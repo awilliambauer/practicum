@@ -20,6 +20,7 @@ This doc walks you through how to checkout the code, running into the walls I ra
 1. Pick your editor (this doc is written for using WebStorm)
 1. Checkout the code base
 1. Make a simple commit
+1. Setup the web server (apache)
 ...
 
 ### Ensure your git knows how to talk to gitlab
@@ -87,6 +88,7 @@ Gitlab.cs prefers that we use ssh keys and a shared username to clone the code. 
 
 ### Web Server!
 
+#### Install it
 1. Now that you have the code, we need to get a webserver set up to serve up the files.
 1. If you are on a Mac, this is likely already done for you.
     * Since we are building a JS heavy application, we just need the webserver -- no need to track down MySQL/PHP, etc.
@@ -102,5 +104,17 @@ Gitlab.cs prefers that we use ssh keys and a shared username to clone the code. 
 1. Linux -- use your package manage to get apache
     * maybe on ubuntu: ```% yum install apache2```?
 
+#### Test it out
 1. Start your server
-1. Navigate to http://localhost/, and you should see a page.
+1. Navigate to http://localhost/, and you should see a page
+1. There are a buncha ways that you can hook your webserver up to the code base; I'mma just show you the one I like.
+    * Find the root folder that Apache is serving out of
+        * On a Mac, this is /Library/WebServer/Documents/
+        * On Linux, this is probably /var/www/html/
+    * Make a symbolic link from that directory to the public folder of the project:
+        *```
+% cd /Library/WebServer/Documents
+% sudo ln -s <path_to_project_root>/public csed
+```
+1. Now navigate your browser to http://localhost/csed, and you should see the landing page! Boom, baby.
+    * It should also say that d3 is working.
