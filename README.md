@@ -79,6 +79,7 @@ Gitlab.cs prefers that we use ssh keys and a shared username to clone the code. 
 1. Use the VCS menu, or right-clicks, or the command line to 'git commit' the staged files, (the index).
     * Include a short description of the purpose of your change
     * Once you commit on your local repo, this is a point that you can roll back to.
+    * WebStorm won't fill out the author box, but gitlab is smart enough to know who you are from your ssh key
 1. Use the VCS menu, or the command-line, to 'git push' your changes to the upstream 'origin' repository
     * Your commit doesn't get shared with anyone until you push it back up to gitlab.
     * (This isn't strictly true, but close enough. Someone can 'git pull' from your local repo if you set it up, but
