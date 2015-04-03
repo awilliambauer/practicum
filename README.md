@@ -103,7 +103,7 @@ Gitlab.cs prefers that we use ssh keys and a shared username to clone the code. 
         * http://www.wampserver.com/en/
         * https://bitnami.com/stack/wamp
 1. Linux -- use your package manage to get apache
-    * maybe on ubuntu: ```% yum install apache2```?
+    * maybe on ubuntu: ```% apt-get install apache2```?
 
 #### Test it out
 1. Start your server
