@@ -112,10 +112,15 @@ Gitlab.cs prefers that we use ssh keys and a shared username to clone the code. 
     * Find the root folder that Apache is serving out of
         * On a Mac, this is /Library/WebServer/Documents/
         * On Linux, this is probably /var/www/html/
+        * On Windows, if you're using Bitnami, it's C:/Bitnami/wampstack-5.4.39-0/apache2/htdocs
     * Make a symbolic link from that directory to the public folder of the project:
         *```
 % cd /Library/WebServer/Documents
 % sudo ln -s <path_to_project_root>/public csed
+```
+        *To do this in Windows, open command prompt and enter
+            *```
+% mklink /J csed <path_to_project_root>
 ```
 1. Now navigate your browser to http://localhost/csed, and you should see the landing page! Boom, baby.
     * It should also say that d3 is working.
