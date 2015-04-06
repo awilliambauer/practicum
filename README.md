@@ -118,9 +118,9 @@ Gitlab.cs prefers that we use ssh keys and a shared username to clone the code. 
 % cd /Library/WebServer/Documents
 % sudo ln -s <path_to_project_root>/public csed
 ```
-        *To do this in Windows, open command prompt and enter
+        * To do this in Windows, open command prompt and enter:
             *```
-% mklink /J csed <path_to_project_root>
+% mklink /J csed <path_to_project_root>/public
 ```
 1. Now navigate your browser to http://localhost/csed, and you should see the landing page! Boom, baby.
     * It should also say that d3 is working.
