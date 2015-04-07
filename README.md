@@ -107,8 +107,9 @@ Gitlab.cs prefers that we use ssh keys and a shared username to clone the code. 
 
 #### Test it out
 1. Start your server
-    Mac:
+    Mac: *```
 % sudo apachectl start
+```
 1. Navigate to http://localhost/, and you should see a page
 1. There are a buncha ways that you can hook your webserver up to the code base; I'mma just show you the one I like.
     * Find the root folder that Apache is serving out of
