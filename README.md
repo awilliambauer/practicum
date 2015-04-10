@@ -125,3 +125,6 @@ Gitlab.cs prefers that we use ssh keys and a shared username to clone the code. 
 ```
 1. Now navigate your browser to http://localhost/csed, and you should see the landing page! Boom, baby.
     * It should also say that d3 is working.
+
+#### Troubleshooting
+* If you get a "Forbidden" error and it says you are not allowed to access the directory, make sure that your repo is in a directory whose parent directories all have public read access. (e.g. your Documents folder will generally not work)
