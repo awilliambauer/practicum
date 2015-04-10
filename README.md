@@ -107,15 +107,24 @@ Gitlab.cs prefers that we use ssh keys and a shared username to clone the code. 
 
 #### Test it out
 1. Start your server
+    (Mac: ``` % sudo apachectl start  ```)
 1. Navigate to http://localhost/, and you should see a page
 1. There are a buncha ways that you can hook your webserver up to the code base; I'mma just show you the one I like.
     * Find the root folder that Apache is serving out of
         * On a Mac, this is /Library/WebServer/Documents/
         * On Linux, this is probably /var/www/html/
+        * On Windows, if you're using Bitnami, it's C:/Bitnami/wampstack-5.4.39-0/apache2/htdocs
     * Make a symbolic link from that directory to the public folder of the project:
         *```
 % cd /Library/WebServer/Documents
 % sudo ln -s <path_to_project_root>/public csed
 ```
+        * To do this in Windows, open command prompt and enter:
+            *```
+% mklink /J csed <path_to_project_root>/public
+```
 1. Now navigate your browser to http://localhost/csed, and you should see the landing page! Boom, baby.
     * It should also say that d3 is working.
+
+#### Troubleshooting
+* If you get a "Forbidden" error and it says you are not allowed to access the directory, make sure that your repo is in a directory whose parent directories all have public read access. (e.g. your Documents folder will generally not work)
