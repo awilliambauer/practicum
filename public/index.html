@@ -1,16 +1,21 @@
+<!DOCTYPE html>
 <html>
-<head>
-    <script src="js/d3/d3.min.js" charset="utf-8"></script>
+<head lang="en">
+    <title>Practice-That!</title>
+    <link href="indextheme.css" type="text/css" rel="stylesheet" />
+    <meta charset="UTF-8">
+    <title></title>
 </head>
-<body>
-<h1>
-    Welcome to CSED!
-</h1>
-<p>
-    Is d3 working? <span class="d3test" style="color:red">No</span>
-</p>
-<script type="text/javascript">
-    d3.select(".d3test").style("color", "green").text("Yes!");
-</script>
+<body style="height:100%">
+    <div class="content">
+        <h1>Practice-That!</h1>
+        <div class="links">
+            <div id="expressions" class="box red">Expressions</div>
+            <div id="if/else" class="box orange">If/Else Mysteries</div>
+            <br />
+            <div id="array" class="box yellow">Array Mysteries</div>
+            <div id="other" class="box green">Other Stuff</div>
+        </div>
+    </div>
 </body>
 </html>
