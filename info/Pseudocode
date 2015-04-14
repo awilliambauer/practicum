@@ -1,0 +1,83 @@
+hiiiiiiiiii! can you see this? there's a serious lag
+
+n see!!!!ca I
+public class ArrayMysterySolver {
+public static void main(String[] args) {
+        solveArrayMystery();
+    }
+
+    void solveArrayMystery() {
+        Gui gui = getLinkToGui();
+        gui.constructArrayOnSreen(array size, "array");
+        ForLoopHeader loop = gui.getForLoopHeader(); // this will search the code and parse it for the parts it needs, like initialization etc.
+        // if we want hte students to do this too, it could be made interactive, like asking them
+        // what the start, end, update, and loop test were
+
+        gui.placeBox(value of i, "iBox");
+        gui.placeBox(array length, "lengthBox");
+        while (loop.evaluateLoopCondition(gui.getValue("iBox"))) {
+            loopContents = parseLoopContents();
+            for each (assignmentStatement at start of loopContents) {
+                updateValuesInArray(assignmentStatement);
+
+            }
+        }
+
+    }
+
+    void updateValuesInArray(assignmentSatement) {
+        RHS = assignmentStatement.getRightHandSide();
+        intList list = new intList();
+        for (array element in RHS) {
+            int val = gui.findBoxInArray(value of i, "array");
+            list.addInt(val);
+        }
+        int newVal = evalulateExpression(RHS, list);
+        LHS = assignmentStatement.getLeftHandSide();
+        gui.updateValue(LHS.arrayElement, newVal);
+
+    }
+
+    void evaluateContents(InstructionIterator itr) {
+        Instruction instruction = itr.nextInstruction();
+        if (instruction is a conditional statement) {
+            boolean testResult = evaluateTest(instruction.getTest());
+            if (testResult) {
+                evaluateContents(instruction.getIfContents());
+            } else if (instruction.hasElseContents()) {
+                evaluateContents(instruction.getElseContents());
+            }
+        }
+    } else { // instruction is a variable assignment
+        int value = evaluateExpression(instruction.getExpression());
+        identify variable and reassign to value;
+        if (instruction.hasNextInstruction()) {
+            evaluateContents(itr);
+        }
+    }
+}
+
+boolean evaluateTest(test) {
+    int left = evaluateExpression(test.left);
+    int right = evaluateExpression(test.right);
+    return result of comparing left and right with given boolean operator;
+}
+
+int evaluateExpression(expr) {
+    for each (variable in expression) {
+        determine value of variable
+    }
+    compute result of expression using values just determined
+    return result;
+}
+
+
+}
+
+public class Gui
+oprivatoxe xB[] variables;
+
+
+
+public class Bxo{
+    ox}
