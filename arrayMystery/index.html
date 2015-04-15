@@ -5,11 +5,25 @@
             <title>Array Mystery</title>
         </head>
     <body>
-        <div id="problemtext">
+    
+        <div id="contentwindow">
 
+            <div id="problemtext">
+                <pre>
+    public static void arrMys(int[] arr) {
+        for (int i = 1; i < arr.length; i++) {
+            arr[i] = i * arr[i + 1] + arr[i - 1];
+        }
+    }
+                </pre>
+            </div>
+
+            <div id="variablebank">
+
+
+            </div>
+            <div id="prompt"></div>
         </div>
-        <div id="variablebank"></div>
-        <div id="prompt"></div>
 
     </body>
     </html>
