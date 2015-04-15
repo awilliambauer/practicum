@@ -1,7 +1,7 @@
 
 body {
     background-color: #0CC5B2;
-    font-family: cursive;
+    font-family: Arial, Tahoma, sans-serif;
     font-size: 8pt;
     margin: 0px;
     padding: 0px;
@@ -17,14 +17,22 @@ h1 {
     width: 50%;
     background-color: #FFF9E8;
     float: left;
+    margin-top: 40px;
     margin-left: 25%;
 }
-#expressions {
-    padding-top: 37px;
-    padding-bottom: 36px;
+
+.topnav {
+    margin-left: 0px;
+}
+
+.navlinks {
+    list-style: none;
+    padding-left: 0px;
+    margin-bottom: 0px;
 }
 .links {
-    padding-left: 10%;
+    padding-left: 15%;
+    padding-right: 15%;
 }
 
 .box {
@@ -32,19 +40,47 @@ h1 {
     border: solid;
     border-radius: 5%;
     font-size: 20pt;
-    padding-top: 3%;
-    padding-bottom: 3%;
-    padding-left: 5%;
-    padding-right: 5%;
+    float:left;
+    overflow: hidden;
+    display: inline-block;
+    width: 175px;
+    height: 100px;
+    vertical-align: middle;
+    padding: 0;
     margin: 5%;
     margin-top: 2%;
     margin-bottom: 2%;
-    float:left;
-    overflow: hidden;
-    display: inline;
-    width: 25%;
-    height: 100%;
 }
+
+.topnavContainer {
+    position:absolute;
+    width:100%;
+    z-index:999;
+    background-color:#CE3850;
+    opacity:0.98;
+    height:40px;
+}
+.topnavContainerScroll {
+    position:fixed;
+    top:0;
+}
+.topnav a {
+    padding:12px 18px;
+    color:#f5f5f5;
+}
+.topnav a:hover, .topnav a:active, .topnav a:focus {
+    background-color:#A52D40 !important;
+    text-decoration: none;
+    color:#ffffff !important;
+}
+.topnav_home {
+    background-image: url('images/pikachu.gif');
+    background-repeat:no-repeat;
+    background-position: 50% 46%;
+    color:transparent !important;
+    width:50px;
+}
+
 
 .red {
     border-color: #CE3850;
