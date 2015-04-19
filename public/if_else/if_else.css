@@ -13,12 +13,13 @@ h3 > span {
 }
 
 #problem_space {
-	display: inline-block;
-	vertical-align: top;
-	margin: 10px;
-	padding: 5px;
-	text-align: left;
 	border: 2px solid black;
+	list-style: none;
+	text-align: left;
+}
+
+#problem_space * {
+	margin-left: 0;
 }
 
 #variable_bank {

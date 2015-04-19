@@ -16,18 +16,19 @@
 		$("#line_nums").text(nums);
 	}
 
-	// the final version of this should look about the same
+	// we will just have to replace "example.txt" with whatever file they store the problem
+	// text in
 	function fillProblemSpace() {
-		var problemText = getProblemText();
-		$("#problem_space").text(problemText);
-	}
-
-	// this will get the text of the problem from the server...I'm thinking stored in a text file,
-	// where we can grab each line separately and put them in a list
-	function getProblemText() {
-		var text = 
-		//"public static void ifElseMystery2(int x, int y) {\n\tint z = 4;\n\n\tif (z <= x) {\n\t\tz = x + 1;\n\t} else {\n\t\tz = z + 9;\n\t}\n\n\tif (z > y) {\n\t\ty++;\n\t} else if (z < y) {\n\t\ty = y - 3;\n\t} else {\n\t\tz = x + y + 7;\n\t}\n\n\tSystem.out.println(z + \" \" + y);\n}";
-		return text;
+		$.get("example.txt", function(data) {
+			var lines = data.split("\n");
+			for (var i = 0; i < lines.length; i++) {
+				var li = document.createElement("li");
+				var liContent = document.createElement("pre");
+				$(liContent).text(i + "\t" + lines[i]);
+				$(li).append(liContent);
+				$("#problem_space").append(li);
+			}
+		});
 	}
 
 })();
