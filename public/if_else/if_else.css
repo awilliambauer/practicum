@@ -2,26 +2,54 @@ body {
 	text-align: center;
 }
 
-.content * {
-	margin-left: auto;
-	margin-right: auto;
-	width: 60%;
-}
-
-h3 > span {
+h3 > span, #answer_box > span, input[type="text"] {
 	font-family: monospace;
 }
 
-#problem_space {
+#problem_space, #answer_box {
 	border: 2px solid black;
-	list-style: none;
-	text-align: left;
 }
 
-#problem_space * {
-	margin-left: 0;
+#problem_space, #answer_box, #highlighted_bar {
+	width: 60%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#problem_space {
+	list-style: none;
+	text-align: left;
+	padding-left: 0; padding-right: 0;
+}
+
+#problem_space > li {
+	padding-left: 2.5%;
+}
+
+#problem_space pre {
+	margin-top: 5px; margin-bottom: 5px;
+}
+
+#highlighted_bar {
+	background-color: #00FFCC;
+}
+
+#answer_box, #problem_space {
+	padding-top: 10px; padding-bottom: 10px;
+}
+
+#answer_box {
+	line-height: 300%;
+}
+
+#answer_box > button {
+	margin-right: 25%;
 }
 
 #variable_bank {
 	border: 2px solid green;
+	position: fixed;
+	top: 25%;
+	right: 2.5%;
+	width: 15%;
 }
