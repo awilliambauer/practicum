@@ -1,0 +1,53 @@
+#contentwindow {
+    border-color: black;
+    border-style: solid;
+    font-family: sans-serif;
+    overflow: hidden;
+    margin-left: auto;
+    margin-right: auto;
+    width: 900px;
+}
+
+#problemcontents {
+    width: 450px;
+    padding-left: 30px;
+    padding-bottom: 30px;
+}
+
+.vardata, #arraydata {
+    font-size: 35px;
+    /*border: 2px solid darkgray;*/
+    /*border-collapse: collapse;*/
+}
+
+#arraydata {
+    border: 2px solid darkgray;
+    border-collapse: collapse;
+}
+
+
+#indices {
+    font-size: 20px;
+}
+
+.vardata, .varlabel {
+    float: left;
+    margin: 20px;
+}
+
+td {
+    padding: 15px;
+    width: 50px;
+    text-align: center;
+    border: 2px solid darkgrey;
+}
+
+.variable {
+    clear: left;
+}
+
+.digit {
+    width: 40px;
+    text-align: center;
+    border: 2px solid darkgray;
+}
