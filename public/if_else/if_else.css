@@ -19,12 +19,12 @@ h3 > span, #answer_box > span, input[type="text"] {
 	padding-left: 0; padding-right: 0;
 }
 
-#problem_space > li {
-	padding-left: 2.5%;
-}
-
 #problem_space pre {
-	margin-top: 5px; margin-bottom: 5px;
+	padding-top: 5px; 
+	padding-bottom: 5px;
+	padding-left: 2.5%;
+	margin: 0;
+	font-size: 11pt;
 }
 
 #answer_box, #problem_space {
@@ -42,12 +42,24 @@ h3 > span, #answer_box > span, input[type="text"] {
 #variable_bank {
 	border: 2px solid green;
 	position: fixed;
-	top: 25%;
+	top: 35%;
 	right: 2.5%;
 	width: 15%;
+	height: 30%;
+}
+
+h4 {
+	text-decoration: underline;
 }
 
 .highlight {
-	background-color: #00FFCC;
-	/*padding-top: 5px; padding-bottom: 5px;*/
+	background-color: rgba(0, 255, 204, 0.3);
+	border: #797979 solid 1px;
+	border-radius: 2px;
+}
+
+.block_highlight {
+	background-color: rgba(204, 204, 255, 0.35);
+	/*border: rgb(204, 204, 255) solid 1px;
+	border-radius: 2px;*/
 }

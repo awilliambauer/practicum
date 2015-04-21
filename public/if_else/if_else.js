@@ -1,24 +1,11 @@
-//(function() {
+(function() {
 	$(document).ready(function() {
 
-		fillPageNums();
 		fillProblemSpace();
-		
+		$("#go_back").click(function() { window.location.href = "../index.html" });
+
 	});
 
-	function initialHighlight() {
-		highlightLine(0);
-	}
-
-	// will need to determine how many lines there are of the problem and plug that into numLines
-	function fillPageNums() {
-		var nums = "";
-		var numLines = 20;
-		for (var i = 0; i < numLines; i++) {
-			nums += i + "\n";	
-		}
-		$("#line_nums").text(nums);
-	}
 
 	// we will just have to replace "example.txt" with whatever file they store the problem
 	// text in
@@ -32,20 +19,28 @@
 				$(li).append(liContent);
 				$("#problem_space").append(li);
 			}
-			initialHighlight();
+			highlightLine(0, "highlight");
+			highlightBlock(3, 7);
+			highlightBlock(9 ,15);
 		});
 	}
 
-	function highlightLine(line) {
+	function highlightLine(line, highlight) {
 		console.log("executed highlightLine");
 		$("#problem_space").children().each(function(index) {
 			console.log(index);			
 			if (index == line) {
-				$(this).addClass("highlight");
+				$(this).children().addClass(highlight);
 				return false;
 			}
 		});
 		console.log("finished executing");
 	}
 
-//})();
+	function highlightBlock(start, end) {
+		for (var i = start; i <= end; i++) {
+			highlightLine(i, "block_highlight");
+		}
+	}
+
+})();
