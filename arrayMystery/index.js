@@ -11,6 +11,7 @@
     function next() {
         switch(step) {
             case 0:
+                $("#next").html("Next");
                 $("#promptwords").html("The current value of i is 1");
                 $("#i").html("1");
                 $("#i").css("border-color", "#00ffff");
@@ -120,6 +121,8 @@
                 break;
             case 29:
                 $("#promptwords").html("We are done!");
+                $("#next").html("Start over");
+                step = -1;
                 break;
         }
         step++;
@@ -128,27 +131,27 @@
 
     //1)   What is the current value of i?
     //    2)   Does the for loop test pass?
-    //    3)   Let’s evaluate the expression now!
+    //    3)   Letï¿½s evaluate the expression now!
     //    4)   What is the value of i?
-    //    5)   What is the value of a[i – 1]?
+    //    5)   What is the value of a[i ï¿½ 1]?
     //    6)   What is the value of a[i + 1]?
     //    7)   What is the result of the expression?
     //    8)   Which index of the array is going to change?
     //    9)   Update that index of the array
     //10) What is the current value of i?
     //    11) Does the for loop test pass?
-    //    12) Let’s evaluate the expression now!
+    //    12) Letï¿½s evaluate the expression now!
     //    13) What is the value of i?
-    //    14) What is the value of a[i – 1]?
+    //    14) What is the value of a[i ï¿½ 1]?
     //    15) What is the value of a[i + 1]?
     //    16) What is the result of the expression?
     //    17) Which index of the array is going to change?
     //    18) Update that index of the array
     //19) What is the current value of i?
     //    20) Does the for loop test pass?
-    //    21) Let’s evaluate the expression now!
+    //    21) Letï¿½s evaluate the expression now!
     //    22) What is the value of i?
-    //    23) What is the value of a[i – 1]?
+    //    23) What is the value of a[i ï¿½ 1]?
     //    24) What is the value of a[i + 1]?
     //    25) What is the result of the expression?
     //    26) Which index of the array is going to change?
