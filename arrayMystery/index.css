@@ -60,6 +60,7 @@ td {
     float: right;
     margin: 50px;
     padding-left: 10px;
+    height: 100px;
 }
 
 hr {
@@ -72,4 +73,9 @@ hr {
 
 .wrong {
     background-color: red;
+}
+
+
+#prompttextbox {
+    height: 50px;
 }
