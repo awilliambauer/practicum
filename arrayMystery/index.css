@@ -65,3 +65,11 @@ td {
 hr {
     clear: left;
 }
+
+.right {
+    background-color: lawngreen;
+}
+
+.wrong {
+    background-color: red;
+}
