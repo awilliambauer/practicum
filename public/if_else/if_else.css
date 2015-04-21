@@ -32,6 +32,7 @@ h3 > span, #answer_box > span, input[type="text"] {
 
 #highlighted_bar {
 	background-color: #00FFCC;
+	height: 5%;
 }
 
 #answer_box, #problem_space {
