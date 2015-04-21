@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+    <html>
+        <head lang="en">
+            <meta charset="UTF-8">
+            <title>Array Mystery</title>
+            <link href="index.css" type="text/css" rel="stylesheet" />
+        </head>
+    <body>
+
+        <div id="contentwindow">
+
+            <div id="problemcontents">
+
+                <div id="problemdescription">
+                    <h1>Problem:</h1>
+                    <p>You are to simulate the execution of a method that manipulates an array of integers.
+                    Consider the following method.</p>
+                </div>
+
+                <div id="problemtext">
+                    <pre>
+        public static void arrMys(int[] arr) {
+            for (int i = 1; i < arr.length; i++) {
+                arr[i] = i * arr[i + 1] + arr[i - 1];
+            }
+        }
+                    </pre>
+                </div>
+            </div>
+
+            <hr>
+
+            <div id="variablebank">
+
+                <div class="variable">
+                    <h1 class="varlabel">arr:</h1>
+                    <table class="vardata">
+
+                        <thead id="indices">
+                            <th>0</th>
+                            <th>1</th>
+                            <th>2</th>
+                            <th>3</th>
+                            <th>4</th>
+                        </thead>
+                        <tbody id="arraydata">
+                            <tr>
+                                <td>11</td>
+                                <td>14</td>
+                                <td>2</td>
+                                <td>4</td>
+                                <td>7</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="variable">
+                    <h1 class="varlabel">arr.length:</h1>
+                    <p class="vardata digit">5</p>
+                </div>
+
+                <div class="variable">
+                    <h1 class="varlabel">i:</h1>
+                    <p class="vardata digit">0</p>
+                </div>
+
+            </div>
+            <div id="prompt"></div>
+        </div>
+
+    </body>
+    </html>
