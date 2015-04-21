@@ -2,7 +2,7 @@ public class ArrayMysterySolver {
 
     void solveArrayMystery() {
         Gui gui = getLinkToGui();
-        gui.constructArrayOnSreen(array size, "array"); // assuming the gui has a method that will constuct the screen
+        gui.constructArrayOnScreen(array size, "array"); // assuming the gui has a method that will construct the screen
         ForLoopHeader loop = gui.getForLoopHeader(); // this will search the code and parse it for the parts it needs, like initialization etc.
         // if we want hte students to do this too, it could be made interactive, like asking them
         // what the start, end, update, and loop test were
@@ -44,9 +44,9 @@ public class ArrayMysterySolver {
      * on the left hand side
      */
     void updateSingleValueInArray(assignmentStatement) {
-        RHS = assignmentStatement.getRightHandSide(); // assuming assigment statement has a way to get the left hand side
+        RHS = assignmentStatement.getRightHandSide(); // assuming assignment statement has a way to get the left hand side
         int val = computeExpressionInvolvingArray(RHS);
-        LHS = assignmentStatement.getLeftHandSide(); // assuming assigment statement has a way to get the left hand side
+        LHS = assignmentStatement.getLeftHandSide(); // assuming assignment statement has a way to get the left hand side
         gui.updateValue(LHS.arrayElement, newVal); // uses gui's method to update the value on the screen
 
     }
@@ -62,7 +62,7 @@ public class ArrayMysterySolver {
         for (element in expression) {
             int val;
             if (element is an array element) {
-                val = gui.findBoxInArray(element's value of i, "array"); // finds the box on the scren corresponding to this value of i
+                val = gui.findBoxInArray(element's value of i, "array"); // finds the box on the screen corresponding to this value of i
             } else if (element is a variable in the variable box) {
                 val = gui.findBoxInVariableBank(element); // assuming there is a variable bank on the user's screen
             } else { // must be a constant
@@ -71,7 +71,7 @@ public class ArrayMysterySolver {
             map.put(array_element, val);
         }
         Map<ArrayElement, Integer> map = mapElementsToValues(RHS);
-        return evalulateExpression(RHS, map); // this method will be using the expression team's code
+        return evaluateExpression(RHS, map); // this method will be using the expression team's code
     }
 }
 
