@@ -12,9 +12,10 @@
     width: 450px;
     padding-left: 30px;
     padding-bottom: 30px;
+    float: left;
 }
 
-.vardata, #arraydata {
+.vardata,   {
     font-size: 35px;
     /*border: 2px solid darkgray;*/
     /*border-collapse: collapse;*/
@@ -50,4 +51,17 @@ td {
     width: 40px;
     text-align: center;
     border: 2px solid darkgray;
+}
+
+#prompt {
+    border: 3px solid black;
+    border-radius: 10px;
+    width: 300px;
+    float: right;
+    margin: 50px;
+    padding-left: 10px;
+}
+
+hr {
+    clear: left;
 }
