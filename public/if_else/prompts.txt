@@ -1,0 +1,23 @@
+Initialization: What are the starting values of our variables?
+x	3	y	20
+Initialization: What is the starting values of this variable?
+z	4
+Booleans: What does this expression evaluate to?
+false
+If/Else: Since this test evaluated to false, we won't go into this branch.
+
+If/Else: We enter this else branch because all other tests in this structure evaluated to false
+
+Assignment: What is the value of this variable after this line executes?
+z   13
+Booleans: What does this expression evaluate to?
+false
+f/Else: Since this test evaluated to false, we won't go into this branch.
+
+Booleans: What does this expression evaluate to?
+true
+If/Else: Since this branch evaluated to true, we won't enter any of the following branches.
+
+Assignment: What is the value of this variable after this line executes?
+y   17
+Answer: Now use your variable bank to fill in the answer!
