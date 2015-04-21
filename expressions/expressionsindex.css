@@ -18,3 +18,15 @@ This provides the stylesheet for expressions
 .buttonLineUp {
 	display: inline-block;
 }
+
+.highlight {
+	color: red;
+}
+
+.hiddenSteps {
+	display: none;
+}
+
+.visibleSteps {
+	display: block;
+}
