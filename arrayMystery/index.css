@@ -60,8 +60,13 @@ td {
     float: right;
     margin: 50px;
     padding-left: 10px;
+    height: 100px;
 }
 
 hr {
     clear: left;
+}
+
+#prompttextbox {
+    height: 50px;
 }
