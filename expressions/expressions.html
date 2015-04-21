@@ -29,45 +29,45 @@ This provides the structure for the expressions page
 				<button class='buttons' type="button" id="nextstep">Next</button>
 			</div>
 			<div id="steps" class='hiddenSteps'>
-				<div class='step1'>
+				<div id='step1'>
 					<p> Step 1: Find the first multiplication/division/mod operator in the expression (move from left to right). </p>
 					<p> 2 + 3 <span class='highlight'> * </span> 4 - 6 </p>
 				</div>
-				<div class='step2'>
+				<div id='step2'>
 					<p> Step 2: Find its left and right operands. </p>
 					<p> Left operand: 3 </p>
 					<p>	Right operand: 4 </p>
 				</div>
-				<div class='step3'>
+				<div id='step3'>
 					<p> Step 3: Evaluate, and replace the operator and operands with the resulting value. </p>
 					<p> 3 * 4 = 12 </p>
 					<p> New expression: 2 + <span class='highlight'> 12 </span> - 6 </p>
 				</div>
-				<div class='step4'>
+				<div id='step4'>
 					<p> Step 4: If there are no more multiplication/division/mod operators, move from left to right and find </p>
 					<p> the first addition/subtraction operator. </p>
 					<p> 2 <span class='highlight'> + </span> 12 - 6 </p>
 				</div>
-				<div class='step5'>
+				<div id='step5'>
 					<p> Step 5: Find its left and right operands. </p>
 					<p> Left operand: 2 </p>
 					<p>	Right operand: 12 </p>
 				</div>
-				<div class='step6'>
+				<div id='step6'>
 					<p> Step 6: Evaluate, and replace the operator and operands with the resulting value. </p>
 					<p> 2 + 12 = 14 </p>
 					<p> New expression: <span class='highlight'> 14 </span> - 6 </p>
 				</div>
-				<div class='step7'>
+				<div id='step7'>
 					<p> Step 7: Move from left to right and find the next addition/subtraction operator. </p>
 					<p> 14 <span class='highlight'> - </span> 6 </p>
 				</div>
-				<div class='step8'>
+				<div id='step8'>
 					<p> Step 8: Find its left and right operands. </p>
 					<p> Left operand: 14 </p>
 					<p>	Right operand: 6 </p>
 				</div>
-				<div class='step9'>
+				<div id='step9'>
 					<p> Step 9: Evaluate, and replace the operator and operands with the resulting value. </p>
 					<p> 14 - 6 = 8 </p>
 					<p> New expression: <span class='highlight'> 8 </span> </p>

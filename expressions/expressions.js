@@ -1,8 +1,12 @@
 window.onload = function() {
-	document.getElementById("nextstep").onclick = showSteps;
+	for (var i = 1; i <= 9; i++) {
+		document.getElementById("nextstep").onclick = showSteps(i);
+	}
 };
 
-function showSteps() {
-	document.getElementById("steps").classList.remove("hiddenSteps");
-	document.getElementById("steps").classList.add("visibleSteps");
+function showSteps(stepCount) {
+	var stepNum = "step" + stepCount;
+	alert(stepNum);
+	document.getElementById(stepNum).classList.remove("hiddenSteps");
+	document.getElementById(stepNum).classList.add("visibleSteps");
 }
