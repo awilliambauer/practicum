@@ -1,83 +1,77 @@
-hiiiiiiiiii! can you see this? there's a serious lag
-
-n see!!!!ca I
 public class ArrayMysterySolver {
-public static void main(String[] args) {
-        solveArrayMystery();
-    }
 
     void solveArrayMystery() {
         Gui gui = getLinkToGui();
-        gui.constructArrayOnSreen(array size, "array");
+        gui.constructArrayOnSreen(array size, "array"); // assuming the gui has a method that will constuct the screen
         ForLoopHeader loop = gui.getForLoopHeader(); // this will search the code and parse it for the parts it needs, like initialization etc.
         // if we want hte students to do this too, it could be made interactive, like asking them
         // what the start, end, update, and loop test were
 
-        gui.placeBox(value of i, "iBox");
-        gui.placeBox(array length, "lengthBox");
+        gui.placeBox(loop.initialIValue, "iBox"); // uses gui to place a box on the user's screen
+        gui.placeBox(gui.getArrayLength(), "lengthBox");
         while (loop.evaluateLoopCondition(gui.getValue("iBox"))) {
             loopContents = parseLoopContents();
             for each (assignmentStatement at start of loopContents) {
-                updateValuesInArray(assignmentStatement);
-
+                updateSingleValueInArray(assignmentStatement); // see method below
             }
-        }
-
-    }
-
-    void updateValuesInArray(assignmentSatement) {
-        RHS = assignmentStatement.getRightHandSide();
-        intList list = new intList();
-        for (array element in RHS) {
-            int val = gui.findBoxInArray(value of i, "array");
-            list.addInt(val);
-        }
-        int newVal = evalulateExpression(RHS, list);
-        LHS = assignmentStatement.getLeftHandSide();
-        gui.updateValue(LHS.arrayElement, newVal);
-
-    }
-
-    void evaluateContents(InstructionIterator itr) {
-        Instruction instruction = itr.nextInstruction();
-        if (instruction is a conditional statement) {
-            boolean testResult = evaluateTest(instruction.getTest());
-            if (testResult) {
-                evaluateContents(instruction.getIfContents());
-            } else if (instruction.hasElseContents()) {
-                evaluateContents(instruction.getElseContents());
+            if (there is an if/else branch) {
+                Expression if_test = gui.getIfTest(); // assuming the gui can parse the code
+                boolean should_enter_if = computeExpressionInvolvingArray(if_test); // see below
+                if (should_enter_if) {
+                    for each (assignmentStatement in the if branch) {
+                        updateSingleValueInArray(assignmentStatement);
+                    }
+                } else if (there is an else branch) {
+                    for each (assignmentStatement in the else branch) {
+                        updateSingleValueInArray(assignmentStatement);
+                    }
+                }
             }
+            for each (assignmentStatement after the if/else branch) {
+                updateSingleValueInArray(assignmentStatement);
+            }
+            int update = loop.getUpdate();
+            int current_val_of_i = gui.getValue("iBox");
+            gui.updateBox("iBox", update + current_val_of_i);
         }
-    } else { // instruction is a variable assignment
-        int value = evaluateExpression(instruction.getExpression());
-        identify variable and reassign to value;
-        if (instruction.hasNextInstruction()) {
-            evaluateContents(itr);
+
+    }
+
+    /**
+     * Given an assignment statement (not sure what the type
+     * of that will be yet), it evaluates the right hand
+     * side and reassigns the element of the array that is
+     * on the left hand side
+     */
+    void updateSingleValueInArray(assignmentStatement) {
+        RHS = assignmentStatement.getRightHandSide(); // assuming assigment statement has a way to get the left hand side
+        int val = computeExpressionInvolvingArray(RHS);
+        LHS = assignmentStatement.getLeftHandSide(); // assuming assigment statement has a way to get the left hand side
+        gui.updateValue(LHS.arrayElement, newVal); // uses gui's method to update the value on the screen
+
+    }
+
+    /**
+     * Given an expression involving array elements,
+     * it locates the values of the those elements
+     * on the user's screen, and then uses those
+     * numeric values to evaluate the expression
+     */
+    Type computeExpressionInvolvingArray(expression) {
+        Map<ArrayElement, Integer> map = new HashMap<Element, Integer>();
+        for (element in expression) {
+            int val;
+            if (element is an array element) {
+                val = gui.findBoxInArray(element's value of i, "array"); // finds the box on the scren corresponding to this value of i
+            } else if (element is a variable in the variable box) {
+                val = gui.findBoxInVariableBank(element); // assuming there is a variable bank on the user's screen
+            } else { // must be a constant
+                val = element;
+            }
+            map.put(array_element, val);
         }
+        Map<ArrayElement, Integer> map = mapElementsToValues(RHS);
+        return evalulateExpression(RHS, map); // this method will be using the expression team's code
     }
 }
 
-boolean evaluateTest(test) {
-    int left = evaluateExpression(test.left);
-    int right = evaluateExpression(test.right);
-    return result of comparing left and right with given boolean operator;
-}
-
-int evaluateExpression(expr) {
-    for each (variable in expression) {
-        determine value of variable
-    }
-    compute result of expression using values just determined
-    return result;
-}
-
-
-}
-
-public class Gui
-oprivatoxe xB[] variables;
-
-
-
-public class Bxo{
-    ox}
