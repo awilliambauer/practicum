@@ -1,0 +1,20 @@
+/*
+This provides the stylesheet for expressions
+*/
+
+#answerbox, h1, p {
+	text-align: center;
+}
+
+#box {
+	width: 150px;
+	height: 50px;
+}
+
+.buttons {
+	width: 75px;
+}
+
+.buttonLineUp {
+	display: inline-block;
+}

@@ -1,0 +1,33 @@
+ <!DOCTYPE html>
+<!--
+This provides the structure for the expressions page
+-->
+
+<html>
+	<head>
+		<title>Expressions</title>
+		<link rel="stylesheet" type="text/css" href="expressionsindex.css">
+		<meta charset="UTF-8">
+	</head>
+
+	<body>
+		<h1>Expressions</h1>
+
+		<p>2 + 3 * 4 - 6</p>
+
+		<!--This form id box currently posts to a php page, but in the future should ultimately be handled by JavaScript. 
+		See this example: http://www.w3schools.com/jsref/tryit.asp?filename=tryjsref_form_submit -->
+		<form id="answerbox" action="answer.php" method="post">
+			<div class='boxcenter'>
+				<input id='box' name="checkanswer" type="text" autofocus="autofocus" />
+			</div>
+			<div class = 'buttonLineUp'>
+				<input class='buttons' type="submit" value="Submit" />
+			</div>
+			<div class = 'buttonLineUp'>
+				<button class='buttons' type="button" id="nextstep">Next</button>
+			</div>
+		</form>
+
+	</body>
+</html>
