@@ -2,6 +2,7 @@ Initialization: What are the starting values of our variables?
 x	3	y	20
 Initialization: What is the starting values of this variable?
 z	4
+Conditionals: We're at the beginning of a new if/else block. Let's find the first branch that evaluates to true.
 Booleans: What does this expression evaluate to?
 false
 If/Else: Since this test evaluated to false, we won't go into this branch.
@@ -10,6 +11,7 @@ If/Else: We enter this else branch because all other tests in this structure eva
 
 Assignment: What is the value of this variable after this line executes?
 z   13
+Conditionals: We're at the beginning of a new if/else block. Let's find the first branch that evaluates to true.
 Booleans: What does this expression evaluate to?
 false
 f/Else: Since this test evaluated to false, we won't go into this branch.
