@@ -8,9 +8,6 @@ h3 > span, #answer_box > span, input[type="text"] {
 
 #problem_space, #answer_box {
 	border: 2px solid black;
-}
-
-#problem_space, #answer_box, #highlighted_bar {
 	width: 60%;
 	margin-left: auto;
 	margin-right: auto;
@@ -28,11 +25,6 @@ h3 > span, #answer_box > span, input[type="text"] {
 
 #problem_space pre {
 	margin-top: 5px; margin-bottom: 5px;
-}
-
-#highlighted_bar {
-	background-color: #00FFCC;
-	height: 5%;
 }
 
 #answer_box, #problem_space {
@@ -53,4 +45,9 @@ h3 > span, #answer_box > span, input[type="text"] {
 	top: 25%;
 	right: 2.5%;
 	width: 15%;
+}
+
+.highlight {
+	background-color: #00FFCC;
+	/*padding-top: 5px; padding-bottom: 5px;*/
 }

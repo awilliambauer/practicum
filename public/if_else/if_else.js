@@ -1,10 +1,14 @@
-(function() {
+//(function() {
 	$(document).ready(function() {
 
 		fillPageNums();
 		fillProblemSpace();
-
+		
 	});
+
+	function initialHighlight() {
+		highlightLine(0);
+	}
 
 	// will need to determine how many lines there are of the problem and plug that into numLines
 	function fillPageNums() {
@@ -28,7 +32,20 @@
 				$(li).append(liContent);
 				$("#problem_space").append(li);
 			}
+			initialHighlight();
 		});
 	}
 
-})();
+	function highlightLine(line) {
+		console.log("executed highlightLine");
+		$("#problem_space").children().each(function(index) {
+			console.log(index);			
+			if (index == line) {
+				$(this).addClass("highlight");
+				return false;
+			}
+		});
+		console.log("finished executing");
+	}
+
+//})();
