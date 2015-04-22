@@ -7,13 +7,13 @@ $(document).ready(function() {
     "use strict";
 
     $(".questionType").click(function() {
+        console.log("clicked.");
         $(this)
-            .closest("[class^='col-md']")
-                    .toggleClass("col-md-6 col-md-12")
+            .closest("[class^='col-sm']")
+                    .toggleClass("col-sm-6 col-sm-12")
             .siblings()
-                .removeClass("col-md-12")
-                .addClass("col-md-6");
-
+                .removeClass("col-sm-12")
+                .addClass("col-sm-6");
     });
 
 
