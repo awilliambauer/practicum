@@ -1,0 +1,47 @@
+
+body {
+    padding: 0px;
+    background-color: #45ADA8;
+}
+
+body, h1, .content, .container-fluid, #header, #footer {
+    margin: 0px;
+    padding: 0px;
+}
+
+#topnavDIV {
+    background-color: #547980;
+    color: #E5FCC2;
+}
+
+#header {
+    text-align: center;
+}
+
+#header, #footer {
+    background-color: #45ADA8;
+    color: #9DE0AD;
+    height: 100px;
+}
+
+.content {
+    height: 500px;
+    background-color: #E5FCC2;
+    overflow: hidden;
+}
+
+.box {
+    border: solid;
+    border-radius: 5%;
+    font-size: 20pt;
+    float: left;
+    overflow: hidden;
+    display: inline-block;
+    width: 175px;
+    height: 100px;
+    vertical-align: middle;
+    padding: 0;
+    margin: 5%;
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
