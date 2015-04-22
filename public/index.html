@@ -1,16 +1,54 @@
+<!DOCTYPE html>
 <html>
-<head>
-    <script src="js/d3/d3.min.js" charset="utf-8"></script>
+
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Practice-That!</title>
+    <link href="indextheme.css" type="text/css" rel="stylesheet" />
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel= "stylesheet">
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.11.2.min.js"></script>
+    <script src="index.js"></script>
 </head>
-<body>
-<h1>
-    Welcome to CSED!
-</h1>
-<p>
-    Is d3 working? <span class="d3test" style="color:red">No</span>
-</p>
-<script type="text/javascript">
-    d3.select(".d3test").style("color", "green").text("Yes!");
-</script>
+
+<body style="height:100%">
+    <div id="topnavDIV" class="topnavContainer topnavContainerScroll">
+        <div class="container-fluid" style="max-width:1600px;margin-left:0px;padding-left:0;">
+            <ul class="navlinks topnav">
+                <li>
+                    <a href="index.html" class="topnav_home" title="Home">&nbsp;</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="content">
+        <div class="container-fluid">
+            <h1>Practice-That!</h1>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="questionType">
+                        <div id="expressions" class="box red">Expressions</div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="questionType">
+                        <div id="if/else" class="box orange">If/Else Mysteries</div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="questionType">
+                        <div id="array" class="box yellow">Array Mysteries</div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="questionType">
+                        <div id="other" class="box green">Other Stuff</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
