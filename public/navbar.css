@@ -1,26 +1,3 @@
-
-body {
-    background-color: #0CC5B2;
-    font-family: Arial, Tahoma, sans-serif;
-    font-size: 8pt;
-    margin: 0px;
-    padding: 0px;
-    text-align: center;
-}
-h1 {
-    font-size: 36pt ;
-    font-weight: bold;
-    margin-top: 5%;
-    text-shadow: 1px 1px #999999;
-}
-.content {
-    width: 50%;
-    background-color: #FFF9E8;
-    float: left;
-    margin-top: 40px;
-    margin-left: 25%;
-}
-
 .topnav {
     margin-left: 0px;
 }
@@ -104,20 +81,4 @@ h1 {
 }
 #topLogo {
     margin-top:6px;
-}
-
-.red {
-    border-color: #CE3850;
-}
-
-.orange {
-    border-color: #F7B242;
-}
-
-.yellow {
-    border-color: #F9EE76;
-}
-
-.green {
-    border-color: #B3D55F;
 }
