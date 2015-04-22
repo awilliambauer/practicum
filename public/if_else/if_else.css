@@ -40,7 +40,7 @@ h3 > span, #answer_box > span, input[type="text"] {
 }
 
 #variable_bank {
-	border: 2px solid green;
+	border: 2px solid rgb(84,121,128);
 	position: fixed;
 	top: 35%;
 	right: 2.5%;
@@ -52,14 +52,26 @@ h4 {
 	text-decoration: underline;
 }
 
+#prompt {
+	position: absolute;
+	top: 225px;
+	left: 600px;
+	border: 2px black solid;
+	border-radius: 10px;
+	width: 20%;
+	text-align: left;
+	padding: 10px;
+	background: rgb(229,252,194);
+}
+
 .highlight {
-	background-color: rgba(0, 255, 204, 0.3);
+	background-color: rgba(69,173,168, 0.65);
 	border: #797979 solid 1px;
 	border-radius: 2px;
 }
 
 .block_highlight {
-	background-color: rgba(204, 204, 255, 0.35);
+	background-color: rgba(157,224,173, 0.45);
 	/*border: rgb(204, 204, 255) solid 1px;
 	border-radius: 2px;*/
 }

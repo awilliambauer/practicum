@@ -1,8 +1,16 @@
 (function() {
+	
+	var CONTENTS;
+	var CURRENT_STEP;
+
 	$(document).ready(function() {
 
+		CURRENT_STEP = 0;
+		getContents();
 		fillProblemSpace();
+		// this method will need to change, it just loads up the text file
 		$("#go_back").click(function() { window.location.href = "../index.html" });
+		$("#next").click(goNext);
 
 	});
 
@@ -25,22 +33,38 @@
 		});
 	}
 
+	function getContents() {
+		$.get("prompts.txt", function(data) {
+			CONTENTS = data.split("\n");
+			$("#prompt").text(CONTENTS[0]);
+		});
+	}
+
 	function highlightLine(line, highlight) {
-		console.log("executed highlightLine");
 		$("#problem_space").children().each(function(index) {
-			console.log(index);			
 			if (index == line) {
 				$(this).children().addClass(highlight);
 				return false;
 			}
 		});
-		console.log("finished executing");
 	}
 
 	function highlightBlock(start, end) {
 		for (var i = start; i <= end; i++) {
 			highlightLine(i, "block_highlight");
 		}
+	}
+
+	// this will be the method that accesses their js objects...for now, just reading from CONTENTS
+	function goNext() {
+		CURRENT_STEP++;
+		console.log("went to next step: " + CURRENT_STEP);
+		var prompt = CONTENTS[CURRENT_STEP];
+		var vars = CONTENTS[CURRENT_STEP + 1].split("\t");
+		if (vars[0] == "l") {
+			moveLine();
+		}
+		$("#prompt").text(prompt);
 	}
 
 })();
