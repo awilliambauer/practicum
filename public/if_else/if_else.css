@@ -7,7 +7,7 @@ h3 > span, #answer_box > span, input[type="text"] {
 }
 
 #problem_space, #answer_box {
-	border: 2px solid black;
+	border: 2px solid rgb(89,79,79);
 	width: 60%;
 	margin-left: auto;
 	margin-right: auto;
@@ -39,7 +39,7 @@ h3 > span, #answer_box > span, input[type="text"] {
 	margin-right: 25%;
 }
 
-#variable_bank {
+#side_bar {
 	border: 2px solid rgb(84,121,128);
 	position: fixed;
 	top: 35%;
@@ -56,7 +56,7 @@ h4 {
 	position: absolute;
 	top: 225px;
 	left: 600px;
-	border: 2px black solid;
+	border: 2px rgb(89,79,79) solid;
 	border-radius: 10px;
 	width: 20%;
 	text-align: left;
