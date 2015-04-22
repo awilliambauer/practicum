@@ -39,13 +39,20 @@ h3 > span, #answer_box > span, input[type="text"] {
 	margin-right: 25%;
 }
 
-#side_bar {
+#variable_bank {
 	border: 2px solid rgb(84,121,128);
 	position: fixed;
 	top: 35%;
 	right: 2.5%;
 	width: 15%;
 	height: 30%;
+}
+
+#next {
+	position: fixed;
+	top: 30%;
+	right: 2.5%;
+	width: 15%;
 }
 
 h4 {

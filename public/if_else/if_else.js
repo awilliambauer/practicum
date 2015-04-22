@@ -58,11 +58,10 @@
 	// this will be the method that accesses their js objects...for now, just reading from CONTENTS
 	function goNext() {
 		CURRENT_STEP++;
-		console.log("went to next step: " + CURRENT_STEP);
-		var prompt = CONTENTS[CURRENT_STEP];
-		var vars = CONTENTS[CURRENT_STEP + 1].split("\t");
+		var prompt = CONTENTS[2 * CURRENT_STEP];
+		var vars = CONTENTS[2 * CURRENT_STEP + 1].split("\t");
 		if (vars[0] == "l") {
-			moveLine();
+			//moveLine();
 		}
 		$("#prompt").text(prompt);
 	}

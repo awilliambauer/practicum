@@ -2,7 +2,7 @@ If/Else: Before starting, note the separate if/else blocks that are highlighted.
 
 Initialization: What are the starting values of our variables?
 l	x	3	y	20
-Initialization: What is the starting values of this variable?
+Initialization: What is the starting value of this variable?
 l	z	4
 Conditionals: We're at the beginning of a new if/else block. Let's find the first branch that evaluates to true.
 
