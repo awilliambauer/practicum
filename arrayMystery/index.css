@@ -60,7 +60,7 @@ td {
     float: right;
     margin: 50px;
     padding-left: 10px;
-    height: 100px;
+    height: 130px;
 }
 
 hr {
@@ -68,5 +68,10 @@ hr {
 }
 
 #prompttextbox {
-    height: 50px;
+    height: 90px;
+}
+
+#next {
+    float: right;
+    margin-right: 8px;
 }
