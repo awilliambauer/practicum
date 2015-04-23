@@ -14,7 +14,7 @@
         clearHighlights();
         switch(step) {
             case 0:
-                $("#next").html("Next");
+                init();
                 $("#promptwords").html("The current value of i is 1");
                 $("#i").html("1");
                 $("#i").css("border-color", "cyan");
@@ -196,6 +196,13 @@
             step = 28;
             next();
         }
+    }
+
+    function init() {
+        $("#next").html("Next");
+        $("#ele1").html("14");
+        $("#ele2").html("2");
+        $("#ele3").html("4");
     }
 
     // Removes all styling highlighting boxes and coloring text
