@@ -70,6 +70,7 @@
 		var prompt = CONTENTS[2 * CURRENT_STEP];
 		var vars = CONTENTS[2 * CURRENT_STEP + 1].split("\t");
 		var line = vars[0] - 1;
+		var crossout;
 		console.log("line was: " + (CURRENT_LINE + 1) + ", moved to: " + (line + 1));
 		if (line != CURRENT_LINE) {
 			movePrompt(line - CURRENT_LINE);
@@ -77,6 +78,9 @@
 			moveLine();
 		}
 		$("#prompt").text(prompt);
+		if (vars.length > 1) {
+			crossout = vars[1];
+		}
 	}
 
 	// moves the prompt a given number of lines down the page
