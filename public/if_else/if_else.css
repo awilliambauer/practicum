@@ -20,7 +20,7 @@ h3 > span, #answer_box > span, input[type="text"] {
 }
 
 #problem_space pre {
-	padding-top: 5px; 
+	padding-top: 5px;
 	padding-bottom: 5px;
 	padding-left: 2.5%;
 	margin: 0;
@@ -46,6 +46,24 @@ h3 > span, #answer_box > span, input[type="text"] {
 	right: 2.5%;
 	width: 15%;
 	height: 30%;
+}
+
+#variable_bank #variable_list {
+	list-style-type: none;
+	text-align: center;
+	padding-left: 0px;
+}
+
+.bank_variable {
+	color: purple;
+}
+
+.bank_variable_value {
+	color: orange;
+}
+
+.just_updated_value {
+	color: green;
 }
 
 #next {

@@ -1,14 +1,16 @@
 (function() {
-	
+
 	var CONTENTS;
 	var CURRENT_STEP;
 	var CURRENT_LINE;
 	var PROBLEM;
+	var VARIABLES;
 
 	$(document).ready(function() {
 
 		CURRENT_STEP = 0;
 		CURRENT_LINE = 0;
+		VARIABLES = {};
 		getContents();
 		fillProblemSpace();
 		$("#go_back").click(function() { window.location.href = "../index.html" });
@@ -69,6 +71,9 @@
 		CURRENT_STEP++;
 		var prompt = CONTENTS[2 * CURRENT_STEP];
 		var vars = CONTENTS[2 * CURRENT_STEP + 1].split("\t");
+		//console.log("vars = " + vars);
+		var updated_vars = vars.slice(2, vars.length) // get all of the variables changed in this line
+		updateVariables(updated_vars);
 		var line = vars[0] - 1;
 		var crossout;
 		console.log("line was: " + (CURRENT_LINE + 1) + ", moved to: " + (line + 1));
@@ -81,6 +86,7 @@
 		if (vars.length > 1) {
 			crossout = vars[1];
 		}
+		drawVariableBank();
 	}
 
 	// moves the prompt a given number of lines down the page
@@ -96,6 +102,48 @@
 	// changes the highlighted line to the given line number of the problem
 	function moveLine() {
 		highlightLine(CURRENT_LINE, "highlight");
+	}
+
+	function updateVariables(vars) {
+		for (i = 0; i < vars.length; i += 2) {
+			var_name = vars[i];
+			var_value = vars[i + 1];
+			var new_variable = false;
+			if (!VARIABLES.hasOwnProperty(var_name)) {
+				VARIABLES[var_name] = {}
+			}
+			VARIABLES[var_name]["name"] = var_name;
+			VARIABLES[var_name]["value"] = var_value;
+			VARIABLES[var_name]["updated"] = true;
+		}
+	}
+
+	function drawVariableBank() {
+		$("#variable_list").empty();
+
+		for (var variable_name in VARIABLES) {
+			var variable = VARIABLES[variable_name];
+			var variable_span = document.createElement("span");
+			$(variable_span).addClass("bank_variable");
+			$(variable_span).text(variable["name"]);
+
+			var value_span = document.createElement("span");
+			$(value_span).text(variable["value"]);
+
+			if (variable["updated"]) {
+				$(value_span).addClass("just_updated_value");
+				variable["updated"] = false;
+			} else {
+				$(value_span).addClass("bank_variable_value");
+			}
+
+			var li = document.createElement("li");
+			$(li).append(variable_span);
+			$(li).append("\t");
+			$(li).append(value_span);
+
+			$("#variable_list").append(li);
+		}
 	}
 
 })();
