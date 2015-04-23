@@ -69,18 +69,25 @@
 		CURRENT_STEP++;
 		var prompt = CONTENTS[2 * CURRENT_STEP];
 		var vars = CONTENTS[2 * CURRENT_STEP + 1].split("\t");
+		// if vars contains variables
 		var line = vars[0] - 1;
 		var crossout;
 		console.log("line was: " + (CURRENT_LINE + 1) + ", moved to: " + (line + 1));
+		if( vars.length > 2) {
+			console.log("comment being added");
+			addComment(vars);
+		}
 		if (line != CURRENT_LINE) {
+			console.log(vars.length);
 			movePrompt(line - CURRENT_LINE);
 			CURRENT_LINE = line;
-			moveLine();
+			moveLine(vars);
 		}
 		$("#prompt").text(prompt);
 		if (vars.length > 1) {
 			crossout = vars[1];
 		}
+		OLD_VARS = vars;
 	}
 
 	// moves the prompt a given number of lines down the page
@@ -96,6 +103,32 @@
 	// changes the highlighted line to the given line number of the problem
 	function moveLine() {
 		highlightLine(CURRENT_LINE, "highlight");
+	}
+
+	// accepts an array of Strings
+	function addComment(vars) {
+		var comment = document.createElement("span");
+		$(comment).addClass("comments");
+		console.log(vars.toString());
+		console.log(vars.length);
+		if (vars.length == 3) { // Is true/false
+			$(comment).text("\t// " + vars[2]);
+		} else { // Is variable change
+			console.log("going into else statement");
+			for(var i = 2; i < vars.length; i += 2) {
+				$(comment).text("\t//" + vars[i] + " = " + vars[i + 1]);
+			}
+			console.log("\t//" + vars[i] + " = " + vars[i + 1]);
+		}
+		console.log(comment);
+		$(".highlight").append(comment);
+		/*
+		$("#problem_space").children().each(function(index) {
+			if (index == line) {
+				$(this).children.().append(comment);
+			}
+		});*/
+
 	}
 
 })();

@@ -6,6 +6,10 @@ h3 > span, #answer_box > span, input[type="text"] {
 	font-family: monospace;
 }
 
+pre > span { /* comment */
+	color: orange;
+}
+
 #problem_space, #answer_box {
 	border: 2px solid rgb(89,79,79);
 	width: 60%;
