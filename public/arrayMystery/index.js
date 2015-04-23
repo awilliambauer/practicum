@@ -12,6 +12,7 @@
     // Called when the user presses the next button
     function next() {
         clearHighlights();
+        $("#next").html("Next"); //reset next button
         switch(step) {
             case 0:
                 init();
@@ -217,7 +218,6 @@
     }
 
     function init() {
-        $("#next").html("Next");
         $("#ele1").html("14");
         $("#ele2").html("2");
         $("#ele3").html("4");
