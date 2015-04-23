@@ -79,11 +79,11 @@ h4 {
 
 #prompt {
 	position: absolute;
-	top: 227px;
-	left: 50%;
+	top: 200px;
 	border: 2px rgb(89,79,79) solid;
 	border-radius: 10px;
 	width: 20%;
+	left: 50%;
 	text-align: left;
 	padding: 10px;
 	background: rgb(229,252,194);
@@ -99,4 +99,13 @@ h4 {
 	background-color: rgba(69,173,168, 0.65);
 	border: #797979 solid 1px;
 	border-radius: 2px;
+}
+
+.grey_out {
+	color: rgb(155, 149, 149);
+}
+
+.cross_out {
+	color: rgb(200, 149, 149);
+	text-decoration: line-through;
 }
