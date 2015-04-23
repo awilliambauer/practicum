@@ -62,7 +62,7 @@ h4 {
 #prompt {
 	position: absolute;
 	top: 227px;
-	left: 600px;
+	left: 50%;
 	border: 2px rgb(89,79,79) solid;
 	border-radius: 10px;
 	width: 20%;
