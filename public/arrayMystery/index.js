@@ -34,20 +34,26 @@
                 $("#i").css("border-color", "cyan");
                 break;
             case 4:
-                $("#promptwords").append("<br>What is the value of <span style=\"color:darkorange;\">arr[i - 1]</span>? 11.");
+                $("#promptwords").html("What is the value of <span style=\"color:cyan;\">i</span>? 1." +
+                    "<br>What is the value of <span style=\"color:darkorange;\">arr[i - 1]</span>? 11.");
                 $("#expr").css("color", "deeppink");
                 $("#i").css("border-color", "cyan");
                 $("#ele0").css("border-color", "darkorange");
                 break;
             case 5:
-                $("#promptwords").append("<br>What is the value of <span style=\"color:mediumorchid;\">arr[i + 1]</span>? 2.");
+                $("#promptwords").html("What is the value of <span style=\"color:cyan;\">i</span>? 1." +
+                    "<br>What is the value of <span style=\"color:darkorange;\">arr[i - 1]</span>? 11." +
+                    "<br>What is the value of <span style=\"color:mediumorchid;\">arr[i + 1]</span>? 2.");
                 $("#expr").css("color", "deeppink");
                 $("#i").css("border-color", "cyan");
                 $("#ele0").css("border-color", "darkorange");
                 $("#ele2").css("border-color", "mediumorchid");
                 break;
             case 6:
-                $("#promptwords").append("<br>What is the result of the expression? 13.");
+                $("#promptwords").html("What is the value of <span style=\"color:cyan;\">i</span>? 1." +
+                    "<br>What is the value of <span style=\"color:darkorange;\">arr[i - 1]</span>? 11." +
+                    "<br>What is the value of <span style=\"color:mediumorchid;\">arr[i + 1]</span>? 2." +
+                    "<br>What is the result of the expression? 13.");
                 $("#expr").css("color", "deeppink");
                 $("#i").css("border-color", "cyan");
                 $("#ele0").css("border-color", "darkorange");
@@ -83,20 +89,26 @@
                 $("#i").css("border-color", "cyan");
                 break;
             case 13:
-                $("#promptwords").append("<br>What is the value of <span style=\"color:darkorange;\">arr[i - 1]</span>? 13.");
+                $("#promptwords").html("What is the value of <span style=\"color:cyan;\">i</span>? 2." +
+                    "<br>What is the value of <span style=\"color:darkorange;\">arr[i - 1]</span>? 13.");
                 $("#expr").css("color", "deeppink");
                 $("#i").css("border-color", "cyan");
                 $("#ele1").css("border-color", "darkorange");
                 break;
             case 14:
-                $("#promptwords").append("<br>What is the value of <span style=\"color:mediumorchid;\">arr[i + 1]</span>? 4.");
+                $("#promptwords").html("What is the value of <span style=\"color:cyan;\">i</span>? 2." +
+                "<br>What is the value of <span style=\"color:darkorange;\">arr[i - 1]</span>? 13." +
+                    "<br>What is the value of <span style=\"color:mediumorchid;\">arr[i + 1]</span>? 4.");
                 $("#expr").css("color", "deeppink");
                 $("#i").css("border-color", "cyan");
                 $("#ele1").css("border-color", "darkorange");
                 $("#ele3").css("border-color", "mediumorchid");
                 break;
             case 15:
-                $("#promptwords").append("<br>What is the result of the expression? 21.");
+                $("#promptwords").html("What is the value of <span style=\"color:cyan;\">i</span>? 2." +
+                "<br>What is the value of <span style=\"color:darkorange;\">arr[i - 1]</span>? 13." +
+                "<br>What is the value of <span style=\"color:mediumorchid;\">arr[i + 1]</span>? 4." +
+                    "<br>What is the result of the expression? 21.");
                 $("#expr").css("color", "deeppink");
                 $("#i").css("border-color", "cyan");
                 $("#ele1").css("border-color", "darkorange");
@@ -133,20 +145,26 @@
                 $("#i").css("border-color", "cyan");
                 break;
             case 22:
-                $("#promptwords").append("<br>What is the value of <span style=\"color:darkorange;\">arr[i - 1]</span>? 21.");
+                $("#promptwords").html("What is the value of <span style=\"color:cyan;\">i</span>? 3." +
+                    "<br>What is the value of <span style=\"color:darkorange;\">arr[i - 1]</span>? 21.");
                 $("#expr").css("color", "deeppink");
                 $("#i").css("border-color", "cyan");
                 $("#ele2").css("border-color", "darkorange");
                 break;
             case 23:
-                $("#promptwords").append("<br>What is the value of <span style=\"color:mediumorchid;\">arr[i + 1]</span>? 7.");
+                $("#promptwords").html("What is the value of <span style=\"color:cyan;\">i</span>? 3." +
+                "<br>What is the value of <span style=\"color:darkorange;\">arr[i - 1]</span>? 21." +
+                    "<br>What is the value of <span style=\"color:mediumorchid;\">arr[i + 1]</span>? 7.");
                 $("#expr").css("color", "deeppink");
                 $("#i").css("border-color", "cyan");
                 $("#ele2").css("border-color", "darkorange");
                 $("#ele4").css("border-color", "mediumorchid");
                 break;
             case 24:
-                $("#promptwords").append("<br>What is the result of the expression? 42.");
+                $("#promptwords").html("What is the value of <span style=\"color:cyan;\">i</span>? 3." +
+                "<br>What is the value of <span style=\"color:darkorange;\">arr[i - 1]</span>? 21." +
+                "<br>What is the value of <span style=\"color:mediumorchid;\">arr[i + 1]</span>? 7." +
+                    "<br>What is the result of the expression? 42.");
                 $("#expr").css("color", "deeppink");
                 $("#i").css("border-color", "cyan");
                 $("#ele2").css("border-color", "darkorange");
