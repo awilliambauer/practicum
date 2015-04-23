@@ -1,0 +1,7 @@
+Line pairs:
+
+prompt1
+[current line to highlight]\t[lines to cross out (space deliminated)]\t[variable 1]\t[val 1]\t[var 2]\t[val2]...
+
+prompt2
+...
