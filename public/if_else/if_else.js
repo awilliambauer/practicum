@@ -8,7 +8,7 @@
 	$(document).ready(function() {
 
 		CURRENT_STEP = 0;
-		CURRENT_LINE = 0;
+		CURRENT_LINE = -1;
 		getContents();
 		fillProblemSpace();
 		$("#go_back").click(function() { window.location.href = "../index.html" });
@@ -53,10 +53,10 @@
 		});
 	}
 
-	// gives the given lines the specific "block_highlight" class
-	function highlightBlock(start, end) {
+	// gives the given lines the given highlight class
+	function highlightBlock(start, end, highlight) {
 		for (var i = start; i <= end; i++) {
-			highlightLine(i, "block_highlight");
+			highlightLine(i, highlight);
 		}
 	}
 
@@ -68,8 +68,8 @@
 			// show previously invisible prompt
 			$("#prompt").show();
 			// highlighting all the stuff
-			highlightBlock(3, 7);
-			highlightBlock(9 ,15);
+			highlightBlock(3, 7, "block_highlight");
+			highlightBlock(9 ,15, "block_highlight");
 		}			
 
 		CURRENT_STEP++;
@@ -77,10 +77,12 @@
 		var vars = CONTENTS[2 * CURRENT_STEP + 1].split("\t");
 		var line = vars[0] - 1;
 		var crossout;
-		if (line != CURRENT_LINE) {
-			movePrompt(line - CURRENT_LINE);
-//			greyOut(CURRENT_LINE);
+		console.log(line);
+		// don't do this the first time
+		if (line != CURRENT_LINE && line != -1) {
+			movePrompt(line);
 			CURRENT_LINE = line;
+			highlightBlock(0, CURRENT_LINE - 1, "grey_out");
 			highlightLine(CURRENT_LINE, "highlight");
 		}
 		$("#prompt").text(prompt);
@@ -89,14 +91,14 @@
 		}
 	}
 
-	// moves the prompt a given number of lines down the page
-	function movePrompt(lines) {
+	// moves the prompt to the given line
+	function movePrompt(line) {
 		$("#prompt").finish();
 		var currentTop = $("#prompt").css("top");
 		currentTop = parseInt(currentTop.substring(0, currentTop.length - 2));
 		var lineHeight = $("ul > li").css("height");
 		lineHeight = parseInt(lineHeight.substring(0, lineHeight.length - 2));
-		$("#prompt").animate({top: currentTop + lines * (lineHeight) + "px"});
+		$("#prompt").animate({top: currentTop + (line - CURRENT_LINE) * (lineHeight) + "px"});
 	}
 
 })();
