@@ -15,7 +15,7 @@ If/Else: Since this test evaluated to false, we won't go into this branch.
 If/Else: We enter this else branch because all other tests in this structure evaluated to false
 6
 Assignment: What is the value of this variable after this line executes?
-7		z   13
+7		z	13
 Conditionals: We're at the beginning of a new if/else block. Let's find the first branch that evaluates to true.
 10
 Booleans: What does this expression evaluate to?

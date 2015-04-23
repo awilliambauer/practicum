@@ -77,7 +77,6 @@
 		var vars = CONTENTS[2 * CURRENT_STEP + 1].split("\t");
 		var line = vars[0] - 1;
 		var crossout;
-		console.log(line);
 		// don't do this the first time
 		if (line != CURRENT_LINE && line != -1) {
 			movePrompt(line);
@@ -86,8 +85,13 @@
 			highlightLine(CURRENT_LINE, "highlight");
 		}
 		$("#prompt").text(prompt);
-		if (vars.length > 1) {
-			crossout = vars[1];
+		if (vars.length > 1 && vars[1].trim() != "") {
+			crossout = vars[1].split(",");
+			console.log(vars);
+			
+			for (var i = 0; i < crossout.length; i++) {
+				highlightLine(crossout[i] - 1, "cross_out");
+			} 
 		}
 	}
 
