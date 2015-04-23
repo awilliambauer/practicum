@@ -1,29 +1,30 @@
 If/Else: Before starting, note the separate if/else blocks that are highlighted.
-
+1
 Initialization: What are the starting values of our variables?
-l	x	3	y	20
+1	x	3	y	20
 Initialization: What is the starting value of this variable?
-l	z	4
+2	z	4
 Conditionals: We're at the beginning of a new if/else block. Let's find the first branch that evaluates to true.
-
+4
 Booleans: What does this expression evaluate to?
-false
+4	false
 If/Else: Since this test evaluated to false, we won't go into this branch.
-
+4
 If/Else: We enter this else branch because all other tests in this structure evaluated to false
-l
+6
 Assignment: What is the value of this variable after this line executes?
-l	z   13
+7	z   13
 Conditionals: We're at the beginning of a new if/else block. Let's find the first branch that evaluates to true.
-
+10
 Booleans: What does this expression evaluate to?
-false
+10	false
 If/Else: Since this test evaluated to false, we won't go into this branch.
-l
+10
 Booleans: What does this expression evaluate to?
-true
+12	true
 If/Else: Since this branch evaluated to true, we won't enter any of the following branches.
-l
+12
 Assignment: What is the value of this variable after this line executes?
-l	y   17
+13	y   17
 Answer: Now use your variable bank to fill in the answer!
+18

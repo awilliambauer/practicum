@@ -2,28 +2,31 @@
 	
 	var CONTENTS;
 	var CURRENT_STEP;
+	var CURRENT_LINE;
+	var PROBLEM;
 
 	$(document).ready(function() {
 
 		CURRENT_STEP = 0;
+		CURRENT_LINE = 0;
 		getContents();
 		fillProblemSpace();
-		// this method will need to change, it just loads up the text file
 		$("#go_back").click(function() { window.location.href = "../index.html" });
 		$("#next").click(goNext);
 
 	});
 
 
+	// fills in the problem space with the text of the specific problem we're working on,
 	// we will just have to replace "example.txt" with whatever file they store the problem
 	// text in
 	function fillProblemSpace() {
 		$.get("example.txt", function(data) {
-			var lines = data.split("\n");
-			for (var i = 0; i < lines.length; i++) {
+			PROBLEM = data.split("\n");
+			for (var i = 0; i < PROBLEM.length; i++) {
 				var li = document.createElement("li");
 				var liContent = document.createElement("pre");
-				$(liContent).text(i + "\t" + lines[i]);
+				$(liContent).text(i + 1 + "\t" + PROBLEM[i]);
 				$(li).append(liContent);
 				$("#problem_space").append(li);
 			}
@@ -33,6 +36,8 @@
 		});
 	}
 
+	// gets the prompts stored in the prompts.txt file and loads them into memory,
+	// this will be replaced when we hook up to the backend
 	function getContents() {
 		$.get("prompts.txt", function(data) {
 			CONTENTS = data.split("\n");
@@ -40,30 +45,53 @@
 		});
 	}
 
+	// gives the given line the given css class
 	function highlightLine(line, highlight) {
 		$("#problem_space").children().each(function(index) {
 			if (index == line) {
 				$(this).children().addClass(highlight);
-				return false;
+			} else if (highlight == "highlight") {
+				$(this).children().removeClass(highlight);
 			}
 		});
 	}
 
+	// gives the given lines the specific "block_highlight" class
 	function highlightBlock(start, end) {
 		for (var i = start; i <= end; i++) {
 			highlightLine(i, "block_highlight");
 		}
 	}
 
-	// this will be the method that accesses their js objects...for now, just reading from CONTENTS
+	// increments the step we're currently on and changes the prompt/highlighting
+	// accordingly
 	function goNext() {
 		CURRENT_STEP++;
 		var prompt = CONTENTS[2 * CURRENT_STEP];
 		var vars = CONTENTS[2 * CURRENT_STEP + 1].split("\t");
-		if (vars[0] == "l") {
-			//moveLine();
+		var line = vars[0] - 1;
+		console.log("line was: " + (CURRENT_LINE + 1) + ", moved to: " + (line + 1));
+		if (line != CURRENT_LINE) {
+			movePrompt(line - CURRENT_LINE);
+			CURRENT_LINE = line;
+			moveLine();
 		}
 		$("#prompt").text(prompt);
+	}
+
+	// moves the prompt a given number of lines down the page
+	function movePrompt(lines) {
+		$("#prompt").finish();
+		var currentTop = $("#prompt").css("top");
+		currentTop = parseInt(currentTop.substring(0, currentTop.length - 2));
+		var lineHeight = $("ul > li").css("height");
+		lineHeight = parseInt(lineHeight.substring(0, lineHeight.length - 2));
+		$("#prompt").animate({top: currentTop + lines * (lineHeight) + "px"});
+	}
+
+	// changes the highlighted line to the given line number of the problem
+	function moveLine() {
+		highlightLine(CURRENT_LINE, "highlight");
 	}
 
 })();
