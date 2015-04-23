@@ -1,5 +1,7 @@
+
+
 If/Else: Before starting, note the separate if/else blocks that are highlighted.
-1
+
 Initialization: What are the starting values of our variables?
 1		x	3	y	20
 Initialization: What is the starting value of this variable?

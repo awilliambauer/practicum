@@ -30,9 +30,6 @@
 				$(li).append(liContent);
 				$("#problem_space").append(li);
 			}
-			highlightLine(0, "highlight");
-			highlightBlock(3, 7);
-			highlightBlock(9 ,15);
 		});
 	}
 
@@ -41,7 +38,7 @@
 	function getContents() {
 		$.get("prompts.txt", function(data) {
 			CONTENTS = data.split("\n");
-			$("#prompt").text(CONTENTS[0]);
+			$("#prompt").hide();
 		});
 	}
 
@@ -66,14 +63,23 @@
 	// increments the step we're currently on and changes the prompt/highlighting
 	// accordingly
 	function goNext() {
+		// some initialization stuff that happens on first click of next
+		if (CURRENT_STEP == 0) {
+			// show previously invisible prompt
+			$("#prompt").show();
+			// highlighting all the stuff
+			highlightBlock(3, 7);
+			highlightBlock(9 ,15);
+		}			
+
 		CURRENT_STEP++;
 		var prompt = CONTENTS[2 * CURRENT_STEP];
 		var vars = CONTENTS[2 * CURRENT_STEP + 1].split("\t");
 		var line = vars[0] - 1;
 		var crossout;
-		console.log("line was: " + (CURRENT_LINE + 1) + ", moved to: " + (line + 1));
 		if (line != CURRENT_LINE) {
 			movePrompt(line - CURRENT_LINE);
+//			greyOut(CURRENT_LINE);
 			CURRENT_LINE = line;
 			highlightLine(CURRENT_LINE, "highlight");
 		}
