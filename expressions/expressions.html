@@ -12,7 +12,8 @@ This provides the structure for the expressions page
 	</head>
 
 	<body>
-		<h1>Expressions</h1>
+		<div id="header"><h1>Practice That!<h1></h1></div>
+		<h2>Expressions</h2>
 
 		<p>2 + 3 * 4 - 6</p>
 
@@ -25,55 +26,54 @@ This provides the structure for the expressions page
 			<div class = 'buttonLineUp'>
 				<input class='buttons' type="submit" value="Submit" />
 			</div>
-			<div class = 'buttonLineUp'>
-				<button class='buttons' type="button" id="nextstep">Next</button>
-			</div>
 			<div id="steps">
-				<div id='step1' class='hiddenSteps'>
-					<p> Step 1: Find the first multiplication/division/mod operator in the expression (move from left to right). </p>
+				<div id='step1' class='hiddenSteps all-steps'>
+					<p class="step-exp"> Step 1: Find the first multiplication/division/mod operator in the expression (move from left to right). </p>
 					<p> 2 + 3 <span class='highlight'> * </span> 4 - 6 </p>
 				</div>
-				<div id='step2' class='hiddenSteps'>
-					<p> Step 2: Find its left and right operands. </p>
+				<div id='step2' class='hiddenSteps all-steps'>
+					<p class="step-exp"> Step 2: Find its left and right operands. </p>
 					<p> Left operand: 3 </p>
 					<p>	Right operand: 4 </p>
 				</div>
-				<div id='step3' class='hiddenSteps'>
-					<p> Step 3: Evaluate, and replace the operator and operands with the resulting value. </p>
+				<div id='step3' class='hiddenSteps all-steps'>
+					<p class="step-exp"> Step 3: Evaluate, and replace the operator and operands with the resulting value. </p>
 					<p> 3 * 4 = 12 </p>
 					<p> New expression: 2 + <span class='highlight'> 12 </span> - 6 </p>
 				</div>
-				<div id='step4' class='hiddenSteps'>
-					<p> Step 4: If there are no more multiplication/division/mod operators, move from left to right and find </p>
-					<p> the first addition/subtraction operator. </p>
+				<div id='step4' class='hiddenSteps all-steps'>
+					<p class="step-exp">Step 4: If there are no more multiplication/division/mod operators, move from left to right and find the first addition/subtraction operator. </p>
 					<p> 2 <span class='highlight'> + </span> 12 - 6 </p>
 				</div>
-				<div id='step5' class='hiddenSteps'>
-					<p> Step 5: Find its left and right operands. </p>
+				<div id='step5' class='hiddenSteps all-steps'>
+					<p class="step-exp"> Step 5: Find its left and right operands. </p>
 					<p> Left operand: 2 </p>
 					<p>	Right operand: 12 </p>
 				</div>
-				<div id='step6' class='hiddenSteps'>
-					<p> Step 6: Evaluate, and replace the operator and operands with the resulting value. </p>
+				<div id='step6' class='hiddenSteps all-steps'>
+					<p class="step-exp"> Step 6: Evaluate, and replace the operator and operands with the resulting value. </p>
 					<p> 2 + 12 = 14 </p>
 					<p> New expression: <span class='highlight'> 14 </span> - 6 </p>
 				</div>
-				<div id='step7' class='hiddenSteps'>
-					<p> Step 7: Move from left to right and find the next addition/subtraction operator. </p>
+				<div id='step7' class='hiddenSteps all-steps'>
+					<p class="step-exp"> Step 7: Move from left to right and find the next addition/subtraction operator. </p>
 					<p> 14 <span class='highlight'> - </span> 6 </p>
 				</div>
-				<div id='step8' class='hiddenSteps'>
-					<p> Step 8: Find its left and right operands. </p>
+				<div id='step8' class='hiddenSteps all-steps'>
+					<p class="step-exp"> Step 8: Find its left and right operands. </p>
 					<p> Left operand: 14 </p>
 					<p>	Right operand: 6 </p>
 				</div>
-				<div id='step9' class='hiddenSteps'>
-					<p> Step 9: Evaluate, and replace the operator and operands with the resulting value. </p>
+				<div id='step9' class='hiddenSteps all-steps'>
+					<p class="step-exp"> Step 9: Evaluate, and replace the operator and operands with the resulting value. </p>
 					<p> 14 - 6 = 8 </p>
 					<p> New expression: <span class='highlight'> 8 </span> </p>
 				</div>
 			</div>
+			<div class = 'buttonLineUp'>
+				<button class='buttons' type="button" id="nextstep">Next</button>
+			</div>
 		</form>
-
+		<div id="footer"></div>
 	</body>
 </html>
