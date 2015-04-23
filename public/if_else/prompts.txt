@@ -7,7 +7,7 @@ Initialization: What is the starting value of this variable?
 Conditionals: We're at the beginning of a new if/else block. Let's find the first branch that evaluates to true.
 4
 Booleans: What does this expression evaluate to?
-4	false
+4		false
 If/Else: Since this test evaluated to false, we won't go into this branch.
 4	5
 If/Else: We enter this else branch because all other tests in this structure evaluated to false
@@ -23,7 +23,7 @@ If/Else: Since this test evaluated to false, we won't go into this branch.
 Booleans: What does this expression evaluate to?
 12		true
 If/Else: Since this branch evaluated to true, we won't enter any of the following branches.
-12	14 15
+12	14,15
 Assignment: What is the value of this variable after this line executes?
 13		y   17
 Answer: Now use your variable bank to fill in the answer!
