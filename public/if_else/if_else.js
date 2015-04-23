@@ -75,7 +75,7 @@
 		if (line != CURRENT_LINE) {
 			movePrompt(line - CURRENT_LINE);
 			CURRENT_LINE = line;
-			moveLine();
+			highlightLine(CURRENT_LINE, "highlight");
 		}
 		$("#prompt").text(prompt);
 		if (vars.length > 1) {
@@ -91,11 +91,6 @@
 		var lineHeight = $("ul > li").css("height");
 		lineHeight = parseInt(lineHeight.substring(0, lineHeight.length - 2));
 		$("#prompt").animate({top: currentTop + lines * (lineHeight) + "px"});
-	}
-
-	// changes the highlighted line to the given line number of the problem
-	function moveLine() {
-		highlightLine(CURRENT_LINE, "highlight");
 	}
 
 })();
