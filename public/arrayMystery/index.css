@@ -9,6 +9,7 @@
     margin-left: auto;
     margin-right: auto;
     width: 900px;
+    box-shadow: 0px 0px 15px #888888;
 }
 
 #problemcontents {
@@ -64,6 +65,7 @@ td {
     margin: 50px;
     padding-left: 10px;
     height: 130px;
+    box-shadow: 0px 0px 15px #888888;
 }
 
 hr {
@@ -81,9 +83,43 @@ hr {
 
 #prompttextbox {
     height: 90px;
+    text-align: center;
 }
 
 #next {
     float: right;
     margin-right: 8px;
+}
+
+#next, #back {
+    background: #547980;
+    background-image: -webkit-linear-gradient(top, #547980, #45ADA8);
+    background-image: -moz-linear-gradient(top, #547980, #45ADA8);
+    background-image: -ms-linear-gradient(top, #547980, #45ADA8);
+    background-image: -o-linear-gradient(top, #547980, #45ADA8);
+    background-image: linear-gradient(to bottom, #547980, #45ADA8);
+    -webkit-border-radius: 28;
+    -moz-border-radius: 28;
+    border-radius: 28px;
+    text-shadow: 4px 3px 10px #666666;
+    font-family: Arial;
+    color: #ffffff;
+    font-size: 20px;
+    padding: 10px 20px 10px 20px;
+    text-decoration: none;
+}
+
+#next:hover, #back:hover {
+    background: #9de0ad;
+    background-image: -webkit-linear-gradient(top, #9de0ad, #81b38d);
+    background-image: -moz-linear-gradient(top, #9de0ad, #81b38d);
+    background-image: -ms-linear-gradient(top, #9de0ad, #81b38d);
+    background-image: -o-linear-gradient(top, #9de0ad, #81b38d);
+    background-image: linear-gradient(to bottom, #9de0ad, #81b38d);
+    text-decoration: none;
+
+}
+
+#next:focus, #back:focus {
+    outline: 0;
 }
