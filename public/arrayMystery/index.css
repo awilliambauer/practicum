@@ -64,7 +64,7 @@ td {
     float: right;
     margin: 50px;
     padding-left: 10px;
-    height: 130px;
+    height: 150px;
     box-shadow: 0px 0px 15px #888888;
 }
 
@@ -104,8 +104,8 @@ hr {
     text-shadow: 4px 3px 10px #666666;
     font-family: Arial;
     color: #ffffff;
-    font-size: 20px;
-    padding: 10px 20px 10px 20px;
+    font-size: 15px;
+    padding: 5px 10px 5px 10px;
     text-decoration: none;
 }
 
@@ -117,7 +117,6 @@ hr {
     background-image: -o-linear-gradient(top, #9de0ad, #81b38d);
     background-image: linear-gradient(to bottom, #9de0ad, #81b38d);
     text-decoration: none;
-
 }
 
 #next:focus, #back:focus {
