@@ -8,7 +8,7 @@
 	$(document).ready(function() {
 
 		CURRENT_STEP = 0;
-		CURRENT_LINE = 0;
+		CURRENT_LINE = -1;
 		getContents();
 		fillProblemSpace();
 		$("#go_back").click(function() { window.location.href = "../index.html" });
@@ -30,9 +30,6 @@
 				$(li).append(liContent);
 				$("#problem_space").append(li);
 			}
-			highlightLine(0, "highlight");
-			highlightBlock(3, 7);
-			highlightBlock(9 ,15);
 		});
 	}
 
@@ -41,7 +38,7 @@
 	function getContents() {
 		$.get("prompts.txt", function(data) {
 			CONTENTS = data.split("\n");
-			$("#prompt").text(CONTENTS[0]);
+			$("#prompt").hide();
 		});
 	}
 
@@ -56,16 +53,25 @@
 		});
 	}
 
-	// gives the given lines the specific "block_highlight" class
-	function highlightBlock(start, end) {
+	// gives the given lines the given highlight class
+	function highlightBlock(start, end, highlight) {
 		for (var i = start; i <= end; i++) {
-			highlightLine(i, "block_highlight");
+			highlightLine(i, highlight);
 		}
 	}
 
 	// increments the step we're currently on and changes the prompt/highlighting
 	// accordingly
 	function goNext() {
+		// some initialization stuff that happens on first click of next
+		if (CURRENT_STEP == 0) {
+			// show previously invisible prompt
+			$("#prompt").show();
+			// highlighting all the stuff
+			highlightBlock(3, 7, "block_highlight");
+			highlightBlock(9 ,15, "block_highlight");
+		}			
+
 		CURRENT_STEP++;
 		var prompt = CONTENTS[2 * CURRENT_STEP];
 		var vars = CONTENTS[2 * CURRENT_STEP + 1].split("\t");
@@ -80,23 +86,33 @@
 		if (line != CURRENT_LINE) {
 			console.log(vars.length);
 			movePrompt(line - CURRENT_LINE);
+		// don't do this the first time
+		if (line != CURRENT_LINE && line != -1) {
+			movePrompt(line);
 			CURRENT_LINE = line;
-			moveLine(vars);
+			highlightBlock(0, CURRENT_LINE - 1, "grey_out");
+			highlightLine(CURRENT_LINE, "highlight");
 		}
 		$("#prompt").text(prompt);
-		if (vars.length > 1) {
-			crossout = vars[1];
+		if (vars.length > 1 && vars[1].trim() != "") {
+			crossout = vars[1].split(",");
+			console.log(vars);
+			
+			for (var i = 0; i < crossout.length; i++) {
+				highlightLine(crossout[i] - 1, "cross_out");
+			} 
 		}
 		OLD_VARS = vars;
 	}
 
-	// moves the prompt a given number of lines down the page
-	function movePrompt(lines) {
+	// moves the prompt to the given line
+	function movePrompt(line) {
 		$("#prompt").finish();
 		var currentTop = $("#prompt").css("top");
 		currentTop = parseInt(currentTop.substring(0, currentTop.length - 2));
 		var lineHeight = $("ul > li").css("height");
 		lineHeight = parseInt(lineHeight.substring(0, lineHeight.length - 2));
+		$("#prompt").animate({top: currentTop + (line - CURRENT_LINE) * (lineHeight) + "px"});
 		$("#prompt").animate({top: currentTop + lines * (lineHeight) + "px"});
 	}
 
