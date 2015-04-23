@@ -125,7 +125,7 @@
 		}
 	}
 
-	function drawVariableBank() {
+	function drawVariableBank() { 	
 		$("#variable_list").empty();
 
 		for (var variable_name in VARIABLES) {
