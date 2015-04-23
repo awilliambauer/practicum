@@ -86,3 +86,8 @@ h4 {
 .grey_out {
 	color: rgb(155, 149, 149);
 }
+
+.cross_out {
+	color: rgb(200, 149, 149);
+	text-decoration: line-through;
+}
