@@ -39,7 +39,7 @@ h3 > span, #answer_box > span, input[type="text"] {
 	margin-right: 25%;
 }
 
-#side_bar {
+#variable_bank {
 	border: 2px solid rgb(84,121,128);
 	position: fixed;
 	top: 35%;
@@ -48,13 +48,20 @@ h3 > span, #answer_box > span, input[type="text"] {
 	height: 30%;
 }
 
+#next {
+	position: fixed;
+	top: 30%;
+	right: 2.5%;
+	width: 15%;
+}
+
 h4 {
 	text-decoration: underline;
 }
 
 #prompt {
 	position: absolute;
-	top: 225px;
+	top: 227px;
 	left: 600px;
 	border: 2px rgb(89,79,79) solid;
 	border-radius: 10px;
@@ -64,14 +71,14 @@ h4 {
 	background: rgb(229,252,194);
 }
 
-.highlight {
-	background-color: rgba(69,173,168, 0.65);
-	border: #797979 solid 1px;
-	border-radius: 2px;
-}
-
 .block_highlight {
 	background-color: rgba(157,224,173, 0.45);
 	/*border: rgb(204, 204, 255) solid 1px;
 	border-radius: 2px;*/
+}
+
+.highlight {
+	background-color: rgba(69,173,168, 0.65);
+	border: #797979 solid 1px;
+	border-radius: 2px;
 }
