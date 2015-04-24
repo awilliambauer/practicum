@@ -126,7 +126,7 @@
 		} else { // Is variable change
 			console.log("going into else statement");
 			for(var i = 2; i < vars.length; i += 2) {
-				$(comment).text($(comment).text() + "\t//" + vars[i] + " = " + vars[i + 1]);
+				$(comment).text($(comment).text() + "\t// " + vars[i] + " = " + vars[i + 1]);
 			}
 			console.log("\t//" + vars[i] + " = " + vars[i + 1]);
 		}
