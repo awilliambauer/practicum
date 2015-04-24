@@ -16,190 +16,224 @@
         switch(step) {
             case 0:
                 init();
-                $("#promptwords").html("The current value of i is 1");
-                $("#i").html("1");
-                $("#i").css("border-color", "cyan");
-                $("#init").css("color", "deeppink");
+                iValue(1);
                 break;
             case 1:
-                $("#promptwords").html("Is <span style=\"color:deeppink\">i < arr.length - 1</span>? Yes.");
-                $("#test").css("color", "deeppink");
+                loopTest("Yes");
                 break;
             case 2:
-                $("#promptwords").html("Let's evaluate the expression now!");
-                $("#expr").css("color", "deeppink");
+                exprEvalPrompt();
                 break;
             case 3:
-                $("#promptwords").html("What is the value of <span style=\"color:cyan;\">i</span>? 1.");
-                $("#expr").css("color", "deeppink");
-                $("#i").css("border-color", "cyan");
+                exprIValue(1);
                 break;
             case 4:
-                $("#promptwords").html("What is the value of <span style=\"color:cyan;\">i</span>? 1." +
-                    "<br>What is the value of <span style=\"color:darkorange;\">arr[i - 1]</span>? 11.");
-                $("#expr").css("color", "deeppink");
-                $("#i").css("border-color", "cyan");
-                $("#ele0").css("border-color", "darkorange");
+                exprArrIMin1(1, 11);
                 break;
             case 5:
-                $("#promptwords").html("What is the value of <span style=\"color:cyan;\">i</span>? 1." +
-                    "<br>What is the value of <span style=\"color:darkorange;\">arr[i - 1]</span>? 11." +
-                    "<br>What is the value of <span style=\"color:mediumorchid;\">arr[i + 1]</span>? 2.");
-                $("#expr").css("color", "deeppink");
-                $("#i").css("border-color", "cyan");
-                $("#ele0").css("border-color", "darkorange");
-                $("#ele2").css("border-color", "mediumorchid");
+                exprArrIPlus1(1, 11, 2);
                 break;
             case 6:
-                $("#promptwords").html("What is the value of <span style=\"color:cyan;\">i</span>? 1." +
-                    "<br>What is the value of <span style=\"color:darkorange;\">arr[i - 1]</span>? 11." +
-                    "<br>What is the value of <span style=\"color:mediumorchid;\">arr[i + 1]</span>? 2." +
-                    "<br>What is the result of the expression? 13.");
-                $("#expr").css("color", "deeppink");
-                $("#i").css("border-color", "cyan");
-                $("#ele0").css("border-color", "darkorange");
-                $("#ele2").css("border-color", "mediumorchid");
+                exprResult(1, 11, 2, 13);
                 break;
             case 7:
-                $("#promptwords").html("Which index of the array is going to change? 1");
-                $("#index").css("color", "deeppink");
-                $("#ele1").css("border-color", "cyan");
+                selectIndex(1);
                 break;
             case 8:
-                $("#promptwords").html("Update that index of the array.");
-                $("#ele1").css("border-color", "cyan");
-                $("#ele1").html("13");
+                updateArray(1, 13);
                 break;
             case 9:
-                $("#promptwords").html("The current value of i is 2");
-                $("#i").html("2");
-                $("#incr").css("color", "deeppink");
-                $("#i").css("border-color", "cyan");
+                iValue(2);
                 break;
             case 10:
-                $("#promptwords").html("Is <span style=\"color:deeppink\">i < arr.length - 1</span>? Yes.");
-                $("#test").css("color", "deeppink");
+                loopTest("Yes");
                 break;
             case 11:
-                $("#promptwords").html("Let's evaluate the expression now!");
-                $("#expr").css("color", "deeppink");
+                exprEvalPrompt();
                 break;
             case 12:
-                $("#promptwords").html("What is the value of <span style=\"color:cyan;\">i</span>? 2.");
-                $("#expr").css("color", "deeppink");
-                $("#i").css("border-color", "cyan");
+                exprIValue(2);
                 break;
             case 13:
-                $("#promptwords").html("What is the value of <span style=\"color:cyan;\">i</span>? 2." +
-                    "<br>What is the value of <span style=\"color:darkorange;\">arr[i - 1]</span>? 13.");
-                $("#expr").css("color", "deeppink");
-                $("#i").css("border-color", "cyan");
-                $("#ele1").css("border-color", "darkorange");
+                exprArrIMin1(2, 13);
                 break;
             case 14:
-                $("#promptwords").html("What is the value of <span style=\"color:cyan;\">i</span>? 2." +
-                "<br>What is the value of <span style=\"color:darkorange;\">arr[i - 1]</span>? 13." +
-                    "<br>What is the value of <span style=\"color:mediumorchid;\">arr[i + 1]</span>? 4.");
-                $("#expr").css("color", "deeppink");
-                $("#i").css("border-color", "cyan");
-                $("#ele1").css("border-color", "darkorange");
-                $("#ele3").css("border-color", "mediumorchid");
+                exprArrIPlus1(2, 13, 4);
                 break;
             case 15:
-                $("#promptwords").html("What is the value of <span style=\"color:cyan;\">i</span>? 2." +
-                "<br>What is the value of <span style=\"color:darkorange;\">arr[i - 1]</span>? 13." +
-                "<br>What is the value of <span style=\"color:mediumorchid;\">arr[i + 1]</span>? 4." +
-                    "<br>What is the result of the expression? 21.");
-                $("#expr").css("color", "deeppink");
-                $("#i").css("border-color", "cyan");
-                $("#ele1").css("border-color", "darkorange");
-                $("#ele3").css("border-color", "mediumorchid");
+                exprResult(2, 13, 4, 30);
                 break;
             case 16:
-                $("#promptwords").html("Which index of the array is going to change? 2");
-                $("#index").css("color", "deeppink");
-                $("#ele2").css("border-color", "cyan");
+                selectIndex(2);
                 break;
             case 17:
-                $("#promptwords").html("Update that index of the array.");
-                $("#index").css("color", "deeppink");
-                $("#ele2").css("border-color", "cyan");
-                $("#ele2").html("21");
+                updateArray(2, 30);
                 break;
             case 18:
-                $("#promptwords").html("The current value of i is 3");
-                $("#i").html("3");
-                $("#i").css("border-color", "cyan");
-                $("#incr").css("color", "deeppink");
+                iValue(3)
                 break;
             case 19:
-                $("#promptwords").html("Is <span style=\"color:deeppink\">i < arr.length - 1</span>? Yes.");
-                $("#test").css("color", "deeppink");
+                loopTest("Yes");
                 break;
             case 20:
-                $("#promptwords").html("Let's evaluate the expression now!");
-                $("#expr").css("color", "deeppink");
+                exprEvalPrompt();
                 break;
             case 21:
-                $("#promptwords").html("What is the value of <span style=\"color:cyan;\">i</span>? 3.");
-                $("#expr").css("color", "deeppink");
-                $("#i").css("border-color", "cyan");
+                exprIValue(3)
                 break;
             case 22:
-                $("#promptwords").html("What is the value of <span style=\"color:cyan;\">i</span>? 3." +
-                    "<br>What is the value of <span style=\"color:darkorange;\">arr[i - 1]</span>? 21.");
-                $("#expr").css("color", "deeppink");
-                $("#i").css("border-color", "cyan");
-                $("#ele2").css("border-color", "darkorange");
+                exprArrIMin1(3, 30);
                 break;
             case 23:
-                $("#promptwords").html("What is the value of <span style=\"color:cyan;\">i</span>? 3." +
-                "<br>What is the value of <span style=\"color:darkorange;\">arr[i - 1]</span>? 21." +
-                    "<br>What is the value of <span style=\"color:mediumorchid;\">arr[i + 1]</span>? 7.");
-                $("#expr").css("color", "deeppink");
-                $("#i").css("border-color", "cyan");
-                $("#ele2").css("border-color", "darkorange");
-                $("#ele4").css("border-color", "mediumorchid");
+                exprArrIPlus1(2, 30, 7);
                 break;
             case 24:
-                $("#promptwords").html("What is the value of <span style=\"color:cyan;\">i</span>? 3." +
-                "<br>What is the value of <span style=\"color:darkorange;\">arr[i - 1]</span>? 21." +
-                "<br>What is the value of <span style=\"color:mediumorchid;\">arr[i + 1]</span>? 7." +
-                    "<br>What is the result of the expression? 42.");
-                $("#expr").css("color", "deeppink");
-                $("#i").css("border-color", "cyan");
-                $("#ele2").css("border-color", "darkorange");
-                $("#ele4").css("border-color", "mediumorchid");
+                exprResult(2, 30, 7, 67);
                 break;
             case 25:
-                $("#promptwords").html("Which index of the array is going to change? 3");
-                $("#index").css("color", "deeppink");
-                $("#ele3").css("border-color", "cyan");
+                selectIndex(3);
                 break;
             case 26:
-                $("#promptwords").html("Update that index of the array.");
-                $("#index").css("color", "deeppink");
-                $("#ele3").css("border-color", "cyan");
-                $("#ele3").html("42");
+                updateArray(3, 67);
                 break;
             case 27:
-                $("#promptwords").html("The current value of i is 4");
-                $("#i").html("4");
-                $("#i").css("border-color", "cyan");
-                $("#incr").css("color", "deeppink");
+                iValue(4);
                 break;
             case 28:
-                $("#promptwords").html("Is <span style=\"color:deeppink\">i < arr.length - 1</span>? No.");
-                $("#test").css("color", "deeppink");
+                loopTest("No");
                 break;
             case 29:
-                $("#promptwords").html("We are done!");
-                $("#next").html("Start over");
-                step = -1;
+                done();
                 break;
         }
         step++;
 
+    }
+
+    /** Prompts for the current value of i and updates it
+     *
+     * @param i the current value of i
+     */
+    function iValue(i) {
+        $("#promptwords").html("The current value of i is " + i);
+        $("#i").html(i);
+        $("#i").css("border-color", "cyan");
+        if (i === 1) {
+            $("#init").css("color", "deeppink");
+        } else {
+            $("#incr").css("color", "deeppink");
+        }
+    }
+
+    /**
+     * Prompts for if the for loop test passes
+     *
+     * @param doesPass "Yes" if the test passes, "No" otherwise
+     */
+    function loopTest(doesPass) {
+        $("#promptwords").html("Is <span style=\"color:deeppink\">i < arr.length - 1</span>? " + doesPass);
+        $("#test").css("color", "deeppink");
+    }
+
+    /**
+     * Prompts to evaluate the expression
+     */
+    function exprEvalPrompt() {
+        $("#promptwords").html("Let's evaluate the expression now!");
+        $("#expr").css("color", "deeppink");
+    }
+
+    /**
+     * Prompts for the current value of i in the expression
+     *
+     * @param i the current value of i
+     */
+    function exprIValue(i) {
+        $("#promptwords").html("What is the value of <span style=\"color:cyan;\">i</span>? " + i);
+        $("#expr").css("color", "deeppink");
+        $("#i").css("border-color", "cyan");
+    }
+
+    /**
+     * Prompts for the value at the index i - 1
+     *
+     * @param i the current value of i
+     * @param iMin1 the current value of the index i - 1
+     */
+    function exprArrIMin1(i, iMin1) {
+        $("#promptwords").html("What is the value of <span style=\"color:cyan;\">i</span>? " + i +
+        "<br>What is the value of <span style=\"color:darkorange;\">arr[i - 1]</span>? " + iMin1);
+        $("#expr").css("color", "deeppink");
+        $("#i").css("border-color", "cyan");
+        $("#ele" + (i - 1)).css("border-color", "darkorange");
+    }
+
+    /**
+     * Prompts for the value at the index i + 1
+     *
+     * @param i the current value of i
+     * @param iMin1 the current value of the index i - 1
+     * @param iPlus1 the current value of the index i + 1
+     */
+    function exprArrIPlus1(i, iMin1, iPlus1) {
+        $("#promptwords").html("What is the value of <span style=\"color:cyan;\">i</span>? " + i +
+        "<br>What is the value of <span style=\"color:darkorange;\">arr[i - 1]</span>? " + iMin1 +
+        "<br>What is the value of <span style=\"color:mediumorchid;\">arr[i + 1]</span>? " + iPlus1);
+        $("#expr").css("color", "deeppink");
+        $("#i").css("border-color", "cyan");
+        $("#ele" + (i - 1)).css("border-color", "darkorange");
+        $("#ele" + (i + 1)).css("border-color", "mediumorchid");
+    }
+
+    /**
+     * Prompts for the result of the expression
+     *
+     * @param i the current value of i
+     * @param iMin1 the current value of the index i - 1
+     * @param iPlus1 the current value of the index i + 1
+     * @param result the value of the expression
+     */
+    function exprResult(i, iMin1, iPlus1, result) {
+        $("#promptwords").html("What is the value of <span style=\"color:cyan;\">i</span>? " + i +
+        "<br>What is the value of <span style=\"color:darkorange;\">arr[i - 1]</span>? " + iMin1 +
+        "<br>What is the value of <span style=\"color:mediumorchid;\">arr[i + 1]</span>? " + iPlus1 +
+        "<br>What is the result of the expression? " + result);
+        $("#expr").css("color", "deeppink");
+        $("#i").css("border-color", "cyan");
+        $("#ele" + (i - 1)).css("border-color", "darkorange");
+        $("#ele" + (i + 1)).css("border-color", "mediumorchid");
+    }
+
+    /**
+     * Prompts for the index in the array that will change
+     *
+     * @param index the index that will change
+     */
+    function selectIndex(index) {
+        $("#promptwords").html("Which index of the array is going to change? " + index);
+        $("#index").css("color", "deeppink");
+        $("#ele" + index).css("border-color", "cyan");
+    }
+
+    /**
+     * Prompts the array is updated and updates the array at index index to value val
+     *
+     * @param index the index that will be changed
+     * @param val the value that arr[index] will be changed to
+     */
+    function updateArray(index, val) {
+        $("#promptwords").html("Update that index of the array.");
+        $("#ele" + index).css("border-color", "cyan");
+        $("#ele" + index).html(val);
+    }
+
+    /**
+     *  Prompts the user that the problem is over
+     */
+    function done() {
+        $("#promptwords").html("We are done!");
+        $("#next").html("Start over");
+        step = -1;
     }
 
     // Called when the back button is pressed
@@ -217,6 +251,9 @@
         }
     }
 
+    /**
+     * Resets the array to its original values
+     */
     function init() {
         $("#ele1").html("14");
         $("#ele2").html("2");
