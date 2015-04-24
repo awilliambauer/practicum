@@ -77,13 +77,10 @@
 		CURRENT_STEP++;
 		var prompt = CONTENTS[2 * CURRENT_STEP];
 		var vars = CONTENTS[2 * CURRENT_STEP + 1].split("\t");
-<<<<<<< HEAD
 		//console.log("vars = " + vars);
 		var updated_vars = vars.slice(2, vars.length) // get all of the variables changed in this line
 		updateVariables(updated_vars);
-=======
 		// if vars contains variables
->>>>>>> origin/dev-wceriale
 		var line = vars[0] - 1;
 		var crossout;
 		console.log("line was: " + (CURRENT_LINE + 1) + ", moved to: " + (line + 1));
@@ -110,11 +107,8 @@
 				highlightLine(crossout[i] - 1, "cross_out");
 			}
 		}
-<<<<<<< HEAD
 		drawVariableBank();
-=======
 		OLD_VARS = vars;
->>>>>>> origin/dev-wceriale
 	}
 
 	// moves the prompt to the given line
