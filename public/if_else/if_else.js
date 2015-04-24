@@ -84,13 +84,14 @@
 		var line = vars[0] - 1;
 		var crossout;
 		console.log("line was: " + (CURRENT_LINE + 1) + ", moved to: " + (line + 1));
-		if( vars.length > 2) {
+		if (vars.length > 2) {
 			console.log("comment being added");
 			addComment(vars);
 		}
 		if (line != CURRENT_LINE) {
 			console.log(vars.length);
 			movePrompt(line - CURRENT_LINE);
+		}
 		// don't do this the first time
 		if (line != CURRENT_LINE && line != -1) {
 			movePrompt(line);
