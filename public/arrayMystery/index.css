@@ -1,0 +1,124 @@
+#contentwindow {
+    background-color: white;
+    border-color: black;
+    border-style: solid;
+    border-radius: 20px;
+    font-family: sans-serif;
+    color: #594F4F;
+    overflow: hidden;
+    margin-left: auto;
+    margin-right: auto;
+    width: 900px;
+    box-shadow: 0px 0px 15px #888888;
+}
+
+#problemcontents {
+    width: 450px;
+    padding-left: 30px;
+    padding-bottom: 30px;
+    float: left;
+}
+
+.vardata,   {
+    font-size: 35px;
+    /*border: 2px solid darkgray;*/
+    /*border-collapse: collapse;*/
+}
+
+#arraydata {
+    border: 2px solid darkgray;
+    border-collapse: collapse;
+}
+
+
+#indices {
+    font-size: 20px;
+}
+
+.vardata, .varlabel {
+    float: left;
+    margin: 20px;
+}
+
+td {
+    padding: 15px;
+    width: 50px;
+    text-align: center;
+    border: 2px solid darkgrey;
+}
+
+.variable {
+    clear: left;
+}
+
+.digit {
+    width: 40px;
+    text-align: center;
+    border: 2px solid darkgray;
+}
+
+#prompt {
+    border: 3px solid #547980;
+    border-radius: 10px;
+    width: 300px;
+    float: right;
+    margin: 50px;
+    padding-left: 10px;
+    height: 150px;
+    box-shadow: 0px 0px 15px #888888;
+}
+
+hr {
+    clear: left;
+}
+
+.right {
+    background-color: lawngreen;
+}
+
+.wrong {
+    background-color: red;
+}
+
+
+#prompttextbox {
+    height: 90px;
+    text-align: center;
+}
+
+#next {
+    float: right;
+    margin-right: 8px;
+}
+
+#next, #back {
+    background: #547980;
+    background-image: -webkit-linear-gradient(top, #547980, #45ADA8);
+    background-image: -moz-linear-gradient(top, #547980, #45ADA8);
+    background-image: -ms-linear-gradient(top, #547980, #45ADA8);
+    background-image: -o-linear-gradient(top, #547980, #45ADA8);
+    background-image: linear-gradient(to bottom, #547980, #45ADA8);
+    -webkit-border-radius: 28;
+    -moz-border-radius: 28;
+    border-radius: 28px;
+    text-shadow: 4px 3px 10px #666666;
+    font-family: Arial;
+    color: #ffffff;
+    font-size: 15px;
+    padding: 5px 10px 5px 10px;
+    text-decoration: none;
+}
+
+#next:hover, #back:hover {
+    background: #9de0ad;
+    background-image: -webkit-linear-gradient(top, #9de0ad, #81b38d);
+    background-image: -moz-linear-gradient(top, #9de0ad, #81b38d);
+    background-image: -ms-linear-gradient(top, #9de0ad, #81b38d);
+    background-image: -o-linear-gradient(top, #9de0ad, #81b38d);
+    background-image: linear-gradient(to bottom, #9de0ad, #81b38d);
+    text-decoration: none;
+}
+
+#next:focus, #back:focus {
+    outline: 0;
+}

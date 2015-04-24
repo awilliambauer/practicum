@@ -14,13 +14,6 @@ body, h1, .content, .container-fluid, #header, #footer {
     margin: 0px;
 }
 
-
-#topnavDIV {
-    background-color: #547980;
-    color: #E5FCC2;
-    font-weight: bold;
-}
-
 #header {
     text-align: center;
     padding: 25px;
@@ -42,6 +35,11 @@ h1 {
     bottom: 0;
     overflow: hidden;
     width: 100%;
+}
+
+
+#header {
+    margin-top: 40px;
 }
 
 .content {
