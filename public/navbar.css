@@ -29,7 +29,13 @@ body {
     position:absolute;
     width:100%;
     z-index:999;
+<<<<<<< HEAD
     background-color:#CE3850;
+=======
+    background-color: #547980;
+    color: #E5FCC2;
+    font-weight: bold;
+>>>>>>> array-mystery
     opacity:0.98;
     height:40px;
 }
@@ -42,7 +48,7 @@ body {
     color:#f5f5f5;
 }
 .topnav a:hover, .topnav a:active, .topnav a:focus {
-    background-color:#A52D40 !important;
+    background-color:#436166 !important;
     text-decoration: none;
     color:#ffffff !important;
 }
