@@ -1,6 +1,10 @@
+body {
+    background-color: #45ADA8;
+}
+
 #contentwindow {
     background-color: white;
-    border-color: black;
+    border-color: #547980;
     border-style: solid;
     border-radius: 20px;
     font-family: sans-serif;
@@ -8,6 +12,7 @@
     overflow: hidden;
     margin-left: auto;
     margin-right: auto;
+    margin-top: 40px;
     width: 900px;
     box-shadow: 0px 0px 15px #888888;
 }

@@ -85,10 +85,10 @@
                 exprArrIMin1(3, 30);
                 break;
             case 23:
-                exprArrIPlus1(2, 30, 7);
+                exprArrIPlus1(3, 30, 7);
                 break;
             case 24:
-                exprResult(2, 30, 7, 67);
+                exprResult(3, 30, 7, 67);
                 break;
             case 25:
                 selectIndex(3);
