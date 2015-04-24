@@ -83,14 +83,9 @@
 		// if vars contains variables
 		var line = vars[0] - 1;
 		var crossout;
-		console.log("line was: " + (CURRENT_LINE + 1) + ", moved to: " + (line + 1));
 		if (vars.length > 2) {
 			console.log("comment being added");
 			addComment(vars);
-		}
-		if (line != CURRENT_LINE) {
-			console.log(vars.length);
-			movePrompt(line - CURRENT_LINE);
 		}
 		// don't do this the first time
 		if (line != CURRENT_LINE && line != -1) {
@@ -102,8 +97,6 @@
 		$("#prompt").text(prompt);
 		if (vars.length > 1 && vars[1].trim() != "") {
 			crossout = vars[1].split(",");
-			console.log(vars);
-
 			for (var i = 0; i < crossout.length; i++) {
 				highlightLine(crossout[i] - 1, "cross_out");
 			}
@@ -120,12 +113,6 @@
 		var lineHeight = $("ul > li").css("height");
 		lineHeight = parseInt(lineHeight.substring(0, lineHeight.length - 2));
 		$("#prompt").animate({top: currentTop + (line - CURRENT_LINE) * (lineHeight) + "px"});
-		$("#prompt").animate({top: currentTop + lines * (lineHeight) + "px"});
-	}
-
-	// changes the highlighted line to the given line number of the problem
-	function moveLine() {
-		highlightLine(CURRENT_LINE, "highlight");
 	}
 
 	// accepts an array of Strings
@@ -139,7 +126,7 @@
 		} else { // Is variable change
 			console.log("going into else statement");
 			for(var i = 2; i < vars.length; i += 2) {
-				$(comment).text("\t//" + vars[i] + " = " + vars[i + 1]);
+				$(comment).text($(comment).text() + "\t//" + vars[i] + " = " + vars[i + 1]);
 			}
 			console.log("\t//" + vars[i] + " = " + vars[i + 1]);
 		}
