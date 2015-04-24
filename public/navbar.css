@@ -1,5 +1,14 @@
+body {
+    margin: 0px;
+    padding: 0px;
+}
+
 .topnav {
     margin-left: 0px;
+}
+
+.container-fluid > ul {
+    margin: 8pt;
 }
 
 .navlinks {
@@ -14,23 +23,6 @@
 .home_icon {
     width: 50px;
     height: 40px;
-}
-
-.box {
-    background-color: #F0F0F0;
-    border: solid;
-    border-radius: 5%;
-    font-size: 20pt;
-    float:left;
-    overflow: hidden;
-    display: inline-block;
-    width: 175px;
-    height: 100px;
-    vertical-align: middle;
-    padding: 0;
-    margin: 5%;
-    margin-top: 2%;
-    margin-bottom: 2%;
 }
 
 .topnavContainer {
