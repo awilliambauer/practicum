@@ -1,4 +1,3 @@
-
 body {
     background-color: #0CC5B2;
     font-family: Arial, Tahoma, sans-serif;
@@ -16,9 +15,10 @@ h1 {
 .content {
     width: 50%;
     background-color: #FFF9E8;
-    float: left;
     margin-top: 40px;
-    margin-left: 25%;
+    margin-left: auto;
+    margin-right: auto;
+    overflow: hidden;
 }
 
 .topnav {
