@@ -7,7 +7,7 @@ h3 > span, #answer_box > span, input[type="text"] {
 }
 
 pre > span { /* comment */
-	color: orange;
+	color: #ff5900;
 }
 
 #problem_space, #answer_box {
