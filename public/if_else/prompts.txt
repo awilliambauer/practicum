@@ -27,6 +27,6 @@ Booleans: What does this expression evaluate to?
 If/Else: Since this branch evaluated to true, we won't enter any of the following branches.
 12	14,15	true
 Assignment: What is the value of this variable after this line executes?
-13
+13	
 Answer: Now use your variable bank to fill in the answer!
 18		y	17
