@@ -1,0 +1,32 @@
+
+
+If/Else: Before starting, note the separate if/else blocks that are highlighted.
+
+Initialization: What are the starting values of our variables?
+1		
+Initialization: What is the starting value of this variable?
+2		x	3	y	20
+Conditionals: We're at the beginning of a new if/else block. Let's find the first branch that evaluates to true.
+4		z	4
+Booleans: What does this expression evaluate to?
+4		
+If/Else: Since this test evaluated to false, we won't go into this branch.
+4	5	false
+If/Else: We enter this else branch because all other tests in this structure evaluated to false
+6
+Assignment: What is the value of this variable after this line executes?
+7		
+Conditionals: We're at the beginning of a new if/else block. Let's find the first branch that evaluates to true.
+10		z	13
+Booleans: What does this expression evaluate to?
+10		
+If/Else: Since this test evaluated to false, we won't go into this branch.
+10	11	false
+Booleans: What does this expression evaluate to?
+12		
+If/Else: Since this branch evaluated to true, we won't enter any of the following branches.
+12	14,15	true
+Assignment: What is the value of this variable after this line executes?
+13		
+Answer: Now use your variable bank to fill in the answer!
+18		y	17

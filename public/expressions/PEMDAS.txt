@@ -1,0 +1,71 @@
+PEMDAS
+Assumption: starting with proper expression as String
+
+String main(String exp) {
+
+    //handling parenthesis
+	int curr = 0; //current index, starts at index 0
+	//parse string for opening parenthesis starting at curr
+	while (curr != exp.length()) {
+		if (open paren found) {
+			int count = 1;
+			int begin = curr; //open paren index
+			int end = begin;
+			while(count != 0) {  //count == 0 means reached closing paren
+				parse string from begin
+				if(open paren) {
+					count++;
+				}else if(close paren) {
+					count--;
+				}
+				end++;
+			}
+			String replace = main(exp.substring(begin,end)); 
+			//recursive to find nested parens
+			exp = exp.substring(0,begin) + replace + exp.substring(end);
+		}
+		curr++;
+	}
+
+	//handling multiplication/division/modulo
+	curr = 0;
+	//in following code: prev = value before operan, next = value after operand
+	//after operation place resulting value back into String
+	while (curr != exp.length()) {
+		if (multiplication found) {
+			prev * next
+			//assuming double<->int conversion
+		} else if (division found) {
+			if(prev and next are ints) {
+				prev / next (integer division) //answer will be int
+			} else {
+				prev / next //answer will be double
+			}
+		} else if(mod found) {
+			prev % next
+		}
+		curr++;
+	}
+
+	//handling addition/subtraction
+	curr = 0;
+	//in following code: prev = value before operan, next = value after operand
+	//after operation place resulting value back into String
+	while (curr != exp.length()) {
+		if (addition found) {
+			if (prev or next is a String) {
+				String concatenation, add two Strings
+			} else {
+				prev + next
+				//assume proper double<->int conversion
+			}
+		} else if (subtraction found) {
+			prev - next
+			//assume proper double<->int conversion
+		} 
+		curr++;
+	}
+
+	return exp
+}
+
