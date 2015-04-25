@@ -24,6 +24,10 @@ body {
     float: left;
 }
 
+#problemdescription {
+
+}
+
 .vardata,   {
     font-size: 35px;
     /*border: 2px solid darkgray;*/
@@ -126,4 +130,10 @@ hr {
 
 #next:focus, #back:focus {
     outline: 0;
+}
+
+@keyframes shrink {
+    from {
+
+    }
 }
