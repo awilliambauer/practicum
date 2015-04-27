@@ -13,6 +13,9 @@
         clearHighlights();
         $("#next").html("Next"); //reset next button
         switch (step) {
+            case -1:
+                resetScreen();
+                break;
             case 0:
                 init();
                 iValue(1);
@@ -120,6 +123,19 @@
         });
         $("#problemtext").animate({
             "fontSize": "17px"
+        });
+    }
+
+    /** Increases size of problem description with concurrent fadein, and
+     * decreases size of problem text
+     * */
+    function growProblemDes() {
+        $("#problemdescription").fadeTo(500,1);
+        $("#problemdescription").animate({
+            "fontSize": "15px"
+        });
+        $("#problemtext").animate({
+            "fontSize": "12px"
         });
     }
 
@@ -246,7 +262,7 @@
     function done() {
         $("#promptwords").html("We are done!");
         $("#next").html("Start over");
-        step = -1;
+        step = -2;
     }
 
     // Called when the back button is pressed
@@ -271,6 +287,14 @@
         $("#ele1").html("14");
         $("#ele2").html("2");
         $("#ele3").html("4");
+    }
+
+    /** Returns screen to onload state, with initial prompt message and original (approx) sizing
+     * of problem description and problem text.
+     * */
+    function resetScreen() {
+        $("#promptwords").html("Let's start the problem!");
+        growProblemDes();
     }
 
     // Removes all styling highlighting boxes and coloring text
