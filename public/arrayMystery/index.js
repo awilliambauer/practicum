@@ -110,6 +110,9 @@
 
     }
 
+    /** Decreases size of problem description with concurrent fadeout, and
+    * increases size of problem text
+    * */
     function shrinkProblemDes() {
         $("#problemdescription").fadeTo(500,0.3);
         $("#problemdescription").animate({
@@ -118,10 +121,7 @@
         $("#problemtext").animate({
             "fontSize": "17px"
         });
-        //$("#problemtext").css("font-size", "18px");
-        //$("#problemtext").css("margin-top", "100px");
     }
-        //$("problemtext").css("height", "100px");
 
     /** Prompts for the current value of i and updates it
      *
