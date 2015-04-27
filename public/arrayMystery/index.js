@@ -3,20 +3,20 @@
 
     var step = 0;
 
-    window.onload = function() {
+    window.onload = function () {
         $("#next").on("click", next);
         $("#back").on("click", back);
-
     };
 
     // Called when the user presses the next button
     function next() {
         clearHighlights();
         $("#next").html("Next"); //reset next button
-        switch(step) {
+        switch (step) {
             case 0:
                 init();
                 iValue(1);
+                shrinkProblemDes();
                 break;
             case 1:
                 loopTest("Yes");
@@ -108,6 +108,19 @@
         }
         step++;
 
+    }
+
+    /** Decreases size of problem description with concurrent fadeout, and
+    * increases size of problem text
+    * */
+    function shrinkProblemDes() {
+        $("#problemdescription").fadeTo(500,0.3);
+        $("#problemdescription").animate({
+            "fontSize": "10px"
+        });
+        $("#problemtext").animate({
+            "fontSize": "17px"
+        });
     }
 
     /** Prompts for the current value of i and updates it
