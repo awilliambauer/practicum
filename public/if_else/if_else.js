@@ -77,7 +77,6 @@
 		CURRENT_STEP++;
 		var prompt = CONTENTS[2 * CURRENT_STEP];
 		var vars = CONTENTS[2 * CURRENT_STEP + 1].split("\t");
-		//console.log("vars = " + vars);
 		var updated_vars = vars.slice(2, vars.length) // get all of the variables changed in this line
 
 		// Only updates if vars contains variables
@@ -88,8 +87,8 @@
 		var line = vars[0] - 1;
 		var crossout;
 		if (vars.length > 2) {
-			console.log("comment being added");
 			addComment(vars);
+//			addInteraction(vars);
 		}
 		// don't do this the first time
 		if (line != CURRENT_LINE && line != -1) {
