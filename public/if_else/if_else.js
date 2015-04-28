@@ -129,10 +129,15 @@
 			$(comment).text("\t// " + vars[2]);
 		} else { // Is variable change
 			console.log("going into else statement");
-			for(var i = 2; i < vars.length; i += 2) {
-				$(comment).text($(comment).text() + "\t// " + vars[i] + " = " + vars[i + 1]);
+			var variable_comments = "\t// ";
+			for (var variable_name in VARIABLES) {
+				var variable = VARIABLES[variable_name];
+				console.log("variable[name] + \" = \" + variable[value]");
+				variable_comments += variable["name"] + " = " + variable["value"] + ", ";
 			}
-			console.log("\t//" + vars[i] + " = " + vars[i + 1]);
+			//removes trailing comma
+			variable_comments = variable_comments.substr(0, variable_comments.length - 2);
+			$(comment).text(variable_comments);
 		}
 		console.log(comment);
 		$(".highlight").append(comment);
