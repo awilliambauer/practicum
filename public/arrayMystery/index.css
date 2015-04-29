@@ -1,3 +1,15 @@
+/*
+I demand a pancake color scheme:
+
+dark gray: #594F4F
+dark blue: #547980
+med green-blue: #45ADA8
+light green: #9DE0AD
+lightest green: #E5FCC2
+*/
+
+
+
 body {
     background-color: #45ADA8;
 }
@@ -138,8 +150,3 @@ hr {
     outline: 0;
 }
 
-@keyframes shrink {
-    from {
-
-    }
-}
