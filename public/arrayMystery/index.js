@@ -146,11 +146,11 @@
     function iValue(i) {
         $("#promptwords").html("The current value of i is " + i);
         $("#i").html(i);
-        $("#i").css("border-color", "cyan");
+        $("#i").css("border-color", "#45ADA8");
         if (i === 1) {
-            $("#init").css("color", "deeppink");
+            applyEmphasis("#init");
         } else {
-            $("#incr").css("color", "deeppink");
+            applyEmphasis("#init");
         }
     }
 
@@ -160,8 +160,8 @@
      * @param doesPass "Yes" if the test passes, "No" otherwise
      */
     function loopTest(doesPass) {
-        $("#promptwords").html("Is <span style=\"color:deeppink\">i < arr.length - 1</span>? " + doesPass);
-        $("#test").css("color", "deeppink");
+        $("#promptwords").html("Is <span style=\"color:#45ADA8\">i < arr.length - 1</span>? " + doesPass);
+        applyEmphasis("#test");
     }
 
     /**
@@ -169,7 +169,7 @@
      */
     function exprEvalPrompt() {
         $("#promptwords").html("Let's evaluate the expression now!");
-        $("#expr").css("color", "deeppink");
+        applyEmphasis("#expr");
     }
 
     /**
@@ -178,9 +178,9 @@
      * @param i the current value of i
      */
     function exprIValue(i) {
-        $("#promptwords").html("What is the value of <span style=\"color:cyan;\">i</span>? " + i);
-        $("#expr").css("color", "deeppink");
-        $("#i").css("border-color", "cyan");
+        $("#promptwords").html("What is the value of <span style=\"color: #45ada8;\">i</span>? " + i);
+        applyEmphasis("#expr");
+        $("#i").css("border-color", "#45ADA8");
     }
 
     /**
@@ -190,11 +190,11 @@
      * @param iMin1 the current value of the index i - 1
      */
     function exprArrIMin1(i, iMin1) {
-        $("#promptwords").html("What is the value of <span style=\"color:cyan;\">i</span>? " + i +
-        "<br>What is the value of <span style=\"color:darkorange;\">arr[i - 1]</span>? " + iMin1);
-        $("#expr").css("color", "deeppink");
-        $("#i").css("border-color", "cyan");
-        $("#ele" + (i - 1)).css("border-color", "darkorange");
+        $("#promptwords").html("What is the value of <span style=\"color:#45ADA8;\">i</span>? " + i +
+        "<br>What is the value of <span style=\"background-color: #E5FCC2;\">arr[i - 1]</span>? " + iMin1);
+        applyEmphasis("#expr");
+        $("#i").css("border-color", "#E5FCC2");
+        $("#ele" + (i - 1)).css("border-color", "#E5FCC2");
     }
 
     /**
@@ -289,6 +289,12 @@
         $("#ele3").html("4");
     }
 
+    function applyEmphasis(element) {
+        $(element).css("color", "#45ADA8");
+        $(element).css("font-weight", "bold");
+    }
+
+
     /** Returns screen to onload state, with initial prompt message and original (approx) sizing
      * of problem description and problem text.
      * */
@@ -320,6 +326,13 @@
         $("#2").css("color", "black");
         $("#3").css("color", "black");
         $("#4").css("color", "black");
+
+        //Reset bolded terms to normal weight
+        $("#init").css("font-weight", "normal");
+        $("#test").css("font-weight", "normal");
+        $("#incr").css("font-weight", "normal");
+        $("#index").css("font-weight", "normal");
+        $("#expr").css("font-weight", "normal");
     }
     //1)   What is the current value of i?
     //    2)   Does the for loop test pass?
