@@ -193,7 +193,11 @@
         $("#promptwords").html("What is the value of <span style=\"color:#45ADA8;\">i</span>? " + i +
         "<br>What is the value of <span style=\"background-color: #E5FCC2;\">arr[i - 1]</span>? " + iMin1);
         applyEmphasis("#expr");
-        $("#i").css("border-color", "#E5FCC2");
+
+        /*highlight portion of problem text containing "arr[i - 1]"*/
+        $("#exprP1").css("background-color", "#E5FCC2");
+
+        $("#i").css("border-color", "#45ADA8");
         $("#ele" + (i - 1)).css("border-color", "#E5FCC2");
     }
 
@@ -205,13 +209,16 @@
      * @param iPlus1 the current value of the index i + 1
      */
     function exprArrIPlus1(i, iMin1, iPlus1) {
-        $("#promptwords").html("What is the value of <span style=\"color:cyan;\">i</span>? " + i +
-        "<br>What is the value of <span style=\"color:darkorange;\">arr[i - 1]</span>? " + iMin1 +
-        "<br>What is the value of <span style=\"color:mediumorchid;\">arr[i + 1]</span>? " + iPlus1);
-        $("#expr").css("color", "deeppink");
-        $("#i").css("border-color", "cyan");
-        $("#ele" + (i - 1)).css("border-color", "darkorange");
-        $("#ele" + (i + 1)).css("border-color", "mediumorchid");
+        $("#promptwords").html("What is the value of <span style=\"color: #45ada8;\">i</span>? " + i +
+        "<br>What is the value of <span style=\"background-color: #E5FCC2;\">arr[i - 1]</span>? " + iMin1 +
+        "<br>What is the value of <span style=\"background-color: #9DE0AD;\">arr[i + 1]</span>? " + iPlus1);
+
+        applyEmphasis("#expr");
+        $("#exprP1").css("background-color", "#E5FCC2");
+        $("#exprP2").css("background-color", "#9DE0AD");
+        $("#i").css("border-color", "#45ADA8");
+        $("#ele" + (i - 1)).css("border-color", "#E5FCC2");
+        $("#ele" + (i + 1)).css("border-color", "#9DE0AD");
     }
 
     /**
@@ -224,13 +231,16 @@
      */
     function exprResult(i, iMin1, iPlus1, result) {
         $("#promptwords").html("What is the value of <span style=\"color:cyan;\">i</span>? " + i +
-        "<br>What is the value of <span style=\"color:darkorange;\">arr[i - 1]</span>? " + iMin1 +
-        "<br>What is the value of <span style=\"color:mediumorchid;\">arr[i + 1]</span>? " + iPlus1 +
+        "<br>What is the value of <span style=\"background-color: #e5fcc2;\">arr[i - 1]</span>? " + iMin1 +
+        "<br>What is the value of <span style=\"background-color: #9DE0AD;\">arr[i + 1]</span>? " + iPlus1 +
         "<br>What is the result of the expression? " + result);
-        $("#expr").css("color", "deeppink");
-        $("#i").css("border-color", "cyan");
-        $("#ele" + (i - 1)).css("border-color", "darkorange");
-        $("#ele" + (i + 1)).css("border-color", "mediumorchid");
+
+        applyEmphasis("#expr");
+        $("#exprP1").css("background-color", "#E5FCC2");
+        $("#exprP2").css("background-color", "#9DE0AD");
+        $("#i").css("border-color", "#45ADA8");
+        $("#ele" + (i - 1)).css("border-color", "#E5FCC2");
+        $("#ele" + (i + 1)).css("border-color", "#9DE0AD");
     }
 
     /**
@@ -240,8 +250,8 @@
      */
     function selectIndex(index) {
         $("#promptwords").html("Which index of the array is going to change? " + index);
-        $("#index").css("color", "deeppink");
-        $("#ele" + index).css("border-color", "cyan");
+        applyEmphasis("#index");
+        $("#ele" + index).css("border-color", "#45ADA8");
     }
 
     /**
@@ -252,7 +262,7 @@
      */
     function updateArray(index, val) {
         $("#promptwords").html("Update that index of the array.");
-        $("#ele" + index).css("border-color", "cyan");
+        $("#ele" + index).css("border-color", "#45ADA8");
         $("#ele" + index).html(val);
     }
 
@@ -333,6 +343,10 @@
         $("#incr").css("font-weight", "normal");
         $("#index").css("font-weight", "normal");
         $("#expr").css("font-weight", "normal");
+
+        //Reset highlighted terms:
+        $("#exprP1").css("background-color", "white");
+        $("#exprP2").css("background-color", "white");
     }
     //1)   What is the current value of i?
     //    2)   Does the for loop test pass?
