@@ -10,10 +10,10 @@ $(document).ready(function() {
     $(".navlinks").append("<li class='expressions'>");
     $(".navlinks").append("<li class='ifelse'>");
     $(".navlinks").append("<li class='arraymystery'>");
-    $(".home_icon").append("<a href='~/public/index.html' class='topnav_home' title='Home'>&nbsp;</a>");
-    $(".expressions").append("<a href='~/public/expressions/expressions.html' class='topnav_expressions' title='Expressions'>Expressions</a>");
-    $(".ifelse").append("<a href='~/public/if_else/index.html' class='topnav_ifelse' title='If/Else'>If/Else</a>");
-    $(".arraymystery").append("<a href='~/public/arrayMystery/index.html' class='topnav_array' title='Array Mystery'>Array Mystery</a>");
+    $(".home_icon").append("<a href='/csedresearch/public/index.html' class='topnav_home' title='Home'>&nbsp;</a>");
+    $(".expressions").append("<a href='/csedresearch/public/expressions/expressions.html' class='topnav_expressions' title='Expressions'>Expressions</a>");
+    $(".ifelse").append("<a href='/csedresearch/public/if_else/index.html' class='topnav_ifelse' title='If/Else'>If/Else</a>");
+    $(".arraymystery").append("<a href='/csedresearch/public/arrayMystery/index.html' class='topnav_array' title='Array Mystery'>Array Mystery</a>");
 
 
 });
