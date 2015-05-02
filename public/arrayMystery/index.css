@@ -61,6 +61,7 @@ body {
 .vardata, .varlabel {
     float: left;
     margin: 20px;
+    margin-right: 40px;
 }
 
 .varlabel {
