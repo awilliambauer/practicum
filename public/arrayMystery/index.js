@@ -116,8 +116,10 @@
 
     }
 
-    /**
-     *
+    /** Crude version of figuring out loop bounds.
+     * If they enter 0 as the first index, it turns green and
+     * autofills the rest of the indices. Turns red if they
+     * get it wrong.
      */
     function loopBounds() {
         $("#promptwords").html("Let us determine the bounds of the loop <br> Enter the value for the first index");
