@@ -15,4 +15,5 @@ $(document).ready(function() {
     $(".ifelse").append("<a href='~/public/if_else/index.html' class='topnav_ifelse' title='If/Else'>If/Else</a>");
     $(".arraymystery").append("<a href='~/public/arrayMystery/index.html' class='topnav_array' title='Array Mystery'>Array Mystery</a>");
 
+
 });
