@@ -122,6 +122,11 @@ hr {
     background-color: red;
 }
 
+input {
+    width: 26px;
+    background-color: #B5F3C4;
+    text-align: center;
+}
 
 #prompttextbox {
     height: 90px;

@@ -17,100 +17,122 @@
                 resetScreen();
                 break;
             case 0:
+                loopBounds();
+                break;
+            case 1:
                 init();
                 iValue(1);
                 shrinkProblemDes();
                 break;
-            case 1:
-                loopTest("Yes");
-                break;
             case 2:
-                exprEvalPrompt();
+                loopTest("Yes");
                 break;
             case 3:
-                exprIValue(1);
+                exprEvalPrompt();
                 break;
             case 4:
-                exprArrIMin1(1, 11);
+                exprIValue(1);
                 break;
             case 5:
-                exprArrIPlus1(1, 11, 2);
+                exprArrIMin1(1, 11);
                 break;
             case 6:
-                exprResult(1, 11, 2, 13);
+                exprArrIPlus1(1, 11, 2);
                 break;
             case 7:
-                selectIndex(1);
+                exprResult(1, 11, 2, 13);
                 break;
             case 8:
-                updateArray(1, 13);
+                selectIndex(1);
                 break;
             case 9:
-                iValue(2);
+                updateArray(1, 13);
                 break;
             case 10:
-                loopTest("Yes");
+                iValue(2);
                 break;
             case 11:
-                exprEvalPrompt();
-                break;
-            case 12:
-                exprIValue(2);
-                break;
-            case 13:
-                exprArrIMin1(2, 13);
-                break;
-            case 14:
-                exprArrIPlus1(2, 13, 4);
-                break;
-            case 15:
-                exprResult(2, 13, 4, 30);
-                break;
-            case 16:
-                selectIndex(2);
-                break;
-            case 17:
-                updateArray(2, 30);
-                break;
-            case 18:
-                iValue(3)
-                break;
-            case 19:
                 loopTest("Yes");
                 break;
-            case 20:
+            case 12:
                 exprEvalPrompt();
                 break;
+            case 13:
+                exprIValue(2);
+                break;
+            case 14:
+                exprArrIMin1(2, 13);
+                break;
+            case 15:
+                exprArrIPlus1(2, 13, 4);
+                break;
+            case 16:
+                exprResult(2, 13, 4, 30);
+                break;
+            case 17:
+                selectIndex(2);
+                break;
+            case 18:
+                updateArray(2, 30);
+                break;
+            case 19:
+                iValue(3)
+                break;
+            case 20:
+                loopTest("Yes");
+                break;
             case 21:
-                exprIValue(3)
+                exprEvalPrompt();
                 break;
             case 22:
-                exprArrIMin1(3, 30);
+                exprIValue(3)
                 break;
             case 23:
-                exprArrIPlus1(3, 30, 7);
+                exprArrIMin1(3, 30);
                 break;
             case 24:
-                exprResult(3, 30, 7, 67);
+                exprArrIPlus1(3, 30, 7);
                 break;
             case 25:
-                selectIndex(3);
+                exprResult(3, 30, 7, 67);
                 break;
             case 26:
-                updateArray(3, 67);
+                selectIndex(3);
                 break;
             case 27:
-                iValue(4);
+                updateArray(3, 67);
                 break;
             case 28:
-                loopTest("No");
+                iValue(4);
                 break;
             case 29:
+                loopTest("No");
+                break;
+            case 30:
                 done();
                 break;
         }
         step++;
 
+    }
+
+    /**
+     *
+     */
+    function loopBounds() {
+        $("#promptwords").html("Let us determine the bounds of the loop <br> Enter the value for the first index");
+        $("#firstindex").on('keyup change', function() {
+            if ($("#firstindex").val() == 0) {
+                $("#firstindex").css("background-color", "#00FF00");
+                var index = 0;
+                $("input").each(function () {
+                    $(this).val(index);
+                    index++;
+                });
+            } else {
+                $("#firstindex").css("background-color", "#FF0000");
+            }
+        });
     }
 
     /** Decreases size of problem description with concurrent fadeout, and
