@@ -63,6 +63,19 @@ body {
     margin: 20px;
 }
 
+.varlabel {
+    position: absolute;
+    right: 900px;
+}
+
+.vardata {
+    margin-left: 200px;
+}
+
+.arraylabel {
+    margin-top: 48px;
+}
+
 td {
     padding: 15px;
     width: 50px;
@@ -78,6 +91,7 @@ td {
     width: 40px;
     text-align: center;
     border: 2px solid darkgray;
+    padding: 15px;
 }
 
 #prompt {
