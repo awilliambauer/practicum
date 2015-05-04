@@ -10,7 +10,7 @@ body {
     font-family: ‘Lucida Console’, Monaco, monospace;
 }
 
-body, h1, .content, .container-fluid, #header, #footer {
+body, h1, .content, #header, #footer {
     margin: 0px;
 }
 
