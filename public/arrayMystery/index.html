@@ -4,11 +4,14 @@
             <meta charset="UTF-8">
             <title>Array Mystery</title>
             <link href="index.css" type="text/css" rel="stylesheet" />
+            <link href="../navbar.css" type="text/css" rel="stylesheet" />
             <script src="index.js"></script>
             <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+            <script src="../navigationbar.js"></script>
         </head>
     <body>
-
+        <div class="topnavContainer topnavContainerScroll">
+        </div>
         <div id="contentwindow">
 
             <div id="problemcontents">
@@ -21,11 +24,11 @@
 
                 <div id="problemtext">
                     <pre>
-        public static void arrMys(int[] arr) {
-            for (<span id="init">int i = 1</span>; <span id="test">i < arr.length - 1</span>; <span id="incr">i++</span>) {
-                <span id="index">arr[i]</span> = <span id="expr">i * arr[i - 1] + arr[i + 1]</span>;
-            }
-        }
+public static void arrMys(int[] arr) {
+    for (<span id="init">int i = 1</span>; <span id="test">i < arr.length - 1</span>; <span id="incr">i++</span>) {
+        <span id="index">arr[i]</span> = <span id="expr">i * <span id="exprP1">arr[i - 1]</span> + <span id="exprP2">arr[i + 1]</span></span>;
+    }
+}
                     </pre>
                 </div>
             </div>
@@ -46,15 +49,15 @@
             <div id="variablebank">
 
                 <div class="variable">
-                    <h1 class="varlabel">arr:</h1>
+                    <h1 class="varlabel arraylabel">arr:</h1>
                     <table class="vardata">
 
                         <thead id="indices">
-                            <th id="0">0</th>
-                            <th id="1">1</th>
-                            <th id="2">2</th>
-                            <th id="3">3</th>
-                            <th id="4">4</th>
+                            <th id="0"><input type="text" name="0" maxlength="2" id="firstindex"></th>
+                            <th id="1"><input type="text" name="1" maxlength="2"></th>
+                            <th id="2"><input type="text" name="2" maxlength="2"></th>
+                            <th id="3"><input type="text" name="3" maxlength="2"></th>
+                            <th id="4"><input type="text" name="4" maxlength="2"></th>
                         </thead>
                         <tbody id="arraydata">
                             <tr>
