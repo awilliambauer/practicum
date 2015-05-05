@@ -68,6 +68,7 @@ var java_parsing = function() {
         STR_LITERAL: "STR_LITERAL",
     };
 
+    /// Token creation functions (doesn't put position info in, that's added manually)
     var Token = {
         keyword: function(v) { return {type:TokenType.KEYWORD, value:v}; },
         symbol: function(v) { return {type:TokenType.SYMBOL, value:v}; },
@@ -229,6 +230,10 @@ var java_parsing = function() {
     var Parser = function(lex) {
         var self = {};
 
+        var id_counter = 0;
+
+        function new_id() { return ++id_counter; }
+
         function match_program() {
             // let's assume every program is a class with a single method, with nothing fancy.
             match_keyword("public");
@@ -243,6 +248,8 @@ var java_parsing = function() {
             var body = match_block();
 
             return {
+                tag: 'method',
+                id: new_id(),
                 name: name,
                 params: params,
                 body: body,
@@ -276,7 +283,7 @@ var java_parsing = function() {
                     result = match_declaration();
                     break;
                 default:
-                    result = {tag:'expression', expression:match_expression(0)};
+                    result = {id:new_id(), tag:'expression', expression:match_expression(0)};
                     break;
             }
             if (do_match_ending_semicolon) {
@@ -295,6 +302,7 @@ var java_parsing = function() {
             match_symbol(")");
             var body = match_block();
             return {
+                id: new_id(),
                 tag:'for',
                 initializer: init,
                 condition: cond,
@@ -320,6 +328,7 @@ var java_parsing = function() {
                 }
             }
             return {
+                id: new_id(),
                 tag: 'if',
                 condition: cond,
                 then_branch: thenb,
@@ -330,13 +339,14 @@ var java_parsing = function() {
         function match_declaration() {
             // assumes that if the first token is a keyword, then there is a type, otherwise there isn't
             return {
+                id: new_id(),
                 tag: "declaration",
                 type: match_type(),
                 expression: match_expression(0),
             };
         }
 
-        /// Implementation note: expressions use this technique called top-down oeprator precedence parsing.
+        /// Implementation note: expressions use this technique called top-down operator precedence parsing.
         /// rbp means "right bind power". Top-level expressions should be parsed with match_expression(0).
         function match_expression(rbp) {
             var left = match_prefix();
@@ -353,9 +363,9 @@ var java_parsing = function() {
                 // literals
                 case TokenType.INT_LITERAL:
                 case TokenType.STR_LITERAL:
-                    return {tag:'literal', value:t.value};
+                    return {id:new_id(), tag:'literal', value:t.value};
                 case TokenType.IDENTIFIER:
-                    return {tag:'identifier', value:t.value};
+                    return {id:new_id(), tag:'identifier', value:t.value};
                 default: throw_error(t.position, "Expected expression");
             }
         }
@@ -370,16 +380,16 @@ var java_parsing = function() {
             switch (t.value) {
                 // reference
                 case ".":
-                    return {tag:'reference', object:left, name:match_ident()};
+                    return {id:new_id(), tag:'reference', object:left, name:match_ident()};
                 // method call
                 case "(":
                     var args = match_delimited_list(function(){return match_expression(0);}, ",", true);
-                    return {tag:'call', object:left, args:args};
+                    return {id:new_id(), tag:'call', object:left, args:args};
                 // array index
                 case "[":
                     var index = match_expression(0);
                     match_symbol("]");
-                    return {tag:'index', object:left, index:index};
+                    return {id:new_id(), tag:'index', object:left, index:index};
                 // infix binop or postfix
                 default:
                     if (t.type !== TokenType.SYMBOL) {
@@ -387,9 +397,11 @@ var java_parsing = function() {
                     }
 
                     if (t.value in postfix_operators) {
-                        return {tag:"postfix", operator:t.value, args:[left]};
+                        return {id:new_id(), tag:"postfix", operator:t.value, args:[left]};
                     } else {
-                        return {tag:"binop", operator:t.value, args:[left, match_expression(binop_bind_power(t))]};
+                        // this assumes all operators are left-associative!
+                        // if we need to make them right-associative, match the right expr with a lower bind power
+                        return {id:new_id(), tag:"binop", operator:t.value, args:[left, match_expression(binop_bind_power(t))]};
                     }
             }
         }
@@ -403,15 +415,6 @@ var java_parsing = function() {
                 case "+": case "*": case "/": case "-": return 40;
                 case "==": case "!=": case "<=": case ">=": case "<": case ">": return 20;
                 case "=": return 10;
-                default: return 0;
-            }
-        }
-
-        // unary operators' right bind power
-        function unop_bind_power(token) {
-            switch (token.value) {
-                case "-": return 80;
-                case "!": return 70;
                 default: return 0;
             }
         }
@@ -436,7 +439,9 @@ var java_parsing = function() {
 
         function match_parameter() {
             return {
-                tag: match_type(),
+                id: new_id(),
+                tag: 'parameter',
+                type: match_type(),
                 name: match_ident()
             };
         }
@@ -457,14 +462,6 @@ var java_parsing = function() {
             } else {
                 return tn;
             }
-        }
-
-        function match_literal() {
-            var t = lex.next();
-            if (t.type !== TokenType.INT_LITERAL) {
-                throw_error(t.position, sprintf("Expected literal, found {0}", token_to_string(t)));
-            }
-            return t.value;
         }
 
         function match_ident() {
@@ -512,8 +509,7 @@ var java_parsing = function() {
 
     function browser_parse(data, callback) {
         var p = new Parser(new Lexer(new CharStream(data)));
-        var ast = p.parse();
-        callback(ast);
+        return p.parse();
     }
 
     function nodejs_parse(fname, callback) {
