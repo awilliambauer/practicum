@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <title>Java AST to DOM</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel= "stylesheet">
+    <style>
+        .struck-out {
+            color: #aaa;
+            text-decoration: line-through;
+        }
+    </style>
     <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.11.2.min.js"></script>
     <script src="parser.js"></script>
     <script>
@@ -167,10 +173,18 @@
             return elem;
         }
 
+        function set_class_of_ast_dom_element(id, clazz) {
+            $('#java-ast-' + id).addClass(clazz);
+        }
+
         function on_convert() {
             var ast = java_parsing.browser_parse($('#code').val());
             var dom = to_dom(ast, 0);
-            $('#display').append(dom[0]);
+            $('#display').html('').append(dom[0]);
+            $('#tohighlight').val().split(' ').forEach(function(id) {
+                console.log('crossing out ' + id);
+                set_class_of_ast_dom_element(parseInt(id), 'struck-out');
+            });
         }
     </script>
 </head>
@@ -199,6 +213,7 @@ public class ifelse01 {
     }
 }</textarea>
     </div>
+    <p>Lines to strike out: <input id="tohighlight" value="16 26 38"></p>
     <p><button onclick="on_convert()">Convert to DOM</button></p>
     <pre><code id="display"></code></pre>
 
