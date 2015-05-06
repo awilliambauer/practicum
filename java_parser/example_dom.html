@@ -12,6 +12,7 @@
     </style>
     <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.11.2.min.js"></script>
     <script src="parser.js"></script>
+    <script src="ast.js"></script>
     <script>
         /// string format function
         function sprintf(fmt) {
@@ -186,6 +187,12 @@
                 set_class_of_ast_dom_element(parseInt(id), 'struck-out');
             });
         }
+
+        function on_show() {
+            var ast = java_parsing.browser_parse($('#code').val());
+            var node = java_ast.find_by_id(parseInt($('#toshow').val()), ast);
+            $('#node').html(node.tag);
+        }
     </script>
 </head>
 <body>
@@ -215,7 +222,7 @@ public class ifelse01 {
     </div>
     <p>Lines to strike out: <input id="tohighlight" value="16 26 38"></p>
     <p><button onclick="on_convert()">Convert to DOM</button></p>
+    <p><input id="toshow" value="34" size="3"> <button onclick="on_show()">Show Tag of Node with Id</button> <span id="node"></span></p>
     <pre><code id="display"></code></pre>
-
 </body>
 </html>

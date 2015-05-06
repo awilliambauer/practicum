@@ -1,4 +1,4 @@
-;
+
 var java_parsing = function() {
     "use strict";
 
