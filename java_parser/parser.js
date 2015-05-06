@@ -100,8 +100,9 @@ var java_parsing = function() {
             "[":1, "]":1, "{":1, "}":1, "(":1, ")":1,
             "=":1, ";":1, ".":1, ",":1,
             "<":1, ">":1, "<=":1, ">=":1, "==":1, "!=":1,
-            "+":1, "-":1, "*":1, "/":1, "!":1,
-            "++":1,
+            "+":1, "-":1, "*":1, "/":1, "!":1, "%":1,
+            "++":1, "--":1,
+            "&":1, "|":1, "&&":1, "||":1,
         };
 
         var text_start_chars = {
@@ -371,7 +372,7 @@ var java_parsing = function() {
         }
 
         var postfix_operators = {
-            '++':1
+            '++':1, "--":1,
         };
 
         // match binary operators
@@ -411,11 +412,14 @@ var java_parsing = function() {
             switch (token.value) {
                 case ".": return 100;
                 case "(": case "[": return 90;
-                case "++": return 60;
-                case "+": case "*": case "/": case "-": return 40;
-                case "==": case "!=": case "<=": case ">=": case "<": case ">": return 20;
+                case "++": case "--": return 80;
+                case "*": case "/": case "%": return 60;
+                case "+":  case "-": return 50;
+                case "==": case "!=": case "<=": case ">=": case "<": case ">": return 40;
+                case "&&": case "||": return 30;
                 case "=": return 10;
-                default: return 0;
+                case ";": case ")": case "]": return 0;
+                default: throw new Error("unknown operator " + token.value);
             }
         }
 
