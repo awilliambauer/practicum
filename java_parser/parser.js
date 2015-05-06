@@ -512,7 +512,7 @@ var java_parsing = function() {
     };
 
     function browser_parse(data, callback) {
-        var p = new Parser(new Lexer(new CharStream(data)));
+        var p = Parser(Lexer(CharStream(data)));
         return p.parse();
     }
 
@@ -523,7 +523,7 @@ var java_parsing = function() {
             if (err) {
                 return console.log(err);
             }
-            var p = new Parser(new Lexer(new CharStream(data)));
+            var p = Parser(Lexer(CharStream(data)));
             var ast = p.parse();
             callback(ast);
         });
