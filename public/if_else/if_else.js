@@ -66,7 +66,7 @@
 	// accordingly
 	function goNext() {
 		// take away "next" button when finished
-		if (CURRENT_STEP * 2 >= CONTENTS.length - 1) {
+		if ((CURRENT_STEP + 1) * 2 >= CONTENTS.length - 2) {
 			$("#next").hide();
 		}
 
@@ -129,12 +129,9 @@
 	function addComment(vars) {
 		var comment = document.createElement("span");
 		$(comment).addClass("comments");
-		console.log(vars.toString());
-		console.log(vars.length);
 		if (vars.length == 3) { // Is true/false
 			$(comment).text("\t// " + vars[2]);
 		} else { // Is variable change
-			console.log("going into else statement");
 			var variable_comments = "\t// ";
 			for (var variable_name in VARIABLES) {
 				var variable = VARIABLES[variable_name];
@@ -145,7 +142,6 @@
 			variable_comments = variable_comments.substr(0, variable_comments.length - 2);
 			$(comment).text(variable_comments);
 		}
-		console.log(comment);
 		$(".highlight").append(comment);
 		/*
 		$("#problem_space").children().each(function(index) {
@@ -218,15 +214,14 @@
 	function addInteraction() {
 		// get the next step's vars, which is where the new variable values live
 		if ((CURRENT_STEP + 1) * 2 + 1 < CONTENTS.length - 1) {
-			var nextVars = CONTENTS[(CURRENT_STEP + 1) * 2 + 1];
+			var nextVars = CONTENTS[(CURRENT_STEP + 1) * 2 + 1].split("\t");
 			// if there are updated variables
 			var interaction = document.createElement("div");
 			if (nextVars.length > 3) {	// vars, not test result
 				for (var i = 2; i < nextVars.length; i += 2) {
-					var varBox = document.createElement("span");
-					$(varBox).text(nextVars[i] + " = ");
 					console.log(nextVars[i]);
-					console.log(nextVars[i + 1]);
+					var varBox = document.createElement("p");
+					$(varBox).text(nextVars[i] + " = ");
 					var input = document.createElement("input");
 					$(input).attr("type", "text")
 							.attr("value", nextVars[i + 1]);
@@ -234,14 +229,37 @@
 					$(interaction).append(varBox);
 				}
 			} else if (nextVars.length > 2) {	// test result, no vars
-				var boolBox = document.createElement("span");
-				boolBox.text("z <= x\t");
+				console.log(nextVars[2]);
+				var boolBox = document.createElement("p");
+				$(boolBox).text("z <= x\t");
 				var trueChoice = document.createElement("input");
-				$(trueChoice).attr("name", "t/f")
+				$(trueChoice).attr("type", "radio")
+							 .attr("name", "t/f")
 							 .attr("value", "true");
-				
+				var falseChoice = document.createElement("input");
+				$(falseChoice).attr("type", "radio")
+							  .attr("name", "t/f")
+							  .attr("value", "false");
+				if (nextVars[2].trim() == "true") {
+					$(trueChoice).attr("checked", "checked");
+				} else {
+					$(falseChoice).attr("checked", "checked");
+				}
+				var trueBox = document.createElement("p");
+				$(trueBox).text("true")
+						  .append(trueChoice)
+						  .css("text-align", "center");
+				var falseBox = document.createElement("p");
+				$(falseBox).text("false")
+						   .append(falseChoice)
+						   .css("text-align", "center");
+				$(boolBox).append(trueBox)
+						  .append(falseBox)
+						  .css("font-family", "monospace")
+						  .css("font-size", "11pt");
+				$(interaction).append(boolBox);
 			}
-			//$("#prompt").append(interaction);
+			$("#prompt").append(interaction);
 		}
 	}
 
