@@ -65,6 +65,11 @@
 	// increments the step we're currently on and changes the prompt/highlighting
 	// accordingly
 	function goNext() {
+		// take away "next" button when finished
+		if (CURRENT_STEP * 2 >= CONTENTS.size()) {
+			$("#next").hide();
+		}
+
 		// some initialization stuff that happens on first click of next
 		if (CURRENT_STEP == 0) {
 			// show previously invisible prompt
