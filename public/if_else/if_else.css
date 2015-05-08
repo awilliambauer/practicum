@@ -13,6 +13,7 @@ pre > span { /* comment */
 
 #problem_space, #answer_box {
 	border: 2px solid rgb(89,79,79);
+	border-radius: 10px;
 	width: 60%;
 	margin-left: auto;
 	margin-right: auto;
@@ -34,6 +35,9 @@ pre > span { /* comment */
 
 #answer_box, #problem_space {
 	padding-top: 10px; padding-bottom: 10px;
+	margin-bottom: 30px;
+	margin-top: 30px;
+	background-color: #ffffff;
 }
 
 #answer_box {
@@ -46,9 +50,10 @@ pre > span { /* comment */
 
 #variable_bank {
 	border: 2px solid #82557A;
+	background-color: #ffffff;
 	border-radius: 10px;
 	position: fixed;
-	top: 35%;
+	top: 45%;
 	right: 2.5%;
 	width: 15%;
 }
@@ -97,7 +102,7 @@ pre > span { /* comment */
 
 #next {
 	position: fixed;
-	top: 30%;
+	top: 40%;
 	right: 2.5%;
 	width: 15%;
 }
@@ -110,7 +115,7 @@ pre > span { /* comment */
 
 #prompt {
 	position: absolute;
-	top: 200px;
+	top: 275px;
 	border: 2px rgb(89,79,79) solid;
 	border-radius: 10px;
 	width: 20%;
@@ -148,4 +153,24 @@ button {
   	border-radius: 20px;
   	padding: 2px 10px;
 	background-color: white;
+}
+
+.content {
+	margin-top: 40px;
+	background-color: #FAFFF3;
+	padding: 0;
+}
+
+#footer, #title_block {
+	background-color: #45ADA8;
+	color: #B5F3C4;
+}
+
+#title_block {
+	padding: .5em;
+}
+
+#footer {
+
+	height: 100px;
 }
