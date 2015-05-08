@@ -242,7 +242,8 @@
 							 .css("font-family", "monospace");
 					var input = document.createElement("input");
 					$(input).attr("type", "text")
-							.attr("value", nextVars[i + 1]);
+							.attr("value", nextVars[i + 1])
+							.css("font-size", "12pt");
 					$(varBox).append(input);
 					$(interaction).append(varBox);
 				}
@@ -276,6 +277,7 @@
 						  .css("font-size", "11pt");
 				$(interaction).append(boolBox);
 			}
+			$(interaction).css("font-size", "12pt");
 			$("#prompt").append(interaction);
 		}
 	}
