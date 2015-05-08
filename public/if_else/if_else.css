@@ -81,7 +81,7 @@ pre > span { /* comment */
 }
 
 .just_updated_value {
-	color: green;
+	background-color: #95FF7A;
 }
 
 #just_updated_explanation {
@@ -89,7 +89,7 @@ pre > span { /* comment */
 }
 
 #just_updated_box {
-  border: 5px solid green;
+  border: 5px solid #95FF7A;
   height: 5px;
   width: 5px;
   margin-right: 10px;
