@@ -44,8 +44,6 @@ body {
 
 .vardata,   {
     font-size: 35px;
-    /*border: 2px solid darkgray;*/
-    /*border-collapse: collapse;*/
 }
 
 #arraydata {
@@ -58,23 +56,14 @@ body {
     font-size: 20px;
 }
 
-.vardata, .varlabel {
-    float: left;
-    margin: 20px;
-    margin-right: 40px;
-}
-
 .varlabel {
-    position: absolute;
-    right: 900px;
+    text-align: right;
+    margin-bottom: 33px;
 }
 
-.vardata {
-    margin-left: 200px;
-}
 
 .arraylabel {
-    margin-top: 48px;
+    margin-top: 40px;
 }
 
 td {
@@ -84,14 +73,22 @@ td {
     border: 5px solid darkgrey;
 }
 
-.variable {
-    clear: left;
+.varlabelcolumn {
+    float: left;
+}
+
+.varcolumn {
+    float: left;
+}
+
+.varlabelcolumn, .varcolumn {
+    padding: 10px;
 }
 
 .digit {
     width: 40px;
     text-align: center;
-    border: 2px solid darkgray;
+    border: 4px solid darkgray;
     padding: 15px;
 }
 
