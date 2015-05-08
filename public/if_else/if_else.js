@@ -89,10 +89,11 @@
 		var crossout;
 
 		// Only updates if vars contains variables
-		if (vars.length > 2) {
+		if (vars.length > 3) {
 			updateVariables(updated_vars);
+		}
+		if (vars.length > 2) {
 			addComment(vars);
-//			addInteraction(vars);
 		}
 		// don't do this the first time
 		if (line != CURRENT_LINE && line != -1) {
@@ -102,6 +103,7 @@
 			highlightLine(CURRENT_LINE, "highlight");
 		}
 		$("#prompt").text(prompt);
+		addInteraction(vars);
 		if (vars.length > 1 && vars[1].trim() != "") {
 			crossout = vars[1].split(",");
 			for (var i = 0; i < crossout.length; i++) {
@@ -193,6 +195,33 @@
 			$(li).append(value_span);
 
 			$("#variable_list").append(li);
+		}
+	}
+
+	function addInteraction() {
+		// get the next step's vars, which is where the new variable values live
+		if ((CURRENT_STEP + 1) * 2 + 1 < CONTENTS.length - 1) {
+			var nextVars = CONTENTS[(CURRENT_STEP + 1) * 2 + 1];
+			// if there are updated variables
+			var interaction = document.createElement("div");
+			if (nextVars.length > 3) {	// vars, not test result
+				for (var i = 2; i < nextVars.length; i += 2) {
+					var varBox = document.createElement("span");
+					$(varBox).text(nextVars[i] + " = ");
+					var input = document.createElement("input");
+					$(input).attr("type", "text");
+							.attr("value", nextVars[i + 1];
+					$(varBox).append(input);
+					$(interaction).append(varBox);
+				}
+			} else if (nextVars.length > 2) {	// test result, no vars
+				var boolBox = document.createElement("span");
+				boolBox.text("z <= x\t");
+				var trueChoice = document.createElement("input");
+				$(trueChoice).attr("name", "t/f");
+							 .attr("value", "true");
+				
+			}
 		}
 	}
 
