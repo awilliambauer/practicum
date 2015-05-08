@@ -115,7 +115,7 @@ pre > span { /* comment */
 
 #prompt {
 	position: absolute;
-	top: 200px;
+	top: 275px;
 	border: 2px rgb(89,79,79) solid;
 	border-radius: 10px;
 	width: 20%;

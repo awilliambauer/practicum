@@ -120,7 +120,7 @@
 		$("#prompt").finish();
 		var currentTop = $("#prompt").css("top");
 		currentTop = parseInt(currentTop.substring(0, currentTop.length - 2));
-		var lineHeight = $("ul > li").css("height");
+		var lineHeight = $("#problem_space > li").css("height");
 		lineHeight = parseInt(lineHeight.substring(0, lineHeight.length - 2));
 		$("#prompt").animate({top: currentTop + (line - CURRENT_LINE) * (lineHeight) + "px"});
 	}
@@ -219,9 +219,9 @@
 			var interaction = document.createElement("div");
 			if (nextVars.length > 3) {	// vars, not test result
 				for (var i = 2; i < nextVars.length; i += 2) {
-					console.log(nextVars[i]);
 					var varBox = document.createElement("p");
-					$(varBox).text(nextVars[i] + " = ");
+					$(varBox).text(nextVars[i] + " = ")
+							 .css("font-family", "monospace");
 					var input = document.createElement("input");
 					$(input).attr("type", "text")
 							.attr("value", nextVars[i + 1]);
@@ -229,7 +229,6 @@
 					$(interaction).append(varBox);
 				}
 			} else if (nextVars.length > 2) {	// test result, no vars
-				console.log(nextVars[2]);
 				var boolBox = document.createElement("p");
 				$(boolBox).text("z <= x\t");
 				var trueChoice = document.createElement("input");
