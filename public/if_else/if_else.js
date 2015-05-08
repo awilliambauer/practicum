@@ -172,7 +172,23 @@
 
 	function drawVariableBank() { 	
 		$("#variable_list").empty();
+		
+		// insert top row of variable bank
+		var variable_label = document.createElement("span");
+		$(variable_label).addClass("bank_variable");
+		$(variable_label).text("name");
 
+		var value_label = document.createElement("span");
+		$(value_label).addClass("bank_variable_value");
+		$(value_label).text("value");
+
+		var li = document.createElement("li");
+		$(li).addClass("variable_list_item");
+		$(li).append(variable_label);
+		$(li).append("\t");
+		$(li).append(value_label);
+		$("#variable_list").append(li);
+		
 		for (var variable_name in VARIABLES) {
 			var variable = VARIABLES[variable_name];
 			var variable_span = document.createElement("span");
@@ -181,15 +197,16 @@
 
 			var value_span = document.createElement("span");
 			$(value_span).text(variable["value"]);
-
+			
+			$(value_span).addClass("bank_variable_value");
+			// if the variable has just been updated we add a class
 			if (variable["updated"]) {
 				$(value_span).addClass("just_updated_value");
 				variable["updated"] = false;
-			} else {
-				$(value_span).addClass("bank_variable_value");
 			}
 
 			var li = document.createElement("li");
+			$(li).addClass("variable_list_item");
 			$(li).append(variable_span);
 			$(li).append("\t");
 			$(li).append(value_span);
@@ -209,8 +226,8 @@
 					var varBox = document.createElement("span");
 					$(varBox).text(nextVars[i] + " = ");
 					var input = document.createElement("input");
-					$(input).attr("type", "text");
-							.attr("value", nextVars[i + 1];
+					$(input).attr("type", "text")
+							.attr("value", nextVars[i + 1]);
 					$(varBox).append(input);
 					$(interaction).append(varBox);
 				}
@@ -218,7 +235,7 @@
 				var boolBox = document.createElement("span");
 				boolBox.text("z <= x\t");
 				var trueChoice = document.createElement("input");
-				$(trueChoice).attr("name", "t/f");
+				$(trueChoice).attr("name", "t/f")
 							 .attr("value", "true");
 				
 			}
