@@ -110,6 +110,7 @@
 
 	// moves the prompt to the given line
 	function movePrompt(line) {
+		// stops any current animation in case of spam clicking "next"
 		$("#prompt").finish();
 		var currentTop = $("#prompt").css("top");
 		currentTop = parseInt(currentTop.substring(0, currentTop.length - 2));
