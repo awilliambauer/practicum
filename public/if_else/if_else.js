@@ -239,6 +239,7 @@
 							 .attr("value", "true");
 				
 			}
+			$("#prompt").append(interaction);
 		}
 	}
 
