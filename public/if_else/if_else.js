@@ -241,7 +241,7 @@
 							 .attr("value", "true");
 				
 			}
-			$("#prompt").append(interaction);
+			//$("#prompt").append(interaction);
 		}
 	}
 
