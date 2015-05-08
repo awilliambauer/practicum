@@ -225,6 +225,8 @@
 				for (var i = 2; i < nextVars.length; i += 2) {
 					var varBox = document.createElement("span");
 					$(varBox).text(nextVars[i] + " = ");
+					console.log(nextVars[i]);
+					console.log(nextVars[i + 1]);
 					var input = document.createElement("input");
 					$(input).attr("type", "text")
 							.attr("value", nextVars[i + 1]);
