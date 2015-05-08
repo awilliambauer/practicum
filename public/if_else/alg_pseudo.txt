@@ -1,0 +1,13 @@
+* This line won't display anything, occurs for for/if/else
+
+Map Values = initialValues // Initialization, 1st line
+
+* for ( var current = 2; var <= problem.length; current++):
+    * if (currentLine != problem.blockStartLine) // If not in if/else block
+       updateValues(currentLine)
+    * else
+        while(!problem.getBool) // while next evaluated bool is false
+            currentLine += problem.numberOfStatements + 1
+        updateValues(currentLine)
+        currentLine = problem.blockEndLine + 1 // crossout of everything else would occur here
+printStatement
