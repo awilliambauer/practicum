@@ -1,5 +1,6 @@
 body {
 	text-align: center;
+	font-family: "arial", sans-serif;
 }
 
 h3 > span, #answer_box > span, input[type="text"] {
@@ -7,7 +8,7 @@ h3 > span, #answer_box > span, input[type="text"] {
 }
 
 pre > span { /* comment */
-	color: orange;
+	color: #ff5900;
 }
 
 #problem_space, #answer_box {
@@ -44,30 +45,54 @@ pre > span { /* comment */
 }
 
 #variable_bank {
-	border: 2px solid rgb(84,121,128);
+	border: 2px solid #82557A;
+	border-radius: 10px;
 	position: fixed;
 	top: 35%;
 	right: 2.5%;
 	width: 15%;
-	height: 30%;
 }
 
 #variable_bank #variable_list {
 	list-style-type: none;
 	text-align: center;
 	padding-left: 0px;
+	font-size: 15pt;
+}
+
+#variable_list {
+	margin-top: 5px;
+}
+
+.variable_list_item {
+	margin-bottom: 15px;
 }
 
 .bank_variable {
-	color: purple;
+	color: black;
+	margin-right: 5px;
 }
 
 .bank_variable_value {
-	color: orange;
+	color: #82557A;
+	border: 2px solid #A27971;
+	padding: 3px;
+	margin-left: 5px;
 }
 
 .just_updated_value {
-	color: green;
+	background-color: #95FF7A;
+}
+
+#just_updated_explanation {
+	font-size: 10pt;
+}
+
+#just_updated_box {
+  border: 5px solid #95FF7A;
+  height: 5px;
+  width: 5px;
+  margin-right: 10px;
 }
 
 #next {
@@ -77,8 +102,10 @@ pre > span { /* comment */
 	width: 15%;
 }
 
-h4 {
+#variable_bank_title {
 	text-decoration: underline;
+	font-weight: bold;
+	margin-bottom: 15px;
 }
 
 #prompt {
@@ -112,4 +139,13 @@ h4 {
 .cross_out {
 	color: rgb(200, 149, 149);
 	text-decoration: line-through;
+}
+
+button {
+	border: 2px solid #84D854;
+	color: #84D854;
+  	width: 52px;
+  	border-radius: 20px;
+  	padding: 2px 10px;
+	background-color: white;
 }
