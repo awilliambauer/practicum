@@ -65,6 +65,11 @@
 	// increments the step we're currently on and changes the prompt/highlighting
 	// accordingly
 	function goNext() {
+		// take away "next" button when finished
+		if (CURRENT_STEP * 2 >= CONTENTS.length - 1) {
+			$("#next").hide();
+		}
+
 		// some initialization stuff that happens on first click of next
 		if (CURRENT_STEP == 0) {
 			// show previously invisible prompt
@@ -77,18 +82,17 @@
 		CURRENT_STEP++;
 		var prompt = CONTENTS[2 * CURRENT_STEP];
 		var vars = CONTENTS[2 * CURRENT_STEP + 1].split("\t");
-		//console.log("vars = " + vars);
 		var updated_vars = vars.slice(2, vars.length) // get all of the variables changed in this line
 
-		// Only updates if vars contains variables
-		if( vars.length > 3) {
-			updateVariables(updated_vars);
-		}
 		// if vars contains variables or true/false
 		var line = vars[0] - 1;
 		var crossout;
+
+		// Only updates if vars contains variables
+		if (vars.length > 3) {
+			updateVariables(updated_vars);
+		}
 		if (vars.length > 2) {
-			console.log("comment being added");
 			addComment(vars);
 		}
 		// don't do this the first time
@@ -99,6 +103,7 @@
 			highlightLine(CURRENT_LINE, "highlight");
 		}
 		$("#prompt").text(prompt);
+		addInteraction(vars);
 		if (vars.length > 1 && vars[1].trim() != "") {
 			crossout = vars[1].split(",");
 			for (var i = 0; i < crossout.length; i++) {
@@ -111,6 +116,7 @@
 
 	// moves the prompt to the given line
 	function movePrompt(line) {
+		// stops any current animation in case of spam clicking "next"
 		$("#prompt").finish();
 		var currentTop = $("#prompt").css("top");
 		currentTop = parseInt(currentTop.substring(0, currentTop.length - 2));
@@ -129,10 +135,15 @@
 			$(comment).text("\t// " + vars[2]);
 		} else { // Is variable change
 			console.log("going into else statement");
-			for(var i = 2; i < vars.length; i += 2) {
-				$(comment).text($(comment).text() + "\t// " + vars[i] + " = " + vars[i + 1]);
+			var variable_comments = "\t// ";
+			for (var variable_name in VARIABLES) {
+				var variable = VARIABLES[variable_name];
+				console.log("variable[name] + \" = \" + variable[value]");
+				variable_comments += variable["name"] + " = " + variable["value"] + ", ";
 			}
-			console.log("\t//" + vars[i] + " = " + vars[i + 1]);
+			//removes trailing comma
+			variable_comments = variable_comments.substr(0, variable_comments.length - 2);
+			$(comment).text(variable_comments);
 		}
 		console.log(comment);
 		$(".highlight").append(comment);
@@ -184,6 +195,33 @@
 			$(li).append(value_span);
 
 			$("#variable_list").append(li);
+		}
+	}
+
+	function addInteraction() {
+		// get the next step's vars, which is where the new variable values live
+		if ((CURRENT_STEP + 1) * 2 + 1 < CONTENTS.length - 1) {
+			var nextVars = CONTENTS[(CURRENT_STEP + 1) * 2 + 1];
+			// if there are updated variables
+			var interaction = document.createElement("div");
+			if (nextVars.length > 3) {	// vars, not test result
+				for (var i = 2; i < nextVars.length; i += 2) {
+					var varBox = document.createElement("span");
+					$(varBox).text(nextVars[i] + " = ");
+					var input = document.createElement("input");
+					$(input).attr("type", "text");
+							.attr("value", nextVars[i + 1];
+					$(varBox).append(input);
+					$(interaction).append(varBox);
+				}
+			} else if (nextVars.length > 2) {	// test result, no vars
+				var boolBox = document.createElement("span");
+				boolBox.text("z <= x\t");
+				var trueChoice = document.createElement("input");
+				$(trueChoice).attr("name", "t/f");
+							 .attr("value", "true");
+				
+			}
 		}
 	}
 
