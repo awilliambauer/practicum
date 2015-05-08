@@ -213,7 +213,7 @@
 
 	function addInteraction() {
 		// get the next step's vars, which is where the new variable values live
-		if ((CURRENT_STEP + 1) * 2 + 1 < CONTENTS.length - 1) {
+		if ((CURRENT_STEP + 1) * 2 + 1 < CONTENTS.length) {
 			var nextVars = CONTENTS[(CURRENT_STEP + 1) * 2 + 1].split("\t");
 			// if there are updated variables
 			var interaction = document.createElement("div");
