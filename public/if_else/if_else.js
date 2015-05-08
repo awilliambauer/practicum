@@ -84,14 +84,13 @@
 		var vars = CONTENTS[2 * CURRENT_STEP + 1].split("\t");
 		var updated_vars = vars.slice(2, vars.length) // get all of the variables changed in this line
 
-		// Only updates if vars contains variables
-		if( vars.length > 3) {
-			updateVariables(updated_vars);
-		}
 		// if vars contains variables or true/false
 		var line = vars[0] - 1;
 		var crossout;
+
+		// Only updates if vars contains variables
 		if (vars.length > 2) {
+			updateVariables(updated_vars);
 			addComment(vars);
 //			addInteraction(vars);
 		}
