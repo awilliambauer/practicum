@@ -1,7 +1,6 @@
-html {
-    position: relative;
-    min-height: 100%;
-}
+/*
+This is the style sheet for the main page.
+*/
 
 body {
     padding: 0px;
@@ -10,7 +9,7 @@ body {
     font-family: ‘Lucida Console’, Monaco, monospace;
 }
 
-body, h1, .content, #header, #footer {
+body, h1, .content, .container-fluid, #header, #footer {
     margin: 0px;
 }
 
@@ -21,22 +20,14 @@ body, h1, .content, #header, #footer {
 
 h1 {
     font-weight: bolder;
+    font-size: 36pt;
 }
 
 #header, #footer {
     background-color: #45ADA8;
-    color: #B5F3C4;
+    color: #FAFFF3;
     height: 100px;
 }
-
-#footer {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    overflow: hidden;
-    width: 100%;
-}
-
 
 #header {
     margin-top: 40px;
