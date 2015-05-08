@@ -66,7 +66,7 @@
 	// accordingly
 	function goNext() {
 		// take away "next" button when finished
-		if (CURRENT_STEP * 2 >= CONTENTS.length) {
+		if (CURRENT_STEP * 2 >= CONTENTS.length - 1) {
 			$("#next").hide();
 		}
 
