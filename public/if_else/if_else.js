@@ -102,7 +102,7 @@
 			highlightBlock(0, CURRENT_LINE - 1, "grey_out");
 			highlightLine(CURRENT_LINE, "highlight");
 		}
-		$("#prompt").text(prompt);
+		getPrompt(prompt);
 		addInteraction(vars);
 		if (vars.length > 1 && vars[1].trim() != "") {
 			crossout = vars[1].split(",");
@@ -112,6 +112,23 @@
 		}
 		drawVariableBank();
 		OLD_VARS = vars;
+	}
+
+	// Formats the way the prompt displays
+	function getPrompt(prompt) {
+		$("#prompt").empty();
+		var promptParts = prompt.split(":");
+		if (promptParts.length > 1) {	// there is a ":" in the prompt
+			var title = document.createElement("span");
+			$(title).css("font-weight", "bold")
+					.text(promptParts[0] + ": ");	// If/Else, Booleans, etc
+			var body = document.createElement("span");
+			$(body).text(promptParts[1]);	// the actual description
+			$("#prompt").append(title);
+			$("#prompt").append(body);
+		} else {	// no ":", shouldn't happen but whatevs
+			$("#prompt").text(promptParts[0]);
+		}
 	}
 
 	// moves the prompt to the given line
@@ -211,6 +228,7 @@
 		}
 	}
 
+	// adds the interactive components of the webpage
 	function addInteraction() {
 		// get the next step's vars, which is where the new variable values live
 		if ((CURRENT_STEP + 1) * 2 + 1 < CONTENTS.length) {
