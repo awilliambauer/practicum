@@ -31,6 +31,7 @@ pre > span { /* comment */
 	padding-left: 2.5%;
 	margin: 0;
 	font-size: 11pt;
+	overflow: auto;
 }
 
 #answer_box, #problem_space {
