@@ -28,9 +28,14 @@ function stepThrough() {
 	if (arr.length >= 1) {
 		var newChild = document.createElement("div");
 		newChild.classList.add("expressionStatement");
-		var newChildPara = document.createElement("p");
-		newChildPara.innerHTML = arrToString(arr);
-		newChild.appendChild(newChildPara);
+		var newChildPara1 = document.createElement("p");
+		var newChildPara2 = document.createElement("p");
+		newChildPara1.classList.add("step");
+		newChildPara2.classList.add("exp");
+		newChildPara1.innerHTML = "IT WORKS!!";
+		newChildPara2.innerHTML = arrToString(arr);
+		newChild.appendChild(newChildPara1);
+		newChild.appendChild(newChildPara2);
 		document.getElementById("steps").appendChild(newChild);
 		if (arr.length == 1) {
 			arr = [];
