@@ -3,7 +3,6 @@
 	var CONTENTS;
 	var CURRENT_STEP;
 	var CURRENT_LINE;
-	var PROBLEM;
 	var VARIABLES;
 
 	$(document).ready(function() {
@@ -25,14 +24,6 @@
 	function fillProblemSpace() {
 		$.get("example.txt", function(data) {
 			on_convert(data);
-			// PROBLEM = data.split("\n");
-			// for (var i = 0; i < PROBLEM.length; i++) {
-			// 	var li = document.createElement("li");
-			// 	var liContent = document.createElement("pre");
-			// 	$(liContent).text(i + 1 + "\t" + PROBLEM[i]);
-			// 	$(li).append(liContent);
-			// 	$("#problem_space").append(li);
-			// }
 		});
 	}
 
