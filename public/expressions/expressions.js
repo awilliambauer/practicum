@@ -1,14 +1,8 @@
-var arr = [ {type:"int", value : 22},
-{type:"MDMoperator", value: "%"},
-{type:"int", value : 7}, 
-{type:"ASoperator", value: "+"},
-{type:"int", value : 4}, 
-{type:"MDMoperator", value: "*"},
-{type:"int", value : 3}, 
-{type:"ASoperator", value: "-"},
-{type:"double", value : 21.25}, 
-{type:"MDMoperator", value: "/"}, 
-{type:"double", value: 8.5} ];
+var arr = [ {type:"int", value : 2},
+			{type:"ASoperator", value: "+"},
+			{type:"int", value : 6}, 
+			{type:"MDMoperator", value: "*"},
+			{type:"int", value : 3} ];
 
 window.onload = function() {
 	setupPage(arr);	
