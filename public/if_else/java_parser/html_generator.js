@@ -127,7 +127,6 @@ function to_dom(node, indent_level, special_flag) {
                 if (node.else_branch.tag === 'if') {
                     var result = to_dom(node.else_branch, indent_level, true);
                     elem.append(result);
-                    elem.append("\n");
                 } else {
                     var text = indent(indent_level) + 'else {';
                     elem.append($("<li>").text(text));
@@ -215,15 +214,15 @@ function set_class_of_ast_dom_element(id, clazz) {
     $('#java-ast-' + id).addClass(clazz);
 }
 
-function on_convert() {
-    var ast = java_parsing.browser_parse($('#code').val());
+function on_convert(code) {
+    var ast = java_parsing.browser_parse(code);
     console.log(ast);
     var dom = to_dom(ast, 0);
-    $('#display').html('').append(dom[0]);
-    $('#tohighlight').val().split(' ').forEach(function(id) {
-        console.log('crossing out ' + id);
-        set_class_of_ast_dom_element(parseInt(id), 'struck-out');
-    });
+    $('#problem_space > pre').html('').append(dom[0]);
+    // $('#tohighlight').val().split(' ').forEach(function(id) {
+    //     console.log('crossing out ' + id);
+    //     set_class_of_ast_dom_element(parseInt(id), 'struck-out');
+    // });
 }
 
 function on_show() {
