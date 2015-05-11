@@ -6,6 +6,10 @@
     window.onload = function () {
         $("#next").on("click", next);
         $("#back").on("click", back);
+
+
+
+
     };
 
     // Called when the user presses the next button
