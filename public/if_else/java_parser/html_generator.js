@@ -17,7 +17,7 @@ function to_dom(node, indent_level, special_flag) {
     // HACK special_flag is a boolean used to indicate things like "don't put a semi/newline on this statement"
     // or "don't put a newline before this if". It's very hacky.
 
-    if (node.id == 48) {
+    if (node.id == 1) {
     	console.log(node);
     }
     switch (node.tag) {
@@ -25,18 +25,18 @@ function to_dom(node, indent_level, special_flag) {
             var elem = $('<ul>');
             var firstIter;
             elem.attr('id', 'java-ast-' + node.id);
-            elem.append($("<li>").text("public class A {"));
-            var text = indent(1) + 'public static void <span style="color:blue">' + node.name + '</span>('      ;
+            elem.append($("<li>").html('public class <span style="color:purple">A</span> {'));
+            var text = $("<li>").html(indent(1) + 'public static void <span style="color:purple">' + node.name + '</span>(');
             firstIter = true;
             node.params.forEach(function(p) {
                 if (!firstIter) {
-                    text += ", ";
+                    text.append(", ");
                 }
                 firstIter = false;
-                text += to_dom(p, 0).text();
+                text.append(to_dom(p, 0));
             });
-            text += ') {';
-            elem.append($("<li>").html(text));
+            text.append(') {');
+            elem.append(text);
             node.body.forEach(function(s) {
                 elem.append(to_dom(s, 2));
             });
@@ -48,7 +48,7 @@ function to_dom(node, indent_level, special_flag) {
             var elem = $('<span>');
             var firstIter;
             elem.attr('id', 'java-ast-' + node.id);
-            elem.html(node.type + " " + node.name);
+            elem.html(node.type + ' <span style="color:blue">' + node.name + '</span>');
             break;
 
         case 'declaration':
@@ -102,23 +102,22 @@ function to_dom(node, indent_level, special_flag) {
             var elem = $("<ul>");
             var firstIter;
             elem.attr('id', 'java-ast-' + node.id);
-            var text = "";
-			text += indent(indent_level);
+            var text = $("<li>");
+			text.append(indent(indent_level));
             if (special_flag) {
-            	text += "else ";
+            	text.append('} <span style="color:purple">else </span>');
             }
             if (!special_flag) {
                 // leave a blank line between ifs (could replace with something fancier like boxes)
                 elem.append($("<li>").text("\n"));
             }
-            text += "if (";
-            text += to_dom(node.condition, indent_level).text();
-            text += ") {";
-			var inside = $("<li>").html(text);
+            text.append("<span style='color:purple'>if </span>(");
+            text.append(to_dom(node.condition, indent_level));
+            text.append(") {");
 			if (special_flag) {
 				// inside.css("display", "inline-block");
 			}
-			elem.append(inside);
+			elem.append(text);
             node.then_branch.forEach(function(s) {
                 elem.append(to_dom(s, indent_level + 1));
             });
@@ -128,8 +127,8 @@ function to_dom(node, indent_level, special_flag) {
                     var result = to_dom(node.else_branch, indent_level, true);
                     elem.append(result);
                 } else {
-                    var text = indent(indent_level) + 'else {';
-                    elem.append($("<li>").text(text));
+                    var text = indent(indent_level) + '} <span style="color:purple">else </span>{';
+                    elem.append($("<li>").html(text));
                     node.else_branch.forEach(function(s) {
                         elem.append(to_dom(s, indent_level + 1));
                     });
