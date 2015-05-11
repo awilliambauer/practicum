@@ -429,12 +429,14 @@ var java_parsing = function() {
             if (!do_skip_open_parn) {
                 match_symbol("(");
             }
-            while (true) {
-                arr.push(matchfn());
-                if (peek_symbol(delimiter)) {
-                    lex.next();
-                } else {
-                    break;
+            if (!peek_symbol(")")) {
+                while (true) {
+                    arr.push(matchfn());
+                    if (peek_symbol(delimiter)) {
+                        lex.next();
+                    } else {
+                        break;
+                    }
                 }
             }
             match_symbol(")");
