@@ -2,7 +2,19 @@ var arr = [ {type:"int", value : 2},
 			{type:"ASoperator", value: "+"},
 			{type:"int", value : 6}, 
 			{type:"MDMoperator", value: "*"},
-			{type:"int", value : 3} ];
+			{type:"int", value : 3} ]; 
+/*
+var arr = [ {type:"int", value : 22},
+{type:"MDMoperator", value: "%"},
+{type:"int", value : 7}, 
+{type:"ASoperator", value: "+"},
+{type:"int", value : 4}, 
+{type:"MDMoperator", value: "*"},
+{type:"int", value : 3}, 
+{type:"ASoperator", value: "-"},
+{type:"double", value : 21.25}, 
+{type:"MDMoperator", value: "/"}, 
+{type:"double", value: 8.5} ]; */
 
 window.onload = function() {
 	setupPage(arr);	
@@ -32,13 +44,14 @@ function stepThrough() {
 		var newChildPara2 = document.createElement("p");
 		newChildPara1.classList.add("step");
 		newChildPara2.classList.add("exp");
-		newChildPara1.innerHTML = "IT WORKS!!";
+		newChildPara1.innerHTML = "Click on the operator and operands";
 		newChildPara2.innerHTML = arrToString(arr);
 		newChild.appendChild(newChildPara1);
 		newChild.appendChild(newChildPara2);
 		document.getElementById("steps").appendChild(newChild);
 		if (arr.length == 1) {
 			arr = [];
+			document.getElementById("nextstep").classList.add("hiddenSteps");
 		} else {
 			var arr2 = [];
 			var flag = false;
