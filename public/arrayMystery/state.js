@@ -107,7 +107,7 @@ var states = [
         array: [11, 14, 2, 4, 7],
         variables: {
             arrayLength: 5,
-            i: null
+            i: "?"
         },
         promptText: "Let's solve the problem!",
         ast: mainAst,
@@ -126,7 +126,7 @@ var states = [
         array: [11, 14, 2, 4, 7],
         variables: {
             arrayLength: 5,
-            i: null
+            i: "?"
         },
         promptText: "Let's label the indices of the array!",
         ast: mainAst,
@@ -145,7 +145,7 @@ var states = [
         array: [11, 14, 2, 4, 7],
         variables: {
             arrayLength: 5,
-            i: null
+            i: "?"
         },
         promptText: "The next line is a for loop header. First, we'll initialize the counter.",
         ast: mainAst,
@@ -164,7 +164,7 @@ var states = [
         array: [11, 14, 2, 4, 7],
         variables: {
             arrayLength: 5,
-            i: null
+            i: "?"
         },
         promptText: "What is the counter i initialized to?",
         ast: mainAst,

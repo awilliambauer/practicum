@@ -4,9 +4,10 @@
 (function() {
     "use strict";
 
-    var step = -1;
+    var step = 0;
 
     window.onload = function () {
+        displayState();
         $("#next").on("click", next);
         $("#back").on("click", back);
         on_convert();
@@ -20,14 +21,14 @@
 
     function back() {
         step--;
-        displayState(states[step]);
+        displayState();
         // TO DO Add wraps
     }
 
     function displayState() {
         /*{ //state 1 (initial)
+         array: [11, 14, 2, 4, 7]
          variables: {
-         array: [11, 14, 2, 4, 7],
          arrayLength: 5,
          i: null
          },
@@ -74,11 +75,13 @@
         $("#promptwords").html(state.promptText);
 
         // Update Variables
-        var variables = state.variables;
-        for (i = 0; i < variables.length; i++) {
-            insertVariable(variables[i][0], variables[i][1]);
+        var variablelist = state.variables;
+        var nameChild = $("<h1>", {class: "varlabel"});
+        nameChild.html("arr:");
+        $(".varlabelcolumn").append(nameChild);
+        for (var key in variablelist) {
+            insertVariable(key+":", variablelist[key]);
         }
-
         // Add styling classes
         var classes = state.styleClasses;
         for (i = 0; i < classes.length; i++) {
@@ -94,9 +97,9 @@
         // This function should insert the given variable into the dom
         var nameChild = $("<h1>", {class: "varlabel"});
         nameChild.html(name);
-        $("#varlabelcolumn").append(nameChild);
-        var varDiv = $("<div>", {class: "variable"});
-        var varP = $("p", {class: "vardata digit"});
+        $(".varlabelcolumn").append(nameChild);
+        var varDiv = $("<div>", {class: "variable clear"});
+        var varP = $("<p>", {class: "vardata digit"});
         varP.html(value);
         varDiv.append(varP);
         $("#varvalues").append(varDiv);
@@ -276,5 +279,13 @@
         var node = java_ast.find_by_id(parseInt($('#toshow').val()), ast);
         $('#node').html(node.tag);
     }
+
+    Object.size = function(obj) {
+        var size = 0, key;
+        for (key in obj) {
+            if (obj.hasOwnProperty(key)) size++;
+        }
+        return size;
+    };
 
 })();
