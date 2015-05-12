@@ -1,111 +1,85 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/html">
-        <head lang="en">
-            <meta charset="UTF-8">
-            <title>Array Mystery</title>
-            <link href="index.css" type="text/css" rel="stylesheet" />
-            <link href="../navbar.css" type="text/css" rel="stylesheet" />
-            <script src="state.js"></script>
-            <script src="newIndex.js"></script>
-            <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-            <script src="../navigationbar.js"></script>
-        </head>
-    <body>
-        <div class="topnavContainer topnavContainerScroll">
-        </div>
-        <div id="contentwindow">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Array Mystery</title>
+    <link href="index.css" type="text/css" rel="stylesheet" />
+    <link href="../navbar.css" type="text/css" rel="stylesheet" />
+    <script src="state.js"></script>
+    <script src="newIndex.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="../navigationbar.js"></script>
+</head>
+<body>
+    <div class="topnavContainer topnavContainerScroll">
+    </div>
+    <div id="contentwindow">
 
-            <div id="problemcontents">
+        <div id="problemcontents">
 
-                <div id="problemdescription">
-                    <h1>Problem:</h1>
-                    <p>You are to simulate the execution of a method that manipulates an array of integers.
+            <div id="problemdescription">
+                <h1>Problem:</h1>
+                <p>You are to simulate the execution of a method that manipulates an array of integers.
                     Consider the following method.</p>
-                </div>
-
-                <div id="problem">
-                    <pre><code id="problemtext"></code>
-                    </pre>
-                </div>
             </div>
 
-            <div id="prompt">
-                <div id="prompttextbox">
-                    <p id="promptwords">
-                        Let's solve the problem!
-                    </p>
-                </div>
-                <button id="next">Next</button>
-                <button id="back">Back</button>
-
+            <div id="problem">
+                        <pre><code id="problemtext"></code>
+                        </pre>
             </div>
+        </div>
 
-            <div>
-                <div id="array">
-                    <table id="arraytable">
-                        <thead id="indices">
-                        <th id="0"><input type="text" name="0" maxlength="2" id="firstindex"></th>
-                        <th id="1"><input type="text" name="1" maxlength="2"></th>
-                        <th id="2"><input type="text" name="2" maxlength="2"></th>
-                        <th id="3"><input type="text" name="3" maxlength="2"></th>
-                        <th id="4"><input type="text" name="4" maxlength="2"></th>
+        <div id="prompt">
+            <div id="prompttextbox">
+                <p id="promptwords clear">
+                    Let's solve the problem!
+                </p>
+            </div>
+            <button id="next">Next</button>
+            <button id="back">Back</button>
+
+        </div>
+        <hr>
+        <div>
+            <div class="varlabelcolumn variable clear">
+                <h1 class="varlabel arraylabel">arr:</h1>
+                <h1 class="varlabel">arr.length:</h1>
+                <h1 class="varlabel">i:</h1>
+            </div>
+            <div class="varcolumn">
+                <div class="variable">
+                    <table class="vardata">
+
+                        <thead id="indices clear">
+                            <th><input type="text" name="0" maxlength="2" id="index0"></th>
+                            <th><input type="text" name="1" maxlength="2" id="index1"></th>
+                            <th><input type="text" name="2" maxlength="2" id="index2"></th>
+                            <th><input type="text" name="3" maxlength="2" id="index3"></th>
+                            <th><input type="text" name="4" maxlength="2" id="index4"></th>
                         </thead>
-                        <tbody id="arraydata">
-                        <tr>
-                            <td id="ele0">11</td>
-                            <td id="ele1">14</td>
-                            <td id="ele2">2</td>
-                            <td id="ele3">4</td>
-                            <td id="ele4">7</td>
-                        </tr>
+                        <tbody>
+                            <tr id="arraydata clear">
+                                <td id="ele0">11</td>
+                                <td id="ele1">14</td>
+                                <td id="ele2">2</td>
+                                <td id="ele3">4</td>
+                                <td id="ele4">7</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
                 <div id="variablebank">
-                    <div>
-                        
-                    </div>
-                </div>
-                <!--
-                <div class="varlabelcolumn variable">
-                    <h1 class="varlabel arraylabel">arr:</h1>
-                    <h1 class="varlabel">arr.length:</h1>
-                    <h1 class="varlabel">i:</h1>
-                </div>
-                <div class="varcolumn">
-                    <div class="variable">
-                        <table class="vardata">
-
-                            <thead id="indices">
-                                <th id="0"><input type="text" name="0" maxlength="2" id="firstindex"></th>
-                                <th id="1"><input type="text" name="1" maxlength="2"></th>
-                                <th id="2"><input type="text" name="2" maxlength="2"></th>
-                                <th id="3"><input type="text" name="3" maxlength="2"></th>
-                                <th id="4"><input type="text" name="4" maxlength="2"></th>
-                            </thead>
-                            <tbody id="arraydata">
-                                <tr>
-                                    <td id="ele0">11</td>
-                                    <td id="ele1">14</td>
-                                    <td id="ele2">2</td>
-                                    <td id="ele3">4</td>
-                                    <td id="ele4">7</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="variable">
+                    <div class="variable clear">
                         <p class="vardata digit">5</p>
                     </div>
 
-                    <div class="variable">
+                    <div class="variable clear">
                         <p id="i" class="vardata digit">?</p>
                     </div>
-                </div> -->
-
+                </div>
             </div>
-        </div>
 
-    </body>
+        </div>
+    </div>
+</body>
 </html>
