@@ -118,7 +118,7 @@ var states = [
             accent1Highlight: [],
             accent1Border: [],
             accent2Highlight: [],
-            accent2Border: [],
+            accent2Border: []
         }
     },
 
