@@ -44,17 +44,62 @@
          }
          },*/
         var state = states[step];
+        $(".clear").empty();
+
         // Set array element values
         var elements = state.array;
+        var array = $("#arraydata");
         for (var i = 0; i < elements.length; i++) {
-            $("#ele" + i).html(elements[i]);
-
+            var child = $("<td id=\"ele" + i + "\"></td>");
+            child.html(elements[i]);
+            array.append(child);
         }
+
+        // Display Indices
+        var indices = $("#indices");
+        if (state.index === null) {
+            for (i = 0; i < state.array.length; i++) {
+                var indexBox = $("<th><input type=\"text\" name=\"0\" maxlength=\"2\" id=\"index" + i + "\"></th>");
+                indices.append(indexBox);
+            }
+        } else {
+            for (i = 0; i < state.array.length; i++) {
+                indexBox = $("<th id=\"index" + i + "\">" + i + "</th>");
+                indices.append(indexBox);
+            }
+        }
+
+
         // Update prompt text
         $("#promptwords").html(state.promptText);
+
         // Update Variables
+        var variables = state.variables;
+        for (i = 0; i < variables.length; i++) {
+            insertVariable(variables[i][0], variables[i][1]);
+        }
 
+        // Add styling classes
+        var classes = state.styleClasses;
+        for (i = 0; i < classes.length; i++) {
+            var currClass = classes[i];
+            for (var j = 0; j < currClass.length; j++) {
+                $(currClass[j]).addClass(currClass);
+            }
+        }
+    }
 
+    function insertVariable(name, value) {
+        // TO DO Implement this after Varun has updated HTML
+        // This function should insert the given variable into the dom
+        var nameChild = $("<h1>", {class: "varlabel"});
+        nameChild.html(name);
+        $("#varlabelcolumn").append(nameChild);
+        var varDiv = $("<div>", {class: "variable"});
+        var varP = $("p", {class: "vardata digit"});
+        varP.html(value);
+        varDiv.append(varP);
+        $("#varvalues").append(varDiv);
     }
 
     /// string format function

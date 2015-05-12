@@ -104,8 +104,8 @@ var mainAst = {
 
 var states = [
     { //state 1 (initial)
+        array: [11, 14, 2, 4, 7],
         variables: {
-            array: [11, 14, 2, 4, 7],
             arrayLength: 5,
             i: null
         },
@@ -123,8 +123,8 @@ var states = [
     },
 
     { //state 1 (initial)
+        array: [11, 14, 2, 4, 7],
         variables: {
-            array: [11, 14, 2, 4, 7],
             arrayLength: 5,
             i: null
         },
@@ -142,8 +142,8 @@ var states = [
     },
 
     { //state 2
+        array: [11, 14, 2, 4, 7],
         variables: {
-            array: [11, 14, 2, 4, 7],
             arrayLength: 5,
             i: null
         },
@@ -161,8 +161,8 @@ var states = [
     },
 
     { //state 3
+        array: [11, 14, 2, 4, 7],
         variables: {
-            array: [11, 14, 2, 4, 7],
             arrayLength: 5,
             i: null
         },
@@ -180,8 +180,8 @@ var states = [
     },
 
     { //state 4
+        array: [11, 14, 2, 4, 7],
         variables: {
-            array: [11, 14, 2, 4, 7],
             arrayLength: 5,
             i: 1
         },
