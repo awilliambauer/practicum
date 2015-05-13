@@ -17,3 +17,5 @@ public static void ifElseMystery1 (int x, int y) {
 
      System.out.println (z + " " + y);
 }
+
+ifElseMystery1(3, 20)
