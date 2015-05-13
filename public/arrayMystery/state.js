@@ -195,7 +195,150 @@ var states = [
             accent2Highlight: [],
             accent2Border: []
         }
-    }
+    },
 
+    { //state 5
+        array: [11, 14, 2, 4, 7],
+        variables: {
+            arrayLength: 5,
+            i: 1
+        },
+        promptText: "The test passed. Let’s execute the code in the body of the for loop.",
+        ast: mainAst,
+        styleClasses: {
+            mainColorText: [],
+            mainColorBorder: [],
+            accent1Highlight: [],
+            accent1Border:[],
+            accent2Highlight: [],
+            accent2Border: []
+        }
+    },
+
+    { //state 6
+        array: [11, 14, 2, 4, 7],
+        variables: {
+            arrayLength: 5,
+            i: 1
+        },
+        promptText: "The next line of code is an assignment statement so, let’s evaluate the expression on the right side of the assignment statement.",
+        ast: mainAst,
+        styleClasses: {
+            mainColorText: [],
+            mainColorBorder: [],
+            accent1Highlight: [],
+            accent1Border:[],
+            accent2Highlight: [],
+            accent2Border: []
+        }
+    },
+
+    { //state 7
+        array: [11, 14, 2, 4, 7],
+        variables: {
+            arrayLength: 5,
+            i: 1
+        },
+        promptText: "What is the value of i?",
+        ast: mainAst,
+        styleClasses: {
+            mainColorText: [],
+            mainColorBorder: [],
+            accent1Highlight: [],
+            accent1Border:[],
+            accent2Highlight: [],
+            accent2Border: []
+        }
+    },
+
+    { //state 8
+        array: [11, 14, 2, 4, 7],
+        variables: {
+            arrayLength: 5,
+            i: 1
+        },
+        promptText: "The test passed. Let’s execute the code in the body of the for loop.",
+        ast: mainAst,
+        styleClasses: {
+            mainColorText: [],
+            mainColorBorder: [],
+            accent1Highlight: [],
+            accent1Border: [],
+            accent2Highlight: [],
+            accent2Border: []
+        }
+    },
+
+    { //state 9
+        array: [11, 14, 2, 4, 7],
+        variables: {
+            arrayLength: 5,
+            i: 1
+        },
+        promptText: "The test passed. Let’s execute the code in the body of the for loop.",
+        ast: mainAst,
+        styleClasses: {
+            mainColorText: [],
+            mainColorBorder: [],
+            accent1Highlight: [],
+            accent1Border:[],
+            accent2Highlight: [],
+            accent2Border: []
+        }
+    },
+
+    { //state 10
+        array: [11, 14, 2, 4, 7],
+        variables: {
+            arrayLength: 5,
+            i: 1
+        },
+        promptText: "The test passed. Let’s execute the code in the body of the for loop.",
+        ast: mainAst,
+        styleClasses: {
+            mainColorText: [],
+            mainColorBorder: [],
+            accent1Highlight: [],
+            accent1Border:[],
+            accent2Highlight: [],
+            accent2Border: []
+        }
+    },
+
+    { //state 11
+        array: [11, 14, 2, 4, 7],
+        variables: {
+            arrayLength: 5,
+            i: 1
+        },
+        promptText: "The test passed. Let’s execute the code in the body of the for loop.",
+        ast: mainAst,
+        styleClasses: {
+            mainColorText: [],
+            mainColorBorder: [],
+            accent1Highlight: [],
+            accent1Border:[],
+            accent2Highlight: [],
+            accent2Border: []
+        }
+    },
+
+    { //state 12
+        array: [11, 14, 2, 4, 7],
+        variables: {
+            arrayLength: 5,
+            i: 1
+        },
+        promptText: "The test passed. Let’s execute the code in the body of the for loop.",
+        ast: mainAst,
+        styleClasses: {
+            mainColorText: [],
+            mainColorBorder: [],
+            accent1Highlight: [],
+            accent1Border:[],
+            accent2Highlight: [],
+            accent2Border: []
+        }
+    }
 
 ]
