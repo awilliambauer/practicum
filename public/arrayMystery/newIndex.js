@@ -10,6 +10,13 @@
         displayState();
         $("#next").on("click", next);
         $("#back").on("click", back);
+
+        /*
+        meredith - for debugging
+
+        $("#promptwords").html(java_ast.find_by_id(1,mainAst).name);
+        */
+
         on_convert();
     };
 
