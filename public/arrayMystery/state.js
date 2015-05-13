@@ -232,7 +232,7 @@ var states = [
             accent2Border: []
         }
     },
-
+    //the following states need to be checked and worked on.
     { //state 7
         array: [11, 14, 2, 4, 7],
         variables: {
@@ -257,7 +257,7 @@ var states = [
             arrayLength: 5,
             i: 1
         },
-        promptText: "The test passed. Let’s execute the code in the body of the for loop.",
+        promptText: "What is the value of i - 1?",
         ast: mainAst,
         styleClasses: {
             mainColorText: [],
@@ -275,7 +275,7 @@ var states = [
             arrayLength: 5,
             i: 1
         },
-        promptText: "The test passed. Let’s execute the code in the body of the for loop.",
+        promptText: "What is the value of a[i – 1]?",
         ast: mainAst,
         styleClasses: {
             mainColorText: [],
@@ -293,7 +293,7 @@ var states = [
             arrayLength: 5,
             i: 1
         },
-        promptText: "The test passed. Let’s execute the code in the body of the for loop.",
+        promptText: "What is the value of a[i + 1]?",
         ast: mainAst,
         styleClasses: {
             mainColorText: [],
@@ -311,7 +311,7 @@ var states = [
             arrayLength: 5,
             i: 1
         },
-        promptText: "The test passed. Let’s execute the code in the body of the for loop.",
+        promptText: "What is the result of the expression?",
         ast: mainAst,
         styleClasses: {
             mainColorText: [],
@@ -329,7 +329,79 @@ var states = [
             arrayLength: 5,
             i: 1
         },
-        promptText: "The test passed. Let’s execute the code in the body of the for loop.",
+        promptText: "Now that we’ve evaluated the right side of the assignment statement, let’s determine where this value is going to be stored. The left side of the assignment statement tells us where to store the value.",
+        ast: mainAst,
+        styleClasses: {
+            mainColorText: [],
+            mainColorBorder: [],
+            accent1Highlight: [],
+            accent1Border:[],
+            accent2Highlight: [],
+            accent2Border: []
+        }
+    },
+
+    { //state 13
+        array: [11, 14, 2, 4, 7],
+        variables: {
+            arrayLength: 5,
+            i: 1
+        },
+        promptText: "Which element of the array is going to store the result of the expression?",
+        ast: mainAst,
+        styleClasses: {
+            mainColorText: [],
+            mainColorBorder: [],
+            accent1Highlight: [],
+            accent1Border:[],
+            accent2Highlight: [],
+            accent2Border: []
+        }
+    },
+
+    { //state 14
+        array: [11, 14, 2, 4, 7],
+        variables: {
+            arrayLength: 5,
+            i: 1
+        },
+        promptText: "Update that element in the array",
+        ast: mainAst,
+        styleClasses: {
+            mainColorText: [],
+            mainColorBorder: [],
+            accent1Highlight: [],
+            accent1Border:[],
+            accent2Highlight: [],
+            accent2Border: []
+        }
+    },
+
+    { //state 15
+        array: [11, 14, 2, 4, 7],
+        variables: {
+            arrayLength: 5,
+            i: 1
+        },
+        promptText: "We’ve reached the end of the for loop body, which means we need to update our counter and reevaluate the for loop test.",
+        ast: mainAst,
+        styleClasses: {
+            mainColorText: [],
+            mainColorBorder: [],
+            accent1Highlight: [],
+            accent1Border:[],
+            accent2Highlight: [],
+            accent2Border: []
+        }
+    },
+
+    { //state 13
+        array: [11, 14, 2, 4, 7],
+        variables: {
+            arrayLength: 5,
+            i: 1
+        },
+        promptText: "What is i updated to?",
         ast: mainAst,
         styleClasses: {
             mainColorText: [],
@@ -340,5 +412,6 @@ var states = [
             accent2Border: []
         }
     }
+    //1 loop iteration
 
 ]
