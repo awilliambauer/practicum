@@ -109,24 +109,22 @@ function to_dom(node, indent_level, special_flag) {
 			var elem = $("<span>");
 			var firstIter;
 			elem.attr('id', 'java-ast-' + node.id);
+			if (!special_flag) {
+				// leave a blank line between ifs (could replace with something fancier like boxes)
+				elem.append($("<li>").text((LINENUM)).addClass(LINENUM + ""));
+				LINENUM++;
+			}
 			var text = $("<li>");
+			text.addClass(LINENUM + "").append((LINENUM) + "\t");
+			LINENUM++;
 			text.append(indent(indent_level));
 			if (special_flag) {
 				text.append('} <span style="color:purple">else </span>');
 			}
-			if (!special_flag) {
-				// leave a blank line between ifs (could replace with something fancier like boxes)
-				elem.append($("<li>").text((LINENUM) + "\t" + "\n").addClass(LINENUM + ""));
-				LINENUM++;
-			}
+
 			text.append("<span style='color:purple'>if </span>(");
 			text.append(to_dom(node.condition, indent_level));
 			text.append(") {");
-			text.addClass(LINENUM + "").text((LINENUM) + "\t");
-			LINENUM++;
-			if (special_flag) {
-				// inside.css("display", "inline-block");
-			}
 			elem.append(text);
 			node.then_branch.forEach(function(s) {
 				elem.append(to_dom(s, indent_level + 1));
