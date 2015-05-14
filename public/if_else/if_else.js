@@ -64,7 +64,7 @@
 			// show previously invisible prompt
 			$("#prompt").show();
 			// highlighting all the stuff
-			highlightBlock(3, 8, "block_highlight");
+			highlightBlock(4, 8, "block_highlight");
 			highlightBlock(10 ,16, "block_highlight");
 		}
 
