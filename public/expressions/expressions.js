@@ -1,8 +1,8 @@
-var arr = [ {type:"int", value : 2},
-			{type:"ASoperator", value: "+"},
-			{type:"int", value : 6}, 
-			{type:"MDMoperator", value: "*"},
-			{type:"int", value : 3} ]; 
+var arr = [ {type:"int", value : 2, id:""},
+			{type:"ASoperator", value: "+", id:""},
+			{type:"int", value : 6, id:""}, 
+			{type:"MDMoperator", value: "*", id:""},
+			{type:"int", value : 3, id:""} ]; 
 /*
 var arr = [ {type:"int", value : 22},
 {type:"MDMoperator", value: "%"},
@@ -44,11 +44,15 @@ function stepThrough() {
 		var newChildPara2 = document.createElement("p");
 		newChildPara1.classList.add("step");
 		newChildPara2.classList.add("exp");
-		newChildPara1.innerHTML = "Click on the operator and operands";
+
+		newChildPara1.innerHTML = "Click on the next operator";
 		newChildPara2.innerHTML = arrToString(arr);
+
 		newChild.appendChild(newChildPara1);
 		newChild.appendChild(newChildPara2);
+
 		document.getElementById("steps").appendChild(newChild);
+
 		if (arr.length == 1) {
 			arr = [];
 			document.getElementById("nextstep").classList.add("hiddenSteps");
@@ -57,13 +61,16 @@ function stepThrough() {
 			var flag = false;
 			for (var i = 0; i < arr.length; i++) {
 				if (arr[i].type == "MDMoperator" && !flag) {
+					arr[i].id="operator";
+					arr[i - 1].id="leftOperand";
+					arr[i + 1].id="rightOperand";
 					if (arr[i].value == "*") {
 						arr2[i - 1].value = arr[i - 1].value * arr[i + 1].value; 
 					} else if (arr[i].value == "/") {
 						arr2[i - 1].value = (arr[i - 1].value / arr[i + 1].value);
 					} else if (arr[i].value == "%") {
 						arr2[i - 1].value = arr[i - 1].value % arr[i + 1].value;
-					}
+					}	
 					flag = true;
 					i++;
 				} else {
@@ -74,6 +81,9 @@ function stepThrough() {
 				arr2 = [];
 				for (var i = 0; i < arr.length; i++) {
 					if (arr[i].type == "ASoperator" && !flag) {
+						arr[i].id="operator";
+						arr[i - 1].id="leftOperand";
+						arr[i + 1].id="rightOperand";
 						if (arr[i].value == "+") {
 							arr2[i - 1].value = arr[i - 1].value + arr[i + 1].value; 
 						} else if (arr[i].value == "-") {
@@ -86,7 +96,10 @@ function stepThrough() {
 					}
 				}
 			}
-			arr = arr2;	
+			document.getElementById("operator").onclick = alert("correct operator clicked!");
+			document.getElementById("leftOperand").onclick = alert("correct left operand clicked!");
+			document.getElementById("rightOperand").onclick = alert("correct right operand clicked!");
+			arr = arr2;			
 			document.getElementById("nextstep").onclick = stepThrough;
 		}
 	}
