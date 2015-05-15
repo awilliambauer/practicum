@@ -1,8 +1,8 @@
 var arr = [ {type:"int", value : 2, id:""},
 			{type:"ASoperator", value: "+", id:""},
-			{type:"int", value : 6, id:""}, 
-			{type:"MDMoperator", value: "*", id:""},
-			{type:"int", value : 3, id:""} ]; 
+			{type:"int", value : 6, id:"leftOperand"}, 
+			{type:"MDMoperator", value: "*", id:"operator"},
+			{type:"int", value : 3, id:"rightOperand"} ]; 
 /*
 var arr = [ {type:"int", value : 22},
 {type:"MDMoperator", value: "%"},
@@ -21,11 +21,17 @@ window.onload = function() {
 	document.getElementById("nextstep").onclick = stepThrough;
 };
 
+/*
+Eventually change this back to original code of just printing in a loop
+*/
 function setupPage() {
 	var newHeading = document.getElementById("expressionHeader");
-	for(var i = 0; i < arr.length; i++) {
-		newHeading.innerHTML += "" + arr[i].value + " ";
-	}
+	newHeading.innerHTML += "" + "<span id=1>" +arr[0].value + "</span>";
+	newHeading.innerHTML += "" + "<span id=2>" +arr[1].value + "</span>";
+	newHeading.innerHTML += "" + "<span id=3>" +arr[2].value + "</span>";
+	newHeading.innerHTML += "" + "<span id=4>" +arr[3].value + "</span>";
+	newHeading.innerHTML += "" + "<span id=5>" +arr[4].value + "</span>";
+	document.getElementById(5).onclick = stepThrough;
 }
 
 function arrToString() {
@@ -36,6 +42,23 @@ function arrToString() {
 	return arrString;
 }
 
+/* Put this in step through to find the first operator and operands to set id, then step through does the copying*/
+function findFirst() {
+	for (var i = 0; i < arr.length; i++) {
+		if (arr[i].type == "MDMoperator") {
+			arr[i].id = "operator";
+			arr[i-1].id = "leftOperand";
+			arr[i+1].id = "rightOperand";
+			return;
+		}
+	}
+	arr[1].id = "operator";
+	arr[0].id = "leftOperand";
+	arr[2].id = "rightOperand";
+}
+
+
+// Figure out how to make spans with the given id, and make it clickable
 function stepThrough() {
 	if (arr.length >= 1) {
 		var newChild = document.createElement("div");
@@ -61,9 +84,6 @@ function stepThrough() {
 			var flag = false;
 			for (var i = 0; i < arr.length; i++) {
 				if (arr[i].type == "MDMoperator" && !flag) {
-					arr[i].id="operator";
-					arr[i - 1].id="leftOperand";
-					arr[i + 1].id="rightOperand";
 					if (arr[i].value == "*") {
 						arr2[i - 1].value = arr[i - 1].value * arr[i + 1].value; 
 					} else if (arr[i].value == "/") {
@@ -81,9 +101,6 @@ function stepThrough() {
 				arr2 = [];
 				for (var i = 0; i < arr.length; i++) {
 					if (arr[i].type == "ASoperator" && !flag) {
-						arr[i].id="operator";
-						arr[i - 1].id="leftOperand";
-						arr[i + 1].id="rightOperand";
 						if (arr[i].value == "+") {
 							arr2[i - 1].value = arr[i - 1].value + arr[i + 1].value; 
 						} else if (arr[i].value == "-") {
@@ -96,11 +113,7 @@ function stepThrough() {
 					}
 				}
 			}
-			document.getElementById("operator").onclick = alert("correct operator clicked!");
-			document.getElementById("leftOperand").onclick = alert("correct left operand clicked!");
-			document.getElementById("rightOperand").onclick = alert("correct right operand clicked!");
 			arr = arr2;			
-			document.getElementById("nextstep").onclick = stepThrough;
 		}
 	}
 }
