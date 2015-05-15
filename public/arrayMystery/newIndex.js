@@ -16,8 +16,6 @@
 
         $("#promptwords").html(java_ast.find_by_id(1,mainAst).name);
         */
-
-        on_convert();
     };
 
     function next() {
@@ -42,17 +40,22 @@
          promptText: "Let's solve the problem!",
          ast: mainAst,
          index: null, // null means that they haven't answered yet
-         styleClasses: {
-         mainColorText: [],
-         mainColorBorder: [],
-         accent1Highlight: [],
-         accent1Border: [],
-         accent2Highlight: [],
-         accent2Border: []
-         }
+         styleClasses: [
+            [], // color0Text
+            [], // color0Border
+            [], // color1Highlight
+            [], // color1Border
+            [], // color2Highlight
+            []  // color2Border
+         ]
          },*/
         var state = states[step];
+
+        // Clears all of the html whose style can change with different states
         $(".clear").empty();
+
+        // Reinsert the html of the problem text
+        on_convert();
 
         // Set array element values
         var elements = state.array;
@@ -87,26 +90,33 @@
         nameChild.html("arr:");
         $(".varlabelcolumn").append(nameChild);
         for (var key in variablelist) {
-            insertVariable(key+":", variablelist[key]);
+            insertVariable(key, variablelist[key]);
         }
+
         // Add styling classes
         var classes = state.styleClasses;
         for (i = 0; i < classes.length; i++) {
-            var currClass = classes[i];
-            for (var j = 0; j < currClass.length; j++) {
-                $(currClass[j]).addClass(currClass);
+            var currClass = "color" + (i - (i % 2));
+            if (i == 0) {
+                currClass += "Text";
+            } else if ((i % 2) == 1) {
+                currClass += "Border";
+            } else {
+                currClass += "Highlight";
+            }
+            for (var j = 0; j < classes[i].length; j++) {
+                $(classes[i][j]).addClass(currClass);
             }
         }
     }
 
     function insertVariable(name, value) {
-        // TO DO Implement this after Varun has updated HTML
         // This function should insert the given variable into the dom
-        var nameChild = $("<h1>", {class: "varlabel"});
-        nameChild.html(name);
+        var nameChild = $("<h1>", {class: "varlabel", id: name});
+        nameChild.html(name + ":");
         $(".varlabelcolumn").append(nameChild);
         var varDiv = $("<div>", {class: "variable clear"});
-        var varP = $("<p>", {class: "vardata digit"});
+        var varP = $("<p>", {class: "vardata digit", id: name + "div"});
         varP.html(value);
         varDiv.append(varP);
         $("#varvalues").append(varDiv);
@@ -137,7 +147,7 @@
 
         switch (node.tag) {
             case 'method':
-                elem.html(sprintf('public static void <span style="color:blue">{0}</span>(', indent(0), node.name));
+                elem.html(sprintf('public static void arrMys(', indent(0), node.name));
                 firstIter = true;
                 node.params.forEach(function(p) {
                     if (!firstIter) {
@@ -183,12 +193,23 @@
             case 'for':
                 elem.append(indent(indent_level) + 'for (');
                 // statements inside of for loop header should not be indented/have newlines
-                elem.append(to_dom(node.initializer, indent_level, true));
+                var init = $('<span>');
+                init.attr('id', 'init');
+                init.append(to_dom(node.initializer, indent_level, true));
+                elem.append(init);
                 elem.append('; ');
-                elem.append(to_dom(node.condition, indent_level, true));
+                var cond = $('<span>');
+                cond.attr('id', 'test');
+                cond.append(to_dom(node.condition, indent_level, true));
+                elem.append(cond);
                 elem.append('; ');
-                elem.append(to_dom(node.increment, indent_level, true));
+                var update = $('<span>');
+                update.attr('id', 'update');
+                update.append(to_dom(node.increment, indent_level, true));
+                elem.append(update);
                 elem.append(') {');
+                var count = 1;
+                var colors = ['pink', 'purple', 'orange'];
                 node.body.forEach(function(s) {
                     elem.append(to_dom(s, indent_level+ 1));
                 });
@@ -257,12 +278,10 @@
 
             case 'identifier':
                 elem.text(node.value);
-                elem.css('color', 'blue');
                 break;
 
             case 'literal':
                 elem.text(typeof node.value === 'number' ? node.value : '"' + node.value + '"');
-                elem.css('color', 'green');
                 break;
 
             default:

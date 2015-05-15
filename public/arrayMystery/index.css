@@ -14,6 +14,31 @@ body {
     background-color: #45ADA8;
 }
 
+.color0Text {
+    color: #45ADA8;
+    font-weight: bold;
+}
+
+.color0Border {
+    border-color: #45ADA8;
+}
+
+.color2Highlight {
+    background: #9DE0AD;
+}
+
+.color2Border {
+    border-color: #9DE0AD;
+}
+
+.color1Highlight {
+    background: #E5FCC2;
+}
+
+.color1Border {
+    border-color: #E5FCC2;
+}
+
 #contentwindow {
     background-color: white;
     border-color: #547980;
@@ -166,3 +191,4 @@ input {
 #next:focus, #back:focus {
     outline: 0;
 }
+
