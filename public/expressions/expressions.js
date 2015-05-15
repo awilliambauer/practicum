@@ -1,8 +1,8 @@
 var arr = [ {type:"int", value : 2, id:""},
 			{type:"ASoperator", value: "+", id:""},
-			{type:"int", value : 6, id:"leftOperand"}, 
-			{type:"MDMoperator", value: "*", id:"operator"},
-			{type:"int", value : 3, id:"rightOperand"} ]; 
+			{type:"int", value : 6, id:""}, 
+			{type:"MDMoperator", value: "*", id:""},
+			{type:"int", value : 3, id:""} ]; 
 /*
 var arr = [ {type:"int", value : 22},
 {type:"MDMoperator", value: "%"},
@@ -37,7 +37,8 @@ function setupPage() {
 function arrToString() {
 	var arrString = "";
 	for(var i = 0; i < arr.length; i++) {
-		arrString += arr[i].value + " ";
+		var type = arr[i].id;
+		arrString += "<span id=" + type + ">" + arr[i].value + "</span>" + " ";
 	}
 	return arrString;
 }
@@ -69,6 +70,7 @@ function stepThrough() {
 		newChildPara2.classList.add("exp");
 
 		newChildPara1.innerHTML = "Click on the next operator";
+		findFirst();
 		newChildPara2.innerHTML = arrToString(arr);
 
 		newChild.appendChild(newChildPara1);
@@ -113,7 +115,8 @@ function stepThrough() {
 					}
 				}
 			}
-			arr = arr2;			
+			arr = arr2;		
+			document.getElementById("operator").onclick = alert("works");	
 		}
 	}
 }
