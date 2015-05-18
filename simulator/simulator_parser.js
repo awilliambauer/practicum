@@ -227,6 +227,10 @@ var simulator_parsing = function() {
         return self;
     };
 
+    /**
+     * tags: function, if, declaration, parameter, expression, for, literal, identifier, index, call,
+     *       reference, postfix, binop
+     */
     var Parser = function(lex) {
         var self = {};
 
@@ -535,7 +539,7 @@ var simulator_parsing = function() {
 
 if (typeof module !== 'undefined') {
     if (process.argv.length <= 2) {
-        console.log("Usage: node parser.js <filename>\nWill print a json AST to stdout.");
+        console.log("Usage: node simulator_parser.js <filename>\nWill print a json AST to stdout.");
     } else {
         var filename = process.argv[2];
         simulator_parsing.nodejs_parse(filename, function(ast) {

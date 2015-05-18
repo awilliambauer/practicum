@@ -1,8 +1,11 @@
 
 function algorithm(state) {
-
-    var x;
-
-    x = call_some_helper_function(x);
+    var left_operand;
+    var right_operand;
+    var operator;
+    left_operand = state.left;
+    right_operand = state.right;
+    operator = state.op;
+    state.result = eval(left_operand + operator + right_operand);
 }
 
