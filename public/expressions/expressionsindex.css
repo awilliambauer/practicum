@@ -84,6 +84,10 @@ h2 {
 	display: none;
 }
 
+span {
+	display: inline-block;
+}
+
 .visibleSteps {
 	display: block;
 }

@@ -72,7 +72,6 @@ function stepThrough() {
 		newChildPara1.innerHTML = "Click on the next operator";
 		findFirst();
 		newChildPara2.innerHTML = arrToString(arr);
-
 		newChild.appendChild(newChildPara1);
 		newChild.appendChild(newChildPara2);
 
@@ -116,7 +115,6 @@ function stepThrough() {
 				}
 			}
 			arr = arr2;		
-			document.getElementById("operator").onclick = alert("works");	
 		}
 	}
 }
