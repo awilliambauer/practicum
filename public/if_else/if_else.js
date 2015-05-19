@@ -42,6 +42,9 @@
 			$("#problem_space li").removeClass(highlight);		
 		}
 		$("." + line).addClass(highlight);
+		if (highlight == "grey_out") {
+			$("." + line + " *").removeAttr("style");
+		}
 	}
 
 	// gives the given lines the given highlight class
