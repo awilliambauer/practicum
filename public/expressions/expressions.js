@@ -88,8 +88,10 @@ function stepThrough() {
 		document.getElementById("steps").appendChild(newChild);
 		find();
 		document.getElementById(operator).onclick = function () {
+			document.getElementById(operator).classList.add('clicked');
 			newChildPara1.innerHTML = "Click on the left operators";
 			document.getElementById(lOperand).onclick = function () {
+				document.getElementById(lOperand).classList.add('clicked');
 				newChildPara1.innerHTML = "Click on the right operators";
 				document.getElementById(rOperand).onclick = trySubmit;
 			};
@@ -213,6 +215,7 @@ function solve() {
 }*/
 
 function trySubmit() {
+	document.getElementById(rOperand).classList.add('clicked');
 	clearIds();
 
 	var newChild = document.createElement("div");

@@ -4,6 +4,11 @@ This provides the stylesheet for expressions
 
 span:hover {
 	cursor: pointer;
+	background-color: red;
+}
+
+.clicked {
+	color: green;
 }
 
 body {
