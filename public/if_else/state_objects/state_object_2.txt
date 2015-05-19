@@ -8,31 +8,25 @@ Questions:
 state: [
     {prompt: "If/Else: Before starting, note the separate if/else blocks that are highlighted.",
 	    problem},
-
-	{prompt: "Initialization: What are the starting values of our variables?",
-     	lineNum: 1,
-     	vars: {1: {x: 8, y: 30}},
-     	updated: {x, y},
-     	problem
-  	},
+	},
 
   	{prompt: "Initialization: What are the starting values of our variables?",
          lineNum: 1,
          vars: {1: {x: 8, y: 30}},
-         updated: {x, y},
          problem
     },
 
     {prompt: "Initialization: What is the starting value of this variable?"
      	 lineNum: 2,
      	 vars: {1: {x: 3, y: 20}, 2: {x: 3, y: 20, z: 7}},
-     	 updated: {z},
+     	 updated: {x, y},
     	 problem
     },
 
     {prompt: "Conditionals: We're at the beginning of a new if/else block. Let's find the first branch that evaluates to true.",
    	     lineNum: 4,
    	     vars: {1: {x: 3, y: 20}, 2: {x: 3, y: 20, z: 7}},
+   	     updated: {z},
    	     problem
    	},
 
@@ -54,7 +48,6 @@ state: [
     	 lineNum: 5,
     	 vars: {1: {x: 3, y: 20}, 2: {x: 3, y: 20, z: 4}, 5:{x: 15, y: 20, z: 13}},
     	 bools: {4: true},
-    	 updated: {z},
     	 problem
     },
 
@@ -62,6 +55,7 @@ state: [
    	     lineNum: 8,
    	     vars: {1: {x: 3, y: 20}, 2: {x: 3, y: 20, z: 4}, 5:{x: 15, y: 20, z: 13}},
    	     bools: {4: true},
+   	     updated: {z},
    	     problem
    	},
 
@@ -84,7 +78,6 @@ state: [
     	 lineNum: 9,
     	 vars: {1: {x: 3, y: 20}, 2: {x: 3, y: 20, z: 7}, 5:{x: 15, y: 20, z: 13}, 9:{x: 15, y: 25, z: 13}},
     	 bools: {4: true, 8: true},
-    	 updated: {z},
     	 problem
     },
 
@@ -100,6 +93,7 @@ state: [
 		 lineNum: 13,
 		 vars: {1: {x: 3, y: 20}, 2: {x: 3, y: 20, z: 4}, 5:{x: 15, y: 20, z: 13}, 9:{x: 15, y: 25, z: 13}, 10:{x: 30, y: 25, z: 13}},
 		 bools: {4: true, 8: true},
+		 updated: {z},
 		 problem
 	},
 
