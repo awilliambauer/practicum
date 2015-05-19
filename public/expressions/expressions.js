@@ -5,6 +5,12 @@ var arr = [ {type:"int", value : 2, id:""},
 			{type:"int", value : 3, id:""} ]; 
 
 var arrLeng = 0;
+
+var operator;
+var rOperand;
+var lOperand;
+
+
 /*
 var arr = [ {type:"int", value : 22},
 {type:"MDMoperator", value: "%"},
@@ -60,10 +66,7 @@ function findFirst() {
 
 // Figure out how to make spans with the given id, and make it clickable
 function stepThrough() {
-	for(var i = 0; i < arrLeng; i++) {
-		var element = document.getElementById(i);
-		element.id = "";
-	}
+	clearIds();
 
 	arrLeng = arr.length;
 
@@ -77,61 +80,47 @@ function stepThrough() {
 
 		newChildPara1.innerHTML = "Click on the next operator";
 		//findFirst();
-		newChildPara2.innerHTML = arrToString(arr);	
+		newChildPara2.innerHTML = arrToString(arr);
 
 		newChild.appendChild(newChildPara1);
 		newChild.appendChild(newChildPara2);
 
 		document.getElementById("steps").appendChild(newChild);
+		find();
+		document.getElementById(operator).onclick = function () {
+			newChildPara1.innerHTML = "Click on the left operators";
+			document.getElementById(lOperand).onclick = function () {
+				newChildPara1.innerHTML = "Click on the right operators";
+				document.getElementById(rOperand).onclick = trySubmit;
+			};
+		}
+	}
+}
 
-		var operator;
-		var rOperand;
-		var lOperand;
-
+function find() {
 		if (arr.length == 1) {
 			arr = [];
 			document.getElementById("nextstep").classList.add("hiddenSteps");
 		} else {
-			var arr2 = [];
 			var flag = false;
 			for (var i = 0; i < arr.length; i++) {
 				if (arr[i].type == "MDMoperator" && !flag) {
 					operator = i;
 					lOperand = i - 1;
 					rOperand = i + 1;
-					if (arr[i].value == "*") {
-						arr2[i - 1].value = arr[i - 1].value * arr[i + 1].value; 
-					} else if (arr[i].value == "/") {
-						arr2[i - 1].value = (arr[i - 1].value / arr[i + 1].value);
-					} else if (arr[i].value == "%") {
-						arr2[i - 1].value = arr[i - 1].value % arr[i + 1].value;
-					}	
 					flag = true;
-					i++;
-				} else {
-					arr2.push(arr[i]);
 				}
 			}
 			if (!flag) {
-				arr2 = [];
 				for (var i = 0; i < arr.length; i++) {
 					if (arr[i].type == "ASoperator" && !flag) {
 						operator = i;
 						lOperand = i - 1;
 						rOperand = i + 1;
-						if (arr[i].value == "+") {
-							arr2[i - 1].value = arr[i - 1].value + arr[i + 1].value; 
-						} else if (arr[i].value == "-") {
-							arr2[i - 1].value = (arr[i - 1].value - arr[i + 1].value);
-						} 
-						flag = true;
-						i++;
-					} else {
-						arr2.push(arr[i]);
 					}
 				}
 			}
-			document.getElementById(operator).onclick = function () {
+			/*document.getElementById(operator).onclick = function () {
 				alert("operator clicked");
 			}
 			document.getElementById(lOperand).onclick = function () {
@@ -139,9 +128,122 @@ function stepThrough() {
 			}
 			document.getElementById(rOperand).onclick = function () {
 				alert("right operand clicked");
-			}
-			arrLeng = arr.length;
-			arr = arr2;		
+			}*/
 		}
+}
+
+function solve() {
+	if (arr.length == 1) {
+		arr = [];
+		document.getElementById("nextstep").classList.add("hiddenSteps");
+	} else {
+		var arr2 = [];
+		var flag = false;
+		for (var i = 0; i < arr.length; i++) {
+			if (arr[i].type == "MDMoperator" && !flag) {
+				document.getElementById(operator).onclick = findOperand;
+				if (arr[i].value == "*") {
+					arr2[i - 1].value = arr[i - 1].value * arr[i + 1].value;
+				} else if (arr[i].value == "/") {
+					arr2[i - 1].value = (arr[i - 1].value / arr[i + 1].value);
+				} else if (arr[i].value == "%") {
+					arr2[i - 1].value = arr[i - 1].value % arr[i + 1].value;
+				}
+				flag = true;
+				i++;
+			} else {
+				arr2.push(arr[i]);
+			}
+		}
+		if (!flag) {
+			arr2 = [];
+			for (var i = 0; i < arr.length; i++) {
+				if (arr[i].type == "ASoperator" && !flag) {
+					if (arr[i].value == "+") {
+						arr2[i - 1].value = arr[i - 1].value + arr[i + 1].value;
+					} else if (arr[i].value == "-") {
+						arr2[i - 1].value = (arr[i - 1].value - arr[i + 1].value);
+					}
+					flag = true;
+					i++;
+				} else {
+					arr2.push(arr[i]);
+				}
+			}
+		}
+		/*document.getElementById(operator).onclick = function () {
+		 alert("operator clicked");
+		 }
+		 document.getElementById(lOperand).onclick = function () {
+		 alert("left operand clicked");
+		 }
+		 document.getElementById(rOperand).onclick = function () {
+		 alert("right operand clicked");
+		 }*/
+
+		arrLeng = arr.length;
+		arr = arr2;
+	}
+}
+
+/*function findOperand() {
+	clearIds();
+
+	var newChild = document.createElement("div");
+	newChild.classList.add("expressionStatement");
+	var newChildPara1 = document.createElement("p");
+	var newChildPara2 = document.createElement("p");
+	newChildPara1.classList.add("step");
+	newChildPara2.classList.add("exp");
+
+	newChildPara1.innerHTML = "Click on the left operators";
+	//findFirst();
+	newChildPara2.innerHTML = arrToString(arr);
+
+	newChild.appendChild(newChildPara1);
+	newChild.appendChild(newChildPara2);
+
+	document.getElementById("steps").appendChild(newChild);
+
+	document.getElementById(lOperand).onclick = function () {
+		newChildPara1.innerHTML = "Click on the right operators";
+		document.getElementById(rOperand).onclick = trySubmit;
+	};
+	//document.getElementById(loper).onclick = answer();
+}*/
+
+function trySubmit() {
+	clearIds();
+
+	var newChild = document.createElement("div");
+	newChild.classList.add("expressionStatement");
+	var newChildPara1 = document.createElement("p");
+	var newChildPara2 = document.createElement("p");
+	newChildPara1.classList.add("step");
+	newChildPara2.classList.add("exp");
+
+	newChildPara1.innerHTML = "What is the answer?";
+	//findFirst();
+	newChildPara2.innerHTML = answerToString(arr);
+
+	newChild.appendChild(newChildPara1);
+	newChild.appendChild(newChildPara2);
+
+	document.getElementById("steps").appendChild(newChild);
+}
+
+function answerToString() {
+	var arrString = "";
+	for(var i = 0; i < arr.length - 3; i++) {
+		arrString += "<span id=" + i + ">" + arr[i].value + "</span> ";
+	}
+	arrString += "<input type=text id=answer size=5/>"
+	return arrString;
+}
+
+function clearIds() {
+	for (var i = 0; i < arrLeng; i++) {
+		var element = document.getElementById(i);
+		element.id = "";
 	}
 }
