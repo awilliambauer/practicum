@@ -1,0 +1,84 @@
+ <!DOCTYPE html>
+<!--
+This provides the structure for the expressions page
+-->
+
+<html>
+	<head>
+		<title>Expressions</title>
+		<link rel="stylesheet" type="text/css" href="expressionsindex.css">
+		<link href="../navbar.css" type="text/css" rel="stylesheet" />
+		<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.11.2.min.js"></script>
+		<script src="../navigationbar.js"></script>
+		<script src="expressions.js" type="text/javascript"></script>
+		<meta charset="UTF-8">
+	</head>
+
+	<body>
+		<div class="topnavContainer topnavContainerScroll">
+		</div>
+		<div id="header"><h1>Practice That!</h1></div>
+		<h2>Expressions</h2>
+
+		<p>2 + 3 * 4 - 6</p>
+
+		<!--This form id box currently posts to a php page, but in the future should ultimately be handled by JavaScript. 
+		See this example: http://www.w3schools.com/jsref/tryit.asp?filename=tryjsref_form_submit -->
+		<form id="answerbox" action="answer.php" method="post">
+			<div class='boxcenter'>
+				<input id='box' name="checkanswer" type="text" autofocus="autofocus" />
+			</div>
+			<div class = 'buttonLineUp'>
+				<input class='buttons' type="submit" value="Submit" />
+			</div>
+			<div id="steps">
+				<div id='step1' class='hiddenSteps all-steps'>
+					<p class="step-exp"> Step 1: Find the first multiplication/division/mod operator in the expression (move from left to right). </p>
+					<p> 2 + 3 <span class='highlight'> * </span> 4 - 6 </p>
+				</div>
+				<div id='step2' class='hiddenSteps all-steps'>
+					<p class="step-exp"> Step 2: Find its left and right operands. </p>
+					<p> Left operand: 3 </p>
+					<p>	Right operand: 4 </p>
+				</div>
+				<div id='step3' class='hiddenSteps all-steps'>
+					<p class="step-exp"> Step 3: Evaluate, and replace the operator and operands with the resulting value. </p>
+					<p> 3 * 4 = 12 </p>
+					<p> New expression: 2 + <span class='highlight'> 12 </span> - 6 </p>
+				</div>
+				<div id='step4' class='hiddenSteps all-steps'>
+					<p class="step-exp">Step 4: If there are no more multiplication/division/mod operators, move from left to right and find the first addition/subtraction operator. </p>
+					<p> 2 <span class='highlight'> + </span> 12 - 6 </p>
+				</div>
+				<div id='step5' class='hiddenSteps all-steps'>
+					<p class="step-exp"> Step 5: Find its left and right operands. </p>
+					<p> Left operand: 2 </p>
+					<p>	Right operand: 12 </p>
+				</div>
+				<div id='step6' class='hiddenSteps all-steps'>
+					<p class="step-exp"> Step 6: Evaluate, and replace the operator and operands with the resulting value. </p>
+					<p> 2 + 12 = 14 </p>
+					<p> New expression: <span class='highlight'> 14 </span> - 6 </p>
+				</div>
+				<div id='step7' class='hiddenSteps all-steps'>
+					<p class="step-exp"> Step 7: Move from left to right and find the next addition/subtraction operator. </p>
+					<p> 14 <span class='highlight'> - </span> 6 </p>
+				</div>
+				<div id='step8' class='hiddenSteps all-steps'>
+					<p class="step-exp"> Step 8: Find its left and right operands. </p>
+					<p> Left operand: 14 </p>
+					<p>	Right operand: 6 </p>
+				</div>
+				<div id='step9' class='hiddenSteps all-steps'>
+					<p class="step-exp"> Step 9: Evaluate, and replace the operator and operands with the resulting value. </p>
+					<p> 14 - 6 = 8 </p>
+					<p> New expression: <span class='highlight'> 8 </span> </p>
+				</div>
+			</div>
+			<div class = 'buttonLineUp'>
+				<button class='buttons' type="button" id="nextstep">Next</button>
+			</div>
+		</form>
+		<div id="footer"></div>
+	</body>
+</html>

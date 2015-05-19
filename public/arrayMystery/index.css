@@ -1,0 +1,201 @@
+/*
+I demand a pancake color scheme:
+
+dark gray: #594F4F
+dark blue: #547980
+med green-blue: #45ADA8
+light green: #9DE0AD
+lightest green: #E5FCC2
+*/
+
+
+
+body {
+    background-color: #45ADA8;
+}
+
+#contentwindow {
+    background-color: white;
+    border-color: #547980;
+    border-style: solid;
+    border-radius: 20px;
+    font-family: sans-serif;
+    color: #594F4F;
+    overflow: hidden;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 40px;
+    width: 900px;
+    box-shadow: 0px 0px 15px #888888;
+}
+
+#problemcontents {
+    width: 450px;
+    height: 250px; /* to make sure that the gray divider stays in the right spot.*/
+    padding-left: 30px;
+    padding-bottom: 30px;
+    float: left;
+}
+
+#problemtext {
+    position: relative;
+    bottom: 10px;
+}
+
+.vardata,   {
+    font-size: 35px;
+}
+
+#arraydata {
+    border: 2px solid darkgray;
+    border-collapse: collapse;
+}
+
+
+#indices {
+    font-size: 20px;
+}
+
+.varlabel {
+    text-align: right;
+    margin-bottom: 33px;
+}
+
+
+.arraylabel {
+    margin-top: 40px;
+}
+
+td {
+    padding: 15px;
+    width: 50px;
+    text-align: center;
+    border: 5px solid darkgrey;
+}
+
+.varlabelcolumn {
+    float: left;
+}
+
+.varcolumn {
+    float: left;
+}
+
+.varlabelcolumn, .varcolumn {
+    padding: 10px;
+}
+
+.digit {
+    width: 40px;
+    text-align: center;
+    border: 4px solid darkgray;
+    padding: 15px;
+}
+
+#prompt {
+    border: 3px solid #547980;
+    border-radius: 10px;
+    width: 300px;
+    float: right;
+    margin: 50px;
+    padding-left: 10px;
+    height: 150px;
+    box-shadow: 0px 0px 15px #888888;
+}
+
+h1.problemdescription {
+    color: red;
+}
+
+hr {
+    clear: left;
+}
+
+.right {
+    background-color: lawngreen;
+}
+
+.wrong {
+    background-color: red;
+}
+
+input {
+    width: 26px;
+    background-color: #B5F3C4;
+    text-align: center;
+}
+
+#prompttextbox {
+    height: 90px;
+    text-align: center;
+}
+
+#next {
+    float: right;
+    margin-right: 8px;
+}
+
+#next, #back {
+    background: #547980;
+    background-image: -webkit-linear-gradient(top, #547980, #45ADA8);
+    background-image: -moz-linear-gradient(top, #547980, #45ADA8);
+    background-image: -ms-linear-gradient(top, #547980, #45ADA8);
+    background-image: -o-linear-gradient(top, #547980, #45ADA8);
+    background-image: linear-gradient(to bottom, #547980, #45ADA8);
+    -webkit-border-radius: 28;
+    -moz-border-radius: 28;
+    border-radius: 28px;
+    text-shadow: 4px 3px 10px #666666;
+    font-family: Arial;
+    color: #ffffff;
+    font-size: 15px;
+    padding: 5px 10px 5px 10px;
+    text-decoration: none;
+}
+
+#next:hover, #back:hover {
+    background: #9de0ad;
+    background-image: -webkit-linear-gradient(top, #9de0ad, #81b38d);
+    background-image: -moz-linear-gradient(top, #9de0ad, #81b38d);
+    background-image: -ms-linear-gradient(top, #9de0ad, #81b38d);
+    background-image: -o-linear-gradient(top, #9de0ad, #81b38d);
+    background-image: linear-gradient(to bottom, #9de0ad, #81b38d);
+    text-decoration: none;
+}
+
+#next:focus, #back:focus {
+    outline: 0;
+}
+
+/*
+DYNAMIC STYLING CLASSES
+The following classes need to remain at the bottom of the file to ensure
+the dynamic styling works correctly.
+*/
+.mainColorText {
+    color: #45ADA8;
+    font-weight: bold;
+}
+
+.mainColorBorder {
+    border-color: #45ADA8;
+}
+
+.accent2Highlight {
+    background: #9DE0AD;
+}
+
+.accent2Border {
+    border-color: #9DE0AD;
+}
+
+.accent1Highlight {
+    background: #E5FCC2;
+}
+
+.accent1Border {
+    border-color: #E5FCC2;
+}
+/* DON'T PUT STUFF BELOW THIS COMMENT!! PLACE ADDITIONAL CODE ABOVE
+   DYNAMIC STYLING CLASSES!!
+*/

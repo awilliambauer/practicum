@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Array Mystery</title>
+    <link href="index.css" type="text/css" rel="stylesheet" />
+    <link href="../navbar.css" type="text/css" rel="stylesheet" />
+    <script src="state.js"></script>
+    <script src="newIndex.js"></script>
+    <script src="../ast.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="../navigationbar.js"></script>
+</head>
+<body>
+    <div class="topnavContainer topnavContainerScroll">
+    </div>
+    <div id="contentwindow">
+
+        <div id="problemcontents">
+
+            <div id="problemdescription">
+                <h1>Problem:</h1>
+                <p>You are to simulate the execution of a method that manipulates an array of integers.
+                    Consider the following method.</p>
+            </div>
+
+            <div id="problem">
+                <pre><code id="problemtext" class="clear"></code>
+                </pre>
+            </div>
+        </div>
+
+        <div id="prompt">
+            <div id="prompttextbox">
+                <p id="promptwords" class="clear">
+                    Let's solve the problem!
+                </p>
+            </div>
+            <button id="next">Next</button>
+            <button id="back">Back</button>
+
+        </div>
+        <hr>
+        <div>
+            <div class="varlabelcolumn variable clear">
+                <!--<h1 class="varlabel arraylabel">arr:</h1>
+                <h1 class="varlabel">arr.length:</h1>
+                <h1 class="varlabel">i:</h1>-->
+            </div>
+            <div class="varcolumn">
+                <div class="variable">
+                    <table class="vardata">
+
+                        <thead id="indices" class="clear">
+                            <th><input type="text" name="0" maxlength="2" id="index0"></th>
+                            <th><input type="text" name="1" maxlength="2" id="index1"></th>
+                            <th><input type="text" name="2" maxlength="2" id="index2"></th>
+                            <th><input type="text" name="3" maxlength="2" id="index3"></th>
+                            <th><input type="text" name="4" maxlength="2" id="index4"></th>
+                        </thead>
+                        <tbody>
+                            <tr id="arraydata clear">
+                                <td id="ele0">11</td>
+                                <td id="ele1">14</td>
+                                <td id="ele2">2</td>
+                                <td id="ele3">4</td>
+                                <td id="ele4">7</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div id="varvalues" class="clear">
+                    <div class="variable">
+                        <p class="vardata digit">5</p>
+                    </div>
+
+                    <div class="variable">
+                        <p id="i" class="vardata digit">?</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

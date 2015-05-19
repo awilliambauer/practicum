@@ -1,0 +1,87 @@
+/*
+This provides the stylesheet for expressions
+*/
+
+body {
+	padding: 0px;
+	background-color: #FAFFF3;
+	margin: 0 0 100px;
+	font-family: ‘Lucida Console’, Monaco, monospace;
+}
+
+h1 {
+	font-size: 40px;
+}
+
+p {
+	margin-top: 25px;
+}
+
+#header, #footer {
+	margin: 0;
+	background-color: #45ADA8;
+	color: #B5F3C4;
+	height: 100px;
+	padding: 25px;
+}
+
+#step1, #step4, #step7 {
+	background-color: #8ADEDA;
+}
+
+#step2, #step5, #step8 {
+	background-color: #9DE0AD;
+}
+
+#step3, #step6, #step9 {
+	background-color: #BAEFDC;
+}
+
+.all-steps {
+	border: solid;
+	border-radius: 20px;
+	border-color: #547980;
+	margin: 20px;
+}
+
+.step-exp {
+	text-align: left;
+	padding-bottom: 15px;
+}
+
+#answerbox {
+	padding: 0 25px 25px;
+}
+
+#answerbox, h1, h2, p {
+	text-align: center;
+}
+
+h2 {
+	margin-bottom: 50px;
+}
+
+#box {
+	width: 150px;
+	height: 50px;
+}
+
+.buttons {
+	width: 75px;
+}
+
+.buttonLineUp {
+	display: inline-block;
+}
+
+.highlight {
+	color: red;
+}
+
+.hiddenSteps {
+	display: none;
+}
+
+.visibleSteps {
+	display: block;
+}

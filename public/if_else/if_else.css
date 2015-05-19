@@ -1,0 +1,116 @@
+body {
+	text-align: center;
+}
+
+h3 > span, #answer_box > span, input[type="text"] {
+	font-family: monospace;
+}
+
+pre > span { /* comment */
+	color: #ff5900;
+}
+
+#problem_space, #answer_box {
+	border: 2px solid rgb(89,79,79);
+	width: 60%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#problem_space {
+	list-style: none;
+	text-align: left;
+	padding-left: 0; padding-right: 0;
+}
+
+#problem_space pre {
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 2.5%;
+	margin: 0;
+	font-size: 11pt;
+}
+
+#answer_box, #problem_space {
+	padding-top: 10px; padding-bottom: 10px;
+}
+
+#answer_box {
+	line-height: 300%;
+}
+
+#answer_box > button {
+	margin-right: 25%;
+}
+
+#variable_bank {
+	border: 2px solid rgb(84,121,128);
+	position: fixed;
+	top: 35%;
+	right: 2.5%;
+	width: 15%;
+	height: 30%;
+}
+
+#variable_bank #variable_list {
+	list-style-type: none;
+	text-align: center;
+	padding-left: 0px;
+	font-size: 15pt;
+}
+
+.bank_variable {
+	color: purple;
+}
+
+.bank_variable_value {
+	color: orange;
+}
+
+.just_updated_value {
+	color: green;
+}
+
+#next {
+	position: fixed;
+	top: 30%;
+	right: 2.5%;
+	width: 15%;
+}
+
+h4 {
+	text-decoration: underline;
+}
+
+#prompt {
+	position: absolute;
+	top: 200px;
+	border: 2px rgb(89,79,79) solid;
+	border-radius: 10px;
+	width: 20%;
+	left: 50%;
+	text-align: left;
+	padding: 10px;
+	background: rgb(229,252,194);
+}
+
+.block_highlight {
+	background-color: rgba(157,224,173, 0.45);
+	/*border: rgb(204, 204, 255) solid 1px;
+	border-radius: 2px;*/
+}
+
+.highlight {
+	background-color: rgba(69,173,168, 0.65);
+	border: #797979 solid 1px;
+	border-radius: 2px;
+}
+
+.grey_out {
+	color: rgb(155, 149, 149);
+}
+
+.cross_out {
+	color: rgb(200, 149, 149);
+	text-decoration: line-through;
+}
