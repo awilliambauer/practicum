@@ -3,6 +3,8 @@ var arr = [ {type:"int", value : 2, id:""},
 			{type:"int", value : 6, id:""}, 
 			{type:"MDMoperator", value: "*", id:""},
 			{type:"int", value : 3, id:""} ]; 
+
+var arrLeng = 0;
 /*
 var arr = [ {type:"int", value : 22},
 {type:"MDMoperator", value: "%"},
@@ -26,24 +28,20 @@ Eventually change this back to original code of just printing in a loop
 */
 function setupPage() {
 	var newHeading = document.getElementById("expressionHeader");
-	newHeading.innerHTML += "" + "<span id=1>" +arr[0].value + "</span>";
-	newHeading.innerHTML += "" + "<span id=2>" +arr[1].value + "</span>";
-	newHeading.innerHTML += "" + "<span id=3>" +arr[2].value + "</span>";
-	newHeading.innerHTML += "" + "<span id=4>" +arr[3].value + "</span>";
-	newHeading.innerHTML += "" + "<span id=5>" +arr[4].value + "</span>";
-	document.getElementById(5).onclick = stepThrough;
+	for(var i = 0; i < arr.length; i++) {
+		newHeading.innerHTML += "" + arr[i].value + " ";
+	}
 }
 
 function arrToString() {
 	var arrString = "";
 	for(var i = 0; i < arr.length; i++) {
-		var type = arr[i].id;
-		arrString += "<span id=" + type + ">" + arr[i].value + "</span>" + " ";
+		arrString += "<span id=" + i + ">" + arr[i].value + "</span> ";
 	}
 	return arrString;
 }
 
-/* Put this in step through to find the first operator and operands to set id, then step through does the copying*/
+/* Put this in step through to find the first operator and operands to set id, then step through does the copying
 function findFirst() {
 	for (var i = 0; i < arr.length; i++) {
 		if (arr[i].type == "MDMoperator") {
@@ -57,10 +55,18 @@ function findFirst() {
 	arr[0].id = "leftOperand";
 	arr[2].id = "rightOperand";
 }
+*/
 
 
 // Figure out how to make spans with the given id, and make it clickable
 function stepThrough() {
+	for(var i = 0; i < arrLeng; i++) {
+		var element = document.getElementById(i);
+		element.id = "";
+	}
+
+	arrLeng = arr.length;
+
 	if (arr.length >= 1) {
 		var newChild = document.createElement("div");
 		newChild.classList.add("expressionStatement");
@@ -70,12 +76,17 @@ function stepThrough() {
 		newChildPara2.classList.add("exp");
 
 		newChildPara1.innerHTML = "Click on the next operator";
-		findFirst();
-		newChildPara2.innerHTML = arrToString(arr);
+		//findFirst();
+		newChildPara2.innerHTML = arrToString(arr);	
+
 		newChild.appendChild(newChildPara1);
 		newChild.appendChild(newChildPara2);
 
 		document.getElementById("steps").appendChild(newChild);
+
+		var operator;
+		var rOperand;
+		var lOperand;
 
 		if (arr.length == 1) {
 			arr = [];
@@ -85,6 +96,9 @@ function stepThrough() {
 			var flag = false;
 			for (var i = 0; i < arr.length; i++) {
 				if (arr[i].type == "MDMoperator" && !flag) {
+					operator = i;
+					lOperand = i - 1;
+					rOperand = i + 1;
 					if (arr[i].value == "*") {
 						arr2[i - 1].value = arr[i - 1].value * arr[i + 1].value; 
 					} else if (arr[i].value == "/") {
@@ -102,6 +116,9 @@ function stepThrough() {
 				arr2 = [];
 				for (var i = 0; i < arr.length; i++) {
 					if (arr[i].type == "ASoperator" && !flag) {
+						operator = i;
+						lOperand = i - 1;
+						rOperand = i + 1;
 						if (arr[i].value == "+") {
 							arr2[i - 1].value = arr[i - 1].value + arr[i + 1].value; 
 						} else if (arr[i].value == "-") {
@@ -114,6 +131,16 @@ function stepThrough() {
 					}
 				}
 			}
+			document.getElementById(operator).onclick = function () {
+				alert("operator clicked");
+			}
+			document.getElementById(lOperand).onclick = function () {
+				alert("left operand clicked");
+			}
+			document.getElementById(rOperand).onclick = function () {
+				alert("right operand clicked");
+			}
+			arrLeng = arr.length;
 			arr = arr2;		
 		}
 	}
