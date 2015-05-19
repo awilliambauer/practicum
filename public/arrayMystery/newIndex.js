@@ -32,22 +32,22 @@
 
     function displayState() {
         /*{ //state 1 (initial)
-         array: [11, 14, 2, 4, 7]
-         variables: {
-         arrayLength: 5,
-         i: null
-         },
-         promptText: "Let's solve the problem!",
-         ast: mainAst,
-         index: null, // null means that they haven't answered yet
-         styleClasses: [
-            [], // color0Text
-            [], // color0Border
-            [], // color1Highlight
-            [], // color1Border
-            [], // color2Highlight
-            []  // color2Border
-         ]
+            array: [11, 14, 2, 4, 7],
+            variables: {
+                arrayLength: 5,
+                i: "?"
+            },
+            promptText: "Let's label the indices of the array!",
+            ast: mainAst,
+            index: null,
+            styleClasses: {
+                mainColorText: [],
+                mainColorBorder: [".indices"],
+                accent1Highlight: [],
+                accent1Border: [],
+                accent2Hightlight: [],
+                accent2Border: []
+            }
          },*/
         var state = states[step];
 
@@ -93,13 +93,24 @@
             insertVariable(key, variablelist[key]);
         }
 
-        // Add styling classes
+        addStylingClasses(state);
+    }
+
+    /**
+     * Add CSS styling classes to specified DOM elements
+     * The styling information is stored in the state object
+     * as an associative array of arrays. The name of the
+     * CSS class to be applied is the key and its value
+     * is an array of classes and ids of elements to which
+     * the CSS class needs to be applied.
+     */
+    function addStylingClasses(state) {
         var classes = Object.keys(state.styleClasses);
-        for (i = 0; i < classes.length; i++) {
-            var currClass = classes[i];
-            var applyTo = state.styleClasses[classes[i]];
+        for (var i = 0; i < classes.length; i++) {
+            var currClass = classes[i]; // Grabs the CSS class to be added to elements
+            var applyTo = state.styleClasses[classes[i]]; // List of ids & classes of elements in DOM
             for (var j = 0; j < classes[i].length; j++) {
-                $(applyTo[j]).addClass(currClass);
+                $(applyTo[j]).addClass(currClass); // Adds CSS class to each element
             }
         }
     }
@@ -130,6 +141,13 @@
         return Array(4*level+1).join(" ");
     }
 
+    /**
+     *
+     * @param node
+     * @param indent_level
+     * @param special_flag
+     * @returns {*|jQuery|HTMLElement}
+     */
     function to_dom(node, indent_level, special_flag) {
         // HACK special_flag is a boolean used to indicate things like "don't put a semi/newline on this statement"
         // or "don't put a newline before this if". It's very hacky.
@@ -205,6 +223,11 @@
                 var count = 1;
                 var colors = ['pink', 'purple', 'orange'];
                 node.body.forEach(function(s) {
+                    /* Megan's experiment stuff
+                    var line = to_dom(s, indent_level+ 1);
+                    line.css('color', colors[count - 1]);
+                    count++;
+                    elem.append(line);*/
                     elem.append(to_dom(s, indent_level+ 1));
                 });
                 elem.append(indent(indent_level) + '}\n');
