@@ -13,7 +13,9 @@ $(document).ready(function() {
     $(".home_icon").append("<a href='/csedresearch/public/index.html' class='topnav_home' title='Home'>&nbsp;</a>");
     $(".expressions").append("<a href='/csedresearch/public/expressions/expressions.html' class='topnav_expressions' title='Expressions'>Expressions</a>");
     $(".ifelse").append("<a href='/csedresearch/public/if_else/index.html' class='topnav_ifelse' title='If/Else'>If/Else</a>");
-    $(".arraymystery").append("<a href='/csedresearch/public/arrayMystery/index.html' class='topnav_array' title='Array Mystery'>Array Mystery</a>");
+    $(".arraymystery").append("Array Mystery");
 
+
+    $(".arraymystery").append("<ul class='dropdown topnavContainer arraymenu'><li><a href='/csedresearch/public/arrayMystery/index.html' class='topnav_array' title='Problem 1'>Problem 1</a></li></ul>");
 
 });

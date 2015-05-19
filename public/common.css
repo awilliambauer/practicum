@@ -8,7 +8,9 @@ body {
     background-color: #FAFFF3;
     font-family: Arial, san-serif;
 }
-
+.dropdown {
+    list-style: none;
+}
 .topnav {
     margin-left: 0px;
 }
