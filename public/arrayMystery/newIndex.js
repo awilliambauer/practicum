@@ -94,18 +94,12 @@
         }
 
         // Add styling classes
-        var classes = state.styleClasses;
+        var classes = Object.keys(state.styleClasses);
         for (i = 0; i < classes.length; i++) {
-            var currClass = "color" + (i - (i % 2));
-            if (i == 0) {
-                currClass += "Text";
-            } else if ((i % 2) == 1) {
-                currClass += "Border";
-            } else {
-                currClass += "Highlight";
-            }
+            var currClass = classes[i];
+            var applyTo = state.styleClasses[classes[i]];
             for (var j = 0; j < classes[i].length; j++) {
-                $(classes[i][j]).addClass(currClass);
+                $(applyTo[j]).addClass(currClass);
             }
         }
     }
