@@ -232,7 +232,7 @@ var states = [
             []
         ]
     },
-    //the following states need to be checked and worked on.
+    //the following states need to be checked and worked on.    
     { //state 7
         array: [11, 14, 2, 4, 7],
         variables: {
