@@ -2,6 +2,10 @@
 This provides the stylesheet for expressions
 */
 
+span:hover {
+	cursor: pointer;
+}
+
 body {
 	padding: 0px 0px 25px;
 	margin: 0px;
