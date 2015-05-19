@@ -12,29 +12,24 @@ h1 {
 	font-size: 35px;
 }
 
-#steps {
+.all-steps {
 	margin-left: auto;
 	margin-right: auto;
-	width: 500px;
+	width: 650px;
 	padding-bottom: 20px;
 }
 
-.step {
+.step-exp {
 	clear: both;
 	text-align: left;
 	float: left;
 	width: 180pt;
-	height: 50pt;
-	margin: 0pt;
 }
 
 .exp {
 	float: right;
 	font-size: 25pt;
-	/*width: 350px;*/
-	text-align: center;
-	height: 50pt;
-	margin: 0pt;
+	width: 350px;
 }
 #answerbox {
 	margin-left: auto;
@@ -64,8 +59,6 @@ h2 {
 .buttonLineUp {
 	margin-right: 35%;
 	margin-left: 50%;
-	clear:both;
-	float:right;
 }
 
 .highlight1 {
