@@ -1,3 +1,4 @@
+public class A {
 public static void ifElseMystery3 (int x, int y, int z) {
 
     if (x > y) {
@@ -15,5 +16,4 @@ public static void ifElseMystery3 (int x, int y, int z) {
 
     System.out.println(x + " " + y + " " + z);
 }
-
-ifElseMystery1(3, 20, 8)
+}

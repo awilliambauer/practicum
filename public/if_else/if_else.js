@@ -1,4 +1,5 @@
 // (function() {
+	"use strict";
 
 	var CONTENTS;
 	var CURRENT_STEP;
@@ -23,7 +24,7 @@
 	// we will just have to replace "example.txt" with whatever file they store the problem
 	// text in
 	function fillProblemSpace() {
-		$.get("example.txt", function(data) {
+		$.get("problems/problem_2.txt", function(data) {
 			AST = java_parsing.browser_parse(data);
 			on_convert(AST);
 		});
@@ -64,13 +65,8 @@
 			$("#next").hide();
 		}
 
-		// some initialization stuff that happens on first click of next
 		if (CURRENT_STEP == 0) {
-			// show previously invisible prompt
-			$("#prompt").show();
-			// highlighting all the stuff
-			highlightBlock(4, 8, "block_highlight");
-			highlightBlock(10 ,16, "block_highlight");
+			highlightBlocks();
 		}
 
 		CURRENT_STEP++;
@@ -105,7 +101,22 @@
 			}
 		}
 		drawVariableBank();
-		OLD_VARS = vars;
+		// OLD_VARS = vars;
+	}
+
+	// some initialization stuff that happens on first click of next
+	function highlightBlocks() {
+		// show previously invisible prompt
+		$("#prompt").show();
+		// highlighting all the stuff
+		for (let node of java_ast.find_all(function(n) { return n.tag == "if"; }, AST)) {
+			$("#java-ast-" + node.id + "> *").each(function(index, element) {
+				var text = $(element).text().split(" ");
+				if (text.length > 1) {
+					$(element).addClass("block_highlight");
+				}
+			});
+		}
 	}
 
 	// Formats the way the prompt displays
@@ -161,9 +172,9 @@
 	}
 
 	function updateVariables(vars) {
-		for (i = 0; i < vars.length; i += 2) {
-			var_name = vars[i];
-			var_value = vars[i + 1];
+		for (var i = 0; i < vars.length; i += 2) {
+			var var_name = vars[i];
+			var var_value = vars[i + 1];
 			var new_variable = false;
 			if (!VARIABLES.hasOwnProperty(var_name)) {
 				VARIABLES[var_name] = {}
