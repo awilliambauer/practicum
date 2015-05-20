@@ -425,7 +425,7 @@ var simulator_parsing = function() {
                 case "==": case "!=": case "<=": case ">=": case "<": case ">": return 40;
                 case "&&": case "||": return 30;
                 case "=": return 10;
-                case ";": case ")": case "]": return 0;
+                case ";": case ")": case "]": case ",": return 0;
                 default: throw new Error("unknown operator " + token.value);
             }
         }
@@ -537,7 +537,7 @@ var simulator_parsing = function() {
 
 }();
 
-if (typeof module !== 'undefined') {
+if (typeof module !== 'undefined' && typeof process !== 'undefined') {
     if (process.argv.length <= 2) {
         console.log("Usage: node simulator_parser.js <filename>\nWill print a json AST to stdout.");
     } else {
