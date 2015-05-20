@@ -418,7 +418,7 @@ var java_parsing = function() {
                 case "==": case "!=": case "<=": case ">=": case "<": case ">": return 40;
                 case "&&": case "||": return 30;
                 case "=": return 10;
-                case ";": case ")": case "]": return 0;
+                case ";": case ")": case "]": case ",": return 0;
                 default: throw new Error("unknown operator " + token.value);
             }
         }
