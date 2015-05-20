@@ -160,6 +160,73 @@
 
 	}
 
+	// Adds the current list elements whose class corresponds to the state
+	// objects lineNum passed.
+	// Removes highlight from any other list element which had it previously
+	// Necessary for skipping steps/going backwords
+	function newHighlightLine(state) {
+		var line = state.lineNum;
+		var lists = document.getElementsByTagName("li");
+		for(var list in lists) {
+			if (!lists.hasOwnProperty(list)) {
+				continue;
+			}
+
+			// Some extra checks are necessary, in case same state object is passed
+			if(list.className == line && !(list.className.contains("highlight")))
+				$(list).addClass("highlight");
+			else if(list.className.contains("highlight") && list.className != line)
+				$(list).removeClass("highlight");
+
+		}
+
+	}
+
+
+	// Adds comments based off vars and bools array/object
+	// Creates a span then appends it to the list element
+	// of the given line number based off the array/object
+	function addComments(state) {
+		 var bools = state.bools;
+		 var vars = state.vars;
+
+	 	// Handles adding comments for variables
+		 for(var key in vars) {
+			 if (!vars.hasOwnProperty(key)) {
+				 continue;
+			 }
+			 for(var variable in key) {
+				 if (!key.hasOwnProperty(variable)) {
+					continue;
+				 }
+				 var comment = "\t// ";
+				 var letter = variable;
+				 var value = key(letter);
+				 comment += letter + " = " + value + " ";
+			 }
+			 var newSpan = document.createElement("span");
+			 $(newSpan).addClass("comments");
+			 $(newSpan).text(comment);
+			 // Adds the comments to the list of the given class
+			 document.getElementByClassName(key)[0].append(newSpan);
+ 		}
+
+		for(var key1 in bools) {
+			if (!bools.hasOwnProperty(key1)) {
+				continue;
+			}
+			var comments = "\t// ";
+			comments += bools(key);
+			var newSpan2 = document.createElement("span");
+			$(newSpan2).addClass("comments");
+			$(newSpan2).text(comment);
+			// Adds the comments to the list of the given class
+			document.getElementByClassName(key)[0].append(newSpan2);
+		}
+ 	}
+
+
+
 	function updateVariables(vars) {
 		for (i = 0; i < vars.length; i += 2) {
 			var_name = vars[i];
