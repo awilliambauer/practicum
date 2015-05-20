@@ -7,7 +7,7 @@
  one array
  */
 
-state = [
+var state = [
     {
         prompt: "If/Else: Before starting, note the separate if/else blocks that are highlighted."
     },
@@ -15,16 +15,16 @@ state = [
     {
         prompt: "Initialization: What are the starting values of our variables?",
         lineNum: 1,
-        vars: {1: {x: 8, y: 30}}
+        answer: {x: 8, y: 30}
     },
 
     {
         prompt: "Initialization: What is the starting value of this variable?",
         lineNum: 2,
         vars: {
-            1: {x: 3, y: 20},
-            2: {x: 3, y: 20, z: 7}
+            1: {x: 3, y: 20}
         },
+        answer: {z: 7},
         updated: [x, y]
     },
 
@@ -63,9 +63,9 @@ state = [
         lineNum: 5,
         vars: {
             1: {x: 3, y: 20},
-            2: {x: 3, y: 20, z: 4},
-            5: {x: 15, y: 20, z: 13}
+            2: {x: 3, y: 20, z: 4}
         },
+        answer: {z: 13},
         bools: {4: true}
     },
 
@@ -110,9 +110,9 @@ state = [
         vars: {
             1: {x: 3, y: 20},
             2: {x: 3, y: 20, z: 7},
-            5: {x: 15, y: 20, z: 13},
-            9: {x: 15, y: 25, z: 13}
+            5: {x: 15, y: 20, z: 13}
         },
+        answer: {y: 25},
         bools: {4: true, 8: true}
     },
 
@@ -123,9 +123,9 @@ state = [
             1: {x: 3, y: 20},
             2: {x: 3, y: 20, z: 4},
             5: {x: 15, y: 20, z: 13},
-            9: {x: 15, y: 25, z: 13},
-            10: {x: 30, y: 25, z: 13}
+            9: {x: 15, y: 25, z: 13}
         },
+        answer: {x: 30},
         bools: {4: true, 8: true},
         updated: [z]
     },
