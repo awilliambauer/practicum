@@ -166,16 +166,16 @@
 	// Necessary for skipping steps/going backwords
 	function newHighlightLine(state) {
 		var line = state.lineNum;
-		var lists = document.getElementsByTagName("li");
+		var lists = document.getElementsByTagName("ul").children; // Get's all li elements
 		for(var list in lists) {
 			if (!lists.hasOwnProperty(list)) {
 				continue;
 			}
 
 			// Some extra checks are necessary, in case same state object is passed
-			if(list.className == line && !(list.className.contains("highlight")))
+			if($(list).hasClass(line) && !$(list).hasClass("highlight"))
 				$(list).addClass("highlight");
-			else if(list.className.contains("highlight") && list.className != line)
+			else if($(list).hasClass("highlight") && (list).hasClass(line))
 				$(list).removeClass("highlight");
 
 		}
