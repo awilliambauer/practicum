@@ -144,48 +144,22 @@
 		$("#prompt").animate({top: nextTop});
 	}
 
-	// accepts an array of Strings
-	function addComment(vars) {
-		var comment = document.createElement("span");
-		$(comment).addClass("comments");
-		if (vars.length == 3) { // Is true/false
-			$(comment).text("\t// " + vars[2]);
-		} else { // Is variable change
-			var variable_comments = "\t// ";
-			for (var variable_name in VARIABLES) {
-				var variable = VARIABLES[variable_name];
-				// console.log("variable[name] + \" = \" + variable[value]");
-				variable_comments += variable["name"] + " = " + variable["value"] + ", ";
-			}
-			//removes trailing comma
-			variable_comments = variable_comments.substr(0, variable_comments.length - 2);
-			$(comment).text(variable_comments);
-		}
-		$(".highlight").append(comment);
-		/*
-		$("#problem_space").children().each(function(index) {
-			if (index == line) {
-				$(this).children.().append(comment);
-			}
-		});*/
-
-	}
-
 
 	// Accepts a state and adds the cross_out class to
 	// Any element who has the class corresponding to the crossout
 	// numbers from the current state
-	function crossOut(state) {
-		var lines = state.crossOut;
-		// var lists = document.getElementsByTagName("ul")[0].children; // Get's all li elements
-		for(var line in lines) {
-			if (!lines.hasOwnProperty(line)) {
-				continue;
+	function newCrossOutLines(state) {
+		if(state.hasOwnProperty("crossOut")) {
+			var lines = state.crossOut;
+			// var lists = document.getElementsByTagName("ul")[0].children; // Get's all li elements
+			for (var line in lines) {
+				if (!lines.hasOwnProperty(line)) {
+					continue;
+				}
+				var list = document.getElementsByClassName(line)[0];
+				$(list).addClass("cross_out");
 			}
-			var list = document.getElementsByClassName(line)[0];
-			$(list).addClass("cross_out");
 		}
-
 	}
 
 	// Adds the current list elements whose class corresponds to the state
@@ -200,42 +174,44 @@
 	// Adds comments based off vars and bools array/object
 	// Creates a span then appends it to the list element
 	// of the given line number based off the array/object
-	function addComments(state) {
-		 var bools = state.bools;
-		 var vars = state.vars;
-
-	 	// Handles adding comments for variables
-		 for(var key in vars) {
-			 if (!vars.hasOwnProperty(key)) {
-				 continue;
-			 }
-			 for(var variable in key) {
-				 if (!key.hasOwnProperty(variable)) {
+	function newAddComments(state) {
+		if(state.hasOwnProperty("vars")) {
+			var vars = state.vars;
+			// Handles adding comments for variables
+			for (var key in vars) {
+				if (!vars.hasOwnProperty(key)) {
 					continue;
-				 }
-				 var comment = "\t// ";
-				 var letter = variable;
-				 var value = key(letter);
-				 comment += letter + " = " + value + " ";
-			 }
-			 var newSpan = document.createElement("span");
-			 $(newSpan).addClass("comments");
-			 $(newSpan).text(comment);
-			 // Adds the comments to the list of the given class
-			 document.getElementByClassName(key)[0].append(newSpan);
- 		}
-
-		for(var key1 in bools) {
-			if (!bools.hasOwnProperty(key1)) {
-				continue;
+				}
+				for (var variable in key) {
+					if (!key.hasOwnProperty(variable)) {
+						continue;
+					}
+					var comment = "\t// ";
+					var letter = variable;
+					var value = key(letter);
+					comment += letter + " = " + value + " ";
+				}
+				var newSpan = document.createElement("span");
+				$(newSpan).addClass("comments");
+				$(newSpan).text(comment);
+				// Adds the comments to the list of the given class
+				document.getElementByClassName(key)[0].append(newSpan);
 			}
-			var comments = "\t// ";
-			comments += bools(key);
-			var newSpan2 = document.createElement("span");
-			$(newSpan2).addClass("comments");
-			$(newSpan2).text(comment);
-			// Adds the comments to the list of the given class
-			document.getElementByClassName(key)[0].append(newSpan2);
+		}
+		if(state.hasOwnProperty("bools")) {
+			var bools = state.bools;
+			for (var key1 in bools) {
+				if (!bools.hasOwnProperty(key1)) {
+					continue;
+				}
+				var comments = "\t// ";
+				comments += bools(key);
+				var newSpan2 = document.createElement("span");
+				$(newSpan2).addClass("comments");
+				$(newSpan2).text(comment);
+				// Adds the comments to the list of the given class
+				document.getElementByClassName(key)[0].append(newSpan2);
+			}
 		}
  	}
 
