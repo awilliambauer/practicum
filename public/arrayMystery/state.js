@@ -5,7 +5,7 @@
 /*
 mainAst is the abstract syntax tree for the current problem.
  */
-var mainAst = { /*
+var mainAst = {
     "tag": "method",
         "id": 34,
         "name": "arrMys",
@@ -103,8 +103,7 @@ var mainAst = { /*
                 }]
             }
         }]
-    }]*/
-"tag":"method","id":54,"name":"mystery","params":[{"id":1,"tag":"parameter","type":"int[]","name":"list"}],"body":[{"id":53,"tag":"for","initializer":{"id":2,"tag":"declaration","type":"int","expression":{"id":4,"tag":"binop","operator":"=","args":[{"id":3,"tag":"identifier","value":"i"},{"id":5,"tag":"literal","value":1}]}},"condition":{"id":7,"tag":"binop","operator":"<","args":[{"id":6,"tag":"identifier","value":"i"},{"id":10,"tag":"binop","operator":"-","args":[{"id":9,"tag":"reference","object":{"id":8,"tag":"identifier","value":"list"},"name":"length"},{"id":11,"tag":"literal","value":1}]}]},"increment":{"id":12,"tag":"expression","expression":{"id":14,"tag":"postfix","operator":"++","args":[{"id":13,"tag":"identifier","value":"i"}]}},"body":[{"id":42,"tag":"if","condition":{"id":18,"tag":"binop","operator":">","args":[{"id":17,"tag":"index","object":{"id":15,"tag":"identifier","value":"list"},"index":{"id":16,"tag":"identifier","value":"i"}},{"id":23,"tag":"index","object":{"id":19,"tag":"identifier","value":"list"},"index":{"id":21,"tag":"binop","operator":"-","args":[{"id":20,"tag":"identifier","value":"i"},{"id":22,"tag":"literal","value":1}]}}]},"then_branch":[{"id":24,"tag":"expression","expression":{"id":30,"tag":"binop","operator":"=","args":[{"id":29,"tag":"index","object":{"id":25,"tag":"identifier","value":"list"},"index":{"id":27,"tag":"binop","operator":"+","args":[{"id":26,"tag":"identifier","value":"i"},{"id":28,"tag":"literal","value":1}]}},{"id":36,"tag":"binop","operator":"+","args":[{"id":35,"tag":"index","object":{"id":31,"tag":"identifier","value":"list"},"index":{"id":33,"tag":"binop","operator":"-","args":[{"id":32,"tag":"identifier","value":"i"},{"id":34,"tag":"literal","value":1}]}},{"id":41,"tag":"index","object":{"id":37,"tag":"identifier","value":"list"},"index":{"id":39,"tag":"binop","operator":"+","args":[{"id":38,"tag":"identifier","value":"i"},{"id":40,"tag":"literal","value":1}]}}]}]}}]},{"id":43,"tag":"expression","expression":{"id":47,"tag":"binop","operator":"=","args":[{"id":46,"tag":"index","object":{"id":44,"tag":"identifier","value":"list"},"index":{"id":45,"tag":"identifier","value":"i"}},{"id":52,"tag":"index","object":{"id":48,"tag":"identifier","value":"list"},"index":{"id":50,"tag":"binop","operator":"+","args":[{"id":49,"tag":"identifier","value":"i"},{"id":51,"tag":"literal","value":1}]}}]}}]}]
+    }]
 };
 /*
 These states hold the current state of the array mystery problem.
