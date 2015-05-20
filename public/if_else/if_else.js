@@ -4,6 +4,7 @@
 	var CURRENT_STEP;
 	var CURRENT_LINE;
 	var VARIABLES;
+	var AST;
 
 	$(document).ready(function() {
 
@@ -23,7 +24,8 @@
 	// text in
 	function fillProblemSpace() {
 		$.get("example.txt", function(data) {
-			on_convert(data);
+			AST = java_parsing.browser_parse(data);
+			on_convert(AST);
 		});
 	}
 

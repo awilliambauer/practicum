@@ -19,9 +19,6 @@ function to_dom(node, indent_level, special_flag) {
 	// HACK special_flag is a boolean used to indicate things like "don't put a semi/newline on this statement"
 	// or "don't put a newline before this if". It's very hacky.
 
-	if (node.id == 32) {
-		console.log(node);
-	}
 	switch (node.tag) {
 		case 'method':
 			var elem = $('<ul>');
@@ -223,8 +220,7 @@ function set_class_of_ast_dom_element(id, clazz) {
 	$('#java-ast-' + id).addClass(clazz);
 }
 
-function on_convert(code) {
-	var ast = java_parsing.browser_parse(code);
+function on_convert(ast) {
 	console.log(ast);
 	var dom = to_dom(ast, -1);
 	$('#problem_space > pre').html('').append(dom[0]);
