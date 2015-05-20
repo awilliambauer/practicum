@@ -4,6 +4,7 @@
 
 /*
 mainAst is the abstract syntax tree for the current problem.
+Here is a comment to make this file different
  */
 var mainAst = {
     "tag": "method",
