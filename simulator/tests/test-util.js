@@ -3,7 +3,7 @@ var test_util = (function () {"use strict";
 
     self.getStates = function(algoName, startState) {
         var algoFile = new XMLHttpRequest();
-        algoFile.open("GET", "base/simulator/tests/"+algoName+".js", false);
+        algoFile.open("GET", "base/tests/"+algoName+".js", false);
         var states = [startState];
         algoFile.onreadystatechange = function () {
             simulator.init(algoFile.responseText);

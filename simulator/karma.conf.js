@@ -15,9 +15,9 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-        'simulator/*.js',
-        'simulator/tests/test-*.js',
-        {pattern:'simulator/tests/solve-*.js', served: true}
+        '*.js',
+        'tests/test-*.js',
+        {pattern:'tests/solve-*.js', served: true}
     ],
 
 
