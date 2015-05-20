@@ -160,26 +160,31 @@
 
 	}
 
+
+	// Accepts a state and adds the cross_out class to
+	// Any element who has the class corresponding to the crossout
+	// numbers from the current state
+	function crossOut(state) {
+		var lines = state.crossOut;
+		// var lists = document.getElementsByTagName("ul")[0].children; // Get's all li elements
+		for(var line in lines) {
+			if (!lines.hasOwnProperty(line)) {
+				continue;
+			}
+			var list = document.getElementsByClassName(line)[0];
+			$(list).addClass("cross_out");
+		}
+
+	}
+
 	// Adds the current list elements whose class corresponds to the state
 	// objects lineNum passed.
 	// Removes highlight from any other list element which had it previously
 	// Necessary for skipping steps/going backwords
 	function newHighlightLine(state) {
 		var line = state.lineNum;
-		var lists = document.getElementsByTagName("ul").children; // Get's all li elements
-		for(var list in lists) {
-			if (!lists.hasOwnProperty(list)) {
-				continue;
-			}
-
-			// Some extra checks are necessary, in case same state object is passed
-			if($(list).hasClass(line) && !$(list).hasClass("highlight"))
-				$(list).addClass("highlight");
-			else if($(list).hasClass("highlight") && (list).hasClass(line))
-				$(list).removeClass("highlight");
-
-		}
-
+		var list = document.getElementsByClassName(line)[0]; // Get's all li element to highlight
+		$(list).addClass("highlight");
 	}
 
 
