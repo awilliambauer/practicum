@@ -178,12 +178,10 @@
 	}
 
 	// Adds the current list elements whose class corresponds to the state
-	// objects lineNum passed.
-	// Removes highlight from any other list element which had it previously
-	// Necessary for skipping steps/going backwords
+	// objects lineNum passed. Gives it highlight class.
 	function newHighlightLine(state) {
 		var line = state.lineNum;
-		var list = document.getElementsByClassName(line)[0]; // Get's all li element to highlight
+		var list = document.getElementsByClassName(line)[0]; // Gets li element to highlight
 		$(list).addClass("highlight");
 	}
 
