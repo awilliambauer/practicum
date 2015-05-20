@@ -1,9 +1,8 @@
-(function() {
+// (function() {
 
 	var CONTENTS;
 	var CURRENT_STEP;
 	var CURRENT_LINE;
-	var PROBLEM;
 	var VARIABLES;
 
 	$(document).ready(function() {
@@ -24,14 +23,7 @@
 	// text in
 	function fillProblemSpace() {
 		$.get("example.txt", function(data) {
-			PROBLEM = data.split("\n");
-			for (var i = 0; i < PROBLEM.length; i++) {
-				var li = document.createElement("li");
-				var liContent = document.createElement("pre");
-				$(liContent).text(i + 1 + "\t" + PROBLEM[i]);
-				$(li).append(liContent);
-				$("#problem_space").append(li);
-			}
+			on_convert(data);
 		});
 	}
 
@@ -46,13 +38,13 @@
 
 	// gives the given line the given css class
 	function highlightLine(line, highlight) {
-		$("#problem_space").children().each(function(index) {
-			if (index == line) {
-				$(this).children().addClass(highlight);
-			} else if (highlight == "highlight") {
-				$(this).children().removeClass(highlight);
-			}
-		});
+		if (highlight == "highlight") {
+			$("#problem_space li").removeClass(highlight);		
+		}
+		$("." + line).addClass(highlight);
+		if (highlight == "grey_out") {
+			$("." + line + " *").removeAttr("style");
+		}
 	}
 
 	// gives the given lines the given highlight class
@@ -75,8 +67,8 @@
 			// show previously invisible prompt
 			$("#prompt").show();
 			// highlighting all the stuff
-			highlightBlock(3, 7, "block_highlight");
-			highlightBlock(9 ,15, "block_highlight");
+			highlightBlock(4, 8, "block_highlight");
+			highlightBlock(10 ,16, "block_highlight");
 		}
 
 		CURRENT_STEP++;
@@ -85,7 +77,7 @@
 		var updated_vars = vars.slice(2, vars.length) // get all of the variables changed in this line
 
 		// if vars contains variables or true/false
-		var line = vars[0] - 1;
+		var line = vars[0];
 		var crossout;
 
 		// Only updates if vars contains variables
@@ -96,7 +88,7 @@
 			addComment(vars);
 		}
 		// don't do this the first time
-		if (line != CURRENT_LINE && line != -1) {
+		if (line != CURRENT_LINE && line != 0) {
 			movePrompt(line);
 			CURRENT_LINE = line;
 			highlightBlock(0, CURRENT_LINE - 1, "grey_out");
@@ -107,7 +99,7 @@
 		if (vars.length > 1 && vars[1].trim() != "") {
 			crossout = vars[1].split(",");
 			for (var i = 0; i < crossout.length; i++) {
-				highlightLine(crossout[i] - 1, "cross_out");
+				highlightLine(crossout[i], "cross_out");
 			}
 		}
 		drawVariableBank();
@@ -135,11 +127,8 @@
 	function movePrompt(line) {
 		// stops any current animation in case of spam clicking "next"
 		$("#prompt").finish();
-		var currentTop = $("#prompt").css("top");
-		currentTop = parseInt(currentTop.substring(0, currentTop.length - 2));
-		var lineHeight = $("#problem_space > li").css("height");
-		lineHeight = parseInt(lineHeight.substring(0, lineHeight.length - 2));
-		$("#prompt").animate({top: currentTop + (line - CURRENT_LINE) * (lineHeight) + "px"});
+		var nextTop = $("." + (line)).offset().top + 20 + parseFloat($("#problem_space li").css("height"));
+		$("#prompt").animate({top: nextTop});
 	}
 
 	// accepts an array of Strings
@@ -152,7 +141,7 @@
 			var variable_comments = "\t// ";
 			for (var variable_name in VARIABLES) {
 				var variable = VARIABLES[variable_name];
-				console.log("variable[name] + \" = \" + variable[value]");
+				// console.log("variable[name] + \" = \" + variable[value]");
 				variable_comments += variable["name"] + " = " + variable["value"] + ", ";
 			}
 			//removes trailing comma
@@ -282,4 +271,4 @@
 		}
 	}
 
-})();
+// })();
