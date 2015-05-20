@@ -14,9 +14,13 @@ pre > span { /* comment */
 #problem_space, #answer_box {
 	border: 2px solid rgb(89,79,79);
 	border-radius: 10px;
-	width: 60%;
+	width: 80%;
 	margin-left: auto;
 	margin-right: auto;
+	padding-top: 10px; padding-bottom: 10px;
+	margin-bottom: 30px;
+	margin-top: 30px;
+	background-color: #ffffff;
 }
 
 #problem_space ul {
@@ -32,13 +36,6 @@ pre > span { /* comment */
 	margin: 0;
 	font-size: 11pt;
 	overflow: auto;
-}
-
-#answer_box, #problem_space {
-	padding-top: 10px; padding-bottom: 10px;
-	margin-bottom: 30px;
-	margin-top: 30px;
-	background-color: #ffffff;
 }
 
 #answer_box {
