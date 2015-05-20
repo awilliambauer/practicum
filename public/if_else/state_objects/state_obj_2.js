@@ -15,7 +15,7 @@ var state = [
     {
         prompt: "Initialization: What are the starting values of our variables?",
         lineNum: 1,
-        answer: {x: 8, y: 30}
+        answer: {x: 3, y: 20}
     },
 
     {
