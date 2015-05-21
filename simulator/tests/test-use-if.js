@@ -9,6 +9,5 @@ QUnit.test("use-if-firstbranch", function (assert) {
         done: true
     };
     var states = test_util.getStates("solve-use-if", start);
-    console.log(JSON.stringify(states));
     assert.deepEqual(states[states.length - 1], finish);
 });
