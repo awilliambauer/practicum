@@ -216,7 +216,11 @@ var simulator = (function() {
                     addToStack(cur.then_branch);
                 } else {
                     state.prompt = "Condition is false, take the else branch";
-                    addToStack(cur.else_branch);
+                    if (Array.isArray(cur.else_branch)) { // no if else, branch is list of statements
+                        addToStack(cur.else_branch);
+                    } else { // if else, branch is single statement
+                        addToStack([cur.else_branch]);
+                    }
                 }
                 break;
             default:
@@ -235,7 +239,7 @@ var simulator = (function() {
 
     self.nextState = function(stateIn) {
         //console.log("cur...");
-        //console.log(self.currentNode);
+        //console.log(JSON.stringify(self.currentNode));
         // copy the current state object
         var stateOut = copyState(stateIn);
         //console.log(stateOut);
