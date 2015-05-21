@@ -327,8 +327,7 @@ var simulator_parsing = function() {
                 if (peek_symbol("{")) {
                     elseb = match_block();
                 } else {
-                    // HACK assume another if here, so match the block. this is probably not what we want eventually.
-                    elseb = match_statement();
+                    elseb = [match_statement()];
                 }
             }
             return {

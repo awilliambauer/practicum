@@ -216,11 +216,7 @@ var simulator = (function() {
                     addToStack(cur.then_branch);
                 } else {
                     state.prompt = "Condition is false, take the else branch";
-                    if (Array.isArray(cur.else_branch)) { // no if else, branch is list of statements
-                        addToStack(cur.else_branch);
-                    } else { // if else, branch is single statement
-                        addToStack([cur.else_branch]);
-                    }
+                    addToStack(cur.else_branch);
                 }
                 break;
             default:
