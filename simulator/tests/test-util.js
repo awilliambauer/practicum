@@ -18,9 +18,10 @@ var test_util = (function () {"use strict";
         var states = [startState];
         algoFile.onreadystatechange = function () {
             simulator.init(algoFile.responseText);
-
-            while(!states[states.length - 1].done) {
-                states.push(simulator.nextState(states[states.length - 1]));
+            while (true) {
+                var next = simulator.run_next_statement(states[states.length - 1]);
+                if (next === null) break;
+                else states.push(next.state);
             }
 
         };

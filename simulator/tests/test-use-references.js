@@ -10,7 +10,6 @@ QUnit.test("use-references", function (assert) {
         c: {a:"bar"},
         d: ["barbar"],
         prompt: "d's 0 element is barbar",
-        done: true
     };
     var states = test_util.getStates("solve-use-references", start);
     assert.equal(states.length, 8);

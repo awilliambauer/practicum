@@ -6,7 +6,6 @@ QUnit.test("use-if-firstbranch", function (assert) {
         branch: 0,
         result: 0,
         prompt: "result is 0",
-        done: true
     };
     var states = test_util.getStates("solve-use-if", start);
     assert.deepEqual(states[states.length - 1], finish);
@@ -20,7 +19,6 @@ QUnit.test("use-if-secondbranch", function (assert) {
         branch: 1,
         result: 1,
         prompt: "result is 1",
-        done: true
     };
     var states = test_util.getStates("solve-use-if", start);
     assert.deepEqual(states[states.length - 1], finish);
@@ -34,7 +32,6 @@ QUnit.test("use-if-thirdbranch", function (assert) {
         branch: 2,
         result: 2,
         prompt: "result is 2",
-        done: true
     };
     var states = test_util.getStates("solve-use-if", start);
     assert.deepEqual(states[states.length - 1], finish);

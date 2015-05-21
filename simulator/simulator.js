@@ -5,55 +5,40 @@ var simulator = (function() {
     "use strict";
 
     var self = {};
-    self.stack = [];
+
+    var call_stack = [];
+    var ast;
+
     self.locals = {}; // TODO probably too simplistic given what stack allows
-    self.ip = -1; // instruction pointer -- index of the current instruction for the body on top of the stack
-    self.sp = -1; // stack pointer -- index of the top of the stack
+
+    function pop_next_statement() {
+        // if call stack is empty, nothing left to do!
+        if (call_stack.length === 0) {
+            return null;
+        }
+
+        var ss = call_stack[call_stack.length - 1];
+
+        // if current stack state is empty, then go up a level
+        if (ss.to_execute.length === 0) {
+            call_stack.pop();
+            return null;
+        }
+
+        // otherwise pop an element off the current stack state.
+        return ss.to_execute.pop();
+    }
+
+    function push_stack_state(to_execute) {
+        var stmts = to_execute.slice();
+        stmts.reverse();
+        call_stack.push({to_execute: stmts});
+    }
 
     self.init = function(algo) {
-        self.ast = simulator_parsing.browser_parse(algo);
-        self.currentNode = self.ast; // initialize currentNode at the root
-        self.ip = -1;
-        self.sp = -1;
+        ast = simulator_parsing.browser_parse(algo);
+        push_stack_state([ast]);
     };
-
-    function advanceNode() {
-        //console.log("before advanced node");
-        //console.log("sp -> " + self.sp);
-        //console.log("ip -> " + self.ip);
-        //console.log(JSON.stringify(self.currentNode));
-        self.ip += 1;
-        while (self.ip === self.stack[self.sp].body.length) { // done with body on top of stack
-            self.ip = self.stack.pop().oldIp;
-            self.sp -= 1;
-            if (self.sp === -1) { // we're done
-                self.currentNode = null;
-                return;
-            }
-        }
-        if (self.ip < 0 || self.ip >= self.stack[self.sp].body.length) {
-            throw new Error(self.ip + " is an invalid instruction pointer for " + JSON.stringify(self.stack));
-        }
-        self.currentNode = self.stack[self.sp].body[self.ip];
-        //console.log("after advanced node");
-        //console.log("sp -> " + self.sp);
-        //console.log("ip -> " + self.ip);
-        //console.log(JSON.stringify(self.currentNode));
-    }
-
-    function addToStack(statements) {
-        //console.log("stack before add");
-        //console.log("sp -> " + self.sp);
-        //console.log("ip -> " + self.ip);
-        //console.log(JSON.stringify(self.stack));
-        self.stack.push({body: statements, oldIp: self.ip + 1});
-        self.ip = -1;
-        self.sp += 1;
-        //console.log("stack after add");
-        //console.log("sp -> " + self.sp);
-        //console.log("ip -> " + self.ip);
-        //console.log(JSON.stringify(self.stack));
-    }
 
     function shortCircuit(val, op) {
         return (val === true && op === "||") || (val === false && op === "&&");
@@ -191,60 +176,58 @@ var simulator = (function() {
         }
     }
 
-    function step(state) {
+    function step(stmt, state) {
+        // TODO what does this do?
         self.locals["state"] = state;
-        var cur = self.currentNode;
-        if (cur === null) {
-            // TODO decide what should happen here
-            state.done = true;
-            return state;
-        }
-        switch(cur.tag) {
+
+        switch(stmt.tag) {
             case "function":
                 state.prompt = "Let's start";
-                addToStack(cur.body);
+                push_stack_state(stmt.body);
                 break;
             case "declaration":
-                throw new Error("no defined step behavior for declarations -- they should be skipped");
+                // FIXME nothin' to do, for now
+                break;
             case "expression":
-                evaluate(cur.expression, state);
+                evaluate(stmt.expression, state);
                 break;
             case "if":
                 // TODO format condition expressions in prompts
-                if (evaluate(cur.condition, state)) {
+                if (evaluate(stmt.condition, state)) {
                     state.prompt = "Condition is true, take the then branch";
-                    addToStack(cur.then_branch);
+                    push_stack_state(stmt.then_branch);
                 } else {
                     state.prompt = "Condition is false, take the else branch";
-                    addToStack(cur.else_branch);
+                    push_stack_state(stmt.else_branch);
                 }
                 break;
             default:
-                throw new Error("node tag not recognized " + JSON.stringify(cur));
+                throw new Error("node tag not recognized " + JSON.stringify(stmt));
         }
-        advanceNode();
-        //console.log(JSON.stringify(self.stack));
-        //console.log(JSON.stringify(self.currentNode));
-        return state;
     }
 
-    function copyState(state) {
-        // TODO should this do something smarter?
-        return JSON.parse(JSON.stringify(state));
+    self.is_done = function() {
+        return call_stack.length === 0;
     }
 
-    self.nextState = function(stateIn) {
-        //console.log("cur...");
-        //console.log(JSON.stringify(self.currentNode));
-        // copy the current state object
-        var stateOut = copyState(stateIn);
-        //console.log(stateOut);
-        // skip declarations since there's nothing to do
-        while(self.currentNode !== null && self.currentNode.tag === "declaration") {
-            advanceNode();
+    // run the simulator for a single statement.
+    // returns: an object containing the new state and last-executed statement,
+    // or null if the computation has completed.
+    self.run_next_statement = function(in_state) {
+        // copy state by sending it to JSON and back; it's easy, and it'll also
+        // catch bugs where the state illegally contains non-json.
+        var out_state = JSON.parse(JSON.stringify(in_state));
+
+        while (!self.is_done()) {
+            var s = pop_next_statement();
+            if (s) {
+                step(s, out_state);
+                return {state:out_state, statement:s};
+            }
         }
-        return step(stateOut);
-    };
+
+        return null;
+    }
 
     return self;
 }());
