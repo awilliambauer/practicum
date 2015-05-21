@@ -169,6 +169,16 @@
 		var list = document.getElementsByClassName(line)[0]; // Gets li element to highlight
 		$(list).addClass("highlight");
 	}
+	
+	// gives the lines in the state previous to the current line number the given highlight class
+	function newHighlightBlock(state, highlight) {
+		var curLine = state.lineNUm;
+		
+		for (var line = 1; line < curLine; line++) {
+			var list = document.getElementsByClassName(String(line))[0]; // Gets li element to highlight
+			$(list).addClass(highlight);
+		}
+	}
 
 
 	// Adds comments based off vars and bools array/object
