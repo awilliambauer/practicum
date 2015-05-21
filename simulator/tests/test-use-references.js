@@ -14,6 +14,6 @@ QUnit.test("use-references", function (assert) {
     };
     var states = test_util.getStates("solve-use-references", start);
     assert.equal(states.length, 8);
-    //console.log(states[states.length - 1]);
+    //states.map(function (state) { console.log(JSON.stringify(state)); });
     assert.deepEqual(states[states.length - 1], finish);
 });
