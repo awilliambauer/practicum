@@ -144,6 +144,23 @@
 		$("#prompt").animate({top: nextTop});
 	}
 
+	// Extracts prompt from state, splits it into the
+	// Topic and the actual Prompt.
+	// The topic is bold.
+	function newGetPrompt(state) {
+		if(state.hasOwnProperty("prompt")) {
+			var prompt =  state.prompt;
+			var promptParts = prompts.split(":")
+			var title = document.createElement("span");
+			$(title).css("font-weight", "bold")
+				.text(promptParts[0] + ": ");	// If/Else, Booleans, etc
+			var body = document.createElement("span");
+			$(body).text(promptParts[1]);	// the actual description
+			$("#prompt").append(title);
+			$("#prompt").append(body);
+		}
+	}
+
 
 	// Accepts a state and adds the cross_out class to
 	// Any element who has the class corresponding to the crossout
@@ -156,7 +173,7 @@
 				if (!lines.hasOwnProperty(line)) {
 					continue;
 				}
-				var list = document.getElementsByClassName(line)[0];
+				var list = document.getElementsByClassName(lines[line])[0];
 				$(list).addClass("cross_out");
 			}
 		}
@@ -165,9 +182,11 @@
 	// Adds the current list elements whose class corresponds to the state
 	// objects lineNum passed. Gives it highlight class.
 	function newHighlightLine(state) {
-		var line = state.lineNum;
-		var list = document.getElementsByClassName(line)[0]; // Gets li element to highlight
-		$(list).addClass("highlight");
+		if(state.hasOwnProperty("lineNum")) {
+			var line = state.lineNum;
+			var list = document.getElementsByClassName(line)[0]; // Gets li element to highlight
+			$(list).addClass("highlight");
+		}
 	}
 
 
@@ -215,6 +234,38 @@
 		}
  	}
 
+	function newUpdateVariables(state) {
+		if(state.hasOwnProperty("vars")) {
+			var vars = state.vars;
+			for(var line in vars) {
+				if(!vars.hasOwnProperty(line)) {
+					continue;
+				}
+				for(var variable in line) {
+					if(!line.hasOwnProperty(variable)) {
+						continue;
+					}
+					var letter = variable;
+					var value = line(variable);
+					var updated = false;
+					if(state.hasOwnProperty(updated)) {
+						var updates = state.updated;
+						var done = false;
+						for(var index in updates) {
+							if(updates[index] == letter
+								&& !done) {
+								updated = true;
+								done = true;
+							}
+						}
+					}
+					VARIABLES[letter]["name"] = letter;
+					VARIABLES[letter]["value"] = value;
+					VARIABLES[letter]["updated"] = updated;
+				}
+			}
+		}
+	}
 
 
 	function updateVariables(vars) {
