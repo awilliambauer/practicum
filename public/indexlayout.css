@@ -65,3 +65,20 @@ h1 {
     margin-top: 2%;
     margin-bottom: 2%;
 }
+
+.columns {
+    overflow: hidden;
+    padding: 10px;
+    margin-left: 15%;
+    margin-right: auto;
+}
+
+.col-sm-3 {
+    background-color: #B5F3C4;
+    border: 2px solid #547980;
+    height: 100px;
+    border-radius: 10px;
+    margin: 15px;
+    margin-top: 0;
+
+}
