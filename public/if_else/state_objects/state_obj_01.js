@@ -75,7 +75,8 @@ var state = [
             7:{x: 3, y: 20, z: 13}
         },
         bools: {4: false},
-        crossOut: [5]
+        crossOut: [5],
+        updated: ["z"]
     },
 
     {

@@ -26,8 +26,7 @@
 	function fillProblemSpace() {
 		$.get("problems/problem_1.txt", function(data) {
 			AST = java_parsing.browser_parse(data);
-			HTML = $(on_convert(AST)).prop("outerHTML");
-			$("#problem_space > pre").html($.parseHTML(HTML));
+			$("#problem_space > pre").html(on_convert(AST));
 		});
 	}
 
@@ -60,7 +59,6 @@
 
 	function next() {
 		$("#prompt").show();
-		$("#problem_space > pre").html($.parseHTML(HTML));
 		var currentState = state[CURRENT_STEP];
 		//console.log(currentState.prompt);
 		// take away "next" button when finished
@@ -210,6 +208,7 @@
 	// objects lineNum passed. Gives it highlight class.
 	function newHighlightLine(state) {
 		if(state.hasOwnProperty("lineNum")) {
+			$("#problem_space li").removeClass("highlight");
 			var line = state.lineNum;
 			$("." + line).addClass("highlight");
 		}
