@@ -47,6 +47,7 @@
 		newUpdateVariables(currentState);
 		drawVariableBank();
 		newCrossOutLines(currentState);
+		addInteraction(currentState);
 	}
 
 	// some initialization stuff that happens on first click of next
@@ -248,57 +249,53 @@
 	}
 
 	// adds the interactive components of the webpage
-	function addInteraction() {
-		// get the next step's vars, which is where the new variable values live
-		if ((CURRENT_STEP + 1) * 2 + 1 < CONTENTS.length) {
-			var nextVars = CONTENTS[(CURRENT_STEP + 1) * 2 + 1].split("\t");
-			// if there are updated variables
-			var interaction = document.createElement("div");
-			if (nextVars.length > 3) {	// vars, not test result
-				for (var i = 2; i < nextVars.length; i += 2) {
-					var varBox = document.createElement("p");
-					$(varBox).text(nextVars[i] + " = ")
-							 .css("font-family", "monospace");
-					var input = document.createElement("input");
-					$(input).attr("type", "text")
-							.attr("value", nextVars[i + 1])
-							.css("font-size", "12pt");
-					$(varBox).append(input);
-					$(interaction).append(varBox);
-				}
-			} else if (nextVars.length > 2) {	// test result, no vars
-				var boolBox = document.createElement("p");
-				$(boolBox).text("z <= x\t");
-				var trueChoice = document.createElement("input");
-				$(trueChoice).attr("type", "radio")
-							 .attr("name", "t/f")
-							 .attr("value", "true");
-				var falseChoice = document.createElement("input");
-				$(falseChoice).attr("type", "radio")
-							  .attr("name", "t/f")
-							  .attr("value", "false");
-				if (nextVars[2].trim() == "true") {
-					$(trueChoice).attr("checked", "checked");
-				} else {
-					$(falseChoice).attr("checked", "checked");
-				}
-				var trueBox = document.createElement("p");
-				$(trueBox).text("true")
-						  .append(trueChoice)
-						  .css("text-align", "center");
-				var falseBox = document.createElement("p");
-				$(falseBox).text("false")
-						   .append(falseChoice)
-						   .css("text-align", "center");
-				$(boolBox).append(trueBox)
-						  .append(falseBox)
-						  .css("font-family", "monospace")
-						  .css("font-size", "11pt");
-				$(interaction).append(boolBox);
+	function addInteraction(state) {
+		var interaction = document.createElement("div");
+		// if there are updated variables
+		if (state.hasOwnProperty("answer")) {
+			for (var variable in state.answer) {
+				var varBox = document.createElement("p");
+				$(varBox).text(variable + " = ")
+						 .css("font-family", "monospace");
+				var input = document.createElement("input");
+				$(input).attr("type", "text")
+						.attr("value", state.answer[variable])
+						.css("font-size", "12pt");
+				$(varBox).append(input);
+				$(interaction).append(varBox);
 			}
-			$(interaction).css("font-size", "12pt");
-			$("#prompt").append(interaction);
+		} else if (state.hasOwnProperty("testResult")) {	// test result, no vars
+			var boolBox = document.createElement("p");
+			$(boolBox).text("z <= x\t");
+			var trueChoice = document.createElement("input");
+			$(trueChoice).attr("type", "radio")
+						 .attr("name", "t/f")
+						 .attr("value", "true");
+			var falseChoice = document.createElement("input");
+			$(falseChoice).attr("type", "radio")
+						  .attr("name", "t/f")
+						  .attr("value", "false");
+			if (state.testResult) {
+				$(trueChoice).attr("checked", "checked");
+			} else {
+				$(falseChoice).attr("checked", "checked");
+			}
+			var trueBox = document.createElement("p");
+			$(trueBox).text("true")
+					  .append(trueChoice)
+					  .css("text-align", "center");
+			var falseBox = document.createElement("p");
+			$(falseBox).text("false")
+					   .append(falseChoice)
+					   .css("text-align", "center");
+			$(boolBox).append(trueBox)
+					  .append(falseBox)
+					  .css("font-family", "monospace")
+					  .css("font-size", "11pt");
+			$(interaction).append(boolBox);
 		}
+		$(interaction).css("font-size", "12pt");
+		$("#prompt").append(interaction);
 	}
 
 // })();
