@@ -24,7 +24,8 @@ The file creates all interactivity for the webpage.
 
 	var arrLeng = 0;
 	var started = false;
-	var newChildPara;
+	var newChildPara1;
+	var newChildPara2;
 	var overallAnswer = 10.5; // for right now I have the overall answer writen here
 							  // for people wanting to submit immediately.
 
@@ -119,6 +120,13 @@ The file creates all interactivity for the webpage.
 			answerbox.removeChild(answerbox.lastChild);
 		}
 
+		// gets rid of the reply from the last text box inserted.
+		var reply = document.getElementById("reply");
+		if (reply !== null) {
+			document.getElementById("steps").removeChild(reply);
+		}
+
+
 		// gets rid of submit button, chances next button text
 		// and creates the steps div to put everything in.
 		if (!started) {
@@ -138,44 +146,113 @@ The file creates all interactivity for the webpage.
 			newChild.appendChild(newChild2);
 		}
 
+		find();
 
+		// this will prompt the user every time to ask what type
+		// of operator the student should start with.
 		if (arr.length >= 1) {
-			newChild = document.createElement("div");
-			newChild.classList.add("expressionStatement");
-			newChildPara = document.createElement("p");
-			var newChildPara2 = document.createElement("p");
-			newChildPara.classList.add("step");
-			newChildPara2.classList.add("exp");
-
-			newChildPara.innerHTML = "Click on the next operator";
-			//findFirst();
-			newChildPara2.innerHTML = arrToString(arr);
-
-			newChild.appendChild(newChildPara);
-			newChild.appendChild(newChildPara2);
-
-			document.getElementById("steps").appendChild(newChild);
-			document.getElementById("steps").style.visability = "visable";
 			document.getElementById("nextstep").disabled = true;
 
-			find();
+			var firstStep = document.createElement("div");
+			firstStep.setAttribute("id", "firststep");
+			firstStep.classList.add("expressionStatement");
 
-			// makes all the other spans clickable but if they are clicked
-			// and not the right answer they get to go the wrongOption.
-			for (var i = 0; i < arr.length; i++) {
-				if (i != operator) {
-					document.getElementById(i).onclick = wrongOperator;
+			var prompt = document.createElement("p");
+			var buttons = document.createElement("div");
+			prompt.classList.add("step");
+			buttons.classList.add("exp");
+
+			var mdmOperator = document.createElement("button");
+			var asOperator = document.createElement("button");
+			mdmOperator.setAttribute("id", "MDMoperator");
+			mdmOperator.classList.add("operators");
+			asOperator.setAttribute("id", "ASoperator");
+			asOperator.classList.add("operators");
+			mdmOperator.innerHTML = "Multiplication/Division/Mode";
+			asOperator.innerHTML = "Subtraction/Addition";
+			prompt.innerHTML = "What type of operator are we going to use?";
+
+			buttons.appendChild(mdmOperator);
+			buttons.appendChild(asOperator);
+
+			firstStep.appendChild(prompt);
+			firstStep.appendChild(buttons);
+
+			document.getElementById("steps").appendChild(firstStep);
+			var operators = document.querySelectorAll(".operators");
+			for (var i = 0; i < operators.length; i++) {
+				if (operators[i].id == arr[operator].type) {
+					operators[i].onclick = findOperator;
+				} else {
+					operators[i].onclick = wrongButton;
 				}
 			}
-
-			document.getElementById(operator).onclick = findLeft;
 		}
+	}
+
+	// If the student click on the wrong type of operator button.
+	// tells them its wrong and prompts them to continue.
+	function wrongButton() {
+		document.getElementById("nextstep").disabled = false;
+
+		var error = document.createElement("div");
+		error.setAttribute("id", "error");
+		var message = "We need to start with by looking for ";
+		if (arr[operator].type = "MDMoperator") {
+			message += "Multiplication, Division, or Mode";
+		} else {
+			message += "Addition or Subtraction";
+		}
+		error.innerHTML = message + " operators, click next to continue";
+
+		document.getElementById("steps").appendChild(error);
+		document.getElementById("nextstep").onclick = findOperator;
+	}
+
+
+	function findOperator() {
+		if (document.getElementById("error") !== null) {
+			document.getElementById("steps").removeChild(document.getElementById("error"));
+			document.getElementById("nextstep").disabled = true;
+		}
+		document.getElementById("steps").removeChild(document.getElementById("firststep"));
+		var newChild = document.createElement("div");
+		newChild.classList.add("expressionStatement");
+		newChildPara1 = document.createElement("p");
+		newChildPara2 = document.createElement("p");
+		newChildPara1.classList.add("step");
+		newChildPara2.classList.add("exp");
+
+		newChildPara1.innerHTML = "Click on the next operator";
+		//findFirst();
+		newChildPara2.innerHTML = arrToString(arr);
+
+		newChild.appendChild(newChildPara1);
+		newChild.appendChild(newChildPara2);
+
+		document.getElementById("steps").appendChild(newChild);
+		document.getElementById("steps").style.visability = "visable";
+
+		find();
+
+		// makes all the other spans clickable but if they are clicked
+		// and not the right answer they get to go the wrongOption.
+		for (var i = 0; i < arr.length; i++) {
+			if (i != operator) {
+				document.getElementById(i).onclick = wrongOperator;
+			}
+		}
+
+		document.getElementById(operator).onclick = findLeft;
 	}
 
 	// for if you click the wrong operator, it tells you then continues steps
 	function wrongOperator() {
-		var error = document.createElement("div");
-		error.setAttribute("id", "error");
+		var error = document.getElementById("error");
+		if (error === null) {
+			error = document.createElement("div");
+			error.setAttribute("id", "error");
+		}
 		error.innerHTML = "Oops the real operator is the left most " + arr[operator].value
 		+ ", but lets keep going by finding the left operand";
 		document.getElementById("steps").appendChild(error);
@@ -185,8 +262,8 @@ The file creates all interactivity for the webpage.
 	// prompts you to click the left operand.
 	function findLeft() {
 		document.getElementById(operator).classList.add('clicked');
-		newChildPara.innerHTML = "Now click on the left operand";
-		newChildPara.style.color = "#45ADA8";
+		newChildPara1.innerHTML = "Now click on the left operand";
+		newChildPara1.style.color = "#45ADA8";
 
 		// makes all the other spans clickable but if they are clicked
 		// and not the right answer they get to go the wrongOption.
@@ -201,8 +278,8 @@ The file creates all interactivity for the webpage.
 	// prompts you to click the left operand.
 	function findRight() {
 		document.getElementById(lOperand).classList.add('clicked');
-		newChildPara.innerHTML = "Now click on the right operand";
-		newChildPara.style.color = "#547980";
+		newChildPara1.innerHTML = "Now click on the right operand";
+		newChildPara1.style.color = "#547980";
 
 		// makes all the other spans clickable but if they are clicked
 		// and not the right answer they get to go the wrongOption.
@@ -327,27 +404,30 @@ The file creates all interactivity for the webpage.
 			var steps = document.getElementById("steps");
 			steps.removeChild(steps.lastChild);
 		}
-		document.getElementById("nextstep").disabled = false;
+		var next = document.getElementById("nextstep");
+		next.innerHTML = "Check";
+		next.disabled = false;
+
 		document.getElementById(rOperand).classList.add('clicked');
 		clearIds();
 
 		var newChild = document.createElement("div");
 		newChild.classList.add("expressionStatement");
-		var newChildPara1 = document.createElement("p");
-		var newChildPara2 = document.createElement("p");
-		newChildPara1.classList.add("step");
-		newChildPara2.classList.add("exp");
+		var newChildPara3 = document.createElement("p");
+		var newChildPara4 = document.createElement("p");
+		newChildPara3.classList.add("step");
+		newChildPara4.classList.add("exp");
 
-		newChildPara1.innerHTML = "What is the answer?";
+		newChildPara3.innerHTML = "What is the answer?";
 		//findFirst();
-		newChildPara2.innerHTML = answerToString(arr);
+		newChildPara4.innerHTML = answerToString(arr);
 
-		newChild.appendChild(newChildPara1);
-		newChild.appendChild(newChildPara2);
+		newChild.appendChild(newChildPara3);
+		newChild.appendChild(newChildPara4);
 
 		document.getElementById("steps").appendChild(newChild);
 
-		document.getElementById("nextstep").onclick = processAnswer;
+		next.onclick = processAnswer;
 	}
 
 	// prosses user's answer, tells them whether it's right or wrong and then continues.
@@ -355,7 +435,7 @@ The file creates all interactivity for the webpage.
 		var clientAnswer = document.getElementById("answer");
 		solve();
 		var newChild = document.createElement("div");
-		newChild.classList.add("prompt");
+		newChild.setAttribute("id", "reply");
 
 		if (clientAnswer.value == arr[lOperand].value && arr.length > 1) {
 			newChild.innerHTML = "Great Job! Click Next to continue.";
@@ -367,15 +447,17 @@ The file creates all interactivity for the webpage.
 		}
 
 		document.getElementById("steps").appendChild(newChild);
+		var next = document.getElementById("nextstep");
+		next.innerHTML = "Next";
 
 		if (arr.length <= 1) {
 			var newChild = document.createElement("div");
 			newChild.classList.add("finalanswer");
-			newChild.innerHTML = "That why the answer is " + arr[lOperand].value;
+			newChild.innerHTML = "That's why the answer is " + arr[lOperand].value;
 			document.getElementById("answerbox").appendChild(newChild);
-			document.getElementById("nextstep").style.visibility = "hidden";
+			next.style.visibility = "hidden";
 		} else {
-			document.getElementById("nextstep").onclick = stepThrough;
+			next.onclick = stepThrough;
 			clientAnswer.id = "";
 		}
 	}
@@ -396,9 +478,10 @@ The file creates all interactivity for the webpage.
 
 	// clears old ids so not to get them mixed up with the new ones.
 	function clearIds() {
-		for (var i = 0; i < arrLeng; i++) {
-			var element = document.getElementById(i);
-			element.id = "";
+		var arrString = "";
+		for (var i = 0; i < arr.length; i++) {
+			arrString += arr[i].value + " ";
 		}
+		newChildPara2.innerHTML = arrString;
 	}
 }) ();

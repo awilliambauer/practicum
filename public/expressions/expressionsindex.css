@@ -36,6 +36,7 @@ h1 {
 
 .step {
 	clear: both;
+	font-size: 14pt;
 	text-align: left;
 	float: left;
 	width: 180pt;
@@ -43,7 +44,7 @@ h1 {
 }
 
 .expressionStatement {
-	height: 50px;
+	height: 80px;
 }
 
 .exp {
@@ -142,4 +143,5 @@ input {
 
 #error {
 	color: darkred;
+	clear: both;
 }
