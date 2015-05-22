@@ -176,10 +176,12 @@
                 break;
 
             case 'parameter':
+                elem.addClass("parameter");
                 elem.append(node.type + " " + node.name);
                 break;
 
             case 'declaration':
+                elem.addClass("declaration");
                 if (!special_flag) {
                     elem.append(indent(indent_level));
                 }
@@ -191,11 +193,18 @@
                 break;
 
             case 'expression':
+                elem.addClass("expression");
                 // add some space if top-level (could replace this with something fancier)
                 if (!special_flag) {
                     if (indent_level <= 2) { elem.append("\n"); }
                     elem.append(indent(indent_level));
                 }
+                var expression = to_dom(node.expression, indent_level);
+                expression.addClass("whythisnotwork");
+                var children = expression.children();
+                console.log(expression.children());
+                $(".expression span").addClass("expPart");
+                //$(children[1]).addClass("expRight");
                 elem.append(to_dom(node.expression, indent_level));
                 if (!special_flag) {
                     elem.append(";\n");
@@ -203,6 +212,7 @@
                 break;
 
             case 'for':
+                elem.addClass("for");
                 elem.append(indent(indent_level) + 'for (');
                 // statements inside of for loop header should not be indented/have newlines
                 var init = $('<span>');
@@ -220,29 +230,39 @@
                 update.append(to_dom(node.increment, indent_level, true));
                 elem.append(update);
                 elem.append(') {');
-                var count = 1;
+                var count = 0;
                 var colors = ['pink', 'purple', 'orange'];
                 node.body.forEach(function(s) {
-                    /* Megan's experiment stuff
+                    // Megan's experiment stuff
                     var line = to_dom(s, indent_level+ 1);
-                    line.css('color', colors[count - 1]);
+                    //line.css('color', colors[count]);
+                    line.addClass("forBlock" + count);
                     count++;
-                    elem.append(line);*/
-                    elem.append(to_dom(s, indent_level+ 1));
+                    elem.append(line);
+                    //elem.append(to_dom(s, indent_level+ 1));
                 });
                 elem.append(indent(indent_level) + '}\n');
                 break;
 
             case 'if':
+                elem.addClass("if");
                 if (!special_flag) {
                     // leave a blank line between ifs (could replace with something fancier like boxes)
                     elem.append("\n" + indent(indent_level));
                 }
                 elem.append("if (");
-                elem.append(to_dom(node.condition, indent_level));
+                var test = to_dom(node.condition, indent_level);
+                test.addClass("iftest");
+                elem.append(test);
+                //elem.append(to_dom(node.condition, indent_level));
                 elem.append(") {\n");
+                var count = 0;
                 node.then_branch.forEach(function(s) {
-                    elem.append(to_dom(s, indent_level + 1));
+                    var line = to_dom(s, indent_level + 1);
+                    line.addClass("ifBlock" + count);
+                    elem.append(line);
+                    count++;
+                    //elem.append(to_dom(s, indent_level + 1));
                 });
                 if (node.else_branch) {
                     elem.append(indent(indent_level) + '} else ');
@@ -251,8 +271,12 @@
                         elem.append(to_dom(node.else_branch, indent_level, true));
                     } else {
                         elem.append('{\n');
+                        var count = 0;
                         node.else_branch.forEach(function(s) {
-                            elem.append(to_dom(s, indent_level + 1));
+                            var line = to_dom(s, indent_level + 1);
+                            line.addClass("ifBlock" + count);
+                            count++;
+                            //elem.append(to_dom(s, indent_level + 1));
                         });
                     }
                 }
@@ -268,11 +292,13 @@
                 break;
 
             case 'postfix':
+                elem.addClass("postfix");
                 elem.append(to_dom(node.args[0], indent_level));
                 elem.append(node.operator);
                 break;
 
             case 'call':
+                elem.addClass("call");
                 elem.append(to_dom(node.object, indent_level));
                 elem.append('(');
                 // HACK this totally assumes function calls have only one argument,
@@ -282,6 +308,7 @@
                 break;
 
             case 'index':
+                elem.addClass("index");
                 elem.append(to_dom(node.object, indent_level));
                 elem.append('[');
                 elem.append(to_dom(node.index, indent_level));
@@ -289,15 +316,18 @@
                 break;
 
             case 'reference':
+                elem.addClass("reference");
                 elem.append(to_dom(node.object, indent_level));
                 elem.append('.' + node.name);
                 break;
 
             case 'identifier':
+                elem.addClass("identifier");
                 elem.text(node.value);
                 break;
 
             case 'literal':
+                elem.addClass("literal");
                 elem.text(typeof node.value === 'number' ? node.value : '"' + node.value + '"');
                 break;
 
