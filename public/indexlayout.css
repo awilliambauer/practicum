@@ -3,8 +3,9 @@ This is the style sheet for the main page.
 */
 
 body {
-    padding: 0px;
+    margin: 0px;
     background-color: #FAFFF3;
+    font-family: Arial, san-serif;
 }
 
 body, h1, .content, .container-fluid, #header, #footer {
