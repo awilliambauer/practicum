@@ -262,7 +262,7 @@
 				}
 				var newSpan2 = document.createElement("span");
 				$(newSpan2).addClass("comments");
-				newSpan2.innerHTML = "\t //" + bools[key];
+				newSpan2.innerHTML = "\t // " + bools[key];
 				// Adds the comments to the list of the given class
 				document.getElementsByClassName(key)[0].appendChild(newSpan2);
 			}
