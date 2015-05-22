@@ -9,7 +9,7 @@
 
 		CURRENT_STEP = 0;
 		VARIABLES = {};
-		fillProblemSpace();
+		init();
 		$("#go_back").click(function() { window.location.href = "../index.html" });
 		$("#next").click(next);
 
@@ -18,12 +18,30 @@
 	// fills in the problem space with the text of the specific problem we're working on,
 	// we will just have to replace "example.txt" with whatever file they store the problem
 	// text in
-	function fillProblemSpace() {
+	function init() {
+		var problem = getProblemNum();
 		$("#prompt").hide();
-		$.get("problems/problem_3.txt", function(data) {
+		$.get("problems/problem_" + problem + ".txt", function(data) {
 			AST = java_parsing.browser_parse(data);
 			$("#problem_space > pre").html(on_convert(AST));
 		});
+		$.getScript("state_objects/state_obj_" + problem + ".js", function(data) {
+			console.log("loaded object");
+		})
+		$(".content > h2").text("If/Else Mystery Problem " + problem);
+		$(".content > h3 > span").text("ifElseMystery" + problem + "(3, 20)");
+		$("#answer_box > span").prepend("ifElseMystery" + problem + "(3, 20)");
+	}
+
+	// gets the problem number from the address
+	function getProblemNum() {
+		var probText = window.location.search;
+		if (probText.trim() != "") {
+			var probNum = probText.split("=")[1];
+			return probNum;
+		} else {
+			return 1;
+		}
 	}
 
 	function next() {
