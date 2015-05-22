@@ -4,19 +4,18 @@ QUnit.test("solve-binop-int-div", function (assert) {
         left: 10,
         right: 5,
         op: "/",
-        prompt: "",
+        //prompt: "",
     };
     var finish = {
         left: 10,
         right: 5,
         op: "/",
-        prompt: "result is 2",
+        //prompt: "result is 2",
         result: 2,
     };
     var states = test_util.getStates("solve-binop", start);
-    // FIXME declrations currently not filtered
-    assert.equal(states.length, 9); // 5 non-declaration lines + 1 start + 1 finish
-    assert.deepEqual(states[states.length - 1], finish);
+    assert.equal(states.length, 6); // 5 non-declaration lines + 1 start
+    assert.deepEqual(states[states.length - 1].state, finish);
 });
 
 QUnit.test("solve-binop-float-mult", function (assert) {
@@ -24,19 +23,18 @@ QUnit.test("solve-binop-float-mult", function (assert) {
         left: 3.5,
         right: 1.5,
         op: "*",
-        prompt: "",
+        //prompt: "",
     };
     var finish = {
         left: 3.5,
         right: 1.5,
         op: "*",
-        prompt: "result is 5.25",
+        //prompt: "result is 5.25",
         result: 5.25,
     };
     var states = test_util.getStates("solve-binop", start);
-    // FIXME declrations currently not filtered
-    assert.equal(states.length, 9); // 5 non-declaration lines + 1 start + 1 finish
-    assert.deepEqual(states[states.length - 1], finish);
+    assert.equal(states.length, 6); // 5 non-declaration lines + 1 start
+    assert.deepEqual(states[states.length - 1].state, finish);
 });
 
 QUnit.test("solve-binop-lt", function (assert) {
@@ -44,19 +42,18 @@ QUnit.test("solve-binop-lt", function (assert) {
         left: 10,
         right: 5,
         op: "<",
-        prompt: "",
+        //prompt: "",
     };
     var finish = {
         left: 10,
         right: 5,
         op: "<",
-        prompt: "result is false",
+        //prompt: "result is false",
         result: false,
     };
     var states = test_util.getStates("solve-binop", start);
-    // FIXME declrations currently not filtered
-    assert.equal(states.length, 9); // 5 non-declaration lines + 1 start + 1 finish
-    assert.deepEqual(states[states.length - 1], finish);
+    assert.equal(states.length, 6); // 5 non-declaration lines + 1 start
+    assert.deepEqual(states[states.length - 1].state, finish);
 });
 
 QUnit.test("solve-binop-ne", function (assert) {
@@ -64,17 +61,16 @@ QUnit.test("solve-binop-ne", function (assert) {
         left: 10,
         right: 5,
         op: "!=",
-        prompt: "",
+        //prompt: "",
     };
     var finish = {
         left: 10,
         right: 5,
         op: "!=",
-        prompt: "result is true",
+        //prompt: "result is true",
         result: true,
     };
     var states = test_util.getStates("solve-binop", start);
-    // FIXME declrations currently not filtered
-    assert.equal(states.length, 9); // 5 non-declaration lines + 1 start + 1 finish
-    assert.deepEqual(states[states.length - 1], finish);
+    assert.equal(states.length, 6); // 5 non-declaration lines + 1 start
+    assert.deepEqual(states[states.length - 1].state, finish);
 });

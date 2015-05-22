@@ -25,14 +25,14 @@ function simulator(ast) {
         return ss.to_execute.pop();
     }
 
-    function push_stack_state(to_execute) {
+    function push_stack_state(to_execute, marker) {
         var stmts = to_execute.slice();
         stmts.reverse();
-        call_stack.push({to_execute: stmts});
+        call_stack.push({to_execute: stmts, marker:marker});
     }
 
     // initialize by pushing the function onto the stack
-    push_stack_state([ast]);
+    push_stack_state([ast], 'start');
 
     function shortCircuit(val, op) {
         return (val === true && op === "||") || (val === false && op === "&&");
@@ -90,17 +90,17 @@ function simulator(ast) {
                     var rhs_eval = evaluate(rhs, state);
                     switch (lhs.tag) {
                         case "identifier":
-                            state.prompt = lhs.value.replace("_", " ") + " is " + rhs_eval;
+                            //state.prompt = lhs.value.replace("_", " ") + " is " + rhs_eval;
                             self.locals[lhs.value] = rhs_eval;
                             break;
                         case "reference":
-                            state.prompt = lhs.name.replace("_", " ") + " is " + rhs_eval;
+                            //state.prompt = lhs.name.replace("_", " ") + " is " + rhs_eval;
                             resolveRef(lhs.object)[lhs.name] = rhs_eval;
                             break;
                         case "index":
                             var lookups = getLookupsArray(lhs);
                             var index = evaluate(lhs.index, state);
-                            state.prompt = lookups[0].replace("_", " ") + "'s " + index + " element is " + rhs_eval;
+                            //state.prompt = lookups[0].replace("_", " ") + "'s " + index + " element is " + rhs_eval;
                             resolveRef(lhs.object)[index] = rhs_eval;
                             break;
                         default:
@@ -176,8 +176,7 @@ function simulator(ast) {
 
         switch(stmt.tag) {
             case "function":
-                state.prompt = "Let's start";
-                push_stack_state(stmt.body);
+                push_stack_state(stmt.body, 'function');
                 break;
             case "declaration":
                 // FIXME nothin' to do, for now
@@ -188,11 +187,9 @@ function simulator(ast) {
             case "if":
                 // TODO format condition expressions in prompts
                 if (evaluate(stmt.condition, state)) {
-                    state.prompt = "Condition is true, take the then branch";
-                    push_stack_state(stmt.then_branch);
+                    push_stack_state(stmt.then_branch, 'then');
                 } else {
-                    state.prompt = "Condition is false, take the else branch";
-                    push_stack_state(stmt.else_branch);
+                    push_stack_state(stmt.else_branch, 'else');
                 }
                 break;
             default:
@@ -204,23 +201,37 @@ function simulator(ast) {
         return call_stack.length === 0;
     }
 
+    function copy(obj) {
+        // copy state by sending it to JSON and back; it's easy, and it'll also
+        // catch bugs where the state illegally contains non-json.
+        return JSON.parse(JSON.stringify(obj));
+    }
+
     // run the simulator for a single statement.
     // returns: an object containing the new state and last-executed statement,
     // or null if the computation has completed.
     self.run_next_statement = function(in_state) {
-        // copy state by sending it to JSON and back; it's easy, and it'll also
-        // catch bugs where the state illegally contains non-json.
-        var out_state = JSON.parse(JSON.stringify(in_state));
+        var out_state = copy(in_state);
 
         while (!self.is_done()) {
             var s = pop_next_statement();
             if (s) {
                 step(s, out_state);
-                return {state:out_state, statement:s};
+                return {state:out_state, statement:s, stack:copy(call_stack)};
             }
         }
 
         return null;
+    }
+
+    self.run_all = function(start_state) {
+        var results = [{state:start_state}];
+        while (true) {
+            var next = self.run_next_statement(results[results.length - 1].state);
+            if (next === null) break;
+            else results.push(next);
+        }
+        return results;
     }
 
     return self;

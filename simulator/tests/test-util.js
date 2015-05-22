@@ -14,13 +14,7 @@ var test_util = (function () {"use strict";
 
     self.getStates = function(algoName, startState) {
         var sim = simulator(self.parse(algoName));
-        var states = [startState];
-        while (true) {
-            var next = sim.run_next_statement(states[states.length - 1]);
-            if (next === null) break;
-            else states.push(next.state);
-        }
-        return states;
+        return explainer.create_explanations(sim.run_all(startState));
     };
 
     return self;
