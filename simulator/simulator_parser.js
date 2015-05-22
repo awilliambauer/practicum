@@ -276,6 +276,7 @@ var simulator_parsing = function() {
         function match_simple_statement(do_match_ending_semicolon) {
             var next = lex.peek();
             var result;
+            var expr;
             switch (next.type) {
                 case TokenType.KEYWORD:
                     if (next.value === 'var') {
@@ -287,7 +288,13 @@ var simulator_parsing = function() {
                     }
                     break;
                 default:
-                    result = {id:new_id(), tag:'expression', expression:match_expression(0)};
+                    expr = match_expression(0, true);
+                    // HACK translate assignments to their own statement type
+                    if (expr.tag === 'binop' && expr.operator === '=') {
+                        result = {id:new_id(), tag:'assignment', expression:expr.args[1], destination:expr.args[0]};
+                    } else {
+                        result = {id:new_id(), tag:'expression', expression:expr};
+                    }
                     break;
             }
             if (do_match_ending_semicolon) {
@@ -355,10 +362,10 @@ var simulator_parsing = function() {
 
         /// Implementation note: expressions use this technique called top-down operator precedence parsing.
         /// rbp means "right bind power". Top-level expressions should be parsed with match_expression(0).
-        function match_expression(rbp) {
+        function match_expression(rbp, is_statement) {
             var left = match_prefix();
             while (rbp < binop_bind_power(lex.peek())) {
-                left = match_infix(left);
+                left = match_infix(left, is_statement);
             }
             return left;
         }
@@ -382,7 +389,7 @@ var simulator_parsing = function() {
         };
 
         // match binary operators
-        function match_infix(left) {
+        function match_infix(left, is_statement) {
             var t = lex.next();
             switch (t.value) {
                 // reference
@@ -406,6 +413,10 @@ var simulator_parsing = function() {
                     if (t.value in postfix_operators) {
                         return {id:new_id(), tag:"postfix", operator:t.value, args:[left]};
                     } else {
+                        // assignment can only appear as a statement
+                        if (!is_statement && t.value === '=') {
+                            throw_error(t.position, "Assignments cannot be expressions, must be a statement.");
+                        }
                         // this assumes all operators are left-associative!
                         // if we need to make them right-associative, match the right expr with a lower bind power
                         return {id:new_id(), tag:"binop", operator:t.value, args:[left, match_expression(binop_bind_power(t))]};

@@ -85,65 +85,42 @@ function simulator(ast) {
             case "binop":
                 var lhs = expr.args[0];
                 var rhs = expr.args[1];
-                if (expr.operator === "=") {
-                    // NOTE assumes we only assign to local variables
-                    var rhs_eval = evaluate(rhs, state);
-                    switch (lhs.tag) {
-                        case "identifier":
-                            //state.prompt = lhs.value.replace("_", " ") + " is " + rhs_eval;
-                            self.locals[lhs.value] = rhs_eval;
-                            break;
-                        case "reference":
-                            //state.prompt = lhs.name.replace("_", " ") + " is " + rhs_eval;
-                            resolveRef(lhs.object)[lhs.name] = rhs_eval;
-                            break;
-                        case "index":
-                            var lookups = getLookupsArray(lhs);
-                            var index = evaluate(lhs.index, state);
-                            //state.prompt = lookups[0].replace("_", " ") + "'s " + index + " element is " + rhs_eval;
-                            resolveRef(lhs.object)[index] = rhs_eval;
-                            break;
-                        default:
-                            throw new Error("left-hand side of assignment has unrecognized type " + JSON.stringify(lhs));
-                    }
+                var lv = evaluate(lhs, state);
+                // check for boolean short circuit
+                if (shortCircuit(lv, expr.operator)) {
+                    return lv;
+                }
+                var rv = evaluate(rhs, state);
+                if (expr.operator === "+" && (typeof lv === "string" || typeof rv === "string")) {
+                    return lv + rv;
                 } else {
-                    var lv = evaluate(lhs, state);
-                    // check for boolean short circuit
-                    if (shortCircuit(lv, expr.operator)) {
-                        return lv;
-                    }
-                    var rv = evaluate(rhs, state);
-                    if (expr.operator === "+" && (typeof lv === "string" || typeof rv === "string")) {
-                        return lv + rv;
-                    } else {
-                        switch(expr.operator) {
-                            case "+":
-                                return lv + rv;
-                            case "-":
-                                return lv - rv;
-                            case "*":
-                                return lv * rv;
-                            case "%":
-                                return lv % rv;
-                            case "/":
-                                return lv / rv;
-                            case ">":
-                                return lv > rv;
-                            case ">=":
-                                return lv >= rv;
-                            case "<":
-                                return lv < rv;
-                            case "<=":
-                                return lv <= rv;
-                            case "&&":
-                                return lv && rv;
-                            case "||":
-                                return lv || rv;
-                            case "==":
-                                return lv === rv;
-                            case "!=":
-                                return lv !== rv;
-                        }
+                    switch(expr.operator) {
+                        case "+":
+                            return lv + rv;
+                        case "-":
+                            return lv - rv;
+                        case "*":
+                            return lv * rv;
+                        case "%":
+                            return lv % rv;
+                        case "/":
+                            return lv / rv;
+                        case ">":
+                            return lv > rv;
+                        case ">=":
+                            return lv >= rv;
+                        case "<":
+                            return lv < rv;
+                        case "<=":
+                            return lv <= rv;
+                        case "&&":
+                            return lv && rv;
+                        case "||":
+                            return lv || rv;
+                        case "==":
+                            return lv === rv;
+                        case "!=":
+                            return lv !== rv;
                     }
                 }
                 break;
@@ -180,6 +157,30 @@ function simulator(ast) {
                 break;
             case "declaration":
                 // FIXME nothin' to do, for now
+                break;
+            case "assignment":
+                // FIXME assumes we only assign to local variables
+                var rhs = stmt.expression;
+                var lhs = stmt.destination;
+                var rhs_eval = evaluate(rhs, state);
+                switch (lhs.tag) {
+                    case "identifier":
+                        //state.prompt = lhs.value.replace("_", " ") + " is " + rhs_eval;
+                        self.locals[lhs.value] = rhs_eval;
+                        break;
+                    case "reference":
+                        //state.prompt = lhs.name.replace("_", " ") + " is " + rhs_eval;
+                        resolveRef(lhs.object)[lhs.name] = rhs_eval;
+                        break;
+                    case "index":
+                        var lookups = getLookupsArray(lhs);
+                        var index = evaluate(lhs.index, state);
+                        //state.prompt = lookups[0].replace("_", " ") + "'s " + index + " element is " + rhs_eval;
+                        resolveRef(lhs.object)[index] = rhs_eval;
+                        break;
+                    default:
+                        throw new Error("left-hand side of assignment has unrecognized type " + JSON.stringify(lhs));
+                }
                 break;
             case "expression":
                 evaluate(stmt.expression, state);
