@@ -174,7 +174,7 @@ var state = [
 
     {
         prompt: "Answer: Now use your variable bank to fill in the answer!",
-        lineNum: 17,
+        lineNum: 16,
         vars: {
             1: {x: 3, y: 20},
             2: {x: 3, y: 20, z: 2},
