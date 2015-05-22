@@ -1,13 +1,9 @@
-/**
- * NOTE: assumes algorithm is a single function
- */
-var simulator = (function() {
+function simulator(ast) {
     "use strict";
 
     var self = {};
 
     var call_stack = [];
-    var ast;
 
     self.locals = {}; // TODO probably too simplistic given what stack allows
 
@@ -35,10 +31,8 @@ var simulator = (function() {
         call_stack.push({to_execute: stmts});
     }
 
-    self.init = function(algo) {
-        ast = simulator_parsing.browser_parse(algo);
-        push_stack_state([ast]);
-    };
+    // initialize by pushing the function onto the stack
+    push_stack_state([ast]);
 
     function shortCircuit(val, op) {
         return (val === true && op === "||") || (val === false && op === "&&");
@@ -230,6 +224,5 @@ var simulator = (function() {
     }
 
     return self;
-}());
-
+}
 
