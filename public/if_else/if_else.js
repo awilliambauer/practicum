@@ -20,17 +20,19 @@
 	// text in
 	function init() {
 		var problem = getProblemNum();
+		var callVals;
 		$("#prompt").hide();
 		$.get("problems/problem_" + problem + ".txt", function(data) {
 			AST = java_parsing.browser_parse(data);
 			$("#problem_space > pre").html(on_convert(AST));
+			$.getScript("state_objects/state_obj_" + problem + ".js", function(data) {
+				callVals = getCallVals().toString();
+				$(".content > h2").text("If/Else Mystery Problem " + problem);
+				$(".content > h3 > span").text("ifElseMystery" + problem + "(" + callVals + ")");
+				$("#answer_box > span").prepend("ifElseMystery" + problem + "(" + callVals + ")");
+			});
 		});
-		$.getScript("state_objects/state_obj_" + problem + ".js", function(data) {
-			console.log("loaded object");
-		})
-		$(".content > h2").text("If/Else Mystery Problem " + problem);
-		$(".content > h3 > span").text("ifElseMystery" + problem + "(3, 20)");
-		$("#answer_box > span").prepend("ifElseMystery" + problem + "(3, 20)");
+		
 	}
 
 	// gets the problem number from the address
@@ -42,6 +44,17 @@
 		} else {
 			return 1;
 		}
+	}
+
+	// gets the initial values that the method will be called with
+	function getCallVals() {
+		var rawVals = state[1].answer;
+		var callVals = [];
+		for (var variable in rawVals) {
+			callVals.push(rawVals[variable]);
+		}
+		console.log(callVals);
+		return callVals;
 	}
 
 	function next() {
