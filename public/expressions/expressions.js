@@ -130,7 +130,7 @@ The file creates all interactivity for the webpage.
 			newChild2.classList.add("prompt");
 			newChild2.innerHTML = "Before we start solving any part of the problem we " +
 			"always need to find the first operator to be evaluated. Remember always look " +
-			"from left to right.";
+			"from left to right. Starting wiht * / % and then + -";
 			newChild.appendChild(newChild2);
 		}
 
