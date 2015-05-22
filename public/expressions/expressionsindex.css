@@ -11,6 +11,11 @@ span:hover {
 	color: #45ADA8;
 }
 
+.clicked:hover {
+	cursor: auto;
+	background-color: white;
+}
+
 body {
 	margin: 0;
 	font-family: Arial, sans-serif;

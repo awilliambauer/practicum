@@ -477,7 +477,13 @@ The file creates all interactivity for the webpage.
 	function clearIds() {
 		var arrString = "";
 		for (var i = 0; i < arr.length; i++) {
+			if (i == lOperand) {
+				arrString += "<span class='clicked'>";
+			}
 			arrString += arr[i].value + " ";
+			if (i == rOperand) {
+				arrString += "</span>";
+			}
 		}
 		newChildPara2.innerHTML = arrString;
 	}
