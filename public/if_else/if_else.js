@@ -1,18 +1,14 @@
 // (function() {
 	"use strict";
 
-	var CONTENTS;
 	var CURRENT_STEP;
-	var CURRENT_LINE;
 	var VARIABLES;
 	var AST;
 
 	$(document).ready(function() {
 
 		CURRENT_STEP = 0;
-		CURRENT_LINE = -1;
 		VARIABLES = {};
-		getContents();
 		fillProblemSpace();
 		$("#go_back").click(function() { window.location.href = "../index.html" });
 		$("#next").click(next);
@@ -23,44 +19,18 @@
 	// we will just have to replace "example.txt" with whatever file they store the problem
 	// text in
 	function fillProblemSpace() {
+		$("#prompt").hide();
 		$.get("problems/problem_1.txt", function(data) {
 			AST = java_parsing.browser_parse(data);
 			$("#problem_space > pre").html(on_convert(AST));
 		});
 	}
 
-	// gets the prompts stored in the prompts.txt file and loads them into memory,
-	// this will be replaced when we hook up to the backend
-	function getContents() {
-		$.get("prompts.txt", function(data) {
-			CONTENTS = data.split("\n");
-			$("#prompt").hide();
-		});
-	}
-
-	// gives the given line the given css class
-	function highlightLine(line, highlight) {
-		if (highlight == "highlight") {
-			$("#problem_space li").removeClass(highlight);		
-		}
-		$("." + line).addClass(highlight);
-		if (highlight == "grey_out") {
-			$("." + line + " *").removeAttr("style");
-		}
-	}
-
-	// gives the given lines the given highlight class
-	function highlightBlock(start, end, highlight) {
-		for (var i = start; i <= end; i++) {
-			highlightLine(i, highlight);
-		}
-	}
-
 	function next() {
 		var currentState = state[CURRENT_STEP];
 		//console.log(currentState.prompt);
 		// take away "next" button when finished
-		if ((CURRENT_STEP + 1) * 2 >= CONTENTS.length - 2) {
+		if (currentState.prompt.indexOf("Answer") != -1) {
 			$("#next").hide();
 		}
 
@@ -79,53 +49,6 @@
 		newCrossOutLines(currentState);
 	}
 
-	// increments the step we're currently on and changes the prompt/highlighting
-	// accordingly
-	function goNext() {
-		// take away "next" button when finished
-		if ((CURRENT_STEP + 1) * 2 >= CONTENTS.length - 2) {
-			$("#next").hide();
-		}
-
-		if (CURRENT_STEP == 0) {
-			highlightBlocks();
-		}
-
-		CURRENT_STEP++;
-		var prompt = CONTENTS[2 * CURRENT_STEP];
-		var vars = CONTENTS[2 * CURRENT_STEP + 1].split("\t");
-		var updated_vars = vars.slice(2, vars.length) // get all of the variables changed in this line
-
-		// if vars contains variables or true/false
-		var line = vars[0];
-		var crossout;
-
-		// Only updates if vars contains variables
-		if (vars.length > 3) {
-			updateVariables(updated_vars);
-		}
-		if (vars.length > 2) {
-			addComment(vars);
-		}
-		// don't do this the first time
-		if (line != CURRENT_LINE && line != 0) {
-			movePrompt(line);
-			CURRENT_LINE = line;
-			highlightBlock(0, CURRENT_LINE - 1, "grey_out");
-			highlightLine(CURRENT_LINE, "highlight");
-		}
-		getPrompt(prompt);
-		addInteraction(vars);
-		if (vars.length > 1 && vars[1].trim() != "") {
-			crossout = vars[1].split(",");
-			for (var i = 0; i < crossout.length; i++) {
-				highlightLine(crossout[i], "cross_out");
-			}
-		}
-		drawVariableBank();
-		// OLD_VARS = vars;
-	}
-
 	// some initialization stuff that happens on first click of next
 	function highlightBlocks() {
 		// show previously invisible prompt
@@ -138,23 +61,6 @@
 					$(element).addClass("block_highlight");
 				}
 			});
-		}
-	}
-
-	// Formats the way the prompt displays
-	function getPrompt(prompt) {
-		$("#prompt").empty();
-		var promptParts = prompt.split(":");
-		if (promptParts.length > 1) {	// there is a ":" in the prompt
-			var title = document.createElement("span");
-			$(title).css("font-weight", "bold")
-					.text(promptParts[0] + ": ");	// If/Else, Booleans, etc
-			var body = document.createElement("span");
-			$(body).text(promptParts[1]);	// the actual description
-			$("#prompt").append(title);
-			$("#prompt").append(body);
-		} else {	// no ":", shouldn't happen but whatevs
-			$("#prompt").text(promptParts[0]);
 		}
 	}
 
@@ -293,21 +199,6 @@
 					}
 				}
 			}
-		}
-	}
-
-
-	function updateVariables(vars) {
-		for (var i = 0; i < vars.length; i += 2) {
-			var var_name = vars[i];
-			var var_value = vars[i + 1];
-			var new_variable = false;
-			if (!VARIABLES.hasOwnProperty(var_name)) {
-				VARIABLES[var_name] = {}
-			}
-			VARIABLES[var_name]["name"] = var_name;
-			VARIABLES[var_name]["value"] = var_value;
-			VARIABLES[var_name]["updated"] = true;
 		}
 	}
 
