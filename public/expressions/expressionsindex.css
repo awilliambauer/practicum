@@ -12,9 +12,16 @@ span:hover {
 }
 
 body {
+	margin: 0;
+	font-family: Arial, sans-serif;
 	padding: 0px 0px 25px;
 	margin: 40px 0px;
-	font-family: Arial, sans-serif;
+	background-color: #FAFFF3;
+}
+
+#problem {
+	/*border: 2px solid #6FC483;*/
+	overflow: hidden;
 }
 
 h1 {
@@ -27,11 +34,12 @@ h1 {
 	margin-right: auto;
 	width: 700px;
 	margin-top: 50px;
-	border: 2px solid #547980;
+	border: 5px solid #547980;
 	border-radius: 10px;
 	overflow: hidden;
 	padding: 20px;
 	margin-bottom: 20px;
+	background-color: white;
 }
 
 .step {
@@ -50,7 +58,7 @@ h1 {
 .exp {
 	float: right;
 	font-size: 25pt;
-	/*width: 350px;*/
+	width: 400px;
 	text-align: center;
 	margin: 0pt;
 	vertical-align: text-bottom;
@@ -144,4 +152,9 @@ input {
 #error {
 	color: darkred;
 	clear: both;
+}
+
+.operators {
+	margin-right: 10px;
+	font-size: 16pt;
 }

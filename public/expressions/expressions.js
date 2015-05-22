@@ -34,18 +34,6 @@ The file creates all interactivity for the webpage.
 	var lOperand;
 
 
-	var arr = [{type: "int", value: 22},
-		{type: "MDMoperator", value: "%"},
-		{type: "int", value: 7},
-		{type: "ASoperator", value: "+"},
-		{type: "int", value: 4},
-		{type: "MDMoperator", value: "*"},
-		{type: "int", value: 3},
-		{type: "ASoperator", value: "-"},
-		{type: "double", value: 21.25},
-		{type: "MDMoperator", value: "/"},
-		{type: "double", value: 8.5}];
-
 	window.onload = function () {
 		setupPage(arr);
 		document.getElementById("submit").onclick = correct;
@@ -168,8 +156,8 @@ The file creates all interactivity for the webpage.
 			mdmOperator.classList.add("operators");
 			asOperator.setAttribute("id", "ASoperator");
 			asOperator.classList.add("operators");
-			mdmOperator.innerHTML = "Multiplication/Division/Mode";
-			asOperator.innerHTML = "Subtraction/Addition";
+			mdmOperator.innerHTML = "* / %";
+			asOperator.innerHTML = "+ -";
 			prompt.innerHTML = "What type of operator are we going to use?";
 
 			buttons.appendChild(mdmOperator);
@@ -193,17 +181,19 @@ The file creates all interactivity for the webpage.
 	// If the student click on the wrong type of operator button.
 	// tells them its wrong and prompts them to continue.
 	function wrongButton() {
-		document.getElementById("nextstep").disabled = false;
 
 		var error = document.createElement("div");
 		error.setAttribute("id", "error");
-		var message = "We need to start with by looking for ";
-		if (arr[operator].type = "MDMoperator") {
-			message += "Multiplication, Division, or Mode";
+
+		var message = "We need to start by looking for ";
+		if (arr[operator].type == "MDMoperator") {
+			message += "Multiplication, Division, or Mode operators before we do " +
+					"a Addition or Subtraction operator, click the *	/	% button";
 		} else {
-			message += "Addition or Subtraction";
+			message += "Addition or Subtraction because there are no " +
+						"Multiplication, Division, or Mode operators left, click the +	- button";
 		}
-		error.innerHTML = message + " operators, click next to continue";
+		error.innerHTML = message;
 
 		document.getElementById("steps").appendChild(error);
 		document.getElementById("nextstep").onclick = findOperator;
@@ -213,7 +203,6 @@ The file creates all interactivity for the webpage.
 	function findOperator() {
 		if (document.getElementById("error") !== null) {
 			document.getElementById("steps").removeChild(document.getElementById("error"));
-			document.getElementById("nextstep").disabled = true;
 		}
 		document.getElementById("steps").removeChild(document.getElementById("firststep"));
 		var newChild = document.createElement("div");
@@ -223,7 +212,14 @@ The file creates all interactivity for the webpage.
 		newChildPara1.classList.add("step");
 		newChildPara2.classList.add("exp");
 
-		newChildPara1.innerHTML = "Click on the next operator";
+		var message = "Click on the next ";
+
+		if (arr[operator].type == "MDMoperator") {
+			newChildPara1.innerHTML = message + "*, /, or % operator";
+		} else {
+			newChildPara1.innerHTML = message + "+ or - operator";
+		}
+
 		//findFirst();
 		newChildPara2.innerHTML = arrToString(arr);
 
@@ -442,6 +438,7 @@ The file creates all interactivity for the webpage.
 		} else if (clientAnswer.value == arr[lOperand].value && arr.length <= 1) {
 			newChild.innerHTML = "Great Job!";
 		} else {
+			clientAnswer.style.color = "red";
 			newChild.innerHTML = "Oops, sorry the answer was " + arr[lOperand].value
 			+ " but lets keep going!";
 		}
