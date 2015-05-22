@@ -6,7 +6,6 @@
 	var CURRENT_LINE;
 	var VARIABLES;
 	var AST;
-	var HTML;
 
 	$(document).ready(function() {
 
@@ -58,7 +57,6 @@
 	}
 
 	function next() {
-		$("#prompt").show();
 		var currentState = state[CURRENT_STEP];
 		//console.log(currentState.prompt);
 		// take away "next" button when finished
@@ -67,14 +65,14 @@
 		}
 
 		if (CURRENT_STEP == 0) {
-			//highlightBlocks();
+			$("#prompt").show();
+			highlightBlocks();
 		}
 
 		CURRENT_STEP++;
-		//highlightBlocks();
 		newGetPrompt(currentState);
 		newHighlightLine(currentState);
-		//newHighlightBlock(currentState);
+		newHighlightBlock(currentState);
 		newAddComments(currentState);
 		newUpdateVariables(currentState);
 		drawVariableBank();
@@ -129,7 +127,7 @@
 	}
 
 	// some initialization stuff that happens on first click of next
-	/*function highlightBlocks() {
+	function highlightBlocks() {
 		// show previously invisible prompt
 		$("#prompt").show();
 		// highlighting all the stuff
@@ -141,7 +139,7 @@
 				}
 			});
 		}
-	}*/
+	}
 
 	// Formats the way the prompt displays
 	function getPrompt(prompt) {
@@ -230,7 +228,8 @@
 	// Creates a span then appends it to the list element
 	// of the given line number based off the array/object
 	function newAddComments(state) {
-		console.log(state.prompt);
+		$(".comments").remove();
+		// console.log(state.prompt);
 		if(state.hasOwnProperty("vars")) {
 			var vars = state.vars;
 			// Handles adding comments for variables
