@@ -20,7 +20,7 @@
 	// text in
 	function fillProblemSpace() {
 		$("#prompt").hide();
-		$.get("problems/problem_2.txt", function(data) {
+		$.get("problems/problem_3.txt", function(data) {
 			AST = java_parsing.browser_parse(data);
 			$("#problem_space > pre").html(on_convert(AST));
 		});
