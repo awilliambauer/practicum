@@ -23,7 +23,7 @@
 	// we will just have to replace "example.txt" with whatever file they store the problem
 	// text in
 	function fillProblemSpace() {
-		$.get("problems/problem_2.txt", function(data) {
+		$.get("problems/problem_1.txt", function(data) {
 			AST = java_parsing.browser_parse(data);
 			on_convert(AST);
 		});

@@ -148,7 +148,7 @@ var state = [
             1: {x: 3, y: 20},
             2: {x: 3, y: 20, z: 4},
             7: {x: 3, y: 20, z: 13},
-            14: {x: 3, y: 17, z: 13}
+            13: {x: 3, y: 17, z: 13}
         },
         bools: {4: false, 10: false, 12: true},
         updated: ["y"],
