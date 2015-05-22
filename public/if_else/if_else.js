@@ -71,10 +71,10 @@
 		}
 
 		CURRENT_STEP++;
-		highlightBlocks();
+		//highlightBlocks();
 		newGetPrompt(currentState);
 		newHighlightLine(currentState);
-		newHighlightBlock(currentState);
+		//newHighlightBlock(currentState);
 		newAddComments(currentState);
 		newUpdateVariables(currentState);
 		drawVariableBank();
@@ -129,7 +129,7 @@
 	}
 
 	// some initialization stuff that happens on first click of next
-	function highlightBlocks() {
+	/*function highlightBlocks() {
 		// show previously invisible prompt
 		$("#prompt").show();
 		// highlighting all the stuff
@@ -141,7 +141,7 @@
 				}
 			});
 		}
-	}
+	}*/
 
 	// Formats the way the prompt displays
 	function getPrompt(prompt) {
@@ -261,7 +261,7 @@
 				}
 				var newSpan2 = document.createElement("span");
 				$(newSpan2).addClass("comments");
-				newSpan2.innerHTML = "\t " + bools[key];
+				newSpan2.innerHTML = "\t // " + bools[key];
 				// Adds the comments to the list of the given class
 				document.getElementsByClassName(key)[0].appendChild(newSpan2);
 			}
