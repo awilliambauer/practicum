@@ -15,7 +15,8 @@ var state = [
         lineNum: 3,
         vars: {
             1: {x: 3, y: 20, z: 30}
-        }
+        },
+        updated: ["x", "y", "z"]
     },
 
     {
