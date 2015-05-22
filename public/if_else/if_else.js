@@ -58,13 +58,14 @@
 
 	function next() {
 		var currentState = state[CURRENT_STEP];
+		//console.log(currentState.prompt);
 		// take away "next" button when finished
 		if ((CURRENT_STEP + 1) * 2 >= CONTENTS.length - 2) {
 			$("#next").hide();
 		}
 
 		if (CURRENT_STEP == 0) {
-			highlightBlocks();
+			//highlightBlocks();
 		}
 
 		CURRENT_STEP++;
@@ -73,6 +74,7 @@
 		newHighlightBlock(currentState);
 		newAddComments(currentState);
 		newUpdateVariables(currentState);
+		drawVariableBank();
 		newCrossOutLines(currentState);
 	}
 
@@ -124,7 +126,7 @@
 	}
 
 	// some initialization stuff that happens on first click of next
-	function highlightBlocks() {
+	/*function highlightBlocks() {
 		// show previously invisible prompt
 		$("#prompt").show();
 		// highlighting all the stuff
@@ -136,7 +138,7 @@
 				}
 			});
 		}
-	}
+	}*/
 
 	// Formats the way the prompt displays
 	function getPrompt(prompt) {
@@ -223,74 +225,68 @@
 	// Creates a span then appends it to the list element
 	// of the given line number based off the array/object
 	function newAddComments(state) {
+		console.log(state.prompt);
 		if(state.hasOwnProperty("vars")) {
 			var vars = state.vars;
 			// Handles adding comments for variables
-			for (var key in vars) {
-				if (!vars.hasOwnProperty(key)) {
+			for (var line in vars) {
+				var number = line;
+				if (!vars.hasOwnProperty(line)) {
 					continue;
 				}
-				for (var variable in key) {
-					if (!key.hasOwnProperty(variable)) {
-						continue;
-					}
-					var comment = "\t// ";
-					var letter = variable;
-					var value = key(letter);
-					comment += letter + " = " + value + " ";
+				var comment = "\t// ";
+				var x = 0;
+				for(var letter in vars[line]) {
+					comment += letter + " = " + vars[line][letter] + ", ";
 				}
+				comment = comment.substring(0, comment.length - 2); // Remove trailing comma
 				var newSpan = document.createElement("span");
 				$(newSpan).addClass("comments");
-				$(newSpan).text(comment);
+				newSpan.innerHTML = comment;
 				// Adds the comments to the list of the given class
-				document.getElementByClassName(key)[0].append(newSpan);
+				document.getElementsByClassName(number)[0].appendChild(newSpan);
 			}
 		}
 		if(state.hasOwnProperty("bools")) {
+			//console.log(bools);
 			var bools = state.bools;
-			for (var key1 in bools) {
-				if (!bools.hasOwnProperty(key1)) {
+			for (var key in bools) {
+				if (!bools.hasOwnProperty(key)) {
 					continue;
 				}
-				var comments = "\t// ";
-				comments += bools(key);
 				var newSpan2 = document.createElement("span");
 				$(newSpan2).addClass("comments");
-				$(newSpan2).text(comment);
+				newSpan2.innerHTML = "\t " + bools[key];
 				// Adds the comments to the list of the given class
-				document.getElementByClassName(key)[0].append(newSpan2);
+				document.getElementsByClassName(key)[0].appendChild(newSpan2);
 			}
 		}
  	}
 
 	function newUpdateVariables(state) {
+		console.log(state.hasOwnProperty("vars"));
 		if(state.hasOwnProperty("vars")) {
 			var vars = state.vars;
 			for(var line in vars) {
 				if(!vars.hasOwnProperty(line)) {
 					continue;
 				}
-				for(var variable in line) {
-					if(!line.hasOwnProperty(variable)) {
-						continue;
-					}
+				console.log("here");
+				for(var variable in vars[line]) {
+					console.log("here2");
 					var letter = variable;
-					var value = line(variable);
-					var updated = false;
-					if(state.hasOwnProperty(updated)) {
-						var updates = state.updated;
-						var done = false;
-						for(var index in updates) {
-							if(updates[index] == letter
-								&& !done) {
-								updated = true;
-								done = true;
-							}
-						}
+					var value = vars[line][variable];
+					if (!VARIABLES.hasOwnProperty(letter)) {
+						VARIABLES[letter] = {};
 					}
 					VARIABLES[letter]["name"] = letter;
 					VARIABLES[letter]["value"] = value;
-					VARIABLES[letter]["updated"] = updated;
+					console.log(state.hasOwnProperty("updated"));
+					if(state.hasOwnProperty("updated")) {
+						if(state.updated.indexOf(letter) != -1) {
+							VARIABLES[letter]["updated"] = true;
+						}
+					}
 				}
 			}
 		}

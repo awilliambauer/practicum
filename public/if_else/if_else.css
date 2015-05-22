@@ -7,7 +7,7 @@ h3 > span, #answer_box > span, input[type="text"] {
 	font-family: monospace;
 }
 
-pre > span { /* comment */
+.comments {
 	color: #ff5900;
 }
 
