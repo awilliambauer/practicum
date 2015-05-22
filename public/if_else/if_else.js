@@ -1,107 +1,71 @@
 // (function() {
 	"use strict";
 
-	var CONTENTS;
 	var CURRENT_STEP;
-	var CURRENT_LINE;
 	var VARIABLES;
 	var AST;
 
 	$(document).ready(function() {
 
 		CURRENT_STEP = 0;
-		CURRENT_LINE = -1;
 		VARIABLES = {};
-		getContents();
-		fillProblemSpace();
+		init();
 		$("#go_back").click(function() { window.location.href = "../index.html" });
-		$("#next").click(goNext);
+		$("#next").click(next);
 
 	});
-
 
 	// fills in the problem space with the text of the specific problem we're working on,
 	// we will just have to replace "example.txt" with whatever file they store the problem
 	// text in
-	function fillProblemSpace() {
-		$.get("problems/problem_2.txt", function(data) {
+	function init() {
+		var problem = getProblemNum();
+		$("#prompt").hide();
+		$.get("problems/problem_" + problem + ".txt", function(data) {
 			AST = java_parsing.browser_parse(data);
-			on_convert(AST);
+			$("#problem_space > pre").html(on_convert(AST));
 		});
+		$.getScript("state_objects/state_obj_" + problem + ".js", function(data) {
+			console.log("loaded object");
+		})
+		$(".content > h2").text("If/Else Mystery Problem " + problem);
+		$(".content > h3 > span").text("ifElseMystery" + problem + "(3, 20)");
+		$("#answer_box > span").prepend("ifElseMystery" + problem + "(3, 20)");
 	}
 
-	// gets the prompts stored in the prompts.txt file and loads them into memory,
-	// this will be replaced when we hook up to the backend
-	function getContents() {
-		$.get("prompts.txt", function(data) {
-			CONTENTS = data.split("\n");
-			$("#prompt").hide();
-		});
-	}
-
-	// gives the given line the given css class
-	function highlightLine(line, highlight) {
-		if (highlight == "highlight") {
-			$("#problem_space li").removeClass(highlight);		
-		}
-		$("." + line).addClass(highlight);
-		if (highlight == "grey_out") {
-			$("." + line + " *").removeAttr("style");
+	// gets the problem number from the address
+	function getProblemNum() {
+		var probText = window.location.search;
+		if (probText.trim() != "") {
+			var probNum = probText.split("=")[1];
+			return probNum;
+		} else {
+			return 1;
 		}
 	}
 
-	// gives the given lines the given highlight class
-	function highlightBlock(start, end, highlight) {
-		for (var i = start; i <= end; i++) {
-			highlightLine(i, highlight);
-		}
-	}
-
-	// increments the step we're currently on and changes the prompt/highlighting
-	// accordingly
-	function goNext() {
+	function next() {
+		var currentState = state[CURRENT_STEP];
+		//console.log(currentState.prompt);
 		// take away "next" button when finished
-		if ((CURRENT_STEP + 1) * 2 >= CONTENTS.length - 2) {
+		if (currentState.prompt.indexOf("Answer") != -1) {
 			$("#next").hide();
 		}
 
 		if (CURRENT_STEP == 0) {
+			$("#prompt").show();
 			highlightBlocks();
 		}
 
 		CURRENT_STEP++;
-		var prompt = CONTENTS[2 * CURRENT_STEP];
-		var vars = CONTENTS[2 * CURRENT_STEP + 1].split("\t");
-		var updated_vars = vars.slice(2, vars.length) // get all of the variables changed in this line
-
-		// if vars contains variables or true/false
-		var line = vars[0];
-		var crossout;
-
-		// Only updates if vars contains variables
-		if (vars.length > 3) {
-			updateVariables(updated_vars);
-		}
-		if (vars.length > 2) {
-			addComment(vars);
-		}
-		// don't do this the first time
-		if (line != CURRENT_LINE && line != 0) {
-			movePrompt(line);
-			CURRENT_LINE = line;
-			highlightBlock(0, CURRENT_LINE - 1, "grey_out");
-			highlightLine(CURRENT_LINE, "highlight");
-		}
-		getPrompt(prompt);
-		addInteraction(vars);
-		if (vars.length > 1 && vars[1].trim() != "") {
-			crossout = vars[1].split(",");
-			for (var i = 0; i < crossout.length; i++) {
-				highlightLine(crossout[i], "cross_out");
-			}
-		}
+		newGetPrompt(currentState);
+		newHighlightLine(currentState);
+		newHighlightBlock(currentState);
+		newAddComments(currentState);
+		newUpdateVariables(currentState);
 		drawVariableBank();
-		// OLD_VARS = vars;
+		newCrossOutLines(currentState);
+		addInteraction(currentState);
 	}
 
 	// some initialization stuff that happens on first click of next
@@ -109,30 +73,13 @@
 		// show previously invisible prompt
 		$("#prompt").show();
 		// highlighting all the stuff
-		for (let node of java_ast.find_all(function(n) { return n.tag == "if"; }, AST)) {
+		for (var node of java_ast.find_all(function(n) { return n.tag == "if"; }, AST)) {
 			$("#java-ast-" + node.id + "> *").each(function(index, element) {
 				var text = $(element).text().split(" ");
 				if (text.length > 1) {
 					$(element).addClass("block_highlight");
 				}
 			});
-		}
-	}
-
-	// Formats the way the prompt displays
-	function getPrompt(prompt) {
-		$("#prompt").empty();
-		var promptParts = prompt.split(":");
-		if (promptParts.length > 1) {	// there is a ":" in the prompt
-			var title = document.createElement("span");
-			$(title).css("font-weight", "bold")
-					.text(promptParts[0] + ": ");	// If/Else, Booleans, etc
-			var body = document.createElement("span");
-			$(body).text(promptParts[1]);	// the actual description
-			$("#prompt").append(title);
-			$("#prompt").append(body);
-		} else {	// no ":", shouldn't happen but whatevs
-			$("#prompt").text(promptParts[0]);
 		}
 	}
 
@@ -150,14 +97,15 @@
 	function newGetPrompt(state) {
 		if(state.hasOwnProperty("prompt")) {
 			var prompt =  state.prompt;
-			var promptParts = prompts.split(":")
+			var promptParts = prompt.split(":")
 			var title = document.createElement("span");
 			$(title).css("font-weight", "bold")
 				.text(promptParts[0] + ": ");	// If/Else, Booleans, etc
 			var body = document.createElement("span");
 			$(body).text(promptParts[1]);	// the actual description
-			$("#prompt").append(title);
+			$("#prompt").html(title);
 			$("#prompt").append(body);
+			movePrompt(state.lineNum);
 		}
 	}
 
@@ -183,19 +131,20 @@
 	// objects lineNum passed. Gives it highlight class.
 	function newHighlightLine(state) {
 		if(state.hasOwnProperty("lineNum")) {
+			$("#problem_space li").removeClass("highlight");
 			var line = state.lineNum;
-			var list = document.getElementsByClassName(line)[0]; // Gets li element to highlight
-			$(list).addClass("highlight");
+			$("." + line).addClass("highlight");
 		}
 	}
 	
 	// gives the lines in the state previous to the current line number the given highlight class
-	function newHighlightBlock(state, highlight) {
-		var curLine = state.lineNUm;
+	function newHighlightBlock(state) {
+		var curLine = state.lineNum;
 		
 		for (var line = 1; line < curLine; line++) {
 			var list = document.getElementsByClassName(String(line))[0]; // Gets li element to highlight
-			$(list).addClass(highlight);
+			$("." + line).addClass("grey_out");
+			$("." + line + " *").removeAttr("style");
 		}
 	}
 
@@ -204,91 +153,71 @@
 	// Creates a span then appends it to the list element
 	// of the given line number based off the array/object
 	function newAddComments(state) {
+		$(".comments").remove();
+		// console.log(state.prompt);
 		if(state.hasOwnProperty("vars")) {
 			var vars = state.vars;
 			// Handles adding comments for variables
-			for (var key in vars) {
-				if (!vars.hasOwnProperty(key)) {
+			for (var line in vars) {
+				var number = line;
+				if (!vars.hasOwnProperty(line)) {
 					continue;
 				}
-				for (var variable in key) {
-					if (!key.hasOwnProperty(variable)) {
-						continue;
-					}
-					var comment = "\t// ";
-					var letter = variable;
-					var value = key(letter);
-					comment += letter + " = " + value + " ";
+				var comment = "\t// ";
+				var x = 0;
+				for(var letter in vars[line]) {
+					comment += letter + " = " + vars[line][letter] + ", ";
 				}
+				comment = comment.substring(0, comment.length - 2); // Remove trailing comma
 				var newSpan = document.createElement("span");
 				$(newSpan).addClass("comments");
-				$(newSpan).text(comment);
+				newSpan.innerHTML = comment;
 				// Adds the comments to the list of the given class
-				document.getElementByClassName(key)[0].append(newSpan);
+				document.getElementsByClassName(number)[0].appendChild(newSpan);
 			}
 		}
 		if(state.hasOwnProperty("bools")) {
+			//console.log(bools);
 			var bools = state.bools;
-			for (var key1 in bools) {
-				if (!bools.hasOwnProperty(key1)) {
+			for (var key in bools) {
+				if (!bools.hasOwnProperty(key)) {
 					continue;
 				}
-				var comments = "\t// ";
-				comments += bools(key);
 				var newSpan2 = document.createElement("span");
 				$(newSpan2).addClass("comments");
-				$(newSpan2).text(comment);
+				newSpan2.innerHTML = "\t // " + bools[key];
 				// Adds the comments to the list of the given class
-				document.getElementByClassName(key)[0].append(newSpan2);
+				document.getElementsByClassName(key)[0].appendChild(newSpan2);
 			}
 		}
  	}
 
 	function newUpdateVariables(state) {
+		// console.log(state.hasOwnProperty("vars"));
 		if(state.hasOwnProperty("vars")) {
 			var vars = state.vars;
 			for(var line in vars) {
 				if(!vars.hasOwnProperty(line)) {
 					continue;
 				}
-				for(var variable in line) {
-					if(!line.hasOwnProperty(variable)) {
-						continue;
-					}
+				// console.log("here");
+				for(var variable in vars[line]) {
+					// console.log("here2");
 					var letter = variable;
-					var value = line(variable);
-					var updated = false;
-					if(state.hasOwnProperty(updated)) {
-						var updates = state.updated;
-						var done = false;
-						for(var index in updates) {
-							if(updates[index] == letter
-								&& !done) {
-								updated = true;
-								done = true;
-							}
-						}
+					var value = vars[line][variable];
+					if (!VARIABLES.hasOwnProperty(letter)) {
+						VARIABLES[letter] = {};
 					}
 					VARIABLES[letter]["name"] = letter;
 					VARIABLES[letter]["value"] = value;
-					VARIABLES[letter]["updated"] = updated;
+					// console.log(state.hasOwnProperty("updated"));
+					if(state.hasOwnProperty("updated")) {
+						if(state.updated.indexOf(letter) != -1) {
+							VARIABLES[letter]["updated"] = true;
+						}
+					}
 				}
 			}
-		}
-	}
-
-
-	function updateVariables(vars) {
-		for (var i = 0; i < vars.length; i += 2) {
-			var var_name = vars[i];
-			var var_value = vars[i + 1];
-			var new_variable = false;
-			if (!VARIABLES.hasOwnProperty(var_name)) {
-				VARIABLES[var_name] = {}
-			}
-			VARIABLES[var_name]["name"] = var_name;
-			VARIABLES[var_name]["value"] = var_value;
-			VARIABLES[var_name]["updated"] = true;
 		}
 	}
 
@@ -338,57 +267,53 @@
 	}
 
 	// adds the interactive components of the webpage
-	function addInteraction() {
-		// get the next step's vars, which is where the new variable values live
-		if ((CURRENT_STEP + 1) * 2 + 1 < CONTENTS.length) {
-			var nextVars = CONTENTS[(CURRENT_STEP + 1) * 2 + 1].split("\t");
-			// if there are updated variables
-			var interaction = document.createElement("div");
-			if (nextVars.length > 3) {	// vars, not test result
-				for (var i = 2; i < nextVars.length; i += 2) {
-					var varBox = document.createElement("p");
-					$(varBox).text(nextVars[i] + " = ")
-							 .css("font-family", "monospace");
-					var input = document.createElement("input");
-					$(input).attr("type", "text")
-							.attr("value", nextVars[i + 1])
-							.css("font-size", "12pt");
-					$(varBox).append(input);
-					$(interaction).append(varBox);
-				}
-			} else if (nextVars.length > 2) {	// test result, no vars
-				var boolBox = document.createElement("p");
-				$(boolBox).text("z <= x\t");
-				var trueChoice = document.createElement("input");
-				$(trueChoice).attr("type", "radio")
-							 .attr("name", "t/f")
-							 .attr("value", "true");
-				var falseChoice = document.createElement("input");
-				$(falseChoice).attr("type", "radio")
-							  .attr("name", "t/f")
-							  .attr("value", "false");
-				if (nextVars[2].trim() == "true") {
-					$(trueChoice).attr("checked", "checked");
-				} else {
-					$(falseChoice).attr("checked", "checked");
-				}
-				var trueBox = document.createElement("p");
-				$(trueBox).text("true")
-						  .append(trueChoice)
-						  .css("text-align", "center");
-				var falseBox = document.createElement("p");
-				$(falseBox).text("false")
-						   .append(falseChoice)
-						   .css("text-align", "center");
-				$(boolBox).append(trueBox)
-						  .append(falseBox)
-						  .css("font-family", "monospace")
-						  .css("font-size", "11pt");
-				$(interaction).append(boolBox);
+	function addInteraction(state) {
+		var interaction = document.createElement("div");
+		// if there are updated variables
+		if (state.hasOwnProperty("answer")) {
+			for (var variable in state.answer) {
+				var varBox = document.createElement("p");
+				$(varBox).text(variable + " = ")
+						 .css("font-family", "monospace");
+				var input = document.createElement("input");
+				$(input).attr("type", "text")
+						.attr("value", state.answer[variable])
+						.css("font-size", "12pt");
+				$(varBox).append(input);
+				$(interaction).append(varBox);
 			}
-			$(interaction).css("font-size", "12pt");
-			$("#prompt").append(interaction);
+		} else if (state.hasOwnProperty("testResult")) {	// test result, no vars
+			var boolBox = document.createElement("p");
+			$(boolBox).text("z <= x\t");
+			var trueChoice = document.createElement("input");
+			$(trueChoice).attr("type", "radio")
+						 .attr("name", "t/f")
+						 .attr("value", "true");
+			var falseChoice = document.createElement("input");
+			$(falseChoice).attr("type", "radio")
+						  .attr("name", "t/f")
+						  .attr("value", "false");
+			if (state.testResult) {
+				$(trueChoice).attr("checked", "checked");
+			} else {
+				$(falseChoice).attr("checked", "checked");
+			}
+			var trueBox = document.createElement("p");
+			$(trueBox).text("true")
+					  .append(trueChoice)
+					  .css("text-align", "center");
+			var falseBox = document.createElement("p");
+			$(falseBox).text("false")
+					   .append(falseChoice)
+					   .css("text-align", "center");
+			$(boolBox).append(trueBox)
+					  .append(falseBox)
+					  .css("font-family", "monospace")
+					  .css("font-size", "11pt");
+			$(interaction).append(boolBox);
 		}
+		$(interaction).css("font-size", "12pt");
+		$("#prompt").append(interaction);
 	}
 
 // })();

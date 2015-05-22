@@ -15,7 +15,8 @@ var state = [
         lineNum: 3,
         vars: {
             1: {x: 3, y: 20, z: 30}
-        }
+        },
+        updated: ["x", "y", "z"]
     },
 
     {
@@ -131,7 +132,7 @@ var state = [
     {
         prompt: "Booleans: What does this expression evaluate to?",
         lineNum: 12,
-        testResult: false,
+        testResult: true,
         vars: {
             1: {x: 3, y: 20, z: 30}
         },
@@ -152,7 +153,8 @@ var state = [
         bools: {
             3: false,
             5: false,
-            7: false
+            7: false,
+            12: true
         },
         crossOut: [4, 6, 8, 9]
     },
@@ -167,14 +169,15 @@ var state = [
         bools: {
             3: false,
             5: false,
-            7: false
+            7: false,
+            12: true
         },
         crossOut: [4, 6, 8, 9]
     },
 
     {
         prompt: "Answer: Now use your variable bank to fill in the answer!",
-        lineNum: 16,
+        lineNum: 15,
         vars: {
             1: {x: 3, y: 20, z: 30},
             13: {x: 3, y: 20, z: 3}
@@ -183,9 +186,11 @@ var state = [
         bools: {
             3: false,
             5: false,
-            7: false
+            7: false,
+            12: true
         },
-        crossOut: [4, 6, 8, 9]
+        crossOut: [4, 6, 8, 9],
+        updated: ["z"]
     }
 ];
 /**
