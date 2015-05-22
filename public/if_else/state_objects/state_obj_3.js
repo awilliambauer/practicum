@@ -132,7 +132,7 @@ var state = [
     {
         prompt: "Booleans: What does this expression evaluate to?",
         lineNum: 12,
-        testResult: false,
+        testResult: true,
         vars: {
             1: {x: 3, y: 20, z: 30}
         },
@@ -153,7 +153,8 @@ var state = [
         bools: {
             3: false,
             5: false,
-            7: false
+            7: false,
+            12: true
         },
         crossOut: [4, 6, 8, 9]
     },
@@ -168,7 +169,8 @@ var state = [
         bools: {
             3: false,
             5: false,
-            7: false
+            7: false,
+            12: true
         },
         crossOut: [4, 6, 8, 9]
     },
@@ -184,7 +186,8 @@ var state = [
         bools: {
             3: false,
             5: false,
-            7: false
+            7: false,
+            12: true
         },
         crossOut: [4, 6, 8, 9]
     }
