@@ -128,9 +128,8 @@ The file creates all interactivity for the webpage.
 
 			var newChild2 = document.createElement("div");
 			newChild2.classList.add("prompt");
-			newChild2.innerHTML = "Before we start solving any part of the problem we " +
-			"always need to find the first operator to be evaluated. Remember always look " +
-			"from left to right. Starting wiht * / % and then + -";
+			newChild2.innerHTML = "Start by evaluating all the * / % operations <br /> and then evaluate " +
+									"the + - operations working from left to right.";
 			newChild.appendChild(newChild2);
 		}
 
