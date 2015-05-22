@@ -45,6 +45,16 @@
 		}
 	}
 
+	// gets the initial values that the method will be called with
+	function getCallVals() {
+		var rawVals = state[1].answer;
+		var callVals = [];
+		for (var variable in rawVals) {
+			callVals.push(rawVals[variable]);
+		}
+		return callVals;
+	}
+
 	function next() {
 		var currentState = state[CURRENT_STEP];
 		//console.log(currentState.prompt);
@@ -56,6 +66,10 @@
 		if (CURRENT_STEP == 0) {
 			$("#prompt").show();
 			highlightBlocks();
+		} else {
+			// scroll to the right position
+			$("html, body").animate({scrollTop: 
+				$("." + currentState.lineNum).offset().top - 200}, 1000);
 		}
 
 		CURRENT_STEP++;
