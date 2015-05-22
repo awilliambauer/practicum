@@ -1,6 +1,6 @@
 public class A {
 public static void ifElseMystery2 (int x, int y) {
-	int z = 7;
+	int z = 2;
 
     if (z < x) {
         x = x + 12;

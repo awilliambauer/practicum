@@ -20,7 +20,7 @@
 	// text in
 	function fillProblemSpace() {
 		$("#prompt").hide();
-		$.get("problems/problem_1.txt", function(data) {
+		$.get("problems/problem_2.txt", function(data) {
 			AST = java_parsing.browser_parse(data);
 			$("#problem_space > pre").html(on_convert(AST));
 		});
@@ -55,7 +55,7 @@
 		// show previously invisible prompt
 		$("#prompt").show();
 		// highlighting all the stuff
-		for (let node of java_ast.find_all(function(n) { return n.tag == "if"; }, AST)) {
+		for (var node of java_ast.find_all(function(n) { return n.tag == "if"; }, AST)) {
 			$("#java-ast-" + node.id + "> *").each(function(index, element) {
 				var text = $(element).text().split(" ");
 				if (text.length > 1) {

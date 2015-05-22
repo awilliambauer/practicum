@@ -15,7 +15,7 @@ var state = [
     {
         prompt: "Initialization: What are the starting values of our variables?",
         lineNum: 1,
-        answer: {x: 8, y: 20}
+        answer: {x: 3, y: 20}
     },
 
     {
@@ -25,7 +25,7 @@ var state = [
             1: {x: 3, y: 20}
         },
         answer: {z: 7},
-        updated: [x, y]
+        updated: ["x", "y"]
     },
 
     {
@@ -35,7 +35,7 @@ var state = [
             1: {x: 3, y: 20},
             2: {x: 3, y: 20, z: 7}
         },
-        updated: [z]
+        updated: ["z"]
     },
 
     {
@@ -63,9 +63,9 @@ var state = [
         lineNum: 5,
         vars: {
             1: {x: 3, y: 20},
-            2: {x: 3, y: 20, z: 4}
+            2: {x: 3, y: 20, z: 7}
         },
-        answer: {z: 13},
+        answer: {z: 19},
         bools: {4: true}
     },
 
@@ -74,11 +74,11 @@ var state = [
         lineNum: 8,
         vars: {
             1: {x: 3, y: 20},
-            2: {x: 3, y: 20, z: 4},
-            5: {x: 15, y: 20, z: 13}
+            2: {x: 3, y: 20, z: 7},
+            5: {x: 15, y: 20, z: 19}
         },
         bools: {4: true},
-        updated: [z]
+        updated: ["z"]
     },
 
     {
@@ -88,7 +88,7 @@ var state = [
         vars: {
             1: {x: 3, y: 20},
             2: {x: 3, y: 20, z: 7},
-            5: {x: 15, y: 20, z: 13}
+            5: {x: 15, y: 20, z: 19}
         },
         bools: {4: true}
     },
@@ -99,7 +99,7 @@ var state = [
         vars: {
             1: {x: 3, y: 20},
             2: {x: 3, y: 20, z: 7},
-            5: {x: 15, y: 20, z: 13}
+            5: {x: 15, y: 20, z: 19}
         },
         bools: {4: true, 8: true}
     },
@@ -110,7 +110,7 @@ var state = [
         vars: {
             1: {x: 3, y: 20},
             2: {x: 3, y: 20, z: 7},
-            5: {x: 15, y: 20, z: 13}
+            5: {x: 15, y: 20, z: 19}
         },
         answer: {y: 25},
         bools: {4: true, 8: true}
@@ -121,13 +121,13 @@ var state = [
         lineNum: 10,
         vars: {
             1: {x: 3, y: 20},
-            2: {x: 3, y: 20, z: 4},
-            5: {x: 15, y: 20, z: 13},
-            9: {x: 15, y: 25, z: 13}
+            2: {x: 3, y: 20, z: 7},
+            5: {x: 15, y: 20, z: 19},
+            9: {x: 15, y: 25, z: 19}
         },
         answer: {x: 30},
         bools: {4: true, 8: true},
-        updated: [z]
+        updated: ["z"]
     },
 
     {
@@ -135,13 +135,13 @@ var state = [
         lineNum: 13,
         vars: {
             1: {x: 3, y: 20},
-            2: {x: 3, y: 20, z: 4},
-            5: {x: 15, y: 20, z: 13},
-            9: {x: 15, y: 25, z: 13},
-            10: {x: 30, y: 25, z: 13}
+            2: {x: 3, y: 20, z: 7},
+            5: {x: 15, y: 20, z: 19},
+            9: {x: 15, y: 25, z: 19},
+            10: {x: 30, y: 25, z: 19}
         },
         bools: {4: true, 8: true},
-        updated: [z]
+        updated: ["z"]
     },
 
     {
@@ -150,10 +150,10 @@ var state = [
         testResult: false,
         vars: {
             1: {x: 3, y: 20},
-            2: {x: 3, y: 20, z: 4},
-            5: {x: 15, y: 20, z: 13},
-            9: {x: 15, y: 25, z: 13},
-            10: {x: 30, y: 25, z: 13}
+            2: {x: 3, y: 20, z: 7},
+            5: {x: 15, y: 20, z: 19},
+            9: {x: 15, y: 25, z: 19},
+            10: {x: 30, y: 25, z: 19}
         },
         bools: {4: true, 8: true}
     },
@@ -163,10 +163,10 @@ var state = [
         lineNum: 13,
         vars: {
             1: {x: 3, y: 20},
-            2: {x: 3, y: 20, z: 4},
-            5: {x: 15, y: 20, z: 13},
-            9: {x: 15, y: 25, z: 13},
-            10: {x: 30, y: 25, z: 13}
+            2: {x: 3, y: 20, z: 7},
+            5: {x: 15, y: 20, z: 19},
+            9: {x: 15, y: 25, z: 19},
+            10: {x: 30, y: 25, z: 19}
         },
         bools: {4: true, 8: true, 13: false},
         crossOut: [14]
@@ -177,10 +177,10 @@ var state = [
         lineNum: 17,
         vars: {
             1: {x: 3, y: 20},
-            2: {x: 3, y: 20, z: 4},
-            5: {x: 15, y: 20, z: 13},
-            9: {x: 15, y: 25, z: 13},
-            10: {x: 30, y: 25, z: 13}
+            2: {x: 3, y: 20, z: 7},
+            5: {x: 15, y: 20, z: 19},
+            9: {x: 15, y: 25, z: 19},
+            10: {x: 30, y: 25, z: 19}
         },
         bools: {4: true, 8: true, 13: false},
         crossOut: [14]
