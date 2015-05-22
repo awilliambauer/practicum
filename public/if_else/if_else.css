@@ -7,38 +7,35 @@ h3 > span, #answer_box > span, input[type="text"] {
 	font-family: monospace;
 }
 
-pre > span { /* comment */
+.comments {
 	color: #ff5900;
 }
 
 #problem_space, #answer_box {
 	border: 2px solid rgb(89,79,79);
 	border-radius: 10px;
-	width: 60%;
+	width: 80%;
 	margin-left: auto;
 	margin-right: auto;
+	padding-top: 10px; padding-bottom: 10px;
+	margin-bottom: 30px;
+	margin-top: 30px;
+	background-color: #ffffff;
 }
 
-#problem_space {
+#problem_space ul {
 	list-style: none;
 	text-align: left;
 	padding-left: 0; padding-right: 0;
 }
 
-#problem_space pre {
+#problem_space li {
 	padding-top: 5px;
 	padding-bottom: 5px;
 	padding-left: 2.5%;
 	margin: 0;
 	font-size: 11pt;
 	overflow: auto;
-}
-
-#answer_box, #problem_space {
-	padding-top: 10px; padding-bottom: 10px;
-	margin-bottom: 30px;
-	margin-top: 30px;
-	background-color: #ffffff;
 }
 
 #answer_box {
@@ -123,7 +120,7 @@ pre > span { /* comment */
 	left: 50%;
 	text-align: left;
 	padding: 10px;
-	background: rgb(229,252,194);
+	background: rgb(244, 254, 202);
 }
 
 .block_highlight {
@@ -171,7 +168,10 @@ button {
 	padding: .5em;
 }
 
-#footer {
+#main_title {
+	margin: 0;
+}
 
-	height: 100px;
+#footer {
+	height: 25px;
 }
