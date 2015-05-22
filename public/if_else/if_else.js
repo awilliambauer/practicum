@@ -15,10 +15,9 @@
 		getContents();
 		fillProblemSpace();
 		$("#go_back").click(function() { window.location.href = "../index.html" });
-		$("#next").click(goNext);
+		$("#next").click(next);
 
 	});
-
 
 	// fills in the problem space with the text of the specific problem we're working on,
 	// we will just have to replace "example.txt" with whatever file they store the problem
@@ -55,6 +54,26 @@
 		for (var i = start; i <= end; i++) {
 			highlightLine(i, highlight);
 		}
+	}
+
+	function next() {
+		var currentState = state[CURRENT_STEP];
+		// take away "next" button when finished
+		if ((CURRENT_STEP + 1) * 2 >= CONTENTS.length - 2) {
+			$("#next").hide();
+		}
+
+		if (CURRENT_STEP == 0) {
+			highlightBlocks();
+		}
+
+		CURRENT_STEP++;
+		newGetPrompt(currentState);
+		newHighlightLine(currentState);
+		newHighlightBlock(currentState);
+		newAddComments(currentState);
+		newUpdateVariables(currentState);
+		newCrossOutLines(currentState);
 	}
 
 	// increments the step we're currently on and changes the prompt/highlighting
@@ -150,7 +169,7 @@
 	function newGetPrompt(state) {
 		if(state.hasOwnProperty("prompt")) {
 			var prompt =  state.prompt;
-			var promptParts = prompts.split(":")
+			var promptParts = prompt.split(":")
 			var title = document.createElement("span");
 			$(title).css("font-weight", "bold")
 				.text(promptParts[0] + ": ");	// If/Else, Booleans, etc
