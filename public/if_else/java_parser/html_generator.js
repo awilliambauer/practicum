@@ -223,7 +223,8 @@ function set_class_of_ast_dom_element(id, clazz) {
 function on_convert(ast) {
 	console.log(ast);
 	var dom = to_dom(ast, -1);
-	$('#problem_space > pre').html('').append(dom[0]);
+	return dom[0];
+	// $('#problem_space > pre').html('').append(dom[0]);
 	// $('#tohighlight').val().split(' ').forEach(function(id) {
 	//     console.log('crossing out ' + id);
 	//     set_class_of_ast_dom_element(parseInt(id), 'struck-out');

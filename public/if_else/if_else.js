@@ -6,6 +6,7 @@
 	var CURRENT_LINE;
 	var VARIABLES;
 	var AST;
+	var HTML;
 
 	$(document).ready(function() {
 
@@ -25,7 +26,8 @@
 	function fillProblemSpace() {
 		$.get("problems/problem_1.txt", function(data) {
 			AST = java_parsing.browser_parse(data);
-			on_convert(AST);
+			HTML = $(on_convert(AST)).prop("outerHTML");
+			$("#problem_space > pre").html($.parseHTML(HTML));
 		});
 	}
 
@@ -57,6 +59,8 @@
 	}
 
 	function next() {
+		$("#prompt").show();
+		$("#problem_space > pre").html($.parseHTML(HTML));
 		var currentState = state[CURRENT_STEP];
 		//console.log(currentState.prompt);
 		// take away "next" button when finished
@@ -69,6 +73,7 @@
 		}
 
 		CURRENT_STEP++;
+		highlightBlocks();
 		newGetPrompt(currentState);
 		newHighlightLine(currentState);
 		newHighlightBlock(currentState);
@@ -126,7 +131,7 @@
 	}
 
 	// some initialization stuff that happens on first click of next
-	/*function highlightBlocks() {
+	function highlightBlocks() {
 		// show previously invisible prompt
 		$("#prompt").show();
 		// highlighting all the stuff
@@ -138,7 +143,7 @@
 				}
 			});
 		}
-	}*/
+	}
 
 	// Formats the way the prompt displays
 	function getPrompt(prompt) {
@@ -177,8 +182,9 @@
 				.text(promptParts[0] + ": ");	// If/Else, Booleans, etc
 			var body = document.createElement("span");
 			$(body).text(promptParts[1]);	// the actual description
-			$("#prompt").append(title);
+			$("#prompt").html(title);
 			$("#prompt").append(body);
+			movePrompt(state.lineNum);
 		}
 	}
 
@@ -205,18 +211,18 @@
 	function newHighlightLine(state) {
 		if(state.hasOwnProperty("lineNum")) {
 			var line = state.lineNum;
-			var list = document.getElementsByClassName(line)[0]; // Gets li element to highlight
-			$(list).addClass("highlight");
+			$("." + line).addClass("highlight");
 		}
 	}
 	
 	// gives the lines in the state previous to the current line number the given highlight class
-	function newHighlightBlock(state, highlight) {
-		var curLine = state.lineNUm;
+	function newHighlightBlock(state) {
+		var curLine = state.lineNum;
 		
 		for (var line = 1; line < curLine; line++) {
 			var list = document.getElementsByClassName(String(line))[0]; // Gets li element to highlight
-			$(list).addClass(highlight);
+			$("." + line).addClass("grey_out");
+			$("." + line + " *").removeAttr("style");
 		}
 	}
 
@@ -264,16 +270,16 @@
  	}
 
 	function newUpdateVariables(state) {
-		console.log(state.hasOwnProperty("vars"));
+		// console.log(state.hasOwnProperty("vars"));
 		if(state.hasOwnProperty("vars")) {
 			var vars = state.vars;
 			for(var line in vars) {
 				if(!vars.hasOwnProperty(line)) {
 					continue;
 				}
-				console.log("here");
+				// console.log("here");
 				for(var variable in vars[line]) {
-					console.log("here2");
+					// console.log("here2");
 					var letter = variable;
 					var value = vars[line][variable];
 					if (!VARIABLES.hasOwnProperty(letter)) {
@@ -281,7 +287,7 @@
 					}
 					VARIABLES[letter]["name"] = letter;
 					VARIABLES[letter]["value"] = value;
-					console.log(state.hasOwnProperty("updated"));
+					// console.log(state.hasOwnProperty("updated"));
 					if(state.hasOwnProperty("updated")) {
 						if(state.updated.indexOf(letter) != -1) {
 							VARIABLES[letter]["updated"] = true;
