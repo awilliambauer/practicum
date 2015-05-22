@@ -130,7 +130,8 @@ span {
 .prompt {
 	clear: both;
 	text-align: center;
-	padding: 30px;
+	padding-top: 10px;
+	padding-bottom: 30px;
 }
 
 .finalanswer {

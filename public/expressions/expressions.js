@@ -187,11 +187,11 @@ The file creates all interactivity for the webpage.
 
 		var message = "We need to start by looking for ";
 		if (arr[operator].type == "MDMoperator") {
-			message += "Multiplication, Division, or Mode operators before we do " +
+			message += "Multiplication, Division, or Mod operators before we do " +
 					"a Addition or Subtraction operator, click the *	/	% button";
 		} else {
 			message += "Addition or Subtraction because there are no " +
-						"Multiplication, Division, or Mode operators left, click the +	- button";
+						"Multiplication, Division, or Mod operators left, click the +	- button";
 		}
 		error.innerHTML = message;
 
@@ -249,7 +249,7 @@ The file creates all interactivity for the webpage.
 			error = document.createElement("div");
 			error.setAttribute("id", "error");
 		}
-		error.innerHTML = "Oops the real operator is the left most " + arr[operator].value
+		error.innerHTML = "Oops the correct operator is the left most " + arr[operator].value
 		+ ", but lets keep going by finding the left operand";
 		document.getElementById("steps").appendChild(error);
 		findLeft();
@@ -295,7 +295,7 @@ The file creates all interactivity for the webpage.
 			error.setAttribute("id", "error");
 		}
 
-		error.innerHTML = "Oops the real left operand is " + arr[lOperand].value
+		error.innerHTML = "Oops the correct left operand is " + arr[lOperand].value
 		+ ", but lets keep going by finding the right operand";
 		document.getElementById("steps").appendChild(error);
 
@@ -312,7 +312,7 @@ The file creates all interactivity for the webpage.
 			error.setAttribute("id", "error");
 		}
 
-		error.innerHTML = "Oops the real right operand is " + arr[rOperand].value
+		error.innerHTML = "Oops the correct right operand is " + arr[rOperand].value
 		+ ", but lets keep going click the next button.";
 		document.getElementById("steps").appendChild(error);
 
