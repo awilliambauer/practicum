@@ -299,7 +299,8 @@
 			}
 		} else if (state.hasOwnProperty("testResult")) {	// test result, no vars
 			var boolBox = document.createElement("p");
-			$(boolBox).text("z <= x\t");
+			console.log(getBoolTest(state));
+			$(boolBox).text(getBoolTest(state));
 			var trueChoice = document.createElement("input");
 			$(trueChoice).attr("type", "radio")
 						 .attr("name", "t/f")
@@ -329,6 +330,18 @@
 		}
 		$(interaction).css("font-size", "12pt");
 		$("#prompt").append(interaction);
+	}
+
+	function getBoolTest(state) {
+		var currentLine = $("." + state.lineNum);
+		var text = "";
+		$(currentLine).children().each(function(index, element) {
+			if ($(element).attr("id")) {
+				text = $(element).text();
+				return false;
+			}
+		});
+		return text;
 	}
 
 // })();
