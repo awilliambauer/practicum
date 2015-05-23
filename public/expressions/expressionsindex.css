@@ -16,6 +16,17 @@ span:hover {
 	background-color: white;
 }
 
+#pagedescription {
+	margin-left: auto;
+	margin-right: auto;
+	width: 500px;
+	font-size: 9pt;
+
+	border: 2px solid #547980;
+	background-color: white;
+	padding: 5px;
+}
+
 body {
 	margin: 0;
 	font-family: Arial, sans-serif;
@@ -30,7 +41,8 @@ body {
 }
 
 h1 {
-	font-size: 35px;
+	font-size: 40px;
+	margin-bottom: 50px;
 	color: #547980;
 }
 
