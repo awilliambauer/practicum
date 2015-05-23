@@ -9,7 +9,8 @@ body {
 }
 
 body, h1, .content, .container-fluid, #header, #footer {
-    margin: 0px;
+    margin: 0;
+    padding: 0;
 }
 
 #header {
@@ -39,6 +40,7 @@ h1 {
     width: 50%;
     margin-left: auto;
     margin-right: auto;
+    margin-bottom: 50px;
 }
 
 #welcome {
@@ -77,9 +79,14 @@ h1 {
 .col-sm-3 {
     background-color: #B5F3C4;
     border: 2px solid #547980;
-    height: 100px;
+    height: 130px;
     border-radius: 10px;
     margin: 15px;
     margin-top: 0;
+    padding: 10px;
+    overflow: hidden;
+}
 
+.problembox {
+    overflow: hidden;
 }
