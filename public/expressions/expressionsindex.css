@@ -19,12 +19,13 @@ span:hover {
 #pagedescription {
 	margin-left: auto;
 	margin-right: auto;
-	width: 500px;
+	width: 475px;
 	font-size: 9pt;
-
+	margin-bottom: 40px;
 	border: 2px solid #547980;
 	background-color: white;
 	padding: 5px;
+	text-align: center;
 }
 
 body {
@@ -42,7 +43,7 @@ body {
 
 h1 {
 	font-size: 40px;
-	margin-bottom: 50px;
+	margin-bottom: 10px;
 	color: #547980;
 }
 
@@ -95,7 +96,7 @@ h1 {
 }
 
 h2 {
-	margin-bottom: 50px;
+	margin-bottom: 10px;
 	font-size: 25pt;
 	margin-top: 50px;
 }

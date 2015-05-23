@@ -186,9 +186,11 @@ The file creates all interactivity for the webpage.
 
 		var message = "We need to start by looking for ";
 		if (arr[operator].type == "MDMoperator") {
+			document.getElementById("ASoperator").disabled = true;
 			message += "Multiplication, Division, or Mod operators before we do " +
 					"a Addition or Subtraction operator, click the *	/	% button";
 		} else {
+			document.getElementById("MDMoperator").disabled = true;
 			message += "Addition or Subtraction because there are no " +
 						"Multiplication, Division, or Mod operators left, click the +	- button";
 		}
@@ -314,6 +316,7 @@ The file creates all interactivity for the webpage.
 		error.innerHTML = "Oops the correct right operand is " + arr[rOperand].value
 		+ ", but lets keep going click the next button.";
 		document.getElementById("steps").appendChild(error);
+		document.getElementById(rOperand).classList.add('clicked');
 
 		document.getElementById("nextstep").onclick = trySubmit;
 	}
@@ -403,7 +406,6 @@ The file creates all interactivity for the webpage.
 		next.innerHTML = "Check";
 		next.disabled = false;
 
-		document.getElementById(rOperand).classList.add('clicked');
 		clearIds();
 
 		var newChild = document.createElement("div");
@@ -453,7 +455,12 @@ The file creates all interactivity for the webpage.
 			document.getElementById("answerbox").appendChild(newChild);
 			next.style.visibility = "hidden";
 		} else {
-			next.onclick = stepThrough;
+
+			next.onclick = function () {
+				clientAnswer.style.color = "black";
+				clientAnswer.value =  arr[lOperand].value;
+				stepThrough();
+			}
 			clientAnswer.id = "";
 		}
 	}
