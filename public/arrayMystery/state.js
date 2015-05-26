@@ -175,7 +175,7 @@ var states = [
         styleClasses: {
             mainColorText: ["#init"],
             mainColorBorder: [],
-            accent1Highlight: [],
+            accent1Highlight: ["#init"],
             accent1Border: [],
             accent2Hightlight: [],
             accent2Border: []
@@ -194,7 +194,7 @@ var states = [
         styleClasses: {
             mainColorText: ["#init", "#i"],
             mainColorBorder: ["#idiv"],
-            accent1Highlight: [],
+            accent1Highlight: ["#init", "#idiv"],
             accent1Border: [],
             accent2Hightlight: [],
             accent2Border: []
@@ -212,7 +212,7 @@ var states = [
         styleClasses: {
             mainColorText: ["#test"],
             mainColorBorder: [],
-            accent1Highlight: [],
+            accent1Highlight: ["#test"],
             accent1Border: [],
             accent2Hightlight: [],
             accent2Border: []
@@ -246,11 +246,11 @@ var states = [
         promptText: "The next line of code is an assignment statement so, let’s evaluate the expression on the right side of the assignment statement.",
         ast: mainAst,
         styleClasses: {
-            mainColorText: [],
+            mainColorText: ["#java-ast-15"],
             mainColorBorder: [],
-            accent1Highlight: [],
+            accent1Highlight: ["#java-ast-15"],
             accent1Border: [],
-            accent2Hightlight: [],
+            accent2Highlight: [],
             accent2Border: []
         }
     },
@@ -264,9 +264,9 @@ var states = [
         promptText: "What is the value of i?",
         ast: mainAst,
         styleClasses: {
-            mainColorText: [],
+            mainColorText: ["#java-ast-20"],
             mainColorBorder: [],
-            accent1Highlight: [],
+            accent1Highlight: ["#java-ast-20"],
             accent1Border: [],
             accent2Hightlight: [],
             accent2Border: []
@@ -282,9 +282,9 @@ var states = [
         promptText: "What is the value of i - 1?",
         ast: mainAst,
         styleClasses: {
-            mainColorText: [],
+            mainColorText: ["#java-ast-24"],
             mainColorBorder: [],
-            accent1Highlight: [],
+            accent1Highlight: ["#java-ast-24"],
             accent1Border: [],
             accent2Hightlight: [],
             accent2Border: []
@@ -300,9 +300,9 @@ var states = [
         promptText: "What is the value of a[i – 1]?",
         ast: mainAst,
         styleClasses: {
-            mainColorText: [],
+            mainColorText: ["#java-ast-26"],
             mainColorBorder: [],
-            accent1Highlight: [],
+            accent1Highlight: ["#java-ast-26"],
             accent1Border: [],
             accent2Hightlight: [],
             accent2Border: []
@@ -318,9 +318,9 @@ var states = [
         promptText: "What is the value of a[i + 1]?",
         ast: mainAst,
         styleClasses: {
-            mainColorText: [],
+            mainColorText: ["#java-ast-32"],
             mainColorBorder: [],
-            accent1Highlight: [],
+            accent1Highlight: ["#java-ast-32"],
             accent1Border: [],
             accent2Hightlight: [],
             accent2Border: []
@@ -354,9 +354,9 @@ var states = [
         promptText: "Now that we’ve evaluated the right side of the assignment statement, let’s determine where this value is going to be stored. The left side of the assignment statement tells us where to store the value.",
         ast: mainAst,
         styleClasses: {
-            mainColorText: [],
+            mainColorText: ["#java-ast-18"],
             mainColorBorder: [],
-            accent1Highlight: [],
+            accent1Highlight: ["#java-ast-18"],
             accent1Border: [],
             accent2Hightlight: [],
             accent2Border: []
@@ -372,9 +372,9 @@ var states = [
         promptText: "Which element of the array is going to store the result of the expression?",
         ast: mainAst,
         styleClasses: {
-            mainColorText: [],
-            mainColorBorder: [],
-            accent1Highlight: [],
+            mainColorText: ["#arraydata"],
+            mainColorBorder: ["#arraydata"],
+            accent1Highlight: ["#arraydata"],
             accent1Border: [],
             accent2Hightlight: [],
             accent2Border: []
@@ -391,7 +391,7 @@ var states = [
         ast: mainAst,
         styleClasses: {
             mainColorText: [],
-            mainColorBorder: [],
+            mainColorBorder: ["#arraydata"],
             accent1Highlight: [],
             accent1Border: [],
             accent2Hightlight: [],
