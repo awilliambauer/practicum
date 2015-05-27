@@ -91,7 +91,7 @@ var simulator_parsing = function() {
 
         // these are all dicts because javascript doesn't have sets, boo
         var keywords = {
-            "if":1, "else":1, "while":1, "for":1,
+            "if":1, "else":1, "do":1, "while":1, "for":1,
             "function":1, "var":1,
         };
 
@@ -267,7 +267,7 @@ var simulator_parsing = function() {
         function match_statement() {
             var next = lex.peek();
             switch (next.value) {
-                case "for": return match_forloop();
+                case "do": return match_dowhile();
                 case "if": return match_ifelse();
                 default: return match_simple_statement(true);
             }
@@ -303,21 +303,18 @@ var simulator_parsing = function() {
             return result;
         }
 
-        function match_forloop() {
-            match_keyword("for");
-            match_symbol("(");
-            var init = match_simple_statement(true);
-            var cond = match_expression(0);
-           omatch_symbol(";");
-            var incr = match_simple_statement(false);
-            match_symbol(")");
+        function match_dowhile() {
+            match_keyword("do");
             var body = match_block();
+            match_keyword("while");
+            match_symbol("(");
+            var cond = match_expression(0);
+            match_symbol(")");
+            match_symbol(";");
             return {
                 id: new_id(),
-                tag:'for',
-                initializer: init,
+                tag:'dowhile',
                 condition: cond,
-                increment: incr,
                 body: body
             };
         }

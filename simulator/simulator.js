@@ -1,3 +1,8 @@
+// helper function, should hide this somewhere
+function last(array) {
+    return array[array.length - 1];
+}
+
 function simulator(ast) {
     "use strict";
 
@@ -13,7 +18,7 @@ function simulator(ast) {
             return null;
         }
 
-        var ss = call_stack[call_stack.length - 1];
+        var ss = last(call_stack);
 
         // if current stack state is empty, then go up a level
         if (ss.to_execute.length === 0) {
@@ -191,6 +196,16 @@ function simulator(ast) {
                     push_stack_state(stmt.then_branch, 'then');
                 } else {
                     push_stack_state(stmt.else_branch, 'else');
+                }
+                break;
+            case "dowhile":
+                last(call_stack).to_execute.push({tag:'dowhile:condition', parent:stmt});
+                push_stack_state(stmt.body, 'do');
+                break;
+            case "dowhile:condition":
+                if (evaluate(stmt.parent.condition, state)) {
+                    last(call_stack).to_execute.push({tag:'dowhile:condition', parent:stmt.parent});
+                    push_stack_state(stmt.parent.body, 'do');
                 }
                 break;
             default:
