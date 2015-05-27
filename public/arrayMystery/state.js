@@ -138,7 +138,7 @@ var states = [
             mainColorBorder: [],
             accent1Highlight: [],
             accent1Border: [],
-            accent2Hightlight: [],
+            accent2Highlight: [],
             accent2Border: []
         }
     },
@@ -157,7 +157,7 @@ var states = [
             mainColorBorder: [".indices"],
             accent1Highlight: [],
             accent1Border: [],
-            accent2Hightlight: [],
+            accent2Highlight: [],
             accent2Border: []
         }
     },
@@ -177,7 +177,7 @@ var states = [
             mainColorBorder: [],
             accent1Highlight: ["#init"],
             accent1Border: [],
-            accent2Hightlight: [],
+            accent2Highlight: [],
             accent2Border: []
         }
     },
@@ -196,7 +196,7 @@ var states = [
             mainColorBorder: ["#idiv"],
             accent1Highlight: ["#init", "#idiv"],
             accent1Border: [],
-            accent2Hightlight: [],
+            accent2Highlight: [],
             accent2Border: []
         }
     },
@@ -214,7 +214,7 @@ var states = [
             mainColorBorder: [],
             accent1Highlight: ["#test"],
             accent1Border: [],
-            accent2Hightlight: [],
+            accent2Highlight: [],
             accent2Border: []
         }
     },
@@ -232,7 +232,7 @@ var states = [
             mainColorBorder: [],
             accent1Highlight: [],
             accent1Border: [],
-            accent2Hightlight: [],
+            accent2Highlight: [],
             accent2Border: []
         }
 },
@@ -268,7 +268,7 @@ var states = [
             mainColorBorder: [],
             accent1Highlight: ["#java-ast-20"],
             accent1Border: [],
-            accent2Hightlight: [],
+            accent2Highlight: [],
             accent2Border: []
         }
     },
@@ -286,7 +286,7 @@ var states = [
             mainColorBorder: [],
             accent1Highlight: ["#java-ast-24"],
             accent1Border: [],
-            accent2Hightlight: [],
+            accent2Highlight: [],
             accent2Border: []
         }
     },
@@ -304,7 +304,7 @@ var states = [
             mainColorBorder: [],
             accent1Highlight: ["#java-ast-26"],
             accent1Border: [],
-            accent2Hightlight: [],
+            accent2Highlight: [],
             accent2Border: []
         }
     },
@@ -322,7 +322,7 @@ var states = [
             mainColorBorder: [],
             accent1Highlight: ["#java-ast-32"],
             accent1Border: [],
-            accent2Hightlight: [],
+            accent2Highlight: [],
             accent2Border: []
         }
     },
@@ -336,11 +336,11 @@ var states = [
         promptText: "What is the result of the expression?",
         ast: mainAst,
         styleClasses: {
-            mainColorText: [],
+            mainColorText: ["#java-ast-27"],
             mainColorBorder: [],
-            accent1Highlight: [],
+            accent1Highlight: ["#java-ast-27"],
             accent1Border: [],
-            accent2Hightlight: [],
+            accent2Highlight: [],
             accent2Border: []
         }
     },
@@ -358,7 +358,7 @@ var states = [
             mainColorBorder: [],
             accent1Highlight: ["#java-ast-18"],
             accent1Border: [],
-            accent2Hightlight: [],
+            accent2Highlight: [],
             accent2Border: []
         }
     },
@@ -376,7 +376,7 @@ var states = [
             mainColorBorder: ["#arraydata"],
             accent1Highlight: ["#arraydata"],
             accent1Border: [],
-            accent2Hightlight: [],
+            accent2Highlight: [],
             accent2Border: []
         }
     },
@@ -394,7 +394,7 @@ var states = [
             mainColorBorder: ["#arraydata"],
             accent1Highlight: [],
             accent1Border: [],
-            accent2Hightlight: [],
+            accent2Highlight: [],
             accent2Border: []
         }
     },
@@ -408,11 +408,11 @@ var states = [
         promptText: "We’ve reached the end of the for loop body, which means we need to update our counter and reevaluate the for loop test.",
         ast: mainAst,
         styleClasses: {
-            mainColorText: [],
+            mainColorText: ["#update"],
             mainColorBorder: [],
-            accent1Highlight: [],
+            accent1Highlight: ["#update"],
             accent1Border: [],
-            accent2Hightlight: [],
+            accent2Highlight: [],
             accent2Border: []
         }
     },
@@ -426,11 +426,11 @@ var states = [
         promptText: "What is i updated to?",
         ast: mainAst,
         styleClasses: {
-            mainColorText: [],
+            mainColorText: ["#update"],
             mainColorBorder: [],
-            accent1Highlight: [],
+            accent1Highlight: ["#update"],
             accent1Border: [],
-            accent2Hightlight: [],
+            accent2Highlight: [],
             accent2Border: []
         }
     }
