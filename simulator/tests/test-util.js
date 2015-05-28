@@ -4,7 +4,7 @@ var test_util = (function () {"use strict";
     self.parse = function(algoName) {
         var algoFile = new XMLHttpRequest();
         var ast;
-        algoFile.open("GET", "base/tests/"+algoName+".js", false);
+        algoFile.open("GET", "base/tests/"+algoName+".txt", false);
         algoFile.onreadystatechange = function () {
             ast = simulator_parsing.browser_parse(algoFile.responseText);
         };
