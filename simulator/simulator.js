@@ -46,12 +46,12 @@ function simulator(ast, globals) {
 
         var stmts = to_execute.slice();
         stmts.reverse();
-        var context = shallow_copy(last(call_stack).context);
+        // copy parent context, or start with an empty one if this is the first thing.
+        var context = call_stack.length > 0
+            ? shallow_copy(last(call_stack).context)
+            : {};
         call_stack.push({to_execute: stmts, marker:marker, context:context});
     }
-
-    // initialize by pushing the function onto the stack
-    call_stack.push({to_execute:[ast], context:{}});
 
     function shortCircuit(val, op) {
         return (val === true && op === "||") || (val === false && op === "&&");
@@ -195,9 +195,6 @@ function simulator(ast, globals) {
         globals["state"] = state;
 
         switch(stmt.tag) {
-            case "function":
-                push_stack_state(stmt.body, 'function');
-                break;
             case "declaration":
                 // FIXME nothin' to do, for now
                 add_to_context(stmt.name, undefined);
@@ -263,7 +260,7 @@ function simulator(ast, globals) {
 
     self.is_done = function() {
         return call_stack.length === 0;
-    }
+    };
 
     function copy(obj) {
         // copy state by sending it to JSON and back; it's easy, and it'll also
@@ -286,7 +283,19 @@ function simulator(ast, globals) {
         }
 
         return null;
-    }
+    };
+
+    self.start_function = function(name, args) {
+        // HACK for now there's only one function, so start the only one.
+        push_stack_state(ast.body, 'function');
+        // push each argument onto the stack
+        if (args.length !== ast.parameters.length) {
+            throw new Error(sprintf("function '{0}' given {1} arguments, but has arity {2}", ast.name, args.length, ast.parameters.length));
+        }
+        for (var i in args) {
+            add_to_context(ast.parameters[i].name, args[i]);
+        }
+    };
 
     self.run_all = function(start_state) {
         var results = [{state:start_state}];
@@ -296,7 +305,7 @@ function simulator(ast, globals) {
             else results.push(next);
         }
         return results;
-    }
+    };
 
     return self;
 }

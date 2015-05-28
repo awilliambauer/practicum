@@ -1,4 +1,4 @@
-function useIf(state) {
+function useIf() {
     if (state.branch == 0) {
         state.result = 0;
     } else if (state.branch == 1) {

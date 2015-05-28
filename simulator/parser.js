@@ -1,15 +1,15 @@
 
+/// string format function, should put somewhere useful
+function sprintf(fmt) {
+    var args = arguments;
+    return fmt.replace(/{(\d+)}/g, function(match, index) {
+        index = parseInt(index);
+        return typeof args[index+1] !== 'undefined' ? args[index+1] : match;
+    });
+}
+
 var simulator_parsing = function() {
     "use strict";
-
-    /// string format function
-    function sprintf(fmt) {
-        var args = arguments;
-        return fmt.replace(/{(\d+)}/g, function(match, index) {
-            index = parseInt(index);
-            return typeof args[index+1] !== 'undefined' ? args[index+1] : match;
-        });
-    }
 
     /// Throws an exception, aborting the parsing process.
     /// pos can either be a token or a character stream position object
@@ -249,7 +249,7 @@ var simulator_parsing = function() {
                 tag: 'function',
                 id: new_id(),
                 name: name,
-                params: params,
+                parameters: params,
                 body: body,
             };
         }

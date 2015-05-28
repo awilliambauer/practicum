@@ -14,7 +14,7 @@ QUnit.test("solve-binop-int-div", function (assert) {
         result: 2,
     };
     var states = test_util.run("solve-binop", {state:start, globals:{eval:eval}});
-    assert.equal(states.length, 6); // 5 non-declaration lines + 1 start
+    assert.equal(states.length, 5); // 5 non-declaration lines
     assert.deepEqual(states[states.length - 1].state, finish);
 });
 
@@ -33,7 +33,7 @@ QUnit.test("solve-binop-float-mult", function (assert) {
         result: 5.25,
     };
     var states = test_util.run("solve-binop", {state:start, globals:{eval:eval}});
-    assert.equal(states.length, 6); // 5 non-declaration lines + 1 start
+    assert.equal(states.length, 5); // 5 non-declaration lines
     assert.deepEqual(states[states.length - 1].state, finish);
 });
 
@@ -52,7 +52,7 @@ QUnit.test("solve-binop-lt", function (assert) {
         result: false,
     };
     var states = test_util.run("solve-binop", {state:start, globals:{eval:eval}});
-    assert.equal(states.length, 6); // 5 non-declaration lines + 1 start
+    assert.equal(states.length, 5); // 5 non-declaration lines
     assert.deepEqual(states[states.length - 1].state, finish);
 });
 
@@ -71,6 +71,6 @@ QUnit.test("solve-binop-ne", function (assert) {
         result: true,
     };
     var states = test_util.run("solve-binop", {state:start, globals:{eval:eval}});
-    assert.equal(states.length, 6); // 5 non-declaration lines + 1 start
+    assert.equal(states.length, 5); // 5 non-declaration lines
     assert.deepEqual(states[states.length - 1].state, finish);
 });

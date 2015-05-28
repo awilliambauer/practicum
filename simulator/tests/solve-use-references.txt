@@ -1,4 +1,4 @@
-function references(state) {
+function references() {
     state.a = Math.min(3, state.d.length);
     state.b.a = state.d.pop();
     let t;
