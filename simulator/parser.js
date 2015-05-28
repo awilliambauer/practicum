@@ -92,7 +92,7 @@ var simulator_parsing = function() {
         // these are all dicts because javascript doesn't have sets, boo
         var keywords = {
             "if":1, "else":1, "do":1, "while":1, "for":1,
-            "function":1, "var":1,
+            "function":1, "var":1, "let":1, "of":1,
         };
 
         var symbols = {
@@ -268,6 +268,7 @@ var simulator_parsing = function() {
             var next = lex.peek();
             switch (next.value) {
                 case "do": return match_dowhile();
+                case "for": return match_foreach();
                 case "if": return match_ifelse();
                 default: return match_simple_statement(true);
             }
@@ -279,11 +280,11 @@ var simulator_parsing = function() {
             var expr;
             switch (next.type) {
                 case TokenType.KEYWORD:
-                    if (next.value === 'var') {
+                    if (next.value === 'let') {
                         result = match_declaration();
                     } else {
                         throw_error(lex.position(), sprintf(
-                            "Expected 'var' or expression, but found {1}",
+                            "Expected 'let' or expression, but found {0}",
                             token_to_string(next)));
                     }
                     break;
@@ -319,6 +320,24 @@ var simulator_parsing = function() {
             };
         }
 
+        function match_foreach() {
+            match_keyword("for");
+            match_symbol("(");
+            match_keyword("let");
+            var variable = match_ident();
+            match_keyword("of");
+            var collection = match_expression(0);
+            match_symbol(")");
+            var body = match_block();
+            return {
+                id: new_id(),
+                tag:'foreach',
+                variable: variable,
+                collection: collection,
+                body: body
+            };
+        }
+
         function match_ifelse() {
             match_keyword("if");
             match_symbol("(");
@@ -344,7 +363,7 @@ var simulator_parsing = function() {
         }
 
         function match_declaration() {
-            match_keyword('var');
+            match_keyword('let');
             var name = match_ident();
             //match_keyword(':');
             //var type = match_type();

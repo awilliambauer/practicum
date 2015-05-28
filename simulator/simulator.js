@@ -3,14 +3,15 @@ function last(array) {
     return array[array.length - 1];
 }
 
-function simulator(ast) {
+function simulator(ast, globals) {
     "use strict";
 
     var self = {};
 
     var call_stack = [];
-
-    self.locals = {}; // TODO probably too simplistic given what stack allows
+    var MAX_STACK_LENGTH = 50;
+    var MAX_STEP_COUNT = 10000;
+    var total_steps = 0;
 
     function pop_next_statement() {
         // if call stack is empty, nothing left to do!
@@ -30,14 +31,27 @@ function simulator(ast) {
         return ss.to_execute.pop();
     }
 
+    function shallow_copy(object) {
+        var copy = {};
+        for (var id in object) {
+            copy[id] = object[id];
+        }
+        return copy;
+    }
+
     function push_stack_state(to_execute, marker) {
+        if (call_stack.length >= MAX_STACK_LENGTH) {
+            throw new Error("max stack size exceeded!");
+        }
+
         var stmts = to_execute.slice();
         stmts.reverse();
-        call_stack.push({to_execute: stmts, marker:marker});
+        var context = shallow_copy(last(call_stack).context);
+        call_stack.push({to_execute: stmts, marker:marker, context:context});
     }
 
     // initialize by pushing the function onto the stack
-    push_stack_state([ast], 'start');
+    call_stack.push({to_execute:[ast], context:{}});
 
     function shortCircuit(val, op) {
         return (val === true && op === "||") || (val === false && op === "&&");
@@ -55,23 +69,42 @@ function simulator(ast) {
         return lookups;
     }
 
-    function resolveLookup(id) {
+    /// add a new variable to the context, shadowing any conflicting variable name
+    function add_to_context(id, value) {
+        // add values as objects so they can be changed in children
+        last(call_stack).context[id] = {value:value};
+    }
+
+    /// set a value in the current context, errors if not a current variable name
+    function set_value(id, value) {
+        var ctx = last(call_stack).context;
+
         // check locals first
-        if (self.locals[id] !== undefined) {
-            return self.locals[id];
+        if (id in ctx) {
+            ctx[id].value = value;
+        } else {
+            throw Error("unable to resolve reference " + id);
         }
-        // check globals
-        if (window[id] !== undefined) {
-            return window[id];
+    }
+
+    function get_value(id) {
+        var ctx = last(call_stack).context;
+
+        // check locals first
+        if (id in ctx) {
+            return ctx[id].value;
+        } else if (id in globals) {
+            return globals[id];
+        } else {
+            throw Error("unable to resolve reference " + id);
         }
-        throw "unable to resolve reference " + id;
     }
 
     function resolveRef(ref) {
         if (ref.tag === "reference") {
             return resolveRef(ref.object)[ref.name];
         }
-        return resolveLookup(ref.value);
+        return get_value(ref.value);
     }
 
     function resolveRefsList(ref, objs) {
@@ -80,7 +113,7 @@ function simulator(ast) {
             objs.push(rec);
             return rec;
         }
-        var l = resolveLookup(ref.value);
+        var l = get_value(ref.value);
         objs.push(l);
         return l;
     }
@@ -132,7 +165,7 @@ function simulator(ast) {
             case "reference":
                 return resolveRef(expr.object)[expr.name];
             case "identifier":
-                return self.locals[expr.value];
+                return get_value(expr.value);
             case "index":
                 return resolveRef(expr.object)[evaluate(expr.index, state)];
             case "literal":
@@ -153,8 +186,13 @@ function simulator(ast) {
     }
 
     function step(stmt, state) {
-        // TODO what does this do?
-        self.locals["state"] = state;
+        total_steps += 1;
+        if (total_steps > MAX_STEP_COUNT) {
+            throw new Error("max step count exceeded!");
+        }
+
+        // HACK slap the current state in the global context
+        globals["state"] = state;
 
         switch(stmt.tag) {
             case "function":
@@ -162,6 +200,7 @@ function simulator(ast) {
                 break;
             case "declaration":
                 // FIXME nothin' to do, for now
+                add_to_context(stmt.name, undefined);
                 break;
             case "assignment":
                 // FIXME assumes we only assign to local variables
@@ -170,17 +209,14 @@ function simulator(ast) {
                 var rhs_eval = evaluate(rhs, state);
                 switch (lhs.tag) {
                     case "identifier":
-                        //state.prompt = lhs.value.replace("_", " ") + " is " + rhs_eval;
-                        self.locals[lhs.value] = rhs_eval;
+                        set_value(lhs.value, rhs_eval);
                         break;
                     case "reference":
-                        //state.prompt = lhs.name.replace("_", " ") + " is " + rhs_eval;
                         resolveRef(lhs.object)[lhs.name] = rhs_eval;
                         break;
                     case "index":
                         var lookups = getLookupsArray(lhs);
                         var index = evaluate(lhs.index, state);
-                        //state.prompt = lookups[0].replace("_", " ") + "'s " + index + " element is " + rhs_eval;
                         resolveRef(lhs.object)[index] = rhs_eval;
                         break;
                     default:
@@ -197,6 +233,18 @@ function simulator(ast) {
                 } else {
                     push_stack_state(stmt.else_branch, 'else');
                 }
+                break;
+            case "foreach":
+                var col = evaluate(stmt.collection);
+                if (!Array.isArray(col)) {
+                    throw new Error("foreach expects an array, but found " + typeof col);
+                }
+                var to_exec = col.map(function(x) { return {tag:'foreach:increment', parent:stmt, element:x}; });
+                push_stack_state(to_exec, 'foreach');
+                break;
+            case "foreach:increment":
+                push_stack_state(stmt.parent.body);
+                add_to_context(stmt.parent.variable, stmt.element);
                 break;
             case "dowhile":
                 last(call_stack).to_execute.push({tag:'dowhile:condition', parent:stmt});

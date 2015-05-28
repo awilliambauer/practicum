@@ -12,8 +12,9 @@ var test_util = (function () {"use strict";
         return ast;
     }
 
-    self.getStates = function(algoName, startState) {
-        var sim = simulator(self.parse(algoName));
+    self.getStates = function(algoName, startState, globals) {
+        if (!globals) { globals = {Math:Math}; }
+        var sim = simulator(self.parse(algoName), globals);
         return explainer.create_explanations(sim.run_all(startState));
     };
 

@@ -1,6 +1,6 @@
 
 function f() {
-    var x;
+    let x;
     x = 0;
     do {
         x = x + 10;

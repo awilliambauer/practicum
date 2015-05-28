@@ -1,8 +1,8 @@
 
 function algorithm(state) {
-    var left_operand;
-    var right_operand;
-    var operator;
+    let left_operand;
+    let right_operand;
+    let operator;
     left_operand = state.left;
     right_operand = state.right;
     operator = state.op;

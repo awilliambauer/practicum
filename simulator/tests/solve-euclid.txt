@@ -1,6 +1,6 @@
 
 function euclid(state) {
-    var current_step;
+    let current_step;
     current_step = state.steps[state.stepi];
     do {
         if (current_step.left < current_step.right) {

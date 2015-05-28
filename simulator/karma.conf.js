@@ -17,7 +17,7 @@ module.exports = function(config) {
     files: [
         '*.js',
         'tests/test-*.js',
-        {pattern:'tests/*.txt', served: true}
+        {pattern:'tests/*.txt', included:false, served: true}
     ],
 
 
