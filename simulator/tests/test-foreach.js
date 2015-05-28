@@ -7,7 +7,7 @@ QUnit.test("solve-simple-for-each", function (assert) {
         array:[1,2,3,4],
         sum:10,
     };
-    var states = test_util.getStates("solve-foreach", start);
+    var states = test_util.run("solve-foreach", {state:start});
     assert.deepEqual(last(states).state, finish);
 });
 

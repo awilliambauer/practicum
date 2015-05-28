@@ -18,5 +18,15 @@ var test_util = (function () {"use strict";
         return explainer.create_explanations(sim.run_all(startState));
     };
 
+    self.run = function(algo, options) {
+        options = options ? options : {};
+        var globals = options.globals ? options.globals : {Math:Math};
+        var args = options.args ? options.args : [];
+        var state = options.state ? options.state : {};
+
+        var sim = simulator(self.parse(algo), globals);
+        return explainer.create_explanations(sim.run_all(state));
+    }
+
     return self;
 }());

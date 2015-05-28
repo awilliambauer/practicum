@@ -13,7 +13,7 @@ QUnit.test("solve-binop-int-div", function (assert) {
         //prompt: "result is 2",
         result: 2,
     };
-    var states = test_util.getStates("solve-binop", start, {eval:eval});
+    var states = test_util.run("solve-binop", {state:start, globals:{eval:eval}});
     assert.equal(states.length, 6); // 5 non-declaration lines + 1 start
     assert.deepEqual(states[states.length - 1].state, finish);
 });
@@ -32,7 +32,7 @@ QUnit.test("solve-binop-float-mult", function (assert) {
         //prompt: "result is 5.25",
         result: 5.25,
     };
-    var states = test_util.getStates("solve-binop", start, {eval:eval});
+    var states = test_util.run("solve-binop", {state:start, globals:{eval:eval}});
     assert.equal(states.length, 6); // 5 non-declaration lines + 1 start
     assert.deepEqual(states[states.length - 1].state, finish);
 });
@@ -51,7 +51,7 @@ QUnit.test("solve-binop-lt", function (assert) {
         //prompt: "result is false",
         result: false,
     };
-    var states = test_util.getStates("solve-binop", start, {eval:eval});
+    var states = test_util.run("solve-binop", {state:start, globals:{eval:eval}});
     assert.equal(states.length, 6); // 5 non-declaration lines + 1 start
     assert.deepEqual(states[states.length - 1].state, finish);
 });
@@ -70,7 +70,7 @@ QUnit.test("solve-binop-ne", function (assert) {
         //prompt: "result is true",
         result: true,
     };
-    var states = test_util.getStates("solve-binop", start, {eval:eval});
+    var states = test_util.run("solve-binop", {state:start, globals:{eval:eval}});
     assert.equal(states.length, 6); // 5 non-declaration lines + 1 start
     assert.deepEqual(states[states.length - 1].state, finish);
 });
