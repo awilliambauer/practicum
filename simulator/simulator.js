@@ -132,33 +132,21 @@ function simulator(ast, globals) {
                 if (expr.operator === "+" && (typeof lv === "string" || typeof rv === "string")) {
                     return lv + rv;
                 } else {
-                    switch(expr.operator) {
-                        case "+":
-                            return lv + rv;
-                        case "-":
-                            return lv - rv;
-                        case "*":
-                            return lv * rv;
-                        case "%":
-                            return lv % rv;
-                        case "/":
-                            return lv / rv;
-                        case ">":
-                            return lv > rv;
-                        case ">=":
-                            return lv >= rv;
-                        case "<":
-                            return lv < rv;
-                        case "<=":
-                            return lv <= rv;
-                        case "&&":
-                            return lv && rv;
-                        case "||":
-                            return lv || rv;
-                        case "==":
-                            return lv === rv;
-                        case "!=":
-                            return lv !== rv;
+                    switch (expr.operator) {
+                        case "+": return lv + rv;
+                        case "-": return lv - rv;
+                        case "*": return lv * rv;
+                        case "%": return lv % rv;
+                        case "/": return lv / rv;
+                        case ">": return lv > rv;
+                        case ">=": return lv >= rv;
+                        case "<": return lv < rv;
+                        case "<=": return lv <= rv;
+                        case "&&": return lv && rv;
+                        case "||": return lv || rv;
+                        case "==": return lv === rv;
+                        case "!=": return lv !== rv;
+                        default: throw new Error("unrecognized operator " + expr.operator);
                     }
                 }
                 break;
@@ -196,11 +184,9 @@ function simulator(ast, globals) {
 
         switch(stmt.tag) {
             case "declaration":
-                // FIXME nothin' to do, for now
                 add_to_context(stmt.name, undefined);
                 break;
             case "assignment":
-                // FIXME assumes we only assign to local variables
                 var rhs = stmt.expression;
                 var lhs = stmt.destination;
                 var rhs_eval = evaluate(rhs, state);
