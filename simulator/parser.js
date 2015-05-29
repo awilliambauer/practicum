@@ -242,7 +242,8 @@ var simulator_parsing = function() {
             // every program is a single function
             match_keyword("function");
             var name = match_ident(); // ignore the class name
-            var params = match_delimited_list(match_parameter, ",");
+            match_symbol("(");
+            var params = match_delimited_list(match_parameter, ",", ")");
             var body = match_block();
 
             return {
@@ -265,13 +266,32 @@ var simulator_parsing = function() {
         }
 
         function match_statement() {
-            var next = lex.peek();
-            switch (next.value) {
-                case "do": return match_dowhile();
-                case "for": return match_foreach();
-                case "if": return match_ifelse();
-                default: return match_simple_statement(true);
+            // check for meta tags
+            var annotations = [];
+            if (peek_symbol('[')) {
+                match_symbol('[');
+                annotations = match_delimited_list(match_annotation, ";", "]");
             }
+
+            var next = lex.peek();
+            var stmt;
+            switch (next.value) {
+                case "do": stmt = match_dowhile(); break;
+                case "for": stmt = match_foreach(); break;
+                case "if": stmt = match_ifelse(); break;
+                default: stmt = match_simple_statement(true); break;
+            }
+            stmt.annotations = annotations;
+            return stmt;
+        }
+
+        function match_annotation() {
+            var name = match_ident();
+            return {
+                id: new_id(),
+                tag:'annotation',
+                name: name,
+            };
         }
 
         function match_simple_statement(do_match_ending_semicolon) {
@@ -413,7 +433,7 @@ var simulator_parsing = function() {
                     return {id:new_id(), tag:'reference', object:left, name:match_ident()};
                 // method call
                 case "(":
-                    var args = match_delimited_list(function(){return match_expression(0);}, ",", true);
+                    var args = match_delimited_list(function(){return match_expression(0);}, ",", ")");
                     return {id:new_id(), tag:'call', object:left, args:args};
                 // array index
                 case "[":
@@ -456,13 +476,11 @@ var simulator_parsing = function() {
             }
         }
 
-        /// match a list of items delimited by a symbol (e.g., comma or semicolon)
-        function match_delimited_list(matchfn, delimiter, do_skip_open_parn) {
+        /// match a list of items delimited by a symbol (e.g., comma or semicolon) until the closer (e.g., right paren).
+        /// Assumes opening paren/bracket/etc was already matched.
+        function match_delimited_list(matchfn, delimiter, closer) {
             var arr = [];
-            if (!do_skip_open_parn) {
-                match_symbol("(");
-            }
-            if (!peek_symbol(")")) {
+            if (!peek_symbol(closer)) {
                 while (true) {
                     arr.push(matchfn());
                     if (peek_symbol(delimiter)) {
@@ -472,7 +490,7 @@ var simulator_parsing = function() {
                     }
                 }
             }
-            match_symbol(")");
+            match_symbol(closer);
             return arr;
         }
 
@@ -481,18 +499,7 @@ var simulator_parsing = function() {
                 id: new_id(),
                 tag: 'parameter',
                 name: match_ident()
-                //type: match_type(),
             };
-        }
-
-        /// Only capable of matching void, int, and int[].
-        function match_type() {
-            var t = lex.next();
-            var tn = t.value;
-            switch (tn) {
-                case 'int': break;
-                default: throw_error(t.position, "Expected 'int' or 'void', found " + tn);
-            }
         }
 
         function match_ident() {
