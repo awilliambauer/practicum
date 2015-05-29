@@ -20,9 +20,9 @@ The file creates all interactivity for the webpage.
 		{type: "MDMoperator", value: "*"},
 		{type: "int", value: 3},
 		{type: "ASoperator", value: "-"},
-		{type: "double", value: 21.25},
+		{type: "double", value: 6.0},
 		{type: "MDMoperator", value: "/"},
-		{type: "double", value: 8.5}];
+		{type: "double", value: 2}];
 
 	// boolean that represents whether showing steps has started
 	var started = false;
@@ -72,7 +72,11 @@ The file creates all interactivity for the webpage.
 	function setupPage() {
 		var newHeading = document.getElementById("expressionHeader");
 		for (var i = 0; i < arr.length; i++) {
-			newHeading.innerHTML += "" + arr[i].value + " ";
+			if (arr[i].type == 'double' && arr[i].value % 1 == 0) {
+				newHeading.innerHTML += "" + arr[i].value + ".0 ";
+			} else {
+				newHeading.innerHTML += "" + arr[i].value + " ";
+			}
 		}
 	}
 
@@ -80,7 +84,11 @@ The file creates all interactivity for the webpage.
 	function arrToString() {
 		var arrString = "";
 		for (var i = 0; i < arr.length; i++) {
-			arrString += "<span id=" + i + ">" + arr[i].value + "</span> ";
+			if (arr[i].type == 'double' && arr[i].value % 1 == 0) {
+				arrString += "<span id=" + i + ">" + arr[i].value + ".0" + "</span> ";
+			} else {
+				arrString += "<span id=" + i + ">" + arr[i].value + "</span> ";
+			}
 		}
 		return arrString;
 	}
@@ -188,7 +196,7 @@ The file creates all interactivity for the webpage.
 		document.getElementById("nextstep").onclick = findOperator;
 	}
 
-
+	// Prompts the user to find and click the operator.
 	function findOperator() {
 		if (document.getElementById("error") !== null) {
 			document.getElementById("steps").removeChild(document.getElementById("error"));
@@ -260,7 +268,7 @@ The file creates all interactivity for the webpage.
 		document.getElementById(lOperand).onclick = findRight;
 	}
 
-	// prompts you to click the left operand.
+	// prompts you to click the right operand.
 	function findRight() {
 		document.getElementById(lOperand).classList.add('clicked');
 		messageParagraph.innerHTML = "Now click on the right operand";
@@ -334,13 +342,19 @@ The file creates all interactivity for the webpage.
 			document.getElementById("nextstep").classList.add("hiddenSteps");
 		} else {
 			var updatedArray = [];
+			//copy all values that aren't evaluated
 			for (var i = 0; i < operator; i++) {
 				updatedArray.push(arr[i]);
 			}
+			// evaluate portion of expression
 			if (arr[operator].value == '*') {
 				updatedArray[operator - 1].value = (arr[operator - 1].value * arr[operator+ 1].value);
 			} else if (arr[operator].value == '/') {
-				updatedArray[operator - 1].value = (arr[operator - 1].value / arr[operator+ 1].value);
+				updatedArray[operator - 1].value = (arr[operator - 1].value / arr[operator + 1].value);
+				// special case for int division
+				if (arr[operator -1].type == 'int' && arr[operator + 1].type == 'int') {
+					updatedArray[operator - 1].value = Math.round(updatedArray[operator - 1].value);
+				}
 			} else if (arr[operator].value == '%') {
 				updatedArray[operator - 1].value = (arr[operator - 1].value % arr[operator+ 1].value);
 			} else if (arr[operator].value == '+') {
@@ -348,6 +362,13 @@ The file creates all interactivity for the webpage.
 			} else if (arr[operator].value == '-') {
 				updatedArray[operator - 1].value = (arr[operator - 1].value - arr[operator+ 1].value);
 			}
+			// setting type of value
+			if (arr[operator -1].type == 'int' && arr[operator + 1].type == 'int') {
+				updatedArray[operator - 1].type = 'int';
+			} else {
+				updatedArray[operator - 1].type = 'double';
+			}
+			// copy remaining elements of expression
 			for (var i = operator + 2; i < arr.length; i++) {
 				updatedArray.push(arr[i]);
 			}
@@ -396,9 +417,18 @@ The file creates all interactivity for the webpage.
 		var newChild = document.createElement("div");
 		newChild.setAttribute("id", "reply");
 
-		if (clientAnswer.value == arr[lOperand].value && arr.length > 1) {
+		var correct = false;
+		if (arr[lOperand].type == 'double' && arr[lOperand].value % 1 == 0) {
+			if (clientAnswer.value == (arr[lOperand].value + ".0")) {
+				correct = true;
+			}
+		} else if (clientAnswer.value == arr[lOperand].value) {
+			correct = true;
+		}
+
+		if (correct && arr.length > 1) {
 			newChild.innerHTML = "Great Job! Click Next to continue.";
-		} else if (clientAnswer.value == arr[lOperand].value && arr.length <= 1) {
+		} else if (correct && arr.length <= 1) {
 			newChild.innerHTML = "Great Job!";
 		} else {
 			clientAnswer.style.color = "red";
@@ -420,7 +450,11 @@ The file creates all interactivity for the webpage.
 
 			next.onclick = function () {
 				clientAnswer.style.color = "black";
-				clientAnswer.value =  arr[lOperand].value;
+				if (arr[lOperand].type == 'double' && arr[lOperand].value % 1 == 0) {
+					clientAnswer.value =  arr[lOperand].value + ".0";
+				} else {
+					clientAnswer.value = arr[lOperand].value;
+				}
 				stepThrough();
 			}
 			clientAnswer.id = "";
@@ -435,7 +469,11 @@ The file creates all interactivity for the webpage.
 				arrString += "<input type=text id=answer size=1/> "
 				i += 2;
 			} else {
-				arrString += arr[i].value + " ";
+				if (arr[i].type == 'double' && arr[i].value % 1 == 0) {
+					arrString += arr[i].value + ".0 ";
+				} else {
+					arrString += arr[i].value + " ";
+				}
 			}
 		}
 		return arrString;
@@ -448,7 +486,11 @@ The file creates all interactivity for the webpage.
 			if (i == lOperand) {
 				arrString += "<span class='clicked'>";
 			}
-			arrString += arr[i].value + " ";
+			if (arr[i].type == 'double' && arr[i].value % 1 == 0) {
+				arrString += arr[i].value + ".0 ";
+			} else {
+				arrString += arr[i].value + " ";
+			}
 			if (i == rOperand) {
 				arrString += "</span> ";
 			}
