@@ -3,13 +3,13 @@ var test_util = (function () {"use strict";
 
     self.parse = function(algoName) {
         var algoFile = new XMLHttpRequest();
-        var ast;
+        var source;
         algoFile.open("GET", "base/tests/"+algoName+".txt", false);
         algoFile.onreadystatechange = function () {
-            ast = simulator_parsing.browser_parse(algoFile.responseText);
+            source = algoFile.responseText;
         };
         algoFile.send(null);
-        return ast;
+        return simulator_parsing.browser_parse(source);
     }
 
     self.run = function(algo, options) {
