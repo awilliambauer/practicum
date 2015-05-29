@@ -9,16 +9,21 @@ var explainer = (function() {
             case 'declaration': return false;
             default: return true;
         }
-    }
+    };
 
     self.explanation_text_of = function(sim_result) {
-        var stmt = sim_result.stmt;
+        var stmt = sim_result.statement;
         if (!stmt) return "";
         var cs = sim_result.call_stack[sim_result.call_stack.length - 1];
 
         switch(stmt.tag) {
             case "function":
                 return "Let's start";
+            case "assignment":
+                if (stmt.destination.tag === "index") {
+                    return sim_result.explain.name.replace("_", " ") + "'s " + sim_result.explain.index + " element is " + sim_result.explain.rhs;
+                }
+                return sim_result.explain.name.replace("_", " ") + " is " + sim_result.explain.rhs;
             case "expression":
                 // FIXME
                 return "asdfasdfasdf";
@@ -31,14 +36,14 @@ var explainer = (function() {
             default:
                 return "";
         }
-    }
+    };
 
     self.create_explanations = function(results) {
         return results.filter(self.should_be_explained).map(function(r) {
             r.prompt = self.explanation_text_of(r);
             return r;
         });
-    }
+    };
 
     return self;
 }());

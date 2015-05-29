@@ -1,5 +1,5 @@
 var test_util = (function () {"use strict";
-    var self = {}
+    var self = {};
 
     self.parse = function(algoName) {
         var algoFile = new XMLHttpRequest();
@@ -10,7 +10,7 @@ var test_util = (function () {"use strict";
         };
         algoFile.send(null);
         return simulator_parsing.browser_parse(source);
-    }
+    };
 
     self.run = function(algo, options) {
         options = options ? options : {};
@@ -22,7 +22,7 @@ var test_util = (function () {"use strict";
         // HACK function name currently ignored
         sim.start_function(undefined, args);
         return explainer.create_explanations(sim.run_all(state));
-    }
+    };
 
     return self;
 }());

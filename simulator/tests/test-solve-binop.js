@@ -10,12 +10,12 @@ QUnit.test("solve-binop-int-div", function (assert) {
         left: 10,
         right: 5,
         op: "/",
-        //prompt: "result is 2",
         result: 2,
     };
     var states = test_util.run("solve-binop", {state:start, globals:{eval:eval}});
     assert.equal(states.length, 5); // 5 non-declaration lines
     assert.deepEqual(states[states.length - 1].state, finish);
+    assert.equal(states[states.length - 1].prompt, "result is 2");
 });
 
 QUnit.test("solve-binop-float-mult", function (assert) {
@@ -29,12 +29,12 @@ QUnit.test("solve-binop-float-mult", function (assert) {
         left: 3.5,
         right: 1.5,
         op: "*",
-        //prompt: "result is 5.25",
         result: 5.25,
     };
     var states = test_util.run("solve-binop", {state:start, globals:{eval:eval}});
     assert.equal(states.length, 5); // 5 non-declaration lines
     assert.deepEqual(states[states.length - 1].state, finish);
+    assert.equal(states[states.length - 1].prompt, "result is 5.25");
 });
 
 QUnit.test("solve-binop-lt", function (assert) {
@@ -48,12 +48,12 @@ QUnit.test("solve-binop-lt", function (assert) {
         left: 10,
         right: 5,
         op: "<",
-        //prompt: "result is false",
         result: false,
     };
     var states = test_util.run("solve-binop", {state:start, globals:{eval:eval}});
     assert.equal(states.length, 5); // 5 non-declaration lines
     assert.deepEqual(states[states.length - 1].state, finish);
+    assert.equal(states[states.length - 1].prompt, "result is false");
 });
 
 QUnit.test("solve-binop-ne", function (assert) {
@@ -67,10 +67,10 @@ QUnit.test("solve-binop-ne", function (assert) {
         left: 10,
         right: 5,
         op: "!=",
-        //prompt: "result is true",
         result: true,
     };
     var states = test_util.run("solve-binop", {state:start, globals:{eval:eval}});
     assert.equal(states.length, 5); // 5 non-declaration lines
     assert.deepEqual(states[states.length - 1].state, finish);
+    assert.equal(states[states.length - 1].prompt, "result is true");
 });

@@ -193,15 +193,15 @@ function simulator(ast, globals) {
                 switch (lhs.tag) {
                     case "identifier":
                         set_value(lhs.value, rhs_eval);
-                        break;
+                        return {name:lhs.value, rhs:rhs_eval};
                     case "reference":
                         resolveRef(lhs.object)[lhs.name] = rhs_eval;
-                        break;
+                        return {name:lhs.name, rhs:rhs_eval};
                     case "index":
                         var lookups = getLookupsArray(lhs);
                         var index = evaluate(lhs.index, state);
                         resolveRef(lhs.object)[index] = rhs_eval;
-                        break;
+                        return {name:lookups[0], index:index, rhs:rhs_eval};
                     default:
                         throw new Error("left-hand side of assignment has unrecognized type " + JSON.stringify(lhs));
                 }
@@ -263,8 +263,8 @@ function simulator(ast, globals) {
         while (!self.is_done()) {
             var s = pop_next_statement();
             if (s) {
-                step(s, out_state);
-                return {state:out_state, statement:s, stack:copy(call_stack)};
+                var explain_info = step(s, out_state);
+                return {state:out_state, statement:s, call_stack:copy(call_stack), explain:explain_info};
             }
         }
 
