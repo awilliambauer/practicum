@@ -299,7 +299,6 @@
 			}
 		} else if (state.hasOwnProperty("testResult")) {	// test result, no vars
 			var boolBox = document.createElement("p");
-			console.log(getBoolTest(state));
 			$(boolBox).text(getBoolTest(state));
 			var trueChoice = document.createElement("input");
 			$(trueChoice).attr("type", "radio")
@@ -325,8 +324,21 @@
 			$(boolBox).append(trueBox)
 					  .append(falseBox)
 					  .css("font-family", "monospace")
-					  .css("font-size", "11pt");
+					  .css("font-size", "11pt")
+					  .css("text-align", "center");
 			$(interaction).append(boolBox);
+		} else if (state.hasOwnProperty("nextLine")) {
+			var lineBox = document.createElement("p");
+			$(lineBox).text("line #")
+					  .css("font-size", "11pt")
+					  .css("font-family", "monospace");
+			var lineInput = document.createElement("input");
+			$(lineInput).attr("type", "text")
+						.attr("value", state.nextLine)
+						.css("font-size", "12pt")
+						.css("font-family", "monospace");
+			$(lineBox).append(lineInput);
+			$(interaction).append(lineBox);
 		}
 		$(interaction).css("font-size", "12pt");
 		$("#prompt").append(interaction);

@@ -59,6 +59,17 @@ var state = [
     },
 
     {
+        prompt: "If/Else: Which line should we execute next?",
+        lineNum: 4,
+        nextLine: 5,
+        vars: {
+            1: {x: 3, y: 20},
+            2: {x: 3, y: 20, z: 2}
+        },
+        bools: {4: true}
+    },
+
+    {
         prompt: "Assignment: What is the value of this variable after this line executes?",
         lineNum: 5,
         vars: {
@@ -96,6 +107,18 @@ var state = [
     {
         prompt: "If/Else: Since this branch evaluated to true, we won't enter any of the following branches.",
         lineNum: 8,
+        vars: {
+            1: {x: 3, y: 20},
+            2: {x: 3, y: 20, z: 2},
+            5: {x: 15, y: 20, z: 2}
+        },
+        bools: {4: true, 8: true}
+    },
+
+    {
+        prompt: "If/Else: Which line should we execute next?",
+        lineNum: 8,
+        nextLine: 9,
         vars: {
             1: {x: 3, y: 20},
             2: {x: 3, y: 20, z: 2},
@@ -161,6 +184,21 @@ var state = [
     {
         prompt: "If/Else: Since this test evaluated to false, we won't go into this branch.",
         lineNum: 13,
+        vars: {
+            1: {x: 3, y: 20},
+            2: {x: 3, y: 20, z: 2},
+            5: {x: 15, y: 20, z: 2},
+            9: {x: 15, y: 25, z: 2},
+            10: {x: 30, y: 25, z: 2}
+        },
+        bools: {4: true, 8: true, 13: false},
+        crossOut: [14]
+    },
+
+    {
+        prompt: "If/Else: Which line should we execute next?",
+        lineNum: 13,
+        nextLine: 16,
         vars: {
             1: {x: 3, y: 20},
             2: {x: 3, y: 20, z: 2},

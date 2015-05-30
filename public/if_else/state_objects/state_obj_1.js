@@ -43,7 +43,16 @@ var state = [
         lineNum: 4,
         crossOut: [5],
         vars: {1: {x: 3, y: 20}, 2: {x: 3, y: 20, z: 4}},
-        bools: {4: false},
+        bools: {4: false}
+    },
+
+    {
+        prompt: "If/Else: Which line should we execute next?",
+        lineNum: 4,
+        nextLine: 6,
+        crossOut: [5],
+        vars: {1: {x: 3, y: 20}, 2: {x: 3, y: 20, z: 4}},
+        bools: {4: false}
     },
 
     {
@@ -51,7 +60,7 @@ var state = [
         lineNum: 6,
         crossOut: [5],
         vars: {1: {x: 3, y: 20}, 2: {x: 3, y: 20, z: 4}},
-        bools: {4: false},
+        bools: {4: false}
     },
 
     {
@@ -101,7 +110,20 @@ var state = [
             7:{x: 3, y: 20, z: 13}
         },
         bools: {4: false, 10: false},
-        crossOut: [5, 11],
+        crossOut: [5, 11]
+    },
+
+    {
+        prompt: "If/Else: Which line should we execute next?",
+        lineNum: 10,
+        nextLine: 12,
+        vars: {
+            1: {x: 3, y: 20},
+            2: {x: 3, y: 20, z: 4},
+            7:{x: 3, y: 20, z: 13}
+        },
+        bools: {4: false, 10: false},
+        crossOut: [5, 11]
     },
 
     {
@@ -114,12 +136,25 @@ var state = [
             7: {x: 3, y: 20, z: 13}
         },
         bools: {4: false, 10: false},
-        crossOut: [5, 11],
+        crossOut: [5, 11]
     },
 
     {
         prompt: "If/Else: Since this branch evaluated to true, we won't enter any of the following branches.",
         lineNum: 12,
+        vars: {
+            1: {x: 3, y: 20},
+            2: {x: 3, y: 20, z: 4},
+            7: {x: 3, y: 20, z: 13}
+        },
+        bools: {4: false, 10: false, 12: true},
+        crossOut: [5, 11, 14, 15]
+    },
+
+    {
+        prompt: "If/Else: Which line should we execute next?",
+        lineNum: 12,
+        nextLine: 13,
         vars: {
             1: {x: 3, y: 20},
             2: {x: 3, y: 20, z: 4},
@@ -153,6 +188,6 @@ var state = [
         },
         bools: {4: false, 10: false, 12: true},
         updated: ["y"],
-        crossOut: [5, 11, 14, 15],
+        crossOut: [5, 11, 14, 15]
     }
 ];
