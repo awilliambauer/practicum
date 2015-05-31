@@ -11,6 +11,15 @@ The file creates all interactivity for the webpage.
 	 	{type:"MDMoperator", value: "*"},
 	 	{type:"int", value : 3}];*/
 
+	// state object
+	/* Currently only the messages come from the state object, 
+	since we store the array and index as global variables that are updated as the state object is updated.
+	To completely rely on the state object, yu need to find/replace MOST
+	arr with stateObject[stateObject.length - 1][0]
+	operator with stateObject[stateObject.length - 1][1]
+	*/
+	var stateObject = new Array();
+
     // tougher problem state object
 	var arr = [{type: "int", value: 22},
 		{type: "MDMoperator", value: "%"},
@@ -38,7 +47,7 @@ The file creates all interactivity for the webpage.
 	var operator;
 
 	// true - with interactivity, false - without interactivity
-	var interaction = false;
+	var interaction = true;
 
 	// on load, shows expression, answer box, submit button, and show steps button
 	window.onload = function () {
@@ -90,7 +99,7 @@ The file creates all interactivity for the webpage.
 			expressionPrint.classList.add("exp");
 
 		    clearIds(expressionPrint);
-			prompt.innerHTML = "come dance with me";
+			prompt.innerHTML = stateObject[stateObject.length -1][2].message + "<div>&nbsp;</div>";
 
 			firstStep.appendChild(prompt);
 			firstStep.appendChild(expressionPrint);
@@ -174,6 +183,7 @@ The file creates all interactivity for the webpage.
 		}
 
 		// finds and set the indices for the operator, left operand, and right operand
+		// has click operator message
 		find();
 
 		// this will prompt the user every time to ask what type
@@ -254,13 +264,7 @@ The file creates all interactivity for the webpage.
 		messageParagraph.classList.add("step");
 		expressionParagraph.classList.add("exp");
 
-		var message = "Click on the next ";
-
-		if (arr[operator].type == "MDMoperator") {
-			messageParagraph.innerHTML = message + "*, /, or % operator";
-		} else {
-			messageParagraph.innerHTML = message + "+ or - operator";
-		}
+		messageParagraph.innerHTML = stateObject[stateObject.length - 1][2].message;
 
 		//findFirst();
 		expressionParagraph.innerHTML = arrToString(arr);
@@ -300,7 +304,9 @@ The file creates all interactivity for the webpage.
 	// prompts you to click the left operand.
 	function findLeft() {
 		document.getElementById(operator).classList.add('clicked');
-		messageParagraph.innerHTML = "Now click on the left operand";
+		// update state object
+		findLeftOperand();
+		messageParagraph.innerHTML = stateObject[stateObject.length - 1][2].message;
 		messageParagraph.style.color = "#45ADA8";
 
 		// makes all the other spans clickable but if they are clicked
@@ -316,7 +322,9 @@ The file creates all interactivity for the webpage.
 	// prompts you to click the right operand.
 	function findRight() {
 		document.getElementById(operator - 1).classList.add('clicked');
-		messageParagraph.innerHTML = "Now click on the right operand";
+		// update state object
+		findRightOperand();
+		messageParagraph.innerHTML = stateObject[stateObject.length - 1][2].message;
 		messageParagraph.style.color = "#547980";
 
 		// makes all the other spans clickable but if they are clicked
@@ -362,19 +370,58 @@ The file creates all interactivity for the webpage.
 		document.getElementById("nextstep").onclick = trySubmit;
 	}
 
+	/* The next 4 methods are similar to the ones in the pseudocode*/
+
 	// Finds the operator, left operand and right operand.
 	function find() {
+		var currState = new Array();
+		currState.push(arr);
+		var bool = false;
 		// loop through array and find first mult/div/mod operator
 		for (var i = 1; i < arr.length; i+=2) {
 			if (arr[i].type == "MDMoperator") {
 				operator = i;
-				return;
+				bool = true;
+				break;
 			}
 		}
 		// did not find, return first add/subtract operator
-		operator = 1;
+		if (!bool) {
+			operator = 1;
+		}
+		var index = {index: operator};
+		currState.push(index);
+		var message;
+		if (!interaction) {
+			message = {message: "We evaluate the leftmost operator (" + arr[operator].value + ") with its left and right operands."};
+		} else {
+			message = {message: "Click the next operator."};
+		}
+		currState.push(message);
+		stateObject.push(currState);
 	}
 
+	function findLeftOperand() {
+		var currState = new Array();
+		currState.push(arr);
+		var operator = stateObject[stateObject.length - 1][1] - 1;
+		var index = {index: operator};
+		currState.push(index);
+		var message = {message: "Click the left operand."};
+		currState.push(message);
+		stateObject.push(currState);
+	}
+
+	function findRightOperand() {
+		var currState = new Array();
+		currState.push(arr);
+		var operator = stateObject[stateObject.length - 1][1] + 1;
+		var index = {index: operator};
+		currState.push(index);
+		var message = {message: "Click the right operand."};
+		currState.push(message);
+		stateObject.push(currState);
+	} 
 
 	// solves and updates expression, needs to be trimped since find does
 	// a lot of the work.
@@ -417,6 +464,15 @@ The file creates all interactivity for the webpage.
 			}
 			arr = updatedArray;
 		}
+
+		var currState = new Array();
+		currState.push(arr);
+		var oper = stateObject[stateObject.length - 1][1] - 1;
+		var index = {index: oper};
+		currState.push(index);
+		var message = {message: "What is the answer?"};
+		currState.push(message);
+		stateObject.push(currState);
 	}
 
 	// prompts the user to solve a portion of the problem
@@ -439,7 +495,10 @@ The file creates all interactivity for the webpage.
 		messageParagraph2.classList.add("step");
 		expressionParagraph2.classList.add("exp");
 
-		messageParagraph2.innerHTML = "What is the answer?";
+		// update state object
+		solve();
+
+		messageParagraph2.innerHTML = stateObject[stateObject.length - 1][2].message;
 		//findFirst();
 		expressionParagraph2.innerHTML = answerToString(arr);
 
@@ -455,7 +514,6 @@ The file creates all interactivity for the webpage.
 	// tells them whether it's right or wrong and then continues.
 	function processAnswer() {
 		var clientAnswer = document.getElementById("answer");
-		solve();
 
 		var newChild = document.createElement("div");
 		newChild.setAttribute("id", "reply");
@@ -524,7 +582,6 @@ The file creates all interactivity for the webpage.
 		for (var i = 0; i < arr.length; i++) {
 			if (i == operator - 1) {
 				arrString += "<input type=text id=answer size=1/> "
-				i += 2;
 			} else {
 				arrString += getValue(i) + " ";
 			}
