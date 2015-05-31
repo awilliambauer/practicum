@@ -37,14 +37,71 @@ The file creates all interactivity for the webpage.
 	// index of correct operator
 	var operator;
 
+	// true - with interactivity, false - without interactivity
+	var interaction = false;
+
 	// on load, shows expression, answer box, submit button, and show steps button
 	window.onload = function () {
-		setupPage(arr);
+		var newHeading = document.getElementById("expressionHeader");
+		setupPage(newHeading);
 		document.getElementById("submit").onclick = correct;
 		var next = document.getElementById("nextstep");
 		next.disabled = false;
-		next.onclick = stepThrough;
+		if(interaction) {
+			next.onclick = stepThrough;
+		} else {
+			next.onclick = walkThrough;
+		}
 	};
+
+	function walkThrough() {
+		// gets rid of submit button, changes next button text
+		// and creates the steps div to put everything for step through.
+		if (!started) {
+			document.getElementById("submit").style.visibility = "hidden";
+			document.getElementById("nextstep").innerHTML = "Next";
+			var newChild = document.createElement("div");
+			newChild.setAttribute("id", "steps");
+			document.getElementById("stepshell").appendChild(newChild);
+
+			started = true;
+
+			var newChild2 = document.createElement("div");
+			newChild2.classList.add("prompt");
+			newChild2.innerHTML = "Start by evaluating all the Multiplicative (* / %) operators from left to right. <br /> Then evaluate " +
+									"the Additive (+ -) operators from left to right.";
+			newChild.appendChild(newChild2);
+		}
+
+		// finds and set the indices for the operator, left operand, and right operand
+		find();
+
+		// this will prompt the user every time to ask what type
+		// of operator the student should start with.
+		if (arr.length >= 1) {
+
+			var firstStep = document.createElement("div");
+			firstStep.setAttribute("id", "firststep");
+			firstStep.classList.add("expressionStatement");
+
+			var prompt = document.createElement("p");
+			var expressionPrint = document.createElement("div");
+			prompt.classList.add("step");
+			expressionPrint.classList.add("exp");
+
+		    clearIds(expressionPrint);
+			prompt.innerHTML = "come dance with me";
+
+			firstStep.appendChild(prompt);
+			firstStep.appendChild(expressionPrint);
+
+			document.getElementById("steps").appendChild(firstStep);
+			var operators = document.querySelectorAll(".operators");
+			solve();
+		} else {
+			document.getElementById("nextstep").classList.add("hiddenSteps");
+		}
+	}
 
 	// If they submitted an answer (not show steps view), 
 	// displays if user's answer is correct or not.
@@ -66,8 +123,7 @@ The file creates all interactivity for the webpage.
 	}
 
 	// Display the original expression on load
-	function setupPage() {
-		var newHeading = document.getElementById("expressionHeader");
+	function setupPage(newHeading) {
 		for (var i = 0; i < arr.length; i++) {
 			newHeading.innerHTML += getValue(i) + " ";
 		}
@@ -374,7 +430,7 @@ The file creates all interactivity for the webpage.
 		next.innerHTML = "Check";
 		next.disabled = false;
 
-		clearIds();
+		clearIds(expressionParagraph);
 
 		var newChild = document.createElement("div");
 		newChild.classList.add("expressionStatement");
@@ -477,7 +533,7 @@ The file creates all interactivity for the webpage.
 	}
 
 	// clears old ids so not to get them mixed up with the new ones.
-	function clearIds() {
+	function clearIds(expressionPara) {
 		var arrString = "";
 		for (var i = 0; i < arr.length; i++) {
 			if (i == operator - 1) {
@@ -488,6 +544,6 @@ The file creates all interactivity for the webpage.
 				arrString += "</span> ";
 			}
 		}
-		expressionParagraph.innerHTML = arrString;
+		expressionPara.innerHTML = arrString;
 	}
 }) ();
