@@ -1,0 +1,137 @@
+(3, 20)
+public static void ifElseMystery2 (int x, int y) {
+	int z = 4;
+	if (z <= x) {
+		z = x + 1;
+	} else {
+		z = z + 9;
+	}
+	if (z > y) {
+		y++;
+	} else if (z < y) {
+		y = y - 3;
+	} else {
+		z = x + y + 7;
+	}
+	System.out.println (z + " " + y);
+}
+
+/* if : eval test, find first "}" after the if on 
+		its own line
+   else if : eval test 
+   else : just do body
+   int : add new name/value pair to map
+   name of existing variable: update value in map
+   System... : look up values of variables in print
+*/
+
+JSONObject parseProblem(problem) :
+	// result should maintain order of inserted sub-objects
+	JSONObject result;
+	int lineNum = 2;
+	map values;
+	initialize(values, result);
+	while (problem.hasNextLine()):
+		currentLine = problem.getLine(currentLineNum);
+		if (currentLine.startsWith("int")):
+			initializeVariable(values, result, lineNum, currentLine);
+		else if (currentLine.startsWith("System.out.println")):
+			evalPrint(values, result, lineNum, currentLine);
+		else if (currentLine.startsWith("if")):
+			evalBlock(values, result, lineNum);
+		else if (values.containsKey(currentLine.firstWord())):
+			updateVariable(values, result, lineNum);		
+		lineNum++;
+
+// stores initial values of parameters
+void initialize(map values) :
+	initialValues[] = problem.getLine(0).toArray();
+	initialLine = problem.getLine(1);
+	initialNames[] = parseParens(initialLine).toArray();
+	for (int i = 0; i < initialNames.length; i++):
+		values.put(initialNames[i], initialValues[i]);
+
+void initializeVariable(map values, JSONObject result, int lineNum, String currentLine):
+	variable[] = currentLine.split("=");
+	// trim to remove tabs at beginning of line
+	name = variable[0].trim().substring(3);
+	value = parseInt(variable[1].trim().substring(0, variable[1].trim().length - 1));
+	map.put(name, eval(value));
+	JSONObject current = new JSONObject();
+	// will need to get appropriate prompt
+	current.add("prompt", prompt);
+	current.add("vals", name, eval(value));
+	current.add("lineNum", lineNum);
+	result.add(current);
+
+void evalPrint(map values, JSONObject result, int lineNum, String currentLine):
+	JSONObject current = new JSONObject();
+	current.add("prompt", prompt);
+	current.add("lineNum", lineNum);
+	current.add("vals", parseParens(line).getVals());
+	result.add(current);
+
+void evalBlock(map values, JSONObject result, int lineNum, String currentLine):
+	endOfBlock = findNextLoneCurlyBrace();
+	// creates array of start/end line num of each branch
+	// by finding curly braces
+	branches[] = getBranches();
+	int currentBranch = 0;
+	// start at first branch
+	branchStart = problem.getLine(branches[0].start);
+	booleanTest = parseParens(branchStart);
+	// eval returns boolean from looking up values in map
+	// and applying to test
+	// elseBranch is the else branch of a block, if it exists
+	while (!eval(booleanTest) && branches[currentBranch] != elseBranch):
+		JSONObject current = new JSONObject();
+		branchStart = problem.getLine(branches[currentBranch].start);
+		booleanTest = parseParens(branchStart);
+		current.add("crossout", between(branches[currentBranch].start, branches[currentBranch].end));
+		current.add("lineNum", branches[currentBranch].start);
+		current.add("vals", false);
+		current.add("prompt", prompt);
+		currentBranch++;
+
+	JSONObject current = new JSONObject();
+	if (currentBranch < branches.length):
+		// grabs all lines starting with first line of next block, to end of entire block
+		current.add("crossout", between(branches[currentBranch + 1].start, endOfBlock));
+		current.add("prompt", prompt);
+		current.add("val", true);
+		statements = between(branches[currentBranch].start, branches[currentBranch].end);
+		for (int i = 0; i < statements.length, i++):
+			updateVariable(values, result, i, problem.getLine(i));
+	else if (branches[currentBranch] == elseBranch):
+		current.add("prompt", prompt);
+		for (int i = 0; i < statements.length, i++):
+			updateVariable(values, result, i, problem.getLine(i));	
+	else if (currentBranch == branches.length):
+		// special prompt if no branches are executed
+		current.add("prompt", prompt);
+
+void updateVariable(map values, JSONObject result, int lineNum, String currentLine):
+	if (currentLine.contains("++")):
+		variable[] = currentLine.split("++");
+		name = variable[0].trim();
+		expression = name + " + 1";
+	else:
+		variable[] = currentLine.split("=");
+		name = variable[0].trim();
+		expression = variable[1].trim().substring(0, variable[1].trim().length - 1);
+		
+	values.put(name, eval(values, expression));
+	JSONObject current = new JSONObject();
+	current.add("prompt", prompt);
+	current.add("vals", name, eval(values, expression));
+	current.add("lineNum", lineNum);
+
+String parseParens(String line):
+	leftParen = line.indexOf("(");
+	rightParen = line.indexOf(")");
+	return line.substring(leftParen, rightParen);
+
+int[] between(int start, int end):
+	result[] = new int[];
+	for (int i = start + 1; i < end; i++):
+		result[i - start + 1] = i;

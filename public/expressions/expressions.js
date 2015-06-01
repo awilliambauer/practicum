@@ -1,17 +1,16 @@
 /*
 The file creates all interactivity for the webpage.
+
  */
 
 (function() {
 
-    // easy problem state object
 	/*var arr = [ {type:"int", value : 2, id:""},
 	 	{type:"ASoperator", value: "+", id:""},
 	 	{type:"int", value : 6, id:""},
 	 	{type:"MDMoperator", value: "*", id:""},
 	 	{type:"int", value : 3, id:""} ];*/
 
-    // tougher problem state object
 	var arr = [{type: "int", value: 22},
 		{type: "MDMoperator", value: "%"},
 		{type: "int", value: 7},
@@ -20,27 +19,22 @@ The file creates all interactivity for the webpage.
 		{type: "MDMoperator", value: "*"},
 		{type: "int", value: 3},
 		{type: "ASoperator", value: "-"},
-		{type: "double", value: 6.0},
+		{type: "double", value: 21.25},
 		{type: "MDMoperator", value: "/"},
-		{type: "double", value: 2}];
+		{type: "double", value: 8.5}];
 
-	// boolean that represents whether showing steps has started
+	var arrLeng = 0;
 	var started = false;
-	// is the left column for messages
-	var messageParagraph;
-	// is the right column that shows the current expression as it is evaluated
-	var expressionParagraph;
-	// overall answer for checking answer submission
-	var overallAnswer = 22 % 7 + 4 * 3 - 21.25 / 8.5; 
+	var newChildPara1;
+	var newChildPara2;
+	var overallAnswer = 10.5; // for right now I have the overall answer writen here
+							  // for people wanting to submit immediately.
 
-	// index of correct operator
 	var operator;
-	// index of correct right operand
 	var rOperand;
-	// index of correct left operand
 	var lOperand;
 
-	// on load, shows expression, answer box, submit button, and show steps button
+
 	window.onload = function () {
 		setupPage(arr);
 		document.getElementById("submit").onclick = correct;
@@ -49,8 +43,7 @@ The file creates all interactivity for the webpage.
 		next.onclick = stepThrough;
 	};
 
-	// If they submitted an answer (not show steps view), 
-	// displays if user's answer is correct or not.
+	// Displays for the user if the answer is right or wrong.
 	function correct() {
 		var clientAnswer = document.getElementById("box");
 		var answerPrompt = document.getElementById("correct");
@@ -68,34 +61,47 @@ The file creates all interactivity for the webpage.
 		document.getElementById("answerbox").appendChild(answerPrompt);
 	}
 
-	// Display the original expression on load
+	/*
+	 Eventually change this back to original code of just printing in a loop
+	 */
 	function setupPage() {
 		var newHeading = document.getElementById("expressionHeader");
 		for (var i = 0; i < arr.length; i++) {
-			if (arr[i].type == 'double' && arr[i].value % 1 == 0) {
-				newHeading.innerHTML += "" + arr[i].value + ".0 ";
-			} else {
-				newHeading.innerHTML += "" + arr[i].value + " ";
-			}
+			newHeading.innerHTML += "" + arr[i].value + " ";
 		}
 	}
 
-	// Turns expression to a string
+	// turns expression to a string.
 	function arrToString() {
 		var arrString = "";
 		for (var i = 0; i < arr.length; i++) {
-			if (arr[i].type == 'double' && arr[i].value % 1 == 0) {
-				arrString += "<span id=" + i + ">" + arr[i].value + ".0" + "</span> ";
-			} else {
-				arrString += "<span id=" + i + ">" + arr[i].value + "</span> ";
-			}
+			arrString += "<span id=" + i + ">" + arr[i].value + "</span> ";
 		}
 		return arrString;
 	}
 
+	/* Put this in step through to find the first operator and operands to set id, then step through does the copying
+	 function findFirst() {
+	 for (var i = 0; i < arr.length; i++) {
+	 if (arr[i].type == "MDMoperator") {
+	 arr[i].id = "operator";
+	 arr[i-1].id = "leftOperand";
+	 arr[i+1].id = "rightOperand";
+	 return;
+	 }
+	 }
+	 arr[1].id = "operator";
+	 arr[0].id = "leftOperand";
+	 arr[2].id = "rightOperand";
+	 }
+	 */
+
+
 	// This starts the solving process, for right now the person can't try to submit
 	// after starting the stepThrough.
 	function stepThrough() {
+
+		arrLeng = arr.length;
 
 		// gets rid of failed statment if they tried to submit an answer
 		if (document.getElementById("correct") !== null) {
@@ -110,8 +116,8 @@ The file creates all interactivity for the webpage.
 		}
 
 
-		// gets rid of submit button, changes next button text
-		// and creates the steps div to put everything for step through.
+		// gets rid of submit button, chances next button text
+		// and creates the steps div to put everything in.
 		if (!started) {
 			document.getElementById("submit").style.visibility = "hidden";
 			document.getElementById("nextstep").innerHTML = "Next";
@@ -123,12 +129,11 @@ The file creates all interactivity for the webpage.
 
 			var newChild2 = document.createElement("div");
 			newChild2.classList.add("prompt");
-			newChild2.innerHTML = "Start by evaluating all the Multiplicative (* / %) operators from left to right. <br /> Then evaluate " +
-									"the Additive (+ -) operators from left to right.";
+			newChild2.innerHTML = "Start by evaluating all the Multiplicative (* / %) operators <br /> and then evaluate " +
+									"the Additive (+ -) operators working from left to right.";
 			newChild.appendChild(newChild2);
 		}
 
-		// finds and set the indices for the operator, left operand, and right operand
 		find();
 
 		// this will prompt the user every time to ask what type
@@ -196,7 +201,7 @@ The file creates all interactivity for the webpage.
 		document.getElementById("nextstep").onclick = findOperator;
 	}
 
-	// Prompts the user to find and click the operator.
+
 	function findOperator() {
 		if (document.getElementById("error") !== null) {
 			document.getElementById("steps").removeChild(document.getElementById("error"));
@@ -204,24 +209,24 @@ The file creates all interactivity for the webpage.
 		document.getElementById("steps").removeChild(document.getElementById("firststep"));
 		var newChild = document.createElement("div");
 		newChild.classList.add("expressionStatement");
-		messageParagraph = document.createElement("p");
-		expressionParagraph = document.createElement("p");
-		messageParagraph.classList.add("step");
-		expressionParagraph.classList.add("exp");
+		newChildPara1 = document.createElement("p");
+		newChildPara2 = document.createElement("p");
+		newChildPara1.classList.add("step");
+		newChildPara2.classList.add("exp");
 
 		var message = "Click on the next ";
 
 		if (arr[operator].type == "MDMoperator") {
-			messageParagraph.innerHTML = message + "*, /, or % operator";
+			newChildPara1.innerHTML = message + "*, /, or % operator";
 		} else {
-			messageParagraph.innerHTML = message + "+ or - operator";
+			newChildPara1.innerHTML = message + "+ or - operator";
 		}
 
 		//findFirst();
-		expressionParagraph.innerHTML = arrToString(arr);
+		newChildPara2.innerHTML = arrToString(arr);
 
-		newChild.appendChild(messageParagraph);
-		newChild.appendChild(expressionParagraph);
+		newChild.appendChild(newChildPara1);
+		newChild.appendChild(newChildPara2);
 
 		document.getElementById("steps").appendChild(newChild);
 		document.getElementById("steps").style.visability = "visable";
@@ -255,8 +260,8 @@ The file creates all interactivity for the webpage.
 	// prompts you to click the left operand.
 	function findLeft() {
 		document.getElementById(operator).classList.add('clicked');
-		messageParagraph.innerHTML = "Now click on the left operand";
-		messageParagraph.style.color = "#45ADA8";
+		newChildPara1.innerHTML = "Now click on the left operand";
+		newChildPara1.style.color = "#45ADA8";
 
 		// makes all the other spans clickable but if they are clicked
 		// and not the right answer they get to go the wrongOption.
@@ -268,11 +273,11 @@ The file creates all interactivity for the webpage.
 		document.getElementById(lOperand).onclick = findRight;
 	}
 
-	// prompts you to click the right operand.
+	// prompts you to click the left operand.
 	function findRight() {
 		document.getElementById(lOperand).classList.add('clicked');
-		messageParagraph.innerHTML = "Now click on the right operand";
-		messageParagraph.style.color = "#547980";
+		newChildPara1.innerHTML = "Now click on the right operand";
+		newChildPara1.style.color = "#547980";
 
 		// makes all the other spans clickable but if they are clicked
 		// and not the right answer they get to go the wrongOption.
@@ -319,41 +324,71 @@ The file creates all interactivity for the webpage.
 
 	// Finds the operator, left operand and right operand.
 	function find() {
-		// loop through array and find first mult/div/mod operator
-		for (var i = 1; i < arr.length; i+=2) {
-			if (arr[i].type == "MDMoperator") {
-				operator = i;
-				lOperand = i - 1;
-				rOperand = i + 1;
-				return;
+		if (arr.length == 1) {
+			arr = [];
+			document.getElementById("nextstep").classList.add("hiddenSteps");
+		} else {
+			var flag = false;
+			for (var i = 0; i < arr.length; i++) {
+				if (arr[i].type == "MDMoperator" && !flag) {
+					operator = i;
+					lOperand = i - 1;
+					rOperand = i + 1;
+					flag = true;
+				}
+			}
+			if (!flag) {
+				for (var i = 0; i < arr.length; i++) {
+					if (arr[i].type == "ASoperator" && !flag) {
+						operator = i;
+						lOperand = i - 1;
+						rOperand = i + 1;
+						flag = true;
+					}
+				}
 			}
 		}
-		// did not find, return first add/subtract operator
-		operator = 1;
-		lOperand = 0;
-		rOperand = 2;
 	}
-
 
 	// solves and updates expression, needs to be trimped since find does
 	// a lot of the work.
 	function solve() {
 		if (arr.length == 1) {
+			arr = [];
 			document.getElementById("nextstep").classList.add("hiddenSteps");
 		} else {
-			var updatedArray = [];
-			//copy all values that aren't evaluated
-			for (var i = 0; i < operator; i++) {
-				updatedArray.push(arr[i]);
+			var arr2 = [];
+			var flag = false;
+			for (var i = 0; i < arr.length; i++) {
+				if (arr[i].type == "MDMoperator" && !flag) {
+					//document.getElementById(operator).onclick = findOperand;
+					if (arr[i].value == "*") {
+						arr2[i - 1].value = arr[i - 1].value * arr[i + 1].value;
+					} else if (arr[i].value == "/") {
+						arr2[i - 1].value = (arr[i - 1].value / arr[i + 1].value);
+					} else if (arr[i].value == "%") {
+						arr2[i - 1].value = arr[i - 1].value % arr[i + 1].value;
+					}
+					flag = true;
+					i++;
+				} else {
+					arr2.push(arr[i]);
+				}
 			}
-			// evaluate portion of expression
-			if (arr[operator].value == '*') {
-				updatedArray[operator - 1].value = (arr[operator - 1].value * arr[operator+ 1].value);
-			} else if (arr[operator].value == '/') {
-				updatedArray[operator - 1].value = (arr[operator - 1].value / arr[operator + 1].value);
-				// special case for int division
-				if (arr[operator -1].type == 'int' && arr[operator + 1].type == 'int') {
-					updatedArray[operator - 1].value = Math.round(updatedArray[operator - 1].value);
+			if (!flag) {
+				arr2 = [];
+				for (var i = 0; i < arr.length; i++) {
+					if (arr[i].type == "ASoperator" && !flag) {
+						if (arr[i].value == "+") {
+							arr2[i - 1].value = arr[i - 1].value + arr[i + 1].value;
+						} else if (arr[i].value == "-") {
+							arr2[i - 1].value = (arr[i - 1].value - arr[i + 1].value);
+						}
+						flag = true;
+						i++;
+					} else {
+						arr2.push(arr[i]);
+					}
 				}
 			} else if (arr[operator].value == '%') {
 				updatedArray[operator - 1].value = (arr[operator - 1].value % arr[operator+ 1].value);
@@ -362,22 +397,13 @@ The file creates all interactivity for the webpage.
 			} else if (arr[operator].value == '-') {
 				updatedArray[operator - 1].value = (arr[operator - 1].value - arr[operator+ 1].value);
 			}
-			// setting type of value
-			if (arr[operator -1].type == 'int' && arr[operator + 1].type == 'int') {
-				updatedArray[operator - 1].type = 'int';
-			} else {
-				updatedArray[operator - 1].type = 'double';
-			}
-			// copy remaining elements of expression
-			for (var i = operator + 2; i < arr.length; i++) {
-				updatedArray.push(arr[i]);
-			}
-			arr = updatedArray;
+
+			arrLeng = arr.length;
+			arr = arr2;
 		}
 	}
 
 	// prompts the user to solve a portion of the problem
-	// mini expression piece
 	function trySubmit() {
 		if (document.getElementById("error") !== null) {
 			var steps = document.getElementById("steps");
@@ -391,44 +417,33 @@ The file creates all interactivity for the webpage.
 
 		var newChild = document.createElement("div");
 		newChild.classList.add("expressionStatement");
-		var messageParagraph2 = document.createElement("p");
-		var expressionParagraph2 = document.createElement("p");
-		messageParagraph2.classList.add("step");
-		expressionParagraph2.classList.add("exp");
+		var newChildPara3 = document.createElement("p");
+		var newChildPara4 = document.createElement("p");
+		newChildPara3.classList.add("step");
+		newChildPara4.classList.add("exp");
 
-		messageParagraph2.innerHTML = "What is the answer?";
+		newChildPara3.innerHTML = "What is the answer?";
 		//findFirst();
-		expressionParagraph2.innerHTML = answerToString(arr);
+		newChildPara4.innerHTML = answerToString(arr);
 
-		newChild.appendChild(messageParagraph2);
-		newChild.appendChild(expressionParagraph2);
+		newChild.appendChild(newChildPara3);
+		newChild.appendChild(newChildPara4);
 
 		document.getElementById("steps").appendChild(newChild);
 
 		next.onclick = processAnswer;
 	}
 
-	// prosses user's answer for solving mini expression, 
-	// tells them whether it's right or wrong and then continues.
+	// prosses user's answer, tells them whether it's right or wrong and then continues.
 	function processAnswer() {
 		var clientAnswer = document.getElementById("answer");
 		solve();
-
 		var newChild = document.createElement("div");
 		newChild.setAttribute("id", "reply");
 
-		var correct = false;
-		if (arr[lOperand].type == 'double' && arr[lOperand].value % 1 == 0) {
-			if (clientAnswer.value == (arr[lOperand].value + ".0")) {
-				correct = true;
-			}
-		} else if (clientAnswer.value == arr[lOperand].value) {
-			correct = true;
-		}
-
-		if (correct && arr.length > 1) {
+		if (clientAnswer.value == arr[lOperand].value && arr.length > 1) {
 			newChild.innerHTML = "Great Job! Click Next to continue.";
-		} else if (correct && arr.length <= 1) {
+		} else if (clientAnswer.value == arr[lOperand].value && arr.length <= 1) {
 			newChild.innerHTML = "Great Job!";
 		} else {
 			clientAnswer.style.color = "red";
@@ -450,18 +465,14 @@ The file creates all interactivity for the webpage.
 
 			next.onclick = function () {
 				clientAnswer.style.color = "black";
-				if (arr[lOperand].type == 'double' && arr[lOperand].value % 1 == 0) {
-					clientAnswer.value =  arr[lOperand].value + ".0";
-				} else {
-					clientAnswer.value = arr[lOperand].value;
-				}
+				clientAnswer.value =  arr[lOperand].value;
 				stepThrough();
 			}
 			clientAnswer.id = "";
 		}
 	}
 
-	// creates the answer box in a string.
+	// creates the answer box in a sting.
 	function answerToString() {
 		var arrString = "";
 		for (var i = 0; i < arr.length; i++) {
@@ -469,11 +480,7 @@ The file creates all interactivity for the webpage.
 				arrString += "<input type=text id=answer size=1/> "
 				i += 2;
 			} else {
-				if (arr[i].type == 'double' && arr[i].value % 1 == 0) {
-					arrString += arr[i].value + ".0 ";
-				} else {
-					arrString += arr[i].value + " ";
-				}
+				arrString += arr[i].value + " ";
 			}
 		}
 		return arrString;
@@ -486,15 +493,11 @@ The file creates all interactivity for the webpage.
 			if (i == lOperand) {
 				arrString += "<span class='clicked'>";
 			}
-			if (arr[i].type == 'double' && arr[i].value % 1 == 0) {
-				arrString += arr[i].value + ".0 ";
-			} else {
-				arrString += arr[i].value + " ";
-			}
+			arrString += arr[i].value + " ";
 			if (i == rOperand) {
 				arrString += "</span> ";
 			}
 		}
-		expressionParagraph.innerHTML = arrString;
+		newChildPara2.innerHTML = arrString;
 	}
 }) ();

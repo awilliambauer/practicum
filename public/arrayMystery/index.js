@@ -3,111 +3,164 @@
 
     var step = 0;
 
-    window.onload = function() {
+    window.onload = function () {
         $("#next").on("click", next);
         $("#back").on("click", back);
-
     };
 
     // Called when the user presses the next button
     function next() {
         clearHighlights();
         $("#next").html("Next"); //reset next button
-        switch(step) {
+        switch (step) {
+            case -1:
+                resetScreen();
+                break;
             case 0:
-                init();
-                iValue(1);
+                loopBounds();
                 break;
             case 1:
-                loopTest("Yes");
+                init();
+                iValue(1);
+                shrinkProblemDes();
                 break;
             case 2:
-                exprEvalPrompt();
+                loopTest("Yes");
                 break;
             case 3:
-                exprIValue(1);
+                exprEvalPrompt();
                 break;
             case 4:
-                exprArrIMin1(1, 11);
+                exprIValue(1);
                 break;
             case 5:
-                exprArrIPlus1(1, 11, 2);
+                exprArrIMin1(1, 11);
                 break;
             case 6:
-                exprResult(1, 11, 2, 13);
+                exprArrIPlus1(1, 11, 2);
                 break;
             case 7:
-                selectIndex(1);
+                exprResult(1, 11, 2, 13);
                 break;
             case 8:
-                updateArray(1, 13);
+                selectIndex(1);
                 break;
             case 9:
-                iValue(2);
+                updateArray(1, 13);
                 break;
             case 10:
-                loopTest("Yes");
+                iValue(2);
                 break;
             case 11:
-                exprEvalPrompt();
-                break;
-            case 12:
-                exprIValue(2);
-                break;
-            case 13:
-                exprArrIMin1(2, 13);
-                break;
-            case 14:
-                exprArrIPlus1(2, 13, 4);
-                break;
-            case 15:
-                exprResult(2, 13, 4, 30);
-                break;
-            case 16:
-                selectIndex(2);
-                break;
-            case 17:
-                updateArray(2, 30);
-                break;
-            case 18:
-                iValue(3)
-                break;
-            case 19:
                 loopTest("Yes");
                 break;
-            case 20:
+            case 12:
                 exprEvalPrompt();
                 break;
+            case 13:
+                exprIValue(2);
+                break;
+            case 14:
+                exprArrIMin1(2, 13);
+                break;
+            case 15:
+                exprArrIPlus1(2, 13, 4);
+                break;
+            case 16:
+                exprResult(2, 13, 4, 30);
+                break;
+            case 17:
+                selectIndex(2);
+                break;
+            case 18:
+                updateArray(2, 30);
+                break;
+            case 19:
+                iValue(3)
+                break;
+            case 20:
+                loopTest("Yes");
+                break;
             case 21:
-                exprIValue(3)
+                exprEvalPrompt();
                 break;
             case 22:
-                exprArrIMin1(3, 30);
+                exprIValue(3)
                 break;
             case 23:
-                exprArrIPlus1(2, 30, 7);
+                exprArrIMin1(3, 30);
                 break;
             case 24:
-                exprResult(2, 30, 7, 67);
+                exprArrIPlus1(3, 30, 7);
                 break;
             case 25:
-                selectIndex(3);
+                exprResult(3, 30, 7, 67);
                 break;
             case 26:
-                updateArray(3, 67);
+                selectIndex(3);
                 break;
             case 27:
-                iValue(4);
+                updateArray(3, 67);
                 break;
             case 28:
-                loopTest("No");
+                iValue(4);
                 break;
             case 29:
+                loopTest("No");
+                break;
+            case 30:
                 done();
                 break;
         }
         step++;
 
+    }
+
+    /** Crude version of figuring out loop bounds.
+     * If they enter 0 as the first index, it turns green and
+     * autofills the rest of the indices. Turns red if they
+     * get it wrong.
+     */
+    function loopBounds() {
+        $("#promptwords").html("Let us determine the bounds of the loop <br> Enter the value for the first index");
+        $("#firstindex").on('keyup change', function() {
+            if ($("#firstindex").val() == 0) {
+                $("#firstindex").css("background-color", "#00FF00");
+                var index = 0;
+                $("input").each(function () {
+                    $(this).val(index);
+                    index++;
+                });
+            } else {
+                $("#firstindex").css("background-color", "#FF0000");
+            }
+        });
+    }
+
+    /** Decreases size of problem description with concurrent fadeout, and
+    * increases size of problem text
+    * */
+    function shrinkProblemDes() {
+        $("#problemdescription").fadeTo(500,0.3);
+        $("#problemdescription").animate({
+            "fontSize": "10px"
+        });
+        $("#problemtext").animate({
+            "fontSize": "17px"
+        });
+    }
+
+    /** Increases size of problem description with concurrent fadein, and
+     * decreases size of problem text
+     * */
+    function growProblemDes() {
+        $("#problemdescription").fadeTo(500,1);
+        $("#problemdescription").animate({
+            "fontSize": "15px"
+        });
+        $("#problemtext").animate({
+            "fontSize": "12px"
+        });
     }
 
     /** Prompts for the current value of i and updates it
@@ -117,11 +170,11 @@
     function iValue(i) {
         $("#promptwords").html("The current value of i is " + i);
         $("#i").html(i);
-        $("#i").css("border-color", "cyan");
+        $("#i").css("border-color", "#45ADA8");
         if (i === 1) {
-            $("#init").css("color", "deeppink");
+            applyEmphasis("#init");
         } else {
-            $("#incr").css("color", "deeppink");
+            applyEmphasis("#init");
         }
     }
 
@@ -131,8 +184,8 @@
      * @param doesPass "Yes" if the test passes, "No" otherwise
      */
     function loopTest(doesPass) {
-        $("#promptwords").html("Is <span style=\"color:deeppink\">i < arr.length - 1</span>? " + doesPass);
-        $("#test").css("color", "deeppink");
+        $("#promptwords").html("Is <span style=\"color:#45ADA8\">i < arr.length - 1</span>? " + doesPass);
+        applyEmphasis("#test");
     }
 
     /**
@@ -140,7 +193,7 @@
      */
     function exprEvalPrompt() {
         $("#promptwords").html("Let's evaluate the expression now!");
-        $("#expr").css("color", "deeppink");
+        applyEmphasis("#expr");
     }
 
     /**
@@ -149,9 +202,9 @@
      * @param i the current value of i
      */
     function exprIValue(i) {
-        $("#promptwords").html("What is the value of <span style=\"color:cyan;\">i</span>? " + i);
-        $("#expr").css("color", "deeppink");
-        $("#i").css("border-color", "cyan");
+        $("#promptwords").html("What is the value of <span style=\"color: #45ada8;\">i</span>? " + i);
+        applyEmphasis("#expr");
+        $("#i").css("border-color", "#45ADA8");
     }
 
     /**
@@ -161,11 +214,15 @@
      * @param iMin1 the current value of the index i - 1
      */
     function exprArrIMin1(i, iMin1) {
-        $("#promptwords").html("What is the value of <span style=\"color:cyan;\">i</span>? " + i +
-        "<br>What is the value of <span style=\"color:darkorange;\">arr[i - 1]</span>? " + iMin1);
-        $("#expr").css("color", "deeppink");
-        $("#i").css("border-color", "cyan");
-        $("#ele" + (i - 1)).css("border-color", "darkorange");
+        $("#promptwords").html("What is the value of <span style=\"color:#45ADA8;\">i</span>? " + i +
+        "<br>What is the value of <span style=\"background-color: #E5FCC2;\">arr[i - 1]</span>? " + iMin1);
+        applyEmphasis("#expr");
+
+        /*highlight portion of problem text containing "arr[i - 1]"*/
+        $("#exprP1").css("background-color", "#E5FCC2");
+
+        $("#i").css("border-color", "#45ADA8");
+        $("#ele" + (i - 1)).css("border-color", "#E5FCC2");
     }
 
     /**
@@ -176,13 +233,16 @@
      * @param iPlus1 the current value of the index i + 1
      */
     function exprArrIPlus1(i, iMin1, iPlus1) {
-        $("#promptwords").html("What is the value of <span style=\"color:cyan;\">i</span>? " + i +
-        "<br>What is the value of <span style=\"color:darkorange;\">arr[i - 1]</span>? " + iMin1 +
-        "<br>What is the value of <span style=\"color:mediumorchid;\">arr[i + 1]</span>? " + iPlus1);
-        $("#expr").css("color", "deeppink");
-        $("#i").css("border-color", "cyan");
-        $("#ele" + (i - 1)).css("border-color", "darkorange");
-        $("#ele" + (i + 1)).css("border-color", "mediumorchid");
+        $("#promptwords").html("What is the value of <span style=\"color: #45ada8;\">i</span>? " + i +
+        "<br>What is the value of <span style=\"background-color: #E5FCC2;\">arr[i - 1]</span>? " + iMin1 +
+        "<br>What is the value of <span style=\"background-color: #9DE0AD;\">arr[i + 1]</span>? " + iPlus1);
+
+        applyEmphasis("#expr");
+        $("#exprP1").css("background-color", "#E5FCC2");
+        $("#exprP2").css("background-color", "#9DE0AD");
+        $("#i").css("border-color", "#45ADA8");
+        $("#ele" + (i - 1)).css("border-color", "#E5FCC2");
+        $("#ele" + (i + 1)).css("border-color", "#9DE0AD");
     }
 
     /**
@@ -195,13 +255,16 @@
      */
     function exprResult(i, iMin1, iPlus1, result) {
         $("#promptwords").html("What is the value of <span style=\"color:cyan;\">i</span>? " + i +
-        "<br>What is the value of <span style=\"color:darkorange;\">arr[i - 1]</span>? " + iMin1 +
-        "<br>What is the value of <span style=\"color:mediumorchid;\">arr[i + 1]</span>? " + iPlus1 +
+        "<br>What is the value of <span style=\"background-color: #e5fcc2;\">arr[i - 1]</span>? " + iMin1 +
+        "<br>What is the value of <span style=\"background-color: #9DE0AD;\">arr[i + 1]</span>? " + iPlus1 +
         "<br>What is the result of the expression? " + result);
-        $("#expr").css("color", "deeppink");
-        $("#i").css("border-color", "cyan");
-        $("#ele" + (i - 1)).css("border-color", "darkorange");
-        $("#ele" + (i + 1)).css("border-color", "mediumorchid");
+
+        applyEmphasis("#expr");
+        $("#exprP1").css("background-color", "#E5FCC2");
+        $("#exprP2").css("background-color", "#9DE0AD");
+        $("#i").css("border-color", "#45ADA8");
+        $("#ele" + (i - 1)).css("border-color", "#E5FCC2");
+        $("#ele" + (i + 1)).css("border-color", "#9DE0AD");
     }
 
     /**
@@ -211,8 +274,8 @@
      */
     function selectIndex(index) {
         $("#promptwords").html("Which index of the array is going to change? " + index);
-        $("#index").css("color", "deeppink");
-        $("#ele" + index).css("border-color", "cyan");
+        applyEmphasis("#index");
+        $("#ele" + index).css("border-color", "#45ADA8");
     }
 
     /**
@@ -223,7 +286,7 @@
      */
     function updateArray(index, val) {
         $("#promptwords").html("Update that index of the array.");
-        $("#ele" + index).css("border-color", "cyan");
+        $("#ele" + index).css("border-color", "#45ADA8");
         $("#ele" + index).html(val);
     }
 
@@ -233,7 +296,7 @@
     function done() {
         $("#promptwords").html("We are done!");
         $("#next").html("Start over");
-        step = -1;
+        step = -2;
     }
 
     // Called when the back button is pressed
@@ -260,6 +323,20 @@
         $("#ele3").html("4");
     }
 
+    function applyEmphasis(element) {
+        $(element).css("color", "#45ADA8");
+        $(element).css("font-weight", "bold");
+    }
+
+
+    /** Returns screen to onload state, with initial prompt message and original (approx) sizing
+     * of problem description and problem text.
+     * */
+    function resetScreen() {
+        $("#promptwords").html("Let's start the problem!");
+        growProblemDes();
+    }
+
     // Removes all styling highlighting boxes and coloring text
     function clearHighlights() {
         // Reset text in problem
@@ -283,6 +360,17 @@
         $("#2").css("color", "black");
         $("#3").css("color", "black");
         $("#4").css("color", "black");
+
+        //Reset bolded terms to normal weight
+        $("#init").css("font-weight", "normal");
+        $("#test").css("font-weight", "normal");
+        $("#incr").css("font-weight", "normal");
+        $("#index").css("font-weight", "normal");
+        $("#expr").css("font-weight", "normal");
+
+        //Reset highlighted terms:
+        $("#exprP1").css("background-color", "white");
+        $("#exprP2").css("background-color", "white");
     }
     //1)   What is the current value of i?
     //    2)   Does the for loop test pass?

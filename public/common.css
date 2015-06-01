@@ -1,28 +1,20 @@
+/*
+The common style sheet for the whole site.
+*/
+
 body {
-    background-color: #0CC5B2;
-    font-family: Arial, Tahoma, sans-serif;
-    font-size: 8pt;
-    margin: 0px;
     padding: 0px;
-    text-align: center;
-}
-h1 {
-    font-size: 36pt ;
-    font-weight: bold;
-    margin-top: 5%;
-    text-shadow: 1px 1px #999999;
-}
-.content {
-    width: 50%;
-    background-color: #FFF9E8;
-    margin-top: 40px;
-    margin-left: auto;
-    margin-right: auto;
-    overflow: hidden;
+    margin: 0px;
+    background-color: #FAFFF3;
+    font-family: Arial, san-serif;
 }
 
 .topnav {
     margin-left: 0px;
+}
+
+.container-fluid > ul {
+    margin: 8pt;
 }
 
 .navlinks {
@@ -39,28 +31,13 @@ h1 {
     height: 40px;
 }
 
-.box {
-    background-color: #F0F0F0;
-    border: solid;
-    border-radius: 5%;
-    font-size: 20pt;
-    float:left;
-    overflow: hidden;
-    display: inline-block;
-    width: 175px;
-    height: 100px;
-    vertical-align: middle;
-    padding: 0;
-    margin: 5%;
-    margin-top: 2%;
-    margin-bottom: 2%;
-}
-
 .topnavContainer {
     position:absolute;
     width:100%;
     z-index:999;
-    background-color:#CE3850;
+    background-color: #547980;
+    color: #E5FCC2;
+    font-weight: bold;
     opacity:0.98;
     height:40px;
 }
@@ -73,7 +50,7 @@ h1 {
     color:#f5f5f5;
 }
 .topnav a:hover, .topnav a:active, .topnav a:focus {
-    background-color:#A52D40 !important;
+    background-color:#436166 !important;
     text-decoration: none;
     color:#ffffff !important;
 }
@@ -86,7 +63,6 @@ h1 {
 }
 .navlinks > li {
     float: left;
-    font-family: Arial;
     font-weight: bold;
     font-size: 12pt;
 }
@@ -104,20 +80,4 @@ h1 {
 }
 #topLogo {
     margin-top:6px;
-}
-
-.red {
-    border-color: #CE3850;
-}
-
-.orange {
-    border-color: #F7B242;
-}
-
-.yellow {
-    border-color: #F9EE76;
-}
-
-.green {
-    border-color: #B3D55F;
 }
