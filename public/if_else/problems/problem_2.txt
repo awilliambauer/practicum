@@ -1,8 +1,9 @@
+public class A {
 public static void ifElseMystery2 (int x, int y) {
-	int z = 7;
+	int z = 2;
 
     if (z < x) {
-        x = x + 12
+        x = x + 12;
     }
 
     if (z + y > x) {
@@ -16,5 +17,4 @@ public static void ifElseMystery2 (int x, int y) {
 
     System.out.println(x + " " + y + " " + z);
 }
-
-ifElseMystery1(8, 30)
+}

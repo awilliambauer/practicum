@@ -24,8 +24,8 @@ var state = [
         vars: {
             1: {x: 3, y: 20}
         },
-        answer: {z: 7},
-        updated: [x, y]
+        answer: {z: 2},
+        updated: ["x", "y"]
     },
 
     {
@@ -33,9 +33,9 @@ var state = [
         lineNum: 4,
         vars: {
             1: {x: 3, y: 20},
-            2: {x: 3, y: 20, z: 7}
+            2: {x: 3, y: 20, z: 2}
         },
-        updated: [z]
+        updated: ["z"]
     },
 
     {
@@ -44,7 +44,7 @@ var state = [
         testResult: true,
         vars: {
             1: {x: 3, y: 20},
-            2: {x: 3, y: 20, z: 7}
+            2: {x: 3, y: 20, z: 2}
         }
     },
 
@@ -53,7 +53,18 @@ var state = [
         lineNum: 4,
         vars: {
             1: {x: 3, y: 20},
-            2: {x: 3, y: 20, z: 7}
+            2: {x: 3, y: 20, z: 2}
+        },
+        bools: {4: true}
+    },
+
+    {
+        prompt: "If/Else: Which line should we execute next?",
+        lineNum: 4,
+        nextLine: 5,
+        vars: {
+            1: {x: 3, y: 20},
+            2: {x: 3, y: 20, z: 2}
         },
         bools: {4: true}
     },
@@ -63,9 +74,9 @@ var state = [
         lineNum: 5,
         vars: {
             1: {x: 3, y: 20},
-            2: {x: 3, y: 20, z: 4}
+            2: {x: 3, y: 20, z: 2}
         },
-        answer: {z: 13},
+        answer: {x: 15},
         bools: {4: true}
     },
 
@@ -74,11 +85,11 @@ var state = [
         lineNum: 8,
         vars: {
             1: {x: 3, y: 20},
-            2: {x: 3, y: 20, z: 4},
-            5: {x: 15, y: 20, z: 13}
+            2: {x: 3, y: 20, z: 2},
+            5: {x: 15, y: 20, z: 2}
         },
         bools: {4: true},
-        updated: [z]
+        updated: ["x"]
     },
 
     {
@@ -87,8 +98,8 @@ var state = [
         testResult: true,
         vars: {
             1: {x: 3, y: 20},
-            2: {x: 3, y: 20, z: 7},
-            5: {x: 15, y: 20, z: 13}
+            2: {x: 3, y: 20, z: 2},
+            5: {x: 15, y: 20, z: 2}
         },
         bools: {4: true}
     },
@@ -98,8 +109,20 @@ var state = [
         lineNum: 8,
         vars: {
             1: {x: 3, y: 20},
-            2: {x: 3, y: 20, z: 7},
-            5: {x: 15, y: 20, z: 13}
+            2: {x: 3, y: 20, z: 2},
+            5: {x: 15, y: 20, z: 2}
+        },
+        bools: {4: true, 8: true}
+    },
+
+    {
+        prompt: "If/Else: Which line should we execute next?",
+        lineNum: 8,
+        nextLine: 9,
+        vars: {
+            1: {x: 3, y: 20},
+            2: {x: 3, y: 20, z: 2},
+            5: {x: 15, y: 20, z: 2}
         },
         bools: {4: true, 8: true}
     },
@@ -109,8 +132,8 @@ var state = [
         lineNum: 9,
         vars: {
             1: {x: 3, y: 20},
-            2: {x: 3, y: 20, z: 7},
-            5: {x: 15, y: 20, z: 13}
+            2: {x: 3, y: 20, z: 2},
+            5: {x: 15, y: 20, z: 2}
         },
         answer: {y: 25},
         bools: {4: true, 8: true}
@@ -121,13 +144,13 @@ var state = [
         lineNum: 10,
         vars: {
             1: {x: 3, y: 20},
-            2: {x: 3, y: 20, z: 4},
-            5: {x: 15, y: 20, z: 13},
-            9: {x: 15, y: 25, z: 13}
+            2: {x: 3, y: 20, z: 2},
+            5: {x: 15, y: 20, z: 2},
+            9: {x: 15, y: 25, z: 2}
         },
         answer: {x: 30},
         bools: {4: true, 8: true},
-        updated: [z]
+        updated: ["y"]
     },
 
     {
@@ -135,13 +158,13 @@ var state = [
         lineNum: 13,
         vars: {
             1: {x: 3, y: 20},
-            2: {x: 3, y: 20, z: 4},
-            5: {x: 15, y: 20, z: 13},
-            9: {x: 15, y: 25, z: 13},
-            10: {x: 30, y: 25, z: 13}
+            2: {x: 3, y: 20, z: 2},
+            5: {x: 15, y: 20, z: 2},
+            9: {x: 15, y: 25, z: 2},
+            10: {x: 30, y: 25, z: 2}
         },
         bools: {4: true, 8: true},
-        updated: [z]
+        updated: ["x"]
     },
 
     {
@@ -150,10 +173,10 @@ var state = [
         testResult: false,
         vars: {
             1: {x: 3, y: 20},
-            2: {x: 3, y: 20, z: 4},
-            5: {x: 15, y: 20, z: 13},
-            9: {x: 15, y: 25, z: 13},
-            10: {x: 30, y: 25, z: 13}
+            2: {x: 3, y: 20, z: 2},
+            5: {x: 15, y: 20, z: 2},
+            9: {x: 15, y: 25, z: 2},
+            10: {x: 30, y: 25, z: 2}
         },
         bools: {4: true, 8: true}
     },
@@ -163,10 +186,25 @@ var state = [
         lineNum: 13,
         vars: {
             1: {x: 3, y: 20},
-            2: {x: 3, y: 20, z: 4},
-            5: {x: 15, y: 20, z: 13},
-            9: {x: 15, y: 25, z: 13},
-            10: {x: 30, y: 25, z: 13}
+            2: {x: 3, y: 20, z: 2},
+            5: {x: 15, y: 20, z: 2},
+            9: {x: 15, y: 25, z: 2},
+            10: {x: 30, y: 25, z: 2}
+        },
+        bools: {4: true, 8: true, 13: false},
+        crossOut: [14]
+    },
+
+    {
+        prompt: "If/Else: Which line should we execute next?",
+        lineNum: 13,
+        nextLine: 16,
+        vars: {
+            1: {x: 3, y: 20},
+            2: {x: 3, y: 20, z: 2},
+            5: {x: 15, y: 20, z: 2},
+            9: {x: 15, y: 25, z: 2},
+            10: {x: 30, y: 25, z: 2}
         },
         bools: {4: true, 8: true, 13: false},
         crossOut: [14]
@@ -174,13 +212,13 @@ var state = [
 
     {
         prompt: "Answer: Now use your variable bank to fill in the answer!",
-        lineNum: 17,
+        lineNum: 16,
         vars: {
             1: {x: 3, y: 20},
-            2: {x: 3, y: 20, z: 4},
-            5: {x: 15, y: 20, z: 13},
-            9: {x: 15, y: 25, z: 13},
-            10: {x: 30, y: 25, z: 13}
+            2: {x: 3, y: 20, z: 2},
+            5: {x: 15, y: 20, z: 2},
+            9: {x: 15, y: 25, z: 2},
+            10: {x: 30, y: 25, z: 2}
         },
         bools: {4: true, 8: true, 13: false},
         crossOut: [14]
