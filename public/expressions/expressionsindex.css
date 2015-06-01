@@ -17,15 +17,17 @@ span:hover {
 }
 
 #pagedescription {
-	margin-left: auto;
-	margin-right: auto;
-	width: 475px;
-	font-size: 9pt;
-	margin-bottom: 40px;
-	border: 2px solid #547980;
+	display: inline-block;
+	margin: auto;
+	font-size: 15pt;
+	border-radius: 10px;
+	border: 2px solid #45ADA8;
 	background-color: white;
-	padding: 5px;
-	text-align: center;
+	padding: 10px;
+}
+
+#boxcenter {
+	margin-bottom: 20px;
 }
 
 body {
@@ -33,18 +35,28 @@ body {
 	font-family: Arial, sans-serif;
 	padding: 0px 0px 25px;
 	margin: 40px 0px;
-	background-color: #FAFFF3;
+	background-color: #9DE0AD;
 }
 
 #problem {
-	/*border: 2px solid #6FC483;*/
+	border-radius: 25px;
+	width: 75%;
+	margin-left: auto;
+	margin-right: auto;
 	overflow: hidden;
+	background-color: #E5FCC2;
+
+}
+
+#dummy {
+	height: 100px;
 }
 
 h1 {
 	font-size: 40px;
-	margin-bottom: 10px;
-	color: #547980;
+	margin-bottom: 40px;
+	color: #45ADA8;
+	padding-top: 50px;
 }
 
 #steps {
@@ -96,9 +108,10 @@ h1 {
 }
 
 h2 {
-	margin-bottom: 10px;
+	margin-bottom: 40px;
 	font-size: 25pt;
-	margin-top: 50px;
+	margin-top: 40px;
+	font-weight: normal;
 }
 
 .buttons {
@@ -114,11 +127,12 @@ h2 {
 }
 
 .buttonLineUp {
-	margin-right: 35%;
-	margin-left: 50%;
-	width: 30%;
+	margin-right: 40%;
+	margin-left: 25%;
+	width: 20%;
 	clear:both;
 	float:right;
+	margin-top: 15px;
 }
 
 .highlight1 {

@@ -13,16 +13,21 @@ This provides the structure for the expressions page
 
 	<body>
 		<div id="problem">
-			<h1>Expressions Test</h1>
+			<h1>Expressions</h1>
+			<div style="text-align: center;">
+				<div id="pagedescription">
+					Evaluate the expression and give its resulting value.
+				</div>
+			</div>
+			<!--  Going to make this an error message
 
-			<!--<h2>2 + 3 * 4 - 6</h2>-->
+			Make sure to
+				give a value of the appropriate type (such as including a .0 at the end of a double
+				or quotes around a String) -->
+
+
 			<h2 id="expressionHeader"> </h2>
 
-			<div id="pagedescription">
-				Evaluate the expression and give it's resultiing value. Make sure to
-				give a value of the appropriate type (such as including a .0 at the end of a double
-				or quotes around a String).
-			</div>
 
 			<!--This form id box currently posts to a php page, but in the future should ultimately be handled by JavaScript.
 			See this example: http://www.w3schools.com/jsref/tryit.asp?filename=tryjsref_form_submit -->
@@ -38,6 +43,10 @@ This provides the structure for the expressions page
 					<button class='buttons' type="button" id="nextstep">Steps</button>
 				</div>
 			</div>
+
+			<div id="dummy">
+			</div>
+
 		</div>
 	</body>
 </html>
