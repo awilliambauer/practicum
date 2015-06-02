@@ -57,16 +57,12 @@
         // Reinsert the html of the problem text
         on_convert();
 
-        // Set array element values
+        // Rebuild the HTML of the array to ensure any styling is removed
         var elements = state.array;
-        var array = $("#arraydata");
-        for (var i = 0; i < elements.length; i++) {
-            var child = $("<td id=\"ele" + i + "\"></td>");
-            child.html(elements[i]);
-            array.append(child);
-        }
+        var array = $("#array");
 
         // Display Indices
+        var tableHead = $("<thead>", {id: "indices"});
         var indices = $("#indices");
         if (state.index === null) {
             for (i = 0; i < state.array.length; i++) {
@@ -79,6 +75,16 @@
                 indices.append(indexBox);
             }
         }
+        tableHead.append(indices);
+        array.append(tableHead);
+
+        var tableBody = $("<tbody>", {id: "arraydata"});
+        for (var i = 0; i < elements.length; i++) {
+            var child = $("<td id=\"ele" + i + "\"></td>");
+            child.html(elements[i]);
+            tableBody.append(child);
+        }
+        array.append(tableBody);
 
 
         // Update prompt text
