@@ -6,9 +6,10 @@
 	var AST;
 	var CORRECT_NEXT_LINE;
 	var CORRECT_VARIABLES;
+	var CORRECT_BOOL;
 
 	$(document).ready(function() {
-
+		CORRECT_BOOL = null;
 		CURRENT_STEP = 0;
 		VARIABLES = {};
 		init();
@@ -64,14 +65,10 @@
 		 */
 		var correctLine = true;
 		var correctVars = true;
+		var correctBool = true;
 		if (CORRECT_NEXT_LINE) {
 			var lineInput = document.getElementsByClassName("next_line_input");
-			if (CORRECT_NEXT_LINE != lineInput[0].value) {
-				correctLine = false;
-			} else {
-				correctLine = true;
-			}
-
+			correctLine = CORRECT_NEXT_LINE == lineInput[0].value;
 		}
 		if (CORRECT_VARIABLES) {
 			var variables = document.getElementsByClassName("variable_answer");
@@ -79,18 +76,17 @@
 			for(var i = 0; i < variables.length; i++) {
 				answer.push(parseInt(variables[i].value));
 			}
-			//console.log(answer);
-			//console.log(CORRECT_VARIABLES);
-			//console.log(answer.equals(CORRECT_VARIABLES));
-			if(answer.equals(CORRECT_VARIABLES)) {
-				console.log("true");
-				correctVars = true;
-			} else {
-				correctVars = false;
-			}
+			correctVars = answer.equals(CORRECT_VARIABLES);
 
 		}
-		if(correctLine && correctVars) {
+		if(CORRECT_BOOL !== null) {
+			var check = document.querySelector("input[name = \"tf\"]:checked").value + "";
+			console.log(CORRECT_BOOL);
+			correctBool = (check == CORRECT_BOOL);
+		}
+		
+
+		if(correctLine && correctVars && correctBool) {
 			var currentState = state[CURRENT_STEP];
 			if(currentState.hasOwnProperty("answer")) {
 				CORRECT_VARIABLES = [];
@@ -99,6 +95,11 @@
 				}
 			} else {
 				CORRECT_VARIABLES = null;
+			}
+			if(currentState.hasOwnProperty("testResult"))  {
+				CORRECT_BOOL = currentState.testResult + "";
+			} else {
+				CORRECT_BOOL = null;
 			}
 			if (currentState.hasOwnProperty("nextLine")) {
 				CORRECT_NEXT_LINE = currentState.nextLine;
@@ -135,8 +136,10 @@
 		} else { // Entered line was not correct
 			if(!correctLine)
 				alert("Wrong Line, try again!");
-			else
+			else if(!correctVars)
 				alert("Wrong Values");
+			else
+				alert("wrong boolean");
 		}
 
 	}
@@ -361,11 +364,11 @@
 			$(boolBox).text(getBoolTest(state));
 			var trueChoice = document.createElement("input");
 			$(trueChoice).attr("type", "radio")
-						 .attr("name", "t/f")
+						 .attr("name", "tf")
 						 .attr("value", "true");
 			var falseChoice = document.createElement("input");
 			$(falseChoice).attr("type", "radio")
-						  .attr("name", "t/f")
+						  .attr("name", "tf")
 						  .attr("value", "false");
 			if (state.testResult) {
 				$(trueChoice).attr("checked", "checked");
