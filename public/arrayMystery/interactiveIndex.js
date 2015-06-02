@@ -12,15 +12,18 @@
         $("#back").on("click", back);
 
         /*
-        meredith - for debugging
+         meredith - for debugging
 
-        $("#promptwords").html(java_ast.find_by_id(1,mainAst).name);
-        */
+         $("#promptwords").html(java_ast.find_by_id(1,mainAst).name);
+         */
     };
 
     function next() {
-        step++;
-        displayState();
+        if (compareValues()) {
+            step++;
+            displayState();
+        }
+
         // TO DO Add wraps
     }
 
@@ -32,22 +35,22 @@
 
     function displayState() {
         /*{ //state 1 (initial)
-            array: [11, 14, 2, 4, 7],
-            variables: {
-                arrayLength: 5,
-                i: "?"
-            },
-            promptText: "Let's label the indices of the array!",
-            ast: mainAst,
-            index: null,
-            styleClasses: {
-                mainColorText: [],
-                mainColorBorder: [".indices"],
-                accent1Highlight: [],
-                accent1Border: [],
-                accent2Hightlight: [],
-                accent2Border: []
-            }
+         array: [11, 14, 2, 4, 7],
+         variables: {
+         arrayLength: 5,
+         i: "?"
+         },
+         promptText: "Let's label the indices of the array!",
+         ast: mainAst,
+         index: null,
+         styleClasses: {
+         mainColorText: [],
+         mainColorBorder: [".indices"],
+         accent1Highlight: [],
+         accent1Border: [],
+         accent2Hightlight: [],
+         accent2Border: []
+         }
          },*/
         var state = states[step];
 
@@ -78,8 +81,10 @@
 
         var tableBody = $("<tbody>", {id: "arraydata"});
         for (var i = 0; i < elements.length; i++) {
-            var child = $("<td id=\"ele" + i + "\"></td>");
-            child.html(elements[i]);
+            var child = $("<td>");
+            var input = $("<input>", {id: "ele" + i});
+            input.val(elements[i]);
+            child.append(input);
             tableBody.append(child);
         }
         array.append(tableBody);
@@ -125,8 +130,8 @@
         nameChild.html(name + ":");
         $(".varlabelcolumn").append(nameChild);
         var varDiv = $("<div>", {class: "variable clear"});
-        var varP = $("<p>", {class: "vardata digit", id: name + "div"});
-        varP.html(value);
+        var varP = $("<input>", {class: "vardata digit vars", id: name + "div"});
+        varP.val(value);
         varDiv.append(varP);
         $("#varvalues").append(varDiv);
     }
@@ -357,5 +362,60 @@
         $('#node').html(node.tag);
     }
 
+    function compareValues() {
+        var match = true;
+        if (step > 0) {
+            // The next state object, to which compare things
+            var state = states[step + 1];
+
+            // Compare array values
+            var elements = state.array;
+            for (var i = 0; i < elements.length; i++) {
+                var current = $(("#ele" + i)).val();
+                if (elements[i] != current) {
+                    alert(current);
+                    incorrect("array element at index " + i, elements[i], current);
+                    match = false;
+                }
+            }
+
+            // Compare array indices
+            if (states[step].index == null && state.index != null) {
+                for (i = 0; i < elements.length; i++) {
+                    current = $("#index" + i).val();
+                    if ("" + i !== current) {
+                        incorrect("array index", i, current);
+                        match = false;
+                        break;
+                    }
+                }
+            }
+
+            var variables = $(".vars");
+            var variablesExpected = state.variables;
+            var count = 0;
+            for (var key in variablesExpected) {
+                current = $(variables[count]).val();
+                if (variablesExpected[key] !== current) {
+                    incorrect("variable " + key + " value", variablesExpected[key], current);
+                    match = false;
+                }
+                count++;
+            }
+        }
+        return match;
+    }
+
+
+
+
+    function incorrect(message, expected, actual) {
+        alert("Incorrect " + message + ".\n Expected: " + expected + " Actual: " + actual);
+    }
 
 })();
+
+
+
+
+

@@ -6,7 +6,7 @@
     <link href="index.css" type="text/css" rel="stylesheet" />
     <link href="../navbar.css" type="text/css" rel="stylesheet" />
     <script src="state.js"></script>
-    <script src="newIndex.js"></script>
+    <script src="interactiveIndex.js"></script>
     <script src="../ast.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="../navigationbar.js"></script>
@@ -49,9 +49,9 @@
             </div>
             <div class="varcolumn">
                 <div class="variable">
-                    <table class="vardata">
+                    <table class="vardata clear" id="array">
 
-                        <thead id="indices" class="clear">
+                        <thead id="indices">
                             <th><input type="text" name="0" maxlength="2" id="index0"></th>
                             <th><input type="text" name="1" maxlength="2" id="index1"></th>
                             <th><input type="text" name="2" maxlength="2" id="index2"></th>
@@ -59,7 +59,7 @@
                             <th><input type="text" name="4" maxlength="2" id="index4"></th>
                         </thead>
                         <tbody>
-                            <tr id="arraydata clear">
+                            <tr id="arraydata">
                                 <td id="ele0">11</td>
                                 <td id="ele1">14</td>
                                 <td id="ele2">2</td>
@@ -71,11 +71,11 @@
                 </div>
                 <div id="varvalues" class="clear">
                     <div class="variable">
-                        <p class="vardata digit">5</p>
+                        <p class="vardata digit vars">5</p>
                     </div>
 
                     <div class="variable">
-                        <p id="i" class="vardata digit">?</p>
+                        <p id="i" class="vardata digit vars">?</p>
                     </div>
                 </div>
             </div>
