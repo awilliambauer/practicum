@@ -135,6 +135,10 @@ h3 > span, #answer_box > span, input[type="text"] {
 	border-radius: 2px;
 }
 
+.select {
+	background-color: rgba(69,173,168, 0.65);
+}
+
 .grey_out {
 	color: rgb(155, 149, 149);
 }

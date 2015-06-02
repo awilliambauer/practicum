@@ -211,7 +211,7 @@ var state = [
     },
 
     {
-        "prompt": "answer: Now use your variable bank to fill in the answer!",
+        "prompt": "Answer: Now use your variable bank to fill in the answer!",
         "lineNum": 16,
         "vars": {
             "1": {"x": 3, "y": 20},

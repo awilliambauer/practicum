@@ -59,6 +59,38 @@
 	}
 
 	function next() {
+		// turn off line selecting
+		$("#problem_space li").off("mouseover");
+		if (checkUserInput()) {
+			var currentState = state[CURRENT_STEP]
+			//console.log(currentState.prompt);
+			// take away "next" button when finished
+			if (currentState.prompt.indexOf("Answer") != -1) {
+				$("#next").hide();
+			}
+
+			if (CURRENT_STEP == 0) {
+				$("#prompt").show();
+				highlightBlocks();
+			} else {
+				// scroll to the right position
+				$("html, body").animate({
+					scrollTop: $("." + currentState.lineNum).offset().top - 200
+				}, 1000);
+			}
+			CURRENT_STEP++;
+			newGetPrompt(currentState);
+			newHighlightLine(currentState);
+			newHighlightBlock(currentState);
+			newAddComments(currentState);
+			newUpdateVariables(currentState);
+			drawVariableBank();
+			newCrossOutLines(currentState);
+			addInteraction(currentState);
+		}
+	}
+
+	function checkUserInput() {
 		/*
 			Checks if the entered value is the correct next line.
 			correctLine boolean value dictates if next button moves prompt.
@@ -109,30 +141,7 @@
 			if(currentState.hasOwnProperty("nextLine")) {
 				CORRECT_VARIABLES = currentState.answer;
 			}
-			//console.log(currentState.prompt);
-			// take away "next" button when finished
-			if (currentState.prompt.indexOf("Answer") != -1) {
-				$("#next").hide();
-			}
-
-			if (CURRENT_STEP == 0) {
-				$("#prompt").show();
-				highlightBlocks();
-			} else {
-				// scroll to the right position
-				$("html, body").animate({
-					scrollTop: $("." + currentState.lineNum).offset().top - 200
-				}, 1000);
-			}
-			CURRENT_STEP++;
-			newGetPrompt(currentState);
-			newHighlightLine(currentState);
-			newHighlightBlock(currentState);
-			newAddComments(currentState);
-			newUpdateVariables(currentState);
-			drawVariableBank();
-			newCrossOutLines(currentState);
-			addInteraction(currentState);
+			return true;
 		} else { // Entered line was not correct
 			if(!correctLine)
 				alert("Wrong Line, try again!");
@@ -140,8 +149,8 @@
 				alert("Wrong Values");
 			else
 				alert("wrong boolean");
+			return false;
 		}
-
 	}
 
 	// some initialization stuff that happens on first click of next
@@ -353,7 +362,7 @@
 						 .css("font-family", "monospace");
 				var input = document.createElement("input");
 				$(input).attr("type", "text")
-						.attr("value", state.answer[variable])
+						// .attr("value", state.answer[variable]) // adding the answer to the state
 						.css("font-size", "12pt");
 				$(input).addClass("variable_answer");
 				$(varBox).append(input);
@@ -370,11 +379,11 @@
 			$(falseChoice).attr("type", "radio")
 						  .attr("name", "tf")
 						  .attr("value", "false");
-			if (state.testResult) {
-				$(trueChoice).attr("checked", "checked");
-			} else {
-				$(falseChoice).attr("checked", "checked");
-			}
+			// if (state.testResult) { // selecting the right box
+				// $(trueChoice).attr("checked", "checked");
+			// } else {
+				// $(falseChoice).attr("checked", "checked");
+			// }
 			var trueBox = document.createElement("p");
 			$(trueBox).text("true")
 					  .append(trueChoice)
@@ -402,6 +411,14 @@
 			$(lineInput).addClass("next_line_input");     // CLASS TO CHECK LATER IF INPUT'S CORRECT
 			$(lineBox).append(lineInput);
 			$(interaction).append(lineBox);
+			// add hover when mousing over
+			$("#problem_space li").mouseover(function() {
+				$(this).addClass("select");
+			});
+			$("#problem_space li").mouseout(function() {
+				$(this).removeClass("select");
+			});
+
 		}
 		$(interaction).css("font-size", "12pt");
 		$("#prompt").append(interaction);
