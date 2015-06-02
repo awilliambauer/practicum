@@ -5,6 +5,7 @@
 	var VARIABLES;
 	var AST;
 	var CORRECT_NEXT_LINE;
+	var CORRECT_VARIABLES;
 
 	$(document).ready(function() {
 
@@ -62,21 +63,50 @@
 			correctLine boolean value dictates if next button moves prompt.
 		 */
 		var correctLine = true;
+		var correctVars = true;
 		if (CORRECT_NEXT_LINE) {
 			var lineInput = document.getElementsByClassName("next_line_input");
-			if(CORRECT_NEXT_LINE != lineInput[0].value) {
+			if (CORRECT_NEXT_LINE != lineInput[0].value) {
 				correctLine = false;
 			} else {
 				correctLine = true;
 			}
 
 		}
-		if(correctLine) {
+		if (CORRECT_VARIABLES) {
+			var variables = document.getElementsByClassName("variable_answer");
+			var answer = [];
+			for(var i = 0; i < variables.length; i++) {
+				answer.push(parseInt(variables[i].value));
+			}
+			//console.log(answer);
+			//console.log(CORRECT_VARIABLES);
+			//console.log(answer.equals(CORRECT_VARIABLES));
+			if(answer.equals(CORRECT_VARIABLES)) {
+				console.log("true");
+				correctVars = true;
+			} else {
+				correctVars = false;
+			}
+
+		}
+		if(correctLine && correctVars) {
 			var currentState = state[CURRENT_STEP];
+			if(currentState.hasOwnProperty("answer")) {
+				CORRECT_VARIABLES = [];
+				for(var key in currentState.answer) {
+					CORRECT_VARIABLES.push(currentState.answer[key]);
+				}
+			} else {
+				CORRECT_VARIABLES = null;
+			}
 			if (currentState.hasOwnProperty("nextLine")) {
 				CORRECT_NEXT_LINE = currentState.nextLine;
 			} else {
 				CORRECT_NEXT_LINE = null;
+			}
+			if(currentState.hasOwnProperty("nextLine")) {
+				CORRECT_VARIABLES = currentState.answer;
 			}
 			//console.log(currentState.prompt);
 			// take away "next" button when finished
@@ -103,7 +133,10 @@
 			newCrossOutLines(currentState);
 			addInteraction(currentState);
 		} else { // Entered line was not correct
-			alert("Wrong Line, try again!");
+			if(!correctLine)
+				alert("Wrong Line, try again!");
+			else
+				alert("Wrong Values");
 		}
 
 	}
@@ -319,6 +352,7 @@
 				$(input).attr("type", "text")
 						.attr("value", state.answer[variable])
 						.css("font-size", "12pt");
+				$(input).addClass("variable_answer");
 				$(varBox).append(input);
 				$(interaction).append(varBox);
 			}
@@ -380,6 +414,30 @@
 			}
 		});
 		return text;
+	}
+
+	Array.prototype.equals = function (array) {
+		// if the other array is a falsy value, return
+		if (!array)
+			return false;
+
+		// compare lengths - can save a lot of time
+		if (this.length != array.length)
+			return false;
+
+		for (var i = 0, l=this.length; i < l; i++) {
+			// Check if we have nested arrays
+			if (this[i] instanceof Array && array[i] instanceof Array) {
+				// recurse into the nested arrays
+				if (!this[i].equals(array[i]))
+					return false;
+			}
+			else if (this[i] != array[i]) {
+				// Warning - two different object instances will never be equal: {x:20} != {x:20}
+				return false;
+			}
+		}
+		return true;
 	}
 
 // })();
