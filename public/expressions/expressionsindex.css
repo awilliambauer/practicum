@@ -35,11 +35,7 @@ body {
 	font-family: Arial, sans-serif;
 	padding: 0px 0px 25px;
 	margin: 40px 0px;
-	background-color: #9DE0AD;
-}
-
-#container {
-	margin: 80px 0px;
+	background-color: #45ADA8;
 }
 
 
@@ -49,8 +45,8 @@ body {
 	margin-left: auto;
 	margin-right: auto;
 	overflow: hidden;
-	background-color: #E5FCC2;
-
+	background-color: #FAFFF3;
+	margin-top: 80px;
 }
 
 #dummy {
@@ -174,6 +170,7 @@ span {
 .finalanswer {
 	text-align: center;
 	font-size: 32pt;
+	clear: both;
 }
 
 input {
