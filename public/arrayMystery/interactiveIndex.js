@@ -396,7 +396,7 @@
             var count = 0;
             for (var key in variablesExpected) {
                 current = $(variables[count]).val();
-                if (variablesExpected[key] !== current) {
+                if ("" + variablesExpected[key] !== current) {
                     incorrect("variable " + key + " value", variablesExpected[key], current);
                     match = false;
                 }
