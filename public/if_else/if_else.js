@@ -4,6 +4,7 @@
 	var CURRENT_STEP;
 	var VARIABLES;
 	var AST;
+	var CORRECT_NEXT_LINE;
 
 	$(document).ready(function() {
 
@@ -56,31 +57,55 @@
 	}
 
 	function next() {
-		var currentState = state[CURRENT_STEP];
-		//console.log(currentState.prompt);
-		// take away "next" button when finished
-		if (currentState.prompt.indexOf("Answer") != -1) {
-			$("#next").hide();
+		/*
+			Checks if the entered value is the correct next line.
+			correctLine boolean value dictates if next button moves prompt.
+		 */
+		var correctLine = true;
+		if (CORRECT_NEXT_LINE) {
+			var lineInput = document.getElementsByClassName("next_line_input");
+			if(CORRECT_NEXT_LINE != lineInput[0].value) {
+				correctLine = false;
+			} else {
+				correctLine = true;
+			}
+
+		}
+		if(correctLine) {
+			var currentState = state[CURRENT_STEP];
+			if (currentState.hasOwnProperty("nextLine")) {
+				CORRECT_NEXT_LINE = currentState.nextLine;
+			} else {
+				CORRECT_NEXT_LINE = null;
+			}
+			//console.log(currentState.prompt);
+			// take away "next" button when finished
+			if (currentState.prompt.indexOf("Answer") != -1) {
+				$("#next").hide();
+			}
+
+			if (CURRENT_STEP == 0) {
+				$("#prompt").show();
+				highlightBlocks();
+			} else {
+				// scroll to the right position
+				$("html, body").animate({
+					scrollTop: $("." + currentState.lineNum).offset().top - 200
+				}, 1000);
+			}
+			CURRENT_STEP++;
+			newGetPrompt(currentState);
+			newHighlightLine(currentState);
+			newHighlightBlock(currentState);
+			newAddComments(currentState);
+			newUpdateVariables(currentState);
+			drawVariableBank();
+			newCrossOutLines(currentState);
+			addInteraction(currentState);
+		} else { // Entered line was not correct
+			alert("Wrong Line, try again!");
 		}
 
-		if (CURRENT_STEP == 0) {
-			$("#prompt").show();
-			highlightBlocks();
-		} else {
-			// scroll to the right position
-			$("html, body").animate({scrollTop: 
-				$("." + currentState.lineNum).offset().top - 200}, 1000);
-		}
-
-		CURRENT_STEP++;
-		newGetPrompt(currentState);
-		newHighlightLine(currentState);
-		newHighlightBlock(currentState);
-		newAddComments(currentState);
-		newUpdateVariables(currentState);
-		drawVariableBank();
-		newCrossOutLines(currentState);
-		addInteraction(currentState);
 	}
 
 	// some initialization stuff that happens on first click of next
@@ -334,9 +359,10 @@
 					  .css("font-family", "monospace");
 			var lineInput = document.createElement("input");
 			$(lineInput).attr("type", "text")
-						.attr("value", state.nextLine)
 						.css("font-size", "12pt")
 						.css("font-family", "monospace");
+			$(lineInput).attr("value", state.nextLine);
+			$(lineInput).addClass("next_line_input");     // CLASS TO CHECK LATER IF INPUT'S CORRECT
 			$(lineBox).append(lineInput);
 			$(interaction).append(lineBox);
 		}
