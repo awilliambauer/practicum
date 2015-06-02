@@ -16,14 +16,13 @@ This provides the structure for the expressions page
 
 	<body>
 		<div class="topnavContainer topnavContainerScroll"></div>
-		<div id="container">
-			<div id="problem">
-				<h1>Expressions</h1>
-				<div style="text-align: center;">
-					<div id="pagedescription">
-						Evaluate the expression and give its resulting value.
-					</div>
+		<div id="problem">
+			<h1>Expressions</h1>
+			<div style="text-align: center;">
+				<div id="pagedescription">
+					Evaluate the expression and give its resulting value.
 				</div>
+			</div>
 			<!--  Going to make this an error message
 
 			Make sure to
@@ -31,27 +30,27 @@ This provides the structure for the expressions page
 				or quotes around a String) -->
 
 
-				<h2 id="expressionHeader"> </h2>
+			<h2 id="expressionHeader"> </h2>
 
 
 			<!--This form id box currently posts to a php page, but in the future should ultimately be handled by JavaScript.
 			See this example: http://www.w3schools.com/jsref/tryit.asp?filename=tryjsref_form_submit -->
-				<div id="answerbox">
-					<div class='boxcenter'>
-						<input id='box' name="checkanswer" type="text" autofocus="autofocus" />
-					</div>
-
-					<div id='stepshell'></div>
-
-					<div id="lastbutton" class = 'buttonLineUp'>
-						<button class='buttons' type="button" id="submit">Submit</button>
-						<button class='buttons' type="button" id="nextstep">Steps</button>
-					</div>
+			<div id="answerbox">
+				<div class='boxcenter'>
+					<input id='box' name="checkanswer" type="text" autofocus="autofocus" />
 				</div>
 
-				<div id="dummy">
+				<div id='stepshell'></div>
+
+				<div id="lastbutton" class = 'buttonLineUp'>
+					<button class='buttons' type="button" id="submit">Submit</button>
+					<button class='buttons' type="button" id="nextstep">Steps</button>
 				</div>
 			</div>
+
+			<div id="dummy">
+			</div>
+
 		</div>
 	</body>
 </html>
