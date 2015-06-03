@@ -304,9 +304,9 @@ var states = [
             arrayLength: 5,
             i: 1,
             "i - 1": 0,
-            "a[i - 1]": "?"
+            "arr[i - 1]": "?"
         },
-        promptText: "What is the value of a[i – 1]?",
+        promptText: "What is the value of arr[i – 1]?",
         ast: mainAst,
         index: 0,
         styleClasses: {
@@ -325,7 +325,7 @@ var states = [
             arrayLength: 5,
             i: 1,
             "i - 1": 0,
-            "a[i - 1]": 11,
+            "arr[i - 1]": 11,
             "i + 1": "?"
         },
         promptText: "What is the value of i + 1?",
@@ -347,11 +347,11 @@ var states = [
             arrayLength: 5,
             i: 1,
             "i - 1": 0,
-            "a[i - 1]": 11,
+            "arr[i - 1]": 11,
             "i + 1": 2,
-            "a[i + 1]": "?"
+            "arr[i + 1]": "?"
         },
-        promptText: "What is the value of a[i + 1]?",
+        promptText: "What is the value of arr[i + 1]?",
         ast: mainAst,
         index: 0,
         styleClasses: {
@@ -370,9 +370,9 @@ var states = [
             arrayLength: 5,
             i: 1,
             "i - 1": 0,
-            "a[i - 1]": 11,
+            "arr[i - 1]": 11,
             "i + 1": 2,
-            "a[i + 1]": 2,
+            "arr[i + 1]": 2,
             "expressionResult": "?"
         },
         promptText: "What is the result of the expression?",
@@ -394,9 +394,9 @@ var states = [
             arrayLength: 5,
             i: 1,
             "i - 1": 0,
-            "a[i - 1]": 11,
+            "arr[i - 1]": 11,
             "i + 1": 2,
-            "a[i + 1]": 2,
+            "arr[i + 1]": 2,
             "expressionResult" : 13
         },
         promptText: "Now that we’ve evaluated the right side of the assignment statement, let’s determine where this value is going to be stored. The left side of the assignment statement tells us where to store the value.",
@@ -418,9 +418,9 @@ var states = [
             arrayLength: 5,
             i: 1,
             "i - 1": 0,
-            "a[i - 1]": 11,
+            "arr[i - 1]": 11,
             "i + 1": 2,
-            "a[i + 1]": 2,
+            "arr[i + 1]": 2,
             "expressionResult" : 13,
             index: "?"
         },
@@ -443,9 +443,9 @@ var states = [
             arrayLength: 5,
             i: 1,
             "i - 1": 0,
-            "a[i - 1]": 11,
+            "arr[i - 1]": 11,
             "i + 1": 2,
-            "a[i + 1]": 2,
+            "arr[i + 1]": 2,
             "expressionResult" : 13,
             index: 1
         },
