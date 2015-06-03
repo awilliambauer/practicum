@@ -324,7 +324,6 @@ var states = [
         variables: {
             arrayLength: 5,
             i: 1,
-            "i - 1": 0,
             "arr[i - 1]": 11,
             "i + 1": "?"
         },
@@ -346,7 +345,6 @@ var states = [
         variables: {
             arrayLength: 5,
             i: 1,
-            "i - 1": 0,
             "arr[i - 1]": 11,
             "i + 1": 2,
             "arr[i + 1]": "?"
@@ -369,9 +367,7 @@ var states = [
         variables: {
             arrayLength: 5,
             i: 1,
-            "i - 1": 0,
             "arr[i - 1]": 11,
-            "i + 1": 2,
             "arr[i + 1]": 2,
             "expressionResult": "?"
         },
@@ -393,9 +389,7 @@ var states = [
         variables: {
             arrayLength: 5,
             i: 1,
-            "i - 1": 0,
             "arr[i - 1]": 11,
-            "i + 1": 2,
             "arr[i + 1]": 2,
             "expressionResult" : 13
         },
@@ -417,10 +411,6 @@ var states = [
         variables: {
             arrayLength: 5,
             i: 1,
-            "i - 1": 0,
-            "arr[i - 1]": 11,
-            "i + 1": 2,
-            "arr[i + 1]": 2,
             "expressionResult" : 13,
             index: "?"
         },
@@ -442,10 +432,6 @@ var states = [
         variables: {
             arrayLength: 5,
             i: 1,
-            "i - 1": 0,
-            "arr[i - 1]": 11,
-            "i + 1": 2,
-            "arr[i + 1]": 2,
             "expressionResult" : 13,
             index: 1
         },
