@@ -3,12 +3,14 @@ This is the style sheet for the main page.
 */
 
 body {
-    padding: 0px;
+    margin: 0px;
     background-color: #FAFFF3;
+    font-family: Arial, san-serif;
 }
 
 body, h1, .content, .container-fluid, #header, #footer {
-    margin: 0px;
+    margin: 0;
+    padding: 0;
 }
 
 #header {
@@ -38,6 +40,7 @@ h1 {
     width: 50%;
     margin-left: auto;
     margin-right: auto;
+    margin-bottom: 50px;
 }
 
 #welcome {
@@ -64,4 +67,26 @@ h1 {
     margin: 5%;
     margin-top: 2%;
     margin-bottom: 2%;
+}
+
+.columns {
+    overflow: hidden;
+    padding: 10px;
+    margin-left: 15%;
+    margin-right: auto;
+}
+
+.col-sm-3 {
+    background-color: #B5F3C4;
+    border: 2px solid #547980;
+    height: 130px;
+    border-radius: 10px;
+    margin: 15px;
+    margin-top: 0;
+    padding: 10px;
+    overflow: hidden;
+}
+
+.problembox {
+    overflow: hidden;
 }
