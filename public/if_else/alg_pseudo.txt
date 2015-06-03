@@ -1,13 +1,15 @@
-* This line won't display anything, occurs for for/if/else
+* This line won't display anything, occurs for for loop
 
-Map Values = initialValues // Initialization, 1st line
+Map StartEndLine = fill; // Maps StartLine to EndLine of if/else blocks    Block Highlighting
+Map Values = initialValues // Initialization, 1st line                     Initialization step
 
-* for ( var current = 2; var <= problem.length; current++):
-    * if (currentLine != problem.blockStartLine) // If not in if/else block
-       updateValues(currentLine)
-    * else
-        while(!problem.getBool) // while next evaluated bool is false
-            currentLine += problem.numberOfStatements + 1
-        updateValues(currentLine)
-        currentLine = problem.blockEndLine + 1 // crossout of everything else would occur here
-printStatement
+* for ( var current = 2; var <= problem.length; current++):                (Nothing)
+
+    if (current equal to key in StartEndLine):                             Conditionals: Start If/Else block
+        while(!nextBool) // while next evaluated bool is false             What does boolean evaluate to
+            current += numberOfStatements + 1                              Test Evaluated to false (crossout statements inside branch)
+        current = EndBlockLine                                             Test evaluated to true  (crossout everything else)
+                                                                                ^ Different with Else statement.
+    updateValues(Values);                                                  Assignment
+    
+printStatement                                                             Type in the answer!

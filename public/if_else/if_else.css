@@ -1,6 +1,6 @@
 body {
 	text-align: center;
-	font-family: "arial", sans-serif;
+	font-family: Arial, sans-serif;
 }
 
 h3 > span, #answer_box > span, input[type="text"] {
@@ -31,6 +31,7 @@ pre > span { /* comment */
 	padding-left: 2.5%;
 	margin: 0;
 	font-size: 11pt;
+	overflow: auto;
 }
 
 #answer_box, #problem_space {
@@ -53,7 +54,7 @@ pre > span { /* comment */
 	background-color: #ffffff;
 	border-radius: 10px;
 	position: fixed;
-	top: 45%;
+	top: 44%;
 	right: 2.5%;
 	width: 15%;
 }
@@ -115,8 +116,8 @@ pre > span { /* comment */
 
 #prompt {
 	position: absolute;
-	top: 200px;
-	border: 2px rgb(89,79,79) solid;
+	top: 275px;
+	border: 2px solid #547980;
 	border-radius: 10px;
 	width: 20%;
 	left: 50%;
