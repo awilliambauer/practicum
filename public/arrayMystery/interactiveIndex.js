@@ -21,18 +21,13 @@
         for (var j = 0; j < varCells.length; j++) {
             varCells[j].onclick = addFocusClass;
         }
-
-        /*
-         meredith - for debugging
-
-         $("#promptwords").html(java_ast.find_by_id(1,mainAst).name);
-         */
     };
 
     function next() {
         if (compareValues()) {
             step++;
             displayState();
+            compareValues2();
         }
 
         // TO DO Add wraps
@@ -398,7 +393,7 @@
                        currentNode.addClass("wrong");
                         incorrect("array index", i, current);
                         match = false;
-                        break;
+    
                     }
                 }
             }
@@ -423,11 +418,51 @@
         return match;
     }
 
-
-
-
     function incorrect(message, expected, actual) {
         alert("Incorrect " + message + ".\n Expected: " + expected + " Actual: " + actual);
+    }
+
+    function compareValues2() {
+        if (step > 0) {
+            // The next state object, to which compare things
+            var state = states[step + 1];
+
+            // Compare array values
+            var elements = state.array;
+            for (var i = 0; i < elements.length; i++) {
+                var current = $(("#ele" + i)).val();
+                if (elements[i] != current) {
+                    $(("#ele" + i)).focus();
+                }
+            }
+
+            // Compare array indices
+            if (states[step].index == null && state.index != null) {
+                for (i = 0; i < elements.length; i++) {
+                    var currentNode = $("#index" + i);
+                    current = currentNode.val();
+                    if ("" + i !== current) {
+                        currentNode.focus();
+                        break;
+                    }
+                }
+            }
+
+            var variables = $(".vars");
+            var variablesExpected = state.variables;
+            for (var key in variablesExpected) {
+                for (i = 0; i < variables.length; i++) {
+                    currentNode = variables[i];
+                    if (currentNode.id == key + "div") {
+                        current = $(currentNode).val();
+                        var expected = "" + variablesExpected[key];
+                        if (expected != "?" && expected !== current) {
+                            $(variables[i]).focus();
+                        }
+                    }
+                }
+            }
+        }
     }
 
     function addFocusClass() {
