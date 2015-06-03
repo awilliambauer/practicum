@@ -5,7 +5,7 @@
 (function() {
 
 	// easy problem state object
-	/*var arr = [ {type:"String", value : "hello"},
+	/*var startArray = [ {type:"String", value : "hello"},
 	 {type:"ASoperator", value: "+"},
 	 {type:"int", value : 6},
 	 {type:"MDMoperator", value: "*"},
@@ -16,12 +16,11 @@
 	 since we store the array and index as global variables that are updated as the state object is updated.
 	 To completely rely on the state object, yu need to find/replace MOST
 	 arr with stateObject[stateObject.length - 1][0]
-	 operator with stateObject[stateObject.length - 1][1]
 	 */
 	var stateObject = new Array();
 
 	// tougher problem state object
-	var arr = [{type: "int", value: 22},
+	var startArray = [{type: "int", value: 22},
 		{type: "MDMoperator", value: "%"},
 		{type: "int", value: 7},
 		{type: "ASoperator", value: "+"},
@@ -34,13 +33,15 @@
 		{type: "double", value: 2}];
 
 	// boolean that represents whether showing steps has started
+	// if not started, then use startArray
+	// if started, then use arrays in stateObject
 	var started = false;
 
 	// overall answer for checking answer submission
 	var overallAnswer = "10.0";
 
 	// true - with interactivity, false - without interactivity
-	var interaction = false;
+	var interaction = true;
 
 	// on load, shows expression, answer box, submit button, and show steps button
 	window.onload = function () {
@@ -66,8 +67,6 @@
 			newChild.setAttribute("id", "steps");
 			document.getElementById("stepshell").appendChild(newChild);
 
-			started = true;
-
 			var newChild2 = document.createElement("div");
 			newChild2.classList.add("prompt");
 			newChild2.innerHTML = "Start by evaluating all the Multiplicative (* / %) operators from left to right. <br /> Then evaluate " +
@@ -76,7 +75,7 @@
 		}
 
 		// finds and set the indices for the operator, left operand, and right operand
-		if (arr.length > 1) {
+		if (!started || stateObject[stateObject.length - 1][0].length > 1) {
 			find();
 		}
 
@@ -101,7 +100,7 @@
 		document.getElementById("steps").appendChild(firstStep);
 		var operators = document.querySelectorAll(".operators");
 		
-		if (arr.length > 1) {
+		if (stateObject[stateObject.length - 1][0].length > 1) {
 			solve();
 		} else {
 			document.getElementById("nextstep").classList.add("hiddenSteps");
@@ -129,7 +128,7 @@
 
 	// Display the original expression on load
 	function setupPage(newHeading) {
-		for (var i = 0; i < arr.length; i++) {
+		for (var i = 0; i < startArray.length; i++) {
 			newHeading.innerHTML += getValue(i) + " ";
 		}
 	}
@@ -137,7 +136,7 @@
 	// Turns expression to a string
 	function arrToString() {
 		var arrString = "";
-		for (var i = 0; i < arr.length; i++) {
+		for (var i = 0; i < stateObject[stateObject.length - 1][0].length; i++) {
 			arrString += "<span id=" + i + ">" + getValue(i) + "</span> ";
 		}
 		return arrString;
@@ -169,8 +168,6 @@
 			newChild.setAttribute("id", "steps");
 			document.getElementById("stepshell").appendChild(newChild);
 
-			started = true;
-
 			var newChild2 = document.createElement("div");
 			newChild2.classList.add("prompt");
 			newChild2.innerHTML = "Start by evaluating all the Multiplicative (* / %) operators from left to right. <br /> Then evaluate " +
@@ -182,6 +179,7 @@
 		// has click operator message
 		find();
 
+		var arr = stateObject[stateObject.length - 1][0];
 		// this will prompt the user every time to ask what type
 		// of operator the student should start with.
 		if (arr.length >= 1) {
@@ -230,6 +228,7 @@
 
 		var error = document.createElement("div");
 		error.setAttribute("id", "error");
+		var arr = stateObject[stateObject.length - 1][0];
 		var operator = stateObject[stateObject.length - 1][1].index;
 
 		var message = "We need to start by looking for ";
@@ -264,7 +263,7 @@
 		messageParagraph.innerHTML = stateObject[stateObject.length - 1][2].message;
 
 		//findFirst();
-		expressionParagraph.innerHTML = arrToString(arr);
+		expressionParagraph.innerHTML = arrToString();
 
 		newChild.appendChild(messageParagraph);
 		newChild.appendChild(expressionParagraph);
@@ -277,7 +276,7 @@
 
 		// makes all the other spans clickable but if they are clicked
 		// and not the right answer they get to go the wrongOption.
-		for (var i = 0; i < arr.length; i++) {
+		for (var i = 0; i < stateObject[stateObject.length - 1][0].length; i++) {
 			if (i != operator) {
 				document.getElementById(i).onclick = wrongOperator;
 			}
@@ -293,6 +292,7 @@
 			error = document.createElement("div");
 			error.setAttribute("id", "error");
 		}
+		var arr = stateObject[stateObject.length - 1][0];
 		var operator = stateObject[stateObject.length - 1][1].index;
 		error.innerHTML = "Oops the correct operator is the left most " + arr[operator].value
 		+ ", but lets keep going by finding the left operand";
@@ -313,7 +313,7 @@
 		var left = stateObject[stateObject.length - 1][1].index;
 		// makes all the other spans clickable but if they are clicked
 		// and not the right answer they get to go the wrongOption.
-		for (var i = 0; i < arr.length; i++) {
+		for (var i = 0; i < stateObject[stateObject.length - 1][0].length; i++) {
 			if (i != left) {
 				document.getElementById(i).onclick = wrongLeft;
 			}
@@ -334,7 +334,7 @@
 		var right = stateObject[stateObject.length - 1][1].index;
 		// makes all the other spans clickable but if they are clicked
 		// and not the right answer they get to go the wrongOption.
-		for (var i = 0; i < arr.length; i++) {
+		for (var i = 0; i < stateObject[stateObject.length - 1][0].length; i++) {
 			if (i != right) {
 				document.getElementById(i).onclick = wrongRight;
 			}
@@ -419,6 +419,7 @@
 		var newChild = document.createElement("div");
 		newChild.setAttribute("id", "reply");
 		
+		var arr = stateObject[stateObject.length - 1][0];
 		var operator = stateObject[stateObject.length - 1][1].index;
 
 		// check if answer is correct
@@ -470,6 +471,12 @@
 	// gets the value at a particular index
 	// formats it based on int/double/String type
 	function getValue(index) {
+		var arr;
+		if (!started) {
+			arr = startArray;
+		} else {
+			arr = stateObject[stateObject.length - 1][0];
+		}
 		if (arr[index].type == 'double' && arr[index].value % 1 == 0) {
 			return arr[index].value + ".0";
 		} else if (arr[index].type == 'String') {
@@ -482,7 +489,7 @@
 	// creates the answer box in a string.
 	function answerToString() {
 		var arrString = "";
-		for (var i = 0; i < arr.length; i++) {
+		for (var i = 0; i < stateObject[stateObject.length - 1][0].length; i++) {
 			if (i == stateObject[stateObject.length - 1][1].index) {
 				arrString += "<input type=text id=answer size=1/> "
 			} else {
@@ -501,7 +508,7 @@
 		} else {
 			operator = stateObject[stateObject.length - 1][1].index;
 		}
-		for (var i = 0; i < arr.length; i++) {
+		for (var i = 0; i < stateObject[stateObject.length - 1][0].length; i++) {
 			if (i == operator - 1) {
 				arrString += "<span class='clicked'>";
 			}
@@ -517,10 +524,18 @@
 
 	// Finds the operator, left operand and right operand.
 	function find() {
+		var arr;
+		if (!started) {
+			arr = startArray;
+			started = true;
+		} else {
+			arr = stateObject[stateObject.length - 1][0];
+		}
+		
 		var currState = new Array();
-		currState.push(arr);
 		var bool = false;
 		var operator = 1;
+		currState.push(arr);
 		// loop through array and find first mult/div/mod operator
 		for (var i = 1; i < arr.length; i+=2) {
 			if (arr[i].type == "MDMoperator") {
@@ -543,7 +558,7 @@
 
 	function findLeftOperand() {
 		var currState = new Array();
-		currState.push(arr);
+		currState.push(stateObject[stateObject.length - 1][0]);
 		var operator = stateObject[stateObject.length - 1][1].index - 1;
 		var index = {index: operator};
 		currState.push(index);
@@ -554,7 +569,7 @@
 
 	function findRightOperand() {
 		var currState = new Array();
-		currState.push(arr);
+		currState.push(stateObject[stateObject.length - 1][0]);
 		var operator = stateObject[stateObject.length - 2][1].index + 1;
 		var index = {index: operator};
 		currState.push(index);
@@ -566,6 +581,7 @@
 	// solves and updates expression, needs to be trimped since find does
 	// a lot of the work.
 	function solve() {
+		var arr = stateObject[stateObject.length - 1][0];
 		if (arr.length == 1) {
 			// TO DO: remove this from solve()
 			document.getElementById("nextstep").classList.add("hiddenSteps");
