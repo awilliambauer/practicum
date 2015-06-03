@@ -35,8 +35,9 @@ body {
 	font-family: Arial, sans-serif;
 	padding: 0px 0px 25px;
 	margin: 40px 0px;
-	background-color: #9DE0AD;
+	background-color: #45ADA8;
 }
+
 
 #problem {
 	border-radius: 25px;
@@ -44,8 +45,8 @@ body {
 	margin-left: auto;
 	margin-right: auto;
 	overflow: hidden;
-	background-color: #E5FCC2;
-
+	background-color: #FAFFF3;
+	margin-top: 80px;
 }
 
 #dummy {
@@ -169,6 +170,7 @@ span {
 .finalanswer {
 	text-align: center;
 	font-size: 32pt;
+	clear: both;
 }
 
 input {
@@ -190,4 +192,7 @@ input {
 .operators {
 	margin-right: 10px;
 	font-size: 16pt;
+}
+#container {
+	clear:both;
 }
