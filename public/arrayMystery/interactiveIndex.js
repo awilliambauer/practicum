@@ -392,9 +392,10 @@
             // Compare array indices
             if (states[step].index == null && state.index != null) {
                 for (i = 0; i < elements.length; i++) {
-                    current = $("#index" + i).val();
+                    var currentNode  = $("#index" + i);
+                    current = currentNode.val();
                     if ("" + i !== current) {
-                        $("#index" + i).addClass("wrong");
+                       currentNode.addClass("wrong");
                         incorrect("array index", i, current);
                         match = false;
                         break;
@@ -404,16 +405,19 @@
 
             var variables = $(".vars");
             var variablesExpected = state.variables;
-            var count = 0;
             for (var key in variablesExpected) {
-                current = $(variables[count]).val();
-                var expected = "" + variablesExpected[key];
-                if (expected != "?" && expected !== current) {
-                    $(variables[count]).addClass("wrong");
-                    incorrect("variable " + key + " value", variablesExpected[key], current);
-                    match = false;
+                for (i = 0; i < variables.length; i++) {
+                    currentNode = variables[i];
+                    if (currentNode.id == key + "div") {
+                        current = $(currentNode).val();
+                        var expected = "" + variablesExpected[key];
+                        if (expected != "?" && expected !== current) {
+                            $(variables[i]).addClass("wrong");
+                            incorrect("variable " + key + " value", variablesExpected[key], current);
+                            match = false;
+                        }
+                    }
                 }
-                count++;
             }
         }
         return match;
