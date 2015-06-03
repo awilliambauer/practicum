@@ -18,7 +18,7 @@ $(document).ready(function() {
     $("#arraymystery").append("<a href='#' class='topnav_array' title='Array Mystery'>Array Mystery</a>");
 
     $("#expressions").append("<ul id='expressionproblems'>");
-    $("#expressionproblems").append("<li><a href='../expressions/expressions.html' class='topnav_expressions' title='Problem 1'>Problem 1</a></li>");
+    $("#expressionproblems").append("<li><a href='../expressions/index.html' class='topnav_expressions' title='Problem 1'>Problem 1</a></li>");
 
     $("#ifelse").append("<ul id='ifelseproblems'>");
     $("#ifelseproblems").append("<li><a href='../if_else/index.html' class='topnav_ifelse' title='Problem 1'>Problem 1</a></li>");
