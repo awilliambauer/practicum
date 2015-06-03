@@ -137,6 +137,7 @@ h3 > span, #answer_box > span, input[type="text"] {
 
 .select {
 	background-color: rgba(69,173,168, 0.65);
+	cursor: pointer;
 }
 
 .grey_out {

@@ -418,7 +418,10 @@
 			$("#problem_space li").mouseout(function() {
 				$(this).removeClass("select");
 			});
-
+			$("#problem_space li").click(function() {
+				var chosenLine = $(this).hasClass(CORRECT_NEXT_LINE);
+				console.log(chosenLine);
+			});
 		}
 		$(interaction).css("font-size", "12pt");
 		$("#prompt").append(interaction);
