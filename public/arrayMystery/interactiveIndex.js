@@ -9,6 +9,7 @@
     window.onload = function () {
         displayState();
         $("#next").on("click", next);
+        $("#next1").on("click", next);
         $("#back").on("click", back);
 
         /*
@@ -95,7 +96,7 @@
 
         // Update Variables
         var variablelist = state.variables;
-        var nameChild = $("<h1>", {class: "varlabel"});
+        var nameChild = $("<h1>", {class: "varlabel", id: "arrLabel"});
         nameChild.html("arr:");
         $(".varlabelcolumn").append(nameChild);
         for (var key in variablelist) {
@@ -211,7 +212,6 @@
                 var expression = to_dom(node.expression, indent_level);
                 expression.addClass("whythisnotwork");
                 var children = expression.children();
-                console.log(expression.children());
                 $(".expression span").addClass("expPart");
                 //$(children[1]).addClass("expRight");
                 elem.append(to_dom(node.expression, indent_level));
@@ -373,7 +373,7 @@
             for (var i = 0; i < elements.length; i++) {
                 var current = $(("#ele" + i)).val();
                 if (elements[i] != current) {
-                    alert(current);
+                    $(("#ele" + i)).addClass("wrong");
                     incorrect("array element at index " + i, elements[i], current);
                     match = false;
                 }
@@ -384,6 +384,7 @@
                 for (i = 0; i < elements.length; i++) {
                     current = $("#index" + i).val();
                     if ("" + i !== current) {
+                        $("#index" + i).addClass("wrong");
                         incorrect("array index", i, current);
                         match = false;
                         break;
@@ -396,7 +397,9 @@
             var count = 0;
             for (var key in variablesExpected) {
                 current = $(variables[count]).val();
-                if ("" + variablesExpected[key] !== current) {
+                var expected = "" + variablesExpected[key];
+                if (expected != "?" && expected !== current) {
+                    $(variables[count]).addClass("wrong");
                     incorrect("variable " + key + " value", variablesExpected[key], current);
                     match = false;
                 }
