@@ -12,6 +12,16 @@
         $("#next1").on("click", next);
         $("#back").on("click", back);
 
+        var arrayCells = document.querySelectorAll("td");
+        for (var i = 0; i < arrayCells.length; i++) {
+            arrayCells[i].onfocusin = addFocusClass;
+            arrayCells[i].onfocusout = removeFocusClass;
+        }
+        var varCells = document.querySelectorAll(".vardata");
+        for (var j = 0; j < varCells.length; j++) {
+            varCells[j].onclick = addFocusClass;
+        }
+
         /*
          meredith - for debugging
 
@@ -414,6 +424,14 @@
 
     function incorrect(message, expected, actual) {
         alert("Incorrect " + message + ".\n Expected: " + expected + " Actual: " + actual);
+    }
+
+    function addFocusClass() {
+        this.classList.add("focus");
+    }
+
+    function removeFocusClass() {
+        this.classList.remove("focus");
     }
 
 })();

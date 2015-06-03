@@ -68,15 +68,39 @@ body {
     bottom: 10px;
 }
 
-.vardata,   {
-    font-size: 35px;
-}
+/*all variable bank input styling*/
 
 #arraydata {
     border: 2px solid darkgray;
     border-collapse: collapse;
 }
 
+input {
+    width: 26px;
+    text-align: center;
+}
+
+#arraydata td, #varvalues input {
+    padding: 8px;
+}
+
+#arraydata input {
+    border: none;
+    width: 50px;
+}
+
+#arraydata input, #varvalues input {
+    font-size: 22px;
+}
+
+#indices input {
+    font-size: 20px;
+}
+
+#arraydata input:focus, #varvalues input:focus, #indices input:focus{
+    outline: 0;
+    box-shadow: 0 0 5px 2px #9DE0AD;
+}
 
 #indices {
     font-size: 20px;
@@ -96,7 +120,6 @@ body {
 }
 
 td {
-    padding: 15px;
     width: 50px;
     text-align: center;
     border: 5px solid darkgrey;
@@ -142,13 +165,6 @@ hr {
 
 .right {
     background-color: lawngreen;
-}
-
-
-input {
-    width: 26px;
-    background-color: #B5F3C4;
-    text-align: center;
 }
 
 #prompttextbox {
