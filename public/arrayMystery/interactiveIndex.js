@@ -165,9 +165,6 @@
 
     function insertVariable(name, value) {
         // This function should insert the given variable into the dom
-        if (name == "arrayLength") {
-            name = "arr.length";
-        }
         var nameChild = $("<h1>", {class: "varlabel", id: name});
         nameChild.html(name + ":");
         $(".varlabelcolumn").append(nameChild);

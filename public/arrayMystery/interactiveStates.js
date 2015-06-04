@@ -126,7 +126,7 @@ var states = [
     { //state 1 (initial)
         array: [11, 14, 2, 4, 7],
         variables: {
-            arrayLength: 5,
+            "arr.length": 5,
             i: "?"
         },
         smallText: true,
@@ -147,7 +147,7 @@ var states = [
     { //state 1 (initial)
         array: [11, 14, 2, 4, 7],
         variables: {
-            arrayLength: 5,
+            "arr.length": 5,
             i: "?"
         },
         indices: [],
@@ -168,7 +168,7 @@ var states = [
     {
         array: [11, 14, 2, 4, 7],
         variables: {
-            arrayLength: 5,
+            "arr.length": 5,
             i: "?"
         },
         indices: [],
@@ -188,7 +188,7 @@ var states = [
     {
         array: [11, 14, 2, 4, 7],
         variables: {
-            arrayLength: 5,
+            "arr.length": 5,
             i: "?"
         },
         indices: [],
@@ -208,7 +208,7 @@ var states = [
     { //state 4
         array: [11, 14, 2, 4, 7],
         variables: {
-            arrayLength: 5,
+            "arr.length": 5,
             i: 1,
             testResult: "?"
         },
@@ -229,7 +229,7 @@ var states = [
     {//state 5
         array: [11, 14, 2, 4, 7],
         variables: {
-            arrayLength: 5,
+            "arr.length": 5,
             i: 1,
             testResult: true
         },
@@ -250,7 +250,7 @@ var states = [
     { //state 6
         array: [11, 14, 2, 4, 7],
         variables: {
-            arrayLength: 5,
+            "arr.length": 5,
             i: 1
         },
         indices: [],
@@ -270,7 +270,7 @@ var states = [
     { //state 7
         array: [11, 14, 2, 4, 7],
         variables: {
-            arrayLength: 5,
+            "arr.length": 5,
             i: 1
         },
         indices: [],
@@ -290,7 +290,7 @@ var states = [
     { //state 8
         array: [11, 14, 2, 4, 7],
         variables: {
-            arrayLength: 5,
+            "arr.length": 5,
             i: 1,
             "i - 1": "?"
         },
@@ -311,7 +311,7 @@ var states = [
     { //state 9
         array: [11, 14, 2, 4, 7],
         variables: {
-            arrayLength: 5,
+            "arr.length": 5,
             i: 1,
             "i - 1": 0
         },
@@ -332,7 +332,7 @@ var states = [
     { //state 9
         array: [11, 14, 2, 4, 7],
         variables: {
-            arrayLength: 5,
+            "arr.length": 5,
             i: 1,
             "i + 1": "?"
         },
@@ -353,7 +353,7 @@ var states = [
     { //state 10
         array: [11, 14, 2, 4, 7],
         variables: {
-            arrayLength: 5,
+            "arr.length": 5,
             i: 1,
             "i + 1": 2
         },
@@ -374,8 +374,10 @@ var states = [
     { //state 11
         array: [11, 14, 2, 4, 7],
         variables: {
-            arrayLength: 5,
+            "arr.length": 5,
             i: 1,
+            "arr[0]": 11,
+            "arr[2]": 2,
             "expressionResult": "?"
         },
         indices: [0, 2],
@@ -395,7 +397,7 @@ var states = [
     { //state 12
         array: [11, 14, 2, 4, 7],
         variables: {
-            arrayLength: 5,
+            "arr.length": 5,
             i: 1,
             "expressionResult" : 13
         },
@@ -416,7 +418,7 @@ var states = [
     { //state 13
         array: [11, 14, 2, 4, 7],
         variables: {
-            arrayLength: 5,
+            "arr.length": 5,
             i: 1,
             "expressionResult" : 13
         },
@@ -437,7 +439,7 @@ var states = [
     { //state 14
         array: [11, 14, 2, 4, 7],
         variables: {
-            arrayLength: 5,
+            "arr.length": 5,
             i: 1,
             "expressionResult" : 13,
         },
@@ -458,7 +460,7 @@ var states = [
     { //state 15
         array: [11, 13, 2, 4, 7],
         variables: {
-            arrayLength: 5,
+            "arr.length": 5,
             i: 1
         },
         indices: [],
@@ -478,7 +480,7 @@ var states = [
     { //state 13
         array: [11, 13, 2, 4, 7],
         variables: {
-            arrayLength: 5,
+            "arr.length": 5,
             i: 1
         },
         indices: [],
