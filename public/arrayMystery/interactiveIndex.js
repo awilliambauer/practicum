@@ -33,8 +33,13 @@
     }
 
     function addIndex() {
-        indices.push(parseInt(this.id.charAt(3)));
-        next();
+        var index = parseInt(this.id.charAt(3));
+        if (contains(index, indices)) {
+            $("#ele" + index).addClass("wrong");
+        } else {
+            indices.push(parseInt(this.id.charAt(3)));
+            next();
+        }
     }
 
     function next() {
@@ -51,6 +56,8 @@
     function back() {
         step--;
         displayState();
+        compareValues2();
+        $("#index0").on('input', autofillIndices);
         // TO DO Add wraps
     }
 
@@ -388,7 +395,6 @@
         if (step > 0) {
             // The next state object, to which compare things
             var state = states[step + 1];
-
             // Compare array values
             var elements = state.array;
             for (var i = 0; i < elements.length; i++) {
@@ -414,13 +420,13 @@
                 }
             }
 
-            console.log("State: " + state.indices);
-            console.log("Us: " + indices);
+            //console.log("State: " + state.indices);
+            //console.log("Us: " + indices);
             // Compare selected array indices
             var indicesState = state.indices;
             // Compare state to screen
             for (i = 0; i < indices.length; i++) {
-                if ($.inArray(indices[i], indicesState) < 0) {
+                if (!contains(indices[i], indicesState)) {
                     $("#box" + indices[i]).addClass("wrong");
                     indices.pop();
                     match = false;
@@ -428,7 +434,7 @@
             }
             // Compare screen to state
             for (i = 0; i < indicesState.length; i++) {
-                if ($.inArray(indicesState[i], indices) < 0) {
+                if (!contains(indicesState[i], indices)) {
                     $("#box" + indicesState[i]).addClass("right");
                     match = false;
                 }
@@ -462,8 +468,8 @@
         if (step > 0) {
             // The next state object, to which compare things
             var state = states[step + 1];
-
-            if (state.indices.length > states[step].indices.length) {
+            var thisState = states[step];
+            if (state.indices.length > thisState.indices.length) {
                 $(".box").on("click", addIndex);
             }
 
@@ -511,6 +517,15 @@
 
     function removeFocusClass() {
         this.classList.remove("focus");
+    }
+
+    function contains(value, array) {
+        for (var i = 0; i < array.length; i++) {
+            if (parseInt(array[i]) === parseInt(value)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 })();
