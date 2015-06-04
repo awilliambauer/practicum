@@ -129,6 +129,7 @@ var states = [
             arrayLength: 5,
             i: "?"
         },
+        indices: [],
         promptText: "Let's solve the problem!",
         ast: mainAst,
         index: null, // null means that they haven't answered yet
@@ -148,6 +149,7 @@ var states = [
             arrayLength: 5,
             i: "?"
         },
+        indices: [],
         promptText: "Let's label the indices of the array!",
         ast: mainAst,
         index: null,
@@ -168,6 +170,7 @@ var states = [
             arrayLength: 5,
             i: "?"
         },
+        indices: [],
         promptText: "The next line is a for loop header. First, we'll initialize the counter.",
         ast: mainAst,
         index: 0,
@@ -187,6 +190,7 @@ var states = [
             arrayLength: 5,
             i: "?"
         },
+        indices: [],
         promptText: "What is the counter i initialized to?",
         ast: mainAst,
         index: 0,
@@ -207,6 +211,7 @@ var states = [
             i: 1,
             testResult: "?"
         },
+        indices: [],
         promptText: "Next, we’ll see if the for loop test passes. Does the for loop test pass? Type \"true\" or \"false\"",
         ast: mainAst,
         index: 0,
@@ -227,6 +232,7 @@ var states = [
             i: 1,
             testResult: true
         },
+        indices: [],
         promptText: "Correct, the test passed. Let’s execute the code in the body of the for loop.",
         ast: mainAst,
         index: 0,
@@ -246,6 +252,7 @@ var states = [
             arrayLength: 5,
             i: 1
         },
+        indices: [],
         promptText: "The next line of code is an assignment statement so, let’s evaluate the expression on the right side of the assignment statement.",
         ast: mainAst,
         index: 0,
@@ -265,6 +272,7 @@ var states = [
             arrayLength: 5,
             i: 1
         },
+        indices: [],
         promptText: "What is the value of i?",
         ast: mainAst,
         index: 0,
@@ -285,6 +293,7 @@ var states = [
             i: 1,
             "i - 1": "?"
         },
+        indices: [],
         promptText: "What is the value of i - 1?",
         ast: mainAst,
         index: 0,
@@ -303,10 +312,10 @@ var states = [
         variables: {
             arrayLength: 5,
             i: 1,
-            "i - 1": 0,
-            "arr[i - 1]": "?"
+            "i - 1": 0
         },
-        promptText: "What is the value of arr[i – 1]?",
+        indices: [],
+        promptText: "What is the value of arr[i – 1]? (Click on the value in the array)",
         ast: mainAst,
         index: 0,
         styleClasses: {
@@ -324,9 +333,9 @@ var states = [
         variables: {
             arrayLength: 5,
             i: 1,
-            "arr[i - 1]": 11,
             "i + 1": "?"
         },
+        indices: [0],
         promptText: "What is the value of i + 1?",
         ast: mainAst,
         index: 0,
@@ -345,11 +354,10 @@ var states = [
         variables: {
             arrayLength: 5,
             i: 1,
-            "arr[i - 1]": 11,
-            "i + 1": 2,
-            "arr[i + 1]": "?"
+            "i + 1": 2
         },
-        promptText: "What is the value of arr[i + 1]?",
+        indices: [0],
+        promptText: "What is the value of arr[i + 1]? (Click on the value in the array)",
         ast: mainAst,
         index: 0,
         styleClasses: {
@@ -367,10 +375,9 @@ var states = [
         variables: {
             arrayLength: 5,
             i: 1,
-            "arr[i - 1]": 11,
-            "arr[i + 1]": 2,
             "expressionResult": "?"
         },
+        indices: [0, 2],
         promptText: "What is the result of the expression?",
         ast: mainAst,
         index: 0,
@@ -389,10 +396,9 @@ var states = [
         variables: {
             arrayLength: 5,
             i: 1,
-            "arr[i - 1]": 11,
-            "arr[i + 1]": 2,
             "expressionResult" : 13
         },
+        indices: [0, 2],
         promptText: "Now that we’ve evaluated the right side of the assignment statement, let’s determine where this value is going to be stored. The left side of the assignment statement tells us where to store the value.",
         ast: mainAst,
         index: 0,
@@ -411,10 +417,10 @@ var states = [
         variables: {
             arrayLength: 5,
             i: 1,
-            "expressionResult" : 13,
-            index: "?"
+            "expressionResult" : 13
         },
-        promptText: "Which element of the array is going to store the result of the expression?",
+        indices: [],
+        promptText: "Which element of the array is going to store the result of the expression? (Click on the element)",
         ast: mainAst,
         index: 0,
         styleClasses: {
@@ -433,8 +439,8 @@ var states = [
             arrayLength: 5,
             i: 1,
             "expressionResult" : 13,
-            index: 1
         },
+        indices: [1],
         promptText: "Update that element in the array",
         ast: mainAst,
         index: 0,
@@ -454,6 +460,7 @@ var states = [
             arrayLength: 5,
             i: 1
         },
+        indices: [],
         promptText: "We’ve reached the end of the for loop body, which means we need to update our counter and reevaluate the for loop test.",
         ast: mainAst,
         index: 0,
@@ -473,6 +480,7 @@ var states = [
             arrayLength: 5,
             i: 1
         },
+        indices: [],
         promptText: "What is i updated to?",
         ast: mainAst,
         index: 0,

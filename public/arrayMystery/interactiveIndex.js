@@ -4,7 +4,8 @@
 (function() {
     "use strict";
 
-    var step = 0;
+    var step = 6;
+    var indices;
 
     window.onload = function () {
         displayState();
@@ -22,6 +23,11 @@
             varCells[j].onclick = addFocusClass;
         }
     };
+
+    function addIndex() {
+        indices.push(parseInt(this.id.charAt(3)));
+        next();
+    }
 
     function next() {
         if (compareValues()) {
@@ -59,6 +65,7 @@
          }
          },*/
         var state = states[step];
+        indices = state.indices;
 
         // Clears all of the html whose style can change with different states
         $(".clear").empty();
@@ -87,7 +94,7 @@
 
         var tableBody = $("<tbody>", {id: "arraydata"});
         for (var i = 0; i < elements.length; i++) {
-            var child = $("<td>");
+            var child = $("<td>", {id: "box" + i, class: "box"});
             var input = $("<input>", {id: "ele" + i});
             input.val(elements[i]);
             child.append(input);
@@ -369,7 +376,7 @@
 
     function compareValues() {
         var match = true;
-        if (step > 0) {
+        if (step > 7) {
             // The next state object, to which compare things
             var state = states[step + 1];
 
@@ -395,6 +402,26 @@
                         match = false;
     
                     }
+                }
+            }
+
+            console.log("State: " + state.indices);
+            console.log("Us: " + indices);
+            // Compare selected array indices
+            var indicesState = state.indices;
+            // Compare state to screen
+            for (i = 0; i < indices.length; i++) {
+                if ($.inArray(indices[i], indicesState) < 0) {
+                    $("#box" + indices[i]).addClass("wrong");
+                    indices.pop();
+                    match = false;
+                }
+            }
+            // Compare screen to state
+            for (i = 0; i < indicesState.length; i++) {
+                if ($.inArray(indicesState[i], indices) < 0) {
+                    $("#box" + indicesState[i]).addClass("right");
+                    match = false;
                 }
             }
 
@@ -426,6 +453,10 @@
         if (step > 0) {
             // The next state object, to which compare things
             var state = states[step + 1];
+
+            if (state.indices.length > states[step].indices.length) {
+                $(".box").on("click", addIndex);
+            }
 
             // Compare array values
             var elements = state.array;
