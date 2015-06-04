@@ -6,11 +6,15 @@
     window.onload = function () {
         $("#next").on("click", next);
         $("#back").on("click", back);
+
+
+
+
     };
 
     // Called when the user presses the next button
     function next() {
-        clearHighlights();
+            clearHighlights();
         $("#next").html("Next"); //reset next button
         switch (step) {
             case -1:

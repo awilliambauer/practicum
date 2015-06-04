@@ -14,6 +14,31 @@ body {
     background-color: #45ADA8;
 }
 
+.color0Text {
+    color: #45ADA8;
+    font-weight: bold;
+}
+
+.color0Border {
+    border-color: #45ADA8;
+}
+
+.color2Highlight {
+    background: #9DE0AD;
+}
+
+.color2Border {
+    border-color: #9DE0AD;
+}
+
+.color1Highlight {
+    background: #E5FCC2;
+}
+
+.color1Border {
+    border-color: #E5FCC2;
+}
+
 #contentwindow {
     background-color: white;
     border-color: #547980;
@@ -27,6 +52,7 @@ body {
     margin-top: 40px;
     width: 900px;
     box-shadow: 0px 0px 15px #888888;
+    position: relative;
 }
 
 #problemcontents {
@@ -42,15 +68,39 @@ body {
     bottom: 10px;
 }
 
-.vardata,   {
-    font-size: 35px;
-}
+/*all variable bank input styling*/
 
 #arraydata {
     border: 2px solid darkgray;
     border-collapse: collapse;
 }
 
+input {
+    width: 26px;
+    text-align: center;
+}
+
+#arraydata td, #varvalues input {
+    padding: 8px;
+}
+
+#arraydata input {
+    border: none;
+    width: 50px;
+}
+
+#arraydata input, #varvalues input {
+    font-size: 22px;
+}
+
+#indices input {
+    font-size: 20px;
+}
+
+#arraydata input:focus, #varvalues input:focus, #indices input:focus{
+    outline: 0;
+    box-shadow: 0 0 5px 2px #9DE0AD;
+}
 
 #indices {
     font-size: 20px;
@@ -58,16 +108,18 @@ body {
 
 .varlabel {
     text-align: right;
-    margin-bottom: 33px;
+    margin-bottom: 27px;
 }
 
+#arrLabel {
+    margin-top: 40px;
+}
 
 .arraylabel {
     margin-top: 40px;
 }
 
 td {
-    padding: 15px;
     width: 50px;
     text-align: center;
     border: 5px solid darkgrey;
@@ -115,27 +167,17 @@ hr {
     background-color: lawngreen;
 }
 
-.wrong {
-    background-color: red;
-}
-
-input {
-    width: 26px;
-    background-color: #B5F3C4;
-    text-align: center;
-}
-
 #prompttextbox {
     height: 90px;
     text-align: center;
 }
 
-#next {
+#next, #next1 {
     float: right;
     margin-right: 8px;
 }
 
-#next, #back {
+#next, #next1, #back {
     background: #547980;
     background-image: -webkit-linear-gradient(top, #547980, #45ADA8);
     background-image: -moz-linear-gradient(top, #547980, #45ADA8);
@@ -153,7 +195,7 @@ input {
     text-decoration: none;
 }
 
-#next:hover, #back:hover {
+#next:hover, #back:hover, #next1:hover {
     background: #9de0ad;
     background-image: -webkit-linear-gradient(top, #9de0ad, #81b38d);
     background-image: -moz-linear-gradient(top, #9de0ad, #81b38d);
@@ -163,7 +205,56 @@ input {
     text-decoration: none;
 }
 
-#next:focus, #back:focus {
+#next:focus, #back:focus, #next1:hover {
     outline: 0;
 }
+
+#varvalues div {
+    padding-top: 12px;
+}
+
+#next1 {
+    float: right;
+    position: absolute;
+    bottom: 0;
+    right: 48%;
+    margin-bottom: 35px;
+}
+
+/*
+DYNAMIC STYLING CLASSES
+The following classes need to remain at the bottom of the file to ensure
+the dynamic styling works correctly.
+*/
+.mainColorText {
+    color: #45ADA8;
+    font-weight: bold;
+}
+
+.mainColorBorder {
+    border-color: #45ADA8;
+}
+
+.accent2Highlight {
+    background: #9DE0AD;
+}
+
+.accent2Border {
+    border-color: #9DE0AD;
+}
+
+.accent1Highlight {
+    background: #E5FCC2;
+}
+
+.accent1Border {
+    border-color: #E5FCC2;
+}
+
+.wrong {
+    background-color: #DE6363;
+}
+/* DON'T PUT STUFF BELOW THIS COMMENT!! PLACE ADDITIONAL CODE ABOVE
+   DYNAMIC STYLING CLASSES!!
+*/
 
