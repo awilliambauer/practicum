@@ -130,11 +130,17 @@
             console.log("entered smallText check");
 
             /*reduce size of problem description*/
-            document.getElementById("problemdescription").style.fontSize = "10px";
-            document.getElementById("problemdescription").style.color = "gray";
+            document.getElementById("problemdescription").classList.add("littletext");
 
             /*increase size of problem text*/
-            document.getElementById("problemtext").style.fontSize = "17px";
+            document.getElementById("problemtext").classList.add("bigtext");
+
+            /*old way
+            document.getElementById("problemdescription").style.fontSize = "10px";
+            document.getElementById("problemdescription").style.color = "gray";
+             document.getElementById("problemtext").style.fontSize = "17px";*/
+
+
         }
     }
 
