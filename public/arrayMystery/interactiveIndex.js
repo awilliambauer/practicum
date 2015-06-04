@@ -12,16 +12,8 @@
         $("#next").on("click", next);
         $("#next1").on("click", next);
         $("#back").on("click", back);
-
-        var arrayCells = document.querySelectorAll("td");
-        for (var i = 0; i < arrayCells.length; i++) {
-            arrayCells[i].onfocusin = addFocusClass;
-            arrayCells[i].onfocusout = removeFocusClass;
-        }
-        var varCells = document.querySelectorAll(".vardata");
-        for (var j = 0; j < varCells.length; j++) {
-            varCells[j].onclick = addFocusClass;
-        }
+        initializeFocus();
+        document.onkeydown = checkEnter;
     };
 
     function autofillIndices() {
@@ -526,6 +518,27 @@
             }
         }
         return false;
+    }
+
+    /*set focus of array cells and variable boxes--used to make green glow
+    * highlight when user selects box*/
+    function initializeFocus() {
+        var arrayCells = document.querySelectorAll("td");
+        for (var i = 0; i < arrayCells.length; i++) {
+            arrayCells[i].onfocusin = addFocusClass;
+            arrayCells[i].onfocusout = removeFocusClass;
+        }
+        var varCells = document.querySelectorAll(".vardata");
+        for (var j = 0; j < varCells.length; j++) {
+            varCells[j].onclick = addFocusClass;
+        }
+    }
+
+    /*process onkeydown event--call next if key pressed was enter*/
+    function checkEnter() {
+        if (event.keyCode == 13) {
+            next();
+        }
     }
 
 })();
