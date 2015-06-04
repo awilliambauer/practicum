@@ -24,6 +24,14 @@
         }
     };
 
+    function autofillIndices() {
+        var index = parseInt($("#index0").val()) + 1;
+        for (var i = 1; i < states[step].array.length; i++) {
+            $("#index" + i).val(index);
+            index++;
+          }
+    }
+
     function addIndex() {
         indices.push(parseInt(this.id.charAt(3)));
         next();
@@ -34,6 +42,7 @@
             step++;
             displayState();
             compareValues2();
+            $("#index0").on('input', autofillIndices);
         }
 
         // TO DO Add wraps
