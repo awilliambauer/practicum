@@ -4,7 +4,7 @@
 (function() {
     "use strict";
 
-    var step = 6;
+    var step = 0;
     var indices;
 
     window.onload = function () {
@@ -376,7 +376,7 @@
 
     function compareValues() {
         var match = true;
-        if (step > 7) {
+        if (step > 0) {
             // The next state object, to which compare things
             var state = states[step + 1];
 
