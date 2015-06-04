@@ -2,8 +2,8 @@
 <html>
 <head lang="en">
     <title>Practice-That!</title>
+	<link href="../common.css" type="text/css" rel="stylesheet" />
     <link href="if_else.css" type="text/css" rel="stylesheet" />
-	<link href="../navbar.css" type="text/css" rel="stylesheet" />
 	<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.11.2.min.js"></script>
 	<script src="../navigationbar.js"></script>
     <script type="text/javascript" src="if_else.js"></script>
@@ -13,9 +13,11 @@
 	<div class="topnavContainer topnavContainerScroll">
 	</div>
     <div class="content">
-    	<h1>Practice-that!</h1>
-    	<h2>If/Else Mystery Problem 2</h2>
-    	<h3>Current Method call: <span>ifElseMystery2(3, 20)</span></h3>
+		<div id="title_block">
+			<h1 id="main_title">Practice-that!</h1>
+			<h2>If/Else Mystery Problem 2</h2>
+        </div>
+		<h3 id="end_title">Current Method call: <span>ifElseMystery2(3, 20)</span></h3>
     	<ul id="problem_space"></ul>
 
     	<div id="answer_box">
@@ -29,13 +31,20 @@
     	</div>
 
     	<div id="variable_bank">
-    		<h4>Variable Bank</h4>
-            <ul id="variable_list"></ul>
+    		<h4 id="variable_bank_title">Variable Bank</h4>
+            <ul id="variable_list">
+                <li class="variable_list_item">
+                    <span class="bank_variable">name</span>
+                    <span class="bank_variable_value">value</span>
+                </li>
+            </ul>
+            <p id="just_updated_explanation"><span id="just_updated_box"></span> => just updated</span></p>
     	</div>
 
     	<button id="next">Next</button>
 
     	<div id="prompt"></div>
+		<div id="footer"></div>
     </div>
 </body>
 </html>

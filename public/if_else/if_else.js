@@ -65,6 +65,11 @@
 	// increments the step we're currently on and changes the prompt/highlighting
 	// accordingly
 	function goNext() {
+		// take away "next" button when finished
+		if ((CURRENT_STEP + 1) * 2 >= CONTENTS.length - 2) {
+			$("#next").hide();
+		}
+
 		// some initialization stuff that happens on first click of next
 		if (CURRENT_STEP == 0) {
 			// show previously invisible prompt
@@ -77,18 +82,17 @@
 		CURRENT_STEP++;
 		var prompt = CONTENTS[2 * CURRENT_STEP];
 		var vars = CONTENTS[2 * CURRENT_STEP + 1].split("\t");
-		//console.log("vars = " + vars);
 		var updated_vars = vars.slice(2, vars.length) // get all of the variables changed in this line
 
-		// Only updates if vars contains variables
-		if( vars.length > 3) {
-			updateVariables(updated_vars);
-		}
 		// if vars contains variables or true/false
 		var line = vars[0] - 1;
 		var crossout;
+
+		// Only updates if vars contains variables
+		if (vars.length > 3) {
+			updateVariables(updated_vars);
+		}
 		if (vars.length > 2) {
-			console.log("comment being added");
 			addComment(vars);
 		}
 		// don't do this the first time
@@ -98,7 +102,8 @@
 			highlightBlock(0, CURRENT_LINE - 1, "grey_out");
 			highlightLine(CURRENT_LINE, "highlight");
 		}
-		$("#prompt").text(prompt);
+		getPrompt(prompt);
+		addInteraction(vars);
 		if (vars.length > 1 && vars[1].trim() != "") {
 			crossout = vars[1].split(",");
 			for (var i = 0; i < crossout.length; i++) {
@@ -109,12 +114,30 @@
 		OLD_VARS = vars;
 	}
 
+	// Formats the way the prompt displays
+	function getPrompt(prompt) {
+		$("#prompt").empty();
+		var promptParts = prompt.split(":");
+		if (promptParts.length > 1) {	// there is a ":" in the prompt
+			var title = document.createElement("span");
+			$(title).css("font-weight", "bold")
+					.text(promptParts[0] + ": ");	// If/Else, Booleans, etc
+			var body = document.createElement("span");
+			$(body).text(promptParts[1]);	// the actual description
+			$("#prompt").append(title);
+			$("#prompt").append(body);
+		} else {	// no ":", shouldn't happen but whatevs
+			$("#prompt").text(promptParts[0]);
+		}
+	}
+
 	// moves the prompt to the given line
 	function movePrompt(line) {
+		// stops any current animation in case of spam clicking "next"
 		$("#prompt").finish();
 		var currentTop = $("#prompt").css("top");
 		currentTop = parseInt(currentTop.substring(0, currentTop.length - 2));
-		var lineHeight = $("ul > li").css("height");
+		var lineHeight = $("#problem_space > li").css("height");
 		lineHeight = parseInt(lineHeight.substring(0, lineHeight.length - 2));
 		$("#prompt").animate({top: currentTop + (line - CURRENT_LINE) * (lineHeight) + "px"});
 	}
@@ -123,18 +146,19 @@
 	function addComment(vars) {
 		var comment = document.createElement("span");
 		$(comment).addClass("comments");
-		console.log(vars.toString());
-		console.log(vars.length);
 		if (vars.length == 3) { // Is true/false
 			$(comment).text("\t// " + vars[2]);
 		} else { // Is variable change
-			console.log("going into else statement");
-			for(var i = 2; i < vars.length; i += 2) {
-				$(comment).text($(comment).text() + "\t// " + vars[i] + " = " + vars[i + 1]);
+			var variable_comments = "\t// ";
+			for (var variable_name in VARIABLES) {
+				var variable = VARIABLES[variable_name];
+				console.log("variable[name] + \" = \" + variable[value]");
+				variable_comments += variable["name"] + " = " + variable["value"] + ", ";
 			}
-			console.log("\t//" + vars[i] + " = " + vars[i + 1]);
+			//removes trailing comma
+			variable_comments = variable_comments.substr(0, variable_comments.length - 2);
+			$(comment).text(variable_comments);
 		}
-		console.log(comment);
 		$(".highlight").append(comment);
 		/*
 		$("#problem_space").children().each(function(index) {
@@ -161,7 +185,23 @@
 
 	function drawVariableBank() { 	
 		$("#variable_list").empty();
+		
+		// insert top row of variable bank
+		var variable_label = document.createElement("span");
+		$(variable_label).addClass("bank_variable");
+		$(variable_label).text("name");
 
+		var value_label = document.createElement("span");
+		$(value_label).addClass("bank_variable_value");
+		$(value_label).text("value");
+
+		var li = document.createElement("li");
+		$(li).addClass("variable_list_item");
+		$(li).append(variable_label);
+		$(li).append("\t");
+		$(li).append(value_label);
+		$("#variable_list").append(li);
+		
 		for (var variable_name in VARIABLES) {
 			var variable = VARIABLES[variable_name];
 			var variable_span = document.createElement("span");
@@ -170,20 +210,75 @@
 
 			var value_span = document.createElement("span");
 			$(value_span).text(variable["value"]);
-
+			
+			$(value_span).addClass("bank_variable_value");
+			// if the variable has just been updated we add a class
 			if (variable["updated"]) {
 				$(value_span).addClass("just_updated_value");
 				variable["updated"] = false;
-			} else {
-				$(value_span).addClass("bank_variable_value");
 			}
 
 			var li = document.createElement("li");
+			$(li).addClass("variable_list_item");
 			$(li).append(variable_span);
 			$(li).append("\t");
 			$(li).append(value_span);
 
 			$("#variable_list").append(li);
+		}
+	}
+
+	// adds the interactive components of the webpage
+	function addInteraction() {
+		// get the next step's vars, which is where the new variable values live
+		if ((CURRENT_STEP + 1) * 2 + 1 < CONTENTS.length) {
+			var nextVars = CONTENTS[(CURRENT_STEP + 1) * 2 + 1].split("\t");
+			// if there are updated variables
+			var interaction = document.createElement("div");
+			if (nextVars.length > 3) {	// vars, not test result
+				for (var i = 2; i < nextVars.length; i += 2) {
+					var varBox = document.createElement("p");
+					$(varBox).text(nextVars[i] + " = ")
+							 .css("font-family", "monospace");
+					var input = document.createElement("input");
+					$(input).attr("type", "text")
+							.attr("value", nextVars[i + 1])
+							.css("font-size", "12pt");
+					$(varBox).append(input);
+					$(interaction).append(varBox);
+				}
+			} else if (nextVars.length > 2) {	// test result, no vars
+				var boolBox = document.createElement("p");
+				$(boolBox).text("z <= x\t");
+				var trueChoice = document.createElement("input");
+				$(trueChoice).attr("type", "radio")
+							 .attr("name", "t/f")
+							 .attr("value", "true");
+				var falseChoice = document.createElement("input");
+				$(falseChoice).attr("type", "radio")
+							  .attr("name", "t/f")
+							  .attr("value", "false");
+				if (nextVars[2].trim() == "true") {
+					$(trueChoice).attr("checked", "checked");
+				} else {
+					$(falseChoice).attr("checked", "checked");
+				}
+				var trueBox = document.createElement("p");
+				$(trueBox).text("true")
+						  .append(trueChoice)
+						  .css("text-align", "center");
+				var falseBox = document.createElement("p");
+				$(falseBox).text("false")
+						   .append(falseChoice)
+						   .css("text-align", "center");
+				$(boolBox).append(trueBox)
+						  .append(falseBox)
+						  .css("font-family", "monospace")
+						  .css("font-size", "11pt");
+				$(interaction).append(boolBox);
+			}
+			$(interaction).css("font-size", "12pt");
+			$("#prompt").append(interaction);
 		}
 	}
 

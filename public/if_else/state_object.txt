@@ -23,6 +23,7 @@ public static void ifElseMystery2 (int x, int y) {
 
 Sample State Object:
 
+<<<<<<< HEAD
 state: [
 		{prompt: "If/Else: Before starting, note the separate if/else blocks that are highlighted.",
 		 problem},
@@ -32,19 +33,38 @@ state: [
 		 vars: {1: {x: 3, y: 20}},
 		 updated: {x, y},
 		 problem
+=======
+this = {
+	state: [
+		{prompt: "If/Else: Before starting, note the separate if/else blocks that are highlighted."},
+
+		{prompt: "Initialization: What are the starting values of our variables?",
+		 lineNum: 1,
+		 vars: {x: 3, y: 20},
+		 updated: {x, y}
+>>>>>>> integ
 		},	
 
 		{prompt: "Initialization: What is the starting value of this variable?"
 		 lineNum: 2,
+<<<<<<< HEAD
 		 vars: {1: {x: 3, y: 20}, 2: {x: 3, y: 20, z: 4}},
 		 updated: {z},
 		 problem
+=======
+		 vars: {x: 3, y: 20, z: 4},
+		 updated: {z}
+>>>>>>> integ
 		},
 
 		{prompt: "Conditionals: We're at the beginning of a new if/else block. Let's find the first branch that evaluates to true.",
 		 lineNum: 4,
+<<<<<<< HEAD
 		 vars: {x: 3, y: 20, z: 4},
 		 problem
+=======
+		 vars: {x: 3, y: 20, z: 4}
+>>>>>>> integ
 		},
 
 		{prompt: "Booleans: What does this expression evaluate to?",
