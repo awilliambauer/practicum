@@ -124,6 +124,18 @@
         }
 
         addStylingClasses(state);
+
+        /*update size of problem text*/
+        if (!state.smallText) {
+            console.log("entered smallText check");
+
+            /*reduce size of problem description*/
+            document.getElementById("problemdescription").style.fontSize = "10px";
+            document.getElementById("problemdescription").style.color = "gray";
+
+            /*increase size of problem text*/
+            document.getElementById("problemtext").style.fontSize = "17px";
+        }
     }
 
     /**
@@ -504,6 +516,7 @@
     }
 
     function addFocusClass() {
+        this.select();
         this.classList.add("focus");
     }
 
@@ -525,8 +538,14 @@
     function initializeFocus() {
         var arrayCells = document.querySelectorAll("td");
         for (var i = 0; i < arrayCells.length; i++) {
+
+            /*new focus code*/
+            arrayCells[i].addEventListener("focus", addFocusClass, true);
+            arrayCells[i].addEventListener("blur", removeFocusClass, true);
+
+            /*old focus code
             arrayCells[i].onfocusin = addFocusClass;
-            arrayCells[i].onfocusout = removeFocusClass;
+            arrayCells[i].onfocusout = removeFocusClass;*/
         }
         var varCells = document.querySelectorAll(".vardata");
         for (var j = 0; j < varCells.length; j++) {
@@ -535,7 +554,7 @@
     }
 
     /*process onkeydown event--call next if key pressed was enter*/
-    function checkEnter() {
+    function checkEnter(event) {
         if (event.keyCode == 13) {
             next();
         }

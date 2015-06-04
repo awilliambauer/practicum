@@ -129,6 +129,7 @@ var states = [
             arrayLength: 5,
             i: "?"
         },
+        smallText: true,
         indices: [],
         promptText: "Let's solve the problem!",
         ast: mainAst,
