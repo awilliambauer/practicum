@@ -111,7 +111,7 @@ var mainAst = {
  (not included in variables array because it is placed in the
  dom differently from the other variables)
  variables: Holds an associative array mapping variable names to their
- values (includes i, arrayLength and any temporary variables
+ values (includes i, &#46;length and any temporary variables
  that need to be displayed in the variable bank)
  promptText: A string containing the text to be displayed.
  ast: Holds a reference to the AST of the current problem

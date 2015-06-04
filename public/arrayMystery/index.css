@@ -44,6 +44,7 @@ body {
     border-color: #547980;
     border-style: solid;
     border-radius: 20px;
+    border-width: 2px;
     font-family: sans-serif;
     color: #594F4F;
     overflow: hidden;
@@ -150,7 +151,7 @@ td {
 }
 
 #prompt {
-    border: 3px solid #547980;
+    border: 2px solid #547980;
     border-radius: 10px;
     width: 300px;
     float: right;
