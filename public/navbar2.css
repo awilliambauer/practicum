@@ -131,6 +131,7 @@ body {
     padding: 17px;
     font-size: 12px;
     letter-spacing: 1px;
+    font-family: Arial, sans-serif;
     text-decoration: none;
     color: #ffffff;
     font-weight: 700;
@@ -203,6 +204,9 @@ body {
 #cssmenu.align-right ul ul ul {
     margin-left: 0;
     margin-right: 100%;
+}
+#expressions, #ifelse, #arraymystery {
+    width: 170px;
 }
 #cssmenu ul ul li a {
     border-bottom: 1px solid rgba(150, 150, 150, 0.15);

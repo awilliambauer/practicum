@@ -2,8 +2,8 @@
  * Created by Varun on 4/28/2015.
  */
 $(document).ready(function() {
-
-    "use strict";
+     "use strict";
+    var filepath = "../"
     $(".topnavContainer").append("<div id='cssmenu' class='container-fluid'>");
     $(".container-fluid").append("<ul id='navlinks' class='topnav'>");
 
@@ -13,18 +13,22 @@ $(document).ready(function() {
     $("#navlinks").append("<li id='arraymystery' class='active'>");
 
     $("#home_icon").append("<a href='../index.html' class='topnav_home' title='Home'>&nbsp;</a>");
-    $("#expressions").append("<a href='#' class='topnav_expressions' title='Expressions'>Expressions</a>");
-    $("#ifelse").append("<a href='#' class='topnav_ifelse' title='If/Else'>If/Else</a>");
-    $("#arraymystery").append("<a href='#' class='topnav_array' title='Array Mystery'>Array Mystery</a>");
+
+    $("#expressions").append("<a href='#' title='Expressions'>Expressions</a>");
+    $("#ifelse").append("<a href='#' title='If/Else'>If/Else</a>");
+    $("#arraymystery").append("<a href='#'  title='Array Mystery'>Array Mystery</a>");
 
     $("#expressions").append("<ul id='expressionproblems'>");
-    $("#expressionproblems").append("<li><a href='../expressions/index.html' class='topnav_expressions' title='Problem 1'>Problem 1</a></li>");
+    $("#expressionproblems").append("<li><a class='topnav_expressions' title='Problem 1'>Problem 1</a></li>");
+    $(".topnav_expressions").attr("href", filepath + "expressions/index.html");
 
     $("#ifelse").append("<ul id='ifelseproblems'>");
-    $("#ifelseproblems").append("<li><a href='../if_else/index.html' class='topnav_ifelse' title='Problem 1'>Problem 1</a></li>");
+    $("#ifelseproblems").append("<li><a class='topnav_ifelse' title='Problem 1'>Problem 1</a></li>");
+    $(".topnav_ifelse").attr("href", filepath + "if_else/index.html");
 
     $("#arraymystery").append("<ul id='arrayproblems'>");
-    $("#arrayproblems").append("<li><a href='../arrayMystery/index.html' class='topnav_array' title='Problem 1'>Problem 1</a></li>");
+    $("#arrayproblems").append("<li><a class='topnav_array' title='Problem 1'>Problem 1</a></li>");
+    $(".topnav_array").attr("href", filepath + "arrayMystery/index.html");
 });
 (function($) {
 
