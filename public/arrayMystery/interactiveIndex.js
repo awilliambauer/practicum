@@ -412,7 +412,7 @@
                 if (elements[i] != current) {
                     $(("#ele" + i)).addClass("wrong");
                     incorrect("array element at index " + i, elements[i], current);
-                    match = false;
+                    return false;
                 }
             }
 
@@ -424,8 +424,7 @@
                     if ("" + i !== current) {
                        currentNode.addClass("wrong");
                         incorrect("array index", i, current);
-                        match = false;
-    
+                        return false;
                     }
                 }
             }
@@ -461,7 +460,7 @@
                         if (expected != "?" && expected !== current) {
                             $(variables[i]).addClass("wrong");
                             incorrect("variable " + key + " value", variablesExpected[key], current);
-                            match = false;
+                            return false;
                         }
                     }
                 }
