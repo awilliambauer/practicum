@@ -60,8 +60,8 @@
 
 	function next() {
 		// turn off line selecting
-		$("#problem_space li").off("mouseover");
 		if (checkUserInput()) {
+			$("#problem_space li").off("mouseover, click");
 			var currentState = state[CURRENT_STEP]
 			//console.log(currentState.prompt);
 			// take away "next" button when finished
@@ -100,7 +100,8 @@
 		var correctBool = true;
 		if (CORRECT_NEXT_LINE) {
 			var lineInput = document.getElementsByClassName("next_line_input");
-			correctLine = CORRECT_NEXT_LINE == lineInput[0].value;
+			// correctLine = CORRECT_NEXT_LINE == lineInput[0].value;
+			correctLine = $(".chosen-next-line").hasClass(CORRECT_NEXT_LINE);
 		}
 		if (CORRECT_VARIABLES) {
 			var variables = document.getElementsByClassName("variable_answer");
@@ -113,7 +114,6 @@
 		}
 		if(CORRECT_BOOL !== null) {
 			var check = document.querySelector("input[name = \"tf\"]:checked").value + "";
-			console.log(CORRECT_BOOL);
 			correctBool = (check == CORRECT_BOOL);
 		}
 		
@@ -190,7 +190,9 @@
 			$(body).text(promptParts[1]);	// the actual description
 			$("#prompt").html(title);
 			$("#prompt").append(body);
-			movePrompt(state.lineNum);
+			if (state.hasOwnProperty("lineNum")) {
+				movePrompt(state.lineNum);
+			}
 		}
 	}
 
@@ -362,7 +364,7 @@
 						 .css("font-family", "monospace");
 				var input = document.createElement("input");
 				$(input).attr("type", "text")
-						// .attr("value", state.answer[variable]) // adding the answer to the state
+						.attr("value", state.answer[variable]) // adding the answer to the state
 						.css("font-size", "12pt");
 				$(input).addClass("variable_answer");
 				$(varBox).append(input);
@@ -379,11 +381,11 @@
 			$(falseChoice).attr("type", "radio")
 						  .attr("name", "tf")
 						  .attr("value", "false");
-			// if (state.testResult) { // selecting the right box
-				// $(trueChoice).attr("checked", "checked");
-			// } else {
-				// $(falseChoice).attr("checked", "checked");
-			// }
+			if (state.testResult) { // selecting the right box
+				$(trueChoice).attr("checked", "checked");
+			} else {
+				$(falseChoice).attr("checked", "checked");
+			}
 			var trueBox = document.createElement("p");
 			$(trueBox).text("true")
 					  .append(trueChoice)
@@ -407,7 +409,7 @@
 			$(lineInput).attr("type", "text")
 						.css("font-size", "12pt")
 						.css("font-family", "monospace");
-			$(lineInput).attr("value", state.nextLine);
+			// $(lineInput).attr("value", state.nextLine);
 			$(lineInput).addClass("next_line_input");     // CLASS TO CHECK LATER IF INPUT'S CORRECT
 			$(lineBox).append(lineInput);
 			$(interaction).append(lineBox);
@@ -419,8 +421,8 @@
 				$(this).removeClass("select");
 			});
 			$("#problem_space li").click(function() {
-				var chosenLine = $(this).hasClass(CORRECT_NEXT_LINE);
-				console.log(chosenLine);
+				$("#problem_space li").removeClass("chosen-next-line");
+				$(this).addClass("chosen-next-line")
 			});
 		}
 		$(interaction).css("font-size", "12pt");

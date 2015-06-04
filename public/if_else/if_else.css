@@ -135,8 +135,11 @@ h3 > span, #answer_box > span, input[type="text"] {
 	border-radius: 2px;
 }
 
-.select {
+.select, .chosen-next-line {
 	background-color: rgba(69,173,168, 0.65);
+}
+
+.select {
 	cursor: pointer;
 }
 
