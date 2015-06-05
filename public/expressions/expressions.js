@@ -5,22 +5,13 @@
 (function() {
 
 	// easy problem state object
-	var startArray = [ {type:"String", value : "hello"},
-	 {type:"ASoperator", value: "+"},
-	 {type:"int", value : 6},
-	 {type:"MDMoperator", value: "*"},
-	 {type:"int", value : 3}];
+	var startArray;
 
 	// state object
-	/* Currently only the messages come from the state object, 
-	 since we store the array and index as global variables that are updated as the state object is updated.
-	 To completely rely on the state object, yu need to find/replace MOST
-	 arr with stateObject[stateObject.length - 1][0]
-	 */
 	var stateObject = new Array();
 
 	// tougher problem state object
-	/*var startArray = [{type: "int", value: 22},
+	var problems = [[{type: "int", value: 22},
 		{type: "MDMoperator", value: "%"},
 		{type: "int", value: 7},
 		{type: "ASoperator", value: "+"},
@@ -30,7 +21,13 @@
 		{type: "ASoperator", value: "-"},
 		{type: "double", value: 6.0},
 		{type: "MDMoperator", value: "/"},
-		{type: "double", value: 2}];*/
+		{type: "double", value: 2}],
+
+		[{type:"String", value : "hello"},
+	 	{type:"ASoperator", value: "+"},
+	 	{type:"int", value : 6},
+	 	{type:"MDMoperator", value: "*"},
+	 	{type:"int", value : 3}]];
 
 
 	// boolean that represents whether showing steps has started
@@ -42,10 +39,23 @@
 	var overallAnswer = "10.0";
 
 	// true - with interactivity, false - without interactivity
-	var interaction = true;
+	var interaction;
 
 	// on load, shows expression, answer box, submit button, and show steps button
 	window.onload = function () {
+		var query = window.location.search.substring(1);
+		// default values
+		interaction = true;
+		startArray = problems[0];
+		if (query != "") {
+			var queryResults = query.split("+");
+			if (queryResults.length > 1 && queryResults[1] == "noninteractive") {
+				interaction = false;
+			}
+			var index = parseInt(queryResults[0]);
+			startArray = problems[index];
+		}
+
 		var newHeading = document.getElementById("expressionHeader");
 		setupPage(newHeading);
 		document.getElementById("submit").onclick = correct;
@@ -59,7 +69,6 @@
 	};
 
 	function walkThrough() {
-		document.getElementById("dummy").scrollIntoView();
 
 		// gets rid of submit button, changes next button text
 		// and creates the steps div to put everything for step through.
@@ -108,6 +117,7 @@
 		} else {
 			document.getElementById("nextstep").classList.add("hiddenSteps");
 		}
+		document.getElementById("dummy").scrollIntoView();
 	}
 
 	// If they submitted an answer (not show steps view), 
@@ -176,8 +186,6 @@
 			"the Additive (+ -) operators from left to right.";
 			newChild.appendChild(newChild2);
 		}
-
-		document.getElementById("dummy").scrollIntoView();
 		// finds and set the indices for the operator, left operand, and right operand
 		// has click operator message
 		find();
@@ -223,6 +231,7 @@
 				}
 			}
 		}
+		document.getElementById("dummy").scrollIntoView();
 	}
 
 	// If the student click on the wrong type of operator button.
@@ -412,7 +421,7 @@
 		newChild.appendChild(expressionParagraph);
 
 		document.getElementById("steps").appendChild(newChild);
-
+		document.getElementById("dummy").scrollIntoView();
 		next.onclick = processAnswer;
 	}
 
@@ -468,6 +477,7 @@
 			clientAnswer.value = getValue(operator);
 			stepThrough();
 		}
+		document.getElementById("dummy").scrollIntoView();
 	}
 
 	// gets the value at a particular index
