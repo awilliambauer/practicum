@@ -58,6 +58,8 @@
 	};
 
 	function walkThrough() {
+		document.getElementById("dummy").scrollIntoView();
+
 		// gets rid of submit button, changes next button text
 		// and creates the steps div to put everything for step through.
 		if (!started) {
@@ -145,6 +147,7 @@
 	// This starts the solving process, for right now the person can't try to submit
 	// after starting the stepThrough.
 	function stepThrough() {
+		document.getElementById("dummy").scrollIntoView();
 
 		// gets rid of failed statment if they tried to submit an answer
 		if (document.getElementById("correct") !== null) {
@@ -378,6 +381,8 @@
 	// prompts the user to solve a portion of the problem
 	// mini expression piece
 	function trySubmit() {
+		document.getElementById("dummy").scrollIntoView();
+
 		if (document.getElementById("error") !== null) {
 			var steps = document.getElementById("steps");
 			steps.removeChild(steps.lastChild);
