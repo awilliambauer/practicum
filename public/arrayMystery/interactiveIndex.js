@@ -163,6 +163,13 @@
 
         }
         compareValues2();
+        if (state.clickableArray) {
+            console.log("array should be clickable now");
+            var clickCells = document.querySelectorAll("#arraydata input");
+            for (var q = 0; q < clickCells.length; q++) {
+                clickCells[q].style.cursor = "pointer";
+            }
+        }
     }
 
     /**

@@ -319,6 +319,7 @@ var states = [
         promptText: "What is the value of arr[i – 1]? (Click on the value in the array)",
         ast: mainAst,
         index: 0,
+        clickableArray: true,
         styleClasses: {
             mainColorText: ["#java-ast-26"],
             mainColorBorder: [],
@@ -341,9 +342,9 @@ var states = [
         ast: mainAst,
         index: 0,
         styleClasses: {
-            mainColorText: ["#java-ast-26"],
+            mainColorText: ["#java-ast-30"],
             mainColorBorder: [],
-            accent1Highlight: ["#java-ast-26"],
+            accent1Highlight: ["#java-ast-30"],
             accent1Border: [],
             accent2Highlight: [],
             accent2Border: []
@@ -361,6 +362,7 @@ var states = [
         promptText: "What is the value of arr[i + 1]? (Click on the value in the array)",
         ast: mainAst,
         index: 0,
+        clickableArray: true,
         styleClasses: {
             mainColorText: ["#java-ast-32"],
             mainColorBorder: [],
@@ -426,6 +428,7 @@ var states = [
         promptText: "Which element of the array is going to store the result of the expression? (Click on the element)",
         ast: mainAst,
         index: 0,
+        clickableArray: true,
         styleClasses: {
             mainColorText: ["#arraydata"],
             mainColorBorder: ["#arraydata"],
