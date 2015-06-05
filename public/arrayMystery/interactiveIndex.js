@@ -21,6 +21,7 @@
         });
         $("#islider").on("mouseup", function() {
            $("#idiv").removeClass("ihighlight");
+            buttonsVisible();
         });
         document.onkeydown = checkEnter;
     };
