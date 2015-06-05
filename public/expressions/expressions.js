@@ -26,7 +26,7 @@
 	 	[{type:"double", value: 4.0}, 
 	 	{type:"ASoperator", value: "+"}, 
 	 	{type:"String", value: "CSE142"}, 
-	 	{type:"ASOperator", value: "+"}, 
+	 	{type:"ASoperator", value: "+"}, 
 	 	{type:"int", value: 143}]];
 
 	// answers corresponding to array of problems
@@ -235,6 +235,7 @@
 
 			document.getElementById("steps").appendChild(firstStep);
 			var operators = document.querySelectorAll(".operators");
+			alert(arr[stateObject[stateObject.length - 1][1].index].type);
 			for (var i = 0; i < operators.length; i++) {
 				if (operators[i].id == arr[stateObject[stateObject.length - 1][1].index].type) {
 					operators[i].onclick = findOperator;
@@ -489,6 +490,7 @@
 			clientAnswer.value = getValue(operator);
 			stepThrough();
 		}
+		clientAnswer.id = "";
 		document.getElementById("dummy").scrollIntoView();
 	}
 
