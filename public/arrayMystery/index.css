@@ -85,6 +85,7 @@ body {
 input {
     width: 26px;
     text-align: center;
+    background-color:rgba(0, 0, 0, 0);
 }
 
 #arraydata td, #varvalues input {
@@ -294,12 +295,18 @@ the dynamic styling works correctly.
     border-color: #45ADA8;
 }
 
+.mainColorBorderRadius {
+    border-color: #45ADA8;
+    border-radius: 10px;
+}
+
 .accent2Highlight {
     background: #9DE0AD;
 }
 
 .accent2Border {
     border-color: #9DE0AD;
+    border-radius: 10px;
 }
 
 .accent1Highlight {
