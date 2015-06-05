@@ -67,36 +67,38 @@
 		$("body *").removeClass("correct")
 				   .removeClass("incorrect")
 				   .removeClass("incorrect_select");
-		if (checkUserInput()) {
-			$("#problem_space li").off("mouseover")
-								  .off("click");
-			$(".chosen-next-line").removeClass("chosen-next-line");
-			var currentState = state[CURRENT_STEP]
-			//console.log(currentState.prompt);
-			// take away "next" button when finished
-			if (currentState.prompt.indexOf("Answer") != -1) {
-				$("#next").hide();
-			}
+		setTimeout(function() {
+			if (checkUserInput()) {
+				$("#problem_space li").off("mouseover")
+									  .off("click");
+				$(".chosen-next-line").removeClass("chosen-next-line");
+				var currentState = state[CURRENT_STEP]
+				//console.log(currentState.prompt);
+				// take away "next" button when finished
+				if (currentState.prompt.indexOf("Answer") != -1) {
+					$("#next").hide();
+				}
 
-			if (CURRENT_STEP == 0) {
-				$("#prompt").show();
-				highlightBlocks();
-			} else {
-				// scroll to the right position
-				$("html, body").animate({
-					scrollTop: $("." + currentState.lineNum).offset().top - 200
-				}, 1000);
+				if (CURRENT_STEP == 0) {
+					$("#prompt").show();
+					highlightBlocks();
+				} else {
+					// scroll to the right position
+					$("html, body").animate({
+						scrollTop: $("." + currentState.lineNum).offset().top - 200
+					}, 1000);
+				}
+				CURRENT_STEP++;
+				newGetPrompt(currentState);
+				newHighlightLine(currentState);
+				newHighlightBlock(currentState);
+				newAddComments(currentState);
+				newUpdateVariables(currentState);
+				drawVariableBank();
+				newCrossOutLines(currentState);
+				addInteraction(currentState);
 			}
-			CURRENT_STEP++;
-			newGetPrompt(currentState);
-			newHighlightLine(currentState);
-			newHighlightBlock(currentState);
-			newAddComments(currentState);
-			newUpdateVariables(currentState);
-			drawVariableBank();
-			newCrossOutLines(currentState);
-			addInteraction(currentState);
-		}
+		}, 10);
 	}
 
 	function checkUserInput() {
