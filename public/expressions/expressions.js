@@ -5,11 +5,11 @@
 (function() {
 
 	// easy problem state object
-	/*var startArray = [ {type:"String", value : "hello"},
+	var startArray = [ {type:"String", value : "hello"},
 	 {type:"ASoperator", value: "+"},
 	 {type:"int", value : 6},
 	 {type:"MDMoperator", value: "*"},
-	 {type:"int", value : 3}];*/
+	 {type:"int", value : 3}];
 
 	// state object
 	/* Currently only the messages come from the state object, 
@@ -20,7 +20,7 @@
 	var stateObject = new Array();
 
 	// tougher problem state object
-	var startArray = [{type: "int", value: 22},
+	/*var startArray = [{type: "int", value: 22},
 		{type: "MDMoperator", value: "%"},
 		{type: "int", value: 7},
 		{type: "ASoperator", value: "+"},
@@ -30,7 +30,8 @@
 		{type: "ASoperator", value: "-"},
 		{type: "double", value: 6.0},
 		{type: "MDMoperator", value: "/"},
-		{type: "double", value: 2}];
+		{type: "double", value: 2}];*/
+
 
 	// boolean that represents whether showing steps has started
 	// if not started, then use startArray
@@ -443,8 +444,13 @@
 		// give response based on correct/incorrect answer
 		if (correct && arr.length > 1) {
 			newChild.innerHTML = "Great Job! Click Next to continue.";
-		} else if (correct && arr.length <= 1) {
+		} else if (correct && arr.length == 1) {
 			newChild.innerHTML = "Great Job!";
+			document.getElementById("nextstep").classList.add("hiddenSteps");
+		} else if (arr.length == 1) {
+			clientAnswer.style.color = "red";
+			newChild.innerHTML = "Oops, sorry the answer was " + getValue(operator);
+			document.getElementById("nextstep").classList.add("hiddenSteps");
 		} else {
 			clientAnswer.style.color = "red";
 			newChild.innerHTML = "Oops, sorry the answer was " + getValue(operator)
@@ -455,20 +461,12 @@
 		var next = document.getElementById("nextstep");
 		next.innerHTML = "Next";
 
-		if (arr.length <= 1) {
-			var newChild = document.createElement("div");
-			newChild.classList.add("finalanswer");
-			newChild.innerHTML = "That's why the answer is " + getValue(operator);
-			document.getElementById("answerbox").appendChild(newChild);
-			next.style.visibility = "hidden";
-		} else {
-
-			next.onclick = function () {
-				clientAnswer.style.color = "black";
-				clientAnswer.value = getValue(operator);
-				stepThrough();
-			}
-			clientAnswer.id = "";
+		// This corrents their answer in the answer box if they got it wrong
+		// and makes them continue on to another round of solving.
+		next.onclick = function () {
+			clientAnswer.style.color = "black";
+			clientAnswer.value = getValue(operator);
+			stepThrough();
 		}
 	}
 
@@ -586,68 +584,63 @@
 	// a lot of the work.
 	function solve() {
 		var arr = stateObject[stateObject.length - 1][0];
-		if (arr.length == 1) {
-			// TO DO: remove this from solve()
-			document.getElementById("nextstep").classList.add("hiddenSteps");
+		var operator;
+		if (interaction) {
+			operator = stateObject[stateObject.length - 1][1].index - 1;
 		} else {
-			var operator;
-			if (interaction) {
-				operator = stateObject[stateObject.length - 1][1].index - 1;
-			} else {
-				operator = stateObject[stateObject.length - 1][1].index;
-			}
-			var updatedArray = [];
-			//copy all values that aren't evaluated
-			for (var i = 0; i < operator; i++) {
-				updatedArray.push(arr[i]);
-			}
-			// evaluate portion of expression
-			if (arr[operator].value == '*') {
-				updatedArray[operator - 1].value = (arr[operator - 1].value * arr[operator + 1].value);
-			} else if (arr[operator].value == '/') {
-				updatedArray[operator - 1].value = (arr[operator - 1].value / arr[operator + 1].value);
-				// special case for int division
-				if (arr[operator -1].type == 'int' && arr[operator + 1].type == 'int') {
-					updatedArray[operator - 1].value = Math.round(updatedArray[operator - 1].value);
-				}
-			} else if (arr[operator].value == '%') {
-				updatedArray[operator - 1].value = (arr[operator - 1].value % arr[operator+ 1].value);
-			} else if (arr[operator].value == '+') {
-				updatedArray[operator - 1].value = (arr[operator - 1].value + arr[operator+ 1].value);
-			} else if (arr[operator].value == '-') {
-				updatedArray[operator - 1].value = (arr[operator - 1].value - arr[operator+ 1].value);
-			}
-			// setting type of value
-			if (arr[operator - 1].type == 'int' && arr[operator + 1].type == 'int') {
-				updatedArray[operator - 1].type = 'int';
-			} else if (arr[operator - 1].type == 'String' || arr[operator + 1].type == 'String') {
-				updatedArray[operator - 1].type = 'String';
-			} else {
-				updatedArray[operator - 1].type = 'double';
-			}
-			// copy remaining elements of expression
-			for (var i = operator + 2; i < arr.length; i++) {
-				updatedArray.push(arr[i]);
-			}
-			arr = updatedArray;
-		
-			var currState = new Array();
-			currState.push(arr);
-			if (interaction) {
-				var oper = stateObject[stateObject.length - 2][1].index;
-				var index = {index: oper};
-				currState.push(index);
-				var message = {message: "What is the answer?"};
-				currState.push(message);
-			} else {
-				var oper = stateObject[stateObject.length - 1][1].index - 1;
-				var index = {index: oper};
-				currState.push(index);
-				var message = {message: "After evaluating we get " + getValue(oper)};
-				currState.push(message);
-			}
-			stateObject.push(currState);
+			operator = stateObject[stateObject.length - 1][1].index;
 		}
+		var updatedArray = [];
+		//copy all values that aren't evaluated
+		for (var i = 0; i < operator; i++) {
+			updatedArray.push(arr[i]);
+		}
+		// evaluate portion of expression
+		if (arr[operator].value == '*') {
+			updatedArray[operator - 1].value = (arr[operator - 1].value * arr[operator + 1].value);
+		} else if (arr[operator].value == '/') {
+			updatedArray[operator - 1].value = (arr[operator - 1].value / arr[operator + 1].value);
+			// special case for int division
+			if (arr[operator -1].type == 'int' && arr[operator + 1].type == 'int') {
+				updatedArray[operator - 1].value = Math.round(updatedArray[operator - 1].value);
+			}
+		} else if (arr[operator].value == '%') {
+			updatedArray[operator - 1].value = (arr[operator - 1].value % arr[operator+ 1].value);
+		} else if (arr[operator].value == '+') {
+			updatedArray[operator - 1].value = (arr[operator - 1].value + arr[operator+ 1].value);
+		} else if (arr[operator].value == '-') {
+			updatedArray[operator - 1].value = (arr[operator - 1].value - arr[operator+ 1].value);
+		}
+		// setting type of value
+		if (arr[operator - 1].type == 'int' && arr[operator + 1].type == 'int') {
+			updatedArray[operator - 1].type = 'int';
+		} else if (arr[operator - 1].type == 'String' || arr[operator + 1].type == 'String') {
+			updatedArray[operator - 1].type = 'String';
+		} else {
+			updatedArray[operator - 1].type = 'double';
+		}
+		// copy remaining elements of expression
+		for (var i = operator + 2; i < arr.length; i++) {
+			updatedArray.push(arr[i]);
+		}
+		arr = updatedArray;
+
+		var currState = new Array();
+		currState.push(arr);
+		if (interaction) {
+			var oper = stateObject[stateObject.length - 2][1].index;
+			var index = {index: oper};
+			currState.push(index);
+			var message = {message: "What is the answer?"};
+			currState.push(message);
+		} else {
+			var oper = stateObject[stateObject.length - 1][1].index - 1;
+			var index = {index: oper};
+			currState.push(index);
+			var message = {message: "After evaluating we get " + getValue(oper)};
+			currState.push(message);
+		}
+		stateObject.push(currState);
 	}
 
 }) ();
