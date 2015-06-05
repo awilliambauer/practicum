@@ -7,21 +7,22 @@
     var step = 0;
     var indices;
 
+
     window.onload = function () {
         displayState();
         $("#next").on("click", next);
         $("#next1").on("click", next);
         $("#back").on("click", back);
-
-        var arrayCells = document.querySelectorAll("td");
-        for (var i = 0; i < arrayCells.length; i++) {
-            arrayCells[i].onfocusin = addFocusClass;
-            arrayCells[i].onfocusout = removeFocusClass;
-        }
-        var varCells = document.querySelectorAll(".vardata");
-        for (var j = 0; j < varCells.length; j++) {
-            varCells[j].onclick = addFocusClass;
-        }
+        $("#islider").change(function() {
+            $("#idiv").val($(this).val());
+        });
+        $("#islider").on("mousedown", function() {
+            $("#idiv").addClass("ihighlight");
+        });
+        $("#islider").on("mouseup", function() {
+           $("#idiv").removeClass("ihighlight");
+        });
+        document.onkeydown = checkEnter;
     };
 
     function autofillIndices() {
@@ -46,7 +47,6 @@
         if (compareValues()) {
             step++;
             displayState();
-            compareValues2();
             $("#index0").on('input', autofillIndices);
         }
 
@@ -56,7 +56,6 @@
     function back() {
         step--;
         displayState();
-        compareValues2();
         $("#index0").on('input', autofillIndices);
         // TO DO Add wraps
     }
@@ -97,7 +96,7 @@
         var tableHead = $("<thead>", {id: "indices"});
         if (state.index === null) {
             for (i = 0; i < state.array.length; i++) {
-                var indexBox = $("<th><input type=\"text\" name=\"0\" maxlength=\"2\" id=\"index" + i + "\"></th>");
+                var indexBox = $("<th><input type=\"text\" name=\"0\" maxlength=\"2\" class=\"indexinput\" id=\"index" + i + "\"></th>");
                 tableHead.append(indexBox);
             }
         } else {
@@ -118,6 +117,12 @@
         }
         array.append(tableBody);
 
+        //Display i value
+        if(step == 0) {
+            $("#islider").val("0");
+        }
+
+        $("#idiv").val($("#islider").val());
 
         // Update prompt text
         $("#promptwords").html(state.promptText);
@@ -130,8 +135,41 @@
         for (var key in variablelist) {
             insertVariable(key, variablelist[key]);
         }
-
         addStylingClasses(state);
+
+        var arrayElements = document.querySelectorAll("#arraydata td");
+
+
+        for (var x = 0; x < indices.length; x++) {
+            arrayElements[indices[x]].classList.add("mainColorBorder");
+            arrayElements[indices[x]].classList.add("accent2Highlight");
+        }
+
+
+        /*update size of problem text*/
+        if (!state.smallText) {
+
+            /*reduce size of problem description*/
+            document.getElementById("problemdescription").classList.add("littletext");
+
+            /*increase size of problem text*/
+            document.getElementById("problemtext").classList.add("bigtext");
+
+            /*old way
+            document.getElementById("problemdescription").style.fontSize = "10px";
+            document.getElementById("problemdescription").style.color = "gray";
+             document.getElementById("problemtext").style.fontSize = "17px";*/
+
+
+        }
+        compareValues2();
+        if (state.clickableArray) {
+            console.log("array should be clickable now");
+            var clickCells = document.querySelectorAll("#arraydata input");
+            for (var q = 0; q < clickCells.length; q++) {
+                clickCells[q].style.cursor = "pointer";
+            }
+        }
     }
 
     /**
@@ -402,7 +440,7 @@
                 if (elements[i] != current) {
                     $(("#ele" + i)).addClass("wrong");
                     incorrect("array element at index " + i, elements[i], current);
-                    match = false;
+                    return false;
                 }
             }
 
@@ -414,8 +452,7 @@
                     if ("" + i !== current) {
                        currentNode.addClass("wrong");
                         incorrect("array index", i, current);
-                        match = false;
-    
+                        return false;
                     }
                 }
             }
@@ -424,15 +461,17 @@
             //console.log("Us: " + indices);
             // Compare selected array indices
             var indicesState = state.indices;
-            // Compare state to screen
-            for (i = 0; i < indices.length; i++) {
-                if (!contains(indices[i], indicesState)) {
-                    $("#box" + indices[i]).addClass("wrong");
-                    indices.pop();
-                    match = false;
+            // Checks for things on screen not in state
+            if (indicesState.length > 0) {
+                for (i = 0; i < indices.length; i++) {
+                    if (!contains(indices[i], indicesState)) {
+                        $("#box" + indices[i]).addClass("wrong");
+                        indices.pop();
+                        match = false;
+                    }
                 }
             }
-            // Compare screen to state
+            // Checks for things in state not on screen
             for (i = 0; i < indicesState.length; i++) {
                 if (!contains(indicesState[i], indices)) {
                     $("#box" + indicesState[i]).addClass("right");
@@ -451,7 +490,7 @@
                         if (expected != "?" && expected !== current) {
                             $(variables[i]).addClass("wrong");
                             incorrect("variable " + key + " value", variablesExpected[key], current);
-                            match = false;
+                            return false;
                         }
                     }
                 }
@@ -465,12 +504,19 @@
     }
 
     function compareValues2() {
+        var enterInput = false;
         if (step > 0) {
             // The next state object, to which compare things
             var state = states[step + 1];
             var thisState = states[step];
             if (state.indices.length > thisState.indices.length) {
-                $(".box").on("click", addIndex);
+                enterInput = true;
+                var boxes = $(".box");
+                boxes.on("click", addIndex);
+                boxes.keydown(buttonsVisible);
+                boxes.addClass("mainColorBorderRadius");
+                $("#arraydata").addClass("accent1Highlight");
+
             }
 
             // Compare array values
@@ -478,21 +524,23 @@
             for (var i = 0; i < elements.length; i++) {
                 var current = $(("#ele" + i)).val();
                 if (elements[i] != current) {
+                    enterInput = true;
                     $(("#ele" + i)).focus();
+                    $(("#ele" + i)).keydown(buttonsVisible);
+                    $(("#ele" + i)).select();
                 }
             }
 
             // Compare array indices
             if (states[step].index == null && state.index != null) {
-                for (i = 0; i < elements.length; i++) {
-                    var currentNode = $("#index" + i);
-                    current = currentNode.val();
-                    if ("" + i !== current) {
-                        currentNode.focus();
-                        break;
-                    }
-                }
+                var currentNode = $("#index0");
+                enterInput = true;
+                currentNode.focus();
+                currentNode.keydown(buttonsVisible);
+                currentNode.select();
+                $(".indexinput").addClass("accent1Highlight");
             }
+
 
             var variables = $(".vars");
             var variablesExpected = state.variables;
@@ -503,21 +551,22 @@
                         current = $(currentNode).val();
                         var expected = "" + variablesExpected[key];
                         if (expected != "?" && expected !== current) {
+                            enterInput = true;
                             $(variables[i]).focus();
+                            $(variables[i]).keydown(buttonsVisible);
+                            $(variables[i]).select();
                         }
                     }
                 }
             }
         }
+        console.log(enterInput);
+        if (enterInput) {
+           $(".nextbutton").css("visibility", "hidden");
+            console.log("Hidden");
+        }
     }
 
-    function addFocusClass() {
-        this.classList.add("focus");
-    }
-
-    function removeFocusClass() {
-        this.classList.remove("focus");
-    }
 
     function contains(value, array) {
         for (var i = 0; i < array.length; i++) {
@@ -526,6 +575,18 @@
             }
         }
         return false;
+    }
+
+    /*process onkeydown event--call next if key pressed was enter*/
+    function checkEnter(event) {
+        if (event.keyCode == 13) {
+            next();
+        }
+    }
+
+    function buttonsVisible() {
+        console.log("Key down");
+        $(".nextbutton").css("visibility", "visible");
     }
 
 })();
