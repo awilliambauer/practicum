@@ -325,6 +325,10 @@ the dynamic styling works correctly.
     border: 4px solid dodgerblue;
 }
 
+.hidden {
+    visibility: hidden;
+}
+
 /* DON'T PUT STUFF BELOW THIS COMMENT!! PLACE ADDITIONAL CODE ABOVE
    DYNAMIC STYLING CLASSES!!
 */

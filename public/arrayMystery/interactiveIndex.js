@@ -47,7 +47,6 @@
         if (compareValues()) {
             step++;
             displayState();
-            compareValues2();
             $("#index0").on('input', autofillIndices);
         }
 
@@ -57,7 +56,6 @@
     function back() {
         step--;
         displayState();
-        compareValues2();
         $("#index0").on('input', autofillIndices);
         // TO DO Add wraps
     }
@@ -98,7 +96,7 @@
         var tableHead = $("<thead>", {id: "indices"});
         if (state.index === null) {
             for (i = 0; i < state.array.length; i++) {
-                var indexBox = $("<th><input type=\"text\" name=\"0\" maxlength=\"2\" id=\"index" + i + "\"></th>");
+                var indexBox = $("<th><input type=\"text\" name=\"0\" maxlength=\"2\" class=\"indexinput\" id=\"index" + i + "\"></th>");
                 tableHead.append(indexBox);
             }
         } else {
@@ -164,6 +162,7 @@
 
 
         }
+        compareValues2();
     }
 
     /**
@@ -498,13 +497,16 @@
     }
 
     function compareValues2() {
+        var enterInput = false;
         if (step > 0) {
             // The next state object, to which compare things
             var state = states[step + 1];
             var thisState = states[step];
             if (state.indices.length > thisState.indices.length) {
+                enterInput = true;
                 var boxes = $(".box");
                 boxes.on("click", addIndex);
+                boxes.keydown(buttonsVisible);
                 boxes.addClass("mainColorBorderRadius");
                 $("#arraydata").addClass("accent1Highlight");
 
@@ -515,22 +517,21 @@
             for (var i = 0; i < elements.length; i++) {
                 var current = $(("#ele" + i)).val();
                 if (elements[i] != current) {
+                    enterInput = true;
                     $(("#ele" + i)).focus();
+                    $(("#ele" + i)).keydown(buttonsVisible);
                     $(("#ele" + i)).select();
                 }
             }
 
             // Compare array indices
             if (states[step].index == null && state.index != null) {
-                for (i = 0; i < elements.length; i++) {
-                    var currentNode = $("#index" + i);
-                    current = currentNode.val();
-                    if ("" + i !== current) {
-                        currentNode.focus();
-                        currentNode.select();
-                        break;
-                    }
-                }
+                var currentNode = $("#index0");
+                enterInput = true;
+                currentNode.focus();
+                currentNode.keydown(buttonsVisible);
+                currentNode.select();
+                $(".indexinput").addClass("accent1Highlight");
             }
 
 
@@ -543,12 +544,19 @@
                         current = $(currentNode).val();
                         var expected = "" + variablesExpected[key];
                         if (expected != "?" && expected !== current) {
+                            enterInput = true;
                             $(variables[i]).focus();
+                            $(variables[i]).keydown(buttonsVisible);
                             $(variables[i]).select();
                         }
                     }
                 }
             }
+        }
+        console.log(enterInput);
+        if (enterInput) {
+           $(".nextbutton").css("visibility", "hidden");
+            console.log("Hidden");
         }
     }
 
@@ -567,6 +575,11 @@
         if (event.keyCode == 13) {
             next();
         }
+    }
+
+    function buttonsVisible() {
+        console.log("Key down");
+        $(".nextbutton").css("visibility", "visible");
     }
 
 })();

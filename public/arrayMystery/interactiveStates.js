@@ -274,7 +274,7 @@ var states = [
             i: 1
         },
         indices: [],
-        promptText: "What is the value of i?",
+        promptText: "The i in the expression is our loop variable i, so it has the value stored in i",
         ast: mainAst,
         index: 0,
         styleClasses: {
