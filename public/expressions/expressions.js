@@ -4,13 +4,7 @@
 
 (function() {
 
-	// easy problem state object
-	var startArray;
-
-	// state object
-	var stateObject = new Array();
-
-	// tougher problem state object
+	// array of problems to choose from
 	var problems = [[{type: "int", value: 22},
 		{type: "MDMoperator", value: "%"},
 		{type: "int", value: 7},
@@ -23,23 +17,39 @@
 		{type: "MDMoperator", value: "/"},
 		{type: "double", value: 2}],
 
-		[{type:"String", value : "hello"},
+		[{type:"String", value: "hello"},
 	 	{type:"ASoperator", value: "+"},
 	 	{type:"int", value : 6},
 	 	{type:"MDMoperator", value: "*"},
-	 	{type:"int", value : 3}]];
+	 	{type:"int", value : 3}],
 
+	 	[{type:"double", value: 4.0}, 
+	 	{type:"ASoperator", value: "+"}, 
+	 	{type:"String", value: "CSE142"}, 
+	 	{type:"ASOperator", value: "+"}, 
+	 	{type:"int", value: 143}]];
+
+	// answers corresponding to array of problems
+	var answers = ["10.0", "\"hello18\"", "\"4.0CSE142143\""];
+
+	// starting array
+	var startArray;
+
+	// correct final answer
+	// used for checking answer that is submitted without
+	// showing steps
+	var correctAnswer;
+
+	// true - with interactivity, false - without interactivity
+	var interaction;
 
 	// boolean that represents whether showing steps has started
 	// if not started, then use startArray
 	// if started, then use arrays in stateObject
 	var started = false;
 
-	// overall answer for checking answer submission
-	var overallAnswer = "10.0";
-
-	// true - with interactivity, false - without interactivity
-	var interaction;
+	// state object
+	var stateObject = new Array();
 
 	// on load, shows expression, answer box, submit button, and show steps button
 	window.onload = function () {
@@ -47,13 +57,15 @@
 		// default values
 		interaction = true;
 		startArray = problems[0];
+		correctAnswer = answers[0];
 		if (query != "") {
 			var queryResults = query.split("+");
 			if (queryResults.length > 1 && queryResults[1] == "noninteractive") {
 				interaction = false;
 			}
 			var index = parseInt(queryResults[0]);
-			startArray = problems[index];
+			startArray = problems[index - 1];
+			correctAnswer = answers[index - 1];
 		}
 
 		var newHeading = document.getElementById("expressionHeader");
@@ -129,7 +141,7 @@
 			answerPrompt = document.createElement("div");
 			answerPrompt.setAttribute("id", "correct");
 		}
-		if (clientAnswer.value == overallAnswer) {
+		if (clientAnswer.value == correctAnswer) {
 			answerPrompt.innerHTML = "Correct!";
 			document.getElementById("submit").style.visibility = "hidden";
 			document.getElementById("nextstep").style.visibility = "hidden";
@@ -617,7 +629,13 @@
 		} else if (arr[operator].value == '%') {
 			updatedArray[operator - 1].value = (arr[operator - 1].value % arr[operator+ 1].value);
 		} else if (arr[operator].value == '+') {
-			updatedArray[operator - 1].value = (arr[operator - 1].value + arr[operator+ 1].value);
+			if (arr[operator - 1].type == 'String') {
+				updatedArray[operator - 1].value = arr[operator - 1].value + getValue(operator + 1);
+			} else if (arr[operator + 1].type == 'String') {
+				updatedArray[operator - 1].value = getValue(operator - 1) + arr[operator+ 1].value;
+			} else {
+				updatedArray[operator - 1].value = (arr[operator - 1].value + arr[operator+ 1].value);
+			}
 		} else if (arr[operator].value == '-') {
 			updatedArray[operator - 1].value = (arr[operator - 1].value - arr[operator+ 1].value);
 		}
