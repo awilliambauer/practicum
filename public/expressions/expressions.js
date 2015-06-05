@@ -147,8 +147,6 @@
 	// This starts the solving process, for right now the person can't try to submit
 	// after starting the stepThrough.
 	function stepThrough() {
-		document.getElementById("dummy").scrollIntoView();
-
 		// gets rid of failed statment if they tried to submit an answer
 		if (document.getElementById("correct") !== null) {
 			var answerbox = document.getElementById("answerbox");
@@ -178,6 +176,7 @@
 			newChild.appendChild(newChild2);
 		}
 
+		document.getElementById("dummy").scrollIntoView();
 		// finds and set the indices for the operator, left operand, and right operand
 		// has click operator message
 		find();
