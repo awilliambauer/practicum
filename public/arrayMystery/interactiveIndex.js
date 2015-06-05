@@ -135,6 +135,13 @@
 
         addStylingClasses(state);
 
+        var arrayElements = document.querySelectorAll("#arraydata td");
+
+        for (var x = 0; x < indices.length; x++) {
+            arrayElements[indices[x]].classList.add("mainColorBorder");
+            arrayElements[indices[x]].classList.add("accent2Highlight");
+        }
+
         /*update size of problem text*/
         if (!state.smallText) {
 
