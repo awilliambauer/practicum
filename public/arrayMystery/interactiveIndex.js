@@ -499,7 +499,11 @@
             var state = states[step + 1];
             var thisState = states[step];
             if (state.indices.length > thisState.indices.length) {
-                $(".box").on("click", addIndex);
+                var boxes = $(".box");
+                boxes.on("click", addIndex);
+                boxes.addClass("mainColorBorderRadius");
+                $("#arraydata").addClass("accent1Highlight");
+
             }
 
             // Compare array values
@@ -524,6 +528,7 @@
                     }
                 }
             }
+
 
             var variables = $(".vars");
             var variablesExpected = state.variables;
