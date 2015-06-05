@@ -454,7 +454,6 @@ This JS file handles all interactivity and stepping through of expressions probl
 	// tells them whether it's right or wrong and then continues.
 	function processAnswer() {
 		var clientAnswer = document.getElementById("answer");
-
 		var newChild = document.createElement("div");
 		newChild.setAttribute("id", "reply");
 		
@@ -471,7 +470,7 @@ This JS file handles all interactivity and stepping through of expressions probl
 			if (clientAnswer.value == ("\"" + arr[operator].value + "\"")) {
 				correct = true;
 			}
-		} else if (clientAnswer.value == arr[operator].value) {
+		} else if (clientAnswer.value === arr[operator].value.toString()) {
 			correct = true;
 		}
 
