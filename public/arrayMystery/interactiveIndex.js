@@ -7,6 +7,7 @@
     var step = 0;
     var indices;
 
+
     window.onload = function () {
         displayState();
         $("#next").on("click", next);
@@ -136,6 +137,7 @@
         addStylingClasses(state);
 
         var arrayElements = document.querySelectorAll("#arraydata td");
+
 
         for (var x = 0; x < indices.length; x++) {
             arrayElements[indices[x]].classList.add("mainColorBorder");
@@ -449,15 +451,17 @@
             //console.log("Us: " + indices);
             // Compare selected array indices
             var indicesState = state.indices;
-            // Compare state to screen
-            for (i = 0; i < indices.length; i++) {
-                if (!contains(indices[i], indicesState)) {
-                    $("#box" + indices[i]).addClass("wrong");
-                    indices.pop();
-                    match = false;
+            // Checks for things on screen not in state
+            if (indicesState.length > 0) {
+                for (i = 0; i < indices.length; i++) {
+                    if (!contains(indices[i], indicesState)) {
+                        $("#box" + indices[i]).addClass("wrong");
+                        indices.pop();
+                        match = false;
+                    }
                 }
             }
-            // Compare screen to state
+            // Checks for things in state not on screen
             for (i = 0; i < indicesState.length; i++) {
                 if (!contains(indicesState[i], indices)) {
                     $("#box" + indicesState[i]).addClass("right");

@@ -401,7 +401,7 @@ var states = [
             i: 1,
             "expressionResult" : 13
         },
-        indices: [0, 2],
+        indices: [],
         promptText: "Now that we’ve evaluated the right side of the assignment statement, let’s determine where this value is going to be stored. The left side of the assignment statement tells us where to store the value.",
         ast: mainAst,
         index: 0,
