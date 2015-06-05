@@ -74,9 +74,6 @@ body {
     bottom: 10px;
 }
 
-.ihighlight {
-    background-color: yellow;
-}
 
 /*all variable bank input styling*/
 
@@ -316,6 +313,11 @@ the dynamic styling works correctly.
 .wrong {
     background-color: #DE6363;
 }
+
+.ihighlight {
+    border: 4px solid yellow;
+}
+
 /* DON'T PUT STUFF BELOW THIS COMMENT!! PLACE ADDITIONAL CODE ABOVE
    DYNAMIC STYLING CLASSES!!
 */
