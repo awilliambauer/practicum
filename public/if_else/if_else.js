@@ -61,7 +61,9 @@
 	function next() {
 		// turn off line selecting
 		if (checkUserInput()) {
-			$("#problem_space li").off("mouseover, click");
+			$("#problem_space li").off("mouseover")
+								  .off("click");
+			$(".chosen-next-line").removeClass("chosen-next-line");
 			var currentState = state[CURRENT_STEP]
 			//console.log(currentState.prompt);
 			// take away "next" button when finished
@@ -411,7 +413,7 @@
 						.css("font-family", "monospace");
 			// $(lineInput).attr("value", state.nextLine);
 			$(lineInput).addClass("next_line_input");     // CLASS TO CHECK LATER IF INPUT'S CORRECT
-			$(lineBox).append(lineInput);
+			// $(lineBox).append(lineInput);
 			$(interaction).append(lineBox);
 			// add hover when mousing over
 			$("#problem_space li").mouseover(function() {
@@ -421,7 +423,7 @@
 				$(this).removeClass("select");
 			});
 			$("#problem_space li").click(function() {
-				$("#problem_space li").removeClass("chosen-next-line");
+				$(".chosen-next-line").removeClass("chosen-next-line");
 				$(this).addClass("chosen-next-line")
 			});
 		}
