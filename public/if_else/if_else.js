@@ -14,8 +14,13 @@
 		VARIABLES = {};
 		init();
 		$("#go_back").click(function() { window.location.href = "../index.html" });
+		// move to the next step if they hit enter or click next
 		$("#next").click(next);
-
+		$(document).keydown(function() {
+			if (event.which == 13) {
+				next();
+			}
+		})
 	});
 
 	// fills in the problem space with the text of the specific problem we're working on,
@@ -59,9 +64,14 @@
 	}
 
 	function next() {
-		// turn off line selecting
+		$("body *").removeClass("correct")
+				   .removeClass("incorrect")
+				   .removeClass("incorrect_select");
 		if (checkUserInput()) {
-			$("#problem_space li").off("mouseover, click");
+			// turn off line selecting
+			$("#problem_space li").off("mouseover")
+								  .off("click")
+								  .removeClass("chosen-next-line");
 			var currentState = state[CURRENT_STEP]
 			//console.log(currentState.prompt);
 			// take away "next" button when finished
@@ -99,7 +109,7 @@
 		var correctVars = true;
 		var correctBool = true;
 		if (CORRECT_NEXT_LINE) {
-			var lineInput = document.getElementsByClassName("next_line_input");
+			// var lineInput = document.getElementsByClassName("next_line_input");
 			// correctLine = CORRECT_NEXT_LINE == lineInput[0].value;
 			correctLine = $(".chosen-next-line").hasClass(CORRECT_NEXT_LINE);
 		}
@@ -110,11 +120,21 @@
 				answer.push(parseInt(variables[i].value));
 			}
 			correctVars = answer.equals(CORRECT_VARIABLES);
+			if (correctVars) {
+				$("#prompt").addClass("correct");
+			} else {
+				$("#prompt").addClass("incorrect");
+			}
 
 		}
 		if(CORRECT_BOOL !== null) {
 			var check = document.querySelector("input[name = \"tf\"]:checked").value + "";
 			correctBool = (check == CORRECT_BOOL);
+			if (correctBool) {
+				$("#prompt").addClass("correct");
+			} else {
+				$("#promt").addClass("incorrect");
+			}
 		}
 		
 
@@ -143,12 +163,12 @@
 			}
 			return true;
 		} else { // Entered line was not correct
-			if(!correctLine)
-				alert("Wrong Line, try again!");
-			else if(!correctVars)
-				alert("Wrong Values");
-			else
-				alert("wrong boolean");
+			// if(!correctLine)
+			// 	alert("Wrong Line, try again!");
+			// else if(!correctVars)
+			// 	alert("Wrong Values");
+			// else
+			// 	alert("wrong boolean");
 			return false;
 		}
 	}
@@ -421,8 +441,9 @@
 				$(this).removeClass("select");
 			});
 			$("#problem_space li").click(function() {
-				$("#problem_space li").removeClass("chosen-next-line");
+				$(".chosen-next-line").removeClass("chosen-next-line");
 				$(this).addClass("chosen-next-line")
+				next();
 			});
 		}
 		$(interaction).css("font-size", "12pt");
