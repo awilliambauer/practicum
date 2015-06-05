@@ -1,10 +1,14 @@
 /*
- The file creates all interactivity for the webpage.
- */
+@authors Arnavi Chheda, Ashley Donaldson, Cat Johnson, Solai Ramanathan
+
+This JS file handles all interactivity and stepping through of expressions problems.
+*/
 
 (function() {
 
-	// array of problems to choose from
+	// array of problems to choose from; can append new problems  
+	// to this array (but must also append corresponding answer
+	// to end of answers array)
 	var problems = [[{type: "int", value: 22},
 		{type: "MDMoperator", value: "%"},
 		{type: "int", value: 7},
@@ -58,6 +62,8 @@
 		interaction = true;
 		startArray = problems[0];
 		correctAnswer = answers[0];
+		//as per user's request, changes the expression problem and state of 
+		//interactivity
 		if (query != "") {
 			var queryResults = query.split("+");
 			if (queryResults.length > 1 && queryResults[1] == "noninteractive") {
@@ -67,21 +73,26 @@
 			startArray = problems[index - 1];
 			correctAnswer = answers[index - 1];
 		}
-
+		//sets up the page
 		var newHeading = document.getElementById("expressionHeader");
 		setupPage(newHeading);
+		//if users attempt to check a submitted answer
 		document.getElementById("submit").onclick = correct;
+		//if users attempt to step through the breakdown of the problem
 		var next = document.getElementById("nextstep");
 		next.disabled = false;
 		if(interaction) {
+			//interactive step through
 			next.onclick = stepThrough;
 		} else {
+			//non interactive step through
 			next.onclick = walkThrough;
 		}
 	};
 
+	// This starts the non-interactive solving and explaining process, 
+	// for right now the person can't try to submit after starting the walkThrough.
 	function walkThrough() {
-
 		// gets rid of submit button, changes next button text
 		// and creates the steps div to put everything for step through.
 		if (!started) {
@@ -105,28 +116,28 @@
 
 		// this will prompt the user every time to ask what type
 		// of operator the student should start with.
-		
 		var firstStep = document.createElement("div");
 		firstStep.setAttribute("id", "firststep");
 		firstStep.classList.add("expressionStatement");
-
+		//sets up the dual column message-expression interface on the page
 		var prompt = document.createElement("p");
 		var expressionPrint = document.createElement("div");
 		prompt.classList.add("step");
 		expressionPrint.classList.add("exp");
-
+		//adds the current state of the expression to the html
 		clearIds(expressionPrint);
+		//adds message to the page in the left column
 		prompt.innerHTML = stateObject[stateObject.length -1][2].message + "<div>&nbsp;</div>";
-		
 		firstStep.appendChild(prompt);
 		firstStep.appendChild(expressionPrint);
 
 		document.getElementById("steps").appendChild(firstStep);
 		var operators = document.querySelectorAll(".operators");
-		
+		//only solves if not at end of expression	
 		if (stateObject[stateObject.length - 1][0].length > 1) {
 			solve();
 		} else {
+			//if at end of expression solving, hides next button
 			document.getElementById("nextstep").classList.add("hiddenSteps");
 		}
 		document.getElementById("dummy").scrollIntoView();
@@ -158,7 +169,8 @@
 		}
 	}
 
-	// Turns expression to a string
+	// Turns expression to a string with spans to help with operator/operand clicking;
+	// returns the Stringified expression
 	function arrToString() {
 		var arrString = "";
 		for (var i = 0; i < stateObject[stateObject.length - 1][0].length; i++) {
@@ -181,7 +193,6 @@
 		if (reply !== null) {
 			document.getElementById("steps").removeChild(reply);
 		}
-
 
 		// gets rid of submit button, changes next button text
 		// and creates the steps div to put everything for step through.
@@ -207,16 +218,17 @@
 		// of operator the student should start with.
 		if (arr.length >= 1) {
 			document.getElementById("nextstep").disabled = true;
-
+			//next step 
 			var firstStep = document.createElement("div");
 			firstStep.setAttribute("id", "firststep");
 			firstStep.classList.add("expressionStatement");
-
+			//messages
 			var prompt = document.createElement("p");
 			var buttons = document.createElement("div");
 			prompt.classList.add("step");
 			buttons.classList.add("exp");
-
+			//shows two button options (multiplicative and additive) for users to 
+			//choose between
 			var mdmOperator = document.createElement("button");
 			var asOperator = document.createElement("button");
 			mdmOperator.setAttribute("id", "MDMoperator");
@@ -234,11 +246,15 @@
 			firstStep.appendChild(buttons);
 
 			document.getElementById("steps").appendChild(firstStep);
+			//checks to see if user clicked correct "operator type" button
 			var operators = document.querySelectorAll(".operators");
 			for (var i = 0; i < operators.length; i++) {
 				if (operators[i].id == arr[stateObject[stateObject.length - 1][1].index].type) {
+					//if correct, moves on to next step of interaction
 					operators[i].onclick = findOperator;
 				} else {
+					//if incorrect, prints appropriate error message and asks user to click 
+					//correct button
 					operators[i].onclick = wrongButton;
 				}
 			}
@@ -276,6 +292,7 @@
 		if (document.getElementById("error") !== null) {
 			document.getElementById("steps").removeChild(document.getElementById("error"));
 		}
+		//add message and expression to 2 separate columns in interface on page
 		document.getElementById("steps").removeChild(document.getElementById("firststep"));
 		var newChild = document.createElement("div");
 		newChild.classList.add("expressionStatement");
@@ -285,16 +302,13 @@
 		expressionParagraph.classList.add("exp");
 
 		messageParagraph.innerHTML = stateObject[stateObject.length - 1][2].message;
-
-		//findFirst();
 		expressionParagraph.innerHTML = arrToString();
-
 		newChild.appendChild(messageParagraph);
 		newChild.appendChild(expressionParagraph);
 
 		document.getElementById("steps").appendChild(newChild);
 		document.getElementById("steps").style.visability = "visable";
-
+		//adds array, operator index, and message to state object
 		find();
 		var operator = stateObject[stateObject.length - 1][1].index;
 
@@ -309,7 +323,8 @@
 		document.getElementById(operator).onclick = findLeft;
 	}
 
-	// for if you click the wrong operator, it tells you then continues steps
+	// for if you click the wrong operator, it tells you then continues 
+	// through the steps
 	function wrongOperator() {
 		var error = document.getElementById("error");
 		if (error === null) {
@@ -426,9 +441,7 @@
 		solve();
 
 		messageParagraph.innerHTML = stateObject[stateObject.length - 1][2].message;
-		//findFirst();
 		expressionParagraph.innerHTML = answerToString();
-
 		newChild.appendChild(messageParagraph);
 		newChild.appendChild(expressionParagraph);
 
@@ -547,21 +560,28 @@
 
 	/* The next 4 methods build up the state object*/
 
-	// Finds the operator, left operand and right operand.
+	// Find the operator
 	function find() {
 		var arr;
+		// if first time calling find, there is nothing in the state object
+		// so use startArray (global variable)
 		if (!started) {
 			arr = startArray;
 			started = true;
 		} else {
+			// get arr from state object
 			arr = stateObject[stateObject.length - 1][0];
 		}
 		
+		// create a new array for the new state
 		var currState = new Array();
 		var bool = false;
+		// set to first operator
 		var operator = 1;
+		// add array to new state
 		currState.push(arr);
 		// loop through array and find first mult/div/mod operator
+		// if it can't find, then set to the first add/subtract operator
 		for (var i = 1; i < arr.length; i+=2) {
 			if (arr[i].type == "MDMoperator") {
 				operator = i;
@@ -569,8 +589,10 @@
 				break;
 			}
 		}
+		// make and add index to new state
 		var index = {index: operator};
 		currState.push(index);
+		// make and add message to new state
 		var message;
 		if (!interaction) {
 			message = {message: "We evaluate the leftmost operator (" + arr[operator].value + ") with its left and right operands."};
@@ -578,47 +600,63 @@
 			message = {message: "Click the next operator."};
 		}
 		currState.push(message);
+		// add new state to state object
 		stateObject.push(currState);
 	}
 
+	// Find the left operand
 	function findLeftOperand() {
+		// create a new array for the new state
 		var currState = new Array();
+		// add array to new state
 		currState.push(stateObject[stateObject.length - 1][0]);
+		// make and add index to new state
 		var operator = stateObject[stateObject.length - 1][1].index - 1;
 		var index = {index: operator};
 		currState.push(index);
+		// make and add message to new state
 		var message = {message: "Click the left operand."};
 		currState.push(message);
+		// add new state to state object
 		stateObject.push(currState);
 	}
 
+	// Find the right operand
 	function findRightOperand() {
+		// create a new array for the new state
 		var currState = new Array();
+		// add array to new state
 		currState.push(stateObject[stateObject.length - 1][0]);
+		// make and add index to new state
 		var operator = stateObject[stateObject.length - 2][1].index + 1;
 		var index = {index: operator};
 		currState.push(index);
+		// make and add message to new state
 		var message = {message: "Click the right operand."};
 		currState.push(message);
+		// add new state to state object
 		stateObject.push(currState);
 	}
 
-	// solves and updates expression, needs to be trimped since find does
-	// a lot of the work.
+	// Solves and updates state object
 	function solve() {
+		// get array from state object
 		var arr = stateObject[stateObject.length - 1][0];
 		var operator;
+		// set the operator (varies based on interactive mode/noninteractive mode)
 		if (interaction) {
 			operator = stateObject[stateObject.length - 1][1].index - 1;
 		} else {
 			operator = stateObject[stateObject.length - 1][1].index;
 		}
+		// new array for the state object
 		var updatedArray = [];
-		//copy all values that aren't evaluated
+		//copy all values that aren't evaluated 
 		for (var i = 0; i < operator; i++) {
 			updatedArray.push(arr[i]);
 		}
-		// evaluate portion of expression
+
+		// evaluate next part of the expression based on the operator
 		if (arr[operator].value == '*') {
 			updatedArray[operator - 1].value = (arr[operator - 1].value * arr[operator + 1].value);
 		} else if (arr[operator].value == '/') {
@@ -630,6 +668,7 @@
 		} else if (arr[operator].value == '%') {
 			updatedArray[operator - 1].value = (arr[operator - 1].value % arr[operator+ 1].value);
 		} else if (arr[operator].value == '+') {
+			// special case adding to String (need to convert other type to String before adding)
 			if (arr[operator - 1].type == 'String') {
 				updatedArray[operator - 1].value = arr[operator - 1].value + getValue(operator + 1);
 			} else if (arr[operator + 1].type == 'String') {
@@ -640,6 +679,7 @@
 		} else if (arr[operator].value == '-') {
 			updatedArray[operator - 1].value = (arr[operator - 1].value - arr[operator+ 1].value);
 		}
+
 		// setting type of value
 		if (arr[operator - 1].type == 'int' && arr[operator + 1].type == 'int') {
 			updatedArray[operator - 1].type = 'int';
@@ -648,14 +688,18 @@
 		} else {
 			updatedArray[operator - 1].type = 'double';
 		}
+
 		// copy remaining elements of expression
 		for (var i = operator + 2; i < arr.length; i++) {
 			updatedArray.push(arr[i]);
 		}
-		arr = updatedArray;
 
+		// create a new array for the new state
 		var currState = new Array();
-		currState.push(arr);
+		// add new array to new state
+		currState.push(updatedArray);
+		// makes and adds new index and message to state object
+		// differs based on interactive/noninteractive
 		if (interaction) {
 			var oper = stateObject[stateObject.length - 2][1].index;
 			var index = {index: oper};
