@@ -120,6 +120,10 @@
         array.append(tableBody);
 
         //Display i value
+        if(step == 0) {
+            $("#islider").val("0");
+        }
+
         $("#idiv").val($("#islider").val());
 
         // Update prompt text
@@ -133,7 +137,6 @@
         for (var key in variablelist) {
             insertVariable(key, variablelist[key]);
         }
-
         addStylingClasses(state);
 
         var arrayElements = document.querySelectorAll("#arraydata td");
@@ -143,6 +146,7 @@
             arrayElements[indices[x]].classList.add("mainColorBorder");
             arrayElements[indices[x]].classList.add("accent2Highlight");
         }
+
 
         /*update size of problem text*/
         if (!state.smallText) {
