@@ -235,7 +235,6 @@
 
 			document.getElementById("steps").appendChild(firstStep);
 			var operators = document.querySelectorAll(".operators");
-			alert(arr[stateObject[stateObject.length - 1][1].index].type);
 			for (var i = 0; i < operators.length; i++) {
 				if (operators[i].id == arr[stateObject[stateObject.length - 1][1].index].type) {
 					operators[i].onclick = findOperator;
