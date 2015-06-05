@@ -21,7 +21,26 @@
 				next();
 			}
 		})
+		$("#answer_box input").change(function() {
+			checkAnswer();
+		});
 	});
+
+	// checks the entered answer against the real answer to see if they have gotten
+	// the problem correct
+	function checkAnswer() {
+		var realAnswer = state[state.length - 1].result.trim();
+		console.log(realAnswer);
+		var userAnswer = $("#answer")[0].value;
+		console.log(userAnswer);
+		if (realAnswer == userAnswer) {
+			console.log("CORRECT");
+			$("#answer_box").addClass("correct");
+		} else {
+			console.log("incorect");
+			$("#answer_box").addClass("incorrect");
+		}
+	}
 
 	// fills in the problem space with the text of the specific problem we're working on,
 	// we will just have to replace "example.txt" with whatever file they store the problem
@@ -72,7 +91,6 @@
 									  .off("click");
 				$(".chosen-next-line").removeClass("chosen-next-line");
 				var currentState = state[CURRENT_STEP]
-				//console.log(currentState.prompt);
 				// take away "next" button when finished
 				if (currentState.prompt.indexOf("Answer") != -1) {
 					$(document).off("keydown");
@@ -113,7 +131,6 @@
 			// correctLine = CORRECT_NEXT_LINE == lineInput[0].value;
 			correctLine = $(".chosen-next-line").hasClass(CORRECT_NEXT_LINE);
 			if (correctLine) {
-				console.log("correct line");
 				$("#prompt").addClass("correct");
 			} else {
 				$("#prompt").addClass("incorrect");
@@ -127,7 +144,6 @@
 			}
 			correctVars = answer.equals(CORRECT_VARIABLES);
 			if (correctVars) {
-				console.log("correct vars");
 				$("#prompt").addClass("correct");
 			} else {
 				$("#prompt").addClass("incorrect");
@@ -138,7 +154,6 @@
 			var check = document.querySelector("input[name = \"tf\"]:checked").value + "";
 			correctBool = (check == CORRECT_BOOL);
 			if (correctBool) {
-				console.log("correct bool");
 				$("#prompt").addClass("correct");
 			} else {
 				$("#prompt").addClass("incorrect");

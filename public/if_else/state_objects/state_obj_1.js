@@ -188,6 +188,7 @@ var state = [
         },
         "bools": {"4": false, "10": false, "12": true},
         "updated": ["y"],
-        "crossOut": [5, 11, 14, 15]
+        "crossOut": [5, 11, 14, 15],
+        "result": "13 17"
     }
 ];
