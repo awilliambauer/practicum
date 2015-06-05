@@ -35,7 +35,7 @@
                     Let's solve the problem!
                 </p>
             </div>
-            <button id="next">Next</button>
+            <button id="next" class="nextbutton">Next</button>
             <button id="back">Back</button>
 
         </div>
@@ -48,8 +48,10 @@
             </div>
             <div class="varcolumn">
                 <div class="variable">
+                    <div id="rangeslider">
+                        <input id="islider" type="range" min="0" max="4" value="0" step="1" />
+                    </div>
                     <table class="vardata clear" id="array">
-
                         <thead id="indices">
                             <th><input type="text" name="0" maxlength="2" id="index0"></th>
                             <th><input type="text" name="1" maxlength="2" id="index1"></th>
@@ -59,11 +61,11 @@
                         </thead>
                         <tbody>
                             <tr id="arraydata">
-                                <td id="ele0">11</td>
-                                <td id="ele1">14</td>
-                                <td id="ele2">2</td>
-                                <td id="ele3">4</td>
-                                <td id="ele4">7</td>
+                                <td id="ele0" class="clear">11</td>
+                                <td id="ele1" class="clear">14</td>
+                                <td id="ele2" class="clear">2</td>
+                                <td id="ele3" class="clear">4</td>
+                                <td id="ele4" class="clear">7</td>
                             </tr>
                         </tbody>
                     </table>
@@ -79,7 +81,7 @@
                 </div>
             </div>
         </div>
-        <button id="next1">Next</button>
+        <button id="next1" class="nextbutton">Next</button>
     </div>
 </body>
 </html>

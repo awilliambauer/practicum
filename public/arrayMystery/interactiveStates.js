@@ -111,7 +111,7 @@ var mainAst = {
  (not included in variables array because it is placed in the
  dom differently from the other variables)
  variables: Holds an associative array mapping variable names to their
- values (includes i, arrayLength and any temporary variables
+ values (includes i, &#46;length and any temporary variables
  that need to be displayed in the variable bank)
  promptText: A string containing the text to be displayed.
  ast: Holds a reference to the AST of the current problem
@@ -126,9 +126,10 @@ var states = [
     { //state 1 (initial)
         array: [11, 14, 2, 4, 7],
         variables: {
-            arrayLength: 5,
+            "arr.length": 5,
             i: "?"
         },
+        smallText: true,
         indices: [],
         promptText: "Let's solve the problem!",
         ast: mainAst,
@@ -146,7 +147,7 @@ var states = [
     { //state 1 (initial)
         array: [11, 14, 2, 4, 7],
         variables: {
-            arrayLength: 5,
+            "arr.length": 5,
             i: "?"
         },
         indices: [],
@@ -167,7 +168,7 @@ var states = [
     {
         array: [11, 14, 2, 4, 7],
         variables: {
-            arrayLength: 5,
+            "arr.length": 5,
             i: "?"
         },
         indices: [],
@@ -187,7 +188,7 @@ var states = [
     {
         array: [11, 14, 2, 4, 7],
         variables: {
-            arrayLength: 5,
+            "arr.length": 5,
             i: "?"
         },
         indices: [],
@@ -207,7 +208,7 @@ var states = [
     { //state 4
         array: [11, 14, 2, 4, 7],
         variables: {
-            arrayLength: 5,
+            "arr.length": 5,
             i: 1,
             testResult: "?"
         },
@@ -228,7 +229,7 @@ var states = [
     {//state 5
         array: [11, 14, 2, 4, 7],
         variables: {
-            arrayLength: 5,
+            "arr.length": 5,
             i: 1,
             testResult: true
         },
@@ -249,7 +250,7 @@ var states = [
     { //state 6
         array: [11, 14, 2, 4, 7],
         variables: {
-            arrayLength: 5,
+            "arr.length": 5,
             i: 1
         },
         indices: [],
@@ -269,11 +270,11 @@ var states = [
     { //state 7
         array: [11, 14, 2, 4, 7],
         variables: {
-            arrayLength: 5,
+            "arr.length": 5,
             i: 1
         },
         indices: [],
-        promptText: "What is the value of i?",
+        promptText: "The i in the expression is our loop variable i, so it has the value stored in i",
         ast: mainAst,
         index: 0,
         styleClasses: {
@@ -289,7 +290,7 @@ var states = [
     { //state 8
         array: [11, 14, 2, 4, 7],
         variables: {
-            arrayLength: 5,
+            "arr.length": 5,
             i: 1,
             "i - 1": "?"
         },
@@ -310,7 +311,7 @@ var states = [
     { //state 9
         array: [11, 14, 2, 4, 7],
         variables: {
-            arrayLength: 5,
+            "arr.length": 5,
             i: 1,
             "i - 1": 0
         },
@@ -318,6 +319,7 @@ var states = [
         promptText: "What is the value of arr[i – 1]? (Click on the value in the array)",
         ast: mainAst,
         index: 0,
+        clickableArray: true,
         styleClasses: {
             mainColorText: ["#java-ast-26"],
             mainColorBorder: [],
@@ -331,7 +333,7 @@ var states = [
     { //state 9
         array: [11, 14, 2, 4, 7],
         variables: {
-            arrayLength: 5,
+            "arr.length": 5,
             i: 1,
             "i + 1": "?"
         },
@@ -340,9 +342,9 @@ var states = [
         ast: mainAst,
         index: 0,
         styleClasses: {
-            mainColorText: ["#java-ast-26"],
+            mainColorText: ["#java-ast-30"],
             mainColorBorder: [],
-            accent1Highlight: ["#java-ast-26"],
+            accent1Highlight: ["#java-ast-30"],
             accent1Border: [],
             accent2Highlight: [],
             accent2Border: []
@@ -352,7 +354,7 @@ var states = [
     { //state 10
         array: [11, 14, 2, 4, 7],
         variables: {
-            arrayLength: 5,
+            "arr.length": 5,
             i: 1,
             "i + 1": 2
         },
@@ -360,6 +362,7 @@ var states = [
         promptText: "What is the value of arr[i + 1]? (Click on the value in the array)",
         ast: mainAst,
         index: 0,
+        clickableArray: true,
         styleClasses: {
             mainColorText: ["#java-ast-32"],
             mainColorBorder: [],
@@ -373,8 +376,10 @@ var states = [
     { //state 11
         array: [11, 14, 2, 4, 7],
         variables: {
-            arrayLength: 5,
+            "arr.length": 5,
             i: 1,
+            "arr[0]": 11,
+            "arr[2]": 2,
             "expressionResult": "?"
         },
         indices: [0, 2],
@@ -394,11 +399,11 @@ var states = [
     { //state 12
         array: [11, 14, 2, 4, 7],
         variables: {
-            arrayLength: 5,
+            "arr.length": 5,
             i: 1,
             "expressionResult" : 13
         },
-        indices: [0, 2],
+        indices: [],
         promptText: "Now that we’ve evaluated the right side of the assignment statement, let’s determine where this value is going to be stored. The left side of the assignment statement tells us where to store the value.",
         ast: mainAst,
         index: 0,
@@ -415,7 +420,7 @@ var states = [
     { //state 13
         array: [11, 14, 2, 4, 7],
         variables: {
-            arrayLength: 5,
+            "arr.length": 5,
             i: 1,
             "expressionResult" : 13
         },
@@ -423,6 +428,7 @@ var states = [
         promptText: "Which element of the array is going to store the result of the expression? (Click on the element)",
         ast: mainAst,
         index: 0,
+        clickableArray: true,
         styleClasses: {
             mainColorText: ["#arraydata"],
             mainColorBorder: ["#arraydata"],
@@ -436,7 +442,7 @@ var states = [
     { //state 14
         array: [11, 14, 2, 4, 7],
         variables: {
-            arrayLength: 5,
+            "arr.length": 5,
             i: 1,
             "expressionResult" : 13,
         },
@@ -457,7 +463,7 @@ var states = [
     { //state 15
         array: [11, 13, 2, 4, 7],
         variables: {
-            arrayLength: 5,
+            "arr.length": 5,
             i: 1
         },
         indices: [],
@@ -477,7 +483,7 @@ var states = [
     { //state 13
         array: [11, 13, 2, 4, 7],
         variables: {
-            arrayLength: 5,
+            "arr.length": 5,
             i: 1
         },
         indices: [],
