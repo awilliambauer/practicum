@@ -30,14 +30,10 @@
 	// the problem correct
 	function checkAnswer() {
 		var realAnswer = state[state.length - 1].result.trim();
-		console.log(realAnswer);
 		var userAnswer = $("#answer")[0].value;
-		console.log(userAnswer);
 		if (realAnswer == userAnswer) {
-			console.log("CORRECT");
 			$("#answer_box").addClass("correct");
 		} else {
-			console.log("incorect");
 			$("#answer_box").addClass("incorrect");
 		}
 	}
@@ -398,7 +394,7 @@
 
 	// adds the interactive components of the webpage
 	function addInteraction(state) {
-		var answers = true;	// true to auto-fill, false otherwise
+		var answers = false;	// true to auto-fill, false otherwise
 		var interaction = document.createElement("div");
 		// if there are updated variables
 		if (state.hasOwnProperty("answer")) {
@@ -416,6 +412,9 @@
 				$(varBox).append(input);
 				$(interaction).append(varBox);
 			}
+			$(interaction).css("font-size", "12pt");
+			$("#prompt").append(interaction);
+			$("#prompt > div > p:first-child > input").focus();			
 		} else if (state.hasOwnProperty("testResult")) {	// test result, no vars
 			var boolBox = document.createElement("p");
 			$(boolBox).text(getBoolTest(state));
@@ -448,6 +447,9 @@
 					  .css("font-size", "11pt")
 					  .css("text-align", "center");
 			$(interaction).append(boolBox);
+			$(interaction).css("font-size", "12pt");
+			$("#prompt").append(interaction);
+			// $("#prompt > div > p > p:first-child > input").focus();			
 		} else if (state.hasOwnProperty("nextLine")) {
 			// add hover when mousing over
 			$("#problem_space li").mouseover(function() {
@@ -461,9 +463,9 @@
 				$(this).addClass("chosen-next-line")
 				next();
 			});
+			$(interaction).css("font-size", "12pt");
+			$("#prompt").append(interaction);
 		}
-		$(interaction).css("font-size", "12pt");
-		$("#prompt").append(interaction);
 	}
 
 	function getBoolTest(state) {
