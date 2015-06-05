@@ -29,7 +29,6 @@
 	function init() {
 		var problem = getProblemNum();
 		var callVals;
-		$("#prompt").hide();
 		$.get("problems/problem_" + problem + ".txt", function(data) {
 			AST = java_parsing.browser_parse(data);
 			$("#problem_space > pre").html(on_convert(AST));
@@ -76,7 +75,7 @@
 				//console.log(currentState.prompt);
 				// take away "next" button when finished
 				if (currentState.prompt.indexOf("Answer") != -1) {
-					$("#next").hide();
+					$(document).off("keydown");
 				}
 
 				if (CURRENT_STEP == 0) {
@@ -113,6 +112,12 @@
 			// var lineInput = document.getElementsByClassName("next_line_input");
 			// correctLine = CORRECT_NEXT_LINE == lineInput[0].value;
 			correctLine = $(".chosen-next-line").hasClass(CORRECT_NEXT_LINE);
+			if (correctLine) {
+				console.log("correct line");
+				$("#prompt").addClass("correct");
+			} else {
+				$("#prompt").addClass("incorrect");
+			}	
 		}
 		if (CORRECT_VARIABLES) {
 			var variables = document.getElementsByClassName("variable_answer");
@@ -122,6 +127,7 @@
 			}
 			correctVars = answer.equals(CORRECT_VARIABLES);
 			if (correctVars) {
+				console.log("correct vars");
 				$("#prompt").addClass("correct");
 			} else {
 				$("#prompt").addClass("incorrect");
@@ -132,9 +138,10 @@
 			var check = document.querySelector("input[name = \"tf\"]:checked").value + "";
 			correctBool = (check == CORRECT_BOOL);
 			if (correctBool) {
+				console.log("correct bool");
 				$("#prompt").addClass("correct");
 			} else {
-				$("#promt").addClass("incorrect");
+				$("#prompt").addClass("incorrect");
 			}
 		}
 		
@@ -376,6 +383,7 @@
 
 	// adds the interactive components of the webpage
 	function addInteraction(state) {
+		var answers = true;	// true to auto-fill, false otherwise
 		var interaction = document.createElement("div");
 		// if there are updated variables
 		if (state.hasOwnProperty("answer")) {
@@ -385,8 +393,10 @@
 						 .css("font-family", "monospace");
 				var input = document.createElement("input");
 				$(input).attr("type", "text")
-						.attr("value", state.answer[variable]) // adding the answer to the state
 						.css("font-size", "12pt");
+				if (answers) {
+					$(input).attr("value", state.answer[variable]) // adding the answer to the state
+				}
 				$(input).addClass("variable_answer");
 				$(varBox).append(input);
 				$(interaction).append(varBox);
@@ -402,10 +412,12 @@
 			$(falseChoice).attr("type", "radio")
 						  .attr("name", "tf")
 						  .attr("value", "false");
-			if (state.testResult) { // selecting the right box
-				$(trueChoice).attr("checked", "checked");
-			} else {
-				$(falseChoice).attr("checked", "checked");
+			if (answers) {
+				if (state.testResult) { // selecting the right box
+					$(trueChoice).attr("checked", "checked");
+				} else {
+					$(falseChoice).attr("checked", "checked");
+				}
 			}
 			var trueBox = document.createElement("p");
 			$(trueBox).text("true")
@@ -422,18 +434,6 @@
 					  .css("text-align", "center");
 			$(interaction).append(boolBox);
 		} else if (state.hasOwnProperty("nextLine")) {
-			var lineBox = document.createElement("p");
-			$(lineBox).text("line #")
-					  .css("font-size", "11pt")
-					  .css("font-family", "monospace");
-			var lineInput = document.createElement("input");
-			$(lineInput).attr("type", "text")
-						.css("font-size", "12pt")
-						.css("font-family", "monospace");
-			// $(lineInput).attr("value", state.nextLine);
-			$(lineInput).addClass("next_line_input");     // CLASS TO CHECK LATER IF INPUT'S CORRECT
-			// $(lineBox).append(lineInput);
-			$(interaction).append(lineBox);
 			// add hover when mousing over
 			$("#problem_space li").mouseover(function() {
 				$(this).addClass("select");
