@@ -12,6 +12,9 @@
         $("#next").on("click", next);
         $("#next1").on("click", next);
         $("#back").on("click", back);
+        $("#islider").change(function() {
+            $("#idiv").val($(this).val());
+        });
         initializeFocus();
         document.onkeydown = checkEnter;
     };
@@ -110,6 +113,8 @@
         }
         array.append(tableBody);
 
+        //Display i value
+        $("#idiv").val($("#islider").val());
 
         // Update prompt text
         $("#promptwords").html(state.promptText);

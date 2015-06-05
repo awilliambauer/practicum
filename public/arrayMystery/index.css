@@ -118,7 +118,7 @@ input {
 }
 
 #arrLabel {
-    margin-top: 40px;
+    margin-top: 70px;
 }
 
 .arraylabel {
@@ -168,7 +168,10 @@ h1.problemdescription {
 hr {
     clear: left;
 }
-
+#islider {
+    margin-left: 36px;
+    width: 320px;
+}
 .right {
     background-color: lawngreen;
 }
@@ -190,8 +193,7 @@ hr {
     background-image: -ms-linear-gradient(top, #547980, #45ADA8);
     background-image: -o-linear-gradient(top, #547980, #45ADA8);
     background-image: linear-gradient(to bottom, #547980, #45ADA8);
-    -webkit-border-radius: 28;
-    -moz-border-radius: 28;
+    -webkit-border-radius: 28%;
     border-radius: 28px;
     text-shadow: 4px 3px 10px #666666;
     font-family: Arial;
@@ -204,9 +206,6 @@ hr {
 #next:hover, #back:hover, #next1:hover {
     background: #9de0ad;
     background-image: -webkit-linear-gradient(top, #9de0ad, #81b38d);
-    background-image: -moz-linear-gradient(top, #9de0ad, #81b38d);
-    background-image: -ms-linear-gradient(top, #9de0ad, #81b38d);
-    background-image: -o-linear-gradient(top, #9de0ad, #81b38d);
     background-image: linear-gradient(to bottom, #9de0ad, #81b38d);
     text-decoration: none;
 }
@@ -245,6 +244,40 @@ hr {
     -o-transition: font-size 1s;
     transition: font-size 1s;
 }
+
+input[type=range] {
+    -webkit-appearance: none;
+    margin: 18px 0;
+    width: 100%;
+}
+input[type=range]:focus {
+    outline: none;
+}
+input[type=range]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 5px;
+    cursor: pointer;
+    animate: 0.2s;
+    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+    background: #45ADA8;
+    border-radius: 1.3px;
+    border: 0.2px solid #010101;
+}
+input[type=range]::-webkit-slider-thumb {
+    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+    border: 1px solid #000000;
+    height: 25px;
+    width: 10px;
+    background: #ffffff;
+    cursor: pointer;
+    -webkit-appearance: none;
+    margin-top: -10px;
+}
+
+input[type=range]:focus::-webkit-slider-runnable-track {
+    background: #45ADA8;
+}
+
 
 /*
 DYNAMIC STYLING CLASSES
