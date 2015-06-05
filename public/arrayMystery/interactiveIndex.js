@@ -15,6 +15,12 @@
         $("#islider").change(function() {
             $("#idiv").val($(this).val());
         });
+        $("#islider").on("mousedown", function() {
+            $("#idiv").addClass("ihighlight");
+        });
+        $("#islider").on("mouseup", function() {
+           $("#idiv").removeClass("ihighlight");
+        });
         initializeFocus();
         document.onkeydown = checkEnter;
     };

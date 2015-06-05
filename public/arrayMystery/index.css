@@ -74,6 +74,10 @@ body {
     bottom: 10px;
 }
 
+.ihighlight {
+    background-color: yellow;
+}
+
 /*all variable bank input styling*/
 
 #arraydata {
