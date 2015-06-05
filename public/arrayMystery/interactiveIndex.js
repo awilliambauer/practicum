@@ -21,7 +21,6 @@
         $("#islider").on("mouseup", function() {
            $("#idiv").removeClass("ihighlight");
         });
-        initializeFocus();
         document.onkeydown = checkEnter;
     };
 
@@ -138,7 +137,6 @@
 
         /*update size of problem text*/
         if (!state.smallText) {
-            console.log("entered smallText check");
 
             /*reduce size of problem description*/
             document.getElementById("problemdescription").classList.add("littletext");
@@ -499,6 +497,7 @@
                 var current = $(("#ele" + i)).val();
                 if (elements[i] != current) {
                     $(("#ele" + i)).focus();
+                    $(("#ele" + i)).select();
                 }
             }
 
@@ -509,6 +508,7 @@
                     current = currentNode.val();
                     if ("" + i !== current) {
                         currentNode.focus();
+                        currentNode.select();
                         break;
                     }
                 }
@@ -524,6 +524,7 @@
                         var expected = "" + variablesExpected[key];
                         if (expected != "?" && expected !== current) {
                             $(variables[i]).focus();
+                            $(variables[i]).select();
                         }
                     }
                 }
@@ -531,14 +532,6 @@
         }
     }
 
-    function addFocusClass() {
-        this.select();
-        this.classList.add("focus");
-    }
-
-    function removeFocusClass() {
-        this.classList.remove("focus");
-    }
 
     function contains(value, array) {
         for (var i = 0; i < array.length; i++) {
@@ -547,26 +540,6 @@
             }
         }
         return false;
-    }
-
-    /*set focus of array cells and variable boxes--used to make green glow
-    * highlight when user selects box*/
-    function initializeFocus() {
-        var arrayCells = document.querySelectorAll("td");
-        for (var i = 0; i < arrayCells.length; i++) {
-
-            /*new focus code*/
-            arrayCells[i].addEventListener("focus", addFocusClass, true);
-            arrayCells[i].addEventListener("blur", removeFocusClass, true);
-
-            /*old focus code
-            arrayCells[i].onfocusin = addFocusClass;
-            arrayCells[i].onfocusout = removeFocusClass;*/
-        }
-        var varCells = document.querySelectorAll(".vardata");
-        for (var j = 0; j < varCells.length; j++) {
-            varCells[j].onclick = addFocusClass;
-        }
     }
 
     /*process onkeydown event--call next if key pressed was enter*/
