@@ -4,16 +4,43 @@
 	var CURRENT_STEP;
 	var VARIABLES;
 	var AST;
+	var CORRECT_NEXT_LINE;
+	var CORRECT_VARIABLES;
+	var CORRECT_BOOL;
 
 	$(document).ready(function() {
-
+		CORRECT_BOOL = null;
 		CURRENT_STEP = 0;
 		VARIABLES = {};
 		init();
 		$("#go_back").click(function() { window.location.href = "../index.html" });
+		// move to the next step if they hit enter or click next
 		$("#next").click(next);
-
+		$(document).keydown(function() {
+			if (event.which == 13) {
+				next();
+			}
+		})
+		$("#answer_box input").change(function() {
+			checkAnswer();
+		});
 	});
+
+	// checks the entered answer against the real answer to see if they have gotten
+	// the problem correct
+	function checkAnswer() {
+		var realAnswer = state[state.length - 1].result.trim();
+		console.log(realAnswer);
+		var userAnswer = $("#answer")[0].value;
+		console.log(userAnswer);
+		if (realAnswer == userAnswer) {
+			console.log("CORRECT");
+			$("#answer_box").addClass("correct");
+		} else {
+			console.log("incorect");
+			$("#answer_box").addClass("incorrect");
+		}
+	}
 
 	// fills in the problem space with the text of the specific problem we're working on,
 	// we will just have to replace "example.txt" with whatever file they store the problem
@@ -21,7 +48,6 @@
 	function init() {
 		var problem = getProblemNum();
 		var callVals;
-		$("#prompt").hide();
 		$.get("problems/problem_" + problem + ".txt", function(data) {
 			AST = java_parsing.browser_parse(data);
 			$("#problem_space > pre").html(on_convert(AST));
@@ -32,9 +58,8 @@
 				$("#answer_box > span").prepend("ifElseMystery" + problem + "(" + callVals + ")");
 			});
 		});
-		
 	}
-
+	
 	// gets the problem number from the address
 	function getProblemNum() {
 		var probText = window.location.search;
@@ -53,32 +78,122 @@
 		for (var variable in rawVals) {
 			callVals.push(rawVals[variable]);
 		}
-		console.log(callVals);
 		return callVals;
 	}
 
 	function next() {
-		var currentState = state[CURRENT_STEP];
-		//console.log(currentState.prompt);
-		// take away "next" button when finished
-		if (currentState.prompt.indexOf("Answer") != -1) {
-			$("#next").hide();
-		}
+		$("body *").removeClass("correct")
+				   .removeClass("incorrect")
+				   .removeClass("incorrect_select");
+		setTimeout(function() {
+			if (checkUserInput()) {
+				$("#problem_space li").off("mouseover")
+									  .off("click");
+				$(".chosen-next-line").removeClass("chosen-next-line");
+				var currentState = state[CURRENT_STEP]
+				// take away "next" button when finished
+				if (currentState.prompt.indexOf("Answer") != -1) {
+					$(document).off("keydown");
+				}
 
-		if (CURRENT_STEP == 0) {
-			$("#prompt").show();
-			highlightBlocks();
-		}
+				if (CURRENT_STEP == 0) {
+					$("#prompt").show();
+					highlightBlocks();
+				} else {
+					// scroll to the right position
+					$("html, body").animate({
+						scrollTop: $("." + currentState.lineNum).offset().top - 200
+					}, 1000);
+				}
+				CURRENT_STEP++;
+				newGetPrompt(currentState);
+				newHighlightLine(currentState);
+				newHighlightBlock(currentState);
+				newAddComments(currentState);
+				newUpdateVariables(currentState);
+				drawVariableBank();
+				newCrossOutLines(currentState);
+				addInteraction(currentState);
+			}
+		}, 10);
+	}
 
-		CURRENT_STEP++;
-		newGetPrompt(currentState);
-		newHighlightLine(currentState);
-		newHighlightBlock(currentState);
-		newAddComments(currentState);
-		newUpdateVariables(currentState);
-		drawVariableBank();
-		newCrossOutLines(currentState);
-		addInteraction(currentState);
+	function checkUserInput() {
+		/*
+			Checks if the entered value is the correct next line.
+			correctLine boolean value dictates if next button moves prompt.
+		 */
+		var correctLine = true;
+		var correctVars = true;
+		var correctBool = true;
+		if (CORRECT_NEXT_LINE) {
+			// var lineInput = document.getElementsByClassName("next_line_input");
+			// correctLine = CORRECT_NEXT_LINE == lineInput[0].value;
+			correctLine = $(".chosen-next-line").hasClass(CORRECT_NEXT_LINE);
+			if (correctLine) {
+				$("#prompt").addClass("correct");
+			} else {
+				$("#prompt").addClass("incorrect");
+			}	
+		}
+		if (CORRECT_VARIABLES) {
+			var variables = document.getElementsByClassName("variable_answer");
+			var answer = [];
+			for(var i = 0; i < variables.length; i++) {
+				answer.push(parseInt(variables[i].value));
+			}
+			correctVars = answer.equals(CORRECT_VARIABLES);
+			if (correctVars) {
+				$("#prompt").addClass("correct");
+			} else {
+				$("#prompt").addClass("incorrect");
+			}
+
+		}
+		if(CORRECT_BOOL !== null) {
+			var check = document.querySelector("input[name = \"tf\"]:checked").value + "";
+			correctBool = (check == CORRECT_BOOL);
+			if (correctBool) {
+				$("#prompt").addClass("correct");
+			} else {
+				$("#prompt").addClass("incorrect");
+			}
+		}
+		
+
+		if(correctLine && correctVars && correctBool) {
+			var currentState = state[CURRENT_STEP];
+			if(currentState.hasOwnProperty("answer")) {
+				CORRECT_VARIABLES = [];
+				for(var key in currentState.answer) {
+					CORRECT_VARIABLES.push(currentState.answer[key]);
+				}
+			} else {
+				CORRECT_VARIABLES = null;
+			}
+			if(currentState.hasOwnProperty("testResult"))  {
+				CORRECT_BOOL = currentState.testResult + "";
+			} else {
+				CORRECT_BOOL = null;
+			}
+			if (currentState.hasOwnProperty("nextLine")) {
+				CORRECT_NEXT_LINE = currentState.nextLine;
+			} else {
+				CORRECT_NEXT_LINE = null;
+			}
+			if(currentState.hasOwnProperty("nextLine")) {
+				CORRECT_VARIABLES = currentState.answer;
+			}
+			return true;
+		} else { // Entered line was not correct
+			// if(!correctLine)
+			// 	alert("Wrong Line, try again!");
+			// else if(!correctVars)
+			// 	alert("Wrong Values");
+			// else
+			// 	alert("wrong boolean");
+			return false;
+		}
 	}
 
 	// some initialization stuff that happens on first click of next
@@ -118,7 +233,9 @@
 			$(body).text(promptParts[1]);	// the actual description
 			$("#prompt").html(title);
 			$("#prompt").append(body);
-			movePrompt(state.lineNum);
+			if (state.hasOwnProperty("lineNum")) {
+				movePrompt(state.lineNum);
+			}
 		}
 	}
 
@@ -281,6 +398,7 @@
 
 	// adds the interactive components of the webpage
 	function addInteraction(state) {
+		var answers = true;	// true to auto-fill, false otherwise
 		var interaction = document.createElement("div");
 		// if there are updated variables
 		if (state.hasOwnProperty("answer")) {
@@ -290,26 +408,31 @@
 						 .css("font-family", "monospace");
 				var input = document.createElement("input");
 				$(input).attr("type", "text")
-						.attr("value", state.answer[variable])
 						.css("font-size", "12pt");
+				if (answers) {
+					$(input).attr("value", state.answer[variable]) // adding the answer to the state
+				}
+				$(input).addClass("variable_answer");
 				$(varBox).append(input);
 				$(interaction).append(varBox);
 			}
 		} else if (state.hasOwnProperty("testResult")) {	// test result, no vars
 			var boolBox = document.createElement("p");
-			$(boolBox).text("z <= x\t");
+			$(boolBox).text(getBoolTest(state));
 			var trueChoice = document.createElement("input");
 			$(trueChoice).attr("type", "radio")
-						 .attr("name", "t/f")
+						 .attr("name", "tf")
 						 .attr("value", "true");
 			var falseChoice = document.createElement("input");
 			$(falseChoice).attr("type", "radio")
-						  .attr("name", "t/f")
+						  .attr("name", "tf")
 						  .attr("value", "false");
-			if (state.testResult) {
-				$(trueChoice).attr("checked", "checked");
-			} else {
-				$(falseChoice).attr("checked", "checked");
+			if (answers) {
+				if (state.testResult) { // selecting the right box
+					$(trueChoice).attr("checked", "checked");
+				} else {
+					$(falseChoice).attr("checked", "checked");
+				}
 			}
 			var trueBox = document.createElement("p");
 			$(trueBox).text("true")
@@ -322,11 +445,61 @@
 			$(boolBox).append(trueBox)
 					  .append(falseBox)
 					  .css("font-family", "monospace")
-					  .css("font-size", "11pt");
+					  .css("font-size", "11pt")
+					  .css("text-align", "center");
 			$(interaction).append(boolBox);
+		} else if (state.hasOwnProperty("nextLine")) {
+			// add hover when mousing over
+			$("#problem_space li").mouseover(function() {
+				$(this).addClass("select");
+			});
+			$("#problem_space li").mouseout(function() {
+				$(this).removeClass("select");
+			});
+			$("#problem_space li").click(function() {
+				$(".chosen-next-line").removeClass("chosen-next-line");
+				$(this).addClass("chosen-next-line")
+				next();
+			});
 		}
 		$(interaction).css("font-size", "12pt");
 		$("#prompt").append(interaction);
+	}
+
+	function getBoolTest(state) {
+		var currentLine = $("." + state.lineNum);
+		var text = "";
+		$(currentLine).children().each(function(index, element) {
+			if ($(element).attr("id")) {
+				text = $(element).text();
+				return false;
+			}
+		});
+		return text;
+	}
+
+	Array.prototype.equals = function (array) {
+		// if the other array is a falsy value, return
+		if (!array)
+			return false;
+
+		// compare lengths - can save a lot of time
+		if (this.length != array.length)
+			return false;
+
+		for (var i = 0, l=this.length; i < l; i++) {
+			// Check if we have nested arrays
+			if (this[i] instanceof Array && array[i] instanceof Array) {
+				// recurse into the nested arrays
+				if (!this[i].equals(array[i]))
+					return false;
+			}
+			else if (this[i] != array[i]) {
+				// Warning - two different object instances will never be equal: {x:20} != {x:20}
+				return false;
+			}
+		}
+		return true;
 	}
 
 // })();

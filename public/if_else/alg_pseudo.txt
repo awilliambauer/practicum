@@ -13,3 +13,10 @@ Map Values = initialValues // Initialization, 1st line                     Initi
     updateValues(Values);                                                  Assignment
     
 printStatement                                                             Type in the answer!
+
+
+THINGS WE NEED TO ALTER LATER:
+	-We need to have two different cases for initializing other variables that aren't
+	parameters
+	-Need to break down the conditional and evaluating each variable in the if/else tests
+	-Should we include prompts for if they get things wrong?

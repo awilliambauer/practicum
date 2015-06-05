@@ -221,7 +221,6 @@ function set_class_of_ast_dom_element(id, clazz) {
 }
 
 function on_convert(ast) {
-	console.log(ast);
 	var dom = to_dom(ast, -1);
 	return dom[0];
 	// $('#problem_space > pre').html('').append(dom[0]);
