@@ -1,10 +1,35 @@
 /*
+ * This is the actual pseudocode (as opposed to the test one). Helper functions
+ * need to be fleshed out still when it comes to parsing the AST.
+ *
+ * If you have questions, please email Grant Magdanz: gmagdanz@uw.edu
+ *
  * NOTE: Every helper method comment also says how visible it should be to
  * students. Externally visible means all internal details should be hid from
  * the student, partially visible means that details should only be displayed if
  * they deal with arrays, and internally visible means that all internal details
  * showed be displayed always.
  */
+
+var initialState = {
+    array: [11, 14, 2, 4, 7],
+    variables: {
+        arrayLength: 5,
+        i: "?"
+    },
+    instructionPtr: 0,
+    promptText: "Let's solve the problem!",
+    ast: mainAst,
+    index: null, // null means that they haven't answered yet
+    styleClasses: {
+        mainColorText: [],
+        mainColorBorder: [],
+        accent1Highlight: [],
+        accent1Border: [],
+        accent2Hightlight: [],
+        accent2Border: []
+    }
+}
 
 /**
  * Given the initial state of an array mystery problem, solves it
@@ -15,17 +40,23 @@
 function solveArrayMystery(problem) {
     // init i
     problem.variable.i = determineInitialValueOfI(problem);
+    problem.instructionPtr++;
     while (doesForLoopTestPass(problem)) {
+        problem.instructionPtr++;
         if (nextLineIsIfStatement(problem)) {
             if (doesIfTestPass(problem)) {
+                problem.instructionPtr++;
                 // update values in the array
                 while (nextLineIsAssignmentStatement(problem)) {
+                    problem.instructionPtr++;
                     var expression = evaluateExpression(problem);
                     var toUpdate = getIndexToUpdate(problem);
                     problem.array[toUpdate] = expression;
                 }
             } else if (nextLineIsElseBranch(problem)) {
+                problem.instructionPtr++;
                 while (nextLineIsAssignmentStatement(problem)) {
+                    problem.instructionPtr++;
                     var expression = evaluateExpression(problem);
                     var toUpdate = getIndexToUpdate(problem);
                     problem.array[toUpdate] = expression;
@@ -33,10 +64,12 @@ function solveArrayMystery(problem) {
             }
         }
         while (nextLineIsAssignmentStatement(problem)) {
+            problem.instructionPtr++;
             var expression = evaluateExpression(problem);
             var toUpdate = getIndexToUpdate(problem);
             problem.array[toUpdate] = expression;
         }
+        problem.instructionPtr++;
         var increment = getLoopIncrement(problem);
         problem.variables.i += increment;
     }
