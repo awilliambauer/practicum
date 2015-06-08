@@ -135,6 +135,11 @@ h3 > span, #answer_box > span, input[type="text"] {
 	border-radius: 2px;
 }
 
+.select {
+	background-color: rgba(69,173,168, 0.65);
+	cursor: pointer;
+}
+
 .grey_out {
 	color: rgb(155, 149, 149);
 }
@@ -142,6 +147,48 @@ h3 > span, #answer_box > span, input[type="text"] {
 .cross_out {
 	color: rgb(200, 149, 149);
 	text-decoration: line-through;
+}
+
+.correct {
+	animation-name: correct;
+	animation-duration: 2s;
+}
+
+@keyframes correct {
+	from {
+		color: green;
+		background: rgb(0, 255, 0);
+		border: solid 2px green;
+	}
+
+	to {
+		color: black;
+		border: 2px solid #547980;
+		background: rgb(244, 254, 202);
+	}
+}
+
+.incorrect {
+	animation-name: incorrect;
+	animation-duration: 2s;
+}
+
+@keyframes incorrect {
+	from {
+		color: red;
+		border: solid 2px green;
+		background: rgb(255, 0, 0);
+	}
+
+	to {
+		color: black;
+		border: 2px solid #547980;
+		background: rgb(244, 254, 202);		
+	}
+}
+
+.incorrect_select {
+	background-color: red;
 }
 
 button {

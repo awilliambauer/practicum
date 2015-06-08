@@ -4,28 +4,53 @@
     <title>Practice-That!</title>
     <link href="images/squirtle.png" type="image/gif" rel="shortcut icon" />
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel= "stylesheet">
+    <link href="navbar2.css" type="text/css" rel="stylesheet" />
     <link href="common.css" type="text/css" rel="stylesheet" />
     <link href="indexlayout.css" type="text/css" rel="stylesheet" />
     <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.11.2.min.js"></script>
     <script src="index.js"></script>
-    <script src="navigationbar.js"></script>
     <meta charset="UTF-8">
 </head>
 <body>
+
     <div class="topnavContainer topnavContainerScroll">
     </div>
 
-    <div id="header">
-        <h1>Practice-That!</h1>
-    </div>
-    <div class="content">
-        <div id="welcome">
-            <p>Welcome to Practice That!</p>
-            <p>
-                On this site you can practice a wide variety of problems related to introductory programing
-                through our indepth learning enviroment. Click on a type of problem and let's get programing!
-            </p>
+    <div class="container-fluid">
+        <div id="header">
+            <h1>Practice-That!</h1>
         </div>
+        <div class="content">
+            <div id="welcome">
+                <p>Welcome to Practice That!</p>
+                <p>
+                    On this site you can practice a wide variety of problems related to introductory programming
+                    through our in-depth learning environment. Click on a type of problem and let's get programming!
+                </p>
+            </div>
+        </div>
+
+        <div class="columns">
+            <div class="col-sm-3">
+                <div class="problemBox">
+                    <h4 class="text-center">Expressions</h4>
+                    <p class="text-center">Practice regular expressions- addition, subtraction, multiplication and more!</p>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="problemBox">
+                    <h4 class="text-center">If/Else Mystery</h4>
+                    <p class="text-center">Practice your conditionals and if/else structures</p>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="problemBox">
+                    <h4 class="text-center">Array Mystery</h4>
+                    <p class="text-center">Practice analyzing and iterating through arrays</p>
+                </div>
+            </div>
+        </div>
+
     </div>
 </body>
 </html>

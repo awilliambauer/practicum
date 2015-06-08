@@ -2,55 +2,106 @@
 This provides the stylesheet for expressions
 */
 
+span:hover {
+	cursor: pointer;
+	background-color: #9DE0AD;
+}
+
+.clicked {
+	color: #45ADA8;
+}
+
+.clicked:hover {
+	cursor: auto;
+	background-color: white;
+}
+
+#pagedescription {
+	display: inline-block;
+	margin: auto;
+	font-size: 15pt;
+	border-radius: 10px;
+	border: 2px solid #45ADA8;
+	background-color: white;
+	padding: 10px;
+}
+
+#boxcenter {
+	margin-bottom: 20px;
+}
+
 body {
-	padding: 0px;
+	margin: 0;
+	font-family: Arial, sans-serif;
+	padding: 0px 0px 25px;
+	margin: 40px 0px;
+	background-color: #45ADA8;
+}
+
+
+#problem {
+	border-radius: 25px;
+	width: 75%;
+	margin-left: auto;
+	margin-right: auto;
+	overflow: hidden;
 	background-color: #FAFFF3;
-	margin: 0 0 100px;
-	font-family: ‘Lucida Console’, Monaco, monospace;
+	margin-top: 80px;
+}
+
+#dummy {
+	height: 100px;
 }
 
 h1 {
 	font-size: 40px;
+	margin-bottom: 40px;
+	color: #45ADA8;
+	padding-top: 50px;
 }
 
-p {
-	margin-top: 25px;
+#steps {
+	margin-left: auto;
+	margin-right: auto;
+	width: 700px;
+	margin-top: 50px;
+	border: 5px solid #547980;
+	border-radius: 10px;
+	overflow: hidden;
+	padding: 20px;
+	margin-bottom: 20px;
+	background-color: white;
 }
 
-#header, #footer {
-	margin: 0;
-	background-color: #45ADA8;
-	color: #B5F3C4;
-	height: 100px;
-	padding: 25px;
-}
-
-#step1, #step4, #step7 {
-	background-color: #8ADEDA;
-}
-
-#step2, #step5, #step8 {
-	background-color: #9DE0AD;
-}
-
-#step3, #step6, #step9 {
-	background-color: #BAEFDC;
-}
-
-.all-steps {
-	border: solid;
-	border-radius: 20px;
-	border-color: #547980;
-	margin: 20px;
-}
-
-.step-exp {
+.step {
+	clear: both;
+	font-size: 14pt;
 	text-align: left;
-	padding-bottom: 15px;
+	float: left;
+	width: 180pt;
+	margin: 0pt;
 }
 
+.expressionStatement {
+	height: 80px;
+}
+
+.exp {
+	float: right;
+	font-size: 25pt;
+	width: 400px;
+	text-align: center;
+	margin: 0pt;
+	vertical-align: text-bottom;
+}
 #answerbox {
-	padding: 0 25px 25px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#box {
+	width: 200px;
+	margin-bottom: 15px;
 }
 
 #answerbox, h1, h2, p {
@@ -58,24 +109,43 @@ p {
 }
 
 h2 {
-	margin-bottom: 50px;
-}
-
-#box {
-	width: 150px;
-	height: 50px;
+	margin-bottom: 40px;
+	font-size: 25pt;
+	margin-top: 40px;
+	font-weight: normal;
 }
 
 .buttons {
 	width: 75px;
 }
 
-.buttonLineUp {
-	display: inline-block;
+#submit {
+	float: left;
 }
 
-.highlight {
+#nextstep {
+	float: right;
+}
+
+.buttonLineUp {
+	margin-right: 40%;
+	margin-left: 25%;
+	width: 20%;
+	clear:both;
+	float:right;
+	margin-top: 15px;
+}
+
+.highlight1 {
 	color: red;
+}
+
+.highlight2 {
+	color: green;
+}
+
+.highlight3 {
+	color: blue;
 }
 
 .hiddenSteps {
@@ -84,4 +154,41 @@ h2 {
 
 .visibleSteps {
 	display: block;
+}
+
+.prompt {
+	clear: both;
+	text-align: center;
+	padding-top: 10px;
+	padding-bottom: 30px;
+}
+
+.finalanswer {
+	text-align: center;
+	font-size: 32pt;
+	clear: both;
+}
+
+input {
+	font-size: 25pt;
+	width: 60px;
+}
+
+#correct {
+	font-size: 20pt;
+	margin: 60px;
+	clear: both;
+}
+
+#error {
+	color: darkred;
+	clear: both;
+}
+
+.operators {
+	margin-right: 10px;
+	font-size: 16pt;
+}
+#container {
+	clear:both;
 }

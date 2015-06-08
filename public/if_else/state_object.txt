@@ -23,6 +23,7 @@ public static void ifElseMystery2 (int x, int y) {
 
 Sample State Object:
 
+<<<<<<< HEAD
 state: [
 	{prompt: "If/Else: Before starting, note the separate if/else blocks that are highlighted.",
 	 problem},
@@ -138,3 +139,114 @@ state: [
 	 problem
 	}
 ]
+=======
+<<<<<<< HEAD
+state: [
+		{prompt: "If/Else: Before starting, note the separate if/else blocks that are highlighted.",
+		 problem},
+
+		{prompt: "Initialization: What are the starting values of our variables?",
+		 lineNum: 1,
+		 vars: {1: {x: 3, y: 20}},
+		 updated: {x, y},
+		 problem
+=======
+this = {
+	state: [
+		{prompt: "If/Else: Before starting, note the separate if/else blocks that are highlighted."},
+
+		{prompt: "Initialization: What are the starting values of our variables?",
+		 lineNum: 1,
+		 vars: {x: 3, y: 20},
+		 updated: {x, y}
+>>>>>>> integ
+		},	
+
+		{prompt: "Initialization: What is the starting value of this variable?"
+		 lineNum: 2,
+<<<<<<< HEAD
+		 vars: {1: {x: 3, y: 20}, 2: {x: 3, y: 20, z: 4}},
+		 updated: {z},
+		 problem
+=======
+		 vars: {x: 3, y: 20, z: 4},
+		 updated: {z}
+>>>>>>> integ
+		},
+
+		{prompt: "Conditionals: We're at the beginning of a new if/else block. Let's find the first branch that evaluates to true.",
+		 lineNum: 4,
+<<<<<<< HEAD
+		 vars: {x: 3, y: 20, z: 4},
+		 problem
+=======
+		 vars: {x: 3, y: 20, z: 4}
+>>>>>>> integ
+		},
+
+		{prompt: "Booleans: What does this expression evaluate to?",
+		 lineNum: 4,
+		 testResult: false,
+		 vars: {x: 3, y: 20, z: 4}
+		},
+
+		{prompt: "If/Else: Since this test evaluated to false, we won't go into this branch.",
+		 lineNum: 4,
+		 crossOut: {5},
+		 vars: {x: 3, y: 20, z: 4}
+		},
+
+		{prompt: "If/Else: We enter this else branch because all other tests in this structure evaluated to false",
+		 lineNum: 6,
+		 vars: {x: 3, y: 20, z: 4}
+		},
+
+		{prompt: "Assignment: What is the value of this variable after this line executes?",
+		 lineNum: 7,
+		 vars: {x: 3, y: 20, z: 13},
+		 updated: {z}
+		},
+
+		{prompt: "Conditionals: We're at the beginning of a new if/else block. Let's find the first branch that evaluates to true.",
+		 lineNum: 10,
+		 vars: {x: 3, y: 20, z: 13}
+		},
+
+		{prompt: "Booleans: What does this expression evaluate to?",
+		 lineNum: 10,
+		 testResult: false,
+		 vars: {x: 3, y: 20, z: 13}
+		},
+
+		{prompt: "If/Else: Since this test evaluated to false, we won't go into this branch.",
+		 lineNum: 10,
+		 crossOut: {11},
+		 vars: {x: 3, y: 20, z: 13}
+		},
+
+		{prompt: "Booleans: What does this expression evaluate to?",
+		 lineNum: 12,
+		 testResult: true,
+		 vars: {x: 3, y: 20, z: 13}
+		},
+
+		{prompt: "If/Else: Since this branch evaluated to true, we won't enter any of the following branches.",
+		 lineNum: 12,
+		 crossOut: {14, 15},
+		 vars: {x: 3, y: 20, z: 13}
+		},
+
+		{prompt: "Assignment: What is the value of this variable after this line executes?",
+		 lineNum: 13,
+		 vars: {x: 3, y: 17, z:13},
+		 updated: {y}
+		},
+
+		{prompt: "Answer: Now use your variable bank to fill in the answer!",
+		 lineNum: 17,
+		 vars: {x: 3, y: 17, z:13}
+		}
+	],
+	program: [...]
+}
+>>>>>>> array-mystery
