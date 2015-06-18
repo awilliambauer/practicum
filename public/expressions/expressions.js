@@ -59,7 +59,7 @@ This JS file handles all interactivity and stepping through of expressions probl
 	window.onload = function () {
 		var query = window.location.search.substring(1);
 		// default values
-		interaction = true;
+		interaction = false;
 		startArray = problems[0];
 		correctAnswer = answers[0];
 		//as per user's request, changes the expression problem and state of 
