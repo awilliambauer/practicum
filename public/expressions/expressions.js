@@ -6,7 +6,106 @@ This JS file handles all interactivity and stepping through of expressions probl
 
 (function() {
 
-	// array of problems to choose from; can append new problems  
+	// the current index into the state array
+	var currentStateIndex;
+
+	// whether or not this is the first time the user is clicking the "step" button
+	var firstStep = true;
+
+	window.onload = function () {
+		var problem = 1;
+		$.getScript("state_objects/state_" + problem + ".js", function() {
+			currentStateIndex = 0;
+			var expressionHeader = document.getElementById("expressionHeader");
+			var expression = states[currentStateIndex].problemLines[0];
+			expressionHeader.innerHTML = buildExpressionString(expression);
+		});
+
+		//if users attempt to check a submitted answer
+		document.getElementById("submit").onclick = correct;
+
+		//if users attempt to step through the breakdown of the problem
+		var next = document.getElementById("nextstep");
+		next.disabled = false;
+		next.onclick = step;
+
+	};
+
+	function step() {
+		console.log("step!");
+
+		var stepHolder;
+		if (firstStep) {
+			document.getElementById("submit").style.visibility = "hidden";
+			document.getElementById("nextstep").innerHTML = "Next";
+
+			stepHolder = document.createElement("div");
+			stepHolder.setAttribute("id", "steps");
+			document.getElementById("stepshell").appendChild(stepHolder);
+
+			firstStep = false;
+		}
+		else {
+			stepHolder = document.getElementById("steps");
+			stepHolder.innerHTML = "";
+		}
+
+		var initialPrompt = document.createElement("div");
+		initialPrompt.classList.add("prompt");
+		initialPrompt.innerHTML = "Start by evaluating all the Multiplicative (* / %) operators from left to right. <br /> Then evaluate " +
+			"the Additive (+ -) operators from left to right.";
+
+		stepHolder.appendChild(initialPrompt);
+
+		addStepHTML();
+
+		currentStateIndex++;
+	}
+
+	function addStepHTML() {
+		for (var i = 0; i < states[currentStateIndex].problemLines.length; i++) {
+			var expression = states[currentStateIndex].problemLines[i];
+
+			var lineHTML = document.createElement("div");
+			lineHTML.setAttribute("id", "firststep");
+			lineHTML.classList.add("expressionStatement");
+
+			var expressionHTML = document.createElement("div");
+			expressionHTML.classList.add("exp");
+			expressionHTML.innerHTML = buildExpressionString(expression);
+
+			lineHTML.appendChild(expressionHTML);
+			document.getElementById("steps").appendChild(lineHTML);
+		}
+	}
+
+	// create the expression HTML from the array of objects
+	function buildExpressionString(expression) {
+		var expressionString = "";
+		for (var i = 0; i < expression.length; i++) {
+			expressionString += getExpressionValue(expression, i) + " ";
+		}
+		return expressionString;
+	}
+
+	// gets the value at a particular index
+	// formats it based on int/double/String type
+	function getExpressionValue(arr, index) {
+		if (arr[index].type == 'double' && arr[index].value % 1 == 0) {
+			return arr[index].value + ".0";
+		} else if (arr[index].type == 'String') {
+			return "\"" + arr[index].value + "\"";
+		} else {
+			return arr[index].value;
+		}
+	}
+
+
+	// ################################################################################################
+	// OLD CODE
+	// ################################################################################################
+
+	// array of problems to choose from; can append new problems
 	// to this array (but must also append corresponding answer
 	// to end of answers array)
 	var problems = [[{type: "int", value: 22},
@@ -55,14 +154,15 @@ This JS file handles all interactivity and stepping through of expressions probl
 	// state object
 	var stateObject = new Array();
 
+
 	// on load, shows expression, answer box, submit button, and show steps button
-	window.onload = function () {
+	function oldOnload () {
 		var query = window.location.search.substring(1);
 		// default values
 		interaction = false;
 		startArray = problems[0];
 		correctAnswer = answers[0];
-		//as per user's request, changes the expression problem and state of 
+		//as per user's request, changes the expression problem and state of
 		//interactivity
 		if (query != "") {
 			var queryResults = query.split("+");
@@ -88,7 +188,7 @@ This JS file handles all interactivity and stepping through of expressions probl
 			//non interactive step through
 			next.onclick = walkThrough;
 		}
-	};
+	 }
 
 	// This starts the non-interactive solving and explaining process, 
 	// for right now the person can't try to submit after starting the walkThrough.
