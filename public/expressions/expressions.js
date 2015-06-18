@@ -18,7 +18,7 @@ This JS file handles all interactivity and stepping through of expressions probl
 			currentStateIndex = 0;
 			var expressionHeader = document.getElementById("expressionHeader");
 			var expression = states[currentStateIndex].problemLines[0];
-			expressionHeader.innerHTML = buildExpressionString(expression);
+			expressionHeader.innerHTML = buildExpressionString(expression, []);
 		});
 
 		//if users attempt to check a submitted answer
@@ -65,25 +65,39 @@ This JS file handles all interactivity and stepping through of expressions probl
 	function addStepHTML() {
 		for (var i = 0; i < states[currentStateIndex].problemLines.length; i++) {
 			var expression = states[currentStateIndex].problemLines[i];
+			var highlighting = states[currentStateIndex].highlighted[i];
 
 			var lineHTML = document.createElement("div");
 			lineHTML.setAttribute("id", "firststep");
 			lineHTML.classList.add("expressionStatement");
 
+			// display the prompt text next to the last line
+			if (i == states[currentStateIndex].problemLines.length-1) {
+				var promptHTML = document.createElement("p");
+				promptHTML.classList.add("step");
+				promptHTML.innerHTML = states[currentStateIndex].promptText + "<div>&nbsp;</div>";
+				lineHTML.appendChild(promptHTML);
+			}
+
 			var expressionHTML = document.createElement("div");
 			expressionHTML.classList.add("exp");
-			expressionHTML.innerHTML = buildExpressionString(expression);
-
+			expressionHTML.innerHTML = buildExpressionString(expression, highlighting);
 			lineHTML.appendChild(expressionHTML);
+
 			document.getElementById("steps").appendChild(lineHTML);
 		}
 	}
 
 	// create the expression HTML from the array of objects
-	function buildExpressionString(expression) {
+	function buildExpressionString(expression, highlighting) {
 		var expressionString = "";
 		for (var i = 0; i < expression.length; i++) {
-			expressionString += getExpressionValue(expression, i) + " ";
+			if (highlighting.length > 0 && highlighting.indexOf(i) >= 0) {
+				expressionString += "<span class='clicked'>" + getExpressionValue(expression, i) + "</span> ";
+			}
+			else {
+				expressionString += getExpressionValue(expression, i) + " ";
+			}
 		}
 		return expressionString;
 	}
