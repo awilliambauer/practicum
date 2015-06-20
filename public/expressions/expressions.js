@@ -12,9 +12,40 @@ This JS file handles all interactivity and stepping through of expressions probl
 	// whether or not this is the first time the user is clicking the "step" button
 	var firstStep = true;
 
+	var initialState = {
+		problemLines: [
+			[
+				{type: "int", value: 22},
+				{type: "MDMoperator", value: "%"},
+				{type: "int", value: 7},
+				{type: "ASoperator", value: "+"},
+				{type: "int", value: 4},
+				{type: "MDMoperator", value: "*"},
+				{type: "int", value: 3},
+				{type: "ASoperator", value: "-"},
+				{type: "double", value: 6.0},
+				{type: "MDMoperator", value: "/"},
+				{type: "double", value: 2.0}
+			]
+		]
+	};
+
+	var states;
+
 	window.onload = function () {
-		var problem = 1;
-		$.getScript("state_objects/state_" + problem + ".js", function() {
+		// this code runs the hard-coded array of state objects stored in state_1.js
+
+		/*$.getScript("state_objects/state_1.js", function() {
+			currentStateIndex = 0;
+			var expressionHeader = document.getElementById("expressionHeader");
+			var expression = states[currentStateIndex].problemLines[0];
+			expressionHeader.innerHTML = buildExpressionString(expression, []);
+		});*/
+
+		// this code runs the thoughtProcess.js file to build up the array of state objects
+
+		$.getScript("thoughtProcess.js", function() {
+			states = TPLAlgorithm(initialState);
 			currentStateIndex = 0;
 			var expressionHeader = document.getElementById("expressionHeader");
 			var expression = states[currentStateIndex].problemLines[0];
@@ -65,7 +96,7 @@ This JS file handles all interactivity and stepping through of expressions probl
 	function addStepHTML() {
 		for (var i = 0; i < states[currentStateIndex].problemLines.length; i++) {
 			var expression = states[currentStateIndex].problemLines[i];
-			var highlighting = states[currentStateIndex].highlighted[i];
+			var highlighting = [];//states[currentStateIndex].highlighted[i];
 
 			var lineHTML = document.createElement("div");
 			lineHTML.setAttribute("id", "firststep");
@@ -107,7 +138,7 @@ This JS file handles all interactivity and stepping through of expressions probl
 	function getExpressionValue(arr, index) {
 		if (arr[index].type == 'double' && arr[index].value % 1 == 0) {
 			return arr[index].value + ".0";
-		} else if (arr[index].type == 'String') {
+		} else if (arr[index].type == 'string') {
 			return "\"" + arr[index].value + "\"";
 		} else {
 			return arr[index].value;
@@ -134,7 +165,7 @@ This JS file handles all interactivity and stepping through of expressions probl
 		{type: "MDMoperator", value: "/"},
 		{type: "double", value: 2}],
 
-		[{type:"String", value: "hello"},
+		[{type:"string", value: "hello"},
 	 	{type:"ASoperator", value: "+"},
 	 	{type:"int", value : 6},
 	 	{type:"MDMoperator", value: "*"},
@@ -142,7 +173,7 @@ This JS file handles all interactivity and stepping through of expressions probl
 
 	 	[{type:"double", value: 4.0}, 
 	 	{type:"ASoperator", value: "+"}, 
-	 	{type:"String", value: "CSE142"}, 
+	 	{type:"string", value: "CSE142"},
 	 	{type:"ASoperator", value: "+"}, 
 	 	{type:"int", value: 143}]];
 
@@ -580,7 +611,7 @@ This JS file handles all interactivity and stepping through of expressions probl
 			if (clientAnswer.value == (arr[operator].value + ".0")) {
 				correct = true;
 			}
-		} else if (arr[operator].type == 'String') {
+		} else if (arr[operator].type == 'string') {
 			if (clientAnswer.value == ("\"" + arr[operator].value + "\"")) {
 				correct = true;
 			}
@@ -782,9 +813,9 @@ This JS file handles all interactivity and stepping through of expressions probl
 			updatedArray[operator - 1].value = (arr[operator - 1].value % arr[operator+ 1].value);
 		} else if (arr[operator].value == '+') {
 			// special case adding to String (need to convert other type to String before adding)
-			if (arr[operator - 1].type == 'String') {
+			if (arr[operator - 1].type == 'string') {
 				updatedArray[operator - 1].value = arr[operator - 1].value + getValue(operator + 1);
-			} else if (arr[operator + 1].type == 'String') {
+			} else if (arr[operator + 1].type == 'string') {
 				updatedArray[operator - 1].value = getValue(operator - 1) + arr[operator+ 1].value;
 			} else {
 				updatedArray[operator - 1].value = (arr[operator - 1].value + arr[operator+ 1].value);
@@ -796,8 +827,8 @@ This JS file handles all interactivity and stepping through of expressions probl
 		// setting type of value
 		if (arr[operator - 1].type == 'int' && arr[operator + 1].type == 'int') {
 			updatedArray[operator - 1].type = 'int';
-		} else if (arr[operator - 1].type == 'String' || arr[operator + 1].type == 'String') {
-			updatedArray[operator - 1].type = 'String';
+		} else if (arr[operator - 1].type == 'string' || arr[operator + 1].type == 'string') {
+			updatedArray[operator - 1].type = 'string';
 		} else {
 			updatedArray[operator - 1].type = 'double';
 		}
