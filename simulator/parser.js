@@ -279,6 +279,7 @@ var simulator_parsing = function() {
                 case "do": stmt = match_dowhile(); break;
                 case "for": stmt = match_foreach(); break;
                 case "if": stmt = match_ifelse(); break;
+                case "while": stmt = match_while(); break;
                 default: stmt = match_simple_statement(true); break;
             }
             stmt.annotations = annotations;
@@ -335,6 +336,20 @@ var simulator_parsing = function() {
             return {
                 id: new_id(),
                 tag:'dowhile',
+                condition: cond,
+                body: body
+            };
+        }
+
+        function match_while() {
+            match_keyword("while");
+            match_symbol("(");
+            var cond = match_expression(0);
+            match_symbol(")");
+            var body = match_block();
+            return {
+                id: new_id(),
+                tag: "while",
                 condition: cond,
                 body: body
             };

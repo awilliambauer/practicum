@@ -239,6 +239,18 @@ function simulator(ast, globals) {
                     push_stack_state(stmt.parent.body, 'do');
                 }
                 break;
+            case "while":
+                if (evaluate(stmt.condition, state)) {
+                    last(call_stack).to_execute.push({tag:'while:condition', parent:stmt});
+                    push_stack_state(stmt.body, 'while');
+                }
+                break;
+            case "while:condition":
+                if (evaluate(stmt.parent.condition, state)) {
+                    last(call_stack).to_execute.push({tag:'while:condition', parent:stmt.parent});
+                    push_stack_state(stmt.parent.body, 'while');
+                }
+                break;
             default:
                 throw new Error("node tag not recognized " + JSON.stringify(stmt));
         }
