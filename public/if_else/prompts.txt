@@ -1,0 +1,51 @@
+
+This file contains the various prompts that would be called on each line
+of our pseudocode
+
+3: If/Else: Before starting, note the separate if/else blocks that are highlighted.
+4: Initialization: What are the starting values of our variables?
+8: Conditionals: We're at the beginning of a new if/else block. Let's find the first branch that evaluates to true.
+9: Booleans: What does this expression evaluate to?
+--IF TRUE: Go to line 11
+--IF FALSE: Got to line 10
+10: If/Else: Since this test evaluated to false, we won't go into this branch.
+11: If/Else: Since this branch evaluated to true, we won't enter any of the following branches.
+13: Assignment: What is the value of this variable after this line executes?
+15: Answer: Now use your variable bank to fill in the answer!
+
+
+________________________________________________________________________________________
+
+Below is our original prompts, which we're keeping for now as we're finalizing things:
+
+
+If/Else: Before starting, note the separate if/else blocks that are highlighted.
+
+Initialization: What are the starting values of our variables?
+1
+Initialization: What is the starting value of this variable?
+2		x	3	y	20
+Conditionals: We're at the beginning of a new if/else block. Let's find the first branch that evaluates to true.
+4		z	4
+Booleans: What does this expression evaluate to?
+4
+If/Else: Since this test evaluated to false, we won't go into this branch.
+4	5	false
+If/Else: We enter this else branch because all other tests in this structure evaluated to false
+6
+Assignment: What is the value of this variable after this line executes?
+7
+Conditionals: We're at the beginning of a new if/else block. Let's find the first branch that evaluates to true.
+10		z	13
+Booleans: What does this expression evaluate to?
+10
+If/Else: Since this test evaluated to false, we won't go into this branch.
+10	11	false
+Booleans: What does this expression evaluate to?
+12
+If/Else: Since this branch evaluated to true, we won't enter any of the following branches.
+12	14,15	true
+Assignment: What is the value of this variable after this line executes?
+13	
+Answer: Now use your variable bank to fill in the answer!
+17		y	17

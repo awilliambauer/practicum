@@ -1,0 +1,92 @@
+/*
+This is the style sheet for the main page.
+*/
+
+body {
+    margin: 0px;
+    background-color: #FAFFF3;
+    font-family: Arial, san-serif;
+}
+
+body, h1, .content, .container-fluid, #header, #footer {
+    margin: 0;
+    padding: 0;
+}
+
+#header {
+    text-align: center;
+    padding: 25px;
+}
+
+h1 {
+    font-weight: bolder;
+    font-size: 36pt;
+}
+
+#header, #footer {
+    background-color: #45ADA8;
+    color: #FAFFF3;
+    height: 100px;
+}
+
+#header {
+    margin-top: 40px;
+}
+
+.content {
+    background-color: #FAFFF3;
+    overflow: hidden;
+    padding: 30px;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 50px;
+}
+
+#welcome {
+    text-align: center;
+    background-color: white;
+    border: 2px solid #547980;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.box {
+    background-color: #B8E0C1;
+    border: solid;
+    border-radius: 5%;
+    border-color: #547980;
+    font-size: 20pt;
+    float: left;
+    overflow: hidden;
+    display: inline-block;
+    width: 175px;
+    height: 100px;
+    vertical-align: middle;
+    padding: 0;
+    margin: 5%;
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+
+.columns {
+    overflow: hidden;
+    padding: 10px;
+    margin-left: 15%;
+    margin-right: auto;
+}
+
+.col-sm-3 {
+    background-color: #B5F3C4;
+    border: 2px solid #547980;
+    height: 130px;
+    border-radius: 10px;
+    margin: 15px;
+    margin-top: 0;
+    padding: 10px;
+    overflow: hidden;
+}
+
+.problembox {
+    overflow: hidden;
+}
