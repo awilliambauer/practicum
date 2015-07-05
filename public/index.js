@@ -220,7 +220,7 @@ function getUsername() {
     return $("#__username").text();
 }
 
-var cookieKey = "csed-consent-form-responded";
+var cookieKeyPrefix = "csed-consent-form-";
 
 /**
  * Checks cookies to see whether they've responded?
@@ -230,7 +230,8 @@ var cookieKey = "csed-consent-form-responded";
 function hasRespondedToConsentForm() {
     // Looks like poor boolean zen, necessary because string "false"
     // evaluates to true.
-    return $.cookie(cookieKey) === "true";
+    var cookieKey = cookieKeyPrefix + getUsername();
+    return $.cookie(cookieKey) === true;
 }
 
 function showConsentFormModal() {
@@ -269,6 +270,7 @@ function sendSurveyResponse(data) {
 }
 
 function surveySuccess() {
+    var cookieKey = cookieKeyPrefix + getUsername();
     $.cookie(cookieKey, true)
 }
 
