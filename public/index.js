@@ -231,7 +231,7 @@ function hasRespondedToConsentForm() {
     // Looks like poor boolean zen, necessary because string "false"
     // evaluates to true.
     var cookieKey = cookieKeyPrefix + getUsername();
-    return $.cookie(cookieKey) === true;
+    return $.cookie(cookieKey) === "true";
 }
 
 function showConsentFormModal() {
@@ -240,40 +240,44 @@ function showConsentFormModal() {
 }
 
 function installConsentFormModal() {
-    d3.select("#age-input").on("input", checkAge);
+    d3.select("#age-input").on("input", function () {
+        var age = d3.select("#age-input").property("value");
+        if ($.isNumeric(age) && age >= 18) {
+            // GUH. remove the attribute by passing null. Passing false leaves the attribute there,
+            //      which leaves the element disabled.
+            d3.select("#consent-form-agree").attr("disabled", null);
+        } else {
+            d3.select("#consent-form-agree").attr("disabled", true);
+        }
+    });
+    $("#age-input").keypress(function(e){
+        if(e.keyCode==13 && !d3.select("#consent-form-agree").attr("disabled")) {
+            $('#consent-form-agree').click();
+        }
+    });
 }
 
-function checkAge() {
-    var age = d3.select("#age-input").property("value");
-    if ($.isNumeric(age) && age >= 18) {
-        // GUH. remove the attribute by passing null. Passing false leaves the attribute there,
-        //      which leaves the element disabled.
-        d3.select("#consent-form-agree").attr("disabled", null);
-    } else {
-        d3.select("#consent-form-agree").attr("disabled", true);
-    }
-
-}
 
 function sendConsentFormAgree() {
-    sendSurveyResponse($("#__consent-form-agree-data").text());
+    sendConsentFormResponse($("#__consent-form-agree-data").text());
 }
 
 function sendConsentFormDisagree() {
-    sendSurveyResponse($("#__consent-form-disagree-data").text());
+    sendConsentFormResponse($("#__consent-form-disagree-data").text());
 }
 
-function sendSurveyResponse(data) {
+function sendConsentFormResponse(data) {
+    // TODO -- Eric, here's your spot to send the data. I premade an object that might be good enough, it's
+    //         passed through the DOM into this function
     console.log("Want to send data: " + data + ", assuming success");
 
-    surveySuccess();
+    consentFormResponseSuccess();
 }
 
-function surveySuccess() {
+function consentFormResponseSuccess() {
     var cookieKey = cookieKeyPrefix + getUsername();
-    $.cookie(cookieKey, true)
+    $.cookie(cookieKey, true);
 }
-
 
 
 (function($) {
