@@ -1,5 +1,8 @@
 /**
  * Created by Varun on 4/28/2015.
+ *
+ * @whitab on 7/4/2015 --  I think we can get rid of this file and just use the bootstrap nav.
+ *                         Keeping it around until everything shakes out with the nav.
  */
 $(document).ready(function() {
      "use strict";
