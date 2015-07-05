@@ -140,7 +140,26 @@ function HelperObject() {
 			result = leftOperand.value / rightOperand.value;
 		}
 		else if (operator.value == "+") {
-			result = leftOperand.value + rightOperand.value;
+
+            // Need a little magic here: If this is string concat with a double,
+            // need to make sure that we concat in the .0, because JS will treat
+            // 4.0 like 4.
+            var lhv = leftOperand.value;
+            var rhv = rightOperand.value;
+
+            if (leftOperand.type == "double" && rightOperand.type == "string") {
+                if (leftOperand.value - Math.floor(leftOperand.value) == 0) {
+                    lhv = leftOperand.value.toFixed(1);
+                }
+            }
+
+            if (leftOperand.type == "string" && rightOperand.type == "double") {
+                if (rightOperand.value - Math.floor(rightOperand.value) == 0) {
+                    rhv = rightOperand.value.toFixed(1);
+                }
+            }
+
+			result = lhv + rhv;
 		}
 		else if (operator.value == "-") {
 			result = leftOperand.value - rightOperand.value;
@@ -148,16 +167,26 @@ function HelperObject() {
 
 		state.problemLines[problemLine][operatorIndex-1].value = result;
 
-		// somewhat hacky way to figure out the type, since javascript doesn't have doubles
-		if ((leftOperand.type == "double" || rightOperand.type == "double") && result.toString().indexOf(".") == -1 ) {
-			result = result.toFixed(1);
-			state.problemLines[problemLine][operatorIndex-1].type = "double";
+
+        // If either operand was a string, the result is a string
+        if (leftOperand.type == "string" || rightOperand.type == "string") {
+            state.problemLines[problemLine][operatorIndex-1].type = "string";
+
+        // Javascript doesn't put any type info into the the numbers, so we have to keep track
+        // If either operand was a double, then the result is a double.
+        } else if ((leftOperand.type == "double" || rightOperand.type == "double")) {
+            result = result.toFixed(1);
+            state.problemLines[problemLine][operatorIndex-1].type = "double";
 		}
+
+        // Otherwise, it's gonna be an int.
 		else if (typeof result == "number") {
-			state.problemLines[problemLine][operatorIndex-1].type = "int";
+            state.problemLines[problemLine][operatorIndex-1].type = "int";
 		}
 		else {
-			state.problemLines[problemLine][operatorIndex-1].type = typeof result;
+            console.error("Expressions thoughtProcess -- Encountered a type we weren't expecting: " + (typeof result));
+            state.problemLines[problemLine][operatorIndex-1].type = typeof result;
+
 		}
 
 		return result;
