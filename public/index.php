@@ -122,9 +122,11 @@ $disagreeData = array_merge(['response' => 'disagree'], $studentData);
                         Researchers
                     </h4>
                     <p>
-                        Eleanor O’Rourke, Computer Science & Engineering, eorourke@cs.washington.edu, 413-259-7352
-                        Eric Butler, Computer Science & Engineering, edbutler@cs.washington.edu, 724-355-7904
-                        Aaron Bauer, Computer Science & Engineering, awb@cs.washington.edu, 206-348-3268
+                        <ul>
+                            <li>Eleanor O’Rourke, Computer Science & Engineering, eorourke@cs.washington.edu, 413-259-7352</li>
+                            <li>Eric Butler, Computer Science & Engineering, edbutler@cs.washington.edu, 724-355-7904</li>
+                            <li>Aaron Bauer, Computer Science & Engineering, awb@cs.washington.edu, 206-348-3268</li>
+                        </ul>
                     </p>
 
                     <h4>
@@ -200,6 +202,8 @@ $disagreeData = array_merge(['response' => 'disagree'], $studentData);
                     <label id="age-input-label" for="age-input">
                         Your age:
                     </label>
+
+
                     <input type="number" id="age-input" class="form-horizontal input-sm" />
 
                     <button id="consent-form-agree" href="#" class="btn btn-primary" disabled="true" onclick="sendConsentFormAgree()" data-dismiss="modal">I Agree</button>
