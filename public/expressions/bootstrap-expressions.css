@@ -1,0 +1,187 @@
+/*
+  @whitab on 7/4/2015 says:
+  This is the CSS for expressions problems. The goal is to delete as much out of this file
+  as possible, and rely on bootstrap's stylings. This will get easier once we install scss or
+  less or something.
+*/
+span:hover {
+    cursor: pointer;
+    background-color: #9DE0AD;
+}
+
+.clicked {
+    color: #45ADA8;
+}
+
+.clicked:hover {
+    cursor: auto;
+    background-color: white;
+}
+
+#pagedescription {
+    display: inline-block;
+    margin: auto;
+    font-size: 15pt;
+    border-radius: 10px;
+    border: 2px solid #45ADA8;
+    background-color: white;
+    padding: 10px;
+}
+
+#boxcenter {
+    margin-bottom: 20px;
+}
+
+#problem-area {
+    border-radius: 25px;
+    width: 75%;
+    margin-left: auto;
+    margin-right: auto;
+    overflow: hidden;
+    background-color: #FAFFF3;
+    margin-top: 80px;
+}
+
+#dummy {
+    height: 100px;
+}
+
+h1 {
+    font-size: 40px;
+    margin-bottom: 40px;
+    color: #45ADA8;
+    padding-top: 50px;
+}
+
+#steps {
+    margin-left: auto;
+    margin-right: auto;
+    width: 700px;
+    margin-top: 50px;
+    border: 5px solid #547980;
+    border-radius: 10px;
+    overflow: hidden;
+    padding: 20px;
+    margin-bottom: 20px;
+    background-color: white;
+}
+
+.step {
+    clear: both;
+    font-size: 14pt;
+    text-align: left;
+    float: left;
+    width: 180pt;
+    margin: 0pt;
+}
+
+.expressionStatement {
+    height: 80px;
+}
+
+.exp {
+    float: right;
+    font-size: 25pt;
+    width: 400px;
+    text-align: center;
+    margin: 0pt;
+    vertical-align: text-bottom;
+}
+#answerbox {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#box {
+    width: 200px;
+    margin-bottom: 15px;
+}
+
+#answerbox, h1, h2 {
+    text-align: center;
+}
+
+h2 {
+    margin-bottom: 40px;
+    font-size: 25pt;
+    margin-top: 40px;
+    font-weight: normal;
+}
+
+.buttons {
+    width: 75px;
+}
+
+#submit {
+    float: left;
+}
+
+#nextstep {
+    float: right;
+}
+
+.buttonLineUp {
+    margin-right: 40%;
+    margin-left: 25%;
+    width: 20%;
+    clear:both;
+    float:right;
+    margin-top: 15px;
+}
+
+.highlight1 {
+    color: red;
+}
+
+.highlight2 {
+    color: green;
+}
+
+.highlight3 {
+    color: blue;
+}
+
+.hiddenSteps {
+    display: none;
+}
+
+.visibleSteps {
+    display: block;
+}
+
+.prompt {
+    clear: both;
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 30px;
+}
+
+.finalanswer {
+    text-align: center;
+    font-size: 32pt;
+    clear: both;
+}
+
+input {
+    font-size: 25pt;
+    width: 60px;
+}
+
+#correct {
+    font-size: 20pt;
+    margin: 60px;
+    clear: both;
+}
+
+#error {
+    color: darkred;
+    clear: both;
+}
+
+.operators {
+    margin-right: 10px;
+    font-size: 16pt;
+}
+#container {
+    clear:both;
+}

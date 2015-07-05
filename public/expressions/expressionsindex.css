@@ -1,5 +1,10 @@
 /*
-This provides the stylesheet for expressions
+From @whitab on 7/4/15:
+
+This file isn't being used anymore. The goal is to get rid of as much of our own CSS as possible, and customize
+bootstrap styling unless we really need something else.
+
+This file left here for reference, but bootstrap-expressions.css is the working version of the css for expressions.
 */
 
 span:hover {
