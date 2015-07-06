@@ -47,6 +47,12 @@ $disagreeData = array_merge(['response' => 'disagree'], $studentData);
     <meta charset="UTF-8">
 </head>
 <body>
+<script id="category-config" type="text/javascript">
+    <?php
+       include("categoryConfig.json");
+    ?>
+</script>
+
 <!--
     <div class="topnavContainer topnavContainerScroll">
     </div>

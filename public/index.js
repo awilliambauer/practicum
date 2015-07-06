@@ -263,20 +263,26 @@ $(document).ready(function() {
 
 
     // pull in problems
-    var categoryConfig;
-    d3.json(csed.URL_PREFIX + "/categoryConfig.json", function(error, json) {
-        if (error) return console.warn(error);
-        categoryConfig = json;
-        csed.addProblemsToNav(categoryConfig);
-        csed.addProblemsContentToLandingPage(categoryConfig);
+    var categoryJSON = $("#category-config").html();
+    if (!categoryJSON) {
+        console.error("Unable to load problem configuration: need .../public/categoryConfig.json");
+    } else {
+        var categoryConfig = JSON.parse(categoryJSON);
 
-        if (csed.hasProblemToLoad(categoryConfig)) {
-            var problem = csed.getProblemToLoad(categoryConfig);
-            csed.loadProblem(problem);
+        if (!categoryConfig) {
+            console.error("Unable to load problem configuration: need .../public/categoryConfig.json");
         } else {
-            csed.showHome();
+            csed.addProblemsToNav(categoryConfig);
+            csed.addProblemsContentToLandingPage(categoryConfig);
+
+            if (csed.hasProblemToLoad(categoryConfig)) {
+                var problem = csed.getProblemToLoad(categoryConfig);
+                csed.loadProblem(problem);
+            } else {
+                csed.showHome();
+            }
         }
-    });
+    }
 });
 
 (function($) {

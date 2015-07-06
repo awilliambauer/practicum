@@ -47,6 +47,12 @@ $disagreeData = array_merge(['response' => 'disagree'], $studentData);
     <meta charset="UTF-8">
 </head>
 <body>
+<script id="category-config" type="text/javascript">
+    <?php
+       include("../categoryConfig.json");
+    ?>
+</script>
+
 <!--
     <div class="topnavContainer topnavContainerScroll">
     </div>
@@ -213,9 +219,9 @@ $disagreeData = array_merge(['response' => 'disagree'], $studentData);
 
 </div>
 <script type="text/javascript" >
-    $(document).ready(function() {
-        csed.setProblemToLoad("expressions", "86fdd9c7-1004-4e33-a0f4-2fb3634c8958");
-    });
+    // Timing is important here. Set this value before document.ready, because
+    // index.js renders the page onReady
+    csed.setProblemToLoad("expressions", "86fdd9c7-1004-4e33-a0f4-2fb3634c8958");
 </script>
 </body>
 </html>
