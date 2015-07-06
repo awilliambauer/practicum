@@ -214,7 +214,11 @@ var csed = (function() {
 
     function consentFormResponseSuccess() {
         var cookieKey = COOKIE_KEY_PREFIX + getUsername();
-        $.cookie(cookieKey, true);
+        if ($.cookie(cookieKey) !== "true") {
+            $.cookie(cookieKey, true, {
+                path : URL_PREFIX
+            });
+        }
     }
 
     return {
