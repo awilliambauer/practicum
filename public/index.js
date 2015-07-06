@@ -84,7 +84,6 @@ var csed = (function() {
             .append("a")
             .attr("href", function(problem) { return URL_PREFIX + "/" + problem.category + "/" + problem.id + ".php"; } )
             .text(function(problemConfig) { return problemConfig.title; })
-            .on("click", loadProblem)
         ;
     }
 
@@ -154,7 +153,6 @@ var csed = (function() {
             .append("a")
             .attr("href", function(problem) { return URL_PREFIX + "/" + problem.category + "/" + problem.id  + ".php"; } )
             .text(function(problem) { return problem.title; })
-            .on("click", loadProblem )
         ;
     }
 
