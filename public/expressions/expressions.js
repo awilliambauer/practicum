@@ -29,7 +29,7 @@ var expressions = (function(csed) {
     };
 
     // Callback function for navigation javascript. Installs a problem into the page
-    var initialize = function (problemConfig) {
+    var initialize = function(urlPrefix, problemConfig) {
         // this code runs the hard-coded array of state objects stored in state_1.js
 
         /*$.getScript("state_objects/state_1.js", function() {
@@ -42,12 +42,10 @@ var expressions = (function(csed) {
         // this code runs the thoughtProcess.js file to build up the array of state objects
 
         var initState = problemConfig.initialState;
-
-        $.getScript("expressions/thoughtProcess.js", function () {
+        $.getScript(urlPrefix + "/expressions/thoughtProcess.js", function () {
             states = TPLAlgorithm(initState);
             currentStateIndex = 0;
             var expressionHeader = document.getElementById("expressionHeader");
-            console.log("expression header = " + expressionHeader);
             var expression = states[currentStateIndex].problemLines[0];
             expressionHeader.innerHTML = buildExpressionString(expression, []);
         });
