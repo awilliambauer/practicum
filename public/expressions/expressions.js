@@ -11,8 +11,7 @@
  Exports a variable named expressions, and also installs that variable into the
  'csed' global at csed.expressions
  */
-var expressions = (function(csed) {
-
+var expressions = (function() {
     // the current index into the state array
     var currentStateIndex;
 
@@ -42,13 +41,11 @@ var expressions = (function(csed) {
         // this code runs the thoughtProcess.js file to build up the array of state objects
 
         var initState = problemConfig.initialState;
-        $.getScript(urlPrefix + "/expressions/thoughtProcess.js", function () {
-            states = TPLAlgorithm(initState);
-            currentStateIndex = 0;
-            var expressionHeader = document.getElementById("expressionHeader");
-            var expression = states[currentStateIndex].problemLines[0];
-            expressionHeader.innerHTML = buildExpressionString(expression, []);
-        });
+        states = expressionsThoughtProcess.TPLAlgorithm(initState);
+        currentStateIndex = 0;
+        var expressionHeader = document.getElementById("expressionHeader");
+        var expression = states[currentStateIndex].problemLines[0];
+        expressionHeader.innerHTML = buildExpressionString(expression, []);
 
         //if users attempt to check a submitted answer
         d3.select("#submit").on("click", correct);
@@ -865,7 +862,7 @@ var expressions = (function(csed) {
         "reset": reset
     };
 
-}) ();
+}) (expressionsThoughtProcess);
 
 // Register this problem type with the csed global.
 (function(csed) {
