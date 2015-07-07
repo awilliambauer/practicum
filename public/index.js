@@ -224,15 +224,14 @@ var csed = (function() {
     }
 
     function sendConsentFormResponse(data) {
-        console.log("Want to send data: " + data + ", assuming success");
+        console.log("Sending consent data: " + data);
 
         telemetry_client.log_event({
             type: 101,
             detail: data
+        }, true).then(function() {
+            consentFormResponseSuccess();
         });
-
-        // TODO need to block until event has been successfully submitted
-        consentFormResponseSuccess();
     }
 
     function consentFormResponseSuccess() {
