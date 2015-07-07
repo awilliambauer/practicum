@@ -6,10 +6,29 @@
 // Make a little global that categories can decorate.
 var csed = (function() {
     var COOKIE_KEY_PREFIX = "csed-consent-form-";
-    var URL_PREFIX = "/csed";
+    var URL_PREFIX = "";
+    var LOGGING_BASE_URL = 'http://localhost:5555';
+    var LOGGING_RELEASE_ID = '10d48c3a-460e-4675-be78-b708b35c990b';
 
     var categoryToLoad;
     var problemToLoad;
+
+    var userid_promise;
+    var telmetry_client;
+
+    function setupLogging(username) {
+        telemetry_client = papika.TelemetryClient(LOGGING_BASE_URL, LOGGING_RELEASE_ID, '');
+
+        uid_promise = self.telemetry_client.query_user_id({username:username})
+            .then(function(userid) {
+                self.telemetry_client.log_session({
+                    user: userid,
+                    detail: null
+                });
+                return userid;
+            });
+
+    }
 
     function setProblemToLoad(category, problemId) {
         categoryToLoad = category;
@@ -205,10 +224,14 @@ var csed = (function() {
     }
 
     function sendConsentFormResponse(data) {
-        // TODO -- Eric, here's your spot to send the data. I premade an object that might be good enough, it's
-        //         passed through the DOM into this function
         console.log("Want to send data: " + data + ", assuming success");
 
+        telemetry_client.log_event({
+            type: 101,
+            detail: data
+        });
+
+        // TODO need to block until event has been successfully submitted
         consentFormResponseSuccess();
     }
 
@@ -236,6 +259,7 @@ var csed = (function() {
         "sendConsentFormAgree": sendConsentFormAgree,
         "sendConsentFormDisagree": sendConsentFormDisagree,
         "setProblemToLoad": setProblemToLoad,
+        "setupLogging": setupLogging,
         "showConsentFormModal": showConsentFormModal,
         "showHome": showHome
     };
@@ -256,6 +280,9 @@ $(document).ready(function() {
 
     var username = csed.getUsername();
     var hasResponded = csed.hasRespondedToConsentForm();
+
+    // start logging system
+    csed.setupLogging(username);
 
     csed.installConsentFormModal();
     if (!hasResponded) {

@@ -42,6 +42,10 @@ $disagreeData = array_merge(['response' => 'disagree'], $studentData);
     <script src="js/jquery/jquery.cookie.js"></script>
     <script src="js/bootstrap/bootstrap.min.js"></script>
     <script src="js/d3/d3.js"></script>
+
+    <script src="js/fetch/fetch.js"></script>
+    <script src="js/papika.js"></script>
+
     <script src="index.js"></script>
     <script src="expressions/expressions.js"></script>
     <meta charset="UTF-8">
