@@ -1,6 +1,9 @@
 // (function() {
 	"use strict";
 
+	// MODE variable can be either "static" or "interactive"
+	var MODE = "interactive";
+
 	var CURRENT_STEP;
 	var VARIABLES;
 	var AST;
@@ -47,11 +50,24 @@
 		$.get("problems/problem_" + problem + ".txt", function(data) {
 			AST = java_parsing.browser_parse(data);
 			$("#problem_space > pre").html(on_convert(AST));
-			$.getScript("state_objects/state_obj_" + problem + ".js", function(data) {
+
+			// figure out the appropriate state object to use
+			var stateObjectName = "state_objects/state_obj_" + problem;
+			if (MODE == "static") {
+				stateObjectName = stateObjectName + "_static"
+			}
+			stateObjectName = stateObjectName + ".js"
+
+			$.getScript(stateObjectName, function(data) {
 				callVals = getCallVals().toString();
 				$(".content > h2").text("If/Else Mystery Problem " + problem);
 				$(".content > h3 > span").text("ifElseMystery" + problem + "(" + callVals + ")");
 				$("#answer_box > span").prepend("ifElseMystery" + problem + "(" + callVals + ")");
+
+				// test out the thought process algorithm
+				/*$.getScript("thoughtProcess.js", function () {
+					states = TPLAlgorithm(AST, state[0]);
+				});*/
 			});
 		});
 	}
@@ -69,7 +85,7 @@
 
 	// gets the initial values that the method will be called with
 	function getCallVals() {
-		var rawVals = state[1].answer;
+		var rawVals = state[0].initialization;
 		var callVals = [];
 		for (var variable in rawVals) {
 			callVals.push(rawVals[variable]);
@@ -82,21 +98,19 @@
 				   .removeClass("incorrect")
 				   .removeClass("incorrect_select");
 		setTimeout(function() {
-			if (checkUserInput()) {
-				$("#problem_space li").off("mouseover")
-									  .off("click");
-				$(".chosen-next-line").removeClass("chosen-next-line");
-				var currentState = state[CURRENT_STEP]
-				// take away "next" button when finished
-				if (currentState.prompt.indexOf("Answer") != -1) {
-					$(document).off("keydown");
-				}
+			var currentState = state[CURRENT_STEP];
+			if (typeof currentState == "undefined") {
+				// we reached the end of the problem
+				return;
+			}
 
+			if (MODE == "static") {
 				if (CURRENT_STEP == 0) {
 					$("#prompt").show();
 					highlightBlocks();
 				} else {
 					// scroll to the right position
+					if (currentState.lineNum > 0)
 					$("html, body").animate({
 						scrollTop: $("." + currentState.lineNum).offset().top - 200
 					}, 1000);
@@ -105,11 +119,42 @@
 				newGetPrompt(currentState);
 				newHighlightLine(currentState);
 				newHighlightBlock(currentState);
-				newAddComments(currentState);
 				newUpdateVariables(currentState);
 				drawVariableBank();
-				newCrossOutLines(currentState);
-				addInteraction(currentState);
+				//newAddComments(currentState);
+				//newCrossOutLines(currentState);
+				//addInteraction(currentState);
+			}
+			else if (MODE == "interactive") {
+				if (checkUserInput()) {
+					$("#problem_space li").off("mouseover")
+						.off("click");
+					$(".chosen-next-line").removeClass("chosen-next-line");
+
+					// take away "next" button when finished
+					if (currentState.prompt.indexOf("Answer") != -1) {
+						$(document).off("keydown");
+					}
+
+					if (CURRENT_STEP == 0) {
+						$("#prompt").show();
+						highlightBlocks();
+					} else {
+						// scroll to the right position
+						$("html, body").animate({
+							scrollTop: $("." + currentState.lineNum).offset().top - 200
+						}, 1000);
+					}
+					CURRENT_STEP++;
+					newGetPromptWithTitle(currentState);
+					newHighlightLine(currentState);
+					newHighlightBlock(currentState);
+					newAddComments(currentState);
+					newUpdateVariablesWithLineNums(currentState);
+					drawVariableBank();
+					newCrossOutLines(currentState);
+					addInteraction(currentState);
+				}
 			}
 		}, 10);
 	}
@@ -215,10 +260,21 @@
 		$("#prompt").animate({top: nextTop});
 	}
 
+	// Extracts prompt from state and creates HTML
+	function newGetPrompt(state) {
+		if(state.hasOwnProperty("prompt")) {
+			var prompt =  state.prompt;
+			$("#prompt").html(prompt);
+			if (state.hasOwnProperty("lineNum")) {
+				movePrompt(state.lineNum);
+			}
+		}
+	}
+
 	// Extracts prompt from state, splits it into the
 	// Topic and the actual Prompt.
 	// The topic is bold.
-	function newGetPrompt(state) {
+	function newGetPromptWithTitle(state) {
 		if(state.hasOwnProperty("prompt")) {
 			var prompt =  state.prompt;
 			var promptParts = prompt.split(":")
@@ -318,7 +374,8 @@
 		}
  	}
 
-	function newUpdateVariables(state) {
+	// Old function that maintained variables
+	function newUpdateVariablesWithLineNums(state) {
 		// console.log(state.hasOwnProperty("vars"));
 		if(state.hasOwnProperty("vars")) {
 			var vars = state.vars;
@@ -343,6 +400,21 @@
 						}
 					}
 				}
+			}
+		}
+	}
+
+	function newUpdateVariables(state) {
+		if(state.hasOwnProperty("vars")) {
+			var vars = state.vars;
+			for (var variable in vars) {
+				var letter = variable;
+				var value = vars[variable];
+				if (!VARIABLES.hasOwnProperty(letter)) {
+					VARIABLES[letter] = {};
+				}
+				VARIABLES[letter]["name"] = letter;
+				VARIABLES[letter]["value"] = value;
 			}
 		}
 	}

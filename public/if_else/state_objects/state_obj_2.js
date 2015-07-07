@@ -9,7 +9,8 @@
 
 var state = [
     {
-        "prompt": "If/Else: Before starting, note the separate if/else blocks that are highlighted."
+        "prompt": "If/Else: Before starting, note the separate if/else blocks that are highlighted.",
+        "initialization": {"x": 3, "y": 20}
     },
 
     {
