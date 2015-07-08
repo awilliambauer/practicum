@@ -31,7 +31,6 @@ $disagreeData = array_merge(['response' => 'disagree'], $studentData);
     <link href="css/bootstrap/bootstrap.min.css" type="text/css" rel="stylesheet" />
 
     <!-- load local files after to override bootstrap styling -->
-    <link href="common.css" type="text/css" rel="stylesheet" />
     <link href="indexlayout.css" type="text/css" rel="stylesheet" />
     <link href="css/csed.css" type="text/css" rel="stylesheet" />
     <link href="expressions/bootstrap-expressions.css" type="text/css" rel="stylesheet" />
