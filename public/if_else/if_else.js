@@ -64,7 +64,7 @@
 				$(".content > h3 > span").text("ifElseMystery" + problem + "(" + callVals + ")");
 				$("#answer_box > span").prepend("ifElseMystery" + problem + "(" + callVals + ")");
 
-				// test out the thought process algorithm
+				// test out the thought process algorithm -- NOTE: the MODE must be "static" for this to work
 				/*$.getScript("thoughtProcess.js", function () {
 					states = TPLAlgorithm(AST, state[0]);
 				});*/

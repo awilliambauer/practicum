@@ -19,40 +19,42 @@ function TPLAlgorithm(AST, state) {
 		}
 		else if (helper.thisIsAnIfElseStatement(AST, state)) {
 			explain = "We're at the beginning of a new if/else block.";
-			var executeThisUpdateVariableStatement;
+			do {
+				var thisIsTheNextIfElseBranchThatWillExecute = helper.getNextIfElseStatement(AST, state);
+				var thisIsTheNextStatementThatWillExecute;
+				var executeThisUpdateVariableStatement;
+				if (helper.doesThisStatementHaveAConditional(thisIsTheNextIfElseBranchThatWillExecute)) {
+					if (helper.doesTheConditionalEvaluateToTrue(thisIsTheNextIfElseBranchThatWillExecute, state)) {
+						console.log("inside conditional branch " + thisIsTheNextIfElseBranchThatWillExecute["id"]);
+						do {
+							thisIsTheNextStatementThatWillExecute = helper.getNextStatement(thisIsTheNextIfElseBranchThatWillExecute["then_branch"], AST, state);
+							console.log("about to execute statement: " + thisIsTheNextStatementThatWillExecute["id"]);
+							executeThisUpdateVariableStatement = helper.executeUpdateVariableStatement(thisIsTheNextStatementThatWillExecute, AST, state);
+							helper.addToTheVariableBank(executeThisUpdateVariableStatement, AST, state);
+						}
+						while (helper.isThereAnotherStatementToExecute(thisIsTheNextIfElseBranchThatWillExecute["then_branch"], AST, state));
 
-			if (helper.doesTheIfConditionalEvaluateToTrue(AST, state)) {
-				console.log("if evaluates to true");
-				executeThisUpdateVariableStatement = helper.executeUpdateVariableStatement("if", AST, state);
-				helper.addToTheVariableBank(executeThisUpdateVariableStatement, AST, state);
+						break;
+					}
+					else {
+						console.log("skipping conditional branch " + thisIsTheNextIfElseBranchThatWillExecute["id"])
+					}
+				}
+				else {
+					console.log("inside else branch");
+					do {
+						thisIsTheNextStatementThatWillExecute = helper.getNextStatement(thisIsTheNextIfElseBranchThatWillExecute, AST, state);
+						console.log("about to execute statement: " + thisIsTheNextStatementThatWillExecute["id"]);
+						executeThisUpdateVariableStatement = helper.executeUpdateVariableStatement(thisIsTheNextStatementThatWillExecute, AST, state);
+						helper.addToTheVariableBank(executeThisUpdateVariableStatement, AST, state);
+					}
+					while (helper.isThereAnotherStatementToExecute(thisIsTheNextIfElseBranchThatWillExecute, AST, state));
+					break;
+				}
 			}
-			else if (helper.doesTheFirstElseIfEvaluateToTrue(AST, state)) {
-				console.log("first else-if evaluates to true");
-				executeThisUpdateVariableStatement = helper.executeUpdateVariableStatement("else_if_1", AST, state);
-				helper.addToTheVariableBank(executeThisUpdateVariableStatement, AST, state);
-			}
-			else if (helper.doesTheSecondElseIfEvaluateToTrue(AST, state)) {
-				console.log("second else-if evaluates to true");
-				executeThisUpdateVariableStatement = helper.executeUpdateVariableStatement("else_if_2", AST, state);
-				helper.addToTheVariableBank(executeThisUpdateVariableStatement, AST, state);
-			}
-			else if (helper.doesTheThirdElseIfEvaluateToTrue(AST, state)) {
-				console.log("third else-if evaluates to true");
-				executeThisUpdateVariableStatement = helper.executeUpdateVariableStatement("else_if_3", AST, state);
-				helper.addToTheVariableBank(executeThisUpdateVariableStatement, AST, state);
-			}
-			else if (helper.isThereAnElseStatement(AST, state)) {
-				console.log("there is an else statement");
-				executeThisUpdateVariableStatement = helper.executeUpdateVariableStatement("else", AST, state);
-				helper.addToTheVariableBank(executeThisUpdateVariableStatement, AST, state);
-			}
-			else {
-				console.log("does not go into any branch of the if/else statement");
-			}
-
+			while (helper.isThereAnotherIfElseStatement(AST, state));
 		}
 		else if (helper.thisIsAPrintlnStatement(AST, state)) {
-			console.log("found println at index " + thisIsTheNextCodeBlockThatWillExecute);
 			var whatDoesThisPrintlnFunctionPrint = helper.getPrintlnOutput(AST, state);
 			console.log("final answer: " + whatDoesThisPrintlnFunctionPrint)
 			explain = "Enter the solution in the solution box.";
@@ -72,6 +74,8 @@ function addState(state) {
 function HelperObject() {
 
 	this.currentCodeBlockIndex = -1;
+	this.currentIfElseIndex = -1;
+	this.currentStatementIndex = -1;
 
 	this.getIfElseBlocks = function(AST, state) {
 		var ifElseBlockCount = 0;
@@ -150,86 +154,116 @@ function HelperObject() {
 		}
 	};
 
-	this.doesTheIfConditionalEvaluateToTrue = function(AST, state) {
-		return this.evaluateConditional(AST["body"][this.currentCodeBlockIndex]["condition"], state);
+	this.getNextIfElseStatement = function(AST, state) {
+		this.currentIfElseIndex++;
+
+		if (this.currentIfElseIndex == 0) {
+			return AST["body"][this.currentCodeBlockIndex];
+		}
+		else if (this.currentIfElseIndex == 1) {
+			return AST["body"][this.currentCodeBlockIndex]["else_branch"];
+		}
+		else if (this.currentIfElseIndex == 2) {
+			return AST["body"][this.currentCodeBlockIndex]["else_branch"]["else_branch"];
+		}
+		else if (this.currentIfElseIndex == 3) {
+			return AST["body"][this.currentCodeBlockIndex]["else_branch"]["else_branch"]["else_branch"];
+		}
+		else if (this.currentIfElseIndex == 4) {
+			return AST["body"][this.currentCodeBlockIndex]["else_branch"]["else_branch"]["else_branch"]["else_branch"];
+		}
+		else if (this.currentIfElseIndex == 5) {
+			return AST["body"][this.currentCodeBlockIndex]["else_branch"]["else_branch"]["else_branch"]["else_branch"]["else_branch"];
+		}
 	};
 
-	this.doesTheFirstElseIfEvaluateToTrue = function(AST, state) {
-		if (typeof AST["body"][this.currentCodeBlockIndex]["else_branch"] != "undefined") {
-			var elseBranch = AST["body"][this.currentCodeBlockIndex]["else_branch"];
-			if (elseBranch.hasOwnProperty("tag") && elseBranch["tag"] == "if") {
-				return this.evaluateConditional(elseBranch["condition"], state);
-			}
+	this.doesThisStatementHaveAConditional = function(statement) {
+		if (statement.hasOwnProperty("condition")) {
+			return true;
 		}
-
-		return false;
+		else {
+			// we're going into an "else" branch, so we should reset the if/else index
+			this.currentIfElseIndex = -1;
+			return false;
+		}
 	};
 
-	this.doesTheSecondElseIfEvaluateToTrue = function(AST, state) {
-		if (typeof AST["body"][this.currentCodeBlockIndex]["else_branch"] != "undefined") {
-			var elseBranch = AST["body"][this.currentCodeBlockIndex]["else_branch"];
-			if (elseBranch.hasOwnProperty("tag") && elseBranch["tag"] == "if") {
-				if (typeof elseBranch["else_branch"] != "undefined") {
-					var secondElseBranch = AST["body"][this.currentCodeBlockIndex]["else_branch"]["else_branch"];
-					if (secondElseBranch.hasOwnProperty("tag") && secondElseBranch["tag"] == "if") {
-						return this.evaluateConditional(secondElseBranch["condition"], state);
-					}
-				}
-			}
+	this.doesTheConditionalEvaluateToTrue = function(statement, state) {
+		if (this.evaluateConditional(statement["condition"], state)) {
+			// we're going into an "if" or "else if" branch, so we should reset the if/else index
+			this.currentIfElseIndex = -1;
+			return true;
 		}
-
-		return false;
+		else {
+			return false;
+		}
 	};
 
-	this.doesTheThirdElseIfEvaluateToTrue = function(AST, state) {
-		if (typeof AST["body"][this.currentCodeBlockIndex]["else_branch"] != "undefined") {
-			var elseBranch = AST["body"][this.currentCodeBlockIndex]["else_branch"];
-			if (elseBranch.hasOwnProperty("tag") && elseBranch["tag"] == "if") {
-				if (typeof elseBranch["else_branch"] != "undefined") {
-					var secondElseBranch = AST["body"][this.currentCodeBlockIndex]["else_branch"]["else_branch"];
-					if (secondElseBranch.hasOwnProperty("tag") && secondElseBranch["tag"] == "if") {
-						if (typeof secondElseBranch["else_branch"] != "undefined") {
-							var thirdElseBranch = AST["body"][this.currentCodeBlockIndex]["else_branch"]["else_branch"]["else_branch"];
-							if (thirdElseBranch.hasOwnProperty("tag") && thirdElseBranch["tag"] == "if") {
-								return this.evaluateConditional(thirdElseBranch["condition"], state);
-							}
-						}
-					}
-				}
-			}
+	this.isThereAnotherIfElseStatement = function(AST, state) {
+
+		var nextElseBranch;
+
+		if (this.currentIfElseIndex + 1 == 1) {
+			nextElseBranch = AST["body"][this.currentCodeBlockIndex]["else_branch"];
 		}
-		return false;
+		else if (this.currentIfElseIndex + 1 == 2) {
+			nextElseBranch = AST["body"][this.currentCodeBlockIndex]["else_branch"]["else_branch"];
+		}
+		else if (this.currentIfElseIndex + 1 == 3) {
+			nextElseBranch = AST["body"][this.currentCodeBlockIndex]["else_branch"]["else_branch"]["else_branch"];
+		}
+		else if (this.currentIfElseIndex + 1 == 4) {
+			nextElseBranch = AST["body"][this.currentCodeBlockIndex]["else_branch"]["else_branch"]["else_branch"]["else_branch"];
+		}
+		else if (this.currentIfElseIndex + 1 == 5) {
+			nextElseBranch = AST["body"][this.currentCodeBlockIndex]["else_branch"]["else_branch"]["else_branch"]["else_branch"]["else_branch"];
+		}
+
+		if (typeof nextElseBranch != "undefined") {
+			return true;
+		}
+		else {
+			// there are no more statemenets in the code blcok, so we shoud reset the if/else index
+			this.currentIfElseIndex = -1;
+			return false;
+		}
+
 	};
 
-	this.isThereAnElseStatement = function(AST, state) {
-		if (typeof AST["body"][this.currentCodeBlockIndex]["else_branch"] != "undefined") {
-			var elseBranch = AST["body"][this.currentCodeBlockIndex]["else_branch"];
-			if (elseBranch.hasOwnProperty("tag") && elseBranch["tag"] == "if") {
-				if (typeof elseBranch["else_branch"] != "undefined") {
-					var secondElseBranch = AST["body"][this.currentCodeBlockIndex]["else_branch"]["else_branch"];
-					if (secondElseBranch.hasOwnProperty("tag") && secondElseBranch["tag"] == "if") {
-						if (typeof secondElseBranch["else_branch"] != "undefined") {
-							var thirdElseBranch = AST["body"][this.currentCodeBlockIndex]["else_branch"]["else_branch"]["else_branch"];
-							if (thirdElseBranch.hasOwnProperty("tag") && thirdElseBranch["tag"] == "if") {
-								if (typeof thirdElseBranch["else_branch"] != "undefined") {
-									return true;
-								}
-							}
-							else {
-								return true;
-							}
-						}
-					}
-					else {
-						return true;
-					}
-				}
-			}
-			else {
-				return true;
-			}
+	this.getNextStatement = function(statements, AST, state) {
+		this.currentStatementIndex++;
+		return statements[this.currentStatementIndex];
+	};
+
+	this.isThereAnotherStatementToExecute = function(statements, AST, state) {
+		if (typeof statements[this.currentStatementIndex + 1] != "undefined") {
+			console.log("there is another statement");
+			return true;
 		}
-		return false;
+		else {
+			// there are no more statements in this branch, so we should reset the statement index
+			this.currentStatementIndex = -1;
+			console.log("there are no more statements");
+			return false;
+		}
+	};
+
+	this.executeUpdateVariableStatement = function(statement, AST, state) {
+
+		// we are updating a variable's value
+		if (statement["expression"]["tag"] == "binop" && statement["expression"]["operator"] == "=") {
+			var updatedVariable = statement["expression"]["args"][0]["value"];
+			var newValue = this.evaluateArg(statement["expression"]["args"][1], state);
+			console.log("updated variable: " + updatedVariable + " new value: " + newValue);
+
+			var parameters = {}
+			parameters[updatedVariable] = newValue;
+			return parameters;
+		}
+		else {
+			console.log("this expresison type is not currently supported: " + statement["expression"]["tag"]);
+			return null;
+		}
 	};
 
 	this.evaluateConditional = function(condition, state) {
@@ -292,75 +326,6 @@ function HelperObject() {
 		}
 	}
 
-	this.executeUpdateVariableStatement = function(statement, AST, state) {
-
-		var expression;
-
-		if (statement == "if") {
-			expression = AST["body"][this.currentCodeBlockIndex]["then_branch"][0];
-		}
-		else if (statement == "else_if_1") {
-			expression = AST["body"][this.currentCodeBlockIndex]["else_branch"]["then_branch"][0];
-		}
-		else if (statement == "else_if_2") {
-			expression = AST["body"][this.currentCodeBlockIndex]["else_branch"]["else_branch"]["then_branch"][0];
-		}
-		else if (statement == "else_if_3") {
-			expression = AST["body"][this.currentCodeBlockIndex]["else_branch"]["else_branch"]["else_branch"]["then_branch"][0];
-		}
-		else if (statement == "else") {
-			expression = this.getElseExpressionStatement(AST, state);
-		}
-
-		// we are updating a variable's value
-		if (expression["expression"]["tag"] == "binop" && expression["expression"]["operator"] == "=") {
-			var updatedVariable = expression["expression"]["args"][0]["value"];
-			var newValue = this.evaluateArg(expression["expression"]["args"][1], state);
-			console.log("updated variable: " + updatedVariable + " new value: " + newValue);
-
-			var parameters = {}
-			parameters[updatedVariable] = newValue;
-			return parameters;
-		}
-		else {
-			console.log("this expresison type is not currently supported: " + expression["expression"]["tag"]);
-			return null;
-		}
-	};
-
-	this.getElseExpressionStatement = function(AST, state) {
-		if (AST["body"][this.currentCodeBlockIndex].hasOwnProperty("else_branch")) {
-			var elseBranch = AST["body"][this.currentCodeBlockIndex]["else_branch"];
-			if (elseBranch.hasOwnProperty("tag") && elseBranch["tag"] == "if") {
-				if (elseBranch.hasOwnProperty("else_branch")) {
-					var secondElseBranch = AST["body"][this.currentCodeBlockIndex]["else_branch"]["else_branch"];
-					if (secondElseBranch.hasOwnProperty("tag") && secondElseBranch["tag"] == "if") {
-						if (secondElseBranch.hasOwnProperty("else_branch")) {
-							var thirdElseBranch = AST["body"][this.currentCodeBlockIndex]["else_branch"]["else_branch"]["else_branch"];
-							if (thirdElseBranch.hasOwnProperty("tag") && thirdElseBranch["tag"] == "if") {
-								if (thirdElseBranch.hasOwnProperty("else_branch")) {
-									return thirdElseBranch["else_branch"][0];
-								}
-							}
-							else {
-								return thirdElseBranch[0];
-							}
-						}
-					}
-					else {
-						return secondElseBranch[0];
-					}
-				}
-			}
-			else {
-				return elseBranch[0];
-			}
-		}
-		return false;
-	};
-
-
-
 	this.thisIsAPrintlnStatement = function(AST, state) {
 		if (AST["body"][this.currentCodeBlockIndex]["tag"] == "expression") {
 			if (AST["body"][this.currentCodeBlockIndex]["expression"].hasOwnProperty("object")) {
@@ -393,7 +358,7 @@ function HelperObject() {
 				string = this.createPrintlnOutput(args[i]["args"], string);
 			}
 			else if (args[i]["tag"] == "identifier" || args[i]["tag"] == "literal") {
-				string = args[i]["value"] + string;
+				string = string + args[i]["value"];
 			}
 		}
 
