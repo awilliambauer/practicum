@@ -199,7 +199,12 @@ var csed = (function() {
 
     function showConsentFormModal() {
         // go modal
-        $("#consent-form-modal").modal("show");
+        var m = $("#consent-form-modal");
+        m.modal({
+              keyboard: false,
+              backdrop: 'static'
+        });
+        m.modal("show");
     }
 
     function installConsentFormModal() {

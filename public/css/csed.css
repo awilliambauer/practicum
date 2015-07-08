@@ -37,3 +37,13 @@ a:hover.btn-primary, a:active.btn-primary, a:focus.btn-primary {
     text-decoration: none;
     color:#ffffff !important;
 }
+
+.modal-body {
+    height: 600px;
+}
+
+.modal-body .overflow {
+    height: 100%;
+    overflow-y: auto;
+}
+
