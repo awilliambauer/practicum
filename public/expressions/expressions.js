@@ -12,23 +12,25 @@
  'csed' global at csed.expressions
  */
 var expressions = (function() {
-    // the current index into the state array
-    var currentStateIndex;
+    // the object that's used to communicate with the simulator
+    var callback;
+
+    // the current state object
+    var state;
 
     // whether or not this is the first time the user is clicking the "step" button
     var firstStep = true;
 
-    var states = [];
 
     // Callback function for navigation javascript -- called before problem load.
     var reset = function() {
         firstStep = true;
         currentStateIndex = 0;
-        states = [];
+        state = {};
     };
 
     // Callback function for navigation javascript. Installs a problem into the page
-    var initialize = function(urlPrefix, problemConfig) {
+    var initialize = function(urlPrefix, problemConfig, callbackObject) {
         // this code runs the hard-coded array of state objects stored in state_1.js
 
         /*$.getScript("state_objects/state_1.js", function() {
@@ -40,11 +42,13 @@ var expressions = (function() {
 
         // this code runs the thoughtProcess.js file to build up the array of state objects
 
-        var initState = problemConfig.initialState;
-        states = expressionsThoughtProcess.TPLAlgorithm(initState);
-        currentStateIndex = 0;
+        callback = callbackObject;
+        state = problemConfig.initialState;
+        console.log("initial state:");
+        console.log(state);
+
         var expressionHeader = document.getElementById("expressionHeader");
-        var expression = states[currentStateIndex].problemLines[0];
+        var expression = state.problemLines[0];
         expressionHeader.innerHTML = buildExpressionString(expression, []);
 
         //if users attempt to check a submitted answer
@@ -60,6 +64,8 @@ var expressions = (function() {
 
     function step() {
         console.log("step!");
+        state = callback.getNextState().state;
+        console.log(state);
 
         var stepHolder;
         if (firstStep) {
@@ -86,23 +92,22 @@ var expressions = (function() {
 
         addStepHTML();
 
-        currentStateIndex++;
     }
 
     function addStepHTML() {
-        for (var i = 0; i < states[currentStateIndex].problemLines.length; i++) {
-            var expression = states[currentStateIndex].problemLines[i];
-            var highlighting = [];//states[currentStateIndex].highlighted[i];
+        for (var i = 0; i < state.problemLines.length; i++) {
+            var expression = state.problemLines[i];
+            var highlighting = [];//state.highlighted[i];
 
             var lineHTML = document.createElement("div");
             lineHTML.setAttribute("id", "firststep");
             lineHTML.classList.add("expressionStatement");
 
             // display the prompt text next to the last line
-            if (i == states[currentStateIndex].problemLines.length - 1) {
+            if (i == state.problemLines.length - 1) {
                 var promptHTML = document.createElement("p");
                 promptHTML.classList.add("step");
-                promptHTML.innerHTML = states[currentStateIndex].promptText + "<div>&nbsp;</div>";
+                promptHTML.innerHTML = state.promptText + "<div>&nbsp;</div>";
                 lineHTML.appendChild(promptHTML);
             }
 
