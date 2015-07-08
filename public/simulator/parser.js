@@ -92,7 +92,7 @@ var simulator_parsing = function() {
         // these are all dicts because javascript doesn't have sets, boo
         var keywords = {
             "if":1, "else":1, "do":1, "while":1, "for":1,
-            "function":1, "var":1, "let":1, "of":1,
+            "function":1, "var":1, "let":1, "of":1, "break":1,
         };
 
         var symbols = {
@@ -229,7 +229,7 @@ var simulator_parsing = function() {
 
     /**
      * tags: function, if, declaration, parameter, expression, for, literal, identifier, index, call,
-     *       reference, postfix, binop
+     *       reference, postfix, binop, break
      */
     var Parser = function(lex) {
         var self = {};
@@ -280,6 +280,7 @@ var simulator_parsing = function() {
                 case "for": stmt = match_foreach(); break;
                 case "if": stmt = match_ifelse(); break;
                 case "while": stmt = match_while(); break;
+                case "break": stmt = match_break(); break;
                 default: stmt = match_simple_statement(true); break;
             }
             stmt.annotations = annotations;
@@ -323,6 +324,15 @@ var simulator_parsing = function() {
                 match_symbol(";");
             }
             return result;
+        }
+
+        function match_break() {
+            match_keyword("break");
+            match_symbol(";");
+            return {
+                id: new_id(),
+                tag: "break"
+            };
         }
 
         function match_dowhile() {
@@ -379,7 +389,7 @@ var simulator_parsing = function() {
             var cond = match_expression(0);
             match_symbol(")");
             var thenb = match_block();
-            var elseb = undefined;
+            var elseb = null;
             if (peek_keyword("else")) {
                 match_keyword("else");
                 if (peek_symbol("{")) {

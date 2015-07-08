@@ -2,3 +2,4 @@
 #JetBrains preference files
 .idea
 public/.htaccess
+node_modules/
