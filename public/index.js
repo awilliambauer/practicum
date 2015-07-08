@@ -1,10 +1,8 @@
-/**
- * Created by Alicheae on 4/20/2015.
- */
 
-
-// Make a little global that categories can decorate.
+/// main page management functions
 var csed = (function() {
+    "use strict";
+
     var COOKIE_KEY_PREFIX = "csed-consent-form-";
     var URL_PREFIX = "";
     var LOGGING_BASE_URL = 'http://localhost:5555';
@@ -14,20 +12,19 @@ var csed = (function() {
     var problemToLoad;
 
     var userid_promise;
-    var telmetry_client;
+    var telemetry_client;
 
     function setupLogging(username) {
         telemetry_client = papika.TelemetryClient(LOGGING_BASE_URL, LOGGING_RELEASE_ID, '');
 
-        uid_promise = self.telemetry_client.query_user_id({username:username})
+        userid_promise = telemetry_client.query_user_id({username:username})
             .then(function(userid) {
-                self.telemetry_client.log_session({
+                telemetry_client.log_session({
                     user: userid,
                     detail: null
                 });
                 return userid;
             });
-
     }
 
     function setProblemToLoad(category, problemId) {
@@ -68,7 +65,7 @@ var csed = (function() {
         return null;
     }
 
-    function addProblemsContentToLandingPage(problemsConfig) {
+    function addProblemsContentToLandingPage(problemsConfig, onProblemStartCallback) {
         var problemArea = d3.select("#problems-content-container").selectAll("div")
                 .data(problemsConfig)
                 .enter()
@@ -101,8 +98,8 @@ var csed = (function() {
             .enter()
             .append("li")
             .append("a")
-            .attr("href", function(problem) { return URL_PREFIX + "/" + problem.category + "/" + problem.id + ".php"; } )
             .text(function(problemConfig) { return problemConfig.title; })
+            .on("click", onProblemStartCallback)
         ;
     }
 
@@ -138,7 +135,7 @@ var csed = (function() {
         });
     }
 
-    function addProblemsToNav(problemsConfig) {
+    function addProblemsToNav(problemsConfig, onProblemStartCallback) {
         // add problems to nav
         d3.select("#problems-nav-container").selectAll("li")
             .data(problemsConfig)
@@ -170,8 +167,8 @@ var csed = (function() {
             .enter()
             .append("li")
             .append("a")
-            .attr("href", function(problem) { return URL_PREFIX + "/" + problem.category + "/" + problem.id  + ".php"; } )
             .text(function(problem) { return problem.title; })
+            .on("click", onProblemStartCallback)
         ;
     }
 
@@ -226,11 +223,14 @@ var csed = (function() {
     function sendConsentFormResponse(data) {
         console.log("Sending consent data: " + data);
 
-        telemetry_client.log_event({
-            type: 101,
-            detail: data
-        }, true).then(function() {
-            consentFormResponseSuccess();
+        userid_promise.then(function() {
+            telemetry_client.log_event({
+                type: 101,
+                detail: data
+            }, true).then(function() {
+                console.info("successfully logged consent response.");
+                consentFormResponseSuccess();
+            });
         });
     }
 
@@ -299,11 +299,15 @@ $(document).ready(function() {
     } else {
         var categoryConfig = JSON.parse(categoryJSON);
 
+        function onProblemStart(problem) {
+            csed.loadProblem(problem);
+        }
+
         if (!categoryConfig) {
             console.error("Unable to load problem configuration: need .../public/categoryConfig.json");
         } else {
-            csed.addProblemsToNav(categoryConfig);
-            csed.addProblemsContentToLandingPage(categoryConfig);
+            csed.addProblemsToNav(categoryConfig, onProblemStart);
+            csed.addProblemsContentToLandingPage(categoryConfig, onProblemStart);
 
             if (csed.hasProblemToLoad(categoryConfig)) {
                 var problem = csed.getProblemToLoad(categoryConfig);

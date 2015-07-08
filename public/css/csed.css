@@ -28,6 +28,10 @@ body {
     color: #E5FCC2;
 }
 
+a {
+    cursor: pointer;
+}
+
 a:hover.btn-primary, a:active.btn-primary, a:focus.btn-primary {
     background-color:#436166 !important;
     text-decoration: none;
