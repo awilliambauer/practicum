@@ -47,8 +47,16 @@ $disagreeData = array_merge(['response' => 'disagree'], $studentData);
     <script src="js/papika.js"></script>
 
     <script src="index.js"></script>
+
+    <script src="simulator/main.js"></script>
+    <script src="simulator/parser.js"></script>
+    <script src="simulator/simulator.js"></script>
+    <script src="simulator/explainer.js"></script>
+    <script src="simulator/algorithms/expressionsHelper.js"></script>
+
     <script src="expressions/thoughtProcess.js"></script>
     <script src="expressions/expressions.js"></script>
+
 </head>
 <body>
     <script id="category-config" type="text/javascript">

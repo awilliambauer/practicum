@@ -104,6 +104,14 @@ var csed = (function() {
         ;
     }
 
+    function CallbackObject() {
+
+        this.getNextState = function() {
+            return main_simulator.next();
+        }
+
+    }
+
     function loadProblem(problemConfig) {
         telemetry_task = userid_promise.then(function() {
              return telemetry_client.start_task({
@@ -138,7 +146,17 @@ var csed = (function() {
             // Here, I'm just using the expressions global because I know what that name is...
             //expressions.initialize();
             if (csed.hasOwnProperty(category)) {
-                csed[category].initialize(URL_PREFIX, problemConfig);
+
+                main_simulator.initialize(category, {state:problemConfig.initialState}).then(function() {
+                    console.log("finished initializing simulator");
+                    csed[category].initialize(URL_PREFIX, problemConfig, new CallbackObject());
+                }, function(error) {
+                    console.error("something went wrong: ");
+                    console.log(error);
+                });
+
+
+                //csed[category].initialize(URL_PREFIX, problemConfig);
             }
         });
     }
