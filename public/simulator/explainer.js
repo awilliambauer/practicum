@@ -11,8 +11,13 @@ var explainer = (function() {
         }
     };
 
+    function format_identifier(id) {
+        return id.replace("_", " ");
+    }
+
     self.explanation_text_of = function(sim_result) {
         var stmt = sim_result.statement;
+        var sr = sim_result.statement_result;
         if (!stmt) return "";
         var cs = sim_result.call_stack[sim_result.call_stack.length - 1];
 
@@ -21,9 +26,9 @@ var explainer = (function() {
                 return "Let's start";
             case "assignment":
                 if (stmt.destination.tag === "index") {
-                    return sim_result.explain.name.replace("_", " ") + "'s " + sim_result.explain.index + " element is " + sim_result.explain.rhs;
+                    return format_identifier(sr.name) + "'s " + sr.index + " element is " + sr.rhs;
                 }
-                return sim_result.explain.name.replace("_", " ") + " is " + sim_result.explain.rhs;
+                return format_identifier(sr.name) + " is " + sr.rhs;
             case "expression":
                 // FIXME
                 return "asdfasdfasdf";

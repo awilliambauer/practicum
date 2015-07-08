@@ -288,8 +288,22 @@ function simulator(ast, globals) {
         while (!self.is_done()) {
             var s = pop_next_statement();
             if (s) {
-                var explain_info = step(s, out_state);
-                return {state:out_state, statement:s, call_stack:copy(call_stack), explain:explain_info};
+                var result = step(s, out_state);
+                var cs = copy(call_stack);
+                return {
+                    // the problem state
+                    state: out_state,
+                    // the most-recently executed statement
+                    statement: s,
+                    // the call stack
+                    call_stack: cs,
+                    // information about the last statement execution
+                    statement_result: result,
+                    // information about current variables
+                    variables: {
+                        in_scope: last(cs).context
+                    }
+                };
             }
         }
 
