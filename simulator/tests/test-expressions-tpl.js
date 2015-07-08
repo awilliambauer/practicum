@@ -1,6 +1,6 @@
 
 
-function HelperObject() {
+function ExpressionsHelperObject() {
 
     this.isThereAtLeastOneMultiplicationDivisionOrModOperator = function(state) {
         var numProblemLines = state.problemLines.length;
@@ -130,7 +130,7 @@ function HelperObject() {
 
 QUnit.test("expressions-tpl", function (assert) {
     var globals = {
-        helper: new HelperObject()
+        helper: new ExpressionsHelperObject()
     };
     var state = {
         problemLines: [

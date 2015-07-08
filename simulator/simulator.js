@@ -213,7 +213,7 @@ function simulator(ast, globals) {
                 // TODO format condition expressions in prompts
                 if (evaluate(stmt.condition, state)) {
                     push_stack_state(stmt.then_branch, 'then');
-                } else {
+                } else if (stmt.else_branch !== null) {
                     push_stack_state(stmt.else_branch, 'else');
                 }
                 break;
@@ -251,9 +251,22 @@ function simulator(ast, globals) {
                     push_stack_state(stmt.parent.body, 'while');
                 }
                 break;
+            case "break":
+                do { // get loop body off the stack, may be inside ifs right now
+                    var loopBody = call_stack.pop();
+                } while (!isLoopMarker(loopBody.marker));
+
+                if (loopBody.marker === 'while' || loopBody.marker === 'do') { // get rid of condition check
+                    last(call_stack).to_execute.pop();
+                }
+                break;
             default:
                 throw new Error("node tag not recognized " + JSON.stringify(stmt));
         }
+    }
+
+    function isLoopMarker(marker) {
+        return marker === "while" || marker === "do" || marker === "foreach";
     }
 
     self.is_done = function() {
