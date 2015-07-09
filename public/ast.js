@@ -1,3 +1,4 @@
+
 var java_ast = function() {
     "use strict";
     var self = {};

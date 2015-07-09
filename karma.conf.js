@@ -15,9 +15,12 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
+      'public/parser.js',
+      'public/ast.js',
       'public/simulator/*.js',
       'tests/**/*.js',
-      {pattern:'tests/**/*.txt', included:false, served:true}
+      {pattern:'tests/**/*.txt', included:false, served:true},
+      {pattern:'tests/**/*.java', included:false, served:true}
     ],
 
 

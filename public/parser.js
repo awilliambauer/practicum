@@ -1,3 +1,4 @@
+
 var java_parsing = function() {
     "use strict";
 
@@ -417,7 +418,7 @@ var java_parsing = function() {
                 case "==": case "!=": case "<=": case ">=": case "<": case ">": return 40;
                 case "&&": case "||": return 30;
                 case "=": return 10;
-                case ";": case ")": case "]": return 0;
+                case ";": case ")": case "]": case ",": return 0;
                 default: throw new Error("unknown operator " + token.value);
             }
         }
@@ -428,12 +429,14 @@ var java_parsing = function() {
             if (!do_skip_open_parn) {
                 match_symbol("(");
             }
-            while (true) {
-                arr.push(matchfn());
-                if (peek_symbol(delimiter)) {
-                    lex.next();
-                } else {
-                    break;
+            if (!peek_symbol(")")) {
+                while (true) {
+                    arr.push(matchfn());
+                    if (peek_symbol(delimiter)) {
+                        lex.next();
+                    } else {
+                        break;
+                    }
                 }
             }
             match_symbol(")");
@@ -535,7 +538,7 @@ var java_parsing = function() {
 
 }();
 
-if (typeof module !== 'undefined') {
+if (typeof module !== 'undefined' && typeof process !== 'undefined') {
     if (process.argv.length <= 2) {
         console.log("Usage: node parser.js <filename>\nWill print a json AST to stdout.");
     } else {
@@ -545,3 +548,4 @@ if (typeof module !== 'undefined') {
         });
     }
 }
+
