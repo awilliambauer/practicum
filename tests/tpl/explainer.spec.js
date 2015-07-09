@@ -10,6 +10,6 @@ describe('explainer prompts', function () {
                     }";
         var data = tpl_test_util.run2(simulator_parsing.browser_parse(algo), {state:{x:0}});
         var prompts = data.map(function(d) { return d.prompt; });
-        console.log(prompts);
+        //console.log(prompts);
     })
 });

@@ -86,7 +86,12 @@ describe('TPL language features', function() {
 
     describe('annotations', function() {
         it("should have annotations", function() {
-            var out = tpl_test_util.run("feat-annotations");
+            var out = tpl_test_util.run("feat-annotations", {args:[2]});
+            var anns = out.map(function(s) { return s.annotations; });
+            console.info(anns);
+            expect(anns[1]).toEqual([{name:'ImAnAnnotation',args:[]}]);
+            expect(anns[2]).toEqual([{name:'ImAnotherAnnotation',args:[]}]);
+            expect(anns[3]).toEqual([{name:'ImANestedAnnotation',args:[]},{name:'AndLookASecond',args:[]}]);
         });
     });
 });
