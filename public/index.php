@@ -31,28 +31,31 @@ $disagreeData = array_merge(['response' => 'disagree'], $studentData);
     <link href="css/bootstrap/bootstrap.min.css" type="text/css" rel="stylesheet" />
 
     <!-- load local files after to override bootstrap styling -->
-    <link href="indexlayout.css" type="text/css" rel="stylesheet" />
+    <link href="css/indexlayout.css" type="text/css" rel="stylesheet" />
     <link href="css/csed.css" type="text/css" rel="stylesheet" />
     <link href="expressions/bootstrap-expressions.css" type="text/css" rel="stylesheet" />
 
     <!-- load jQuery before cookie plugin, bootstrap, d3 -->
-    <script src="js/jquery/jquery-1.11.2.min.js"></script>
+    <script src="vendor/jquery/jquery-1.11.2.min.js"></script>
 
-    <script src="js/jquery/jquery.cookie.js"></script>
-    <script src="js/bootstrap/bootstrap.min.js"></script>
-    <script src="js/d3/d3.js"></script>
+    <script src="vendor/jquery/jquery.cookie.js"></script>
+    <script src="vendor/bootstrap/bootstrap.min.js"></script>
+    <script src="vendor/d3/d3.js"></script>
 
     <!-- polyfill fetch for older browsers -->
-    <script src="js/fetch/fetch.js"></script>
-    <script src="js/papika.js"></script>
+    <script src="vendor/fetch/fetch.js"></script>
+    <script src="vendor/papika.js"></script>
 
-    <script src="index.js"></script>
+    <script src="js/index.js"></script>
 
-    <script src="simulator/main.js"></script>
-    <script src="simulator/parser.js"></script>
-    <script src="simulator/simulator.js"></script>
-    <script src="simulator/explainer.js"></script>
-    <script src="simulator/algorithms/expressionsHelper.js"></script>
+    <script src="js/java/ast.js"></script>
+    <script src="js/java/parser.js"></script>
+
+    <script src="js/simulator/main.js"></script>
+    <script src="js/simulator/parser.js"></script>
+    <script src="js/simulator/simulator.js"></script>
+    <script src="js/simulator/explainer.js"></script>
+    <script src="js/simulator/algorithms/expressionsHelper.js"></script>
 
     <script src="expressions/thoughtProcess.js"></script>
     <script src="expressions/expressions.js"></script>
