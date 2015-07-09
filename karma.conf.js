@@ -10,14 +10,16 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['qunit'],
+    frameworks: ['jasmine'],
 
 
     // list of files / patterns to load in the browser
     files: [
-      'public/simulator/*.js',
+      'public/js/java/*.js',
+      'public/js/simulator/*.js',
       'tests/**/*.js',
-      {pattern:'tests/**/*.txt', included:false, served:true}
+      {pattern:'tests/**/*.tpl', included:false, served:true},
+      {pattern:'tests/**/*.java', included:false, served:true}
     ],
 
 

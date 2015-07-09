@@ -1,10 +1,10 @@
-var test_util = (function () {"use strict";
+var tpl_test_util = (function () {"use strict";
     var self = {};
 
     self.parse = function(algoName) {
         var algoFile = new XMLHttpRequest();
         var source;
-        algoFile.open("GET", "base/tests/simulator/"+algoName+".txt", false);
+        algoFile.open("GET", "base/tests/tpl/"+algoName+".tpl", false);
         algoFile.onreadystatechange = function () {
             source = algoFile.responseText;
         };

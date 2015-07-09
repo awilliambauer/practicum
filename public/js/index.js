@@ -146,6 +146,11 @@ var csed = (function() {
             // Here, I'm just using the expressions global because I know what that name is...
             //expressions.initialize();
             if (csed.hasOwnProperty(category)) {
+                // TODO use this instead of the initial state parameter. for now just test it out if it exists.
+                if (csed[category].create_initial_state) {
+                    var initial_state = csed[category].create_initial_state(problemConfig);
+                    console.info(initial_state);
+                }
 
                 main_simulator.initialize(category, {state:problemConfig.initialState}).then(function() {
                     console.log("finished initializing simulator");
