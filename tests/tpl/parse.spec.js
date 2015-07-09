@@ -2,22 +2,39 @@
 /// tests related to the parser, e.g., can it parse every file, is location information embedded.
 describe('TPL parsing', function() {
     var all_test_files = [
-        "feat-break"
+        "feat-add",
+        "feat-annotations",
+        "feat-assignment",
+        "feat-break",
+        "feat-dowhile",
+        "feat-foreach",
+        "feat-if",
+        "feat-parameters",
+        "feat-reference",
+        "feat-while",
+        "solve-binop",
+    ];
+
+    var all_algo_files = [
+        "expressions"
     ];
 
     it("should parse programs", function() {
-        function check(file) {
-            var ast = tpl_test_util.parse(file);
+        function check(ast) {
             expect(typeof ast).toEqual("object");
         }
 
-        all_test_files.forEach(check);
+        all_test_files.forEach(function(file) {
+            check(tpl_test_util.parse(file));
+        });
+
+        all_algo_files.forEach(function(file) {
+            check(tpl_test_util.parse(file, "base/public/js/tpl/algorithms/"));
+        });
     });
 
     it("should have location info", function() {
-        function check(file) {
-            var ast = tpl_test_util.parse(file);
-
+        function check(ast) {
             // ensure ever ast node has a location object.
             function check_node(node) {
                 expect(typeof node.location).toEqual( "object");
@@ -43,7 +60,13 @@ describe('TPL parsing', function() {
             check_node(ast);
         }
 
-        all_test_files.forEach(check);
+        all_test_files.forEach(function(file) {
+            check(tpl_test_util.parse(file));
+        });
+
+        all_algo_files.forEach(function(file) {
+            check(tpl_test_util.parse(file, "base/public/js/tpl/algorithms/"));
+        });
     });
 
     it("should parse annotations", function() {

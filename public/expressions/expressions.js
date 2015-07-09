@@ -904,34 +904,7 @@ var expressions = (function() {
         stateObject.push(currState);
     }
 
-    function create_initial_state(problemConfig) {
-        function operator_type(op) {
-            switch (op) {
-                case '+': case '-': return 'ASoperator';
-                default: return 'MDMoperator';
-            }
-        }
-
-        function flatten(node) {
-            switch (node.tag) {
-                case 'binop':
-                    var left = flatten(node.args[0]);
-                    var right = flatten(node.args[1]);
-                    return left.concat({type:operator_type(node.operator), value:node.operator}, right);
-                case 'literal':
-                    return [{type:node.type, value:node.value}];
-            }
-        }
-
-        var ast = java_parsing.parse_expression(problemConfig.content);
-
-        return {
-            problemLines: flatten(ast)
-        };
-    }
-
     return {
-        create_initial_state: create_initial_state,
         initialize: initialize,
         reset: reset
     };
