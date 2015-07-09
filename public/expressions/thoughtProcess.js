@@ -70,11 +70,13 @@ var expressionsThoughtProcess = (function() {
         this.getFirstMultiplicationDivisionOrModOperatorFromLeft = function (state) {
             var numProblemLines = state.problemLines.length;
             var currentExpression = state.problemLines[numProblemLines - 1];
-            var MDMoperator;
+            var MDMoperator = {};
+            MDMoperator.type = "lineCell";
+            MDMoperator.line = numProblemLines - 1;
 
             for (var i = 0; i < currentExpression.length; i++) {
                 if (currentExpression[i].type == "MDMoperator") {
-                    MDMoperator = i;
+                    MDMoperator.cell = i;
                     break;
                 }
             }
@@ -85,11 +87,13 @@ var expressionsThoughtProcess = (function() {
         this.getFirstAdditionOrSubtractionOperatorFromLeft = function (state) {
             var numProblemLines = state.problemLines.length;
             var currentExpression = state.problemLines[numProblemLines - 1];
-            var ASoperator;
+            var ASoperator = {};
+            ASoperator.type = "lineCell";
+            ASoperator.line = numProblemLines - 1;
 
             for (var i = 0; i < currentExpression.length; i++) {
                 if (currentExpression[i].type == "ASoperator") {
-                    ASoperator = i;
+                    ASoperator.cell = i;
                     break;
                 }
             }
@@ -98,11 +102,19 @@ var expressionsThoughtProcess = (function() {
         };
 
         this.getLeftOperand = function (state, operatorIndex) {
-            return operatorIndex - 1;
+            var leftOperand = {};
+            leftOperand.type = "lineCell";
+            leftOperand.line = state.problemLines.length - 1;
+            leftOperand.cell = operatorIndex - 1;
+            return leftOperand;
         };
 
         this.getRightOperand = function (state, operatorIndex) {
-            return operatorIndex + 1;
+            var rightOperand = {};
+            rightOperand.type = "lineCell";
+            rightOperand.line = state.problemLines.length - 1;
+            rightOperand.cell = operatorIndex + 1;
+            return rightOperand;
         };
 
         this.createNewLineWithEmptyCell = function (state, operatorIndex) {
@@ -117,7 +129,12 @@ var expressionsThoughtProcess = (function() {
             newProblemLine[operatorIndex - 1].value = "";
 
             state.problemLines.push(newProblemLine);
-            return operatorIndex - 1;
+
+            var emptyCell = {};
+            emptyCell.type = "lineCell";
+            emptyCell.line = state.problemLines.length - 1;
+            emptyCell.cell = operatorIndex - 1;
+            return emptyCell;
         };
 
         this.calculate = function (state, operatorIndex) {

@@ -64,7 +64,7 @@ var expressions = (function() {
 
     function step() {
         console.log("step!");
-        state = callback.getNextState().state;
+        state = callback.getNextState();
         console.log(state);
 
         var stepHolder;
@@ -95,29 +95,65 @@ var expressions = (function() {
     }
 
     function addStepHTML() {
-        for (var i = 0; i < state.problemLines.length; i++) {
-            var expression = state.problemLines[i];
-            var highlighting = [];//state.highlighted[i];
+        var highlighting = getCurrentHighlighting();
+
+        for (var i = 0; i < state.state.problemLines.length; i++) {
+            var expression = state.state.problemLines[i];
 
             var lineHTML = document.createElement("div");
             lineHTML.setAttribute("id", "firststep");
             lineHTML.classList.add("expressionStatement");
 
             // display the prompt text next to the last line
-            if (i == state.problemLines.length - 1) {
+            if (i == state.state.problemLines.length - 1) {
+                var promptText = removeCamelCase(state.prompt);
                 var promptHTML = document.createElement("p");
                 promptHTML.classList.add("step");
-                promptHTML.innerHTML = state.promptText + "<div>&nbsp;</div>";
+                promptHTML.innerHTML = promptText + "<div>&nbsp;</div>";
                 lineHTML.appendChild(promptHTML);
             }
 
             var expressionHTML = document.createElement("div");
             expressionHTML.classList.add("exp");
-            expressionHTML.innerHTML = buildExpressionString(expression, highlighting);
+            expressionHTML.innerHTML = buildExpressionString(expression, highlighting[i]);
             lineHTML.appendChild(expressionHTML);
 
             document.getElementById("steps").appendChild(lineHTML);
         }
+    }
+
+    // look at the current variables in scope to determine which rows and cells should be highlighted
+    function getCurrentHighlighting() {
+        var highlighting = [];
+        for (var i = 0; i < state.state.problemLines.length; i++) {
+            highlighting.push([]);
+        }
+
+        for (var variable in state.variables.in_scope) {
+            var varObject = state.variables.in_scope[variable];
+            if (varObject.hasOwnProperty("value")) {
+                var objectToVisualize = varObject["value"];
+
+                if (objectToVisualize.hasOwnProperty("type")) {
+                    if (objectToVisualize.type == "lineCell") {
+                        highlighting[objectToVisualize.line].push(objectToVisualize.cell);
+                    }
+                    else {
+                        console.error("Unsupported variable type: " + objectToVisualize.type);
+                    }
+                }
+            }
+        }
+
+        return highlighting;
+    }
+
+    function removeCamelCase(string) {
+        // insert a space before all caps
+        string = string.replace(/([A-Z])/g, ' $1');
+        // uppercase the first character
+        string = string.replace(/^./, function(str){ return str.toUpperCase(); });
+        return string;
     }
 
     // create the expression HTML from the array of objects
@@ -125,7 +161,13 @@ var expressions = (function() {
         var expressionString = "";
         for (var i = 0; i < expression.length; i++) {
             if (highlighting.length > 0 && highlighting.indexOf(i) >= 0) {
-                expressionString += "<span class='clicked'>" + getExpressionValue(expression, i) + "</span> ";
+                if (expression[i].type == "empty"){
+                    expressionString += "<span class='empty'>&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;";
+                }
+                else {
+                    expressionString += "<span class='clicked'>" + getExpressionValue(expression, i) + "</span> ";
+                }
+
             }
             else {
                 expressionString += getExpressionValue(expression, i) + " ";
