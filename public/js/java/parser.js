@@ -351,7 +351,7 @@ var java_parsing = function() {
         /// rbp means "right bind power". Top-level expressions should be parsed with match_expression(0).
         function match_expression(rbp) {
             var left = match_prefix();
-            while (rbp < binop_bind_power(lex.peek())) {
+            while (!lex.iseof() && rbp < binop_bind_power(lex.peek())) {
                 left = match_infix(left);
             }
             return left;
@@ -506,36 +506,30 @@ var java_parsing = function() {
             return t.type === expected_type && t.value === expected_value;
         }
 
-        self.parse = function() {
+        self.parse_program = function() {
             return match_program();
+        };
+
+        self.parse_expression = function() {
+            return match_expression(0);
         };
 
         return self;
     };
 
-    function browser_parse(data, callback) {
-        var p = Parser(Lexer(CharStream(data)));
-        return p.parse();
+    var self = {};
+
+    self.parse_program = function(source) {
+        var p = Parser(Lexer(CharStream(source)));
+        return p.parse_program();
     }
 
-    function nodejs_parse(fname, callback) {
-        var fs = require('fs');
-
-        fs.readFile(fname, 'utf8', function (err,data) {
-            if (err) {
-                return console.log(err);
-            }
-            var p = Parser(Lexer(CharStream(data)));
-            var ast = p.parse();
-            callback(ast);
-        });
-    }
-
-    return {
-        nodejs_parse: nodejs_parse,
-        browser_parse: browser_parse
+    self.parse_expression = function(source) {
+        var p = Parser(Lexer(CharStream(source)));
+        return p.parse_expression();
     };
 
+    return self;
 }();
 
 if (typeof module !== 'undefined' && typeof process !== 'undefined') {
@@ -543,8 +537,14 @@ if (typeof module !== 'undefined' && typeof process !== 'undefined') {
         console.log("Usage: node parser.js <filename>\nWill print a json AST to stdout.");
     } else {
         var filename = process.argv[2];
-        java_parsing.nodejs_parse(filename, function(ast) {
-            console.log(JSON.stringify(ast));
+        var fs = require('fs');
+        fs.readFile(filename, 'utf8', function (err,data) {
+            if (err) {
+                console.log(err);
+            } else {
+                var ast = java_parsing.parse_program(data);
+                console.log(JSON.stringify(ast));
+            }
         });
     }
 }

@@ -1,7 +1,7 @@
 
-QUnit.test("java parsing", function (assert) {
+QUnit.test("java program parsing", function (assert) {
     function check(file) {
-        var ast = java_parser_test_util.parse(file);
+        var ast = java_parser_test_util.parse_program(file);
         assert.equal(typeof ast, "object");
     }
 
@@ -16,3 +16,16 @@ QUnit.test("java parsing", function (assert) {
     check("ifelse05");
 });
 
+QUnit.test("java expression parsing", function (assert) {
+
+    function check(source, tag) {
+        var ast = java_parsing.parse_expression(source);
+        assert.equal(typeof ast, "object");
+        assert.equal(ast.tag, tag);
+    }
+
+    check("x", "identifier");
+    check("2", "literal");
+    check('2 + 3 + "asdf"', "binop");
+
+});
