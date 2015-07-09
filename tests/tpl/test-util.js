@@ -18,7 +18,6 @@ var tpl_test_util = (function () {"use strict";
         var globals = options.globals ? options.globals : {Math:Math};
         var args = options.args ? options.args : [];
         var state = options.state ? options.state : {};
-
         var sim = simulator(self.parse(algo), globals);
         // HACK function name currently ignored
         sim.start_function(undefined, args);

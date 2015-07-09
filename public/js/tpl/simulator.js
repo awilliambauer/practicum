@@ -195,6 +195,14 @@ function simulator(ast, globals) {
         // HACK slap the current state in the global context
         globals["state"] = state;
 
+        // evaluate all annotations on this statement first
+        var annotations = stmt.annotations ? stmt.annotations : [];
+        annotations = annotations.map(function(ann) {
+            return {name:ann.name, args:[]};
+        });
+
+        var result;
+
         switch(stmt.tag) {
             case "declaration":
                 add_to_context(stmt.name, undefined);
@@ -206,15 +214,18 @@ function simulator(ast, globals) {
                 switch (lhs.tag) {
                     case "identifier":
                         set_value(lhs.value, rhs_eval);
-                        return {name:lhs.value, rhs:rhs_eval};
+                        result = {name:lhs.value, rhs:rhs_eval};
+                        break;
                     case "reference":
                         resolveRef(lhs.object)[lhs.name] = rhs_eval;
-                        return {name:lhs.name, rhs:rhs_eval};
+                        result = {name:lhs.name, rhs:rhs_eval};
+                        break;
                     case "index":
                         var lookups = getLookupsArray(lhs);
                         var index = evaluate(lhs.index, state);
                         resolveRef(lhs.object)[index] = rhs_eval;
-                        return {name:lookups[0], index:index, rhs:rhs_eval};
+                        result = {name:lookups[0], index:index, rhs:rhs_eval};
+                        break;
                     default:
                         throw new Error("left-hand side of assignment has unrecognized type " + JSON.stringify(lhs));
                 }
@@ -258,14 +269,16 @@ function simulator(ast, globals) {
                     last(call_stack).to_execute.push({tag:'while:condition', parent:stmt});
                     push_stack_state(stmt.body, 'while');
                 }
-                return {condition_info:cond_info};
+                result = {condition_info:cond_info};
+                break;
             case "while:condition":
                 var cond_info = {};
                 if (evaluate(stmt.parent.condition, state, cond_info)) {
                     last(call_stack).to_execute.push({tag:'while:condition', parent:stmt.parent});
                     push_stack_state(stmt.parent.body, 'while');
                 }
-                return {condition_info:cond_info};
+                result = {condition_info:cond_info};
+                break;
             case "break":
                 do { // get loop body off the stack, may be inside ifs right now
                     var loopBody = call_stack.pop();
@@ -278,6 +291,23 @@ function simulator(ast, globals) {
             default:
                 throw new Error("node tag not recognized " + JSON.stringify(stmt));
         }
+
+        var cs = copy(call_stack);
+        return {
+            // the problem state
+            state: state,
+            // the most-recently executed statement
+            statement: stmt,
+            // the call stack
+            call_stack: cs,
+            // information about the last statement execution
+            statement_result: result,
+            // information about current variables
+            variables: {
+                in_scope: last(cs).context
+            },
+            annotations: annotations
+        };
     }
 
     function isLoopMarker(marker) {
@@ -303,22 +333,7 @@ function simulator(ast, globals) {
         while (!self.is_done()) {
             var s = pop_next_statement();
             if (s) {
-                var result = step(s, out_state);
-                var cs = copy(call_stack);
-                return {
-                    // the problem state
-                    state: out_state,
-                    // the most-recently executed statement
-                    statement: s,
-                    // the call stack
-                    call_stack: cs,
-                    // information about the last statement execution
-                    statement_result: result,
-                    // information about current variables
-                    variables: {
-                        in_scope: last(cs).context
-                    }
-                };
+                return step(s, out_state);
             }
         }
 
