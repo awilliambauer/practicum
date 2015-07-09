@@ -203,10 +203,15 @@ function simulator(ast, globals) {
         globals["state"] = state;
 
         // evaluate all annotations on this statement first
-        var annotations = stmt.annotations ? stmt.annotations : [];
-        annotations = annotations.map(function(ann) {
-            return {name:ann.name, args:[]};
-        });
+        var annotations = {};
+        if (stmt.annotations) {
+            stmt.annotations.forEach(function(ann) {
+                if (annotations.hasOwnProperty(ann.name)) {
+                    throw new Error('duplicate annotation!');
+                }
+                annotations[ann.name] = [];
+            });
+        }
 
         var result;
 
