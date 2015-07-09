@@ -11,7 +11,7 @@ var main_simulator = (function () {"use strict";
 
     self.parse = function(algoName) {
 
-        return fetch("js/simulator/algorithms/"+algoName+".txt").then(function(response) {
+        return fetch("js/tpl/algorithms/"+algoName+".txt").then(function(response) {
             if (response.status === 200) {
                 return response.text().then(function(source) {
                     return simulator_parsing.browser_parse(source);

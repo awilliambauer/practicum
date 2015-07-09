@@ -51,11 +51,11 @@ $disagreeData = array_merge(['response' => 'disagree'], $studentData);
     <script src="js/java/ast.js"></script>
     <script src="js/java/parser.js"></script>
 
-    <script src="js/simulator/main.js"></script>
-    <script src="js/simulator/parser.js"></script>
-    <script src="js/simulator/simulator.js"></script>
-    <script src="js/simulator/explainer.js"></script>
-    <script src="js/simulator/algorithms/expressionsHelper.js"></script>
+    <script src="js/tpl/main.js"></script>
+    <script src="js/tpl/parser.js"></script>
+    <script src="js/tpl/simulator.js"></script>
+    <script src="js/tpl/explainer.js"></script>
+    <script src="js/tpl/algorithms/expressionsHelper.js"></script>
 
     <script src="expressions/thoughtProcess.js"></script>
     <script src="expressions/expressions.js"></script>
