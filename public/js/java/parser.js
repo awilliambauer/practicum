@@ -65,6 +65,7 @@ var java_parsing = function() {
         SYMBOL: "SYMBOL",
         IDENTIFIER: "IDENTIFIER",
         INT_LITERAL: "INT_LITERAL",
+        DOUBLE_LITERAL: "DOUBLE_LITERAL",
         STR_LITERAL: "STR_LITERAL",
     };
 
@@ -74,6 +75,7 @@ var java_parsing = function() {
         symbol: function(v) { return {type:TokenType.SYMBOL, value:v}; },
         identifier: function(v) { return {type:TokenType.IDENTIFIER, value:v}; },
         integer: function(v) { return {type:TokenType.INT_LITERAL, value:v}; },
+        double: function(v) { return {type:TokenType.DOUBLE_LITERAL, value:v}; },
         string: function(v) { return {type:TokenType.STR_LITERAL, value:v}; },
     };
 
@@ -182,11 +184,13 @@ var java_parsing = function() {
                 token = ident in keywords ? Token.keyword(ident) : Token.identifier(ident);
             } else if (isdigit(c)) {
                 var num = c;
-                while (!cs.iseof() && isident(cs.peek())) {
+                var is_double = false;
+                while (!cs.iseof() && (isdigit(cs.peek()) || cs.peek() === '.')) {
                     c = cs.next();
+                    is_double = is_double || c === '.';
                     num += c;
                 }
-                token = Token.integer(parseInt(num));
+                token = (is_double ? Token.double : Token.integer)(parseFloat(num));
             } else if (c === '"') {
                 var str = "";
                 while (cs.peek() !== '"') {
@@ -363,8 +367,11 @@ var java_parsing = function() {
             switch (t.type) {
                 // literals
                 case TokenType.INT_LITERAL:
+                    return {id:new_id(), tag:'literal', type:'int', value:t.value};
+                case TokenType.DOUBLE_LITERAL:
+                    return {id:new_id(), tag:'literal', type:'double', value:t.value};
                 case TokenType.STR_LITERAL:
-                    return {id:new_id(), tag:'literal', value:t.value};
+                    return {id:new_id(), tag:'literal', type:'string', value:t.value};
                 case TokenType.IDENTIFIER:
                     return {id:new_id(), tag:'identifier', value:t.value};
                 default: throw_error(t.position, "Expected expression");

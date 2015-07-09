@@ -5,8 +5,9 @@
     "problems": [{
       "id": "86fdd9c7-1004-4e33-a0f4-2fb3634c8958",
       "category": "expressions",
-      "title": "22 % 7 + 4 * 3 - 6.0 / 2",
+      "title": "22 % 7 + 4 * 3 - 6.0 / 2.0",
       "url": "expressions/problemTemplate.html",
+      "content": "22 % 7 + 4 * 3 - 6.0 / 2.0",
       "initialState": {
         "problemLines": [
           [
@@ -29,6 +30,7 @@
       "category": "expressions",
       "title": "\"hello\" + 6 * 3",
       "url": "expressions/problemTemplate.html",
+      "content": "\"hello\" + 6 * 3",
       "initialState": {
         "problemLines": [
           [
@@ -45,6 +47,7 @@
       "category": "expressions",
       "title": "4.0 + \"CSE142\" + 143",
       "url": "expressions/problemTemplate.html",
+      "content": "4.0 + \"CSE142\" + 143",
       "initialState": {
         "problemLines": [
           [
