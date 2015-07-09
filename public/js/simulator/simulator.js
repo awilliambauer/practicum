@@ -118,7 +118,10 @@ function simulator(ast, globals) {
         return l;
     }
 
-    function evaluate(expr, state) {
+    function evaluate(expr, state, sr_info) {
+        if (sr_info === undefined) {
+            sr_info = {}; // fill in dummy object to avoid errors
+        }
         switch (expr.tag) {
             case "binop":
                 var lhs = expr.args[0];
@@ -151,12 +154,20 @@ function simulator(ast, globals) {
                 }
                 break;
             case "reference":
-                return resolveRef(expr.object)[expr.name];
+                sr_info.name = expr.name;
+                sr_info.result = resolveRef(expr.object)[expr.name];
+                return sr_info.result;
             case "identifier":
-                return get_value(expr.value);
+                sr_info.name = expr.value;
+                sr_info.result = get_value(expr.value);
+                return sr_info.result;
             case "index":
-                return resolveRef(expr.object)[evaluate(expr.index, state)];
+                sr_info.name = expr.object;
+                sr_info.index = expr.index;
+                sr_info.result = resolveRef(expr.object)[evaluate(expr.index, state)];
+                return sr_info.result;
             case "literal":
+                sr_info.result = expr.value;
                 return expr.value;
             case "call":
                 var objs = [];
@@ -167,6 +178,8 @@ function simulator(ast, globals) {
                 var fn_this = objs[objs.length - 2];
                 var args = expr.args.map(function (arg) { return evaluate(arg, state)});
                 var ret = fn.apply(fn_this, args);
+                sr_info.name = expr.object.name;
+                sr_info.result = ret;
                 return ret;
             default:
                 throw new Error("expression type not recognized " + JSON.stringify(expr));
@@ -240,17 +253,19 @@ function simulator(ast, globals) {
                 }
                 break;
             case "while":
-                if (evaluate(stmt.condition, state)) {
+                var cond_info = {};
+                if (evaluate(stmt.condition, state, cond_info)) {
                     last(call_stack).to_execute.push({tag:'while:condition', parent:stmt});
                     push_stack_state(stmt.body, 'while');
                 }
-                break;
+                return {condition_info:cond_info};
             case "while:condition":
-                if (evaluate(stmt.parent.condition, state)) {
+                var cond_info = {};
+                if (evaluate(stmt.parent.condition, state, cond_info)) {
                     last(call_stack).to_execute.push({tag:'while:condition', parent:stmt.parent});
                     push_stack_state(stmt.parent.body, 'while');
                 }
-                break;
+                return {condition_info:cond_info};
             case "break":
                 do { // get loop body off the stack, may be inside ifs right now
                     var loopBody = call_stack.pop();
