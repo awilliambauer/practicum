@@ -201,7 +201,7 @@ function expressions_make_initial_state(problemConfig) {
     var ast = java_parsing.parse_expression(problemConfig.content);
 
     return {
-        problemLines: flatten(ast)
+        problemLines: [flatten(ast)]
     };
 }
 

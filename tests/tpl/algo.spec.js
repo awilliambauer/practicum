@@ -14,7 +14,7 @@ describe('TPL algorithms', function() {
         function check(problem, answer) {
             var start = expressions_make_initial_state({content: problem});
             var out = run("expressions", {state:start, globals: {helper: new ExpressionsHelper()}});
-            expect(last(out.state.problemLines)).toEqual(answer);
+            expect(last(out.state.problemLines)[0]).toEqual(answer);
         }
 
         it("1", function(){
@@ -24,7 +24,7 @@ describe('TPL algorithms', function() {
             check('"7"', {value:'7', type:"string"});
         });
         it("3", function(){
-            check("22 % 7 + 4 * 3 - 6.0 / 2.0", {value:2, type:"double"});
+            check("22 % 7 + 4 * 3 - 6.0 / 2.0", {value:10, type:"double"});
         });
         it("4", function(){
             check('"hello" + 6 * 3', {value:'hello18', type:"string"});
