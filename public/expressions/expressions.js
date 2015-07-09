@@ -909,7 +909,7 @@ var expressions = (function() {
         reset: reset
     };
 
-}) (expressionsThoughtProcess);
+}) ();
 
 // Register this problem type with the csed global.
 (function(csed) {

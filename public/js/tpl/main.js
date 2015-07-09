@@ -7,10 +7,13 @@ var main_simulator = (function () {"use strict";
         if (algoName == "expressions") {
             return new ExpressionsHelper();
         }
+        else if (algoName == "ifElse") {
+            return new IfElseHelper();
+        }
     }
 
     self.parse = function(algoName) {
-        return fetch("js/tpl/algorithms/" + algoName + ".tpl").then(function(response) {
+        return fetch("/js/tpl/algorithms/" + algoName + ".tpl").then(function(response) {
             if (response.status === 200) {
                 return response.text().then(function(source) {
                     return simulator_parsing.browser_parse(source);

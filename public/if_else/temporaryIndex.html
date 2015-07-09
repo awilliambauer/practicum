@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <title>Practice-That!</title>
+	<link href="../css/navbar.css" type="text/css" rel="stylesheet" />
+    <link href="if_else.css" type="text/css" rel="stylesheet" />
+	<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.11.2.min.js"></script>
+	<script src="../js/navigationbar.js"></script>
+    <script type="text/javascript" src="java_parser/parser.js"></script>
+    <script type="text/javascript" src="java_parser/ast.js"></script>
+    <script type="text/javascript" src="java_parser/html_generator.js"></script>
+    <script type="text/javascript" src="if_else.js"></script>
+
+	<script src="../js/tpl/main.js"></script>
+	<script src="../js/tpl/parser.js"></script>
+	<script src="../js/tpl/simulator.js"></script>
+	<script src="../js/tpl/explainer.js"></script>
+	<script src="../js/tpl/algorithms/ifElseHelper.js"></script>
+
+    <meta charset="UTF-8">
+</head>
+
+<script>
+
+	window.onload = function () {
+		console.log("in temp");
+		console.log(if_else);
+
+		var state = {
+			"prompt": "First, look at the structure of the code in the problem",
+			"initialization": {"x": 3, "y": 20},
+			"lineNum": 1,
+			"vars": {},
+			"highlighted": []
+		};
+		var AST = JSON.parse('{"tag":"method","id":58,"name":"ifElseMystery1","params":[{"id":1,"tag":"parameter","type":"int","name":"x"},{"id":2,"tag":"parameter","type":"int","name":"y"}],"body":[{"id":3,"tag":"declaration","type":"int","expression":{"id":5,"tag":"binop","operator":"=","args":[{"id":4,"tag":"identifier","value":"z"},{"id":6,"tag":"literal","value":4}]}},{"id":22,"tag":"if","condition":{"id":8,"tag":"binop","operator":"<=","args":[{"id":7,"tag":"identifier","value":"z"},{"id":9,"tag":"identifier","value":"x"}]},"then_branch":[{"id":10,"tag":"expression","expression":{"id":12,"tag":"binop","operator":"=","args":[{"id":11,"tag":"identifier","value":"z"},{"id":14,"tag":"binop","operator":"+","args":[{"id":13,"tag":"identifier","value":"x"},{"id":15,"tag":"literal","value":1}]}]}}],"else_branch":[{"id":16,"tag":"expression","expression":{"id":18,"tag":"binop","operator":"=","args":[{"id":17,"tag":"identifier","value":"z"},{"id":20,"tag":"binop","operator":"+","args":[{"id":19,"tag":"identifier","value":"z"},{"id":21,"tag":"literal","value":9}]}]}}]},{"id":47,"tag":"if","condition":{"id":24,"tag":"binop","operator":">","args":[{"id":23,"tag":"identifier","value":"z"},{"id":25,"tag":"identifier","value":"y"}]},"then_branch":[{"id":26,"tag":"expression","expression":{"id":28,"tag":"postfix","operator":"++","args":[{"id":27,"tag":"identifier","value":"y"}]}}],"else_branch":{"id":46,"tag":"if","condition":{"id":30,"tag":"binop","operator":"<","args":[{"id":29,"tag":"identifier","value":"z"},{"id":31,"tag":"identifier","value":"y"}]},"then_branch":[{"id":32,"tag":"expression","expression":{"id":34,"tag":"binop","operator":"=","args":[{"id":33,"tag":"identifier","value":"y"},{"id":36,"tag":"binop","operator":"-","args":[{"id":35,"tag":"identifier","value":"y"},{"id":37,"tag":"literal","value":3}]}]}}],"else_branch":[{"id":38,"tag":"expression","expression":{"id":40,"tag":"binop","operator":"=","args":[{"id":39,"tag":"identifier","value":"z"},{"id":44,"tag":"binop","operator":"+","args":[{"id":42,"tag":"binop","operator":"+","args":[{"id":41,"tag":"identifier","value":"x"},{"id":43,"tag":"identifier","value":"y"}]},{"id":45,"tag":"literal","value":7}]}]}}]}},{"id":48,"tag":"expression","expression":{"id":57,"tag":"call","object":{"id":51,"tag":"reference","object":{"id":50,"tag":"reference","object":{"id":49,"tag":"identifier","value":"System"},"name":"out"},"name":"println"},"args":[{"id":55,"tag":"binop","operator":"+","args":[{"id":53,"tag":"binop","operator":"+","args":[{"id":52,"tag":"identifier","value":"z"},{"id":54,"tag":"literal","value":" "}]},{"id":56,"tag":"identifier","value":"y"}]}]}}]}');
+
+		var problemConfig = {
+			initialState: state,
+			AST: AST
+		}
+
+		function CallbackObject() {
+			this.getNextState = function() {
+				return main_simulator.next();
+			}
+		}
+
+		main_simulator.initialize("ifElse", {state:state, args:[AST]}).then(function() {
+			console.log("finished initializing simulator");
+			if_else.initialize(null, problemConfig, new CallbackObject());
+		}, function(error) {
+			console.error("something went wrong: ");
+			console.log(error);
+		});
+	};
+
+
+</script>
+<body>
+	<div class="topnavContainer topnavContainerScroll">
+	</div>
+    <div class="content">
+		<div id="title_block">
+			<h1 id="main_title">Practice-that!</h1>
+        </div>
+		<h2></h2>
+		<h3 id="end_title">Current Method call: <span></span></h3>
+    	<div id="problem_space"><pre></pre></div>
+
+    	<div id="answer_box">
+    		<span>
+	    		<input id="answer" type="text" placeholder="Answer">
+    			<br>
+   			</span>
+    		<button id="go_back">Go Back</button>
+    		<a href="resources.html">More Resources</a>
+    	</div>
+
+    	<div id="variable_bank">
+    		<h4 id="variable_bank_title">Variable Bank</h4>
+            <ul id="variable_list">
+                <li class="variable_list_item">
+                    <span class="bank_variable">name</span>
+                    <span class="bank_variable_value">value</span>
+                </li>
+            </ul>
+            <p id="just_updated_explanation"><span id="just_updated_box"></span> => just updated</span></p>
+    	</div>
+
+    	<div id="prompt">Press Enter to start!</div>
+		<div id="footer"></div>
+    </div>
+</body>
+</html>

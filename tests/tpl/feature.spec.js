@@ -83,4 +83,10 @@ describe('TPL language features', function() {
         var states = tpl_test_util.run("feat-parameters", {args:[3,4]});
         expect(last(states).state).toEqual(finish);
     });
+
+    describe('annotations', function() {
+        it("should have annotations", function() {
+            var out = tpl_test_util.run("feat-annotations");
+        });
+    });
 });
