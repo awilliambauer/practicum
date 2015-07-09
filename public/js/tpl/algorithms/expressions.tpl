@@ -2,7 +2,7 @@ function TPLAlgorithm() {
 	let weWillPlaceTheResultOfThisOperationHere;
 
 	while(helper.isThereAtLeastOneMultiplicationDivisionOrModOperator(state)) {
-		[Prompt]
+		[prompt]
 		"Start at the left, and search for the first multiplication, division, or mod operator in the expression";
 		let thisIsTheFirstMultiplicationDivisionOrModOperator;
 		thisIsTheFirstMultiplicationDivisionOrModOperator = helper.getFirstMultiplicationDivisionOrModOperatorFromLeft(state);
@@ -16,7 +16,7 @@ function TPLAlgorithm() {
 	}
 
 	while(helper.isThereAtLeastOneAdditionOrSubtractionOperator(state)) {
-	    [Prompt]
+	    [prompt]
 		"Start at the left, and find the first addition or subtraction operator";
 		let thisIsTheFirstAdditionOrSubtractionOperator;
 		thisIsTheFirstAdditionOrSubtractionOperator = helper.getFirstAdditionOrSubtractionOperatorFromLeft(state);

@@ -24,8 +24,19 @@ var explainer = (function() {
     self.explanation_text_of = function(sim_result) {
         var stmt = sim_result.statement;
         var sr = sim_result.statement_result;
+        var annotations = sim_result.annotations;
         if (!stmt) return "";
         var cs = sim_result.call_stack[sim_result.call_stack.length - 1];
+
+        // a non-empty prompt annotation overrides explanation
+        if (annotations.hasOwnProperty("prompt") && annotations.prompt.length > 0) {
+            if (annotations.prompt.length === 1) { // we expect a single expression as the argument
+                return annotations.prompt[0];
+            } else { // invalid use of prompt
+                throw new Error("prompt annotation expects 0 or 1 arguments, " +
+                                annotations.prompt + " were given");
+            }
+        }
 
         switch(stmt.tag) {
             case "function":
@@ -37,8 +48,9 @@ var explainer = (function() {
                 // in expression thought process, we always ignore the right side when making the prompt
                 return format_identifier(sr.name);
             case "expression":
-                if (stmt.annotations.indexOf("Prompt") !== -1) {
-                    return stmt.expression.value;
+                // empty prompt means use value of expression as prompt
+                if (annotations.hasOwnProperty("prompt")) {
+                    return sr.result;
                 }
                 return "";
             case "if":
@@ -48,8 +60,9 @@ var explainer = (function() {
                     return "Condition is false, take the else branch";
                 }
             case "while":
-                var prompt = format_identifier(sr.condition_info.name) + "? ";
-                if (sr.condition_info.result) {
+            case "while:condition":
+                var prompt = format_identifier(sr.name) + "? ";
+                if (sr.result) {
                     prompt += "Yes.";
                 } else {
                     prompt += "No.";

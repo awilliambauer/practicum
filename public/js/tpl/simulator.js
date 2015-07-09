@@ -126,14 +126,14 @@ function simulator(ast, globals) {
             case "binop":
                 var lhs = expr.args[0];
                 var rhs = expr.args[1];
-                var lhs_info = {}
+                var lhs_info = {};
                 var lv = evaluate(lhs, state, lhs_info);
                 // check for boolean short circuit
                 if (shortCircuit(lv, expr.operator)) {
                     sr_info.result = lv;
                     return lv;
                 }
-                var rhs_info = {}
+                var rhs_info = {};
                 var rv = evaluate(rhs, state, rhs_info);
                 sr_info.name = [lhs_info.name, expr.operator, rhs_info.name].join(" ");
                 if (expr.operator === "+" && (typeof lv === "string" || typeof rv === "string")) {
@@ -213,7 +213,7 @@ function simulator(ast, globals) {
             });
         }
 
-        var result;
+        var result = {};
 
         switch(stmt.tag) {
             case "declaration":
@@ -243,7 +243,7 @@ function simulator(ast, globals) {
                 }
                 break;
             case "expression":
-                evaluate(stmt.expression, state);
+                evaluate(stmt.expression, state, result);
                 break;
             case "if":
                 // TODO format condition expressions in prompts
@@ -276,20 +276,16 @@ function simulator(ast, globals) {
                 }
                 break;
             case "while":
-                var cond_info = {};
-                if (evaluate(stmt.condition, state, cond_info)) {
+                if (evaluate(stmt.condition, state, result)) {
                     last(call_stack).to_execute.push({tag:'while:condition', parent:stmt});
                     push_stack_state(stmt.body, 'while');
                 }
-                result = {condition_info:cond_info};
                 break;
             case "while:condition":
-                var cond_info = {};
-                if (evaluate(stmt.parent.condition, state, cond_info)) {
+                if (evaluate(stmt.parent.condition, state, result)) {
                     last(call_stack).to_execute.push({tag:'while:condition', parent:stmt.parent});
                     push_stack_state(stmt.parent.body, 'while');
                 }
-                result = {condition_info:cond_info};
                 break;
             case "break":
                 do { // get loop body off the stack, may be inside ifs right now
