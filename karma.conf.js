@@ -16,7 +16,7 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       'public/js/java/*.js',
-      'public/js/simulator/*.js',
+      'public/js/tpl/*.js',
       'tests/**/*.js',
       {pattern:'tests/**/*.tpl', included:false, served:true},
       {pattern:'tests/**/*.java', included:false, served:true}
