@@ -298,11 +298,18 @@ var simulator_parsing = function() {
         function match_annotation() {
             var start = lex.position();
             var name = match_ident();
+            var args = [];
+            if (peek_symbol('(')) {
+                match_symbol('(');
+                args = match_delimited_list(function(){return match_expression(0);}, ",", ")");
+            }
+
             return {
                 id: new_id(),
                 location: location(start),
                 tag:'annotation',
                 name: name,
+                args: args
             };
         }
 

@@ -209,7 +209,7 @@ function simulator(ast, globals) {
                 if (annotations.hasOwnProperty(ann.name)) {
                     throw new Error('duplicate annotation!');
                 }
-                annotations[ann.name] = [];
+                annotations[ann.name] = ann.args.map(function(e) { return evaluate(e, state); });
             });
         }
 

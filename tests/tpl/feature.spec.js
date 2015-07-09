@@ -91,6 +91,7 @@ describe('TPL language features', function() {
             expect(anns[1]).toEqual({'ImAnAnnotation':[]});
             expect(anns[2]).toEqual({'ImAnotherAnnotation':[]});
             expect(anns[3]).toEqual({'ImANestedAnnotation':[],'AndLookASecond':[]});
+            expect(anns[4]).toEqual({'Annotation':["a",5]});
         });
     });
 });

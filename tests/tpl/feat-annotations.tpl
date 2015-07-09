@@ -8,6 +8,7 @@ function f(y) {
         [ImANestedAnnotation;AndLookASecond]
         x = x - y;
     }
+    [Annotation("a", 2+3)]
     state.result = x;
 }
 
