@@ -84,6 +84,14 @@ describe('TPL language features', function() {
         expect(last(states).state).toEqual(finish);
     });
 
+    it("should have types", function() {
+        var states = tpl_test_util.run("feat-types");
+        var vars = last(states).variables.in_scope;
+        expect(vars['x']).toEqual({value: 3, type: 'foo'});
+        expect(vars['y']).toEqual({value: 6, type: 'bar'});
+        expect(vars['z']).toEqual({value: 10});
+    });
+
     describe('annotations', function() {
         it("should have annotations", function() {
             var out = tpl_test_util.run("feat-annotations", {args:[2]});

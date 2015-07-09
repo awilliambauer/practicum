@@ -10,6 +10,7 @@ describe('TPL parsing', function() {
         "feat-foreach",
         "feat-if",
         "feat-parameters",
+        "feat-types",
         "feat-reference",
         "feat-while",
         "solve-binop",
@@ -92,6 +93,16 @@ describe('TPL parsing', function() {
         expect(ast.tag).toEqual('function');
         // make sure + left-associates
         expect(ast.body[0].expression.args[1].value).toEqual(3);
+    });
+
+    it("should have types", function() {
+        var ast = tpl_test_util.parse("feat-types");
+        expect(ast.body[0].tag).toEqual('declaration');
+        expect(ast.body[0].type).toEqual('foo');
+        expect(ast.body[1].tag).toEqual('declaration');
+        expect(ast.body[1].type).toEqual('bar');
+        expect(ast.body[2].tag).toEqual('declaration');
+        expect(ast.body[2].type).toEqual(undefined);
     });
 });
 

@@ -101,7 +101,7 @@ var simulator_parsing = function() {
             "=":1, ";":1, ".":1, ",":1,
             "<":1, ">":1, "<=":1, ">=":1, "==":1, "!=":1,
             "+":1, "-":1, "*":1, "/":1, "!":1, "%":1,
-            "++":1, "--":1,
+            "++":1, "--":1, ":":1,
             "&":1, "|":1, "&&":1, "||":1,
         };
 
@@ -441,16 +441,23 @@ var simulator_parsing = function() {
             var start = lex.position();
             match_keyword('let');
             var name = match_ident();
-            //match_keyword(':');
-            //var type = match_type();
+            var type;
+            if (peek_symbol(':')) {
+                match_symbol(':');
+                type = match_type();
+            }
 
             return {
                 id: new_id(),
                 location: location(start),
                 tag: "declaration",
                 name: name,
-                //type: type,
+                type: type,
             };
+        }
+
+        function match_type() {
+            return match_ident();
         }
 
         /// Implementation note: expressions use this technique called top-down operator precedence parsing.

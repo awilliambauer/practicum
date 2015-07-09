@@ -70,9 +70,9 @@ function simulator(ast, globals) {
     }
 
     /// add a new variable to the context, shadowing any conflicting variable name
-    function add_to_context(id, value) {
+    function add_to_context(id, value, type) {
         // add values as objects so they can be changed in children
-        last(call_stack).context[id] = {value:value};
+        last(call_stack).context[id] = {value:value, type:type};
     }
 
     /// set a value in the current context, errors if not a current variable name
@@ -217,7 +217,7 @@ function simulator(ast, globals) {
 
         switch(stmt.tag) {
             case "declaration":
-                add_to_context(stmt.name, undefined);
+                add_to_context(stmt.name, undefined, stmt.type);
                 break;
             case "assignment":
                 var rhs = stmt.expression;
@@ -263,7 +263,8 @@ function simulator(ast, globals) {
                 break;
             case "foreach:increment":
                 push_stack_state(stmt.parent.body);
-                add_to_context(stmt.parent.variable, stmt.element);
+                // TODO foreach should use a declaration with a type
+                add_to_context(stmt.parent.variable, stmt.element, undefined);
                 break;
             case "dowhile":
                 last(call_stack).to_execute.push({tag:'dowhile:condition', parent:stmt});
