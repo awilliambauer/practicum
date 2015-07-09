@@ -4,7 +4,7 @@ var java_parser_test_util = (function () {"use strict";
     self.load = function(name) {
         var algoFile = new XMLHttpRequest();
         var source;
-        algoFile.open("GET", "base/tests/java_parser/"+name+".java", false);
+        algoFile.open("GET", "base/tests/java/"+name+".java", false);
         algoFile.onreadystatechange = function () {
             source = algoFile.responseText;
         };
