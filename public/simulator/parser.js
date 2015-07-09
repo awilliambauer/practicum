@@ -87,6 +87,7 @@ var simulator_parsing = function() {
         var self = {};
 
         var is_peeked = false;
+        var last_position = cs.position();
         var current_token;
 
         // these are all dicts because javascript doesn't have sets, boo
@@ -215,12 +216,13 @@ var simulator_parsing = function() {
         function next() {
             var token = peek();
             is_peeked = false;
+            last_position = cs.position();
             return token;
         }
         self.next = next;
 
         function position() {
-            return cs.position();
+            return last_position;
         }
         self.position = position;
 
@@ -238,7 +240,12 @@ var simulator_parsing = function() {
 
         function new_id() { return ++id_counter; }
 
+        function location(start) {
+            return {start:start, end:lex.position()};
+        }
+
         function match_program() {
+            var start = lex.position();
             // every program is a single function
             match_keyword("function");
             var name = match_ident(); // ignore the class name
@@ -247,8 +254,9 @@ var simulator_parsing = function() {
             var body = match_block();
 
             return {
-                tag: 'function',
                 id: new_id(),
+                location: location(start),
+                tag: 'function',
                 name: name,
                 parameters: params,
                 body: body,
@@ -288,15 +296,18 @@ var simulator_parsing = function() {
         }
 
         function match_annotation() {
+            var start = lex.position();
             var name = match_ident();
             return {
                 id: new_id(),
+                location: location(start),
                 tag:'annotation',
                 name: name,
             };
         }
 
         function match_simple_statement(do_match_ending_semicolon) {
+            var start = lex.position();
             var next = lex.peek();
             var result;
             var expr;
@@ -314,28 +325,33 @@ var simulator_parsing = function() {
                     expr = match_expression(0, true);
                     // HACK translate assignments to their own statement type
                     if (expr.tag === 'binop' && expr.operator === '=') {
-                        result = {id:new_id(), tag:'assignment', expression:expr.args[1], destination:expr.args[0]};
+                        result = {tag:'assignment', expression:expr.args[1], destination:expr.args[0]};
                     } else {
-                        result = {id:new_id(), tag:'expression', expression:expr};
+                        result = {tag:'expression', expression:expr};
                     }
                     break;
             }
             if (do_match_ending_semicolon) {
                 match_symbol(";");
             }
+            result.id = new_id();
+            result.location = location(start);
             return result;
         }
 
         function match_break() {
+            var start = lex.position();
             match_keyword("break");
             match_symbol(";");
             return {
                 id: new_id(),
+                location: location(start),
                 tag: "break"
             };
         }
 
         function match_dowhile() {
+            var start = lex.position();
             match_keyword("do");
             var body = match_block();
             match_keyword("while");
@@ -345,6 +361,7 @@ var simulator_parsing = function() {
             match_symbol(";");
             return {
                 id: new_id(),
+                location: location(start),
                 tag:'dowhile',
                 condition: cond,
                 body: body
@@ -352,6 +369,7 @@ var simulator_parsing = function() {
         }
 
         function match_while() {
+            var start = lex.position();
             match_keyword("while");
             match_symbol("(");
             var cond = match_expression(0);
@@ -359,6 +377,7 @@ var simulator_parsing = function() {
             var body = match_block();
             return {
                 id: new_id(),
+                location: location(start),
                 tag: "while",
                 condition: cond,
                 body: body
@@ -366,6 +385,7 @@ var simulator_parsing = function() {
         }
 
         function match_foreach() {
+            var start = lex.position();
             match_keyword("for");
             match_symbol("(");
             match_keyword("let");
@@ -376,6 +396,7 @@ var simulator_parsing = function() {
             var body = match_block();
             return {
                 id: new_id(),
+                location: location(start),
                 tag:'foreach',
                 variable: variable,
                 collection: collection,
@@ -384,6 +405,7 @@ var simulator_parsing = function() {
         }
 
         function match_ifelse() {
+            var start = lex.position();
             match_keyword("if");
             match_symbol("(");
             var cond = match_expression(0);
@@ -400,6 +422,7 @@ var simulator_parsing = function() {
             }
             return {
                 id: new_id(),
+                location: location(start),
                 tag: 'if',
                 condition: cond,
                 then_branch: thenb,
@@ -408,6 +431,7 @@ var simulator_parsing = function() {
         }
 
         function match_declaration() {
+            var start = lex.position();
             match_keyword('let');
             var name = match_ident();
             //match_keyword(':');
@@ -415,6 +439,7 @@ var simulator_parsing = function() {
 
             return {
                 id: new_id(),
+                location: location(start),
                 tag: "declaration",
                 name: name,
                 //type: type,
@@ -433,14 +458,15 @@ var simulator_parsing = function() {
 
         // match prefix operators or sub-expressions of operators
         function match_prefix() {
+            var start = lex.position();
             var t = lex.next();
             switch (t.type) {
                 // literals
                 case TokenType.INT_LITERAL:
                 case TokenType.STR_LITERAL:
-                    return {id:new_id(), tag:'literal', value:t.value};
+                    return {id:new_id(), location: location(start), tag:'literal', value:t.value};
                 case TokenType.IDENTIFIER:
-                    return {id:new_id(), tag:'identifier', value:t.value};
+                    return {id:new_id(), location: location(start), tag:'identifier', value:t.value};
                 default: throw_error(t.position, "Expected expression");
             }
         }
@@ -451,20 +477,21 @@ var simulator_parsing = function() {
 
         // match binary operators
         function match_infix(left, is_statement) {
+            var start = lex.position();
             var t = lex.next();
             switch (t.value) {
                 // reference
                 case ".":
-                    return {id:new_id(), tag:'reference', object:left, name:match_ident()};
+                    return {id:new_id(), location: location(start), tag:'reference', object:left, name:match_ident()};
                 // method call
                 case "(":
                     var args = match_delimited_list(function(){return match_expression(0);}, ",", ")");
-                    return {id:new_id(), tag:'call', object:left, args:args};
+                    return {id:new_id(), location: location(start), tag:'call', object:left, args:args};
                 // array index
                 case "[":
                     var index = match_expression(0);
                     match_symbol("]");
-                    return {id:new_id(), tag:'index', object:left, index:index};
+                    return {id:new_id(), location: location(start), tag:'index', object:left, index:index};
                 // infix binop or postfix
                 default:
                     if (t.type !== TokenType.SYMBOL) {
@@ -472,7 +499,7 @@ var simulator_parsing = function() {
                     }
 
                     if (t.value in postfix_operators) {
-                        return {id:new_id(), tag:"postfix", operator:t.value, args:[left]};
+                        return {id:new_id(), location: location(start), tag:"postfix", operator:t.value, args:[left]};
                     } else {
                         // assignment can only appear as a statement
                         if (!is_statement && t.value === '=') {
@@ -480,7 +507,7 @@ var simulator_parsing = function() {
                         }
                         // this assumes all operators are left-associative!
                         // if we need to make them right-associative, match the right expr with a lower bind power
-                        return {id:new_id(), tag:"binop", operator:t.value, args:[left, match_expression(binop_bind_power(t))]};
+                        return {id:new_id(), location: location(start), tag:"binop", operator:t.value, args:[left, match_expression(binop_bind_power(t))]};
                     }
             }
         }
@@ -520,10 +547,13 @@ var simulator_parsing = function() {
         }
 
         function match_parameter() {
+            var start = lex.position();
+            var name = match_ident();
             return {
                 id: new_id(),
+                location: location(start),
                 tag: 'parameter',
-                name: match_ident()
+                name: name,
             };
         }
 
