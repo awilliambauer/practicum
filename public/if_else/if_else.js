@@ -1,4 +1,4 @@
-// (function() {
+var if_else = (function() {
 	"use strict";
 
 	// MODE variable can be either "static" or "interactive"
@@ -11,11 +11,11 @@
 	var CORRECT_VARIABLES;
 	var CORRECT_BOOL;
 
-	$(document).ready(function() {
+	/*$(document).ready(function() {
 		CORRECT_BOOL = null;
 		CURRENT_STEP = 0;
 		VARIABLES = {};
-		init();
+		initialize();
 		$("#go_back").click(function() { window.location.href = "../index.html" });
 		// move to the next step if they hit enter or click next
 		$("#next").click(next);
@@ -27,7 +27,7 @@
 		$("#answer_box input").change(function() {
 			checkAnswer();
 		});
-	});
+	});*/
 
 	// checks the entered answer against the real answer to see if they have gotten
 	// the problem correct
@@ -44,7 +44,11 @@
 	// fills in the problem space with the text of the specific problem we're working on,
 	// we will just have to replace "example.txt" with whatever file they store the problem
 	// text in
-	function init() {
+	function inititialize() {
+		CORRECT_BOOL = null;
+		CURRENT_STEP = 0;
+		VARIABLES = {};
+
 		var problem = getProblemNum();
 		var callVals;
 		$.get("problems/problem_" + problem + ".txt", function(data) {
@@ -69,6 +73,18 @@
 					states = TPLAlgorithm(AST, state[0]);
 				});*/
 			});
+		});
+
+		$("#go_back").click(function() { window.location.href = "../index.html" });
+		// move to the next step if they hit enter or click next
+		$("#next").click(next);
+		$(document).keydown(function() {
+			if (event.which == 13) {
+				next();
+			}
+		})
+		$("#answer_box input").change(function() {
+			checkAnswer();
 		});
 	}
 	
@@ -576,4 +592,8 @@
 		return true;
 	}
 
-// })();
+	return {
+		inititialize: inititialize
+	};
+
+ })();
