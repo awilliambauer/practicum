@@ -120,37 +120,43 @@ function simulator(ast, globals) {
 
     function evaluate(expr, state, sr_info) {
         if (sr_info === undefined) {
-            sr_info = {}; // fill in dummy object to avoid errors
+            sr_info = {}; // supply a dummy object to avoid errors
         }
         switch (expr.tag) {
             case "binop":
                 var lhs = expr.args[0];
                 var rhs = expr.args[1];
-                var lv = evaluate(lhs, state);
+                var lhs_info = {}
+                var lv = evaluate(lhs, state, lhs_info);
                 // check for boolean short circuit
                 if (shortCircuit(lv, expr.operator)) {
+                    sr_info.result = lv;
                     return lv;
                 }
-                var rv = evaluate(rhs, state);
+                var rhs_info = {}
+                var rv = evaluate(rhs, state, rhs_info);
+                sr_info.name = [lhs_info.name, expr.operator, rhs_info.name].join(" ");
                 if (expr.operator === "+" && (typeof lv === "string" || typeof rv === "string")) {
-                    return lv + rv;
+                    sr_info.result = lv + rv;
+                    return sr_info.result;
                 } else {
                     switch (expr.operator) {
-                        case "+": return lv + rv;
-                        case "-": return lv - rv;
-                        case "*": return lv * rv;
-                        case "%": return lv % rv;
-                        case "/": return lv / rv;
-                        case ">": return lv > rv;
-                        case ">=": return lv >= rv;
-                        case "<": return lv < rv;
-                        case "<=": return lv <= rv;
-                        case "&&": return lv && rv;
-                        case "||": return lv || rv;
-                        case "==": return lv === rv;
-                        case "!=": return lv !== rv;
+                        case "+": sr_info.result = lv + rv; break;
+                        case "-": sr_info.result = lv - rv; break;
+                        case "*": sr_info.result = lv * rv; break;
+                        case "%": sr_info.result = lv % rv; break;
+                        case "/": sr_info.result = lv / rv; break;
+                        case ">": sr_info.result = lv > rv; break;
+                        case ">=": sr_info.result = lv >= rv; break;
+                        case "<": sr_info.result = lv < rv; break;
+                        case "<=": sr_info.result = lv <= rv; break;
+                        case "&&": sr_info.result = lv && rv; break;
+                        case "||": sr_info.result = lv || rv; break;
+                        case "==": sr_info.result = lv === rv; break;
+                        case "!=": sr_info.result = lv !== rv; break;
                         default: throw new Error("unrecognized operator " + expr.operator);
                     }
+                    return sr_info.result;
                 }
                 break;
             case "reference":
@@ -167,6 +173,7 @@ function simulator(ast, globals) {
                 sr_info.result = resolveRef(expr.object)[evaluate(expr.index, state)];
                 return sr_info.result;
             case "literal":
+                sr_info.name = expr.value
                 sr_info.result = expr.value;
                 return expr.value;
             case "call":
