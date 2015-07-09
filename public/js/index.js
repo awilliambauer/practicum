@@ -125,12 +125,14 @@ var csed = (function() {
         d3.select("#problem-area").remove();
 
         // reset any global state in the category js runner
-        if (csed.hasOwnProperty(problemConfig.category)) {
-            csed[problemConfig.category].reset();
+        if (!csed.hasOwnProperty(problemConfig.category)) {
+            throw new Error("unknown category " + problemConfig.category + "!");
         }
 
+        var problemUI = csed[problemConfig.category];
+
         // Load in the template for the problem
-        d3.html(URL_PREFIX + "/" + problemConfig.url, function(error, problemHtml) {
+        d3.html(URL_PREFIX + "/" + problemUI.template_url, function(error, problemHtml) {
             if (error) return console.warn(error);
 
             // Uh, not sure why I can't append raw html into the dom with D3. Using jQuery for the moment...
@@ -142,27 +144,14 @@ var csed = (function() {
 
             var category = problemConfig.category;
 
-            // bleh, I need a variable with all the category runners in it.
-            // Here, I'm just using the expressions global because I know what that name is...
-            //expressions.initialize();
-            if (csed.hasOwnProperty(category)) {
-                // TODO use this instead of the initial state parameter. for now just test it out if it exists.
-                //if (csed[category].create_initial_state) {
-                //    var initial_state = csed[category].create_initial_state(problemConfig);
-                //    console.info(initial_state);
-                //}
-
-                main_simulator.initialize(category, {state:problemConfig.initialState}).then(function() {
-                    console.log("finished initializing simulator");
-                    csed[category].initialize(URL_PREFIX, problemConfig, new CallbackObject());
-                }, function(error) {
-                    console.error("something went wrong: ");
-                    console.log(error);
-                });
-
-
-                //csed[category].initialize(URL_PREFIX, problemConfig);
-            }
+            var initial_state = problemUI.create_initial_state(problemConfig);
+            main_simulator.initialize(category, {state:initial_state}).then(function() {
+                console.log("finished initializing simulator");
+                problemUI.initialize(URL_PREFIX, problemConfig, new CallbackObject(), initial_state);
+            }, function(error) {
+                console.error("something went wrong: ");
+                console.log(error);
+            });
         });
     }
 
