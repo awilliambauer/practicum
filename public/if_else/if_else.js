@@ -2,21 +2,36 @@ var if_else = (function() {
 	"use strict";
 
 	// MODE variable can be either "static" or "interactive"
-	var MODE = "interactive";
+	var MODE = "static";
 
 	var CURRENT_STEP;
 	var VARIABLES;
 	var AST;
+	var state;
+	var callback;
 	var CORRECT_NEXT_LINE;
 	var CORRECT_VARIABLES;
 	var CORRECT_BOOL;
 
-	/*$(document).ready(function() {
+	// fills in the problem space with the text of the specific problem we're working on,
+	// we will just have to replace "example.txt" with whatever file they store the problem
+	// text in
+	function initialize(urlPrefix, problemConfig, callbackObject) {
 		CORRECT_BOOL = null;
 		CURRENT_STEP = 0;
 		VARIABLES = {};
-		initialize();
-		$("#go_back").click(function() { window.location.href = "../index.html" });
+
+		AST = problemConfig.AST;
+		$("#problem_space > pre").html(on_convert(AST));
+
+		state = problemConfig.initialState;
+		callback = callbackObject;
+
+		var args = getArgumentString().toString();
+		$(".content > h2").text("If/Else Mystery Problem");
+		$(".content > h3 > span").text("ifElseMystery (" + args + ")");
+		$("#answer_box > span").prepend("ifElseMystery (" + args + ")");
+
 		// move to the next step if they hit enter or click next
 		$("#next").click(next);
 		$(document).keydown(function() {
@@ -27,7 +42,7 @@ var if_else = (function() {
 		$("#answer_box input").change(function() {
 			checkAnswer();
 		});
-	});*/
+	}
 
 	// checks the entered answer against the real answer to see if they have gotten
 	// the problem correct
@@ -41,67 +56,9 @@ var if_else = (function() {
 		}
 	}
 
-	// fills in the problem space with the text of the specific problem we're working on,
-	// we will just have to replace "example.txt" with whatever file they store the problem
-	// text in
-	function inititialize() {
-		CORRECT_BOOL = null;
-		CURRENT_STEP = 0;
-		VARIABLES = {};
-
-		var problem = getProblemNum();
-		var callVals;
-		$.get("problems/problem_" + problem + ".txt", function(data) {
-			AST = java_parsing.browser_parse(data);
-			$("#problem_space > pre").html(on_convert(AST));
-
-			// figure out the appropriate state object to use
-			var stateObjectName = "state_objects/state_obj_" + problem;
-			if (MODE == "static") {
-				stateObjectName = stateObjectName + "_static"
-			}
-			stateObjectName = stateObjectName + ".js"
-
-			$.getScript(stateObjectName, function(data) {
-				callVals = getCallVals().toString();
-				$(".content > h2").text("If/Else Mystery Problem " + problem);
-				$(".content > h3 > span").text("ifElseMystery" + problem + "(" + callVals + ")");
-				$("#answer_box > span").prepend("ifElseMystery" + problem + "(" + callVals + ")");
-
-				// test out the thought process algorithm -- NOTE: the MODE must be "static" for this to work
-				/*$.getScript("thoughtProcess.js", function () {
-					states = TPLAlgorithm(AST, state[0]);
-				});*/
-			});
-		});
-
-		$("#go_back").click(function() { window.location.href = "../index.html" });
-		// move to the next step if they hit enter or click next
-		$("#next").click(next);
-		$(document).keydown(function() {
-			if (event.which == 13) {
-				next();
-			}
-		})
-		$("#answer_box input").change(function() {
-			checkAnswer();
-		});
-	}
-	
-	// gets the problem number from the address
-	function getProblemNum() {
-		var probText = window.location.search;
-		if (probText.trim() != "") {
-			var probNum = probText.split("=")[1];
-			return probNum;
-		} else {
-			return 1;
-		}
-	}
-
 	// gets the initial values that the method will be called with
-	function getCallVals() {
-		var rawVals = state[0].initialization;
+	function getArgumentString() {
+		var rawVals = state.initialization;
 		var callVals = [];
 		for (var variable in rawVals) {
 			callVals.push(rawVals[variable]);
@@ -110,69 +67,63 @@ var if_else = (function() {
 	}
 
 	function next() {
+		console.log("step!");
+		state = callback.getNextState();
+		console.log(state);
+
 		$("body *").removeClass("correct")
 				   .removeClass("incorrect")
 				   .removeClass("incorrect_select");
-		setTimeout(function() {
-			var currentState = state[CURRENT_STEP];
-			if (typeof currentState == "undefined") {
-				// we reached the end of the problem
-				return;
-			}
 
-			if (MODE == "static") {
+
+		if (MODE == "static") {
+
+			if (state.state.lineNum > 0) {
+				$("html, body").animate({
+					scrollTop: $("." + state.state.lineNum).offset().top - 200
+				}, 1000);
+			}
+			highlightBlocks();
+			newGetPrompt(state);
+			newHighlightLine(state.state);
+			newHighlightBlock(state.state);
+			newUpdateVariables(state.state);
+			drawVariableBank();
+			//newAddComments(currentState);
+			//newCrossOutLines(currentState);
+			//addInteraction(currentState);
+		}
+		else if (MODE == "interactive") {
+			if (checkUserInput()) {
+				$("#problem_space li").off("mouseover")
+					.off("click");
+				$(".chosen-next-line").removeClass("chosen-next-line");
+
+				// take away "next" button when finished
+				if (state.state.prompt.indexOf("Answer") != -1) {
+					$(document).off("keydown");
+				}
+
 				if (CURRENT_STEP == 0) {
 					$("#prompt").show();
 					highlightBlocks();
 				} else {
 					// scroll to the right position
-					if (currentState.lineNum > 0)
 					$("html, body").animate({
-						scrollTop: $("." + currentState.lineNum).offset().top - 200
+						scrollTop: $("." + state.state.lineNum).offset().top - 200
 					}, 1000);
 				}
 				CURRENT_STEP++;
-				newGetPrompt(currentState);
+				newGetPromptWithTitle(currentState);
 				newHighlightLine(currentState);
 				newHighlightBlock(currentState);
-				newUpdateVariables(currentState);
+				newAddComments(currentState);
+				newUpdateVariablesWithLineNums(currentState);
 				drawVariableBank();
-				//newAddComments(currentState);
-				//newCrossOutLines(currentState);
-				//addInteraction(currentState);
+				newCrossOutLines(currentState);
+				addInteraction(currentState);
 			}
-			else if (MODE == "interactive") {
-				if (checkUserInput()) {
-					$("#problem_space li").off("mouseover")
-						.off("click");
-					$(".chosen-next-line").removeClass("chosen-next-line");
-
-					// take away "next" button when finished
-					if (currentState.prompt.indexOf("Answer") != -1) {
-						$(document).off("keydown");
-					}
-
-					if (CURRENT_STEP == 0) {
-						$("#prompt").show();
-						highlightBlocks();
-					} else {
-						// scroll to the right position
-						$("html, body").animate({
-							scrollTop: $("." + currentState.lineNum).offset().top - 200
-						}, 1000);
-					}
-					CURRENT_STEP++;
-					newGetPromptWithTitle(currentState);
-					newHighlightLine(currentState);
-					newHighlightBlock(currentState);
-					newAddComments(currentState);
-					newUpdateVariablesWithLineNums(currentState);
-					drawVariableBank();
-					newCrossOutLines(currentState);
-					addInteraction(currentState);
-				}
-			}
-		}, 10);
+		}
 	}
 
 	function checkUserInput() {
@@ -593,7 +544,7 @@ var if_else = (function() {
 	}
 
 	return {
-		inititialize: inititialize
+		initialize: initialize
 	};
 
  })();
