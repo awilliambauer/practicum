@@ -20,6 +20,7 @@ module.exports = function(config) {
       'public/js/java/**/*.js',
       'public/js/tpl/**/*.js',
       'tests/**/*.js',
+      {pattern:'**/*.txt', included:false, served:true},
       {pattern:'**/*.tpl', included:false, served:true},
       {pattern:'**/*.java', included:false, served:true}
     ],

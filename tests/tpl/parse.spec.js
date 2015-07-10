@@ -30,7 +30,7 @@ describe('TPL parsing', function() {
         });
 
         all_algo_files.forEach(function(file) {
-            check(tpl_test_util.parse(file, "base/public/js/tpl/algorithms/"));
+            check(tpl_test_util.parse(file, "base/public/js/tpl/algorithms/", ".tpl.txt"));
         });
     });
 
@@ -66,7 +66,7 @@ describe('TPL parsing', function() {
         });
 
         all_algo_files.forEach(function(file) {
-            check(tpl_test_util.parse(file, "base/public/js/tpl/algorithms/"));
+            check(tpl_test_util.parse(file, "base/public/js/tpl/algorithms/", ".tpl.txt"));
         });
     });
 

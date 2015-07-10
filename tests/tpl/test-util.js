@@ -1,11 +1,12 @@
 var tpl_test_util = (function () {"use strict";
     var self = {};
 
-    self.parse = function(algoName, base) {
+    self.parse = function(algoName, base, extension) {
         var algoFile = new XMLHttpRequest();
         var source;
         base = base ? base : "base/tests/tpl/";
-        algoFile.open("GET", base + algoName + ".tpl", false);
+        extension = extension ? extension : ".tpl";
+        algoFile.open("GET", base + algoName + extension, false);
         algoFile.onreadystatechange = function () {
             source = algoFile.responseText;
         };
