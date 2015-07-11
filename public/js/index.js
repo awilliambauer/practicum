@@ -122,7 +122,7 @@ var csed = (function() {
         });
 
         // remove the old problem from the DOM
-        d3.select("#problem-area").remove();
+        d3.selectAll("#problem").remove();
 
         // reset any global state in the category js runner
         if (!csed.hasOwnProperty(problemConfig.category)) {
@@ -132,15 +132,15 @@ var csed = (function() {
         var problemUI = csed[problemConfig.category];
 
         // Load in the template for the problem
-        d3.html(URL_PREFIX + "/" + problemUI.template_url, function(error, problemHtml) {
+        d3.html(problemUI.template_url, function(error, problemHtml) {
             if (error) return console.warn(error);
 
             // Uh, not sure why I can't append raw html into the dom with D3. Using jQuery for the moment...
             //d3.select("#problem").append(problemHtml);
-            $("#problem").append(problemHtml);
+            $("#problem-container").append(problemHtml);
 
             d3.select("#main-page").classed("hidden", true);
-            d3.select("#problem").classed("hidden", false);
+            d3.select("#problem-container").classed("hidden", false);
 
             var category = problemConfig.category;
 
@@ -290,6 +290,10 @@ var csed = (function() {
 
 }) ();
 
+function onProblemStart(problem) {
+    csed.loadProblem(problem);
+}
+
 $(document).ready(function() {
     "use strict";
 
@@ -323,10 +327,6 @@ $(document).ready(function() {
         console.error("Unable to load problem configuration: need .../public/categoryConfig.json");
     } else {
         var categoryConfig = JSON.parse(categoryJSON);
-
-        function onProblemStart(problem) {
-            csed.loadProblem(problem);
-        }
 
         if (!categoryConfig) {
             console.error("Unable to load problem configuration: need .../public/categoryConfig.json");

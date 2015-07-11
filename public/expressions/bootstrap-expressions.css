@@ -4,26 +4,21 @@
   as possible, and rely on bootstrap's stylings. This will get easier once we install scss or
   less or something.
 */
-span:hover {
-    cursor: pointer;
-    background-color: #9DE0AD;
-}
-
-.clicked {
+.expressions_problem .clicked {
     color: #45ADA8;
 }
 
-.clicked:hover {
+.expressions_problem .clicked:hover {
     cursor: auto;
     background-color: white;
 }
 
-.empty {
+.expressions_problem .empty {
     border: 2px solid #45ADA8;
     height: 45px;
 }
 
-#pagedescription {
+.expressions_problem #pagedescription {
     display: inline-block;
     margin: auto;
     font-size: 15pt;
@@ -33,11 +28,11 @@ span:hover {
     padding: 10px;
 }
 
-#boxcenter {
+.expressions_problem #boxcenter {
     margin-bottom: 20px;
 }
 
-#problem-area {
+#problem-area.expressions_problem {
     border-radius: 25px;
     width: 75%;
     margin-left: auto;
@@ -47,21 +42,14 @@ span:hover {
     margin-top: 80px;
 }
 
-#dummy {
+.expressions_problem #dummy {
     height: 100px;
 }
 
-h1 {
-    font-size: 40px;
-    margin-bottom: 40px;
-    color: #45ADA8;
-    padding-top: 50px;
-}
 
-#steps {
+.expressions_problem #steps {
     margin-left: auto;
     margin-right: auto;
-    width: 700px;
     margin-top: 50px;
     border: 5px solid #547980;
     border-radius: 10px;
@@ -71,20 +59,20 @@ h1 {
     background-color: white;
 }
 
-.step {
+.expressions_problem .step {
     clear: both;
     font-size: 14pt;
     text-align: left;
     float: left;
-    width: 180pt;
+    width: 50%;
     margin: 0pt;
 }
 
-.expressionStatement {
+.expressions_problem .expressionStatement {
     height: 80px;
 }
 
-.exp {
+.expressions_problem .exp {
     float: right;
     font-size: 25pt;
     width: 400px;
@@ -92,40 +80,41 @@ h1 {
     margin: 0pt;
     vertical-align: text-bottom;
 }
-#answerbox {
+
+.expressions_problem #answerbox {
     margin-left: auto;
     margin-right: auto;
 }
 
-#box {
+.expressions_problem #box {
     width: 200px;
     margin-bottom: 15px;
 }
 
-#answerbox, h1, h2 {
+.expressions_problem #answerbox {
     text-align: center;
 }
 
-h2 {
+.expressions_problem h2 {
     margin-bottom: 40px;
     font-size: 25pt;
     margin-top: 40px;
     font-weight: normal;
 }
 
-.buttons {
+.expressions_problem .buttons {
     width: 75px;
 }
 
-#submit {
+.expressions_problem #submit {
     float: left;
 }
 
-#nextstep {
+.expressions_problem #nextstep {
     float: right;
 }
 
-.buttonLineUp {
+.expressions_problem .buttonLineUp {
     margin-right: 40%;
     margin-left: 25%;
     width: 20%;
@@ -134,59 +123,60 @@ h2 {
     margin-top: 15px;
 }
 
-.highlight1 {
+.expressions_problem .highlight1 {
     color: red;
 }
 
-.highlight2 {
+.expressions_problem .highlight2 {
     color: green;
 }
 
-.highlight3 {
+.expressions_problem .highlight3 {
     color: blue;
 }
 
-.hiddenSteps {
+.expressions_problem .hiddenSteps {
     display: none;
 }
 
-.visibleSteps {
+.expressions_problem .visibleSteps {
     display: block;
 }
 
-.prompt {
+.expressions_problem .prompt {
     clear: both;
     text-align: center;
     padding-top: 10px;
     padding-bottom: 30px;
 }
 
-.finalanswer {
+.expressions_problem .finalanswer {
     text-align: center;
     font-size: 32pt;
     clear: both;
 }
 
-input {
+.expressions_problem input {
     font-size: 25pt;
     width: 60px;
 }
 
-#correct {
+.expressions_problem #correct {
     font-size: 20pt;
     margin: 60px;
     clear: both;
 }
 
-#error {
+.expressions_problem #error {
     color: darkred;
     clear: both;
 }
 
-.operators {
+.expressions_problem .operators {
     margin-right: 10px;
     font-size: 16pt;
 }
-#container {
+
+.expressions_problem #container {
     clear:both;
 }

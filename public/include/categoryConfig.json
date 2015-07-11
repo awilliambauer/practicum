@@ -18,4 +18,72 @@
       "title": "4.0 + \"CSE142\" + 143",
       "content": "4.0 + \"CSE142\" + 143"
     }]
-}]
+},
+  {
+  "name": "if_else",
+  "title": "If Else Mystery",
+  "description": "Practice conditionals and if/else structures",
+  "problems": [{
+    "id": "a2b016dd-897d-46ee-96ea-106c93b9ed10",
+    "category": "if_else",
+    "title": "Problem 1",
+    "url": "if_else/if_else_problem_template.html",
+    "initialState": {
+      "prompt": "First, look at the structure of the code in the problem",
+      "initialization": {"x": 3, "y": 20},
+      "lineNum": 1,
+      "vars": {},
+      "highlighted": []
+    },
+    "alternateStartingStates": [
+      {
+        "prompt": "First, look at the structure of the code in the problem",
+        "initialization": {"x": 5,"y": 10},
+        "lineNum": 1,
+        "vars": {},
+        "highlighted": []
+      },
+      {
+        "prompt": "First, look at the structure of the code in the problem",
+        "initialization": {"x": 20,"y": 100},
+        "lineNum": 1,
+        "vars": {},
+        "highlighted": []
+      }
+
+    ],
+    "AST": {"tag":"method","id":58,"name":"ifElseMystery1","params":[{"id":1,"tag":"parameter","type":"int","name":"x"},{"id":2,"tag":"parameter","type":"int","name":"y"}],"body":[{"id":3,"tag":"declaration","type":"int","expression":{"id":5,"tag":"binop","operator":"=","args":[{"id":4,"tag":"identifier","value":"z"},{"id":6,"tag":"literal","value":4}]}},{"id":22,"tag":"if","condition":{"id":8,"tag":"binop","operator":"<=","args":[{"id":7,"tag":"identifier","value":"z"},{"id":9,"tag":"identifier","value":"x"}]},"then_branch":[{"id":10,"tag":"expression","expression":{"id":12,"tag":"binop","operator":"=","args":[{"id":11,"tag":"identifier","value":"z"},{"id":14,"tag":"binop","operator":"+","args":[{"id":13,"tag":"identifier","value":"x"},{"id":15,"tag":"literal","value":1}]}]}}],"else_branch":[{"id":16,"tag":"expression","expression":{"id":18,"tag":"binop","operator":"=","args":[{"id":17,"tag":"identifier","value":"z"},{"id":20,"tag":"binop","operator":"+","args":[{"id":19,"tag":"identifier","value":"z"},{"id":21,"tag":"literal","value":9}]}]}}]},{"id":47,"tag":"if","condition":{"id":24,"tag":"binop","operator":">","args":[{"id":23,"tag":"identifier","value":"z"},{"id":25,"tag":"identifier","value":"y"}]},"then_branch":[{"id":26,"tag":"expression","expression":{"id":28,"tag":"postfix","operator":"++","args":[{"id":27,"tag":"identifier","value":"y"}]}}],"else_branch":{"id":46,"tag":"if","condition":{"id":30,"tag":"binop","operator":"<","args":[{"id":29,"tag":"identifier","value":"z"},{"id":31,"tag":"identifier","value":"y"}]},"then_branch":[{"id":32,"tag":"expression","expression":{"id":34,"tag":"binop","operator":"=","args":[{"id":33,"tag":"identifier","value":"y"},{"id":36,"tag":"binop","operator":"-","args":[{"id":35,"tag":"identifier","value":"y"},{"id":37,"tag":"literal","value":3}]}]}}],"else_branch":[{"id":38,"tag":"expression","expression":{"id":40,"tag":"binop","operator":"=","args":[{"id":39,"tag":"identifier","value":"z"},{"id":44,"tag":"binop","operator":"+","args":[{"id":42,"tag":"binop","operator":"+","args":[{"id":41,"tag":"identifier","value":"x"},{"id":43,"tag":"identifier","value":"y"}]},{"id":45,"tag":"literal","value":7}]}]}}]}},{"id":48,"tag":"expression","expression":{"id":57,"tag":"call","object":{"id":51,"tag":"reference","object":{"id":50,"tag":"reference","object":{"id":49,"tag":"identifier","value":"System"},"name":"out"},"name":"println"},"args":[{"id":55,"tag":"binop","operator":"+","args":[{"id":53,"tag":"binop","operator":"+","args":[{"id":52,"tag":"identifier","value":"z"},{"id":54,"tag":"literal","value":" "}]},{"id":56,"tag":"identifier","value":"y"}]}]}}]}
+  },{
+    "id": "270267a8-7399-4357-8e6d-27f6fe7daef6",
+    "category": "if_else",
+    "title": "Problem 2",
+    "url": "if_else/if_else_problem_template.html",
+    "initialState": {
+      "prompt": "First, look at the structure of the code in the problem",
+      "initialization": {"x": 3, "y": 20},
+      "lineNum": 1,
+      "vars": {},
+      "highlighted": []
+    },
+    "alternateStartingStates": [
+      {
+        "prompt": "First, look at the structure of the code in the problem",
+        "initialization": {"x": 5,"y": 10},
+        "lineNum": 1,
+        "vars": {},
+        "highlighted": []
+      },
+      {
+        "prompt": "First, look at the structure of the code in the problem",
+        "initialization": {"x": 20,"y": 100},
+        "lineNum": 1,
+        "vars": {},
+        "highlighted": []
+      }
+
+    ],
+    "AST": {"tag":"method","id":59,"name":"ifElseMystery2","params":[{"id":1,"tag":"parameter","type":"int","name":"x"},{"id":2,"tag":"parameter","type":"int","name":"y"}],"body":[{"id":3,"tag":"declaration","type":"int","expression":{"id":5,"tag":"binop","operator":"=","args":[{"id":4,"tag":"identifier","value":"z"},{"id":6,"tag":"literal","value":2}]}},{"id":16,"tag":"if","condition":{"id":8,"tag":"binop","operator":"<","args":[{"id":7,"tag":"identifier","value":"z"},{"id":9,"tag":"identifier","value":"x"}]},"then_branch":[{"id":10,"tag":"expression","expression":{"id":12,"tag":"binop","operator":"=","args":[{"id":11,"tag":"identifier","value":"x"},{"id":14,"tag":"binop","operator":"+","args":[{"id":13,"tag":"identifier","value":"x"},{"id":15,"tag":"literal","value":12}]}]}}]},{"id":34,"tag":"if","condition":{"id":20,"tag":"binop","operator":">","args":[{"id":18,"tag":"binop","operator":"+","args":[{"id":17,"tag":"identifier","value":"z"},{"id":19,"tag":"identifier","value":"y"}]},{"id":21,"tag":"identifier","value":"x"}]},"then_branch":[{"id":22,"tag":"expression","expression":{"id":24,"tag":"binop","operator":"=","args":[{"id":23,"tag":"identifier","value":"y"},{"id":26,"tag":"binop","operator":"+", "args":[{"id":25,"tag":"identifier","value":"y"},{"id":27,"tag":"literal","value":5}]}]}},{"id":28,"tag":"expression","expression":{"id":30,"tag":"binop","operator":"=","args":[{"id":29,"tag":"identifier","value":"x"},{"id":32,"tag":"binop","operator":"*","args":[{"id":31,"tag":"identifier","value":"x"},{"id":33,"tag":"literal","value":2}]}]}}]},{"id":44,"tag":"if","condition":{"id":36,"tag":"binop","operator":">","args":[{"id":35,"tag":"identifier","value":"y"},{"id":37,"tag":"identifier","value":"x"}]},"then_branch":[{"id":38,"tag":"expression","expression":{"id":40,"tag":"binop","operator":"=","args":[{"id":39,"tag":"identifier","value":"z"},{"id":42,"tag":"binop","operator":"+","args":[{"id":41,"tag":"identifier","value":"z"},{"id":43,"tag":"identifier","value":"y"}]}]}}]},{"id":45,"tag":"expression","expression":{"id":58,"tag":"call","object":{"id":48,"tag":"reference","object":{"id":47,"tag":"reference","object":{"id":46,"tag":"identifier","value":"System"},"name":"out"},"name":"println"},"args":[{"id":56,"tag":"binop","operator":"+","args":[{"id":54,"tag":"binop","operator":"+","args":[{"id":52,"tag":"binop","operator":"+","args":[{"id":50,"tag":"binop","operator":"+","args":[{"id":49,"tag":"identifier","value":"x"},{"id":51,"tag":"literal","value":" "}]},{"id":53,"tag":"identifier","value":"y"}]},{"id":55,"tag":"literal","value":" "}]},{"id":57,"tag":"identifier","value":"z"}]}]}}]}
+  }
+  ]
+}
+]
