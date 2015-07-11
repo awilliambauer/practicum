@@ -6,9 +6,8 @@ function TPLAlgorithm() {
     let nextCodeBlock;
     let thisIsTheNextIfElseBranchThatWillExecute;
     let thisIsTheNextStatementThatWillExecute;
-    let executeThisUpdateVariableStatement;
+    let thisLineUpdatesAVariableValue;
     let whatDoesThisPrintlnFunctionPrint;
-    let executeThisUpdateVariableStatement;
     let crossOutTheBranchLines:crossedOutLines;
 
     let AST;
@@ -44,8 +43,9 @@ function TPLAlgorithm() {
             if (helper.doesThisConditionalEvaluateToTrue(thisIsTheNextIfElseBranchThatWillExecute, state)) {
                 do {
                     thisIsTheNextLineThatWillExecute = helper.getNextStatement(thisIsTheNextIfElseBranchThatWillExecute["then_branch"], AST, state);
-                    executeThisUpdateVariableStatement = helper.executeUpdateVariableStatement(thisIsTheNextIfElseBranchThatWillExecute["then_branch"], AST, state);
-                    helper.addToTheVariableBank(executeThisUpdateVariableStatement, AST, state);
+                    thisLineUpdatesAVariableValue = helper.executeUpdateVariableStatement(thisIsTheNextIfElseBranchThatWillExecute["then_branch"], AST, state);
+                    let updateTheVariableInTheVariableBank:variableBank;
+                    updateTheVariableInTheVariableBank = helper.addToTheVariableBank(thisLineUpdatesAVariableValue, AST, state);
                 }
                 while (helper.isThereAnotherStatementToExecute(thisIsTheNextIfElseBranchThatWillExecute["then_branch"], AST, state));
             }
@@ -66,8 +66,9 @@ function TPLAlgorithm() {
                             crossOutTheBranchLines = helper.crossOutOtherBranches(thisIsTheNextIfElseBranchThatWillExecute, crossOutTheBranchLines, AST, state);
                             do {
                                 thisIsTheNextLineThatWillExecute = helper.getNextStatement(thisIsTheNextIfElseBranchThatWillExecute["then_branch"], AST, state);
-                                executeThisUpdateVariableStatement = helper.executeUpdateVariableStatement(thisIsTheNextIfElseBranchThatWillExecute["then_branch"], AST, state);
-                                helper.addToTheVariableBank(executeThisUpdateVariableStatement, AST, state);
+                                thisLineUpdatesAVariableValue = helper.executeUpdateVariableStatement(thisIsTheNextIfElseBranchThatWillExecute["then_branch"], AST, state);
+                                let updateTheVariableInTheVariableBank:variableBank;
+                                updateTheVariableInTheVariableBank = helper.addToTheVariableBank(thisLineUpdatesAVariableValue, AST, state);
                             }
                             while (helper.isThereAnotherStatementToExecute(thisIsTheNextIfElseBranchThatWillExecute["then_branch"], AST, state));
 
@@ -83,8 +84,9 @@ function TPLAlgorithm() {
                         "We go into the else branch";
                         do {
                             thisIsTheNextLineThatWillExecute = helper.getNextStatement(thisIsTheNextIfElseBranchThatWillExecute, AST, state);
-                            executeThisUpdateVariableStatement = helper.executeUpdateVariableStatement(thisIsTheNextIfElseBranchThatWillExecute, AST, state);
-                            helper.addToTheVariableBank(executeThisUpdateVariableStatement, AST, state);
+                            thisLineUpdatesAVariableValue = helper.executeUpdateVariableStatement(thisIsTheNextIfElseBranchThatWillExecute, AST, state);
+                            let updateTheVariableInTheVariableBank:variableBank;
+                            updateTheVariableInTheVariableBank = helper.addToTheVariableBank(thisLineUpdatesAVariableValue, AST, state);
                         }
                         while (helper.isThereAnotherStatementToExecute(thisIsTheNextIfElseBranchThatWillExecute, AST, state));
                         break;
@@ -92,7 +94,7 @@ function TPLAlgorithm() {
                 }
             }
 		}
-		else if (helper.thisIsAPrintlnStatement(AST, state)) {
+		else [no_step] if (helper.thisIsAPrintlnStatement(AST, state)) {
 			whatDoesThisPrintlnFunctionPrint = helper.getPrintlnOutput(AST, state);
 			[prompt]
 			"Enter the solution in the solution box.";
