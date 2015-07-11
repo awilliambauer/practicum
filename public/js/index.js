@@ -5,7 +5,7 @@ var csed = (function() {
 
     var COOKIE_KEY_PREFIX = "csed-consent-form-";
     var URL_PREFIX = "";
-    var LOGGING_BASE_URL = 'https://localhost:5555';
+    var LOGGING_PORT = 5555;
     var LOGGING_RELEASE_ID = '10d48c3a-460e-4675-be78-b708b35c990b';
 
     var categoryToLoad;
@@ -16,6 +16,7 @@ var csed = (function() {
     var telemetry_task;
 
     function setupLogging(username) {
+        var LOGGING_BASE_URL = window.location.protocol + "//" + window.location.hostname + ":" + LOGGING_PORT;
         telemetry_client = papika.TelemetryClient(LOGGING_BASE_URL, LOGGING_RELEASE_ID, '');
 
         userid_promise = telemetry_client.query_user_id({username:username})
@@ -46,8 +47,8 @@ var csed = (function() {
 
     function showHome() {
         d3.select("#main-page").classed("hidden", false);
-        d3.select("#problem").classed("hidden", true);
-        d3.select("#problem").innerHTML = "";
+        d3.select("#problem-container").classed("hidden", true);
+        d3.select("#problem").remove();
     }
 
     function findProblem(categoryConfig, requestedCategory, requestedProblemId)  {
@@ -147,7 +148,7 @@ var csed = (function() {
             var initial_state = problemUI.create_initial_state(problemConfig);
             main_simulator.initialize(category, {state:initial_state}).then(function() {
                 console.log("finished initializing simulator");
-                problemUI.initialize(URL_PREFIX, problemConfig, new CallbackObject(), initial_state);
+                problemUI.initialize(problemConfig, new CallbackObject(), initial_state);
             }, function(error) {
                 console.error("something went wrong: ");
                 console.log(error);
