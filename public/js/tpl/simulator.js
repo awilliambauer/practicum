@@ -257,7 +257,7 @@ function simulator(ast, globals) {
                 }
                 break;
             case "foreach":
-                var col = evaluate(stmt.collection);
+                var col = evaluate(stmt.collection, state, result);
                 if (!Array.isArray(col)) {
                     throw new Error("foreach expects an array, but found " + typeof col);
                 }
@@ -274,7 +274,7 @@ function simulator(ast, globals) {
                 push_stack_state(stmt.body, 'do');
                 break;
             case "dowhile:condition":
-                if (evaluate(stmt.parent.condition, state)) {
+                if (evaluate(stmt.parent.condition, state, result)) {
                     last(call_stack).to_execute.push({tag:'dowhile:condition', parent:stmt.parent});
                     push_stack_state(stmt.parent.body, 'do');
                 }

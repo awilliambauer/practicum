@@ -59,14 +59,16 @@ var explainer = (function() {
                     }
                     break;
                 case "if":
+                    prompt = "Is this condition true? ";
                     if (cs.marker === 'then') {
-                        prompt = "Condition is true, take the then branch";
+                        prompt += "Yes, so take the then branch"
                     } else {
-                        prompt = "Condition is false, take the else branch";
+                        prompt = "No, so take the else branch";
                     }
                     break;
                 case "while":
                 case "while:condition":
+                case "dowhile:condition":
                     var p = format_identifier(sr.name) + "? ";
                     if (sr.result) {
                         p += "Yes.";
