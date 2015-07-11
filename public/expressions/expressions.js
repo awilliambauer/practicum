@@ -62,7 +62,10 @@ var expressions = (function() {
         //next.onclick = step;
 
         // how to log a task event
-        Logging.log_task_event(logger, Logging.ID.ExampleEventType);
+        Logging.log_task_event(logger, {
+            type: Logging.ID.ExampleEventType,
+            detail: {key:'value'},
+        });
     };
 
     function step() {

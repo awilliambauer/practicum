@@ -131,7 +131,7 @@ var csed = (function() {
             var initial_state = problemUI.create_initial_state(problemConfig);
             main_simulator.initialize(category, {state:initial_state}).then(function() {
                 console.log("finished initializing simulator");
-                problemUI.initialize(problemConfig, new CallbackObject(), initial_state);
+                problemUI.initialize(problemConfig, new CallbackObject(), initial_state, task_logger);
             }, function(error) {
                 console.error("something went wrong: ");
                 console.log(error);
