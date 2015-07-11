@@ -5,7 +5,7 @@ var csed = (function() {
 
     var COOKIE_KEY_PREFIX = "csed-consent-form-";
     var URL_PREFIX = "";
-    var LOGGING_BASE_URL = 'https://localhost:5555';
+    var LOGGING_PORT = 5555;
     var LOGGING_RELEASE_ID = '10d48c3a-460e-4675-be78-b708b35c990b';
 
     var categoryToLoad;
@@ -16,6 +16,7 @@ var csed = (function() {
     var telemetry_task;
 
     function setupLogging(username) {
+        var LOGGING_BASE_URL = window.location.protocol + "//" + window.location.hostname + ":" + LOGGING_PORT;
         telemetry_client = papika.TelemetryClient(LOGGING_BASE_URL, LOGGING_RELEASE_ID, '');
 
         userid_promise = telemetry_client.query_user_id({username:username})
