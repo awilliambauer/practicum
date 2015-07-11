@@ -46,8 +46,7 @@ var main_simulator = (function () {"use strict";
 
     self.next = function() {
         if (currentState + 1 < states.length) {
-            currentState++;
-            return states[currentState];
+            return states[currentState++];
         }
         else {
             return null;

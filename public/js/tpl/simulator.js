@@ -100,9 +100,12 @@ function simulator(ast, globals) {
         }
     }
 
-    function resolveRef(ref) {
+    function resolveRef(ref, state) {
         if (ref.tag === "reference") {
-            return resolveRef(ref.object)[ref.name];
+            return resolveRef(ref.object, state)[ref.name];
+        }
+        if (ref.tag === "index") {
+            return resolveRef(ref.object, state)[evaluate(ref.index, state)]
         }
         return get_value(ref.value);
     }
@@ -161,7 +164,7 @@ function simulator(ast, globals) {
                 break;
             case "reference":
                 sr_info.name = expr.name;
-                sr_info.result = resolveRef(expr.object)[expr.name];
+                sr_info.result = resolveRef(expr.object, state)[expr.name];
                 return sr_info.result;
             case "identifier":
                 sr_info.name = expr.value;
@@ -170,7 +173,7 @@ function simulator(ast, globals) {
             case "index":
                 sr_info.name = expr.object;
                 sr_info.index = expr.index;
-                sr_info.result = resolveRef(expr.object)[evaluate(expr.index, state)];
+                sr_info.result = resolveRef(expr.object, state)[evaluate(expr.index, state)];
                 return sr_info.result;
             case "literal":
                 sr_info.name = expr.value
@@ -229,13 +232,13 @@ function simulator(ast, globals) {
                         result = {name:lhs.value, rhs:rhs_eval};
                         break;
                     case "reference":
-                        resolveRef(lhs.object)[lhs.name] = rhs_eval;
+                        resolveRef(lhs.object, state)[lhs.name] = rhs_eval;
                         result = {name:lhs.name, rhs:rhs_eval};
                         break;
                     case "index":
                         var lookups = getLookupsArray(lhs);
                         var index = evaluate(lhs.index, state);
-                        resolveRef(lhs.object)[index] = rhs_eval;
+                        resolveRef(lhs.object, state)[index] = rhs_eval;
                         result = {name:lookups[0], index:index, rhs:rhs_eval};
                         break;
                     default:
