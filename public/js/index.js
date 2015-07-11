@@ -263,7 +263,7 @@ var csed = (function() {
         var cookieKey = COOKIE_KEY_PREFIX + getUsername();
         if ($.cookie(cookieKey) !== "true") {
             $.cookie(cookieKey, true, {
-                path : URL_PREFIX
+                domain: window.location.hostname
             });
         }
     }
