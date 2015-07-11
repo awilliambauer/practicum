@@ -178,7 +178,7 @@ var csed = (function() {
         ;
 
         // fill in dropdowns in nav
-        d3.select("#problems-nav-container li")
+        d3.selectAll("#problems-nav-container li")
             .data(problemsConfig)
             .append("ul")
             .attr("class", "dropdown-menu")
