@@ -232,8 +232,8 @@ var if_else = (function() {
 			var varObject = state.variables.in_scope[variable];
 
 			if (varObject.hasOwnProperty("value")) {
-				console.log(variable);
-				console.log(varObject);
+				//console.log(variable);
+				//console.log(varObject);
 				var objectToVisualize = varObject["value"];
 
 				if (objectToVisualize.hasOwnProperty("type")) {
@@ -255,9 +255,8 @@ var if_else = (function() {
 					else if (varObject.type === "codeLine") {
 						highlightLine(varObject.value);
 					}
-					else if (varObject.type === "assignment") {
-						console.log("found assignment")
-						//highlightAssignment(varObject.value);
+					else if (varObject.type === "crossedOutLines") {
+						crossOutLines(varObject.value);
 					}
 					else {
 						console.error("Unsupported variable type: " + varObject.type);
@@ -289,7 +288,6 @@ var if_else = (function() {
 					d3.select(this).select(".bank_variable_value").attr("class","bank_variable_value just_updated_value");
 				}
 			}
-
 		});
 	}
 
@@ -297,6 +295,16 @@ var if_else = (function() {
 	function highlightLine(lineNum) {
 		$("#problem_space li").removeClass("highlight");
 		$("." + lineNum).addClass("highlight");
+	}
+
+	// Crosses out all the lines in the array passed in as a parameter
+	function crossOutLines(lineNums) {
+		console.log("in cross out lines");
+		for (var i = 0; i < lineNums.length; i++) {
+			var list = document.getElementsByClassName(lineNums[i])[0];
+			console.log(list);
+			$(list).addClass("cross_out");
+		}
 	}
 
 	function highlightAssignment(variable) {
