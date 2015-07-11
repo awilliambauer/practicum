@@ -11,21 +11,11 @@ var csed = (function() {
     var problemToLoad;
 
     var userid_promise;
-    var telemetry_client;
-    var telemetry_task;
+    var task_logger;
 
     function setupLogging(username) {
         var LOGGING_BASE_URL = window.location.protocol + "//" + window.location.hostname + ":" + LOGGING_PORT;
-        telemetry_client = papika.TelemetryClient(LOGGING_BASE_URL, LOGGING_RELEASE_ID, '');
-
-        userid_promise = telemetry_client.query_user_id({username:username})
-            .then(function(userid) {
-                telemetry_client.log_session({
-                    user: userid,
-                    detail: null
-                });
-                return userid;
-            });
+        Logging.initialize(LOGGING_BASE_URL, LOGGING_RELEASE_ID, username);
     }
 
     function setProblemToLoad(category, problemId) {
@@ -113,13 +103,7 @@ var csed = (function() {
     }
 
     function loadProblem(problemConfig) {
-        telemetry_task = userid_promise.then(function() {
-             return telemetry_client.start_task({
-                type: 2,
-                detail: null,
-                group: problemConfig.id
-            });
-        });
+        task_logger = Logging.start_task(problemConfig);
 
         // remove the old problem from the DOM
         d3.selectAll("#problem").remove();
@@ -250,14 +234,12 @@ var csed = (function() {
     function sendConsentFormResponse(data) {
         console.log("Sending consent data: " + data);
 
-        userid_promise.then(function() {
-            telemetry_client.log_event({
-                type: 11,
-                detail: data
-            }, true).then(function() {
-                console.info("successfully logged consent response.");
-                consentFormResponseSuccess();
-            });
+        Logging.log_event_with_promise({
+            type: Logging.ID.Consent,
+            detail: data
+        }, true).then(function() {
+            console.info("successfully logged consent response.");
+            consentFormResponseSuccess();
         });
     }
 
