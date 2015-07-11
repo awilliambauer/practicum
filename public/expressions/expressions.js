@@ -911,6 +911,7 @@ var expressions = (function() {
     return {
         create_initial_state: expressions_make_initial_state,
         template_url: "expressions/problemTemplate.html",
+        "template_id": "expressions-problem-template",
         initialize: initialize,
         reset: reset
     };

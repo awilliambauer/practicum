@@ -37,7 +37,7 @@ var csed = (function() {
     function showHome() {
         d3.select("#main-page").classed("hidden", false);
         d3.select("#problem-container").classed("hidden", true);
-        d3.select("#problem").remove();
+        d3.select("#problem-container .problem").remove();
     }
 
     function findProblem(categoryConfig, requestedCategory, requestedProblemId)  {
@@ -106,7 +106,7 @@ var csed = (function() {
         task_logger = Logging.start_task(problemConfig);
 
         // remove the old problem from the DOM
-        d3.selectAll("#problem").remove();
+        d3.selectAll("#problem-container .problem").remove();
 
         // reset any global state in the category js runner
         if (!csed.hasOwnProperty(problemConfig.category)) {
@@ -116,9 +116,11 @@ var csed = (function() {
         var problemUI = csed[problemConfig.category];
 
         // Load in the template for the problem
-        fetch(problemUI.template_url).then(function(response) {
-            return response.text();
-        }).then(function(problemHtml) {
+//        fetch(problemUI.template_url).then(function(response) {
+//            return response.text();
+//        }).then(function(problemHtml) {
+            var problemHtml = $("#" + problemUI.template_id).children(".problem").clone();
+
             // Uh, not sure why I can't append raw html into the dom with D3. Using jQuery for the moment...
             //d3.select("#problem").append(problemHtml);
             $("#problem-container").append(problemHtml);
@@ -136,9 +138,9 @@ var csed = (function() {
                 console.error("something went wrong: ");
                 console.log(error);
             });
-        }, function(error) {
-            console.error(error);
-        });
+//        }, function(error) {
+//            console.error(error);
+//        });
     }
 
     function addProblemsToNav(problemsConfig, onProblemStartCallback) {

@@ -724,6 +724,7 @@ var if_else = (function() {
 	return {
 		"create_initial_state": if_else_make_initial_state,
 		"template_url": "if_else/if_else_problem_template.html",
+		"template_id": "if_else-problem-template",
 		"reset":  reset,
 		"initialize": initialize
 	};
