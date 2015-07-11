@@ -9,6 +9,7 @@ var main_simulator = (function () {"use strict";
         }
         else if (algoName == "if_else") {
             return new IfElseHelper();
+        }
     }
 
     self.parse = function(algoName) {
