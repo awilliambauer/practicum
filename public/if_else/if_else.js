@@ -22,7 +22,6 @@ var if_else = (function() {
 	var if_else_make_initial_state = function (problemConfig) {
 		var state = problemConfig.initialState;
 		createStartingStates(problemConfig, state);
-		loadState(problemConfig, state, problemConfig.AST);
 		return state;
 	};
 
@@ -59,18 +58,6 @@ var if_else = (function() {
 		}
 	}
 
-	function loadState(problemConfig, state, AST) {
-		console.log("state to load:");
-		console.log(state);
-		main_simulator.initialize("ifElse", {state:state, args:[AST]}).then(function() {
-			console.log("finished initializing simulator");
-			if_else.initialize(problemConfig, new CallbackObject(), state);
-		}, function(error) {
-			console.error("something went wrong: ");
-			console.log(error);
-		});
-	}
-
 
 	// fills in the problem space with the text of the specific problem we're working on,
 	// we will just have to replace "example.txt" with whatever file they store the problem
@@ -84,7 +71,7 @@ var if_else = (function() {
 		VARIABLES = {};
 
 		if (!AST_INSTALLED_INTO_DOM) {
-			AST = problemConfig.AST;
+			AST = initialState.AST;
 			$("#problem_space > pre").html(on_convert(AST));
 			AST_INSTALLED_INTO_DOM = true;
 		}

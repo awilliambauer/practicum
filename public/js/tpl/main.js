@@ -7,9 +7,8 @@ var main_simulator = (function () {"use strict";
         if (algoName == "expressions") {
             return new ExpressionsHelper();
         }
-        else if (algoName == "ifElse") {
+        else if (algoName == "if_else") {
             return new IfElseHelper();
-        }
     }
 
     self.parse = function(algoName) {
