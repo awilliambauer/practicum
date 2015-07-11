@@ -58,6 +58,18 @@ var if_else = (function() {
 		}
 	}
 
+	function loadState(problemConfig, state, AST) {
+		console.log("state to load:");
+		console.log(state);
+		main_simulator.initialize("if_else", {state:state}).then(function() {
+			console.log("finished initializing simulator");
+			if_else.initialize(problemConfig, new CallbackObject(), state);
+		}, function(error) {
+			console.error("something went wrong: ");
+			console.log(error);
+		});
+	}
+
 
 	// fills in the problem space with the text of the specific problem we're working on,
 	// we will just have to replace "example.txt" with whatever file they store the problem
