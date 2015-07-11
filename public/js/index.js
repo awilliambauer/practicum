@@ -4,8 +4,7 @@ var csed = (function() {
     "use strict";
 
     var COOKIE_KEY_PREFIX = "csed-consent-form-";
-    var URL_PREFIX = "";
-    var LOGGING_PORT = 5555;
+    var LOGGING_PORT = 5678;
     var LOGGING_RELEASE_ID = '10d48c3a-460e-4675-be78-b708b35c990b';
 
     var categoryToLoad;
@@ -270,7 +269,6 @@ var csed = (function() {
     }
 
     return {
-        "URL_PREFIX": URL_PREFIX,
         "COOKIE_KEY_PREFIX": COOKIE_KEY_PREFIX,
 
         "addProblemsToNav": addProblemsToNav,
@@ -319,7 +317,7 @@ $(document).ready(function() {
     }
 
     // set up home link
-    d3.select("#home-link").attr("href", csed.URL_PREFIX);
+    d3.select("#home-link").attr("href", "");
 
 
     // pull in problems
