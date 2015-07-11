@@ -1,20 +1,30 @@
-body {
+.if_else_problem div#active_method_call {
+	text-align: right;
+	width: 47.5%;
+	float: left;
+	padding-right: 5%;
+}
+
+.if_else_problem span#active_method_call_text {
+	font-family: monospace;
+}
+
+#problem-area.if_else_problem {
 	text-align: center;
 	font-family: Arial, sans-serif;
 }
 
-h3 > span, #answer_box > span, input[type="text"] {
+.if_else_problem h3 > span,  .if_else_problem #answer_box > span, .if_else_problem input[type="text"] {
 	font-family: monospace;
 }
 
-.comments {
+.if_else_problem .comments {
 	color: #ff5900;
 }
 
-#problem_space, #answer_box {
+.if_else_problem #problem_space, .if_else_problem #answer_box {
 	border: 2px solid rgb(89,79,79);
 	border-radius: 10px;
-	width: 80%;
 	margin-left: auto;
 	margin-right: auto;
 	padding-top: 10px; padding-bottom: 10px;
@@ -23,13 +33,13 @@ h3 > span, #answer_box > span, input[type="text"] {
 	background-color: #ffffff;
 }
 
-#problem_space ul {
+.if_else_problem #problem_space ul {
 	list-style: none;
 	text-align: left;
 	padding-left: 0; padding-right: 0;
 }
 
-#problem_space li {
+.if_else_problem #problem_space li {
 	padding-top: 5px;
 	padding-bottom: 5px;
 	padding-left: 2.5%;
@@ -38,15 +48,17 @@ h3 > span, #answer_box > span, input[type="text"] {
 	overflow: auto;
 }
 
-#answer_box {
+.if_else_problem #answer_box {
 	line-height: 300%;
 }
 
-#answer_box > button {
+/*
+.if_else_problem #answer_box > button {
 	margin-right: 25%;
 }
+*/
 
-#variable_bank {
+.if_else_problem #variable_bank {
 	border: 2px solid #82557A;
 	background-color: #ffffff;
 	border-radius: 10px;
@@ -54,64 +66,65 @@ h3 > span, #answer_box > span, input[type="text"] {
 	top: 44%;
 	right: 2.5%;
 	width: 15%;
+	padding-left: 20px;
+	z-index: 1000;
 }
 
-#variable_bank #variable_list {
+.if_else_problem #variable_bank #variable_list {
 	list-style-type: none;
-	text-align: center;
-	padding-left: 0px;
 	font-size: 15pt;
+	padding-left: 0px;
 }
 
-#variable_list {
+.if_else_problem #variable_list {
 	margin-top: 5px;
 }
 
-.variable_list_item {
+.if_else_problem .variable_list_item {
 	margin-bottom: 15px;
 }
 
-.bank_variable {
+.if_else_problem .bank_variable {
 	color: black;
 	margin-right: 5px;
 }
 
-.bank_variable_value {
+.if_else_problem .bank_variable_value {
 	color: #82557A;
 	border: 2px solid #A27971;
 	padding: 3px;
 	margin-left: 5px;
 }
 
-.just_updated_value {
+.if_else_problem .just_updated_value {
 	background-color: #95FF7A;
 }
 
-#just_updated_explanation {
+.if_else_problem #just_updated_explanation {
 	font-size: 10pt;
 }
 
-#just_updated_box {
-  border: 5px solid #95FF7A;
-  height: 5px;
-  width: 5px;
-  margin-right: 10px;
+.if_else_problem #just_updated_box {
+	border: 5px solid #95FF7A;
+	height: 5px;
+	width: 5px;
+	margin-right: 10px;
 }
 
-#next {
+.if_else_problem #next {
 	position: fixed;
 	top: 40%;
 	right: 2.5%;
 	width: 15%;
 }
 
-#variable_bank_title {
+.if_else_problem #variable_bank_title {
 	text-decoration: underline;
 	font-weight: bold;
 	margin-bottom: 15px;
 }
 
-#prompt {
+.if_else_problem #prompt {
 	position: absolute;
 	top: 275px;
 	border: 2px solid #547980;
@@ -123,52 +136,52 @@ h3 > span, #answer_box > span, input[type="text"] {
 	background: rgb(244, 254, 202);
 }
 
-.block_highlight {
+.if_else_problem .block_highlight {
 	background-color: rgba(157,224,173, 0.45);
 	/*border: rgb(204, 204, 255) solid 1px;
 	border-radius: 2px;*/
 }
 
-.highlight {
+.if_else_problem .highlight {
 	background-color: rgba(69,173,168, 0.65);
 	border: #797979 solid 1px;
 	border-radius: 2px;
 }
 
-.select {
+.if_else_problem .select {
 	background-color: rgba(69,173,168, 0.65);
 	cursor: pointer;
 }
 
-.grey_out {
+.if_else_problem .grey_out {
 	color: rgb(155, 149, 149);
 }
 
-.cross_out {
+.if_else_problem .cross_out {
 	color: rgb(200, 149, 149);
 	text-decoration: line-through;
 }
 
-.correct {
+.if_else_problem .correct {
 	animation-name: correct;
 	animation-duration: 2s;
 }
 
-@keyframes correct {
-	from {
-		color: green;
-		background: rgb(0, 255, 0);
-		border: solid 2px green;
-	}
+.if_else_problem @keyframes correct {
+					 from {
+						 color: green;
+						 background: rgb(0, 255, 0);
+						 border: solid 2px green;
+					 }
 
-	to {
-		color: black;
-		border: 2px solid #547980;
-		background: rgb(244, 254, 202);
-	}
-}
+					 to {
+						 color: black;
+						 border: 2px solid #547980;
+						 background: rgb(244, 254, 202);
+					 }
+				 }
 
-.incorrect {
+.if_else_problem .incorrect {
 	animation-name: incorrect;
 	animation-duration: 2s;
 }
@@ -183,15 +196,16 @@ h3 > span, #answer_box > span, input[type="text"] {
 	to {
 		color: black;
 		border: 2px solid #547980;
-		background: rgb(244, 254, 202);		
+		background: rgb(244, 254, 202);
 	}
 }
 
-.incorrect_select {
+.if_else_problem .incorrect_select {
 	background-color: red;
 }
 
-button {
+/*
+.if_else_problem button {
 	border: 2px solid #84D854;
 	color: #84D854;
   	width: 52px;
@@ -199,26 +213,27 @@ button {
   	padding: 2px 10px;
 	background-color: white;
 }
+*/
 
-.content {
+.if_else_problem .content {
 	margin-top: 40px;
 	background-color: #FAFFF3;
 	padding: 0;
 }
 
-#footer, #title_block {
+.if_else_problem #footer, .if_else_problem #title_block {
 	background-color: #45ADA8;
 	color: #B5F3C4;
 }
 
-#title_block {
+.if_else_problem #title_block {
 	padding: .5em;
 }
 
-#main_title {
+.if_else_problem #main_title {
 	margin: 0;
 }
 
-#footer {
+.if_else_problem #footer {
 	height: 25px;
 }

@@ -3,6 +3,17 @@
  Styles and bootstrap overrides for the csed research project.
 
  */
+
+h1 {
+    font-size: 40px;
+    margin-bottom: 40px;
+    color: #45ADA8;
+}
+
+h1, h2, h3 {
+    text-align: center;
+}
+
 body {
     margin: 0px;
     padding: 0px;
@@ -24,8 +35,13 @@ body {
 }
 
 .btn-primary {
-    background-color: #547980;
+    background-color: #45ADA8;
     color: #E5FCC2;
+}
+
+/* Oh my god this is ugly. We need sass to override this, plz */
+.btn-primary.disabled, .btn-primary.disabled.active, .btn-primary.disabled.focus, .btn-primary.disabled:active, .btn-primary.disabled:focus, .btn-primary.disabled:hover, .btn-primary[disabled], .btn-primary[disabled].active, .btn-primary[disabled].focus, .btn-primary[disabled]:active, .btn-primary[disabled]:focus, .btn-primary[disabled]:hover, fieldset[disabled] .btn-primary, fieldset[disabled] .btn-primary.active, fieldset[disabled] .btn-primary.focus, fieldset[disabled] .btn-primary:active, fieldset[disabled] .btn-primary:focus, fieldset[disabled] .btn-primary:hover {
+    background-color: #547980;
 }
 
 a {
@@ -37,13 +53,3 @@ a:hover.btn-primary, a:active.btn-primary, a:focus.btn-primary {
     text-decoration: none;
     color:#ffffff !important;
 }
-
-.modal-body {
-    height: 600px;
-}
-
-.modal-body .overflow {
-    height: 100%;
-    overflow-y: auto;
-}
-

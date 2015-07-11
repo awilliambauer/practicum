@@ -34,6 +34,7 @@ $disagreeData = array_merge(['response' => 'disagree'], $studentData);
     <link href="css/indexlayout.css" type="text/css" rel="stylesheet" />
     <link href="css/csed.css" type="text/css" rel="stylesheet" />
     <link href="expressions/bootstrap-expressions.css" type="text/css" rel="stylesheet" />
+    <link href="if_else/if_else.css" type="text/css" rel="stylesheet" />
 
     <!-- load jQuery before cookie plugin, bootstrap, d3 -->
     <script src="vendor/jquery/jquery-1.11.2.min.js"></script>
@@ -56,9 +57,14 @@ $disagreeData = array_merge(['response' => 'disagree'], $studentData);
     <script src="js/tpl/simulator.js"></script>
     <script src="js/tpl/explainer.js"></script>
     <script src="js/tpl/algorithms/expressionsHelper.js"></script>
+    <script src="js/tpl/algorithms/ifElseHelper.js"></script>
 
     <script src="expressions/thoughtProcess.js"></script>
     <script src="expressions/expressions.js"></script>
+
+    <script type="text/javascript" src="if_else/java_parser/html_generator.js"></script>
+    <script src="if_else/if_else.js"></script>
+
 
 </head>
 <body>
@@ -111,7 +117,7 @@ $disagreeData = array_merge(['response' => 'disagree'], $studentData);
     </div>
 
     <!-- placeholder div for the problem content to go in -->
-    <div id="problem" class="container container-fluid hidden"></div>
+    <div id="problem-container" class="container container-fluid hidden"></div>
 
     <?php include("include/consentFormModal.html"); ?>
 </body>
