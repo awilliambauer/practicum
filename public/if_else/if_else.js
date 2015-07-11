@@ -95,7 +95,7 @@ var if_else = (function() {
 		var methodCallText = "ifElseMystery1(" + args + ")";
 
 		$(".content > h2").text("If/Else Mystery Problem");
-		$("h3#end_title > span").text(methodCallText);
+		$("h3#end_title > span").text(methodCallText).attr("id","args");
 		$("#active_method_call_text").text(methodCallText);
 
 		// move to the next step if they hit enter or click next
@@ -278,7 +278,7 @@ var if_else = (function() {
 	}
 
 	function highlightArguments() {
-		d3.select("#method_call").attr("class", "highlight");
+		d3.select("#args").attr("class", "highlight");
 	}
 
 	function highlightVariableBank(variables) {

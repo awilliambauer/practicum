@@ -60,10 +60,14 @@ var explainer = (function() {
                     break;
                 case "if":
                     prompt = "Is this condition true? ";
+                    // if we're calling a helper function in the conditional, use the function name as the prompt
+                    if (stmt.condition.hasOwnProperty("object") && stmt.condition.object.hasOwnProperty("name")) {
+                        prompt = format_identifier(stmt.condition.object.name) + "? ";
+                    }
                     if (cs.marker === 'then') {
-                        prompt += "Yes, so take the then branch"
+                        prompt += "Yes."
                     } else {
-                        prompt = "No, so take the else branch";
+                        prompt += "No.";
                     }
                     break;
                 case "while":

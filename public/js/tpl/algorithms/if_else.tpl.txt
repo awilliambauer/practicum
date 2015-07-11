@@ -25,19 +25,23 @@ function TPLAlgorithm() {
 
 	[prompt]
 	"Now walk through the code line-by-line, keeping track of variable values in the variable bank.";
+	[no_step]
 	do {
 		thisIsTheNextLineThatWillExecute = helper.getNextCodeBlock(AST, state);
+		[no_step]
 		if (helper.thisIsAVariableDeclarationStatement(AST, state)) {
 		    let thisLineDeclaresANewVariable:assignment;
 			thisLineDeclaresANewVariable = helper.getDeclaredVariable(AST, state);
 			let addTheNewVariableToTheVariableBank:variableBank;
 			addTheNewVariableToTheVariableBank = helper.addToTheVariableBank(thisLineDeclaresANewVariable, AST, state);
 		}
-		else if (helper.thisIsAnIfElseStatement(AST, state)) {
+		else [no_step] if (helper.thisIsAnIfElseStatement(AST, state)) {
 			[prompt]
-			"We're at the beginning of a new if/else block.";
+			"We're at the beginning of a new if/else block. Let's find the first branch that evaluates to true.";
 			do {
+			    [no_step]
 				thisIsTheNextIfElseBranchThatWillExecute = helper.getNextIfElseStatement(AST, state);
+				[no_step]
 				if (helper.doesThisStatementHaveAConditional(thisIsTheNextIfElseBranchThatWillExecute)) {
 					if (helper.doesTheConditionalEvaluateToTrue(thisIsTheNextIfElseBranchThatWillExecute, state)) {
 						do {
