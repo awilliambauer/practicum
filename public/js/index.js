@@ -132,9 +132,9 @@ var csed = (function() {
         var problemUI = csed[problemConfig.category];
 
         // Load in the template for the problem
-        d3.html(problemUI.template_url, function(error, problemHtml) {
-            if (error) return console.warn(error);
-
+        fetch(problemUI.template_url).then(function(response) {
+            return response.text();
+        }).then(function(problemHtml) {
             // Uh, not sure why I can't append raw html into the dom with D3. Using jQuery for the moment...
             //d3.select("#problem").append(problemHtml);
             $("#problem-container").append(problemHtml);
@@ -152,6 +152,8 @@ var csed = (function() {
                 console.error("something went wrong: ");
                 console.log(error);
             });
+        }, function(error) {
+            console.error(error);
         });
     }
 

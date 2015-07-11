@@ -102,7 +102,6 @@ var explainer = (function() {
     self.create_explanations = function(results) {
         var ret = results.filter(self.should_be_explained).map(function(r) {
             r.prompt = self.explanation_text_of(r);
-            console.log(r.prompt);
             return r;
         });
         return ret;
