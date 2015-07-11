@@ -254,6 +254,7 @@ var if_else = (function() {
 					}
 					else if (varObject.type === "codeLine") {
 						highlightLine(varObject.value);
+						grayOutPreviousLines(varObject.value);
 					}
 					else if (varObject.type === "crossedOutLines") {
 						crossOutLines(varObject.value);
@@ -297,9 +298,17 @@ var if_else = (function() {
 		$("." + lineNum).addClass("highlight");
 	}
 
+	// grays out the lines that we have already passed
+	function grayOutPreviousLines(lineNum) {
+		for (var line = 1; line < lineNum; line++) {
+			var list = document.getElementsByClassName(String(line))[0]; // Gets li element to highlight
+			$("." + line).addClass("grey_out");
+			$("." + line + " *").removeAttr("style");
+		}
+	}
+
 	// Crosses out all the lines in the array passed in as a parameter
 	function crossOutLines(lineNums) {
-		console.log("in cross out lines");
 		for (var i = 0; i < lineNums.length; i++) {
 			var list = document.getElementsByClassName(lineNums[i])[0];
 			console.log(list);
@@ -307,9 +316,9 @@ var if_else = (function() {
 		}
 	}
 
-	function highlightAssignment(variable) {
 
-	}
+
+
 
 
 	function checkUserInput() {
