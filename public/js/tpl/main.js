@@ -7,7 +7,7 @@ var main_simulator = (function () {"use strict";
         if (algoName == "expressions") {
             return new ExpressionsHelper();
         }
-        else if (algoName == "ifElse") {
+        else if (algoName == "if_else") {
             return new IfElseHelper();
         }
     }
@@ -46,8 +46,7 @@ var main_simulator = (function () {"use strict";
 
     self.next = function() {
         if (currentState + 1 < states.length) {
-            currentState++;
-            return states[currentState];
+            return states[currentState++];
         }
         else {
             return null;

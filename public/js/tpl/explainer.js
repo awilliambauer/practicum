@@ -4,10 +4,15 @@ var explainer = (function() {
     var self = {};
 
     self.should_be_explained = function(sim_result) {
-        if (!sim_result.statement) return true;
-        else switch (sim_result.statement.tag) {
-            case 'declaration': return false;
-            default: return true;
+        if (!sim_result.statement || sim_result.annotations.hasOwnProperty("no_step")) {
+            return false;
+        } else if (!sim_result.statement) {
+            return false;
+        } else {
+            switch (sim_result.statement.tag) {
+                case 'declaration': return false;
+                default: return true;
+            }
         }
     };
 
@@ -25,59 +30,81 @@ var explainer = (function() {
         var stmt = sim_result.statement;
         var sr = sim_result.statement_result;
         var annotations = sim_result.annotations;
-        if (!stmt) return "";
         var cs = sim_result.call_stack[sim_result.call_stack.length - 1];
+        var prompt = "";
 
         // a non-empty prompt annotation overrides explanation
         if (annotations.hasOwnProperty("prompt") && annotations.prompt.length > 0) {
-            if (annotations.prompt.length === 1) { // we expect a single expression as the argument
-                return annotations.prompt[0];
-            } else { // invalid use of prompt
-                throw new Error("prompt annotation expects 0 or 1 arguments, " +
-                                annotations.prompt + " were given");
+            prompt = annotations.prompt.join(" ");
+        } else {
+            switch (stmt.tag) {
+                case "function":
+                    prompt = "Let's start";
+                    break;
+                case "assignment":
+                    if (stmt.destination.tag === "index") {
+                        prompt = format_identifier(sr.name) + "'s " + sr.index + " element is " + sr.rhs;
+                    }
+                    // in expression thought process, we always ignore the right side when making the prompt
+                    prompt = format_identifier(sr.name);
+                    break;
+                case "expression":
+                    // empty prompt means use value of expression as prompt
+                    if (annotations.hasOwnProperty("prompt")) {
+                        prompt = sr.result;
+                    } else if (annotations.hasOwnProperty("question_answer")) {
+                        prompt = format_identifier(sr.name);
+                    } else {
+                        prompt = "";
+                    }
+                    break;
+                case "if":
+                    prompt = "Is this condition true? ";
+                    // if we're calling a helper function in the conditional, use the function name as the prompt
+                    if (stmt.condition.hasOwnProperty("object") && stmt.condition.object.hasOwnProperty("name")) {
+                        prompt = format_identifier(stmt.condition.object.name) + "? ";
+                    }
+                    if (cs.marker === 'then') {
+                        prompt += "Yes."
+                    } else {
+                        prompt += "No.";
+                    }
+                    break;
+                case "while":
+                case "while:condition":
+                case "dowhile:condition":
+                    var p = format_identifier(sr.name) + "? ";
+                    if (sr.result) {
+                        p += "Yes.";
+                    } else {
+                        p += "No.";
+                    }
+                    prompt = p;
+                    break;
+                default:
+                    prompt = "";
+                    break;
             }
         }
-
-        switch(stmt.tag) {
-            case "function":
-                return "Let's start";
-            case "assignment":
-                if (stmt.destination.tag === "index") {
-                    return format_identifier(sr.name) + "'s " + sr.index + " element is " + sr.rhs;
-                }
-                // in expression thought process, we always ignore the right side when making the prompt
-                return format_identifier(sr.name);
-            case "expression":
-                // empty prompt means use value of expression as prompt
-                if (annotations.hasOwnProperty("prompt")) {
-                    return sr.result;
-                }
-                return "";
-            case "if":
-                if (cs.marker === 'then') {
-                    return "Condition is true, take the then branch";
-                } else {
-                    return "Condition is false, take the else branch";
-                }
-            case "while":
-            case "while:condition":
-                var prompt = format_identifier(sr.name) + "? ";
-                if (sr.result) {
-                    prompt += "Yes.";
-                } else {
-                    prompt += "No.";
-                }
-                return prompt;
-            default:
-                return "";
+        if (annotations.hasOwnProperty("add_to_prompt")) {
+            prompt += " " + annotations.add_to_prompt.join(" ");
         }
+        if (annotations.hasOwnProperty("question_answer")) {
+            prompt += "? " + sr.result;
+        }
+        //var punc = ".?!";
+        //if (punc.indexOf(prompt.charAt(prompt.length - 1)) === -1) {
+        //    prompt += '.';
+        //}
+        return prompt;
     };
 
     self.create_explanations = function(results) {
-        return results.filter(self.should_be_explained).map(function(r) {
+        var ret = results.filter(self.should_be_explained).map(function(r) {
             r.prompt = self.explanation_text_of(r);
             return r;
         });
+        return ret;
     };
 
     return self;

@@ -5,13 +5,16 @@ function IfElseHelper() {
 	this.currentStatementIndex = -1;
 
 	this.getIfElseBlocks = function(AST, state) {
-		var ifElseBlockCount = 0;
+        var ifElseBlocks = {};
+        ifElseBlocks.type = "codeBlock";
+        ifElseBlocks.blockIds = [];
+
 		for (i = 0; i < AST["body"].length; i++) {
 			if (AST["body"][i]["tag"] == "if") {
-				ifElseBlockCount++;
+                ifElseBlocks.blockIds.push(AST["body"][i]["id"]);
 			}
 		}
-		return ifElseBlockCount;
+		return ifElseBlocks;
 
 	};
 
@@ -33,6 +36,7 @@ function IfElseHelper() {
 		for (v in state["vars"]) {
 			//console.log("var: " + v + " value: " + state["vars"][v]);
 		}
+        return parameters;
 	};
 
 	this.areWeAtTheEnd = function(AST, state) {
@@ -43,7 +47,7 @@ function IfElseHelper() {
 
 	this.getNextCodeBlock = function(AST, state) {
 		this.currentCodeBlockIndex++;
-		return this.currentCodeBlockIndex;
+		return AST["body"][this.currentCodeBlockIndex]["location"]["start"]["line"];
 	};
 
 	this.areThereMoreCodeBlocks = function(AST, state) {
@@ -126,6 +130,10 @@ function IfElseHelper() {
 		}
 	};
 
+    this.crossOut = function(statement, crossedOutLines, AST, state) {
+
+    }
+
 	this.isThereAnotherIfElseStatement = function(AST, state) {
 
 		var nextElseBranch;
@@ -159,7 +167,7 @@ function IfElseHelper() {
 
 	this.getNextStatement = function(statements, AST, state) {
 		this.currentStatementIndex++;
-		return statements[this.currentStatementIndex];
+		return statements[this.currentStatementIndex]["location"]["start"]["line"];
 	};
 
 	this.isThereAnotherStatementToExecute = function(statements, AST, state) {
@@ -175,12 +183,12 @@ function IfElseHelper() {
 		}
 	};
 
-	this.executeUpdateVariableStatement = function(statement, AST, state) {
+	this.executeUpdateVariableStatement = function(statements, AST, state) {
 
 		// we are updating a variable's value
-		if (statement["expression"]["tag"] == "binop" && statement["expression"]["operator"] == "=") {
-			var updatedVariable = statement["expression"]["args"][0]["value"];
-			var newValue = this.evaluateArg(statement["expression"]["args"][1], state);
+		if (statements[this.currentStatementIndex]["expression"]["tag"] == "binop" && statements[this.currentStatementIndex]["expression"]["operator"] == "=") {
+			var updatedVariable = statements[this.currentStatementIndex]["expression"]["args"][0]["value"];
+			var newValue = this.evaluateArg(statements[this.currentStatementIndex]["expression"]["args"][1], state);
 			//console.log("updated variable: " + updatedVariable + " new value: " + newValue);
 
 			var parameters = {}

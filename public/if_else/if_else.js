@@ -13,24 +13,90 @@ var if_else = (function() {
 	var CORRECT_VARIABLES;
 	var CORRECT_BOOL;
 
+	var AST_INSTALLED_INTO_DOM = false;
+
+	function reset() {
+
+	}
+
+	var if_else_make_initial_state = function (problemConfig) {
+		var state = problemConfig.initialState;
+		createStartingStates(problemConfig, state);
+		return state;
+	};
+
+	// create the method call list in the dom
+	function createStartingStates(problemConfig) {
+		var availableMethodCalls = [problemConfig.initialState].concat(problemConfig.alternateStartingStates);
+
+		var method_call_containers = d3.select("#method_calls")
+			.selectAll("li.method_call_container")
+			.data(availableMethodCalls)
+			.enter()
+			.append("li")
+			.attr("class", "method_call_container list-group-item")
+		;
+
+		method_call_containers
+			.append("div")
+			.attr("class", "col-sm-8")
+			.append("a")
+			.text(function(state) { return "ifElseMystery1(" + getArgString(state.initialization) + ")"} )
+		;
+
+		method_call_containers
+			.append("div")
+			.append("input")
+			.attr("placeholder", "Answer")
+		;
+	}
+
+
+	function CallbackObject() {
+		this.getNextState = function() {
+			return main_simulator.next();
+		}
+	}
+
+	function loadState(problemConfig, state, AST) {
+		console.log("state to load:");
+		console.log(state);
+		main_simulator.initialize("if_else", {state:state}).then(function() {
+			console.log("finished initializing simulator");
+			if_else.initialize(problemConfig, new CallbackObject(), state);
+		}, function(error) {
+			console.error("something went wrong: ");
+			console.log(error);
+		});
+	}
+
+
 	// fills in the problem space with the text of the specific problem we're working on,
 	// we will just have to replace "example.txt" with whatever file they store the problem
 	// text in
-	function initialize(urlPrefix, problemConfig, callbackObject) {
+	// fills in the problem space with the text of the specific problem we're working on,
+	// we will just have to replace "example.txt" with whatever file they store the problem
+	// text in
+	function initialize(problemConfig, callbackObject, initialState) {
 		CORRECT_BOOL = null;
 		CURRENT_STEP = 0;
 		VARIABLES = {};
 
-		AST = problemConfig.AST;
-		$("#problem_space > pre").html(on_convert(AST));
+		if (!AST_INSTALLED_INTO_DOM) {
+			AST = initialState.AST;
+			$("#problem_space > pre").html(on_convert(AST));
+			AST_INSTALLED_INTO_DOM = true;
+		}
 
-		state = problemConfig.initialState;
+		state = initialState;
 		callback = callbackObject;
 
 		var args = getArgumentString().toString();
+		var methodCallText = "ifElseMystery1(" + args + ")";
+
 		$(".content > h2").text("If/Else Mystery Problem");
-		$(".content > h3 > span").text("ifElseMystery (" + args + ")");
-		$("#answer_box > span").prepend("ifElseMystery (" + args + ")");
+		$("h3#end_title > span").text(methodCallText).attr("id","args");
+		$("#active_method_call_text").text(methodCallText);
 
 		// move to the next step if they hit enter or click next
 		$("#next").click(next);
@@ -38,11 +104,40 @@ var if_else = (function() {
 			if (event.which == 13) {
 				next();
 			}
-		})
+		});
 		$("#answer_box input").change(function() {
 			checkAnswer();
 		});
+
+		fillStartingStates(problemConfig, initialState);
 	}
+
+	// Highlight the button that represents the method call we're currently viewing and disable it
+	// Make the other method calls into buttons
+	function fillStartingStates(problemConfig, activeState) {
+		var availableMethodCalls = [problemConfig.initialState].concat(problemConfig.alternateStartingStates);
+		d3.selectAll(".method_call_container a")
+			.data(availableMethodCalls)
+
+			.attr("class", function(state) {
+				var activeStatus = "active";
+				var buttonClass = "btn-default";
+				if (state.initialization === activeState.initialization) {
+					activeStatus = "disabled";
+					buttonClass = "btn-primary";
+					console.log("They were the same");
+				}
+
+				return "btn btn-block method_call_text " + activeStatus + " " + buttonClass;
+			})
+			.on("click", function(state) {
+				if (state.initialization !== activeState.initialization) {
+					loadState(problemConfig, state, problemConfig.AST);
+				}
+			})
+		;
+	}
+
 
 	// checks the entered answer against the real answer to see if they have gotten
 	// the problem correct
@@ -56,14 +151,19 @@ var if_else = (function() {
 		}
 	}
 
-	// gets the initial values that the method will be called with
-	function getArgumentString() {
-		var rawVals = state.initialization;
+	function getArgString(initialization) {
+		var rawVals = initialization;
 		var callVals = [];
 		for (var variable in rawVals) {
 			callVals.push(rawVals[variable]);
 		}
 		return callVals;
+	}
+
+	// gets the initial values that the method will be called with
+	// This one uses the global state?
+	function getArgumentString() {
+		return getArgString(state.initialization);
 	}
 
 	function next() {
@@ -83,12 +183,13 @@ var if_else = (function() {
 					scrollTop: $("." + state.state.lineNum).offset().top - 200
 				}, 1000);
 			}
-			highlightBlocks();
 			newGetPrompt(state);
-			newHighlightLine(state.state);
-			newHighlightBlock(state.state);
 			newUpdateVariables(state.state);
 			drawVariableBank();
+			addHighlighting();
+			//newHighlightLine(state.state);
+			//newHighlightBlock(state.state);
+
 			//newAddComments(currentState);
 			//newCrossOutLines(currentState);
 			//addInteraction(currentState);
@@ -125,6 +226,83 @@ var if_else = (function() {
 			}
 		}
 	}
+
+	function addHighlighting() {
+		for (var variable in state.variables.in_scope) {
+			var varObject = state.variables.in_scope[variable];
+
+			if (varObject.hasOwnProperty("value")) {
+				console.log(variable);
+				console.log(varObject);
+				var objectToVisualize = varObject["value"];
+
+				if (objectToVisualize.hasOwnProperty("type")) {
+					if (objectToVisualize.type == "codeBlock") {
+						console.log("about to highlight code block");
+						highlightCodeBlocks(objectToVisualize.blockIds);
+					}
+					else {
+						console.error("Unsupported variable type: " + objectToVisualize.type);
+					}
+				}
+				else if (varObject.hasOwnProperty("type")) {
+					if (varObject.type === "arguments") {
+						highlightArguments();
+					}
+					else if (varObject.type === "variableBank") {
+						highlightVariableBank(varObject.value);
+					}
+					else if (varObject.type === "codeLine") {
+						highlightLine(varObject.value);
+					}
+					else if (varObject.type === "assignment") {
+						console.log("found assignment")
+						//highlightAssignment(varObject.value);
+					}
+					else {
+						console.error("Unsupported variable type: " + varObject.type);
+					}
+				}
+				/*else {
+					console.error("This variable has no visualization type: " + variable);
+				}*/
+			}
+		}
+	}
+
+	function highlightCodeBlocks(blockIds) {
+		for (var i = 0; i < blockIds.length; i++) {
+			var idString = "#java-ast-" + blockIds[i];
+			d3.select(idString).attr("class", "block_highlight");
+		}
+	}
+
+	function highlightArguments() {
+		d3.select("#args").attr("class", "highlight");
+	}
+
+	function highlightVariableBank(variables) {
+		d3.selectAll(".variable_list_item").each(function(d,i) {
+			var varName = d3.select(this).select(".bank_variable")[0][0].innerHTML;
+			for (var key in variables) {
+				if (varName === key) {
+					d3.select(this).select(".bank_variable_value").attr("class","bank_variable_value just_updated_value");
+				}
+			}
+
+		});
+	}
+
+	// Highlights the line of code passed in as a parameter
+	function highlightLine(lineNum) {
+		$("#problem_space li").removeClass("highlight");
+		$("." + lineNum).addClass("highlight");
+	}
+
+	function highlightAssignment(variable) {
+
+	}
+
 
 	function checkUserInput() {
 		/*
@@ -209,7 +387,7 @@ var if_else = (function() {
 		// show previously invisible prompt
 		$("#prompt").show();
 		// highlighting all the stuff
-		for (var node of java_ast.find_all(function(n) { return n.tag == "if"; }, AST)) {
+		 for (var node in java_ast.find_all(function(n) { return n.tag == "if"; }, AST)) {
 			$("#java-ast-" + node.id + "> *").each(function(index, element) {
 				var text = $(element).text().split(" ");
 				if (text.length > 1) {
@@ -499,7 +677,7 @@ var if_else = (function() {
 			});
 			$("#problem_space li").click(function() {
 				$(".chosen-next-line").removeClass("chosen-next-line");
-				$(this).addClass("chosen-next-line")
+				$(this).addClass("chosen-next-line");
 				next();
 			});
 			$(interaction).css("font-size", "12pt");
@@ -541,10 +719,17 @@ var if_else = (function() {
 			}
 		}
 		return true;
-	}
+	};
 
 	return {
-		initialize: initialize
+		"create_initial_state": if_else_make_initial_state,
+		"template_url": "if_else/if_else_problem_template.html",
+		"reset":  reset,
+		"initialize": initialize
 	};
 
  })();
+
+(function(csed) {
+	csed.if_else = if_else;
+}) (csed);
