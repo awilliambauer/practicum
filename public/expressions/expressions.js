@@ -30,7 +30,7 @@ var expressions = (function() {
     };
 
     // Callback function for navigation javascript. Installs a problem into the page
-    var initialize = function(urlPrefix, problemConfig, callbackObject) {
+    var initialize = function(urlPrefix, problemConfig, callbackObject, initial_state) {
         // this code runs the hard-coded array of state objects stored in state_1.js
 
         /*$.getScript("state_objects/state_1.js", function() {
@@ -43,9 +43,7 @@ var expressions = (function() {
         // this code runs the thoughtProcess.js file to build up the array of state objects
 
         callback = callbackObject;
-        state = problemConfig.initialState;
-        console.log("initial state:");
-        console.log(state);
+        state = initial_state;
 
         var expressionHeader = document.getElementById("expressionHeader");
         var expression = state.problemLines[0];
@@ -63,9 +61,7 @@ var expressions = (function() {
     };
 
     function step() {
-        console.log("step!");
         state = callback.getNextState();
-        console.log(state);
 
         var stepHolder;
         if (firstStep) {
@@ -905,6 +901,8 @@ var expressions = (function() {
     }
 
     return {
+        create_initial_state: expressions_make_initial_state,
+        template_url: "expressions/problemTemplate.html",
         initialize: initialize,
         reset: reset
     };

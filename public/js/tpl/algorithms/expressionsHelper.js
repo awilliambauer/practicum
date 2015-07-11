@@ -70,6 +70,14 @@ function ExpressionsHelper() {
         leftOperand.type = "lineCell";
         leftOperand.line = state.problemLines.length - 1;
         leftOperand.cell = operatorIndex.cell - 1;
+        leftOperand.value = state.problemLines[leftOperand.line][leftOperand.cell].value;
+        leftOperand.valType = state.problemLines[leftOperand.line][leftOperand.cell].type;
+        leftOperand.asString = function () {
+            if (this.valType === "double" && this.value % 1 === 0) { // double without non-zero decimals
+                return this.value.toFixed(1);
+            }
+            return this.value.toString();
+        };
         return leftOperand;
     };
 
@@ -78,6 +86,14 @@ function ExpressionsHelper() {
         rightOperand.type = "lineCell";
         rightOperand.line = state.problemLines.length - 1;
         rightOperand.cell = operatorIndex.cell + 1;
+        rightOperand.value = state.problemLines[rightOperand.line][rightOperand.cell].value;
+        rightOperand.valType = state.problemLines[rightOperand.line][rightOperand.cell].type;
+        rightOperand.asString = function () {
+            if (this.valType === "double" && this.value % 1 === 0) { // double without non-zero decimals
+                return this.value.toFixed(1);
+            }
+            return this.value.toString();
+        };
         return rightOperand;
     };
 
@@ -102,66 +118,85 @@ function ExpressionsHelper() {
         return emptyCell;
     };
 
-    this.calculate = function (state, operatorObject) {
+    function getOperator(state, index) {
+        var nextToLastProblemLine = state.problemLines.length - 2;
+        var calculationExpression = state.problemLines[nextToLastProblemLine];
+
+        return calculationExpression[index];
+    }
+
+    this.isCurrentOperatorMod = function (state, operatorObject) {
+        return getOperator(state, operatorObject.cell).value === "%";
+    };
+
+    this.isCurrentOperationIntDiv = function (state, operatorObject) {
         var operatorIndex = operatorObject.cell;
         var nextToLastProblemLine = state.problemLines.length - 2;
-        var problemLine = state.problemLines.length - 1;
         var calculationExpression = state.problemLines[nextToLastProblemLine];
 
         var operator = calculationExpression[operatorIndex];
         var leftOperand = calculationExpression[operatorIndex - 1];
         var rightOperand = calculationExpression[operatorIndex + 1];
-        var result;
 
-        if (operator.value === "%") {
-            result = leftOperand.value % rightOperand.value;
-        }
-        else if (operator.value === "*") {
-            result = leftOperand.value * rightOperand.value;
-        }
-        else if (operator.value === "/") {
-            result = leftOperand.value / rightOperand.value;
-        }
-        else if (operator.value === "+") {
+        return operator.value === "/" && leftOperand.type === "int" && rightOperand.type === "int";
+    };
 
-            // Need a little magic here: If this is string concat with a double,
-            // need to make sure that we concat in the .0, because JS will treat
-            // 4.0 like 4.
-            var lhv = leftOperand.value;
-            var rhv = rightOperand.value;
+    this.isCurrentOperationDiv = function (state, operatorObject) {
+        return getOperator(state, operatorObject.cell).value === "/";
+    };
 
-            if (leftOperand.type === "double" && rightOperand.type === "string") {
-                if (leftOperand.value - Math.floor(leftOperand.value) === 0) {
-                    lhv = leftOperand.value.toFixed(1);
-                }
-            }
+    this.isCurrentOperationMult = function (state, operatorObject) {
+        return getOperator(state, operatorObject.cell).value === "*";
+    };
 
-            if (leftOperand.type === "string" && rightOperand.type === "double") {
-                if (rightOperand.value - Math.floor(rightOperand.value) === 0) {
-                    rhv = rightOperand.value.toFixed(1);
-                }
-            }
+    this.isCurrentOperationConcat = function (state, operatorObject) {
+        var operatorIndex = operatorObject.cell;
+        var nextToLastProblemLine = state.problemLines.length - 2;
+        var calculationExpression = state.problemLines[nextToLastProblemLine];
 
-            result = lhv + rhv;
+        var operator = calculationExpression[operatorIndex];
+        var leftOperand = calculationExpression[operatorIndex - 1];
+        var rightOperand = calculationExpression[operatorIndex + 1];
+
+        return operator.value === "+" && (leftOperand.type === "string" || rightOperand.type === "string");
+    };
+
+    this.isCurrentOperationAdd = function (state, operatorObject) {
+        return getOperator(state, operatorObject.cell).value === "+";
+    };
+
+    this.isCurrentOperationSub = function (state, operatorObject) {
+        return getOperator(state, operatorObject.cell).value === "-";
+    };
+
+    function correctPrecision(result, left, right) {
+        if ((left.valType !== "string" && right.valType !== "string") &&
+            (left.valType === "double" || right.valType === "double") && result % 1 === 0) {
+            return result.toFixed(1);
         }
-        else if (operator.value === "-") {
-            result = leftOperand.value - rightOperand.value;
-        }
+        return result;
+    }
+
+    function doStateUpdate(state, operator, result) {
+        var operatorIndex = operator.cell;
+        var nextToLastProblemLine = state.problemLines.length - 2;
+        var problemLine = state.problemLines.length - 1;
+        var calculationExpression = state.problemLines[nextToLastProblemLine];
+
+        var leftOperand = calculationExpression[operatorIndex - 1];
+        var rightOperand = calculationExpression[operatorIndex + 1];
 
         state.problemLines[problemLine][operatorIndex - 1].value = result;
-
 
         // If either operand was a string, the result is a string
         if (leftOperand.type === "string" || rightOperand.type === "string") {
             state.problemLines[problemLine][operatorIndex - 1].type = "string";
 
-            // Javascript doesn't put any type info into the the numbers, so we have to keep track
-            // If either operand was a double, then the result is a double.
+        // Javascript doesn't put any type info into the the numbers, so we have to keep track
+        // If either operand was a double, then the result is a double.
         } else if ((leftOperand.type === "double" || rightOperand.type === "double")) {
-            result = result.toFixed(1);
             state.problemLines[problemLine][operatorIndex - 1].type = "double";
         }
-
         // Otherwise, it's gonna be an int.
         else if (typeof result === "number") {
             state.problemLines[problemLine][operatorIndex - 1].type = "int";
@@ -171,8 +206,54 @@ function ExpressionsHelper() {
             state.problemLines[problemLine][operatorIndex - 1].type = typeof result;
 
         }
+    }
 
-        return result;
+    // left and right are objects returned by get{Left|Right}Operand, state is state object,
+    // operator is operator object returned by getFirst...FromLeft
+    this.whatIsTheResultOfThisModulus = function(left, right, state, operator) {
+        var result = left.value % right.value;
+        doStateUpdate(state, operator, result);
+        return correctPrecision(result, left, right);
+    };
+
+    // left and right are objects returned by get{Left|Right}Operand, state is state object,
+    // operator is operator object returned by getFirst...FromLeft
+    this.whatIsTheResultOfThisDivision = function (left, right, state, operator) {
+        var result = left.value / right.value;
+        // check for integer division
+        if (left.valType === "int" && right.valType === "int") {
+            result = Math.floor(result);
+        }
+        doStateUpdate(state, operator, result);
+        return correctPrecision(result, left, right);
+    };
+
+    // left and right are objects returned by get{Left|Right}Operand, state is state object,
+    // operator is operator object returned by getFirst...FromLeft
+    this.whatIsTheResultOfThisMultiplication = function (left, right, state, operator) {
+        var result = left.value * right.value;
+        doStateUpdate(state, operator, result);
+        return correctPrecision(result, left, right);
+    };
+
+    // left and right are objects returned by get{Left|Right}Operand, state is state object,
+    // operator is operator object returned by getFirst...FromLeft
+    this.whatIsTheResultOfThisAddition = function (left, right, state, operator) {
+        var result = left.value + right.value;
+        // check for string concatenation
+        if (left.valType === "string" || right.valType === "string") {
+            result = left.asString() + right.asString();
+        }
+        doStateUpdate(state, operator, result);
+        return correctPrecision(result, left, right);
+    };
+
+    // left and right are objects returned by get{Left|Right}Operand, state is state object,
+    // operator is operator object returned by getFirst...FromLeft
+    this.whatIsTheResultOfThisSubtraction = function (left, right, state, operator) {
+        var result = left.value - right.value;
+        doStateUpdate(state, operator, result);
+        return correctPrecision(result, left, right);
     };
 }
 

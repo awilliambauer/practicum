@@ -2,7 +2,7 @@
 /// Test simulation of actual TPL algorithms
 describe('TPL algorithms', function() {
     function parse(name) {
-        return tpl_test_util.parse(name, "base/public/js/tpl/algorithms/");
+        return tpl_test_util.parse(name, "base/public/js/tpl/algorithms/", ".tpl.txt");
     }
 
     function run(name, options) {

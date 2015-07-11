@@ -13,7 +13,7 @@ var main_simulator = (function () {"use strict";
     }
 
     self.parse = function(algoName) {
-        return fetch("/js/tpl/algorithms/" + algoName + ".tpl").then(function(response) {
+        return fetch("js/tpl/algorithms/" + algoName + ".tpl.txt").then(function(response) {
             if (response.status === 200) {
                 return response.text().then(function(source) {
                     return simulator_parsing.browser_parse(source);
@@ -46,8 +46,7 @@ var main_simulator = (function () {"use strict";
 
     self.next = function() {
         if (currentState + 1 < states.length) {
-            currentState++;
-            return states[currentState];
+            return states[currentState++];
         }
         else {
             return null;
