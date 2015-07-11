@@ -21,6 +21,7 @@ var expressions = (function() {
     // whether or not this is the first time the user is clicking the "step" button
     var firstStep = true;
 
+    var logger;
 
     // Callback function for navigation javascript -- called before problem load.
     var reset = function() {
@@ -30,7 +31,7 @@ var expressions = (function() {
     };
 
     // Callback function for navigation javascript. Installs a problem into the page
-    var initialize = function(problemConfig, callbackObject, initial_state) {
+    var initialize = function(problemConfig, callbackObject, initial_state, task_logger) {
         // this code runs the hard-coded array of state objects stored in state_1.js
 
         /*$.getScript("state_objects/state_1.js", function() {
@@ -44,6 +45,8 @@ var expressions = (function() {
 
         callback = callbackObject;
         state = initial_state;
+        // hold onto the task logger for logging UI events.
+        logger = task_logger;
 
         var expressionHeader = document.getElementById("expressionHeader");
         var expression = state.problemLines[0];
@@ -58,6 +61,11 @@ var expressions = (function() {
         //next.disabled = false;
         //next.onclick = step;
 
+        // how to log a task event
+        Logging.log_task_event(logger, {
+            type: Logging.ID.ExampleEventType,
+            detail: {key:'value'},
+        });
     };
 
     function step() {
@@ -903,6 +911,7 @@ var expressions = (function() {
     return {
         create_initial_state: expressions_make_initial_state,
         template_url: "expressions/problemTemplate.html",
+        "template_id": "expressions-problem-template",
         initialize: initialize,
         reset: reset
     };
