@@ -29,7 +29,7 @@ var if_else = (function() {
 
 		var args = getArgumentString().toString();
 		$(".content > h2").text("If/Else Mystery Problem");
-		$(".content > h3 > span").text("ifElseMystery (" + args + ")");
+		$(".content > h3 > span").text("ifElseMystery (" + args + ")").attr("id", "method_call");
 		$("#answer_box > span").prepend("ifElseMystery (" + args + ")");
 
 		// move to the next step if they hit enter or click next
@@ -83,12 +83,13 @@ var if_else = (function() {
 					scrollTop: $("." + state.state.lineNum).offset().top - 200
 				}, 1000);
 			}
-			highlightBlocks();
 			newGetPrompt(state);
-			newHighlightLine(state.state);
-			newHighlightBlock(state.state);
 			newUpdateVariables(state.state);
 			drawVariableBank();
+			addHighlighting();
+			//newHighlightLine(state.state);
+			//newHighlightBlock(state.state);
+
 			//newAddComments(currentState);
 			//newCrossOutLines(currentState);
 			//addInteraction(currentState);
@@ -125,6 +126,83 @@ var if_else = (function() {
 			}
 		}
 	}
+
+	function addHighlighting() {
+		for (var variable in state.variables.in_scope) {
+			var varObject = state.variables.in_scope[variable];
+
+			if (varObject.hasOwnProperty("value")) {
+				console.log(variable);
+				console.log(varObject);
+				var objectToVisualize = varObject["value"];
+
+				if (objectToVisualize.hasOwnProperty("type")) {
+					if (objectToVisualize.type == "codeBlock") {
+						console.log("about to highlight code block");
+						highlightCodeBlocks(objectToVisualize.blockIds);
+					}
+					else {
+						console.error("Unsupported variable type: " + objectToVisualize.type);
+					}
+				}
+				else if (varObject.hasOwnProperty("type")) {
+					if (varObject.type === "arguments") {
+						highlightArguments();
+					}
+					else if (varObject.type === "variableBank") {
+						highlightVariableBank(varObject.value);
+					}
+					else if (varObject.type === "codeLine") {
+						highlightLine(varObject.value);
+					}
+					else if (varObject.type === "assignment") {
+						console.log("found assignment")
+						//highlightAssignment(varObject.value);
+					}
+					else {
+						console.error("Unsupported variable type: " + varObject.type);
+					}
+				}
+				/*else {
+					console.error("This variable has no visualization type: " + variable);
+				}*/
+			}
+		}
+	}
+
+	function highlightCodeBlocks(blockIds) {
+		for (var i = 0; i < blockIds.length; i++) {
+			var idString = "#java-ast-" + blockIds[i];
+			d3.select(idString).attr("class", "block_highlight");
+		}
+	}
+
+	function highlightArguments() {
+		d3.select("#method_call").attr("class", "highlight");
+	}
+
+	function highlightVariableBank(variables) {
+		d3.selectAll(".variable_list_item").each(function(d,i) {
+			var varName = d3.select(this).select(".bank_variable")[0][0].innerHTML;
+			for (var key in variables) {
+				if (varName === key) {
+					d3.select(this).select(".bank_variable_value").attr("class","bank_variable_value just_updated_value");
+				}
+			}
+
+		});
+	}
+
+	// Highlights the line of code passed in as a parameter
+	function highlightLine(lineNum) {
+		$("#problem_space li").removeClass("highlight");
+		$("." + lineNum).addClass("highlight");
+	}
+
+	function highlightAssignment(variable) {
+
+	}
+
 
 	function checkUserInput() {
 		/*

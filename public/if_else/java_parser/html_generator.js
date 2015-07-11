@@ -39,6 +39,11 @@ function to_dom(node, indent_level, special_flag) {
 			text.append(') {');
 			elem.append(text);
 			node.body.forEach(function(s) {
+				if (s.tag === 'if') {
+					// hack to add a blank line before each if/else block
+					elem.append($("<li>").text((LINENUM)).addClass(LINENUM + ""));
+					LINENUM++;
+				}
 				elem.append(to_dom(s, 1));
 			});
 			elem.append($("<li>").text(LINENUM + "\t" + indent(0) + "}").addClass(LINENUM + ""));
@@ -106,11 +111,6 @@ function to_dom(node, indent_level, special_flag) {
 			var elem = $("<span>");
 			var firstIter;
 			elem.attr('id', 'java-ast-' + node.id);
-			if (!special_flag) {
-				// leave a blank line between ifs (could replace with something fancier like boxes)
-				elem.append($("<li>").text((LINENUM)).addClass(LINENUM + ""));
-				LINENUM++;
-			}
 			var text = $("<li>");
 			text.addClass(LINENUM + "").append((LINENUM) + "\t");
 			LINENUM++;
