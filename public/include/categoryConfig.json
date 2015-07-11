@@ -1,0 +1,21 @@
+[{
+    "name": "expressions",
+    "title": "Expressions",
+    "description": "Practice expressions - addition, subtraction, multiplication and more!",
+    "problems": [{
+      "id": "86fdd9c7-1004-4e33-a0f4-2fb3634c8958",
+      "category": "expressions",
+      "title": "22 % 7 + 4 * 3 - 6.0 / 2.0",
+      "content": "22 % 7 + 4 * 3 - 6.0 / 2.0"
+    },{
+      "id": "0e5f8705-13f6-4fbf-822b-54c803bee683",
+      "category": "expressions",
+      "title": "\"hello\" + 6 * 3",
+      "content": "\"hello\" + 6 * 3"
+    },{
+      "id": "be79b84f-6364-42bc-8d2b-b68ac6a0e47d",
+      "category": "expressions",
+      "title": "4.0 + \"CSE142\" + 143",
+      "content": "4.0 + \"CSE142\" + 143"
+    }]
+}]

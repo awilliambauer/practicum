@@ -1,3 +1,4 @@
+
 var java_parsing = function() {
     "use strict";
 
@@ -64,6 +65,7 @@ var java_parsing = function() {
         SYMBOL: "SYMBOL",
         IDENTIFIER: "IDENTIFIER",
         INT_LITERAL: "INT_LITERAL",
+        DOUBLE_LITERAL: "DOUBLE_LITERAL",
         STR_LITERAL: "STR_LITERAL",
     };
 
@@ -73,6 +75,7 @@ var java_parsing = function() {
         symbol: function(v) { return {type:TokenType.SYMBOL, value:v}; },
         identifier: function(v) { return {type:TokenType.IDENTIFIER, value:v}; },
         integer: function(v) { return {type:TokenType.INT_LITERAL, value:v}; },
+        double: function(v) { return {type:TokenType.DOUBLE_LITERAL, value:v}; },
         string: function(v) { return {type:TokenType.STR_LITERAL, value:v}; },
     };
 
@@ -86,6 +89,7 @@ var java_parsing = function() {
         var self = {};
 
         var is_peeked = false;
+        var last_position = cs.position();
         var current_token;
 
         // these are all dicts because javascript doesn't have sets, boo
@@ -181,11 +185,13 @@ var java_parsing = function() {
                 token = ident in keywords ? Token.keyword(ident) : Token.identifier(ident);
             } else if (isdigit(c)) {
                 var num = c;
-                while (!cs.iseof() && isident(cs.peek())) {
+                var is_double = false;
+                while (!cs.iseof() && (isdigit(cs.peek()) || cs.peek() === '.')) {
                     c = cs.next();
+                    is_double = is_double || c === '.';
                     num += c;
                 }
-                token = Token.integer(parseInt(num));
+                token = (is_double ? Token.double : Token.integer)(parseFloat(num));
             } else if (c === '"') {
                 var str = "";
                 while (cs.peek() !== '"') {
@@ -215,12 +221,13 @@ var java_parsing = function() {
         function next() {
             var token = peek();
             is_peeked = false;
+            last_position = cs.position();
             return token;
         }
         self.next = next;
 
         function position() {
-            return cs.position();
+            return last_position;
         }
         self.position = position;
 
@@ -234,7 +241,12 @@ var java_parsing = function() {
 
         function new_id() { return ++id_counter; }
 
+        function location(start) {
+            return {start:start, end:lex.position()};
+        }
+
         function match_program() {
+            var start = lex.position();
             // let's assume every program is a class with a single method, with nothing fancy.
             match_keyword("public");
             match_keyword("class");
@@ -248,8 +260,9 @@ var java_parsing = function() {
             var body = match_block();
 
             return {
-                tag: 'method',
                 id: new_id(),
+                location: location(start),
+                tag: 'method',
                 name: name,
                 params: params,
                 body: body,
@@ -276,6 +289,7 @@ var java_parsing = function() {
         }
 
         function match_simple_statement(do_match_ending_semicolon) {
+            var start = lex.position();
             var next = lex.peek();
             var result;
             switch (next.type) {
@@ -283,7 +297,7 @@ var java_parsing = function() {
                     result = match_declaration();
                     break;
                 default:
-                    result = {id:new_id(), tag:'expression', expression:match_expression(0)};
+                    result = {id:new_id(), location: location(start), tag:'expression', expression:match_expression(0)};
                     break;
             }
             if (do_match_ending_semicolon) {
@@ -293,6 +307,7 @@ var java_parsing = function() {
         }
 
         function match_forloop() {
+            var start = lex.position();
             match_keyword("for");
             match_symbol("(");
             var init = match_simple_statement(true);
@@ -303,6 +318,7 @@ var java_parsing = function() {
             var body = match_block();
             return {
                 id: new_id(),
+                location: location(start),
                 tag:'for',
                 initializer: init,
                 condition: cond,
@@ -312,6 +328,7 @@ var java_parsing = function() {
         }
 
         function match_ifelse() {
+            var start = lex.position();
             match_keyword("if");
             match_symbol("(");
             var cond = match_expression(0);
@@ -329,6 +346,7 @@ var java_parsing = function() {
             }
             return {
                 id: new_id(),
+                location: location(start),
                 tag: 'if',
                 condition: cond,
                 then_branch: thenb,
@@ -337,12 +355,16 @@ var java_parsing = function() {
         }
 
         function match_declaration() {
+            var start = lex.position();
+            var type = match_type();
+            var expression = match_expression(0);
             // assumes that if the first token is a keyword, then there is a type, otherwise there isn't
             return {
                 id: new_id(),
+                location: location(start),
                 tag: "declaration",
-                type: match_type(),
-                expression: match_expression(0),
+                type: type,
+                expression: expression
             };
         }
 
@@ -350,7 +372,7 @@ var java_parsing = function() {
         /// rbp means "right bind power". Top-level expressions should be parsed with match_expression(0).
         function match_expression(rbp) {
             var left = match_prefix();
-            while (rbp < binop_bind_power(lex.peek())) {
+            while (!lex.iseof() && rbp < binop_bind_power(lex.peek())) {
                 left = match_infix(left);
             }
             return left;
@@ -358,14 +380,18 @@ var java_parsing = function() {
 
         // match prefix operators or sub-expressions of operators
         function match_prefix() {
+            var start = lex.position();
             var t = lex.next();
             switch (t.type) {
                 // literals
                 case TokenType.INT_LITERAL:
+                    return {id:new_id(), location:location(start), tag:'literal', type:'int', value:t.value};
+                case TokenType.DOUBLE_LITERAL:
+                    return {id:new_id(), location:location(start), tag:'literal', type:'double', value:t.value};
                 case TokenType.STR_LITERAL:
-                    return {id:new_id(), tag:'literal', value:t.value};
+                    return {id:new_id(), location:location(start), tag:'literal', type:'string', value:t.value};
                 case TokenType.IDENTIFIER:
-                    return {id:new_id(), tag:'identifier', value:t.value};
+                    return {id:new_id(), location:location(start), tag:'identifier', value:t.value};
                 default: throw_error(t.position, "Expected expression");
             }
         }
@@ -376,20 +402,22 @@ var java_parsing = function() {
 
         // match binary operators
         function match_infix(left) {
+            var start = lex.position();
             var t = lex.next();
             switch (t.value) {
                 // reference
                 case ".":
-                    return {id:new_id(), tag:'reference', object:left, name:match_ident()};
+                    var name = match_ident()
+                    return {id:new_id(), location:location(start), tag:'reference', object:left, name:name};
                 // method call
                 case "(":
                     var args = match_delimited_list(function(){return match_expression(0);}, ",", true);
-                    return {id:new_id(), tag:'call', object:left, args:args};
+                    return {id:new_id(), location:location(start), tag:'call', object:left, args:args};
                 // array index
                 case "[":
                     var index = match_expression(0);
                     match_symbol("]");
-                    return {id:new_id(), tag:'index', object:left, index:index};
+                    return {id:new_id(), location:location(start), tag:'index', object:left, index:index};
                 // infix binop or postfix
                 default:
                     if (t.type !== TokenType.SYMBOL) {
@@ -397,11 +425,12 @@ var java_parsing = function() {
                     }
 
                     if (t.value in postfix_operators) {
-                        return {id:new_id(), tag:"postfix", operator:t.value, args:[left]};
+                        return {id:new_id(), location:location(start), tag:"postfix", operator:t.value, args:[left]};
                     } else {
                         // this assumes all operators are left-associative!
                         // if we need to make them right-associative, match the right expr with a lower bind power
-                        return {id:new_id(), tag:"binop", operator:t.value, args:[left, match_expression(binop_bind_power(t))]};
+                        var right = match_expression(binop_bind_power(t));
+                        return {id:new_id(), location:location(start), tag:"binop", operator:t.value, args:[left, right]};
                     }
             }
         }
@@ -417,7 +446,7 @@ var java_parsing = function() {
                 case "==": case "!=": case "<=": case ">=": case "<": case ">": return 40;
                 case "&&": case "||": return 30;
                 case "=": return 10;
-                case ";": case ")": case "]": return 0;
+                case ";": case ")": case "]": case ",": return 0;
                 default: throw new Error("unknown operator " + token.value);
             }
         }
@@ -428,12 +457,14 @@ var java_parsing = function() {
             if (!do_skip_open_parn) {
                 match_symbol("(");
             }
-            while (true) {
-                arr.push(matchfn());
-                if (peek_symbol(delimiter)) {
-                    lex.next();
-                } else {
-                    break;
+            if (!peek_symbol(")")) {
+                while (true) {
+                    arr.push(matchfn());
+                    if (peek_symbol(delimiter)) {
+                        lex.next();
+                    } else {
+                        break;
+                    }
                 }
             }
             match_symbol(")");
@@ -441,11 +472,15 @@ var java_parsing = function() {
         }
 
         function match_parameter() {
+            var start = lex.position();
+            var type = match_type();
+            var name = match_ident();
             return {
                 id: new_id(),
+                location: location(start),
                 tag: 'parameter',
-                type: match_type(),
-                name: match_ident()
+                type: type,
+                name: name
             };
         }
 
@@ -503,45 +538,46 @@ var java_parsing = function() {
             return t.type === expected_type && t.value === expected_value;
         }
 
-        self.parse = function() {
+        self.parse_program = function() {
             return match_program();
+        };
+
+        self.parse_expression = function() {
+            return match_expression(0);
         };
 
         return self;
     };
 
-    function browser_parse(data, callback) {
-        var p = Parser(Lexer(CharStream(data)));
-        return p.parse();
+    var self = {};
+
+    self.parse_program = function(source) {
+        var p = Parser(Lexer(CharStream(source)));
+        return p.parse_program();
     }
 
-    function nodejs_parse(fname, callback) {
-        var fs = require('fs');
-
-        fs.readFile(fname, 'utf8', function (err,data) {
-            if (err) {
-                return console.log(err);
-            }
-            var p = Parser(Lexer(CharStream(data)));
-            var ast = p.parse();
-            callback(ast);
-        });
-    }
-
-    return {
-        nodejs_parse: nodejs_parse,
-        browser_parse: browser_parse
+    self.parse_expression = function(source) {
+        var p = Parser(Lexer(CharStream(source)));
+        return p.parse_expression();
     };
 
+    return self;
 }();
 
-if (typeof module !== 'undefined') {
+if (typeof module !== 'undefined' && typeof process !== 'undefined') {
     if (process.argv.length <= 2) {
         console.log("Usage: node parser.js <filename>\nWill print a json AST to stdout.");
     } else {
         var filename = process.argv[2];
-        java_parsing.nodejs_parse(filename, function(ast) {
-            console.log(JSON.stringify(ast));
+        var fs = require('fs');
+        fs.readFile(filename, 'utf8', function (err,data) {
+            if (err) {
+                console.log(err);
+            } else {
+                var ast = java_parsing.parse_program(data);
+                console.log(JSON.stringify(ast));
+            }
         });
     }
 }
+

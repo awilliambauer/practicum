@@ -8,7 +8,7 @@ body {
     font-family: Arial, san-serif;
 }
 
-body, h1, .content, .container-fluid, #header, #footer {
+body, h1, .content, #header, #footer {
     margin: 0;
     padding: 0;
 }

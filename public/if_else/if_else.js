@@ -1,19 +1,37 @@
-// (function() {
+var if_else = (function() {
 	"use strict";
+
+	// MODE variable can be either "static" or "interactive"
+	var MODE = "static";
 
 	var CURRENT_STEP;
 	var VARIABLES;
 	var AST;
+	var state;
+	var callback;
 	var CORRECT_NEXT_LINE;
 	var CORRECT_VARIABLES;
 	var CORRECT_BOOL;
 
-	$(document).ready(function() {
+	// fills in the problem space with the text of the specific problem we're working on,
+	// we will just have to replace "example.txt" with whatever file they store the problem
+	// text in
+	function initialize(urlPrefix, problemConfig, callbackObject) {
 		CORRECT_BOOL = null;
 		CURRENT_STEP = 0;
 		VARIABLES = {};
-		init();
-		$("#go_back").click(function() { window.location.href = "../index.html" });
+
+		AST = problemConfig.AST;
+		$("#problem_space > pre").html(on_convert(AST));
+
+		state = problemConfig.initialState;
+		callback = callbackObject;
+
+		var args = getArgumentString().toString();
+		$(".content > h2").text("If/Else Mystery Problem");
+		$(".content > h3 > span").text("ifElseMystery (" + args + ")");
+		$("#answer_box > span").prepend("ifElseMystery (" + args + ")");
+
 		// move to the next step if they hit enter or click next
 		$("#next").click(next);
 		$(document).keydown(function() {
@@ -24,7 +42,7 @@
 		$("#answer_box input").change(function() {
 			checkAnswer();
 		});
-	});
+	}
 
 	// checks the entered answer against the real answer to see if they have gotten
 	// the problem correct
@@ -38,38 +56,9 @@
 		}
 	}
 
-	// fills in the problem space with the text of the specific problem we're working on,
-	// we will just have to replace "example.txt" with whatever file they store the problem
-	// text in
-	function init() {
-		var problem = getProblemNum();
-		var callVals;
-		$.get("problems/problem_" + problem + ".txt", function(data) {
-			AST = java_parsing.browser_parse(data);
-			$("#problem_space > pre").html(on_convert(AST));
-			$.getScript("state_objects/state_obj_" + problem + ".js", function(data) {
-				callVals = getCallVals().toString();
-				$(".content > h2").text("If/Else Mystery Problem " + problem);
-				$(".content > h3 > span").text("ifElseMystery" + problem + "(" + callVals + ")");
-				$("#answer_box > span").prepend("ifElseMystery" + problem + "(" + callVals + ")");
-			});
-		});
-	}
-	
-	// gets the problem number from the address
-	function getProblemNum() {
-		var probText = window.location.search;
-		if (probText.trim() != "") {
-			var probNum = probText.split("=")[1];
-			return probNum;
-		} else {
-			return 1;
-		}
-	}
-
 	// gets the initial values that the method will be called with
-	function getCallVals() {
-		var rawVals = state[1].answer;
+	function getArgumentString() {
+		var rawVals = state.initialization;
 		var callVals = [];
 		for (var variable in rawVals) {
 			callVals.push(rawVals[variable]);
@@ -78,17 +67,40 @@
 	}
 
 	function next() {
+		console.log("step!");
+		state = callback.getNextState();
+		console.log(state);
+
 		$("body *").removeClass("correct")
 				   .removeClass("incorrect")
 				   .removeClass("incorrect_select");
-		setTimeout(function() {
+
+
+		if (MODE == "static") {
+
+			if (state.state.lineNum > 0) {
+				$("html, body").animate({
+					scrollTop: $("." + state.state.lineNum).offset().top - 200
+				}, 1000);
+			}
+			highlightBlocks();
+			newGetPrompt(state);
+			newHighlightLine(state.state);
+			newHighlightBlock(state.state);
+			newUpdateVariables(state.state);
+			drawVariableBank();
+			//newAddComments(currentState);
+			//newCrossOutLines(currentState);
+			//addInteraction(currentState);
+		}
+		else if (MODE == "interactive") {
 			if (checkUserInput()) {
 				$("#problem_space li").off("mouseover")
-									  .off("click");
+					.off("click");
 				$(".chosen-next-line").removeClass("chosen-next-line");
-				var currentState = state[CURRENT_STEP]
+
 				// take away "next" button when finished
-				if (currentState.prompt.indexOf("Answer") != -1) {
+				if (state.state.prompt.indexOf("Answer") != -1) {
 					$(document).off("keydown");
 				}
 
@@ -98,20 +110,20 @@
 				} else {
 					// scroll to the right position
 					$("html, body").animate({
-						scrollTop: $("." + currentState.lineNum).offset().top - 200
+						scrollTop: $("." + state.state.lineNum).offset().top - 200
 					}, 1000);
 				}
 				CURRENT_STEP++;
-				newGetPrompt(currentState);
+				newGetPromptWithTitle(currentState);
 				newHighlightLine(currentState);
 				newHighlightBlock(currentState);
 				newAddComments(currentState);
-				newUpdateVariables(currentState);
+				newUpdateVariablesWithLineNums(currentState);
 				drawVariableBank();
 				newCrossOutLines(currentState);
 				addInteraction(currentState);
 			}
-		}, 10);
+		}
 	}
 
 	function checkUserInput() {
@@ -215,10 +227,21 @@
 		$("#prompt").animate({top: nextTop});
 	}
 
+	// Extracts prompt from state and creates HTML
+	function newGetPrompt(state) {
+		if(state.hasOwnProperty("prompt")) {
+			var prompt =  state.prompt;
+			$("#prompt").html(prompt);
+			if (state.hasOwnProperty("lineNum")) {
+				movePrompt(state.lineNum);
+			}
+		}
+	}
+
 	// Extracts prompt from state, splits it into the
 	// Topic and the actual Prompt.
 	// The topic is bold.
-	function newGetPrompt(state) {
+	function newGetPromptWithTitle(state) {
 		if(state.hasOwnProperty("prompt")) {
 			var prompt =  state.prompt;
 			var promptParts = prompt.split(":")
@@ -318,7 +341,8 @@
 		}
  	}
 
-	function newUpdateVariables(state) {
+	// Old function that maintained variables
+	function newUpdateVariablesWithLineNums(state) {
 		// console.log(state.hasOwnProperty("vars"));
 		if(state.hasOwnProperty("vars")) {
 			var vars = state.vars;
@@ -343,6 +367,21 @@
 						}
 					}
 				}
+			}
+		}
+	}
+
+	function newUpdateVariables(state) {
+		if(state.hasOwnProperty("vars")) {
+			var vars = state.vars;
+			for (var variable in vars) {
+				var letter = variable;
+				var value = vars[variable];
+				if (!VARIABLES.hasOwnProperty(letter)) {
+					VARIABLES[letter] = {};
+				}
+				VARIABLES[letter]["name"] = letter;
+				VARIABLES[letter]["value"] = value;
 			}
 		}
 	}
@@ -504,4 +543,8 @@
 		return true;
 	}
 
-// })();
+	return {
+		initialize: initialize
+	};
+
+ })();

@@ -8,8 +8,9 @@ Leveraging the Center for Games back-end, this project is for visualizing progra
 
 #### Prerequisites
 1. git
-1. ssh
-1. IDE (I'm using WebStorm: [https://www.jetbrains.com/webstorm/] -- you can get a 1-year trial with a .edu email)
+2. ssh
+3. IDE (I'm using WebStorm: [https://www.jetbrains.com/webstorm/] -- you can get a 1-year trial with a .edu email)
+4. NodeJS, if you want to run the unit tests.
 
 #### Overview of setup procedure
 Alright, you thought this was going to be easy. :P Don't worry, it's not too bad.
@@ -128,3 +129,20 @@ Gitlab.cs prefers that we use ssh keys and a shared username to clone the code. 
 
 #### Troubleshooting
 * If you get a "Forbidden" error and it says you are not allowed to access the directory, make sure that your repo is in a directory whose parent directories all have public read access. (e.g. your Documents folder will generally not work)
+
+## Running the Unit Tests
+
+Unit tests uses Google's karma as the test runner. They work on Linux/Mac/Windows.
+
+First install NodeJS and npm. Then, in a shell/cmd, in the top directory (the one with `package.json`), run:
+
+    npm install
+    npm install -g karma-cli
+    karma start
+
+This should open a few browser windows. Then, in a different shell,
+
+    karma run
+
+to run the tests. They can be run multiple times without closing the browsers.
+

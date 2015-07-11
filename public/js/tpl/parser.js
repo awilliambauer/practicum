@@ -1,15 +1,15 @@
 
-var java_parsing = function() {
-    "use strict";
+/// string format function, should put somewhere useful
+function sprintf(fmt) {
+    var args = arguments;
+    return fmt.replace(/{(\d+)}/g, function(match, index) {
+        index = parseInt(index);
+        return typeof args[index+1] !== 'undefined' ? args[index+1] : match;
+    });
+}
 
-    /// string format function
-    function sprintf(fmt) {
-        var args = arguments;
-        return fmt.replace(/{(\d+)}/g, function(match, index) {
-            index = parseInt(index);
-            return typeof args[index+1] !== 'undefined' ? args[index+1] : match;
-        });
-    }
+var simulator_parsing = function() {
+    "use strict";
 
     /// Throws an exception, aborting the parsing process.
     /// pos can either be a token or a character stream position object
@@ -87,13 +87,13 @@ var java_parsing = function() {
         var self = {};
 
         var is_peeked = false;
+        var last_position = cs.position();
         var current_token;
 
         // these are all dicts because javascript doesn't have sets, boo
         var keywords = {
-            "class":1, "public":1, "static":1,
-            "void":1, "int":1,
-            "for":1, "if":1, "else":1
+            "if":1, "else":1, "do":1, "while":1, "for":1,
+            "function":1, "var":1, "let":1, "of":1, "break":1,
         };
 
         var symbols = {
@@ -101,7 +101,7 @@ var java_parsing = function() {
             "=":1, ";":1, ".":1, ",":1,
             "<":1, ">":1, "<=":1, ">=":1, "==":1, "!=":1,
             "+":1, "-":1, "*":1, "/":1, "!":1, "%":1,
-            "++":1, "--":1,
+            "++":1, "--":1, ":":1,
             "&":1, "|":1, "&&":1, "||":1,
         };
 
@@ -216,18 +216,23 @@ var java_parsing = function() {
         function next() {
             var token = peek();
             is_peeked = false;
+            last_position = cs.position();
             return token;
         }
         self.next = next;
 
         function position() {
-            return cs.position();
+            return last_position;
         }
         self.position = position;
 
         return self;
     };
 
+    /**
+     * tags: function, if, declaration, parameter, expression, for, literal, identifier, index, call,
+     *       reference, postfix, binop, break
+     */
     var Parser = function(lex) {
         var self = {};
 
@@ -235,24 +240,25 @@ var java_parsing = function() {
 
         function new_id() { return ++id_counter; }
 
+        function location(start) {
+            return {start:start, end:lex.position()};
+        }
+
         function match_program() {
-            // let's assume every program is a class with a single method, with nothing fancy.
-            match_keyword("public");
-            match_keyword("class");
-            match_ident(); // ignore the class name
-            match_symbol("{");
-            match_keyword("public");
-            match_keyword("static");
-            match_type(); // ignore return type
-            var name = match_ident();
-            var params = match_delimited_list(match_parameter, ",");
+            var start = lex.position();
+            // every program is a single function
+            match_keyword("function");
+            var name = match_ident(); // ignore the class name
+            match_symbol("(");
+            var params = match_delimited_list(match_parameter, ",", ")");
             var body = match_block();
 
             return {
-                tag: 'method',
                 id: new_id(),
+                location: location(start),
+                tag: 'function',
                 name: name,
-                params: params,
+                parameters: params,
                 body: body,
             };
         }
@@ -268,68 +274,162 @@ var java_parsing = function() {
         }
 
         function match_statement() {
-            var next = lex.peek();
-            switch (next.value) {
-                case "for": return match_forloop();
-                case "if": return match_ifelse();
-                default: return match_simple_statement(true);
+            // check for meta tags
+            var annotations = [];
+            if (peek_symbol('[')) {
+                match_symbol('[');
+                annotations = match_delimited_list(match_annotation, ";", "]");
             }
+
+            var next = lex.peek();
+            var stmt;
+            switch (next.value) {
+                case "do": stmt = match_dowhile(); break;
+                case "for": stmt = match_foreach(); break;
+                case "if": stmt = match_ifelse(); break;
+                case "while": stmt = match_while(); break;
+                case "break": stmt = match_break(); break;
+                default: stmt = match_simple_statement(true); break;
+            }
+            stmt.annotations = annotations;
+            return stmt;
+        }
+
+        function match_annotation() {
+            var start = lex.position();
+            var name = match_ident();
+            var args = [];
+            if (peek_symbol('(')) {
+                match_symbol('(');
+                args = match_delimited_list(function(){return match_expression(0);}, ",", ")");
+            }
+
+            return {
+                id: new_id(),
+                location: location(start),
+                tag:'annotation',
+                name: name,
+                args: args
+            };
         }
 
         function match_simple_statement(do_match_ending_semicolon) {
+            var start = lex.position();
             var next = lex.peek();
             var result;
+            var expr;
             switch (next.type) {
                 case TokenType.KEYWORD:
-                    result = match_declaration();
+                    if (next.value === 'let') {
+                        result = match_declaration();
+                    } else {
+                        throw_error(lex.position(), sprintf(
+                            "Expected 'let' or expression, but found {0}",
+                            token_to_string(next)));
+                    }
                     break;
                 default:
-                    result = {id:new_id(), tag:'expression', expression:match_expression(0)};
+                    expr = match_expression(0, true);
+                    // HACK translate assignments to their own statement type
+                    if (expr.tag === 'binop' && expr.operator === '=') {
+                        result = {tag:'assignment', expression:expr.args[1], destination:expr.args[0]};
+                    } else {
+                        result = {tag:'expression', expression:expr};
+                    }
                     break;
             }
             if (do_match_ending_semicolon) {
                 match_symbol(";");
             }
+            result.id = new_id();
+            result.location = location(start);
             return result;
         }
 
-        function match_forloop() {
-            match_keyword("for");
-            match_symbol("(");
-            var init = match_simple_statement(true);
-            var cond = match_expression(0);
+        function match_break() {
+            var start = lex.position();
+            match_keyword("break");
             match_symbol(";");
-            var incr = match_simple_statement(false);
+            return {
+                id: new_id(),
+                location: location(start),
+                tag: "break"
+            };
+        }
+
+        function match_dowhile() {
+            var start = lex.position();
+            match_keyword("do");
+            var body = match_block();
+            match_keyword("while");
+            match_symbol("(");
+            var cond = match_expression(0);
+            match_symbol(")");
+            match_symbol(";");
+            return {
+                id: new_id(),
+                location: location(start),
+                tag:'dowhile',
+                condition: cond,
+                body: body
+            };
+        }
+
+        function match_while() {
+            var start = lex.position();
+            match_keyword("while");
+            match_symbol("(");
+            var cond = match_expression(0);
             match_symbol(")");
             var body = match_block();
             return {
                 id: new_id(),
-                tag:'for',
-                initializer: init,
+                location: location(start),
+                tag: "while",
                 condition: cond,
-                increment: incr,
+                body: body
+            };
+        }
+
+        function match_foreach() {
+            var start = lex.position();
+            match_keyword("for");
+            match_symbol("(");
+            match_keyword("let");
+            var variable = match_ident();
+            match_keyword("of");
+            var collection = match_expression(0);
+            match_symbol(")");
+            var body = match_block();
+            return {
+                id: new_id(),
+                location: location(start),
+                tag:'foreach',
+                variable: variable,
+                collection: collection,
                 body: body
             };
         }
 
         function match_ifelse() {
+            var start = lex.position();
             match_keyword("if");
             match_symbol("(");
             var cond = match_expression(0);
             match_symbol(")");
             var thenb = match_block();
-            var elseb = undefined;
+            var elseb = null;
             if (peek_keyword("else")) {
                 match_keyword("else");
                 if (peek_symbol("{")) {
                     elseb = match_block();
                 } else {
-                    // HACK assume another if here, so match the block. this is probably not what we want eventually.
-                    elseb = match_statement();
+                    elseb = [match_statement()];
                 }
             }
             return {
                 id: new_id(),
+                location: location(start),
                 tag: 'if',
                 condition: cond,
                 then_branch: thenb,
@@ -338,35 +438,49 @@ var java_parsing = function() {
         }
 
         function match_declaration() {
-            // assumes that if the first token is a keyword, then there is a type, otherwise there isn't
+            var start = lex.position();
+            match_keyword('let');
+            var name = match_ident();
+            var type;
+            if (peek_symbol(':')) {
+                match_symbol(':');
+                type = match_type();
+            }
+
             return {
                 id: new_id(),
+                location: location(start),
                 tag: "declaration",
-                type: match_type(),
-                expression: match_expression(0),
+                name: name,
+                type: type,
             };
+        }
+
+        function match_type() {
+            return match_ident();
         }
 
         /// Implementation note: expressions use this technique called top-down operator precedence parsing.
         /// rbp means "right bind power". Top-level expressions should be parsed with match_expression(0).
-        function match_expression(rbp) {
+        function match_expression(rbp, is_statement) {
             var left = match_prefix();
             while (rbp < binop_bind_power(lex.peek())) {
-                left = match_infix(left);
+                left = match_infix(left, is_statement);
             }
             return left;
         }
 
         // match prefix operators or sub-expressions of operators
         function match_prefix() {
+            var start = lex.position();
             var t = lex.next();
             switch (t.type) {
                 // literals
                 case TokenType.INT_LITERAL:
                 case TokenType.STR_LITERAL:
-                    return {id:new_id(), tag:'literal', value:t.value};
+                    return {id:new_id(), location: location(start), tag:'literal', value:t.value};
                 case TokenType.IDENTIFIER:
-                    return {id:new_id(), tag:'identifier', value:t.value};
+                    return {id:new_id(), location: location(start), tag:'identifier', value:t.value};
                 default: throw_error(t.position, "Expected expression");
             }
         }
@@ -376,21 +490,22 @@ var java_parsing = function() {
         };
 
         // match binary operators
-        function match_infix(left) {
+        function match_infix(left, is_statement) {
+            var start = lex.position();
             var t = lex.next();
             switch (t.value) {
                 // reference
                 case ".":
-                    return {id:new_id(), tag:'reference', object:left, name:match_ident()};
+                    return {id:new_id(), location: location(start), tag:'reference', object:left, name:match_ident()};
                 // method call
                 case "(":
-                    var args = match_delimited_list(function(){return match_expression(0);}, ",", true);
-                    return {id:new_id(), tag:'call', object:left, args:args};
+                    var args = match_delimited_list(function(){return match_expression(0);}, ",", ")");
+                    return {id:new_id(), location: location(start), tag:'call', object:left, args:args};
                 // array index
                 case "[":
                     var index = match_expression(0);
                     match_symbol("]");
-                    return {id:new_id(), tag:'index', object:left, index:index};
+                    return {id:new_id(), location: location(start), tag:'index', object:left, index:index};
                 // infix binop or postfix
                 default:
                     if (t.type !== TokenType.SYMBOL) {
@@ -398,11 +513,15 @@ var java_parsing = function() {
                     }
 
                     if (t.value in postfix_operators) {
-                        return {id:new_id(), tag:"postfix", operator:t.value, args:[left]};
+                        return {id:new_id(), location: location(start), tag:"postfix", operator:t.value, args:[left]};
                     } else {
+                        // assignment can only appear as a statement
+                        if (!is_statement && t.value === '=') {
+                            throw_error(t.position, "Assignments cannot be expressions, must be a statement.");
+                        }
                         // this assumes all operators are left-associative!
                         // if we need to make them right-associative, match the right expr with a lower bind power
-                        return {id:new_id(), tag:"binop", operator:t.value, args:[left, match_expression(binop_bind_power(t))]};
+                        return {id:new_id(), location: location(start), tag:"binop", operator:t.value, args:[left, match_expression(binop_bind_power(t))]};
                     }
             }
         }
@@ -418,18 +537,16 @@ var java_parsing = function() {
                 case "==": case "!=": case "<=": case ">=": case "<": case ">": return 40;
                 case "&&": case "||": return 30;
                 case "=": return 10;
-                case ";": case ")": case "]": return 0;
+                case ";": case ")": case "]": case ",": return 0;
                 default: throw new Error("unknown operator " + token.value);
             }
         }
 
-        /// match a list of items delimited by a symbol (e.g., comma or semicolon)
-        function match_delimited_list(matchfn, delimiter, do_skip_open_parn) {
+        /// match a list of items delimited by a symbol (e.g., comma or semicolon) until the closer (e.g., right paren).
+        /// Assumes opening paren/bracket/etc was already matched.
+        function match_delimited_list(matchfn, delimiter, closer) {
             var arr = [];
-            if (!do_skip_open_parn) {
-                match_symbol("(");
-            }
-            if (!peek_symbol(")")) {
+            if (!peek_symbol(closer)) {
                 while (true) {
                     arr.push(matchfn());
                     if (peek_symbol(delimiter)) {
@@ -439,35 +556,19 @@ var java_parsing = function() {
                     }
                 }
             }
-            match_symbol(")");
+            match_symbol(closer);
             return arr;
         }
 
         function match_parameter() {
+            var start = lex.position();
+            var name = match_ident();
             return {
                 id: new_id(),
+                location: location(start),
                 tag: 'parameter',
-                type: match_type(),
-                name: match_ident()
+                name: name,
             };
-        }
-
-        /// Only capable of matching void, int, and int[].
-        function match_type() {
-            var t = lex.next();
-            var tn = t.value;
-            switch (tn) {
-                case 'void': break;
-                case 'int': break;
-                default: throw_error(t.position, "Expected 'int' or 'void', found " + tn);
-            }
-            if (peek_symbol("[")) {
-                match_symbol("[");
-                match_symbol("]");
-                return tn + "[]";
-            } else {
-                return tn;
-            }
         }
 
         function match_ident() {
@@ -538,12 +639,12 @@ var java_parsing = function() {
 
 }();
 
-if (typeof module !== 'undefined') {
+if (typeof module !== 'undefined' && typeof process !== 'undefined') {
     if (process.argv.length <= 2) {
-        console.log("Usage: node parser.js <filename>\nWill print a json AST to stdout.");
+        console.log("Usage: node simulator_parser.js <filename>\nWill print a json AST to stdout.");
     } else {
         var filename = process.argv[2];
-        java_parsing.nodejs_parse(filename, function(ast) {
+        simulator_parsing.nodejs_parse(filename, function(ast) {
             console.log(JSON.stringify(ast));
         });
     }
