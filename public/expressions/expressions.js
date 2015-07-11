@@ -30,7 +30,7 @@ var expressions = (function() {
     };
 
     // Callback function for navigation javascript. Installs a problem into the page
-    var initialize = function(urlPrefix, problemConfig, callbackObject, initial_state) {
+    var initialize = function(problemConfig, callbackObject, initial_state) {
         // this code runs the hard-coded array of state objects stored in state_1.js
 
         /*$.getScript("state_objects/state_1.js", function() {

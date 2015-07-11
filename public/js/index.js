@@ -47,8 +47,8 @@ var csed = (function() {
 
     function showHome() {
         d3.select("#main-page").classed("hidden", false);
-        d3.select("#problem").classed("hidden", true);
-        d3.select("#problem").innerHTML = "";
+        d3.select("#problem-container").classed("hidden", true);
+        d3.select("#problem").remove();
     }
 
     function findProblem(categoryConfig, requestedCategory, requestedProblemId)  {
@@ -148,7 +148,7 @@ var csed = (function() {
             var initial_state = problemUI.create_initial_state(problemConfig);
             main_simulator.initialize(category, {state:initial_state}).then(function() {
                 console.log("finished initializing simulator");
-                problemUI.initialize(URL_PREFIX, problemConfig, new CallbackObject(), initial_state);
+                problemUI.initialize(problemConfig, new CallbackObject(), initial_state);
             }, function(error) {
                 console.error("something went wrong: ");
                 console.log(error);

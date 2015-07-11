@@ -23,6 +23,7 @@ var if_else = (function() {
 		var state = problemConfig.initialState;
 		createStartingStates(problemConfig, state);
 		loadState(problemConfig, state, problemConfig.AST);
+		return state;
 	};
 
 	// create the method call list in the dom
@@ -63,7 +64,7 @@ var if_else = (function() {
 		console.log(state);
 		main_simulator.initialize("ifElse", {state:state, args:[AST]}).then(function() {
 			console.log("finished initializing simulator");
-			if_else.initialize(problemConfig, state, new CallbackObject());
+			if_else.initialize(problemConfig, new CallbackObject(), state);
 		}, function(error) {
 			console.error("something went wrong: ");
 			console.log(error);
@@ -77,7 +78,7 @@ var if_else = (function() {
 	// fills in the problem space with the text of the specific problem we're working on,
 	// we will just have to replace "example.txt" with whatever file they store the problem
 	// text in
-	function initialize(problemConfig, stateToStart, callbackObject) {
+	function initialize(problemConfig, callbackObject, initialState) {
 		CORRECT_BOOL = null;
 		CURRENT_STEP = 0;
 		VARIABLES = {};
@@ -88,7 +89,7 @@ var if_else = (function() {
 			AST_INSTALLED_INTO_DOM = true;
 		}
 
-		state = stateToStart;
+		state = initialState;
 		callback = callbackObject;
 
 		var args = getArgumentString().toString();
@@ -109,7 +110,7 @@ var if_else = (function() {
 			checkAnswer();
 		});
 
-		fillStartingStates(problemConfig, stateToStart);
+		fillStartingStates(problemConfig, initialState);
 	}
 
 	// Highlight the button that represents the method call we're currently viewing and disable it
