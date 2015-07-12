@@ -53,8 +53,8 @@ var if_else = (function() {
 
 
 	function CallbackObject() {
-		this.getNextState = function() {
-			return main_simulator.next();
+		this.getNextState = function(fadeLevel) {
+			return main_simulator.next(fadeLevel);
 		}
 	}
 
@@ -168,7 +168,7 @@ var if_else = (function() {
 
 	function next() {
 		console.log("step!");
-		state = callback.getNextState();
+		state = callback.getNextState(0);
 		console.log(state);
 
 		$("body *").removeClass("correct")

@@ -21,6 +21,11 @@ var expressions = (function() {
     // whether or not this is the first time the user is clicking the "step" button
     var firstStep = true;
 
+    // current fading level -- will need to move this to index.js at some point
+    // level 0 = full step-by-step explanations
+    // level 1 = full explanations with user input
+    var fadeLevel = 1;
+
     var logger;
 
     // Callback function for navigation javascript -- called before problem load.
@@ -50,7 +55,7 @@ var expressions = (function() {
 
         var expressionHeader = document.getElementById("expressionHeader");
         var expression = state.problemLines[0];
-        expressionHeader.innerHTML = buildExpressionString(expression, []);
+        expressionHeader.innerHTML = buildExpressionString(expression, [], false);
 
         //if users attempt to check a submitted answer
         d3.select("#submit").on("click", correct);
@@ -69,7 +74,7 @@ var expressions = (function() {
     };
 
     function step() {
-        state = callback.getNextState();
+        state = callback.getNextState(fadeLevel);
 
         var stepHolder;
         if (firstStep) {
@@ -98,6 +103,20 @@ var expressions = (function() {
 
     }
 
+    function stepWithState() {
+        stepHolder = document.getElementById("steps");
+        stepHolder.innerHTML = "";
+        document.getElementById("nextstep").style.visibility = "visible";
+        var initialPrompt = document.createElement("div");
+        initialPrompt.classList.add("prompt");
+        initialPrompt.innerHTML = "Start by evaluating all the Multiplicative (* / %) operators from left to right. <br /> Then evaluate " +
+            "the Additive (+ -) operators from left to right.";
+
+        stepHolder.appendChild(initialPrompt);
+
+        addStepHTML();
+    }
+
     function addStepHTML() {
         var highlighting = getCurrentHighlighting();
 
@@ -110,19 +129,28 @@ var expressions = (function() {
 
             // display the prompt text next to the last line
             if (i == state.state.problemLines.length - 1) {
-                var promptText = removeCamelCase(state.prompt);
                 var promptHTML = document.createElement("p");
                 promptHTML.classList.add("step");
-                promptHTML.innerHTML = promptText + "<div>&nbsp;</div>";
+                promptHTML.innerHTML = state.prompt + "<div>&nbsp;</div>";
                 lineHTML.appendChild(promptHTML);
             }
 
             var expressionHTML = document.createElement("div");
             expressionHTML.classList.add("exp");
-            expressionHTML.innerHTML = buildExpressionString(expression, highlighting[i]);
-            lineHTML.appendChild(expressionHTML);
 
-            document.getElementById("steps").appendChild(lineHTML);
+            // if we're asking for a user response, make the expression string clickable
+            if (fadeLevel > 0 && i === state.state.problemLines.length -1 && state.hasOwnProperty("askForResponse")) {
+                expressionHTML.innerHTML = buildExpressionString(expression, highlighting[i], true);
+                lineHTML.appendChild(expressionHTML);
+                document.getElementById("steps").appendChild(lineHTML);
+                document.getElementById("nextstep").style.visibility = "hidden";
+                addExpressionOnClickListeners(expression);
+            }
+            else {
+                expressionHTML.innerHTML = buildExpressionString(expression, highlighting[i], false);
+                lineHTML.appendChild(expressionHTML);
+                document.getElementById("steps").appendChild(lineHTML);
+            }
         }
     }
 
@@ -152,32 +180,39 @@ var expressions = (function() {
         return highlighting;
     }
 
-    function removeCamelCase(string) {
-        // insert a space before all caps
-        string = string.replace(/([A-Z])/g, ' $1');
-        // uppercase the first character
-        string = string.replace(/^./, function(str){ return str.toUpperCase(); });
-        return string;
-    }
-
     // create the expression HTML from the array of objects
-    function buildExpressionString(expression, highlighting) {
+    function buildExpressionString(expression, highlighting, makeClickable) {
         var expressionString = "";
         for (var i = 0; i < expression.length; i++) {
+            var value = getExpressionValue(expression, i);
             if (highlighting.length > 0 && highlighting.indexOf(i) >= 0) {
                 if (expression[i].type == "empty"){
                     expressionString += "<span class='empty'>&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;";
                 }
                 else {
-                    expressionString += "<span class='clicked'>" + getExpressionValue(expression, i) + "</span> ";
+                    expressionString += "<span class='clicked'>" + value + "</span> ";
                 }
-
+            }
+            else if (makeClickable) {
+                expressionString += "<span class='clickable' id='expression_" + i + "'>" + value + "</span> ";
             }
             else {
-                expressionString += getExpressionValue(expression, i) + " ";
+                expressionString += value + " ";
             }
         }
         return expressionString;
+    }
+
+    // for clickable expression strings, adds the event listeners to ask
+    // the simulator if the response was correct or not
+    function addExpressionOnClickListeners(expression) {
+        for (var i = 0; i < expression.length; i++) {
+            d3.select("#expression_" + i).on("click", function() {
+                var id = d3.select(this).attr("id");
+                var index = id.substring(id.indexOf("_") + 1);
+                checkAnswer(index);
+            });
+        }
     }
 
     // gets the value at a particular index
@@ -191,6 +226,11 @@ var expressions = (function() {
         } else {
             return arr[index].value;
         }
+    }
+
+    function checkAnswer(value) {
+        state = callback.checkAnswer(parseInt(value), "cell");
+        stepWithState();
     }
 
 

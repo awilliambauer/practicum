@@ -96,8 +96,12 @@ var csed = (function() {
 
     function CallbackObject() {
 
-        this.getNextState = function() {
-            return main_simulator.next();
+        this.getNextState = function(fadeLevel) {
+            return main_simulator.next(fadeLevel);
+        }
+
+        this.checkAnswer = function(answer, property) {
+            return main_simulator.checkAnswer(answer, property);
         }
 
     }
