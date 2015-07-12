@@ -53,8 +53,8 @@ var if_else = (function() {
 
 
 	function CallbackObject() {
-		this.getNextState = function() {
-			return main_simulator.next();
+		this.getNextState = function(fadeLevel) {
+			return main_simulator.next(fadeLevel);
 		}
 	}
 
@@ -168,7 +168,7 @@ var if_else = (function() {
 
 	function next() {
 		console.log("step!");
-		state = callback.getNextState();
+		state = callback.getNextState(0);
 		console.log(state);
 
 		$("body *").removeClass("correct")
@@ -232,8 +232,8 @@ var if_else = (function() {
 			var varObject = state.variables.in_scope[variable];
 
 			if (varObject.hasOwnProperty("value")) {
-				console.log(variable);
-				console.log(varObject);
+				//console.log(variable);
+				//console.log(varObject);
 				var objectToVisualize = varObject["value"];
 
 				if (objectToVisualize.hasOwnProperty("type")) {
@@ -254,10 +254,10 @@ var if_else = (function() {
 					}
 					else if (varObject.type === "codeLine") {
 						highlightLine(varObject.value);
+						grayOutPreviousLines(varObject.value);
 					}
-					else if (varObject.type === "assignment") {
-						console.log("found assignment")
-						//highlightAssignment(varObject.value);
+					else if (varObject.type === "crossedOutLines") {
+						crossOutLines(varObject.value);
 					}
 					else {
 						console.error("Unsupported variable type: " + varObject.type);
@@ -289,7 +289,6 @@ var if_else = (function() {
 					d3.select(this).select(".bank_variable_value").attr("class","bank_variable_value just_updated_value");
 				}
 			}
-
 		});
 	}
 
@@ -299,9 +298,27 @@ var if_else = (function() {
 		$("." + lineNum).addClass("highlight");
 	}
 
-	function highlightAssignment(variable) {
-
+	// grays out the lines that we have already passed
+	function grayOutPreviousLines(lineNum) {
+		for (var line = 1; line < lineNum; line++) {
+			var list = document.getElementsByClassName(String(line))[0]; // Gets li element to highlight
+			$("." + line).addClass("grey_out");
+			$("." + line + " *").removeAttr("style");
+		}
 	}
+
+	// Crosses out all the lines in the array passed in as a parameter
+	function crossOutLines(lineNums) {
+		for (var i = 0; i < lineNums.length; i++) {
+			var list = document.getElementsByClassName(lineNums[i])[0];
+			console.log(list);
+			$(list).addClass("cross_out");
+		}
+	}
+
+
+
+
 
 
 	function checkUserInput() {

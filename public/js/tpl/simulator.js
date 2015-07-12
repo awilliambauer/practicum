@@ -270,24 +270,24 @@ function simulator(ast, globals) {
                 add_to_context(stmt.parent.variable, stmt.element, undefined);
                 break;
             case "dowhile":
-                last(call_stack).to_execute.push({tag:'dowhile:condition', parent:stmt});
+                last(call_stack).to_execute.push({tag:'dowhile:condition', parent:stmt, annotations:stmt.annotations});
                 push_stack_state(stmt.body, 'do');
                 break;
             case "dowhile:condition":
                 if (evaluate(stmt.parent.condition, state, result)) {
-                    last(call_stack).to_execute.push({tag:'dowhile:condition', parent:stmt.parent});
+                    last(call_stack).to_execute.push({tag:'dowhile:condition', parent:stmt.parent, annotations:stmt.annotations});
                     push_stack_state(stmt.parent.body, 'do');
                 }
                 break;
             case "while":
                 if (evaluate(stmt.condition, state, result)) {
-                    last(call_stack).to_execute.push({tag:'while:condition', parent:stmt});
+                    last(call_stack).to_execute.push({tag:'while:condition', parent:stmt, annotations:stmt.annotations});
                     push_stack_state(stmt.body, 'while');
                 }
                 break;
             case "while:condition":
                 if (evaluate(stmt.parent.condition, state, result)) {
-                    last(call_stack).to_execute.push({tag:'while:condition', parent:stmt.parent});
+                    last(call_stack).to_execute.push({tag:'while:condition', parent:stmt.parent, annotations:stmt.annotations});
                     push_stack_state(stmt.parent.body, 'while');
                 }
                 break;

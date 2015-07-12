@@ -108,6 +108,17 @@ function IfElseHelper() {
 		}
 	};
 
+    this.getElseStatementLineNum = function(statement) {
+        console.log(statement[0]["location"]["start"]["line"] - 1);
+        return statement[0]["location"]["start"]["line"] - 1;
+    }
+
+    this.getElseIfStatementLineNum = function(statement) {
+        console.log("if else");
+        console.log(statement["location"]["start"]["line"]);
+        return statement["location"]["start"]["line"];
+    }
+
 	this.doesThisStatementHaveAConditional = function(statement) {
 		if (statement.hasOwnProperty("condition")) {
 			return true;
@@ -119,7 +130,7 @@ function IfElseHelper() {
 		}
 	};
 
-	this.doesTheConditionalEvaluateToTrue = function(statement, state) {
+	this.doesThisConditionalEvaluateToTrue = function(statement, state) {
 		if (this.evaluateConditional(statement["condition"], state)) {
 			// we're going into an "if" or "else if" branch, so we should reset the if/else index
 			this.currentIfElseIndex = -1;
@@ -131,14 +142,52 @@ function IfElseHelper() {
 	};
 
     this.crossOut = function(statement, crossedOutLines, AST, state) {
+        var lineNum = statement[0]["location"]["start"]["line"];
+        if (typeof crossedOutLines === "undefined") {
+            crossedOutLines = [];
+        }
+        crossedOutLines.push(lineNum);
+        return crossedOutLines;
+    }
 
+    this.crossOutOtherBranches = function(statement, crossedOutLines, AST, state) {
+        console.log("crossing out other branches");
+        console.log(statement);
+        console.log(AST["body"][this.currentCodeBlockIndex]);
+
+        var branchesToCrossOut = this.getBranchesToCrossOut(statement["else_branch"], []);
+        console.log("cross out branch ids:");
+        console.log(branchesToCrossOut);
+
+        crossedOutLines = crossedOutLines.concat(branchesToCrossOut);
+        return crossedOutLines;
+    }
+
+    this.getBranchesToCrossOut = function(statement, branchIds) {
+
+        if (statement.hasOwnProperty("tag") && statement.tag === "if") {
+            branchIds.push(statement.location.start.line);
+            var thenBranchIds = this.getBranchesToCrossOut(statement["then_branch"]);
+            var elseBranchIds = this.getBranchesToCrossOut(statement["else_branch"]);
+            branchIds = branchIds.concat(thenBranchIds);
+            branchIds = branchIds.concat(elseBranchIds);
+            return branchIds;
+        }
+        else {
+            // the else line isn't in the ast, so we have to add it manually
+            branchIds.push(statement[0].location.start.line - 1)
+            for (var i = 0; i < statement.length; i++) {
+                branchIds.push(statement[i].location.start.line);
+            }
+            return branchIds;
+        }
     }
 
 	this.isThereAnotherIfElseStatement = function(AST, state) {
 
 		var nextElseBranch;
 
-		if (this.currentIfElseIndex + 1 == 1) {
+        if (this.currentIfElseIndex + 1 == 1) {
 			nextElseBranch = AST["body"][this.currentCodeBlockIndex]["else_branch"];
 		}
 		else if (this.currentIfElseIndex + 1 == 2) {

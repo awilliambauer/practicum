@@ -4,6 +4,11 @@
   as possible, and rely on bootstrap's stylings. This will get easier once we install scss or
   less or something.
 */
+
+.expressions_problem .clickable:hover {
+    cursor: pointer;
+    background-color: #9DE0AD;
+}
 .expressions_problem .clicked {
     color: #45ADA8;
 }
