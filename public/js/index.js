@@ -137,13 +137,19 @@ var csed = (function() {
             var category = problemConfig.category;
 
             var initial_state = problemUI.create_initial_state(problemConfig);
-            main_simulator.initialize(category, {state:initial_state}).then(function() {
-                console.log("finished initializing simulator");
-                problemUI.initialize(problemConfig, new CallbackObject(), initial_state, task_logger);
-            }, function(error) {
-                console.error("something went wrong: ");
-                console.log(error);
-            });
+            main_simulator.initialize(category, {state:initial_state});
+
+            // This problemUI initialize call probably needs to happen after the main_sim init call,
+            // which is handled by promises/then() with fetch.
+            problemUI.initialize(problemConfig, new CallbackObject(), initial_state, task_logger);
+
+//            main_simulator.initialize(category, {state:initial_state}).then(function() {
+//                console.log("finished initializing simulator");
+//                problemUI.initialize(problemConfig, new CallbackObject(), initial_state, task_logger);
+//            }, function(error) {
+//                console.error("something went wrong: ");
+//                console.log(error);
+//            });
 //        }, function(error) {
 //            console.error(error);
         });

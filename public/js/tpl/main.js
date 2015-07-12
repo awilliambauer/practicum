@@ -36,13 +36,24 @@ var main_simulator = (function () {"use strict";
             helper: self.getHelper(algo)
         }
 
-        return self.parse(algo).then(function(ast) {
+        d3.text("js/tpl/algorithms/" + algo + ".tpl.txt", function(error, algoText) {
+            if (error) return console.error(error);
+            var ast = simulator_parsing.browser_parse(algoText);
             var sim = simulator(ast, globals);
             // HACK function name currently ignored
             sim.start_function(undefined, args);
             states = explainer.create_explanations(sim.run_all(state));
             currentState = -1;
         });
+
+
+        //return self.parse(algo).then(function(ast) {
+        //    var sim = simulator(ast, globals);
+        //    // HACK function name currently ignored
+        //    sim.start_function(undefined, args);
+        //    states = explainer.create_explanations(sim.run_all(state));
+        //    currentState = -1;
+        //});
 
     };
 
