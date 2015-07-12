@@ -10,7 +10,7 @@ var main_simulator = (function () {"use strict";
         else if (algoName == "if_else") {
             return new IfElseHelper();
         }
-    }
+    };
 
     self.parse = function(algoName) {
         return fetch("js/tpl/algorithms/" + algoName + ".tpl.txt").then(function(response) {
@@ -32,7 +32,7 @@ var main_simulator = (function () {"use strict";
 
         var globals = {
             helper: self.getHelper(algo)
-        }
+        };
 
         return self.parse(algo).then(function(ast) {
             var sim = simulator(ast, globals);
@@ -45,13 +45,13 @@ var main_simulator = (function () {"use strict";
     };
 
     self.next = function() {
-        if (currentState + 1 < states.length) {
+        if (currentState < states.length) {
             return states[currentState++];
         }
         else {
             return null;
         }
-    }
+    };
 
     return self;
 }());

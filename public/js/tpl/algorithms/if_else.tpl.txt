@@ -41,6 +41,7 @@ function TPLAlgorithm() {
 			[no_step]
             thisIsTheNextIfElseBranchThatWillExecute = helper.getNextIfElseStatement(AST, state);
             if (helper.doesThisConditionalEvaluateToTrue(thisIsTheNextIfElseBranchThatWillExecute, state)) {
+                [no_step]
                 do {
                     thisIsTheNextLineThatWillExecute = helper.getNextStatement(thisIsTheNextIfElseBranchThatWillExecute["then_branch"], AST, state);
                     thisLineUpdatesAVariableValue = helper.executeUpdateVariableStatement(thisIsTheNextIfElseBranchThatWillExecute["then_branch"], AST, state);
@@ -64,6 +65,7 @@ function TPLAlgorithm() {
                             [prompt]
                             "Since the conditional evaluates to true, we won't go into any of the other branches.";
                             crossOutTheBranchLines = helper.crossOutOtherBranches(thisIsTheNextIfElseBranchThatWillExecute, crossOutTheBranchLines, AST, state);
+                            [no_step]
                             do {
                                 thisIsTheNextLineThatWillExecute = helper.getNextStatement(thisIsTheNextIfElseBranchThatWillExecute["then_branch"], AST, state);
                                 thisLineUpdatesAVariableValue = helper.executeUpdateVariableStatement(thisIsTheNextIfElseBranchThatWillExecute["then_branch"], AST, state);
@@ -82,6 +84,7 @@ function TPLAlgorithm() {
                         thisIsTheNextLineThatWillExecute = helper.getElseStatementLineNum(thisIsTheNextIfElseBranchThatWillExecute);
                         [prompt]
                         "We go into the else branch";
+                        [no_step]
                         do {
                             thisIsTheNextLineThatWillExecute = helper.getNextStatement(thisIsTheNextIfElseBranchThatWillExecute, AST, state);
                             thisLineUpdatesAVariableValue = helper.executeUpdateVariableStatement(thisIsTheNextIfElseBranchThatWillExecute, AST, state);

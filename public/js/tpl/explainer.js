@@ -10,7 +10,10 @@ var explainer = (function() {
             return false;
         } else {
             switch (sim_result.statement.tag) {
-                case 'declaration': return false;
+                case 'declaration':
+                case 'dowhile': // skip over the do (condition checks will be dowhile:condition)
+                case 'break': // for now we never explain breaks, so this removes the need to annotate each one
+                    return false;
                 default: return true;
             }
         }
