@@ -41,9 +41,11 @@ var main_simulator = (function () {"use strict";
             // HACK function name currently ignored
             sim.start_function(undefined, args);
             states = explainer.create_explanations(sim.run_all(state));
+
+            // the UIs call "next" to get the first state, so we start at -1
+            // to indicate that the UI hasn't displayed the first state yet
             currentState = -1;
         });
-
     };
 
     self.next = function(fadeLevel) {
@@ -76,9 +78,11 @@ var main_simulator = (function () {"use strict";
                 // the next step is interactive. we don't want to show the user the answer in the
                 // next state yet, so we're going to continue showing them the current state, but
                 // send the UI a note that it should ask for a user response here
-                var returnState = self.copy(states[currentState]);
+                var returnState;
+                returnState = self.copy(states[currentState]);
                 returnState.prompt = self.getInteractivePrompt(states[currentState + 1].prompt);
-                returnState.askForResponse = {};
+                console.log("prompt: " + returnState.prompt);
+                returnState.askForResponse = states[currentState + 1].annotations["interactive"][0];
                 waitingForUserResponse = true;
                 return returnState;
             }
@@ -90,33 +94,36 @@ var main_simulator = (function () {"use strict";
         return states[states.length - 1];
     };
 
-    // checks whether or not the user's answer was correct. checks whether statement_result.rhs
-    // has the answer passed in as a parameter stored at the property passed in as a parameter
-    // returns a state object that the UI should display in response to the answer check
-    self.checkAnswer = function(answer, property) {
+    // return the statemet_result object so that the UI can check the correct answer against
+    // the answer and determine whether or not the user answer was correct
+    self.getCorrectAnswer = function() {
         if (!waitingForUserResponse) {
-            console.error("Called checkAnswer, but the simulator wasn't waiting for an answer");
+            console.error("Called getCorrectAnswer, but the simulator wasn't waiting for an answer");
         }
         else {
-            var correctAnswer = states[currentState + 1].statement_result.rhs[property];
-            console.log("answers:");
-            console.log(answer);
-            console.log(correctAnswer);
-            if (JSON.stringify(answer) === JSON.stringify(correctAnswer)) {
-                currentState = currentState + 1;
-                waitingForUserResponse = false;
-                var returnState = self.copy(states[currentState])
-                returnState.prompt = "Great job! That is correct."
-                return returnState;
-            }
-            else {
-                var returnState = self.copy(states[currentState]);
-                returnState.prompt = "Sorry, that is not correct. Try again!<br>" + self.getInteractivePrompt(states[currentState + 1].prompt);
-                returnState.askForResponse = {};
-                return returnState;
-            }
+            return states[currentState + 1].statement_result;
         }
-    };
+    }
+
+    // respond to a user answer, based on whether or not the answer was correct
+    self.respondToAnswer = function(correct) {
+        if (!waitingForUserResponse) {
+            console.error("Called respondToAnswer, but the simulator wasn't waiting for an answer");
+        }
+        else if (correct) {
+            currentState = currentState + 1;
+            waitingForUserResponse = false;
+            var returnState = self.copy(states[currentState])
+            returnState.prompt = "Great job! That is correct."
+            return returnState;
+        }
+        else {
+            var returnState = self.copy(states[currentState]);
+            returnState.prompt = "Sorry, that is not correct. Try again!<br>" + self.getInteractivePrompt(states[currentState + 1].prompt);
+            returnState.askForResponse = states[currentState + 1].annotations["interactive"][0];
+            return returnState;
+        }
+    }
 
     self.copy = function(obj) {
         // copy state by sending it to JSON and back; it's easy, and it'll also

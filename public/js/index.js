@@ -100,8 +100,12 @@ var csed = (function() {
             return main_simulator.next(fadeLevel);
         }
 
-        this.checkAnswer = function(answer, property) {
-            return main_simulator.checkAnswer(answer, property);
+        this.getCorrectAnswer = function() {
+            return main_simulator.getCorrectAnswer();
+        }
+
+        this.respondToAnswer = function(correct) {
+            return main_simulator.respondToAnswer(correct);
         }
 
     }

@@ -58,7 +58,7 @@ var explainer = (function() {
                     } else if (annotations.hasOwnProperty("question_answer")) {
                         prompt = format_identifier(sr.name);
                     } else {
-                        prompt = "";
+                        prompt = format_identifier(sr.name);
                     }
                     break;
                 case "if":

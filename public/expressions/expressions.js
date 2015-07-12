@@ -26,6 +26,13 @@ var expressions = (function() {
     // level 1 = full explanations with user input
     var fadeLevel = 1;
 
+    // boolean indiciating whether the UI is waiting for a response from the user
+    var waitingForResponse;
+
+    // if the UI is waiting for a response, this string holds the type of response
+    // it's waiting for
+    var responseType;
+
     var logger;
 
     // Callback function for navigation javascript -- called before problem load.
@@ -50,12 +57,13 @@ var expressions = (function() {
 
         callback = callbackObject;
         state = initial_state;
+        waitingForResponse = false; // not waiting for a response
         // hold onto the task logger for logging UI events.
         logger = task_logger;
 
         var expressionHeader = document.getElementById("expressionHeader");
         var expression = state.problemLines[0];
-        expressionHeader.innerHTML = buildExpressionString(expression, [], false);
+        expressionHeader.innerHTML = buildExpressionString(expression, [], false, false);
 
         //if users attempt to check a submitted answer
         d3.select("#submit").on("click", correct);
@@ -74,6 +82,18 @@ var expressions = (function() {
     };
 
     function step() {
+        if (waitingForResponse) {
+            if (responseType === "enter") {
+                var responseValue = d3.select("#answer").property("value");
+                checkAnswer(responseType, responseValue);
+            }
+        }
+        else {
+            stepNextState();
+        }
+    }
+
+    function stepNextState() {
         state = callback.getNextState(fadeLevel);
 
         var stepHolder;
@@ -96,7 +116,6 @@ var expressions = (function() {
         initialPrompt.classList.add("prompt");
         initialPrompt.innerHTML = "Start by evaluating all the Multiplicative (* / %) operators from left to right. <br /> Then evaluate " +
         "the Additive (+ -) operators from left to right.";
-
         stepHolder.appendChild(initialPrompt);
 
         addStepHTML();
@@ -104,14 +123,13 @@ var expressions = (function() {
     }
 
     function stepWithState() {
-        stepHolder = document.getElementById("steps");
+        var stepHolder = document.getElementById("steps");
         stepHolder.innerHTML = "";
         document.getElementById("nextstep").style.visibility = "visible";
         var initialPrompt = document.createElement("div");
         initialPrompt.classList.add("prompt");
         initialPrompt.innerHTML = "Start by evaluating all the Multiplicative (* / %) operators from left to right. <br /> Then evaluate " +
             "the Additive (+ -) operators from left to right.";
-
         stepHolder.appendChild(initialPrompt);
 
         addStepHTML();
@@ -138,16 +156,33 @@ var expressions = (function() {
             var expressionHTML = document.createElement("div");
             expressionHTML.classList.add("exp");
 
-            // if we're asking for a user response, make the expression string clickable
-            if (fadeLevel > 0 && i === state.state.problemLines.length -1 && state.hasOwnProperty("askForResponse")) {
-                expressionHTML.innerHTML = buildExpressionString(expression, highlighting[i], true);
-                lineHTML.appendChild(expressionHTML);
-                document.getElementById("steps").appendChild(lineHTML);
-                document.getElementById("nextstep").style.visibility = "hidden";
-                addExpressionOnClickListeners(expression);
+            // check if we need to add interactivity to the UI
+            if (fadeLevel > 0 && state.hasOwnProperty("askForResponse")) {
+                // if we're asking for a click response, only make the last line of the problem click-able
+                if (state["askForResponse"] === "click" && i === state.state.problemLines.length -1) {
+                    // make the expression string click-able
+                    expressionHTML.innerHTML = buildExpressionString(expression, highlighting[i], true, false);
+                    lineHTML.appendChild(expressionHTML);
+                    document.getElementById("steps").appendChild(lineHTML);
+                    document.getElementById("nextstep").style.visibility = "hidden";
+                    addExpressionOnClickListeners(expression);
+                }
+                else if (state["askForResponse"] === "enter") {
+                    // add an input to allow the user to enter a calculation result
+                    expressionHTML.innerHTML = buildExpressionString(expression, highlighting[i], false, true);
+                    lineHTML.appendChild(expressionHTML);
+                    document.getElementById("steps").appendChild(lineHTML);
+                    waitingForResponse = true;
+                    responseType = "enter";
+                }
+                else {
+                    expressionHTML.innerHTML = buildExpressionString(expression, highlighting[i], false, false);
+                    lineHTML.appendChild(expressionHTML);
+                    document.getElementById("steps").appendChild(lineHTML);
+                }
             }
             else {
-                expressionHTML.innerHTML = buildExpressionString(expression, highlighting[i], false);
+                expressionHTML.innerHTML = buildExpressionString(expression, highlighting[i], false, false);
                 lineHTML.appendChild(expressionHTML);
                 document.getElementById("steps").appendChild(lineHTML);
             }
@@ -181,12 +216,15 @@ var expressions = (function() {
     }
 
     // create the expression HTML from the array of objects
-    function buildExpressionString(expression, highlighting, makeClickable) {
+    function buildExpressionString(expression, highlighting, makeClickable, allowInput) {
         var expressionString = "";
         for (var i = 0; i < expression.length; i++) {
             var value = getExpressionValue(expression, i);
             if (highlighting.length > 0 && highlighting.indexOf(i) >= 0) {
-                if (expression[i].type == "empty"){
+                if (expression[i].type == "empty" && allowInput) {
+                    expressionString += "<input type=text id=answer size=1/> "
+                }
+                else if (expression[i].type == "empty"){
                     expressionString += "<span class='empty'>&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;";
                 }
                 else {
@@ -203,18 +241,6 @@ var expressions = (function() {
         return expressionString;
     }
 
-    // for clickable expression strings, adds the event listeners to ask
-    // the simulator if the response was correct or not
-    function addExpressionOnClickListeners(expression) {
-        for (var i = 0; i < expression.length; i++) {
-            d3.select("#expression_" + i).on("click", function() {
-                var id = d3.select(this).attr("id");
-                var index = id.substring(id.indexOf("_") + 1);
-                checkAnswer(index);
-            });
-        }
-    }
-
     // gets the value at a particular index
     // formats it based on int/double/String type
     function getExpressionValue(arr, index) {
@@ -228,8 +254,45 @@ var expressions = (function() {
         }
     }
 
-    function checkAnswer(value) {
-        state = callback.checkAnswer(parseInt(value), "cell");
+    // for clickable expression strings, adds the event listeners to ask
+    // the simulator if the response was correct or not
+    function addExpressionOnClickListeners(expression) {
+        for (var i = 0; i < expression.length; i++) {
+            d3.select("#expression_" + i).on("click", function() {
+                var id = d3.select(this).attr("id");
+                var index = id.substring(id.indexOf("_") + 1);
+                checkAnswer("click", index);
+            });
+        }
+    }
+
+    function checkAnswer(type, value) {
+        var statementResponseObject = callback.getCorrectAnswer();
+        var correct = false;
+
+        if (type === "click") {
+            if (statementResponseObject.rhs["cell"] === parseInt(value)) {
+                correct = true;
+            }
+        }
+        else if (type === "enter") {
+            var result = statementResponseObject.result;
+            if (typeof result === "string") {
+                result = '"' + result + '"';
+            }
+            if (String(result) === String(value)) {
+                correct = true;
+            }
+        }
+
+        if (correct) {
+            waitingForResponse = false;
+            responseType = "";
+        }
+
+        // Get the response based on whether or not the answer was
+        // correct, and display the response
+        state = callback.respondToAnswer(correct);
         stepWithState();
     }
 
