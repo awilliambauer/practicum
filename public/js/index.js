@@ -119,7 +119,9 @@ var csed = (function() {
 //        fetch(problemUI.template_url).then(function(response) {
 //            return response.text();
 //        }).then(function(problemHtml) {
-            var problemHtml = $("#" + problemUI.template_id).children(".problem").clone();
+
+        d3.html(problemUI.template_url, function(error, problemHtml){
+            if (error) console.error(error);
 
             // Uh, not sure why I can't append raw html into the dom with D3. Using jQuery for the moment...
             //d3.select("#problem").append(problemHtml);
@@ -140,7 +142,7 @@ var csed = (function() {
             });
 //        }, function(error) {
 //            console.error(error);
-//        });
+        });
     }
 
     function addProblemsToNav(problemsConfig, onProblemStartCallback) {
