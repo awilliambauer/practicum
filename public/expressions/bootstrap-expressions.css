@@ -60,6 +60,7 @@
     border-radius: 10px;
     overflow: hidden;
     padding: 20px;
+    padding-bottom: 40px;
     margin-bottom: 20px;
     background-color: white;
 }
@@ -162,8 +163,21 @@
 }
 
 .expressions_problem input {
-    font-size: 25pt;
-    width: 60px;
+     font-size: 25pt;
+     width: 60px;
+}
+
+.expressions_problem .yes_no_buttons {
+    text-align: center;
+}
+
+.expressions_problem .radio {
+    display: inline;
+    width: 30px;
+}
+
+.expressions_problem label {
+    padding-right: 30px;
 }
 
 .expressions_problem #correct {

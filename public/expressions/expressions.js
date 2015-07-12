@@ -83,8 +83,13 @@ var expressions = (function() {
 
     function step() {
         if (waitingForResponse) {
+            var responseValue;
             if (responseType === "enter") {
-                var responseValue = d3.select("#answer").property("value");
+                responseValue = d3.select("#answer").property("value");
+                checkAnswer(responseType, responseValue);
+            }
+            else if (responseType === "question") {
+                responseValue = d3.select('input[name="yes_no_radio"]:checked').node().value;
                 checkAnswer(responseType, responseValue);
             }
         }
@@ -112,26 +117,13 @@ var expressions = (function() {
             stepHolder.innerHTML = "";
         }
 
-        var initialPrompt = document.createElement("div");
-        initialPrompt.classList.add("prompt");
-        initialPrompt.innerHTML = "Start by evaluating all the Multiplicative (* / %) operators from left to right. <br /> Then evaluate " +
-        "the Additive (+ -) operators from left to right.";
-        stepHolder.appendChild(initialPrompt);
-
         addStepHTML();
-
     }
 
     function stepWithState() {
         var stepHolder = document.getElementById("steps");
         stepHolder.innerHTML = "";
         document.getElementById("nextstep").style.visibility = "visible";
-        var initialPrompt = document.createElement("div");
-        initialPrompt.classList.add("prompt");
-        initialPrompt.innerHTML = "Start by evaluating all the Multiplicative (* / %) operators from left to right. <br /> Then evaluate " +
-            "the Additive (+ -) operators from left to right.";
-        stepHolder.appendChild(initialPrompt);
-
         addStepHTML();
     }
 
@@ -149,7 +141,7 @@ var expressions = (function() {
             if (i == state.state.problemLines.length - 1) {
                 var promptHTML = document.createElement("p");
                 promptHTML.classList.add("step");
-                promptHTML.innerHTML = state.prompt + "<div>&nbsp;</div>";
+                promptHTML.innerHTML = state.prompt;
                 lineHTML.appendChild(promptHTML);
             }
 
@@ -174,6 +166,16 @@ var expressions = (function() {
                     document.getElementById("steps").appendChild(lineHTML);
                     waitingForResponse = true;
                     responseType = "enter";
+                }
+                else if (state["askForResponse"] === "question") {
+                    // add yes/no radio buttons to the prompt so the user can answer the question
+                    expressionHTML.innerHTML = buildExpressionString(expression, highlighting[i], false, false);
+                    lineHTML.appendChild(expressionHTML);
+                    document.getElementById("steps").appendChild(lineHTML);
+                    waitingForResponse = true;
+                    responseType = "question";
+                    addResponseButtonsToPrompt();
+
                 }
                 else {
                     expressionHTML.innerHTML = buildExpressionString(expression, highlighting[i], false, false);
@@ -266,6 +268,38 @@ var expressions = (function() {
         }
     }
 
+    // adds "yes" and "no" buttons to the prompt text so the user can answer
+    // the question.
+    function addResponseButtonsToPrompt() {
+        var yesNoButtonDiv = d3.select(".step")
+            .append("div")
+            .attr("class", "yes_no_buttons");
+
+        yesNoButtonDiv
+            .append("input")
+            .attr("type", "radio")
+            .attr("class", "radio")
+            .attr("name", "yes_no_radio")
+            .attr("value", "yes");
+
+        yesNoButtonDiv
+            .append("label")
+            .text("Yes");
+
+        yesNoButtonDiv
+            .append("input")
+            .attr("type", "radio")
+            .attr("class", "radio")
+            .attr("name", "yes_no_radio")
+            .attr("value", "no");
+        yesNoButtonDiv
+            .append("label")
+            .text("No");
+    }
+
+    // asks the simulator for the statement response object and determines whether
+    // or not the user's answer is correct. asks the simulator for a state to respond
+    // to the user's answer, and calls stepWithState to display the response state.
     function checkAnswer(type, value) {
         var statementResponseObject = callback.getCorrectAnswer();
         var correct = false;
@@ -284,7 +318,12 @@ var expressions = (function() {
                 correct = true;
             }
         }
-
+        else if (type === "question") {
+            if ((statementResponseObject.result == true && value == "yes") ||
+                (statementResponseObject.result == false && value == "no")) {
+                correct = true;
+            }
+        }
         if (correct) {
             waitingForResponse = false;
             responseType = "";

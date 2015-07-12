@@ -1,6 +1,10 @@
 function TPLAlgorithm() {
 	let weWillPlaceTheResultOfThisOperationHere;
 
+	[prompt]
+	"To solve an expression problem, start by evaluating all the Multiplicative (* / %) operators from left to right. Then evaluate the Additive (+ -) operators from left to right.";
+
+	[interactive("question")]
 	while(helper.isThereAtLeastOneMultiplicationDivisionOrModOperator(state)) {
 		[prompt]
 		"Start at the left, and search for the first multiplication, division, or mod operator in the expression";
@@ -34,6 +38,7 @@ function TPLAlgorithm() {
 		}
 	}
 
+	[interactive("question")]
 	while(helper.isThereAtLeastOneAdditionOrSubtractionOperator(state)) {
 	    [prompt]
 		"Start at the left, and find the first addition or subtraction operator";

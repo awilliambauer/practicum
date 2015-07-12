@@ -81,7 +81,6 @@ var main_simulator = (function () {"use strict";
                 var returnState;
                 returnState = self.copy(states[currentState]);
                 returnState.prompt = self.getInteractivePrompt(states[currentState + 1].prompt);
-                console.log("prompt: " + returnState.prompt);
                 returnState.askForResponse = states[currentState + 1].annotations["interactive"][0];
                 waitingForUserResponse = true;
                 return returnState;
@@ -131,11 +130,16 @@ var main_simulator = (function () {"use strict";
         return JSON.parse(JSON.stringify(obj));
     };
 
-    // for now, change "this is" to "click on" for interactive prompts. not sure yet
-    // how general this is, so we may need to change this to something less hacky
+
     self.getInteractivePrompt = function(prompt) {
+        // for now, change "this is" to "click on" for interactive prompts. not sure yet
+        // how general this is, so we may need to change this to something less hacky
         if (prompt.indexOf("This is ") != -1) {
             prompt = "Click on " + prompt.substring(prompt.indexOf("This is ") + 8);
+        }
+        // for now, remove any answer after the question mark if it's interactive
+        if (prompt.indexOf("?") != -1) {
+            prompt = prompt.substring(0, prompt.indexOf("?") + 1);
         }
         return prompt;
     }
