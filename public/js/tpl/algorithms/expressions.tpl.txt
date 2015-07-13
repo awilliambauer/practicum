@@ -15,13 +15,13 @@ function TPLAlgorithm() {
 		[no_step]
 		if (helper.isCurrentOperatorMod(state, thisIsTheFirstMultiplicationDivisionOrModOperatorFromTheLeft)) {
 			let thisIsTheResultOfTheModOperation;
-			[interactive("enter"); add_to_prompt("(divide and take the remainder to get the modulus)")]
+			[interactive("enter"); add_to_prompt("<br>(divide and take the remainder to get the mod)")]
 			thisIsTheResultOfTheModOperation = helper.whatIsTheResultOfThisModulus(thisIsTheLeftOperand, thisIsTheRightOperand, state, thisIsTheFirstMultiplicationDivisionOrModOperatorFromTheLeft);
 		} else
 		[no_step]
 		if (helper.isCurrentOperationIntDiv(state, thisIsTheFirstMultiplicationDivisionOrModOperatorFromTheLeft)) {
 			let thisIsTheResultOfTheDivisionOperation;
-			[interactive("enter"); add_to_prompt("(both operands are ints, so round down to make the answer an int)")]
+			[interactive("enter"); add_to_prompt("<br>(since both of the operands are ints,<br>round the answer down to make it an int)")]
 			thisIsTheResultOfTheDivisionOperation = helper.whatIsTheResultOfThisDivision(thisIsTheLeftOperand, thisIsTheRightOperand, state, thisIsTheFirstMultiplicationDivisionOrModOperatorFromTheLeft);
 		} else
 		[no_step]
@@ -49,7 +49,7 @@ function TPLAlgorithm() {
 		[no_step]
 		if (helper.isCurrentOperationConcat(state, thisIsTheFirstAdditionOrSubtractionOperatorFromTheLeft)) {
 			let thisIsTheResultOfTheAdditionOperation;
-			[interactive("enter"); add_to_prompt("(addition involving a string results in concatenation)")]
+			[interactive("enter"); add_to_prompt("<br>(since one of the operands is a string, concatenate the two operands to make the answer a string)")]
 			thisIsTheResultOfTheAdditionOperation = helper.whatIsTheResultOfThisAddition(thisIsTheLeftOperand, thisIsTheRightOperand, state, thisIsTheFirstAdditionOrSubtractionOperatorFromTheLeft);
 		} else
 		[no_step]

@@ -152,7 +152,7 @@ var main_simulator = (function () {"use strict";
                 prompText = "Try the next step on your own!";
             }
 
-            returnState.prompt = "<span style='color: #339944;'>Great job! That is correct.</span><br>" + prompText;
+            returnState.prompt = "<span style='color: #45ADA8;'>Great job! That is correct.</span><br>" + prompText;
             return returnState;
         }
         else if (!correct && numTries < 3) {
