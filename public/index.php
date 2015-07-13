@@ -123,16 +123,6 @@ $disagreeData = array_merge(['response' => 'disagree'], $studentData);
     <div id="problem-container" class="container container-fluid hidden"></div>
 
     <?php include("include/consentFormModal.html"); ?>
-
-    <div id="expressions-problem-template" class="hidden">
-        <?php include("expressions/problemTemplate.html"); ?>
-    </div>
-
-    <div id="if_else-problem-template" class="hidden">
-        <?php include("if_else/if_else_problem_template.html"); ?>
-    </div>
-
-
 </body>
 </html>
 
