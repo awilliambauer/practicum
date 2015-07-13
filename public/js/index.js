@@ -108,6 +108,10 @@ var csed = (function() {
             return main_simulator.respondToAnswer(correct);
         }
 
+        this.getFinalState = function() {
+            return main_simulator.getFinalState();
+        }
+
     }
 
     function loadProblem(problemConfig) {
@@ -122,6 +126,7 @@ var csed = (function() {
         }
 
         var problemUI = csed[problemConfig.category];
+        problemUI.reset();
 
         // Load in the template for the problem
 //        fetch(problemUI.template_url).then(function(response) {
