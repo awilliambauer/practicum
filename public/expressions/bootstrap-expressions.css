@@ -70,7 +70,7 @@
     font-size: 14pt;
     text-align: left;
     float: left;
-    width: 50%;
+    width: 45%;
     margin: 0pt;
 }
 
@@ -81,7 +81,7 @@
 .expressions_problem .exp {
     float: right;
     font-size: 25pt;
-    width: 400px;
+    width: 50%;
     text-align: center;
     margin: 0pt;
     vertical-align: text-bottom;
