@@ -4,6 +4,7 @@ var main_simulator = (function () {"use strict";
     var currentState;
     var waitingForUserResponse;
     var numTries;
+    var fadeLevel;
 
     self.getHelper = function(algoName) {
         if (algoName == "expressions") {
@@ -61,14 +62,14 @@ var main_simulator = (function () {"use strict";
         //});
     };
 
-    self.next = function(fadeLevel) {
-        switch (fadeLevel) {
-            case 0:
-                return self.getNextState();
-                break;
-            case 1:
-                return self.getNextStateWithInteractivity();
-                break;
+    self.next = function(fading) {
+        fadeLevel = fading;
+
+        if (fadeLevel == 0) {
+            return self.getNextState();
+        }
+        else {
+            return self.getNextStateWithInteractivity();
         }
     };
 
@@ -88,6 +89,13 @@ var main_simulator = (function () {"use strict";
         }
         else if (currentState + 1 < states.length) {
             if (states[currentState + 1].annotations.hasOwnProperty("interactive")) {
+                // for fade level 3 (least explanation level) don't ask questions
+                if (fadeLevel === 3 && states[currentState + 1].annotations.interactive[0] === "question") {
+                    console.log("skipping question");
+                    currentState = currentState + 1;
+                    return self.getNextStateWithInteractivity();
+                }
+
                 // the next step is interactive. we don't want to show the user the answer in the
                 // next state yet, so we're going to continue showing them the current state, but
                 // send the UI a note that it should ask for a user response here
@@ -96,7 +104,13 @@ var main_simulator = (function () {"use strict";
                     stateToShow = currentState;
                 }
                 var returnState = self.copy(states[stateToShow]);
+
+                // dislay the correct prompt, based on the fade level
                 returnState.prompt = self.getInteractivePrompt(states[currentState + 1].prompt, states[currentState + 1].annotations.interactive);
+                if (fadeLevel > 1 && states[currentState + 1].annotations.interactive[0] !== "question") {
+                    returnState.prompt = "Try the next step on your own!";
+                }
+
                 returnState.askForResponse = states[currentState + 1].annotations["interactive"][0];
                 waitingForUserResponse = true;
                 return returnState;
@@ -132,7 +146,14 @@ var main_simulator = (function () {"use strict";
             currentState = currentState + 1;
             waitingForUserResponse = false;
             returnState = self.copy(self.getNextStateWithInteractivity());
-            returnState.prompt = "<span style='color: #339944;'>Great job! That is correct.</span><br>" + returnState.prompt
+
+            // dislay the correct prompt, based on the fade level
+            var prompText = returnState.prompt;
+            if (fadeLevel > 1 && currentState + 1 < states.length && states[currentState + 1].annotations.interactive[0] !== "question") {
+                prompText = "Try the next step on your own!";
+            }
+
+            returnState.prompt = "<span style='color: #339944;'>Great job! That is correct.</span><br>" + prompText;
             return returnState;
         }
         else if (!correct && numTries < 3) {
