@@ -24,7 +24,7 @@ $disagreeData = array_merge(['response' => 'disagree'], $studentData);
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title>Practice-That!</title>
+    <title>Practicum</title>
     <link href="images/squirtle.png" type="image/gif" rel="shortcut icon"/>
 
     <!-- load common styles from bootstrap -->
