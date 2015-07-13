@@ -24,7 +24,7 @@ var expressions = (function() {
     // current fading level -- will need to move this to index.js at some point
     // level 0 = full step-by-step explanations
     // level 1 = full explanations with user input
-    var fadeLevel = 1;
+    var fadeLevel = 0;
 
     // boolean indiciating whether the UI is waiting for a response from the user
     var waitingForResponse;
@@ -234,8 +234,13 @@ var expressions = (function() {
                         highlighting[objectToVisualize.line].push(objectToVisualize.cell);
                     }
                     else if (objectToVisualize.type == "result") {
-                        resultSize = String(objectToVisualize.value).length + 2;
-                        highlighting[objectToVisualize.line].push("result_" + objectToVisualize.cell);
+                        if (fadeLevel > 0) {
+                            resultSize = String(objectToVisualize.value).length + 2;
+                            highlighting[objectToVisualize.line].push("result_" + objectToVisualize.cell);
+                        }
+                        else {
+                            highlighting[objectToVisualize.line].push(objectToVisualize.cell);
+                        }
                     }
                     else {
                         console.error("Unsupported variable type: " + objectToVisualize.type);
