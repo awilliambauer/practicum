@@ -21,10 +21,8 @@ var expressions = (function() {
     // whether or not this is the first time the user is clicking the "step" button
     var firstStep = true;
 
-    // current fading level -- will need to move this to index.js at some point
-    // level 0 = full step-by-step explanations
-    // level 1 = full explanations with user input
-    var fadeLevel = 0;
+    // current fading level. this is instantiated in the initialize function
+    var fadeLevel;
 
     // boolean indiciating whether the UI is waiting for a response from the user
     var waitingForResponse;
@@ -49,9 +47,10 @@ var expressions = (function() {
     };
 
     // Callback function for navigation javascript. Installs a problem into the page
-    var initialize = function(problemConfig, callbackObject, initial_state, task_logger) {
+    var initialize = function(problemConfig, callbackObject, initial_state, task_logger, fading) {
         callback = callbackObject;
         state = initial_state;
+        fadeLevel = fading;
         waitingForResponse = false;
         numTries = 0;
         // hold onto the task logger for logging UI event

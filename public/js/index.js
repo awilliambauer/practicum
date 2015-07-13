@@ -14,12 +14,26 @@ var csed = (function() {
 
     var experimental_condition;
     var server_savedata;
+    var numProblems;
 
     function setupLogging(username) {
         var LOGGING_BASE_URL = "https://" + window.location.hostname + ":" + LOGGING_PORT;
         return Logging.initialize(LOGGING_BASE_URL, LOGGING_RELEASE_ID, username).then(function(logging_data) {
             experimental_condition = logging_data.condition;
             server_savedata = logging_data.savedata ? JSON.parse(logging_data.savedata) : null;
+
+            // initialize the number of problems so we can give the user the correct fading level
+            if (server_savedata === null) {
+                numProblems = 0;
+            }
+            else {
+                numProblems = server_savedata.numProblems;
+            }
+
+            // for debugging
+            //experimental_condition = 0;
+            //numProblems = 0;
+
             console.info('successfully started logging session');
         });
     }
@@ -100,15 +114,28 @@ var csed = (function() {
         ;
     }
 
-    function getFadingLevel(condition, problemNum) {
+    function saveProblemData() {
+        if (server_savedata === null) {
+            server_savedata = {
+              numProblems: numProblems
+            };
+        }
+        else {
+            server_savedata.numProblems = numProblems;
+        }
+
+        Logging.save_user_data(server_savedata);
+    }
+
+    function getFadingLevel(condition) {
         if (condition === 0) {
-            if (problemNum == 1) {
+            if (numProblems == 1) {
                 return 0;
             }
-            else if (problemNum <=4) {
+            else if (numProblems <=4) {
                 return 1;
             }
-            else if (problemNum <= 7) {
+            else if (numProblems <= 7) {
                 return 2;
             }
             else {
@@ -143,6 +170,10 @@ var csed = (function() {
     function loadProblem(problemConfig) {
         task_logger = Logging.start_task(problemConfig);
 
+        // increment the number of problems this user has started
+        numProblems = numProblems + 1;
+        saveProblemData();
+
         // remove the old problem from the DOM
         d3.selectAll("#problem-container .problem").remove();
 
@@ -174,9 +205,13 @@ var csed = (function() {
             var initial_state = problemUI.create_initial_state(problemConfig);
             main_simulator.initialize(category, {state:initial_state});
 
+            // calculate what fading level the user should see for this problem, based on their
+            // experimental condition and the number of problems they have completed
+            var fadeLevel = getFadingLevel(experimental_condition);
+
             // This problemUI initialize call probably needs to happen after the main_sim init call,
             // which is handled by promises/then() with fetch.
-            problemUI.initialize(problemConfig, new CallbackObject(), initial_state, task_logger);
+            problemUI.initialize(problemConfig, new CallbackObject(), initial_state, task_logger, fadeLevel);
 
 //            main_simulator.initialize(category, {state:initial_state}).then(function() {
 //                console.log("finished initializing simulator");
