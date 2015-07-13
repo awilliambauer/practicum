@@ -365,6 +365,28 @@ var expressions = (function() {
         // correct, and display the response
         state = callback.respondToAnswer(correct);
 
+        // log information about this question answer attempt
+        Logging.log_task_event(logger, {
+            type: Logging.ID.QuestionAnswer,
+            detail: {
+                type: type,
+                correctAnswer: correctAnswer,
+                userAnswer: value,
+                correct: correct
+            },
+        });
+
+        if (!correct && numTries === 3) {
+            // log that the user received a bottom-out hint
+            Logging.log_task_event(logger, {
+                type: Logging.ID.BottomOutHint,
+                detail: {
+                    type: type,
+                    correctAnswer: correctAnswer
+                },
+            });
+        }
+
         if (correct || numTries === 3) {
             waitingForResponse = false;
             responseType = "";
@@ -388,28 +410,6 @@ var expressions = (function() {
                     }
                 }
             }
-        }
-
-        // log information about this question answer attempt
-        Logging.log_task_event(logger, {
-            type: Logging.ID.QuestionAnswer,
-            detail: {
-                type: type,
-                correctAnswer: correctAnswer,
-                userAnswer: value,
-                correct: correct
-            },
-        });
-
-        if (numTries === 3) {
-            // log that the user received a bottom-out hint
-            Logging.log_task_event(logger, {
-                type: Logging.ID.BottomOutHint,
-                detail: {
-                    type: type,
-                    correctAnswer: correctAnswer
-                },
-            });
         }
 
         stepWithState();
