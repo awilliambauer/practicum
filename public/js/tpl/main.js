@@ -91,7 +91,6 @@ var main_simulator = (function () {"use strict";
             if (states[currentState + 1].annotations.hasOwnProperty("interactive")) {
                 // for fade level 3 (least explanation level) don't ask questions
                 if (fadeLevel === 3 && states[currentState + 1].annotations.interactive[0] === "question") {
-                    console.log("skipping question");
                     currentState = currentState + 1;
                     return self.getNextStateWithInteractivity();
                 }

@@ -94,6 +94,26 @@ var csed = (function() {
         ;
     }
 
+    function getFadingLevel(condition, problemNum) {
+        if (condition === 0) {
+            if (problemNum == 1) {
+                return 0;
+            }
+            else if (problemNum <=4) {
+                return 1;
+            }
+            else if (problemNum <= 7) {
+                return 2;
+            }
+            else {
+                return 3;
+            }
+        }
+        else {
+            return 1;
+        }
+    }
+
     function CallbackObject() {
 
         this.getNextState = function(fadeLevel) {
