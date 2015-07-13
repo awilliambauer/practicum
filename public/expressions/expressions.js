@@ -45,7 +45,6 @@ var expressions = (function() {
     // Callback function for navigation javascript -- called before problem load.
     var reset = function() {
         firstStep = true;
-        currentStateIndex = 0;
         state = {};
     };
 
@@ -90,11 +89,27 @@ var expressions = (function() {
             var responseValue;
             if (responseType === "enter") {
                 responseValue = d3.select("#answer").property("value");
-                checkAnswer(responseType, responseValue);
+                if (responseValue === "") {
+                    d3.select("#errorMessage").style("visibility", "visible");
+                }
+                else {
+                    d3.select("#errorMessage").style("visibility", "hidden");
+                    checkAnswer(responseType, responseValue);
+                }
+
             }
             else if (responseType === "question") {
-                responseValue = d3.select('input[name="yes_no_radio"]:checked').node().value;
-                checkAnswer(responseType, responseValue);
+                if (d3.select('input[name="yes_no_radio"]:checked').node() === null) {
+                    d3.select("#errorMessage").style("visibility", "visible");
+                }
+                else {
+                    d3.select("#errorMessage").style("visibility", "hidden");
+                    responseValue = d3.select('input[name="yes_no_radio"]:checked').node().value;
+                    checkAnswer(responseType, responseValue);
+                }
+            }
+            else if (responseType === "click") {
+                d3.select("#errorMessage").style("visibility", "visible");
             }
         }
         else {
@@ -159,7 +174,6 @@ var expressions = (function() {
                     expressionHTML.innerHTML = buildExpressionString(expression, highlighting[i], true, false);
                     lineHTML.appendChild(expressionHTML);
                     document.getElementById("steps").appendChild(lineHTML);
-                    document.getElementById("nextstep").style.visibility = "hidden";
                     waitingForResponse = true;
                     responseType = "click";
                     addExpressionOnClickListeners(expression);
@@ -266,6 +280,7 @@ var expressions = (function() {
             d3.select("#expression_" + i).on("click", function() {
                 var id = d3.select(this).attr("id");
                 var index = id.substring(id.indexOf("_") + 1);
+                d3.select("#errorMessage").style("visibility", "hidden");
                 checkAnswer("click", index);
             });
         }
