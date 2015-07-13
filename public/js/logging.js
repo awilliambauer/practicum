@@ -75,9 +75,7 @@ var Logging = (function() {
     /// Logs a task event.
     /// `task_logger` should be the object returned by start_task.
     self.log_task_event = function(task_logger, data) {
-        task_logger.then(function(task) {
-            task.log_event(data);
-        });
+        task_logger.log_event(data);
     };
 
     return self;
