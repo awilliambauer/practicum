@@ -70,6 +70,8 @@ var expressions = (function() {
         //if users attempt to step through the breakdown of the problem
         d3.select("#nextstep").on("click", step);
 
+        // remove existing keydown handler to avoid duplicate calls to step
+        $(document).off("keydown");
         // call step when you press the "enter" key
         $(document).keydown(function() {
             if (event.which == 13) {
@@ -441,6 +443,7 @@ var expressions = (function() {
             }
         }
 
+        $("#inputBox").on("animationend", function () {$("#inputBox").attr("class", "");});
         if (correct) {
             d3.select("#inputBox").attr("class", "correct");
         }
