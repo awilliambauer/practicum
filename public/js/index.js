@@ -128,7 +128,7 @@ var csed = (function() {
     }
 
     function getFadingLevel(condition) {
-        if (condition === 0) {
+        if (condition === 1) {
             if (numProblems == 1) {
                 return 0;
             }
