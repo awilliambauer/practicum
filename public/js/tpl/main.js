@@ -131,8 +131,8 @@ var main_simulator = (function () {"use strict";
             numTries = 0;
             currentState = currentState + 1;
             waitingForUserResponse = false;
-            returnState = self.copy(states[currentState])
-            returnState.prompt = "Great job! That is correct."
+            returnState = self.copy(self.getNextStateWithInteractivity());
+            returnState.prompt = "<span style='color: #339944;'>Great job! That is correct.</span><br>" + returnState.prompt
             return returnState;
         }
         else if (!correct && numTries < 3) {
@@ -142,10 +142,10 @@ var main_simulator = (function () {"use strict";
             }
             returnState = self.copy(states[stateToShow]);
             if (numTries == 1) {
-                returnState.prompt = "Sorry, that is not correct. Try again!<br>";
+                returnState.prompt = "<span style='color: red;'>Sorry, that is not correct. Try again!</span><br>";
             }
             else {
-                returnState.prompt = "Sorry, that is not correct. Try one more time!<br>";
+                returnState.prompt = "<span style='color: red;'>Sorry, that is not correct. Try one more time!</span><br>";
             }
             returnState.prompt += self.getInteractivePrompt(states[currentState + 1].prompt, states[currentState + 1].annotations.interactive);
             returnState.askForResponse = states[currentState + 1].annotations["interactive"][0];
