@@ -31,7 +31,6 @@ var main_simulator = (function () {"use strict";
         options = options ? options : {};
         var args = options.args ? options.args : [];
         var state = options.state ? options.state : {};
-        var waitingForUserResponse = false;
 
         var globals = {
             helper: self.getHelper(algo)
@@ -124,6 +123,7 @@ var main_simulator = (function () {"use strict";
     // respond to a user answer, based on whether or not the answer was correct
     self.respondToAnswer = function(correct) {
         numTries = numTries + 1;
+        var returnState
         if (!waitingForUserResponse) {
             console.error("Called respondToAnswer, but the simulator wasn't waiting for an answer");
         }
@@ -131,7 +131,7 @@ var main_simulator = (function () {"use strict";
             numTries = 0;
             currentState = currentState + 1;
             waitingForUserResponse = false;
-            var returnState = self.copy(states[currentState])
+            returnState = self.copy(states[currentState])
             returnState.prompt = "Great job! That is correct."
             return returnState;
         }
@@ -140,7 +140,7 @@ var main_simulator = (function () {"use strict";
             if (states[currentState + 1].annotations.interactive[0] === "click") {
                 stateToShow = currentState;
             }
-            var returnState = self.copy(states[stateToShow]);
+            returnState = self.copy(states[stateToShow]);
             if (numTries == 1) {
                 returnState.prompt = "Sorry, that is not correct. Try again!<br>";
             }
@@ -155,7 +155,7 @@ var main_simulator = (function () {"use strict";
             numTries = 0;
             currentState = currentState + 1;
             waitingForUserResponse = false;
-            var returnState = self.copy(states[currentState])
+            returnState = self.copy(states[currentState])
             returnState.prompt = "Sorry, that is not correct."
             return returnState;
         }
