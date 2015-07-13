@@ -10,12 +10,18 @@ var csed = (function() {
     var categoryToLoad;
     var problemToLoad;
 
-    var userid_promise;
     var task_logger;
+
+    var experimental_condition;
+    var server_savedata;
 
     function setupLogging(username) {
         var LOGGING_BASE_URL = "https://" + window.location.hostname + ":" + LOGGING_PORT;
-        Logging.initialize(LOGGING_BASE_URL, LOGGING_RELEASE_ID, username);
+        return Logging.initialize(LOGGING_BASE_URL, LOGGING_RELEASE_ID, username).then(function(logging_data) {
+            experimental_condition = logging_data.condition;
+            server_savedata = logging_data.savedata ? JSON.parse(logging_data.savedata) : null;
+            console.info('successfully started logging session');
+        });
     }
 
     function setProblemToLoad(category, problemId) {
@@ -336,38 +342,43 @@ $(document).ready(function() {
     var hasResponded = csed.hasRespondedToConsentForm();
 
     // start logging system
-    csed.setupLogging(username);
+    csed.setupLogging(username).then(function() {
+        csed.installConsentFormModal();
+        if (!hasResponded) {
+            csed.showConsentFormModal();
+        }
 
-    csed.installConsentFormModal();
-    if (!hasResponded) {
-        csed.showConsentFormModal();
-    }
-
-    // set up home link
-    d3.select("#home-link").attr("href", "");
+        // set up home link
+        d3.select("#home-link").attr("href", "");
 
 
-    // pull in problems
-    var categoryJSON = $("#category-config").html();
-    if (!categoryJSON) {
-        console.error("Unable to load problem configuration: need .../public/categoryConfig.json");
-    } else {
-        var categoryConfig = JSON.parse(categoryJSON);
-
-        if (!categoryConfig) {
+        // pull in problems
+        var categoryJSON = $("#category-config").html();
+        if (!categoryJSON) {
             console.error("Unable to load problem configuration: need .../public/categoryConfig.json");
         } else {
-            csed.addProblemsToNav(categoryConfig, onProblemStart);
-            csed.addProblemsContentToLandingPage(categoryConfig, onProblemStart);
+            var categoryConfig = JSON.parse(categoryJSON);
 
-            if (csed.hasProblemToLoad(categoryConfig)) {
-                var problem = csed.getProblemToLoad(categoryConfig);
-                csed.loadProblem(problem);
+            if (!categoryConfig) {
+                console.error("Unable to load problem configuration: need .../public/categoryConfig.json");
             } else {
-                csed.showHome();
+                csed.addProblemsToNav(categoryConfig, onProblemStart);
+                csed.addProblemsContentToLandingPage(categoryConfig, onProblemStart);
+
+                if (csed.hasProblemToLoad(categoryConfig)) {
+                    var problem = csed.getProblemToLoad(categoryConfig);
+                    csed.loadProblem(problem);
+                } else {
+                    csed.showHome();
+                }
             }
         }
-    }
+    }, function(error) {
+        console.error(error);
+        // if logging fails, just terminate initialization and print an error message
+        $('#main-page').html("<p>Uh oh! There appears to be a problem with the server!</p><p>Our apologies, please report this to edbutler@cs.washington.edu and we'll get it fixed ASAP.</p>");
+        d3.select("#main-page").classed("hidden", false);
+    });
 });
 
 (function($) {
