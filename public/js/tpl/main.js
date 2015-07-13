@@ -78,9 +78,12 @@ var main_simulator = (function () {"use strict";
                 // the next step is interactive. we don't want to show the user the answer in the
                 // next state yet, so we're going to continue showing them the current state, but
                 // send the UI a note that it should ask for a user response here
-                var returnState;
-                returnState = self.copy(states[currentState]);
-                returnState.prompt = self.getInteractivePrompt(states[currentState + 1].prompt);
+                var stateToShow = currentState + 1;
+                if (states[currentState + 1].annotations.interactive[0] === "click") {
+                    stateToShow = currentState;
+                }
+                var returnState = self.copy(states[stateToShow]);
+                returnState.prompt = self.getInteractivePrompt(states[currentState + 1].prompt, states[currentState + 1].annotations.interactive);
                 returnState.askForResponse = states[currentState + 1].annotations["interactive"][0];
                 waitingForUserResponse = true;
                 return returnState;
@@ -117,8 +120,14 @@ var main_simulator = (function () {"use strict";
             return returnState;
         }
         else {
-            var returnState = self.copy(states[currentState]);
-            returnState.prompt = "Sorry, that is not correct. Try again!<br>" + self.getInteractivePrompt(states[currentState + 1].prompt);
+            var stateToShow = currentState + 1;
+            if (states[currentState + 1].annotations.interactive[0] === "click") {
+                console.log("this is a click, show old state!");
+                stateToShow = currentState;
+            }
+            var returnState = self.copy(states[stateToShow]);
+            returnState.prompt = "Sorry, that is not correct. Try again!<br>";
+            returnState.prompt += self.getInteractivePrompt(states[currentState + 1].prompt, states[currentState + 1].annotations.interactive);
             returnState.askForResponse = states[currentState + 1].annotations["interactive"][0];
             return returnState;
         }
@@ -131,11 +140,14 @@ var main_simulator = (function () {"use strict";
     };
 
 
-    self.getInteractivePrompt = function(prompt) {
+    self.getInteractivePrompt = function(prompt, type) {
         // for now, change "this is" to "click on" for interactive prompts. not sure yet
         // how general this is, so we may need to change this to something less hacky
-        if (prompt.indexOf("This is ") != -1) {
+        if (type == "click" &&prompt.indexOf("This is ") != -1) {
             prompt = "Click on " + prompt.substring(prompt.indexOf("This is ") + 8);
+        }
+        else if (type == "enter" &&prompt.indexOf("This is ") != -1) {
+            prompt = "Enter " + prompt.substring(prompt.indexOf("This is ") + 8);
         }
         // for now, remove any answer after the question mark if it's interactive
         if (prompt.indexOf("?") != -1) {

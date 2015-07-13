@@ -70,9 +70,13 @@ var expressions = (function() {
 
         //if users attempt to step through the breakdown of the problem
         d3.select("#nextstep").on("click", step);
-        //var next = document.getElementById("nextstep");
-        //next.disabled = false;
-        //next.onclick = step;
+
+        // call step when you press the "enter" key
+        $(document).keydown(function() {
+            if (event.which == 13) {
+                step();
+            }
+        });
 
         // how to log a task event
         Logging.log_task_event(logger, {
@@ -207,6 +211,9 @@ var expressions = (function() {
                     if (objectToVisualize.type == "lineCell") {
                         highlighting[objectToVisualize.line].push(objectToVisualize.cell);
                     }
+                    else if (objectToVisualize.type == "result") {
+                        highlighting[objectToVisualize.line].push("result_" + objectToVisualize.cell);
+                    }
                     else {
                         console.error("Unsupported variable type: " + objectToVisualize.type);
                     }
@@ -233,6 +240,9 @@ var expressions = (function() {
                     expressionString += "<span class='clicked'>" + value + "</span> ";
                 }
             }
+            else if (highlighting.indexOf("result_" + i) >= 0) {
+                expressionString += "<input type=text id=answer size=1/> ";
+            }
             else if (makeClickable) {
                 expressionString += "<span class='clickable' id='expression_" + i + "'>" + value + "</span> ";
             }
@@ -249,7 +259,6 @@ var expressions = (function() {
         if (arr[index].type == 'double' && arr[index].value % 1 == 0) {
             return arr[index].value + ".0";
         } else if (arr[index].type == 'string') {
-            console.log("Get expr val arr  = " + arr + ", idx = " + index);
             return "\"" + arr[index].value + "\"";
         } else {
             return arr[index].value;
@@ -310,11 +319,11 @@ var expressions = (function() {
             }
         }
         else if (type === "enter") {
-            var result = statementResponseObject.result;
-            if (typeof result === "string") {
-                result = '"' + result + '"';
+            var correctAnswer = statementResponseObject.rhs.value;
+            if (statementResponseObject.rhs.valueType === "string") {
+                correctAnswer = '"' + correctAnswer + '"';
             }
-            if (String(result) === String(value)) {
+            if (String(correctAnswer) === String(value)) {
                 correct = true;
             }
         }
@@ -332,6 +341,26 @@ var expressions = (function() {
         // Get the response based on whether or not the answer was
         // correct, and display the response
         state = callback.respondToAnswer(correct);
+
+        // HUGE HACK to handle removing the input if the user entered the correct answer
+        // need to find a better solution
+        if (type === "enter" && correct) {
+            console.log("state");
+            console.log(state);
+
+            for (var variable in state.variables.in_scope) {
+                var varObject = state.variables.in_scope[variable];
+                if (varObject.hasOwnProperty("value")) {
+                    var objectToVisualize = varObject["value"];
+                    if (objectToVisualize.hasOwnProperty("type")) {
+                        if (objectToVisualize.type === "result") {
+                            objectToVisualize.type = "lineCell";
+                        }
+                    }
+                }
+            }
+        }
+
         stepWithState();
     }
 
