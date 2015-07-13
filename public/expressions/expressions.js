@@ -69,6 +69,8 @@ var expressions = (function() {
         //if users attempt to step through the breakdown of the problem
         d3.select("#nextstep").on("click", step);
 
+        // remove existing keydown handler to avoid duplicate calls to step
+        $(document).off("keydown");
         // call step when you press the "enter" key
         $(document).keydown(function() {
             if (event.which == 13) {
@@ -367,6 +369,28 @@ var expressions = (function() {
         // correct, and display the response
         state = callback.respondToAnswer(correct);
 
+        // log information about this question answer attempt
+        Logging.log_task_event(logger, {
+            type: Logging.ID.QuestionAnswer,
+            detail: {
+                type: type,
+                correctAnswer: correctAnswer,
+                userAnswer: value,
+                correct: correct
+            },
+        });
+
+        if (!correct && numTries === 3) {
+            // log that the user received a bottom-out hint
+            Logging.log_task_event(logger, {
+                type: Logging.ID.BottomOutHint,
+                detail: {
+                    type: type,
+                    correctAnswer: correctAnswer
+                },
+            });
+        }
+
         if (correct || numTries === 3) {
             waitingForResponse = false;
             responseType = "";
@@ -390,28 +414,6 @@ var expressions = (function() {
                     }
                 }
             }
-        }
-
-        // log information about this question answer attempt
-        Logging.log_task_event(logger, {
-            type: Logging.ID.QuestionAnswer,
-            detail: {
-                type: type,
-                correctAnswer: correctAnswer,
-                userAnswer: value,
-                correct: correct
-            },
-        });
-
-        if (numTries === 3) {
-            // log that the user received a bottom-out hint
-            Logging.log_task_event(logger, {
-                type: Logging.ID.BottomOutHint,
-                detail: {
-                    type: type,
-                    correctAnswer: correctAnswer
-                },
-            });
         }
 
         stepWithState();
@@ -445,6 +447,7 @@ var expressions = (function() {
             }
         }
 
+        $("#inputBox").on("animationend", function () {$("#inputBox").attr("class", "");});
         if (correct) {
             d3.select("#inputBox").attr("class", "correct");
         }
