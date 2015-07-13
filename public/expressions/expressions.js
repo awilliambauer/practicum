@@ -77,14 +77,21 @@ var expressions = (function() {
             }
         });
 
-        // how to log a task event
+        // log the level of fading for this problem
         Logging.log_task_event(logger, {
-            type: Logging.ID.ExampleEventType,
-            detail: {key:'value'},
+            type: Logging.ID.FadeLevel,
+            detail: {fadeLevel:fadeLevel},
         });
     };
 
     function step() {
+
+        // log that the "next" button was clicked
+        Logging.log_task_event(logger, {
+            type: Logging.ID.NextButton,
+            detail: {},
+        });
+
         if (waitingForResponse) {
             var responseValue;
             if (responseType === "enter") {
@@ -322,14 +329,16 @@ var expressions = (function() {
         numTries = numTries + 1;
         var statementResponseObject = callback.getCorrectAnswer();
         var correct = false;
+        var correctAnswer;
 
         if (type === "click") {
+            correctAnswer = statementResponseObject.rhs["cell"];
             if (statementResponseObject.rhs["cell"] === parseInt(value)) {
                 correct = true;
             }
         }
         else if (type === "enter") {
-            var correctAnswer = statementResponseObject.rhs.value;
+            correctAnswer = statementResponseObject.rhs.value;
             if (statementResponseObject.rhs.valueType === "string") {
                 correctAnswer = '"' + correctAnswer + '"';
             }
@@ -338,8 +347,14 @@ var expressions = (function() {
             }
         }
         else if (type === "question") {
-            if ((statementResponseObject.result == true && value == "yes") ||
-                (statementResponseObject.result == false && value == "no")) {
+            if (statementResponseObject.result == true) {
+                correctAnswer = "yes";
+            }
+            else if (statementResponseObject.result == false) {
+                correctAnswer = "no";
+            }
+
+            if (correctAnswer === value) {
                 correct = true;
             }
         }
@@ -371,6 +386,28 @@ var expressions = (function() {
                     }
                 }
             }
+        }
+
+        // log information about this question answer attempt
+        Logging.log_task_event(logger, {
+            type: Logging.ID.QuestionAnswer,
+            detail: {
+                type: type,
+                correctAnswer: correctAnswer,
+                userAnswer: value,
+                correct: correct
+            },
+        });
+
+        if (numTries === 3) {
+            // log that the user received a bottom-out hint
+            Logging.log_task_event(logger, {
+                type: Logging.ID.BottomOutHint,
+                detail: {
+                    type: type,
+                    correctAnswer: correctAnswer
+                },
+            });
         }
 
         stepWithState();
@@ -411,7 +448,11 @@ var expressions = (function() {
             d3.select("#inputBox").attr("class", "incorrect");
         }
 
-        console.log("correct: " + correct);
+        // log the "check" button click, along with the answer correctness
+        Logging.log_task_event(logger, {
+            type: Logging.ID.CheckSolutionButton,
+            detail: {correct:correct},
+        });
     }
 
 

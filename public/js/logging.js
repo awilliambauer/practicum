@@ -7,8 +7,11 @@ var Logging = (function() {
         TaskEnd: 3,
 
         Consent: 11,
-
-        ExampleEventType: 1234
+        FadeLevel: 12,
+        CheckSolutionButton: 13,
+        NextButton: 14,
+        QuestionAnswer: 15,
+        BottomOutHint: 16
     };
 
     var telemetry_client;
