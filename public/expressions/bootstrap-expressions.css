@@ -58,7 +58,6 @@
     padding-top: 10px;
 }
 
-
 .expressions_problem #steps {
     margin-left: auto;
     margin-right: auto;
@@ -131,7 +130,7 @@
 
 @keyframes incorrectExpression {
     from {
-        background-color: #FF5544;
+        background-color: red;
     }
 
     to {
