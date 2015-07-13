@@ -171,6 +171,11 @@ var expressions = (function() {
                 lineHTML.appendChild(promptHTML);
             }
 
+            // HACK to make the next button disappear at the end of the problem
+            if (state.prompt.indexOf("This is the answer!") !== -1) {
+                d3.select("#nextstep").style("visibility", "hidden");
+            }
+
             var expressionHTML = document.createElement("div");
             expressionHTML.classList.add("exp");
 
