@@ -97,6 +97,8 @@ $disagreeData = array_merge(['response' => 'disagree'], $studentData);
                         </ul>
                     </li>
                 </ul>
+
+                <a href="https://catalyst.uw.edu/umail/form/aaronb22/4553" class="nav navbar-feedback navbar-right">Send Us Feedback</a>
             </div>
         </div>
     </nav>
