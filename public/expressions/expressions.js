@@ -21,51 +21,114 @@ var expressions = (function() {
     // whether or not this is the first time the user is clicking the "step" button
     var firstStep = true;
 
+    // current fading level -- will need to move this to index.js at some point
+    // level 0 = full step-by-step explanations
+    // level 1 = full explanations with user input
+    var fadeLevel = 1;
+
+    // boolean indiciating whether the UI is waiting for a response from the user
+    var waitingForResponse;
+
+    // if the UI is waiting for a response, this string holds the type of response
+    // it's waiting for
+    var responseType;
+
+    // the number of times the user has tried to answer this question. limit 3
+    var numTries;
+
+    // the length of the expression calculation result, so we can make the
+    // text box the right size (hacky)
+    var resultSize;
+
+    var logger;
 
     // Callback function for navigation javascript -- called before problem load.
     var reset = function() {
         firstStep = true;
-        currentStateIndex = 0;
         state = {};
     };
 
     // Callback function for navigation javascript. Installs a problem into the page
-    var initialize = function(problemConfig, callbackObject, initial_state) {
-        // this code runs the hard-coded array of state objects stored in state_1.js
-
-        /*$.getScript("state_objects/state_1.js", function() {
-         currentStateIndex = 0;
-         var expressionHeader = document.getElementById("expressionHeader");
-         var expression = states[currentStateIndex].problemLines[0];
-         expressionHeader.innerHTML = buildExpressionString(expression, []);
-         });*/
-
-        // this code runs the thoughtProcess.js file to build up the array of state objects
-
+    var initialize = function(problemConfig, callbackObject, initial_state, task_logger) {
         callback = callbackObject;
         state = initial_state;
+        waitingForResponse = false;
+        numTries = 0;
+        // hold onto the task logger for logging UI event
+        logger = task_logger;
 
         var expressionHeader = document.getElementById("expressionHeader");
         var expression = state.problemLines[0];
-        expressionHeader.innerHTML = buildExpressionString(expression, []);
+        var expresionHeaderString = "<span style='font-weight: bold;'>Problem: </span>";
+        expresionHeaderString += buildExpressionString(expression, [], false, false);
+        expresionHeaderString += "<span style='font-weight: bold; padding-left: 30px;'>Solution: </span>";
+        expressionHeader.innerHTML = expresionHeaderString + expressionHeader.innerHTML;
 
         //if users attempt to check a submitted answer
-        d3.select("#submit").on("click", correct);
+        d3.select("#submitButton").on("click", checkSolution);
 
         //if users attempt to step through the breakdown of the problem
         d3.select("#nextstep").on("click", step);
-        //var next = document.getElementById("nextstep");
-        //next.disabled = false;
-        //next.onclick = step;
 
+        // call step when you press the "enter" key
+        $(document).keydown(function() {
+            if (event.which == 13) {
+                step();
+            }
+        });
+
+        // log the level of fading for this problem
+        Logging.log_task_event(logger, {
+            type: Logging.ID.FadeLevel,
+            detail: {fadeLevel:fadeLevel},
+        });
     };
 
     function step() {
-        state = callback.getNextState();
+
+        // log that the "next" button was clicked
+        Logging.log_task_event(logger, {
+            type: Logging.ID.NextButton,
+            detail: {},
+        });
+
+        if (waitingForResponse) {
+            var responseValue;
+            if (responseType === "enter") {
+                responseValue = d3.select("#answer").property("value");
+                if (responseValue === "") {
+                    d3.select("#errorMessage").style("visibility", "visible");
+                }
+                else {
+                    d3.select("#errorMessage").style("visibility", "hidden");
+                    checkAnswer(responseType, responseValue);
+                }
+
+            }
+            else if (responseType === "question") {
+                if (d3.select('input[name="yes_no_radio"]:checked').node() === null) {
+                    d3.select("#errorMessage").style("visibility", "visible");
+                }
+                else {
+                    d3.select("#errorMessage").style("visibility", "hidden");
+                    responseValue = d3.select('input[name="yes_no_radio"]:checked').node().value;
+                    checkAnswer(responseType, responseValue);
+                }
+            }
+            else if (responseType === "click") {
+                d3.select("#errorMessage").style("visibility", "visible");
+            }
+        }
+        else {
+            stepNextState();
+        }
+    }
+
+    function stepNextState() {
+        state = callback.getNextState(fadeLevel);
 
         var stepHolder;
         if (firstStep) {
-            document.getElementById("submit").style.visibility = "hidden";
             document.getElementById("nextstep").innerHTML = "Next";
 
             stepHolder = document.createElement("div");
@@ -79,15 +142,14 @@ var expressions = (function() {
             stepHolder.innerHTML = "";
         }
 
-        var initialPrompt = document.createElement("div");
-        initialPrompt.classList.add("prompt");
-        initialPrompt.innerHTML = "Start by evaluating all the Multiplicative (* / %) operators from left to right. <br /> Then evaluate " +
-        "the Additive (+ -) operators from left to right.";
-
-        stepHolder.appendChild(initialPrompt);
-
         addStepHTML();
+    }
 
+    function stepWithState() {
+        var stepHolder = document.getElementById("steps");
+        stepHolder.innerHTML = "";
+        document.getElementById("nextstep").style.visibility = "visible";
+        addStepHTML();
     }
 
     function addStepHTML() {
@@ -102,19 +164,56 @@ var expressions = (function() {
 
             // display the prompt text next to the last line
             if (i == state.state.problemLines.length - 1) {
-                var promptText = removeCamelCase(state.prompt);
                 var promptHTML = document.createElement("p");
                 promptHTML.classList.add("step");
-                promptHTML.innerHTML = promptText + "<div>&nbsp;</div>";
+                promptHTML.innerHTML = state.prompt;
                 lineHTML.appendChild(promptHTML);
             }
 
             var expressionHTML = document.createElement("div");
             expressionHTML.classList.add("exp");
-            expressionHTML.innerHTML = buildExpressionString(expression, highlighting[i]);
-            lineHTML.appendChild(expressionHTML);
 
-            document.getElementById("steps").appendChild(lineHTML);
+            // check if we need to add interactivity to the UI
+            if (fadeLevel > 0 && state.hasOwnProperty("askForResponse")) {
+                // if we're asking for a click response, only make the last line of the problem click-able
+                if (state["askForResponse"] === "click" && i === state.state.problemLines.length -1) {
+                    // make the expression string click-able
+                    expressionHTML.innerHTML = buildExpressionString(expression, highlighting[i], true, false);
+                    lineHTML.appendChild(expressionHTML);
+                    document.getElementById("steps").appendChild(lineHTML);
+                    waitingForResponse = true;
+                    responseType = "click";
+                    addExpressionOnClickListeners(expression);
+                }
+                else if (state["askForResponse"] === "enter") {
+                    // add an input to allow the user to enter a calculation result
+                    expressionHTML.innerHTML = buildExpressionString(expression, highlighting[i], false, true);
+                    lineHTML.appendChild(expressionHTML);
+                    document.getElementById("steps").appendChild(lineHTML);
+                    waitingForResponse = true;
+                    responseType = "enter";
+                }
+                else if (state["askForResponse"] === "question") {
+                    // add yes/no radio buttons to the prompt so the user can answer the question
+                    expressionHTML.innerHTML = buildExpressionString(expression, highlighting[i], false, false);
+                    lineHTML.appendChild(expressionHTML);
+                    document.getElementById("steps").appendChild(lineHTML);
+                    waitingForResponse = true;
+                    responseType = "question";
+                    addResponseButtonsToPrompt();
+
+                }
+                else {
+                    expressionHTML.innerHTML = buildExpressionString(expression, highlighting[i], false, false);
+                    lineHTML.appendChild(expressionHTML);
+                    document.getElementById("steps").appendChild(lineHTML);
+                }
+            }
+            else {
+                expressionHTML.innerHTML = buildExpressionString(expression, highlighting[i], false, false);
+                lineHTML.appendChild(expressionHTML);
+                document.getElementById("steps").appendChild(lineHTML);
+            }
         }
     }
 
@@ -134,6 +233,10 @@ var expressions = (function() {
                     if (objectToVisualize.type == "lineCell") {
                         highlighting[objectToVisualize.line].push(objectToVisualize.cell);
                     }
+                    else if (objectToVisualize.type == "result") {
+                        resultSize = String(objectToVisualize.value).length + 2;
+                        highlighting[objectToVisualize.line].push("result_" + objectToVisualize.cell);
+                    }
                     else {
                         console.error("Unsupported variable type: " + objectToVisualize.type);
                     }
@@ -144,29 +247,22 @@ var expressions = (function() {
         return highlighting;
     }
 
-    function removeCamelCase(string) {
-        // insert a space before all caps
-        string = string.replace(/([A-Z])/g, ' $1');
-        // uppercase the first character
-        string = string.replace(/^./, function(str){ return str.toUpperCase(); });
-        return string;
-    }
-
     // create the expression HTML from the array of objects
-    function buildExpressionString(expression, highlighting) {
+    function buildExpressionString(expression, highlighting, makeClickable, allowInput) {
         var expressionString = "";
         for (var i = 0; i < expression.length; i++) {
+            var value = getExpressionValue(expression, i);
             if (highlighting.length > 0 && highlighting.indexOf(i) >= 0) {
-                if (expression[i].type == "empty"){
-                    expressionString += "<span class='empty'>&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;";
-                }
-                else {
-                    expressionString += "<span class='clicked'>" + getExpressionValue(expression, i) + "</span> ";
-                }
-
+                expressionString += "<span class='clicked'>" + value + "</span> ";
+            }
+            else if (highlighting.indexOf("result_" + i) >= 0) {
+                expressionString += "<input type=text id=answer size=" + resultSize + "/> ";
+            }
+            else if (makeClickable) {
+                expressionString += "<span class='clickable' id='expression_" + i + "'>" + value + "</span> ";
             }
             else {
-                expressionString += getExpressionValue(expression, i) + " ";
+                expressionString += value + " ";
             }
         }
         return expressionString;
@@ -178,11 +274,185 @@ var expressions = (function() {
         if (arr[index].type == 'double' && arr[index].value % 1 == 0) {
             return arr[index].value + ".0";
         } else if (arr[index].type == 'string') {
-            console.log("Get expr val arr  = " + arr + ", idx = " + index);
             return "\"" + arr[index].value + "\"";
         } else {
             return arr[index].value;
         }
+    }
+
+    // for clickable expression strings, adds the event listeners to ask
+    // the simulator if the response was correct or not
+    function addExpressionOnClickListeners(expression) {
+        for (var i = 0; i < expression.length; i++) {
+            d3.select("#expression_" + i).on("click", function() {
+                var id = d3.select(this).attr("id");
+                var index = id.substring(id.indexOf("_") + 1);
+                d3.select("#errorMessage").style("visibility", "hidden");
+                checkAnswer("click", index);
+            });
+        }
+    }
+
+    // adds "yes" and "no" buttons to the prompt text so the user can answer
+    // the question.
+    function addResponseButtonsToPrompt() {
+        var yesNoButtonDiv = d3.select(".step")
+            .append("div")
+            .attr("class", "yes_no_buttons");
+
+        yesNoButtonDiv
+            .append("input")
+            .attr("type", "radio")
+            .attr("class", "radio")
+            .attr("name", "yes_no_radio")
+            .attr("value", "yes");
+
+        yesNoButtonDiv
+            .append("label")
+            .text("Yes");
+
+        yesNoButtonDiv
+            .append("input")
+            .attr("type", "radio")
+            .attr("class", "radio")
+            .attr("name", "yes_no_radio")
+            .attr("value", "no");
+        yesNoButtonDiv
+            .append("label")
+            .text("No");
+    }
+
+    // asks the simulator for the statement response object and determines whether
+    // or not the user's answer is correct. asks the simulator for a state to respond
+    // to the user's answer, and calls stepWithState to display the response state.
+    function checkAnswer(type, value) {
+        numTries = numTries + 1;
+        var statementResponseObject = callback.getCorrectAnswer();
+        var correct = false;
+        var correctAnswer;
+
+        if (type === "click") {
+            correctAnswer = statementResponseObject.rhs["cell"];
+            if (statementResponseObject.rhs["cell"] === parseInt(value)) {
+                correct = true;
+            }
+        }
+        else if (type === "enter") {
+            correctAnswer = statementResponseObject.rhs.value;
+            if (statementResponseObject.rhs.valueType === "string") {
+                correctAnswer = '"' + correctAnswer + '"';
+            }
+            if (String(correctAnswer) === String(value)) {
+                correct = true;
+            }
+        }
+        else if (type === "question") {
+            if (statementResponseObject.result == true) {
+                correctAnswer = "yes";
+            }
+            else if (statementResponseObject.result == false) {
+                correctAnswer = "no";
+            }
+
+            if (correctAnswer === value) {
+                correct = true;
+            }
+        }
+
+        // Get the response based on whether or not the answer was
+        // correct, and display the response
+        state = callback.respondToAnswer(correct);
+
+        if (correct || numTries === 3) {
+            waitingForResponse = false;
+            responseType = "";
+            numTries = 0;
+
+            // HUGE HACK to handle removing the input if the user entered the correct answer
+            // need to find a better solution
+            if (type === "enter") {
+                console.log("state");
+                console.log(state);
+
+                for (var variable in state.variables.in_scope) {
+                    var varObject = state.variables.in_scope[variable];
+                    if (varObject.hasOwnProperty("value")) {
+                        var objectToVisualize = varObject["value"];
+                        if (objectToVisualize.hasOwnProperty("type")) {
+                            if (objectToVisualize.type === "result") {
+                                objectToVisualize.type = "lineCell";
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // log information about this question answer attempt
+        Logging.log_task_event(logger, {
+            type: Logging.ID.QuestionAnswer,
+            detail: {
+                type: type,
+                correctAnswer: correctAnswer,
+                userAnswer: value,
+                correct: correct
+            },
+        });
+
+        if (numTries === 3) {
+            // log that the user received a bottom-out hint
+            Logging.log_task_event(logger, {
+                type: Logging.ID.BottomOutHint,
+                detail: {
+                    type: type,
+                    correctAnswer: correctAnswer
+                },
+            });
+        }
+
+        stepWithState();
+    }
+
+    function checkSolution() {
+        var userSolution = d3.select("#inputBox").node().value;
+        var solutionState = callback.getFinalState();
+        var lastLine = solutionState.state.problemLines.length - 1;
+        var solutionValue = solutionState.state.problemLines[lastLine][0].value;
+        var solutionType = solutionState.state.problemLines[lastLine][0].type;
+
+        correct = false;
+        if (solutionType === "int") {
+            if (parseInt(userSolution) === parseInt(solutionValue)) {
+                correct = true;
+            }
+        }
+        else if (solutionType === "double") {
+            if (solutionValue % 1 === 0) {
+                solutionValue = solutionValue.toFixed(1);
+            }
+            if (String(solutionValue) === String(userSolution)) {
+                correct = true;
+            }
+        }
+        else if (solutionType === "string") {
+            solutionValue = '"' + solutionValue + '"';
+            if (String(solutionValue) === String(userSolution)) {
+                correct = true;
+            }
+        }
+
+        if (correct) {
+            d3.select("#inputBox").attr("class", "correct");
+        }
+        else {
+            d3.select("#inputBox").attr("class", "incorrect");
+        }
+
+        // log the "check" button click, along with the answer correctness
+        Logging.log_task_event(logger, {
+            type: Logging.ID.CheckSolutionButton,
+            detail: {correct:correct},
+        });
     }
 
 
@@ -903,6 +1173,7 @@ var expressions = (function() {
     return {
         create_initial_state: expressions_make_initial_state,
         template_url: "expressions/problemTemplate.html",
+        "template_id": "expressions-problem-template",
         initialize: initialize,
         reset: reset
     };

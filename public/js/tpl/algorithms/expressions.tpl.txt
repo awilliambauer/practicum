@@ -1,64 +1,71 @@
 function TPLAlgorithm() {
 	let weWillPlaceTheResultOfThisOperationHere;
 
+	[prompt]
+	"To solve an expression problem, start by evaluating all the Multiplicative (* / %) operators from left to right. Then evaluate the Additive (+ -) operators from left to right.";
+
+	[interactive("question")]
 	while(helper.isThereAtLeastOneMultiplicationDivisionOrModOperator(state)) {
-		[prompt]
-		"Start at the left, and search for the first multiplication, division, or mod operator in the expression";
-		let thisIsTheFirstMultiplicationDivisionOrModOperator;
-		thisIsTheFirstMultiplicationDivisionOrModOperator = helper.getFirstMultiplicationDivisionOrModOperatorFromLeft(state);
+		let thisIsTheFirstMultiplicationDivisionOrModOperatorFromTheLeft;
+		[interactive("click")] thisIsTheFirstMultiplicationDivisionOrModOperatorFromTheLeft = helper.getFirstMultiplicationDivisionOrModOperatorFromLeft(state);
 		let thisIsTheLeftOperand;
-		thisIsTheLeftOperand = helper.getLeftOperand(state, thisIsTheFirstMultiplicationDivisionOrModOperator);
+		[interactive("click")] thisIsTheLeftOperand = helper.getLeftOperand(state, thisIsTheFirstMultiplicationDivisionOrModOperatorFromTheLeft);
 		let thisIsTheRightOperand;
-		thisIsTheRightOperand = helper.getRightOperand(state, thisIsTheFirstMultiplicationDivisionOrModOperator);
-		let weWillPlaceTheResultOfThisOperationHere;
-		weWillPlaceTheResultOfThisOperationHere = helper.createNewLineWithEmptyCell(state, thisIsTheFirstMultiplicationDivisionOrModOperator);
+		[interactive("click")] thisIsTheRightOperand = helper.getRightOperand(state, thisIsTheFirstMultiplicationDivisionOrModOperatorFromTheLeft);
 		[no_step]
-		if (helper.isCurrentOperatorMod(state, thisIsTheFirstMultiplicationDivisionOrModOperator)) {
-			[add_to_prompt("(divide and take the remainder to get the modulus)"); question_answer]
-			helper.whatIsTheResultOfThisModulus(thisIsTheLeftOperand, thisIsTheRightOperand, state, thisIsTheFirstMultiplicationDivisionOrModOperator);
+		if (helper.isCurrentOperatorMod(state, thisIsTheFirstMultiplicationDivisionOrModOperatorFromTheLeft)) {
+			let thisIsTheResultOfTheModOperation;
+			[interactive("enter"); add_to_prompt("(divide and take the remainder to get the modulus)")]
+			thisIsTheResultOfTheModOperation = helper.whatIsTheResultOfThisModulus(thisIsTheLeftOperand, thisIsTheRightOperand, state, thisIsTheFirstMultiplicationDivisionOrModOperatorFromTheLeft);
 		} else
 		[no_step]
-		if (helper.isCurrentOperationIntDiv(state, thisIsTheFirstMultiplicationDivisionOrModOperator)) {
-			[add_to_prompt("(both operands are ints, so round down to make the answer an int)"); question_answer]
-			helper.whatIsTheResultOfThisDivision(thisIsTheLeftOperand, thisIsTheRightOperand, state, thisIsTheFirstMultiplicationDivisionOrModOperator);
+		if (helper.isCurrentOperationIntDiv(state, thisIsTheFirstMultiplicationDivisionOrModOperatorFromTheLeft)) {
+			let thisIsTheResultOfTheDivisionOperation;
+			[interactive("enter"); add_to_prompt("(both operands are ints, so round down to make the answer an int)")]
+			thisIsTheResultOfTheDivisionOperation = helper.whatIsTheResultOfThisDivision(thisIsTheLeftOperand, thisIsTheRightOperand, state, thisIsTheFirstMultiplicationDivisionOrModOperatorFromTheLeft);
 		} else
 		[no_step]
-		if (helper.isCurrentOperationDiv(state, thisIsTheFirstMultiplicationDivisionOrModOperator)) {
-			[question_answer]
-            helper.whatIsTheResultOfThisDivision(thisIsTheLeftOperand, thisIsTheRightOperand, state, thisIsTheFirstMultiplicationDivisionOrModOperator);
+		if (helper.isCurrentOperationDiv(state, thisIsTheFirstMultiplicationDivisionOrModOperatorFromTheLeft)) {
+			let thisIsTheResultofTheDivisionOperation;
+			[interactive("enter")]
+            thisIsTheResultofTheDivisionOperation = helper.whatIsTheResultOfThisDivision(thisIsTheLeftOperand, thisIsTheRightOperand, state, thisIsTheFirstMultiplicationDivisionOrModOperatorFromTheLeft);
 		} else
 		[no_step]
-		if (helper.isCurrentOperationMult(state, thisIsTheFirstMultiplicationDivisionOrModOperator)) {
-			[question_answer]
-			helper.whatIsTheResultOfThisMultiplication(thisIsTheLeftOperand, thisIsTheRightOperand, state, thisIsTheFirstMultiplicationDivisionOrModOperator);
+		if (helper.isCurrentOperationMult(state, thisIsTheFirstMultiplicationDivisionOrModOperatorFromTheLeft)) {
+			let thisIsTheResultOfTheMultiplicationOperation;
+			[interactive("enter")]
+			thisIsTheResultOfTheMultiplicationOperation = helper.whatIsTheResultOfThisMultiplication(thisIsTheLeftOperand, thisIsTheRightOperand, state, thisIsTheFirstMultiplicationDivisionOrModOperatorFromTheLeft);
 		}
 	}
 
+	[interactive("question")]
 	while(helper.isThereAtLeastOneAdditionOrSubtractionOperator(state)) {
-	    [prompt]
-		"Start at the left, and find the first addition or subtraction operator";
-		let thisIsTheFirstAdditionOrSubtractionOperator;
-		thisIsTheFirstAdditionOrSubtractionOperator = helper.getFirstAdditionOrSubtractionOperatorFromLeft(state);
+		let thisIsTheFirstAdditionOrSubtractionOperatorFromTheLeft;
+		[interactive("click")] thisIsTheFirstAdditionOrSubtractionOperatorFromTheLeft = helper.getFirstAdditionOrSubtractionOperatorFromLeft(state);
 		let thisIsTheLeftOperand;
-		thisIsTheLeftOperand = helper.getLeftOperand(state, thisIsTheFirstAdditionOrSubtractionOperator);
+		[interactive("click")] thisIsTheLeftOperand = helper.getLeftOperand(state, thisIsTheFirstAdditionOrSubtractionOperatorFromTheLeft);
 		let thisIsTheRightOperand;
-		thisIsTheRightOperand = helper.getRightOperand(state, thisIsTheFirstAdditionOrSubtractionOperator);
-		let weWillPlaceTheResultOfThisOperationHere;
-		weWillPlaceTheResultOfThisOperationHere = helper.createNewLineWithEmptyCell(state, thisIsTheFirstAdditionOrSubtractionOperator);
+		[interactive("click")] thisIsTheRightOperand = helper.getRightOperand(state, thisIsTheFirstAdditionOrSubtractionOperatorFromTheLeft);
 		[no_step]
-		if (helper.isCurrentOperationConcat(state, thisIsTheFirstAdditionOrSubtractionOperator)) {
-			[add_to_prompt("(addition involving a string results in concatenation)"); question_answer]
-			helper.whatIsTheResultOfThisAddition(thisIsTheLeftOperand, thisIsTheRightOperand, state, thisIsTheFirstAdditionOrSubtractionOperator);
+		if (helper.isCurrentOperationConcat(state, thisIsTheFirstAdditionOrSubtractionOperatorFromTheLeft)) {
+			let thisIsTheResultOfTheAdditionOperation;
+			[interactive("enter"); add_to_prompt("(addition involving a string results in concatenation)")]
+			thisIsTheResultOfTheAdditionOperation = helper.whatIsTheResultOfThisAddition(thisIsTheLeftOperand, thisIsTheRightOperand, state, thisIsTheFirstAdditionOrSubtractionOperatorFromTheLeft);
 		} else
 		[no_step]
-		if (helper.isCurrentOperationAdd(state, thisIsTheFirstAdditionOrSubtractionOperator)) {
-			[question_answer]
-			helper.whatIsTheResultOfThisAddition(thisIsTheLeftOperand, thisIsTheRightOperand, state, thisIsTheFirstAdditionOrSubtractionOperator);
+		if (helper.isCurrentOperationAdd(state, thisIsTheFirstAdditionOrSubtractionOperatorFromTheLeft)) {
+			let thisIsTheResultOfTheAdditionOperation;
+			[interactive("enter")]
+			thisIsTheResultOfTheAdditionOperation = helper.whatIsTheResultOfThisAddition(thisIsTheLeftOperand, thisIsTheRightOperand, state, thisIsTheFirstAdditionOrSubtractionOperatorFromTheLeft);
 		} else
 		[no_step]
-		if (helper.isCurrentOperationSub(state, thisIsTheFirstAdditionOrSubtractionOperator)) {
-			[question_answer]
-            helper.whatIsTheResultOfThisSubtraction(thisIsTheLeftOperand, thisIsTheRightOperand, state, thisIsTheFirstAdditionOrSubtractionOperator);
+		if (helper.isCurrentOperationSub(state, thisIsTheFirstAdditionOrSubtractionOperatorFromTheLeft)) {
+			let thisIsTheResultOfTheSubtractionOperation;
+			[interactive("enter")]
+            thisIsTheResultOfTheSubtractionOperation = helper.whatIsTheResultOfThisSubtraction(thisIsTheLeftOperand, thisIsTheRightOperand, state, thisIsTheFirstAdditionOrSubtractionOperatorFromTheLeft);
 		}
 	}
+
+	[prompt]
+	"This is the answer! Enter your solution in the box above.";
 }

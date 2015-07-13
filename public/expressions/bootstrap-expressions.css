@@ -4,6 +4,11 @@
   as possible, and rely on bootstrap's stylings. This will get easier once we install scss or
   less or something.
 */
+
+.expressions_problem .clickable:hover {
+    cursor: pointer;
+    background-color: #9DE0AD;
+}
 .expressions_problem .clicked {
     color: #45ADA8;
 }
@@ -46,6 +51,13 @@
     height: 100px;
 }
 
+.expressions_problem #errorMessage {
+    color: red;
+    font-size: 14px;
+    text-align: center;
+    padding-top: 10px;
+}
+
 
 .expressions_problem #steps {
     margin-left: auto;
@@ -55,6 +67,7 @@
     border-radius: 10px;
     overflow: hidden;
     padding: 20px;
+    padding-bottom: 40px;
     margin-bottom: 20px;
     background-color: white;
 }
@@ -64,7 +77,7 @@
     font-size: 14pt;
     text-align: left;
     float: left;
-    width: 50%;
+    width: 45%;
     margin: 0pt;
 }
 
@@ -75,24 +88,81 @@
 .expressions_problem .exp {
     float: right;
     font-size: 25pt;
-    width: 400px;
+    width: 50%;
     text-align: center;
     margin: 0pt;
     vertical-align: text-bottom;
 }
 
-.expressions_problem #answerbox {
-    margin-left: auto;
-    margin-right: auto;
+.expressions_problem #inputBox {
+    width: 200px;
+    font-size: 16px;
+    vertical-align: middle;
 }
 
-.expressions_problem #box {
-    width: 200px;
-    margin-bottom: 15px;
+/*.expressions_problem input[type="text"].correct {
+    background-color: #339944;
+}
+
+.expressions_problem input[type="text"].incorrect {
+    background-color: #FF5544;
+}*/
+
+
+.expressions_problem input[type="text"].correct {
+    animation-name: correctExpression;
+    animation-duration: 2s;
+}
+
+@keyframes correctExpression {
+     from {
+         background-color: #339944;
+     }
+
+     to {
+         background-color: #FFFFFF;
+     }
+ }
+
+.expressions_problem input[type="text"].incorrect {
+    animation-name: incorrectExpression;
+    animation-duration: 2s;
+}
+
+@keyframes incorrectExpression {
+    from {
+        background-color: #FF5544;
+    }
+
+    to {
+        background-color: #FFFFFF;
+    }
+}
+
+
+.expressions_problem #expressionHeader {
+    text-align: center;
+    font-size: 25px;
+    margin-bottom: 50px;
+}
+
+.expressions_problem #submitButton {
+    width: 75px;
+    font-size: 14px;
+    vertical-align: middle;
+}
+
+
+.expressions_problem #nextstep {
+    width: 100px;
+    font-size: 14px;
+    margin-top: 20px;
 }
 
 .expressions_problem #answerbox {
     text-align: center;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .expressions_problem h2 {
@@ -100,27 +170,6 @@
     font-size: 25pt;
     margin-top: 40px;
     font-weight: normal;
-}
-
-.expressions_problem .buttons {
-    width: 75px;
-}
-
-.expressions_problem #submit {
-    float: left;
-}
-
-.expressions_problem #nextstep {
-    float: right;
-}
-
-.expressions_problem .buttonLineUp {
-    margin-right: 40%;
-    margin-left: 25%;
-    width: 20%;
-    clear:both;
-    float:right;
-    margin-top: 15px;
 }
 
 .expressions_problem .highlight1 {
@@ -157,8 +206,20 @@
 }
 
 .expressions_problem input {
-    font-size: 25pt;
-    width: 60px;
+     font-size: 25pt;
+}
+
+.expressions_problem .yes_no_buttons {
+    text-align: center;
+}
+
+.expressions_problem .radio {
+    display: inline;
+    width: 30px;
+}
+
+.expressions_problem label {
+    padding-right: 30px;
 }
 
 .expressions_problem #correct {

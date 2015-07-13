@@ -11,21 +11,11 @@ var csed = (function() {
     var problemToLoad;
 
     var userid_promise;
-    var telemetry_client;
-    var telemetry_task;
+    var task_logger;
 
     function setupLogging(username) {
         var LOGGING_BASE_URL = window.location.protocol + "//" + window.location.hostname + ":" + LOGGING_PORT;
-        telemetry_client = papika.TelemetryClient(LOGGING_BASE_URL, LOGGING_RELEASE_ID, '');
-
-        userid_promise = telemetry_client.query_user_id({username:username})
-            .then(function(userid) {
-                telemetry_client.log_session({
-                    user: userid,
-                    detail: null
-                });
-                return userid;
-            });
+        Logging.initialize(LOGGING_BASE_URL, LOGGING_RELEASE_ID, username);
     }
 
     function setProblemToLoad(category, problemId) {
@@ -47,7 +37,7 @@ var csed = (function() {
     function showHome() {
         d3.select("#main-page").classed("hidden", false);
         d3.select("#problem-container").classed("hidden", true);
-        d3.select("#problem").remove();
+        d3.select("#problem-container .problem").remove();
     }
 
     function findProblem(categoryConfig, requestedCategory, requestedProblemId)  {
@@ -106,23 +96,29 @@ var csed = (function() {
 
     function CallbackObject() {
 
-        this.getNextState = function() {
-            return main_simulator.next();
+        this.getNextState = function(fadeLevel) {
+            return main_simulator.next(fadeLevel);
+        }
+
+        this.getCorrectAnswer = function() {
+            return main_simulator.getCorrectAnswer();
+        }
+
+        this.respondToAnswer = function(correct) {
+            return main_simulator.respondToAnswer(correct);
+        }
+
+        this.getFinalState = function() {
+            return main_simulator.getFinalState();
         }
 
     }
 
     function loadProblem(problemConfig) {
-        telemetry_task = userid_promise.then(function() {
-             return telemetry_client.start_task({
-                type: 2,
-                detail: null,
-                group: problemConfig.id
-            });
-        });
+        task_logger = Logging.start_task(problemConfig);
 
         // remove the old problem from the DOM
-        d3.selectAll("#problem").remove();
+        d3.selectAll("#problem-container .problem").remove();
 
         // reset any global state in the category js runner
         if (!csed.hasOwnProperty(problemConfig.category)) {
@@ -130,11 +126,16 @@ var csed = (function() {
         }
 
         var problemUI = csed[problemConfig.category];
+        problemUI.reset();
 
         // Load in the template for the problem
-        fetch(problemUI.template_url).then(function(response) {
-            return response.text();
-        }).then(function(problemHtml) {
+//        fetch(problemUI.template_url).then(function(response) {
+//            return response.text();
+//        }).then(function(problemHtml) {
+
+        d3.html(problemUI.template_url, function(error, problemHtml){
+            if (error) console.error(error);
+
             // Uh, not sure why I can't append raw html into the dom with D3. Using jQuery for the moment...
             //d3.select("#problem").append(problemHtml);
             $("#problem-container").append(problemHtml);
@@ -145,15 +146,21 @@ var csed = (function() {
             var category = problemConfig.category;
 
             var initial_state = problemUI.create_initial_state(problemConfig);
-            main_simulator.initialize(category, {state:initial_state}).then(function() {
-                console.log("finished initializing simulator");
-                problemUI.initialize(problemConfig, new CallbackObject(), initial_state);
-            }, function(error) {
-                console.error("something went wrong: ");
-                console.log(error);
-            });
-        }, function(error) {
-            console.error(error);
+            main_simulator.initialize(category, {state:initial_state});
+
+            // This problemUI initialize call probably needs to happen after the main_sim init call,
+            // which is handled by promises/then() with fetch.
+            problemUI.initialize(problemConfig, new CallbackObject(), initial_state, task_logger);
+
+//            main_simulator.initialize(category, {state:initial_state}).then(function() {
+//                console.log("finished initializing simulator");
+//                problemUI.initialize(problemConfig, new CallbackObject(), initial_state, task_logger);
+//            }, function(error) {
+//                console.error("something went wrong: ");
+//                console.log(error);
+//            });
+//        }, function(error) {
+//            console.error(error);
         });
     }
 
@@ -250,14 +257,12 @@ var csed = (function() {
     function sendConsentFormResponse(data) {
         console.log("Sending consent data: " + data);
 
-        userid_promise.then(function() {
-            telemetry_client.log_event({
-                type: 11,
-                detail: data
-            }, true).then(function() {
-                console.info("successfully logged consent response.");
-                consentFormResponseSuccess();
-            });
+        Logging.log_event_with_promise({
+            type: Logging.ID.Consent,
+            detail: data
+        }, true).then(function() {
+            console.info("successfully logged consent response.");
+            consentFormResponseSuccess();
         });
     }
 
