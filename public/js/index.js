@@ -14,7 +14,7 @@ var csed = (function() {
     var task_logger;
 
     function setupLogging(username) {
-        var LOGGING_BASE_URL = window.location.protocol + "//" + window.location.hostname + ":" + LOGGING_PORT;
+        var LOGGING_BASE_URL = "https://" + window.location.hostname + ":" + LOGGING_PORT;
         Logging.initialize(LOGGING_BASE_URL, LOGGING_RELEASE_ID, username);
     }
 
