@@ -47,17 +47,6 @@ var expressions = (function() {
 
     // Callback function for navigation javascript. Installs a problem into the page
     var initialize = function(problemConfig, callbackObject, initial_state, task_logger) {
-        // this code runs the hard-coded array of state objects stored in state_1.js
-
-        /*$.getScript("state_objects/state_1.js", function() {
-         currentStateIndex = 0;
-         var expressionHeader = document.getElementById("expressionHeader");
-         var expression = states[currentStateIndex].problemLines[0];
-         expressionHeader.innerHTML = buildExpressionString(expression, []);
-         });*/
-
-        // this code runs the thoughtProcess.js file to build up the array of state objects
-
         callback = callbackObject;
         state = initial_state;
         waitingForResponse = false;
@@ -67,7 +56,10 @@ var expressions = (function() {
 
         var expressionHeader = document.getElementById("expressionHeader");
         var expression = state.problemLines[0];
-        expressionHeader.innerHTML = buildExpressionString(expression, [], false, false);
+        var expresionHeaderString = "<span style='font-weight: bold;'>Problem: </span>";
+        expresionHeaderString += buildExpressionString(expression, [], false, false);
+        expresionHeaderString += "<span style='font-weight: bold; padding-left: 30px;'>Solution: </span>";
+        expressionHeader.innerHTML = expresionHeaderString + expressionHeader.innerHTML;
 
         //if users attempt to check a submitted answer
         d3.select("#submit").on("click", correct);
@@ -111,7 +103,6 @@ var expressions = (function() {
 
         var stepHolder;
         if (firstStep) {
-            document.getElementById("submit").style.visibility = "hidden";
             document.getElementById("nextstep").innerHTML = "Next";
 
             stepHolder = document.createElement("div");
