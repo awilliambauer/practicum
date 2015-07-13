@@ -109,7 +109,7 @@ $disagreeData = array_merge(['response' => 'disagree'], $studentData);
 
         <div class="content">
             <div id="welcome">
-                <h2>Welcome to Practice-That!</h2>
+                <h2>Welcome to Practicum!</h2>
                 <p>
                     On this site you can practice a problems related to introductory<br>programming
                     through our in-depth learning environment.<br>Click on a type of problem and let's get programming!
