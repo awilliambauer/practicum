@@ -93,6 +93,46 @@
     vertical-align: middle;
 }
 
+/*.expressions_problem input[type="text"].correct {
+    background-color: #339944;
+}
+
+.expressions_problem input[type="text"].incorrect {
+    background-color: #FF5544;
+}*/
+
+
+.expressions_problem input[type="text"].correct {
+    animation-name: correctExpression;
+    animation-duration: 2s;
+}
+
+@keyframes correctExpression {
+     from {
+         background-color: #339944;
+     }
+
+     to {
+         background-color: #FFFFFF;
+     }
+ }
+
+.expressions_problem input[type="text"].incorrect {
+    animation-name: incorrectExpression;
+    animation-duration: 2s;
+}
+
+@keyframes incorrectExpression {
+    from {
+        background-color: #FF5544;
+    }
+
+    to {
+        background-color: #FFFFFF;
+    }
+}
+
+
 .expressions_problem #expressionHeader {
     text-align: center;
     font-size: 25px;

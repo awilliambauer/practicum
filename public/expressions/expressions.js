@@ -62,7 +62,7 @@ var expressions = (function() {
         expressionHeader.innerHTML = expresionHeaderString + expressionHeader.innerHTML;
 
         //if users attempt to check a submitted answer
-        d3.select("#submit").on("click", correct);
+        d3.select("#submitButton").on("click", checkSolution);
 
         //if users attempt to step through the breakdown of the problem
         d3.select("#nextstep").on("click", step);
@@ -362,6 +362,44 @@ var expressions = (function() {
         }
 
         stepWithState();
+    }
+
+    function checkSolution() {
+        var userSolution = d3.select("#inputBox").node().value;
+        var solutionState = callback.getFinalState();
+        var lastLine = solutionState.state.problemLines.length - 1;
+        var solutionValue = solutionState.state.problemLines[lastLine][0].value;
+        var solutionType = solutionState.state.problemLines[lastLine][0].type;
+
+        correct = false;
+        if (solutionType === "int") {
+            if (parseInt(userSolution) === parseInt(solutionValue)) {
+                correct = true;
+            }
+        }
+        else if (solutionType === "double") {
+            if (solutionValue % 1 === 0) {
+                solutionValue = solutionValue.toFixed(1);
+            }
+            if (String(solutionValue) === String(userSolution)) {
+                correct = true;
+            }
+        }
+        else if (solutionType === "string") {
+            solutionValue = '"' + solutionValue + '"';
+            if (String(solutionValue) === String(userSolution)) {
+                correct = true;
+            }
+        }
+
+        if (correct) {
+            d3.select("#inputBox").attr("class", "correct");
+        }
+        else {
+            d3.select("#inputBox").attr("class", "incorrect");
+        }
+
+        console.log("correct: " + correct);
     }
 
 

@@ -161,6 +161,10 @@ var main_simulator = (function () {"use strict";
         }
     }
 
+    self.getFinalState = function() {
+        return states[states.length - 1];
+    }
+
     self.copy = function(obj) {
         // copy state by sending it to JSON and back; it's easy, and it'll also
         // catch bugs where the state illegally contains non-json.
