@@ -33,6 +33,9 @@ var expressions = (function() {
     // it's waiting for
     var responseType;
 
+    // the number of times the user has tried to answer this question. limit 3
+    var numTries;
+
     var logger;
 
     // Callback function for navigation javascript -- called before problem load.
@@ -57,8 +60,9 @@ var expressions = (function() {
 
         callback = callbackObject;
         state = initial_state;
-        waitingForResponse = false; // not waiting for a response
-        // hold onto the task logger for logging UI events.
+        waitingForResponse = false;
+        numTries = 0;
+        // hold onto the task logger for logging UI event
         logger = task_logger;
 
         var expressionHeader = document.getElementById("expressionHeader");
@@ -161,6 +165,8 @@ var expressions = (function() {
                     lineHTML.appendChild(expressionHTML);
                     document.getElementById("steps").appendChild(lineHTML);
                     document.getElementById("nextstep").style.visibility = "hidden";
+                    waitingForResponse = true;
+                    responseType = "click";
                     addExpressionOnClickListeners(expression);
                 }
                 else if (state["askForResponse"] === "enter") {
@@ -310,6 +316,7 @@ var expressions = (function() {
     // or not the user's answer is correct. asks the simulator for a state to respond
     // to the user's answer, and calls stepWithState to display the response state.
     function checkAnswer(type, value) {
+        numTries = numTries + 1;
         var statementResponseObject = callback.getCorrectAnswer();
         var correct = false;
 
@@ -333,28 +340,30 @@ var expressions = (function() {
                 correct = true;
             }
         }
-        if (correct) {
-            waitingForResponse = false;
-            responseType = "";
-        }
 
         // Get the response based on whether or not the answer was
         // correct, and display the response
         state = callback.respondToAnswer(correct);
 
-        // HUGE HACK to handle removing the input if the user entered the correct answer
-        // need to find a better solution
-        if (type === "enter" && correct) {
-            console.log("state");
-            console.log(state);
+        if (correct || numTries === 3) {
+            waitingForResponse = false;
+            responseType = "";
+            numTries = 0;
 
-            for (var variable in state.variables.in_scope) {
-                var varObject = state.variables.in_scope[variable];
-                if (varObject.hasOwnProperty("value")) {
-                    var objectToVisualize = varObject["value"];
-                    if (objectToVisualize.hasOwnProperty("type")) {
-                        if (objectToVisualize.type === "result") {
-                            objectToVisualize.type = "lineCell";
+            // HUGE HACK to handle removing the input if the user entered the correct answer
+            // need to find a better solution
+            if (type === "enter") {
+                console.log("state");
+                console.log(state);
+
+                for (var variable in state.variables.in_scope) {
+                    var varObject = state.variables.in_scope[variable];
+                    if (varObject.hasOwnProperty("value")) {
+                        var objectToVisualize = varObject["value"];
+                        if (objectToVisualize.hasOwnProperty("type")) {
+                            if (objectToVisualize.type === "result") {
+                                objectToVisualize.type = "lineCell";
+                            }
                         }
                     }
                 }

@@ -3,6 +3,7 @@ var main_simulator = (function () {"use strict";
     var states;
     var currentState;
     var waitingForUserResponse;
+    var numTries;
 
     self.getHelper = function(algoName) {
         if (algoName == "expressions") {
@@ -43,6 +44,8 @@ var main_simulator = (function () {"use strict";
             // HACK function name currently ignored
             sim.start_function(undefined, args);
             states = explainer.create_explanations(sim.run_all(state));
+            waitingForUserResponse = false;
+            numTries = 0;
 
             // the UIs call "next" to get the first state, so we start at -1
             // to indicate that the UI hasn't displayed the first state yet
@@ -120,26 +123,40 @@ var main_simulator = (function () {"use strict";
 
     // respond to a user answer, based on whether or not the answer was correct
     self.respondToAnswer = function(correct) {
+        numTries = numTries + 1;
         if (!waitingForUserResponse) {
             console.error("Called respondToAnswer, but the simulator wasn't waiting for an answer");
         }
         else if (correct) {
+            numTries = 0;
             currentState = currentState + 1;
             waitingForUserResponse = false;
             var returnState = self.copy(states[currentState])
             returnState.prompt = "Great job! That is correct."
             return returnState;
         }
-        else {
+        else if (!correct && numTries < 3) {
             var stateToShow = currentState + 1;
             if (states[currentState + 1].annotations.interactive[0] === "click") {
-                console.log("this is a click, show old state!");
                 stateToShow = currentState;
             }
             var returnState = self.copy(states[stateToShow]);
-            returnState.prompt = "Sorry, that is not correct. Try again!<br>";
+            if (numTries == 1) {
+                returnState.prompt = "Sorry, that is not correct. Try again!<br>";
+            }
+            else {
+                returnState.prompt = "Sorry, that is not correct. Try one more time!<br>";
+            }
             returnState.prompt += self.getInteractivePrompt(states[currentState + 1].prompt, states[currentState + 1].annotations.interactive);
             returnState.askForResponse = states[currentState + 1].annotations["interactive"][0];
+            return returnState;
+        }
+        else {
+            numTries = 0;
+            currentState = currentState + 1;
+            waitingForUserResponse = false;
+            var returnState = self.copy(states[currentState])
+            returnState.prompt = "Sorry, that is not correct."
             return returnState;
         }
     }
