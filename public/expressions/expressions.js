@@ -36,6 +36,10 @@ var expressions = (function() {
     // the number of times the user has tried to answer this question. limit 3
     var numTries;
 
+    // the length of the expression calculation result, so we can make the
+    // text box the right size (hacky)
+    var resultSize;
+
     var logger;
 
     // Callback function for navigation javascript -- called before problem load.
@@ -209,6 +213,7 @@ var expressions = (function() {
                         highlighting[objectToVisualize.line].push(objectToVisualize.cell);
                     }
                     else if (objectToVisualize.type == "result") {
+                        resultSize = String(objectToVisualize.value).length + 2;
                         highlighting[objectToVisualize.line].push("result_" + objectToVisualize.cell);
                     }
                     else {
@@ -227,18 +232,10 @@ var expressions = (function() {
         for (var i = 0; i < expression.length; i++) {
             var value = getExpressionValue(expression, i);
             if (highlighting.length > 0 && highlighting.indexOf(i) >= 0) {
-                if (expression[i].type == "empty" && allowInput) {
-                    expressionString += "<input type=text id=answer size=1/> "
-                }
-                else if (expression[i].type == "empty"){
-                    expressionString += "<span class='empty'>&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;";
-                }
-                else {
-                    expressionString += "<span class='clicked'>" + value + "</span> ";
-                }
+                expressionString += "<span class='clicked'>" + value + "</span> ";
             }
             else if (highlighting.indexOf("result_" + i) >= 0) {
-                expressionString += "<input type=text id=answer size=1/> ";
+                expressionString += "<input type=text id=answer size=" + resultSize + "/> ";
             }
             else if (makeClickable) {
                 expressionString += "<span class='clickable' id='expression_" + i + "'>" + value + "</span> ";

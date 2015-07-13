@@ -65,4 +65,7 @@ function TPLAlgorithm() {
             thisIsTheResultOfTheSubtractionOperation = helper.whatIsTheResultOfThisSubtraction(thisIsTheLeftOperand, thisIsTheRightOperand, state, thisIsTheFirstAdditionOrSubtractionOperatorFromTheLeft);
 		}
 	}
+
+	[prompt]
+	"This is the answer! Enter your solution in the box above.";
 }
