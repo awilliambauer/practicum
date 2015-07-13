@@ -7,10 +7,25 @@
 
 .expressions_problem .clickable:hover {
     cursor: pointer;
-    background-color: #9DE0AD;
+    color: #45ADA8;
 }
+
+.expressions_problem .clickableOperand:hover {
+    cursor: pointer;
+    color: #fdae61;
+}
+
 .expressions_problem .clicked {
     color: #45ADA8;
+}
+
+.expressions_problem .clicked:hover {
+    cursor: auto;
+    background-color: white;
+}
+
+.expressions_problem .clickedOperand {
+    color: #fdae61;
 }
 
 .expressions_problem .clicked:hover {
@@ -76,8 +91,9 @@
     font-size: 14pt;
     text-align: left;
     float: left;
-    width: 45%;
+    width: 40%;
     margin: 0pt;
+    text-align: center;
 }
 
 .expressions_problem .expressionStatement {
@@ -87,7 +103,7 @@
 .expressions_problem .exp {
     float: right;
     font-size: 25pt;
-    width: 50%;
+    width: 60%;
     text-align: center;
     margin: 0pt;
     vertical-align: text-bottom;

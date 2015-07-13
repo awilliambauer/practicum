@@ -167,7 +167,7 @@ var expressions = (function() {
             if (i == state.state.problemLines.length - 1) {
                 var promptHTML = document.createElement("p");
                 promptHTML.classList.add("step");
-                promptHTML.innerHTML = state.prompt;
+                promptHTML.innerHTML = formatPrompt(state.prompt);
                 lineHTML.appendChild(promptHTML);
             }
 
@@ -218,6 +218,27 @@ var expressions = (function() {
         }
     }
 
+    // make the prompt text lay out nicely.
+    function formatPrompt(promptText) {
+        var brIndex = promptText.lastIndexOf("<br>");
+        if (brIndex > 0) {
+            var firstPart = promptText.substring(0, brIndex + 4);
+            var secondPart = promptText.substring(brIndex + 4);
+        }
+        else {
+            firstPart = "";
+            secondPart = promptText;
+        }
+
+        if (secondPart.length > 50 && secondPart.length < 80) {
+            var index = secondPart.indexOf(" ", 25);
+            secondPart = secondPart.substring(0,index) + "<br>" + secondPart.substring(index+1);
+        }
+
+        promptText = firstPart + secondPart;
+        return promptText;
+    }
+
     // look at the current variables in scope to determine which rows and cells should be highlighted
     function getCurrentHighlighting() {
         var highlighting = [];
@@ -259,13 +280,23 @@ var expressions = (function() {
         for (var i = 0; i < expression.length; i++) {
             var value = getExpressionValue(expression, i);
             if (highlighting.length > 0 && highlighting.indexOf(i) >= 0) {
-                expressionString += "<span class='clicked'>" + value + "</span> ";
+                if (value === "%" || value === "*" || value === "/" || value ==="+" || value ==="-") {
+                    expressionString += "<span class='clickedOperand'>" + value + "</span> ";
+                }
+                else {
+                    expressionString += "<span class='clicked'>" + value + "</span> ";
+                }
             }
             else if (highlighting.indexOf("result_" + i) >= 0) {
                 expressionString += "<input type=text id=answer size=" + resultSize + "/> ";
             }
             else if (makeClickable) {
-                expressionString += "<span class='clickable' id='expression_" + i + "'>" + value + "</span> ";
+                if (value === "%" || value === "*" || value === "/" || value ==="+" || value ==="-") {
+                    expressionString += "<span class='clickableOperand' id='expression_" + i + "'>" + value + "</span> ";
+                }
+                else {
+                    expressionString += "<span class='clickable' id='expression_" + i + "'>" + value + "</span> ";
+                }
             }
             else {
                 expressionString += value + " ";

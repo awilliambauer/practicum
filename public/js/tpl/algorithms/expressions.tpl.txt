@@ -2,7 +2,7 @@ function TPLAlgorithm() {
 	let weWillPlaceTheResultOfThisOperationHere;
 
 	[prompt]
-	"To solve an expression problem, start by evaluating all the Multiplicative (* / %) operators from left to right. Then evaluate the Additive (+ -) operators from left to right.";
+	"To solve an expression problem, start by<br>evaluating all the Multiplicative operators<br>(* / %) from left to right. Then evaluate the<br>Additive operators (+ -) from left to right.";
 
 	[interactive("question")]
 	while(helper.isThereAtLeastOneMultiplicationDivisionOrModOperator(state)) {
@@ -67,5 +67,5 @@ function TPLAlgorithm() {
 	}
 
 	[prompt]
-	"This is the answer! Enter your solution in the box above.";
+	"This is the answer!";
 }
