@@ -1,18 +1,9 @@
 var if_else = (function() {
 	"use strict";
 
-	// MODE variable can be either "static" or "interactive"
-	var MODE = "static";
-
-	var CURRENT_STEP;
-	var VARIABLES;
 	var AST;
 	var state;
 	var callback;
-	var CORRECT_NEXT_LINE;
-	var CORRECT_VARIABLES;
-	var CORRECT_BOOL;
-
 	var AST_INSTALLED_INTO_DOM = false;
 
 	function reset() {
@@ -78,10 +69,6 @@ var if_else = (function() {
 	// we will just have to replace "example.txt" with whatever file they store the problem
 	// text in
 	function initialize(problemConfig, callbackObject, initialState) {
-		CORRECT_BOOL = null;
-		CURRENT_STEP = 0;
-		VARIABLES = {};
-
 		if (!AST_INSTALLED_INTO_DOM) {
 			AST = initialState.AST;
 			$("#problem_space > pre").html(on_convert(AST));
@@ -91,7 +78,7 @@ var if_else = (function() {
 		state = initialState;
 		callback = callbackObject;
 
-		var args = getArgumentString().toString();
+		var args = getArgString(state.initialization).toString();
 		var methodCallText = "ifElseMystery1(" + args + ")";
 
 		$(".content > h2").text("If/Else Mystery Problem");
@@ -151,79 +138,64 @@ var if_else = (function() {
 		}
 	}
 
-	function getArgString(initialization) {
-		var rawVals = initialization;
+	// gets the initial values that the method will be called with
+	function getArgString(args) {
 		var callVals = [];
-		for (var variable in rawVals) {
-			callVals.push(rawVals[variable]);
+		for (var variable in args) {
+			callVals.push(args[variable]);
 		}
 		return callVals;
 	}
 
-	// gets the initial values that the method will be called with
-	// This one uses the global state?
-	function getArgumentString() {
-		return getArgString(state.initialization);
-	}
-
 	function next() {
-		console.log("step!");
 		state = callback.getNextState(0);
-		console.log(state);
 
 		$("body *").removeClass("correct")
 				   .removeClass("incorrect")
 				   .removeClass("incorrect_select");
 
-
-		if (MODE == "static") {
-
-			if (state.state.lineNum > 0) {
-				$("html, body").animate({
-					scrollTop: $("." + state.state.lineNum).offset().top - 200
-				}, 1000);
-			}
-			newGetPrompt(state);
-			newUpdateVariables(state.state);
-			drawVariableBank();
-			addHighlighting();
-			//newHighlightLine(state.state);
-			//newHighlightBlock(state.state);
-
-			//newAddComments(currentState);
-			//newCrossOutLines(currentState);
-			//addInteraction(currentState);
+		if (state.state.lineNum > 0) {
+			$("html, body").animate({
+				scrollTop: $("." + state.state.lineNum).offset().top - 200
+			}, 1000);
 		}
-		else if (MODE == "interactive") {
-			if (checkUserInput()) {
-				$("#problem_space li").off("mouseover")
-					.off("click");
-				$(".chosen-next-line").removeClass("chosen-next-line");
+		addPrompt();
+		addVaraibleBank();
+		addHighlighting();
 
-				// take away "next" button when finished
-				if (state.state.prompt.indexOf("Answer") != -1) {
-					$(document).off("keydown");
-				}
+	}
 
-				if (CURRENT_STEP == 0) {
-					$("#prompt").show();
-					highlightBlocks();
-				} else {
-					// scroll to the right position
-					$("html, body").animate({
-						scrollTop: $("." + state.state.lineNum).offset().top - 200
-					}, 1000);
-				}
-				CURRENT_STEP++;
-				newGetPromptWithTitle(currentState);
-				newHighlightLine(currentState);
-				newHighlightBlock(currentState);
-				newAddComments(currentState);
-				newUpdateVariablesWithLineNums(currentState);
-				drawVariableBank();
-				newCrossOutLines(currentState);
-				addInteraction(currentState);
-			}
+	// Extracts prompt from state and creates HTML
+	function addPrompt() {
+		if(state.hasOwnProperty("prompt")) {
+			var prompt =  state.prompt;
+			d3.select("#prompt").node().innerHTML = prompt;
+		}
+	}
+
+	function addVaraibleBank() {
+		// clear the variable bank so we can re-draw it
+		d3.select("#variable_list").node().innerHTML = "";
+
+		// add all of the currently defined variables to the variable bank
+		for (var variable in state.state.vars) {
+
+			var listItem = d3.select("#variable_list")
+				.append("li")
+				.attr("class", "variable_list_item")
+			;
+
+			listItem
+				.append("span")
+				.attr("class", "bank_variable")
+				.text(variable)
+			;
+
+			listItem
+				.append("span")
+				.attr("class", "bank_variable_value")
+				.text(state.state.vars[variable])
+			;
 		}
 	}
 
@@ -232,8 +204,6 @@ var if_else = (function() {
 			var varObject = state.variables.in_scope[variable];
 
 			if (varObject.hasOwnProperty("value")) {
-				//console.log(variable);
-				//console.log(varObject);
 				var objectToVisualize = varObject["value"];
 
 				if (objectToVisualize.hasOwnProperty("type")) {
@@ -263,9 +233,6 @@ var if_else = (function() {
 						console.error("Unsupported variable type: " + varObject.type);
 					}
 				}
-				/*else {
-					console.error("This variable has no visualization type: " + variable);
-				}*/
 			}
 		}
 	}
@@ -284,6 +251,7 @@ var if_else = (function() {
 	function highlightVariableBank(variables) {
 		d3.selectAll(".variable_list_item").each(function(d,i) {
 			var varName = d3.select(this).select(".bank_variable")[0][0].innerHTML;
+			console.log("varName: " +varName);
 			for (var key in variables) {
 				if (varName === key) {
 					d3.select(this).select(".bank_variable_value").attr("class","bank_variable_value just_updated_value");
@@ -319,6 +287,50 @@ var if_else = (function() {
 
 
 
+
+// ################################################################################################
+// OLD CODE
+// ################################################################################################
+
+	function oldNext() {
+		console.log("step!");
+		state = callback.getNextState(0);
+		console.log(state);
+
+		$("body *").removeClass("correct")
+			.removeClass("incorrect")
+			.removeClass("incorrect_select");
+
+		if (checkUserInput()) {
+			$("#problem_space li").off("mouseover")
+				.off("click");
+			$(".chosen-next-line").removeClass("chosen-next-line");
+
+			// take away "next" button when finished
+			if (state.state.prompt.indexOf("Answer") != -1) {
+				$(document).off("keydown");
+			}
+
+			if (CURRENT_STEP == 0) {
+				$("#prompt").show();
+				highlightBlocks();
+			} else {
+				// scroll to the right position
+				$("html, body").animate({
+					scrollTop: $("." + state.state.lineNum).offset().top - 200
+				}, 1000);
+			}
+			CURRENT_STEP++;
+			newGetPromptWithTitle(currentState);
+			newHighlightLine(currentState);
+			newHighlightBlock(currentState);
+			newAddComments(currentState);
+			newUpdateVariablesWithLineNums(currentState);
+			drawVariableBank();
+			newCrossOutLines(currentState);
+			addInteraction(currentState);
+		}
+	}
 
 
 	function checkUserInput() {
