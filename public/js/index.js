@@ -81,6 +81,8 @@ var csed = (function() {
                 .data(problemsConfig)
                 .enter()
                 .append("div")
+                .attr("class", "panel-group")
+                .append("div")
                 .attr("class", "panel panel-default")
             ;
 
@@ -90,25 +92,26 @@ var csed = (function() {
 
         problemDescriptionArea.append("h3")
             .attr("class", "panel-title")
-            .text(function(problemConfig) { return problemConfig.title } );
-
+            .text(function(problemConfig) { return problemConfig.title } )
+        ;
 
         var problemListArea = problemArea
                 .append("div")
-                .attr("class", "panel-body")
+                .attr("class", "list-group")
             ;
 
-        problemListArea.append("p")
-            .text(function(problemConfig) { return problemConfig.description } );
-
+        problemListArea
+            .append("p")
+            .attr("class", "list-group-item")
+            .text(function(problemConfig) { return problemConfig.description } )
+        ;
 
         problemListArea
-            .append("ul")
-            .selectAll("li")
+            .selectAll("a")
             .data(function(problemsConfig) { return problemsConfig.problems; })
             .enter()
-            .append("li")
             .append("a")
+            .attr("class", "list-group-item")
             .text(function(problemConfig) { return problemConfig.title; })
             .on("click", onProblemStartCallback)
         ;
