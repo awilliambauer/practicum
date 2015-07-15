@@ -127,33 +127,54 @@
 .expressions_problem input[type="text"].correct {
     animation-name: correctExpression;
     animation-duration: 2s;
+    -webkit-animation-name: correctExpression;
+    -webkit-animation-duration: 2s;
+
 }
 
 @keyframes correctExpression {
-     from {
+     0% {
          background-color: #339944;
      }
-
-     to {
+     100% {
          background-color: #FFFFFF;
      }
  }
 
-.expressions_problem input[type="text"].incorrect {
-    animation-name: incorrectExpression;
-    animation-duration: 2s;
-}
-
-@keyframes incorrectExpression {
-    from {
-        background-color: red;
+@-webkit-keyframes incorrectExpression {
+    0% {
+        background-color: #339944;
     }
-
-    to {
+    100% {
         background-color: #FFFFFF;
     }
 }
 
+.expressions_problem input[type="text"].incorrect {
+    animation-name: incorrectExpression;
+    animation-duration: 2s;
+    -webkit-animation-name: incorrectExpression;
+    -webkit-animation-duration: 2s;
+}
+
+@keyframes incorrectExpression {
+    0% {
+        background-color: red;
+    }
+    100% {
+        background-color: #FFFFFF;
+    }
+}
+
+@-webkit-keyframes incorrectExpression {
+    0% {
+        background-color: red;
+    }
+
+    100% {
+        background-color: #FFFFFF;
+    }
+}
 
 .expressions_problem #expressionHeader {
     text-align: center;
