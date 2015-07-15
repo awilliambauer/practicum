@@ -21,19 +21,19 @@ function TPLAlgorithm() {
 	[prompt]
 	"Next, look at the method call.";
 	theseAreTheParameters = helper.getParameters(AST, state);
-	addTheParametersToTheVariableBank = helper.addToTheVariableBank(theseAreTheParameters, AST, state);
+	[interactive("add_variable")] addTheParametersToTheVariableBank = helper.addToTheVariableBank(theseAreTheParameters, AST, state);
 
 	[prompt]
 	"Now walk through the code line-by-line, keeping track of variable values in the variable bank.";
 	[no_step]
 	while (helper.areThereMoreCodeBlocks(AST,state)) {
-		thisIsTheNextLineThatWillExecute = helper.getNextCodeBlock(AST, state);
+		[interactive("next_line")] thisIsTheNextLineThatWillExecute = helper.getNextCodeBlock(AST, state);
 		[no_step]
 		if (helper.thisIsAVariableDeclarationStatement(AST, state)) {
 		    let thisLineDeclaresANewVariable:assignment;
 			thisLineDeclaresANewVariable = helper.getDeclaredVariable(AST, state);
 			let addTheNewVariableToTheVariableBank:variableBank;
-			addTheNewVariableToTheVariableBank = helper.addToTheVariableBank(thisLineDeclaresANewVariable, AST, state);
+			[interactive("add_variable")] addTheNewVariableToTheVariableBank = helper.addToTheVariableBank(thisLineDeclaresANewVariable, AST, state);
 		}
 		else [no_step] if (helper.thisIsAnIfElseStatement(AST, state)) {
 			[prompt]
@@ -43,10 +43,10 @@ function TPLAlgorithm() {
             if (helper.doesThisConditionalEvaluateToTrue(thisIsTheNextIfElseBranchThatWillExecute, state)) {
                 [no_step]
                 do {
-                    thisIsTheNextLineThatWillExecute = helper.getNextStatement(thisIsTheNextIfElseBranchThatWillExecute["then_branch"], AST, state);
+                    [interactive("next_line")] thisIsTheNextLineThatWillExecute = helper.getNextStatement(thisIsTheNextIfElseBranchThatWillExecute["then_branch"], AST, state);
                     thisLineUpdatesAVariableValue = helper.executeUpdateVariableStatement(thisIsTheNextIfElseBranchThatWillExecute["then_branch"], AST, state);
                     let updateTheVariableInTheVariableBank:variableBank;
-                    updateTheVariableInTheVariableBank = helper.addToTheVariableBank(thisLineUpdatesAVariableValue, AST, state);
+                    [interactive("update_variable")] updateTheVariableInTheVariableBank = helper.addToTheVariableBank(thisLineUpdatesAVariableValue, AST, state);
                 }
                 while (helper.isThereAnotherStatementToExecute(thisIsTheNextIfElseBranchThatWillExecute["then_branch"], AST, state));
             }
@@ -60,17 +60,17 @@ function TPLAlgorithm() {
                     thisIsTheNextIfElseBranchThatWillExecute = helper.getNextIfElseStatement(AST, state);
                     [no_step]
                     if (helper.doesThisStatementHaveAConditional(thisIsTheNextIfElseBranchThatWillExecute)) {
-                        thisIsTheNextLineThatWillExecute = helper.getElseIfStatementLineNum(thisIsTheNextIfElseBranchThatWillExecute);
+                        [interactive("next_line")] thisIsTheNextLineThatWillExecute = helper.getElseIfStatementLineNum(thisIsTheNextIfElseBranchThatWillExecute);
                         if (helper.doesThisConditionalEvaluateToTrue(thisIsTheNextIfElseBranchThatWillExecute, state)) {
                             [prompt]
                             "Since the conditional evaluates to true, we won't go into any of the other branches.";
                             crossOutTheBranchLines = helper.crossOutOtherBranches(thisIsTheNextIfElseBranchThatWillExecute, crossOutTheBranchLines, AST, state);
                             [no_step]
                             do {
-                                thisIsTheNextLineThatWillExecute = helper.getNextStatement(thisIsTheNextIfElseBranchThatWillExecute["then_branch"], AST, state);
+                                [interactive("next_line")] thisIsTheNextLineThatWillExecute = helper.getNextStatement(thisIsTheNextIfElseBranchThatWillExecute["then_branch"], AST, state);
                                 thisLineUpdatesAVariableValue = helper.executeUpdateVariableStatement(thisIsTheNextIfElseBranchThatWillExecute["then_branch"], AST, state);
                                 let updateTheVariableInTheVariableBank:variableBank;
-                                updateTheVariableInTheVariableBank = helper.addToTheVariableBank(thisLineUpdatesAVariableValue, AST, state);
+                                [interactive("update_variable")] updateTheVariableInTheVariableBank = helper.addToTheVariableBank(thisLineUpdatesAVariableValue, AST, state);
                             }
                             while (helper.isThereAnotherStatementToExecute(thisIsTheNextIfElseBranchThatWillExecute["then_branch"], AST, state));
 
@@ -81,15 +81,15 @@ function TPLAlgorithm() {
                         }
                     }
                     else {
-                        thisIsTheNextLineThatWillExecute = helper.getElseStatementLineNum(thisIsTheNextIfElseBranchThatWillExecute);
+                        [interactive("next_line")] thisIsTheNextLineThatWillExecute = helper.getElseStatementLineNum(thisIsTheNextIfElseBranchThatWillExecute);
                         [prompt]
                         "We go into the else branch";
                         [no_step]
                         do {
-                            thisIsTheNextLineThatWillExecute = helper.getNextStatement(thisIsTheNextIfElseBranchThatWillExecute, AST, state);
+                            [interactive("next_line")] thisIsTheNextLineThatWillExecute = helper.getNextStatement(thisIsTheNextIfElseBranchThatWillExecute, AST, state);
                             thisLineUpdatesAVariableValue = helper.executeUpdateVariableStatement(thisIsTheNextIfElseBranchThatWillExecute, AST, state);
                             let updateTheVariableInTheVariableBank:variableBank;
-                            updateTheVariableInTheVariableBank = helper.addToTheVariableBank(thisLineUpdatesAVariableValue, AST, state);
+                            [interactive("update_variable")] updateTheVariableInTheVariableBank = helper.addToTheVariableBank(thisLineUpdatesAVariableValue, AST, state);
                         }
                         while (helper.isThereAnotherStatementToExecute(thisIsTheNextIfElseBranchThatWillExecute, AST, state));
                         break;

@@ -5,6 +5,10 @@ var if_else = (function() {
 	var state;
 	var callback;
 	var AST_INSTALLED_INTO_DOM = false;
+	var fadeLevel;
+	var waitingForResponse;
+	var responseType;
+	var numTries;
 
 	function reset() {
 
@@ -68,7 +72,7 @@ var if_else = (function() {
 	// fills in the problem space with the text of the specific problem we're working on,
 	// we will just have to replace "example.txt" with whatever file they store the problem
 	// text in
-	function initialize(problemConfig, callbackObject, initialState) {
+	function initialize(problemConfig, callbackObject, initialState, task_logger, fading) {
 		if (!AST_INSTALLED_INTO_DOM) {
 			AST = initialState.AST;
 			$("#problem_space > pre").html(on_convert(AST));
@@ -77,6 +81,14 @@ var if_else = (function() {
 
 		state = initialState;
 		callback = callbackObject;
+		//fadeLevel = fading;
+
+		// for debugging
+		fadeLevel = 1;
+
+		waitingForResponse = false;
+		responseType = "";
+		numTries = 0;
 
 		var args = getArgString(state.initialization).toString();
 		var methodCallText = "ifElseMystery1(" + args + ")";
@@ -86,10 +98,10 @@ var if_else = (function() {
 		$("#active_method_call_text").text(methodCallText);
 
 		// move to the next step if they hit enter or click next
-		$("#next").click(next);
+		$("#next").click(step);
 		$(document).keydown(function() {
 			if (event.which == 13) {
-				next();
+				step();
 			}
 		});
 		$("#answer_box input").change(function() {
@@ -125,19 +137,6 @@ var if_else = (function() {
 		;
 	}
 
-
-	// checks the entered answer against the real answer to see if they have gotten
-	// the problem correct
-	function checkAnswer() {
-		var realAnswer = state[state.length - 1].result.trim();
-		var userAnswer = $("#answer")[0].value;
-		if (realAnswer == userAnswer) {
-			$("#answer_box").addClass("correct");
-		} else {
-			$("#answer_box").addClass("incorrect");
-		}
-	}
-
 	// gets the initial values that the method will be called with
 	function getArgString(args) {
 		var callVals = [];
@@ -147,22 +146,33 @@ var if_else = (function() {
 		return callVals;
 	}
 
-	function next() {
-		state = callback.getNextState(0);
-
-		$("body *").removeClass("correct")
-				   .removeClass("incorrect")
-				   .removeClass("incorrect_select");
-
-		if (state.state.lineNum > 0) {
-			$("html, body").animate({
-				scrollTop: $("." + state.state.lineNum).offset().top - 200
-			}, 1000);
+	function step() {
+		if (waitingForResponse) {
+			numTries = numTries + 1;
+			if (responseType === "add_variable" || responseType === "update_variable") {
+				checkVariableBankAnswer();
+			}
+			else if (responseType === "next_line") {
+				checkNextLineClickAnswer();
+			}
 		}
+		else {
+			state = callback.getNextState(fadeLevel);
+			stepWithState();
+		}
+	}
+
+	function stepWithState() {
+		// set up variables for handling interactivity
+		if (fadeLevel > 0 && state.hasOwnProperty("askForResponse")) {
+			waitingForResponse = true;
+			responseType = state.askForResponse;
+		}
+
+		// update the UI
 		addPrompt();
 		addVaraibleBank();
 		addHighlighting();
-
 	}
 
 	// Extracts prompt from state and creates HTML
@@ -193,6 +203,11 @@ var if_else = (function() {
 
 			listItem
 				.append("span")
+				.text(" :")
+			;
+
+			listItem
+				.append("span")
 				.attr("class", "bank_variable_value")
 				.text(state.state.vars[variable])
 			;
@@ -208,7 +223,6 @@ var if_else = (function() {
 
 				if (objectToVisualize.hasOwnProperty("type")) {
 					if (objectToVisualize.type == "codeBlock") {
-						console.log("about to highlight code block");
 						highlightCodeBlocks(objectToVisualize.blockIds);
 					}
 					else {
@@ -220,11 +234,32 @@ var if_else = (function() {
 						highlightArguments();
 					}
 					else if (varObject.type === "variableBank") {
-						highlightVariableBank(varObject.value);
+						if (fadeLevel > 0 && variable === state.statement_result.name &&
+							state.hasOwnProperty("askForResponse") && state.askForResponse === "add_variable") {
+
+							interactiveVariableBank(varObject.value, true);
+						}
+						else if (fadeLevel > 0 && variable === state.statement_result.name &&
+							state.hasOwnProperty("askForResponse") && state.askForResponse === "update_variable") {
+
+							interactiveVariableBank(varObject.value, false);
+						}
+						else {
+							highlightVariableBank(varObject.value);
+						}
 					}
 					else if (varObject.type === "codeLine") {
-						highlightLine(varObject.value);
-						grayOutPreviousLines(varObject.value);
+						if (fadeLevel > 0 && variable === state.statement_result.name &&
+							state.hasOwnProperty("askForResponse") && state.askForResponse === "next_line") {
+
+							interactiveGrayOutPreviousLines();
+							interactiveLines();
+						}
+						else {
+							grayOutPreviousLines(varObject.value);
+							highlightLine(varObject.value);
+
+						}
 					}
 					else if (varObject.type === "crossedOutLines") {
 						crossOutLines(varObject.value);
@@ -248,22 +283,55 @@ var if_else = (function() {
 		d3.select("#args").attr("class", "highlight");
 	}
 
+	// highlights the variables passed in to this function in the variable bank
 	function highlightVariableBank(variables) {
 		d3.selectAll(".variable_list_item").each(function(d,i) {
-			var varName = d3.select(this).select(".bank_variable")[0][0].innerHTML;
-			console.log("varName: " +varName);
+			var varName = d3.select(this).select(".bank_variable").node().innerHTML;
 			for (var key in variables) {
 				if (varName === key) {
-					d3.select(this).select(".bank_variable_value").attr("class","bank_variable_value just_updated_value");
+					d3.select(this)
+						.select(".bank_variable_value")
+						.attr("class","bank_variable_value just_updated_value")
+					;
 				}
 			}
 		});
 	}
 
-	// Highlights the line of code passed in as a parameter
-	function highlightLine(lineNum) {
-		$("#problem_space li").removeClass("highlight");
-		$("." + lineNum).addClass("highlight");
+	// adds input boxes to the variable bank so the user can add new variables
+	function interactiveVariableBank(variables, newVariable) {
+		d3.selectAll(".variable_list_item").each(function(d,i) {
+			var varName = d3.select(this).select(".bank_variable").node().innerHTML;
+			for (var key in variables) {
+				if (varName === key) {
+					// store the current value
+					var currentValue = d3.select(this)
+						.select(".bank_variable_value")
+						.node()
+						.innerHTML
+					;
+
+					// remove the current value
+					d3.select(this)
+						.select(".bank_variable_value")
+						.node()
+						.innerHTML = ""
+					;
+
+					// add an input box for the value
+					var inputField = d3.select(this)
+						.select(".bank_variable_value")
+						.append("input")
+						.attr("class", "varValue")
+					;
+
+					// show the current value in the input box
+					if (!newVariable) {
+						inputField .property("value", currentValue);
+					}
+				}
+			}
+		});
 	}
 
 	// grays out the lines that we have already passed
@@ -275,14 +343,135 @@ var if_else = (function() {
 		}
 	}
 
+	// grays out the lines that we had already passed before the beginning of this interactive step
+	function interactiveGrayOutPreviousLines() {
+		var previousLineToExecute = d3.select("li.highlight");
+
+		for (var line = 1; line < previousLineToExecute; line++) {
+			var list = document.getElementsByClassName(String(line))[0]; // Gets li element to highlight
+			$("." + line).addClass("grey_out");
+			$("." + line + " *").removeAttr("style");
+		}
+	}
+
+	// Highlights the line of code passed in as a parameter
+	function highlightLine(lineNum) {
+		$("#problem_space li").removeClass("highlight");
+		$("." + lineNum).addClass("highlight");
+	}
+
+	function interactiveLines() {
+		// remove previous line highlighting
+		d3.select("li.highlight").classed("highlight", false);
+
+		// make all lines clickable
+		d3.select("#problem_space").selectAll("li").each(function () {
+			var currentClassList = d3.select(this).attr("class");
+			var newClassList = currentClassList + " clickable";
+			d3.select(this)
+				.attr("class", newClassList)
+				.on("click", function() {
+					// highlight this line
+					d3.select(this).classed("highlight", true);
+					// remove "clickable" class from all lines
+					d3.selectAll(".clickable").each(function() {
+						d3.select(this)
+							.classed("clickable", false)
+							.on("click", null)
+						;
+					});
+					// call step to respond to the user answer
+					step();
+				})
+			;
+		});
+	}
+
 	// Crosses out all the lines in the array passed in as a parameter
 	function crossOutLines(lineNums) {
 		for (var i = 0; i < lineNums.length; i++) {
 			var list = document.getElementsByClassName(lineNums[i])[0];
-			console.log(list);
 			$(list).addClass("cross_out");
 		}
 	}
+
+	// checks the entered answer against the real answer to see if they have gotten
+	// the problem correct
+	function checkAnswer() {
+		var realAnswer = state[state.length - 1].result.trim();
+		var userAnswer = $("#answer")[0].value;
+		if (realAnswer == userAnswer) {
+			$("#answer_box").addClass("correct");
+		} else {
+			$("#answer_box").addClass("incorrect");
+		}
+	}
+
+	// checks that the answer(s) the user entered into the variable bank are correct
+	function checkVariableBankAnswer() {
+		var correctAnswerObject = callback.getCorrectAnswer();
+		var correctVariables = correctAnswerObject.rhs;
+		var correctArray = [];
+
+		d3.selectAll(".variable_list_item").each(function(d,i) {
+			// only want to check the variables that currently have inputs (interactive)
+			var input = d3.select(this).select(".bank_variable_value").select(".varValue");
+			if (input.node() !== null) {
+				var varName = d3.select(this).select(".bank_variable").node().innerHTML;
+				var userValue = input.property("value");
+				for (var key in correctVariables) {
+					if (varName === key) {
+						if (parseInt(userValue) === parseInt(correctVariables[key])) {
+							correctArray.push(true);
+						}
+						else {
+							correctArray.push(false);
+						}
+					}
+				}
+			}
+
+		});
+
+		var correct = true;
+		for (var i = 0; i < correctArray.length; i++) {
+			if (!correctArray[i]) {
+				correct = false;
+			}
+		}
+		respondToAnswer(correct);
+	}
+
+	function checkNextLineClickAnswer() {
+		var correctAnswerObject = callback.getCorrectAnswer();
+		var correctLine = correctAnswerObject.rhs;
+
+		var classList = d3.select("li.highlight").attr("class");
+		classList = classList.replace("highlight", "");
+		classList = classList.replace(/ /g,'');
+		var userLine = parseInt(classList);
+
+		var correct = false;
+		if (userLine === correctLine) {
+			correct = true;
+		}
+		respondToAnswer(correct);
+	}
+
+	function respondToAnswer(correct) {
+		if (correct || numTries === 3) {
+			waitingForResponse = false;
+			responseType = "";
+			numTries = 0;
+		}
+
+		// Get the response based on whether or not the answer was
+		// correct, and display the response
+		state = callback.respondToAnswer(correct);
+		stepWithState();
+	}
+
+
 
 
 
