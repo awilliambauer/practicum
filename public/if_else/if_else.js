@@ -237,7 +237,7 @@ var if_else = (function() {
 						highlightArguments();
 					}
 					else if (varObject.type === "variableBank") {
-						/*if (fadeLevel > 0 && variable === state.statement_result.name &&
+						if (fadeLevel > 0 && variable === state.statement_result.name &&
 							state.hasOwnProperty("askForResponse") && state.askForResponse === "add_variable") {
 
 							interactiveVariableBank(varObject.value, true);
@@ -249,11 +249,10 @@ var if_else = (function() {
 						}
 						else {
 							highlightVariableBank(varObject.value);
-						}*/
-						highlightVariableBank(varObject.value);
+						}
 					}
 					else if (varObject.type === "codeLine") {
-						/*if (fadeLevel > 0 && variable === state.statement_result.name &&
+						if (fadeLevel > 0 && variable === state.statement_result.name &&
 							state.hasOwnProperty("askForResponse") && state.askForResponse === "next_line") {
 
 							interactiveGrayOutPreviousLines();
@@ -262,9 +261,7 @@ var if_else = (function() {
 						else {
 							grayOutPreviousLines(varObject.value);
 							highlightLine(varObject.value);
-						}*/
-						grayOutPreviousLines(varObject.value);
-						highlightLine(varObject.value);
+						}
 					}
 					else if (varObject.type === "crossedOutLines") {
 						if (fadeLevel > 0 && variable === state.statement_result.name &&
@@ -417,8 +414,14 @@ var if_else = (function() {
 			d3.select(this)
 				.attr("class", newClassList)
 				.on("click", function() {
-					// highlight this line
-					d3.select(this).classed("cross_out", true);
+					if($(this).hasClass("cross_out")) {
+						// un-higlight this line
+						d3.select(this).classed("cross_out", false);
+					}
+					else {
+						// highlight this line
+						d3.select(this).classed("cross_out", true);
+					}
 				})
 			;
 		});
@@ -473,27 +476,52 @@ var if_else = (function() {
 	function checkNextLineClickAnswer() {
 		var correctAnswerObject = callback.getCorrectAnswer();
 		var correctLine = correctAnswerObject.rhs;
-
-		var classList = d3.select("li.highlight").attr("class");
-		classList = classList.replace("highlight", "");
-		classList = classList.replace(/ /g,'');
-		var userLine = parseInt(classList);
-
 		var correct = false;
-		if (userLine === correctLine) {
-			correct = true;
+
+		var highlightedLine = d3.select("li.highlight");
+		if (highlightedLine.node() !== null) {
+			var classList = highlightedLine.attr("class");
+			classList = classList.replace("highlight", "");
+			classList = classList.replace(/ /g,'');
+			var userLine = parseInt(classList);
+
+			if (userLine === correctLine) {
+				correct = true;
+			}
 		}
+
 		respondToAnswer(correct);
 	}
 
 	function checkCrossOutAnswer() {
 		var correctAnswerObject = callback.getCorrectAnswer();
 		var correctCrossOuts = correctAnswerObject.rhs;
-		console.log("checking cross out answer");
-		console.log(correctCrossOuts);
-		console.log(state);
 
-		respondToAnswer(true);
+		var userCrossOuts = []
+		d3.selectAll("li.cross_out").each(function() {
+			var classList = d3.select(this).attr("class");
+			classList = classList.replace("cross_out_able", "");
+			classList = classList.replace("cross_out", "");
+			classList = classList.replace(/ /g,'');
+			userCrossOuts.push(parseInt(classList));
+		});
+
+		var correct = false;
+		if (userCrossOuts.equals(correctCrossOuts)) {
+			correct = true;
+		}
+
+		// mare the lines un-cross-out-able
+		if (correct) {
+			d3.selectAll(".cross_out_able").each(function() {
+				d3.select(this)
+					.classed("cross_out_able", false)
+					.on("click", null)
+				;
+			});
+		}
+
+		respondToAnswer(correct);
 	}
 
 	function respondToAnswer(correct) {

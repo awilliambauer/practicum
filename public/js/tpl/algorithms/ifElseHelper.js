@@ -144,10 +144,13 @@ function IfElseHelper() {
     this.crossOut = function(statement, crossedOutLines, AST, state) {
         var lineNum = statement[0]["location"]["start"]["line"];
         if (typeof crossedOutLines === "undefined") {
-            crossedOutLines = [];
+            var lines = [];
         }
-        crossedOutLines.push(lineNum);
-        return crossedOutLines;
+        else {
+            var lines = crossedOutLines.slice();
+        }
+        lines.push(lineNum);
+        return lines;
     }
 
     this.crossOutOtherBranches = function(statement, crossedOutLines, AST, state) {
