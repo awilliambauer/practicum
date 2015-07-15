@@ -561,11 +561,16 @@ var if_else = (function() {
 		var correctAnswerObject = callback.getCorrectAnswer();
 
 		if (d3.select('input[name="yes_no_radio"]:checked').node() === null) {
-			//d3.select("#errorMessage").style("visibility", "visible");
-			console.log("no answer");
+			if (d3.select("#errorMessage").node() === null) {
+				var errorMessage = "<span id='errorMessage' style='color: red;'>Try entering an answer first!</span><br>";
+				d3.select("#prompt").node().innerHTML = errorMessage + d3.select("#prompt").node().innerHTML;
+			}
 		}
 		else {
-			//d3.select("#errorMessage").style("visibility", "hidden");
+			if (d3.select("#errorMessage").node() !== null) {
+				d3.select("#errorMessage").remove();
+			}
+
 			var userAnswer = d3.select('input[name="yes_no_radio"]:checked').node().value;
 
 			var correctAnswer = "no";
