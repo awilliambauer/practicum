@@ -155,6 +155,9 @@ var if_else = (function() {
 			else if (responseType === "next_line") {
 				checkNextLineClickAnswer();
 			}
+			else if (responseType === "cross_out") {
+				checkCrossOutAnswer();
+			}
 		}
 		else {
 			state = callback.getNextState(fadeLevel);
@@ -234,7 +237,7 @@ var if_else = (function() {
 						highlightArguments();
 					}
 					else if (varObject.type === "variableBank") {
-						if (fadeLevel > 0 && variable === state.statement_result.name &&
+						/*if (fadeLevel > 0 && variable === state.statement_result.name &&
 							state.hasOwnProperty("askForResponse") && state.askForResponse === "add_variable") {
 
 							interactiveVariableBank(varObject.value, true);
@@ -246,10 +249,11 @@ var if_else = (function() {
 						}
 						else {
 							highlightVariableBank(varObject.value);
-						}
+						}*/
+						highlightVariableBank(varObject.value);
 					}
 					else if (varObject.type === "codeLine") {
-						if (fadeLevel > 0 && variable === state.statement_result.name &&
+						/*if (fadeLevel > 0 && variable === state.statement_result.name &&
 							state.hasOwnProperty("askForResponse") && state.askForResponse === "next_line") {
 
 							interactiveGrayOutPreviousLines();
@@ -258,11 +262,19 @@ var if_else = (function() {
 						else {
 							grayOutPreviousLines(varObject.value);
 							highlightLine(varObject.value);
-
-						}
+						}*/
+						grayOutPreviousLines(varObject.value);
+						highlightLine(varObject.value);
 					}
 					else if (varObject.type === "crossedOutLines") {
-						crossOutLines(varObject.value);
+						if (fadeLevel > 0 && variable === state.statement_result.name &&
+							state.hasOwnProperty("askForResponse") && state.askForResponse === "cross_out") {
+
+							interactiveCrossOutLines();
+						}
+						else {
+							crossOutLines(varObject.value);
+						}
 					}
 					else {
 						console.error("Unsupported variable type: " + varObject.type);
@@ -354,12 +366,13 @@ var if_else = (function() {
 		}
 	}
 
-	// Highlights the line of code passed in as a parameter
+	// highlights the line of code passed in as a parameter
 	function highlightLine(lineNum) {
 		$("#problem_space li").removeClass("highlight");
 		$("." + lineNum).addClass("highlight");
 	}
 
+	// makes all the lines clickable so that the user can select the next line
 	function interactiveLines() {
 		// remove previous line highlighting
 		d3.select("li.highlight").classed("highlight", false);
@@ -387,7 +400,7 @@ var if_else = (function() {
 		});
 	}
 
-	// Crosses out all the lines in the array passed in as a parameter
+	// crosses out all the lines in the array passed in as a parameter
 	function crossOutLines(lineNums) {
 		for (var i = 0; i < lineNums.length; i++) {
 			var list = document.getElementsByClassName(lineNums[i])[0];
@@ -395,8 +408,23 @@ var if_else = (function() {
 		}
 	}
 
-	// checks the entered answer against the real answer to see if they have gotten
-	// the problem correct
+	// makes all the lines clickable (with cross-out styling) so that the user can cross out lines
+	function interactiveCrossOutLines() {
+		// make all lines cross-out-able
+		d3.select("#problem_space").selectAll("li").each(function () {
+			var currentClassList = d3.select(this).attr("class");
+			var newClassList = currentClassList + " cross_out_able";
+			d3.select(this)
+				.attr("class", newClassList)
+				.on("click", function() {
+					// highlight this line
+					d3.select(this).classed("cross_out", true);
+				})
+			;
+		});
+	}
+
+	// checks the entered answer against the real answer to see if they have gotten the problem correct
 	function checkAnswer() {
 		var realAnswer = state[state.length - 1].result.trim();
 		var userAnswer = $("#answer")[0].value;
@@ -456,6 +484,16 @@ var if_else = (function() {
 			correct = true;
 		}
 		respondToAnswer(correct);
+	}
+
+	function checkCrossOutAnswer() {
+		var correctAnswerObject = callback.getCorrectAnswer();
+		var correctCrossOuts = correctAnswerObject.rhs;
+		console.log("checking cross out answer");
+		console.log(correctCrossOuts);
+		console.log(state);
+
+		respondToAnswer(true);
 	}
 
 	function respondToAnswer(correct) {

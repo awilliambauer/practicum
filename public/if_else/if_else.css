@@ -172,6 +172,12 @@
 	text-decoration: line-through;
 }
 
+.if_else_problem .cross_out_able:hover {
+    color: rgb(200, 149, 149);
+    text-decoration: line-through;
+    cursor: pointer;
+}
+
 .if_else_problem .correct {
 	animation-name: correct;
 	animation-duration: 2s;

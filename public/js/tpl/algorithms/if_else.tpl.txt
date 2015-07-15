@@ -53,7 +53,7 @@ function TPLAlgorithm() {
             else {
                 [prompt]
                 "Since the conditional evaluates to false, we won't go into this branch.";
-                crossOutTheBranchLines = helper.crossOut(thisIsTheNextIfElseBranchThatWillExecute["then_branch"], crossOutTheBranchLines, AST, state);
+                [interactive("cross_out")] crossOutTheBranchLines = helper.crossOut(thisIsTheNextIfElseBranchThatWillExecute["then_branch"], crossOutTheBranchLines, AST, state);
                 [no_step]
                 while (helper.isThereAnotherIfElseStatement(AST, state)) {
                     [no_step]
@@ -64,7 +64,7 @@ function TPLAlgorithm() {
                         if (helper.doesThisConditionalEvaluateToTrue(thisIsTheNextIfElseBranchThatWillExecute, state)) {
                             [prompt]
                             "Since the conditional evaluates to true, we won't go into any of the other branches.";
-                            crossOutTheBranchLines = helper.crossOutOtherBranches(thisIsTheNextIfElseBranchThatWillExecute, crossOutTheBranchLines, AST, state);
+                            [interactive("cross_out")] crossOutTheBranchLines = helper.crossOutOtherBranches(thisIsTheNextIfElseBranchThatWillExecute, crossOutTheBranchLines, AST, state);
                             [no_step]
                             do {
                                 [interactive("next_line")] thisIsTheNextLineThatWillExecute = helper.getNextStatement(thisIsTheNextIfElseBranchThatWillExecute["then_branch"], AST, state);
@@ -77,7 +77,9 @@ function TPLAlgorithm() {
                             break;
                         }
                         else {
-                            sinceTheConditionalEvaluatedToFalseWeWontGoIntoThisBranch = helper.crossOut(thisIsTheNextIfElseBranchThatWillExecute["then_branch"], sinceTheConditionalEvaluatedToFalseWeWontGoIntoThisBranch, AST, state);
+                            [prompt]
+                            "Since the conditional evaluates to false, we won't go into this branch.";
+                            [interactive("cross_out")] crossOutTheBranchLines = helper.crossOut(thisIsTheNextIfElseBranchThatWillExecute["then_branch"], sinceTheConditionalEvaluatedToFalseWeWontGoIntoThisBranch, AST, state);
                         }
                     }
                     else {
