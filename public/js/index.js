@@ -17,7 +17,8 @@ var csed = (function() {
     var numProblems;
 
     function setupLogging(username) {
-        var LOGGING_BASE_URL = "https://" + window.location.hostname + ":" + LOGGING_PORT;
+        //var LOGGING_BASE_URL = "https://" + window.location.hostname + ":" + LOGGING_PORT;
+        var LOGGING_BASE_URL = "https://dev-olio.cs.washington.edu" + ":" + LOGGING_PORT;
         return Logging.initialize(LOGGING_BASE_URL, LOGGING_RELEASE_ID, username).then(function(logging_data) {
             experimental_condition = logging_data.condition;
             server_savedata = logging_data.savedata ? JSON.parse(logging_data.savedata) : null;
@@ -81,6 +82,8 @@ var csed = (function() {
                 .data(problemsConfig)
                 .enter()
                 .append("div")
+                .attr("class", "panel-group")
+                .append("div")
                 .attr("class", "panel panel-default")
             ;
 
@@ -90,25 +93,26 @@ var csed = (function() {
 
         problemDescriptionArea.append("h3")
             .attr("class", "panel-title")
-            .text(function(problemConfig) { return problemConfig.title } );
-
+            .text(function(problemConfig) { return problemConfig.title } )
+        ;
 
         var problemListArea = problemArea
                 .append("div")
-                .attr("class", "panel-body")
+                .attr("class", "list-group")
             ;
 
-        problemListArea.append("p")
-            .text(function(problemConfig) { return problemConfig.description } );
-
+        problemListArea
+            .append("p")
+            .attr("class", "list-group-item")
+            .text(function(problemConfig) { return problemConfig.description } )
+        ;
 
         problemListArea
-            .append("ul")
-            .selectAll("li")
+            .selectAll("a")
             .data(function(problemsConfig) { return problemsConfig.problems; })
             .enter()
-            .append("li")
             .append("a")
+            .attr("class", "list-group-item")
             .text(function(problemConfig) { return problemConfig.title; })
             .on("click", onProblemStartCallback)
         ;
@@ -384,7 +388,8 @@ $(document).ready(function() {
         }
 
         // set up home link
-        d3.select("#home-link").attr("href", "");
+        d3.select("#home-link")
+            .on("click", csed.showHome);
 
 
         // pull in problems
