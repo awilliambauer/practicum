@@ -250,7 +250,7 @@ function simulator(ast, globals) {
                 break;
             case "if":
                 // TODO format condition expressions in prompts
-                if (evaluate(stmt.condition, state)) {
+                if (evaluate(stmt.condition, state, result)) {
                     push_stack_state(stmt.then_branch, 'then');
                 } else if (stmt.else_branch !== null) {
                     push_stack_state(stmt.else_branch, 'else');

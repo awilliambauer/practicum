@@ -158,6 +158,9 @@ var if_else = (function() {
 			else if (responseType === "cross_out") {
 				checkCrossOutAnswer();
 			}
+			else if (responseType === "question") {
+				checkQuestionAnswer();
+			}
 		}
 		else {
 			state = callback.getNextState(fadeLevel);
@@ -183,6 +186,36 @@ var if_else = (function() {
 		if(state.hasOwnProperty("prompt")) {
 			var prompt =  state.prompt;
 			d3.select("#prompt").node().innerHTML = prompt;
+
+			// check if we need to add "yes" and "no" radio buttons to the prompt
+			if (fadeLevel > 0 && state.hasOwnProperty("askForResponse") && state.askForResponse === "question") {
+				var yesNoButtonDiv = d3.select("#prompt")
+					.append("div")
+					.attr("class", "yes_no_buttons");
+
+				yesNoButtonDiv
+					.append("input")
+					.attr("type", "radio")
+					.attr("class", "radio")
+					.attr("name", "yes_no_radio")
+					.attr("value", "yes");
+
+				yesNoButtonDiv
+					.append("label")
+					.text("Yes")
+					.style("padding-right","30px");
+
+				yesNoButtonDiv
+					.append("input")
+					.attr("type", "radio")
+					.attr("class", "radio")
+					.attr("name", "yes_no_radio")
+					.attr("value", "no");
+				yesNoButtonDiv
+					.append("label")
+					.text("No");
+			}
+
 		}
 	}
 
@@ -522,6 +555,31 @@ var if_else = (function() {
 		}
 
 		respondToAnswer(correct);
+	}
+
+	function checkQuestionAnswer() {
+		var correctAnswerObject = callback.getCorrectAnswer();
+
+		if (d3.select('input[name="yes_no_radio"]:checked').node() === null) {
+			//d3.select("#errorMessage").style("visibility", "visible");
+			console.log("no answer");
+		}
+		else {
+			//d3.select("#errorMessage").style("visibility", "hidden");
+			var userAnswer = d3.select('input[name="yes_no_radio"]:checked').node().value;
+
+			var correctAnswer = "no";
+			if (correctAnswerObject.result == true) {
+				correctAnswer = "yes";
+			}
+
+			var correct = false;
+			if (correctAnswer === userAnswer) {
+				correct = true;
+			}
+
+			respondToAnswer(correct);
+		}
 	}
 
 	function respondToAnswer(correct) {

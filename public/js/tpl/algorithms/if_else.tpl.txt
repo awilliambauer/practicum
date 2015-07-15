@@ -40,6 +40,8 @@ function TPLAlgorithm() {
 			"We're at the beginning of a new if/else block. Let's find the first branch that evaluates to true.";
 			[no_step]
             thisIsTheNextIfElseBranchThatWillExecute = helper.getNextIfElseStatement(AST, state);
+
+            [interactive("question")]
             if (helper.doesThisConditionalEvaluateToTrue(thisIsTheNextIfElseBranchThatWillExecute, state)) {
                 [no_step]
                 do {
@@ -61,6 +63,8 @@ function TPLAlgorithm() {
                     [no_step]
                     if (helper.doesThisStatementHaveAConditional(thisIsTheNextIfElseBranchThatWillExecute)) {
                         [interactive("next_line")] thisIsTheNextLineThatWillExecute = helper.getElseIfStatementLineNum(thisIsTheNextIfElseBranchThatWillExecute);
+
+                        [interactive("question")]
                         if (helper.doesThisConditionalEvaluateToTrue(thisIsTheNextIfElseBranchThatWillExecute, state)) {
                             [prompt]
                             "Since the conditional evaluates to true, we won't go into any of the other branches.";

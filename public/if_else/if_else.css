@@ -139,6 +139,15 @@
 	background: rgb(244, 254, 202);
 }
 
+.if_else_problem .yes_no_buttons {
+    text-align: center;
+}
+
+.if_else_problem .radio {
+    display: inline;
+    width: 25px;
+}
+
 .if_else_problem .block_highlight li {
 	background-color: rgba(157,224,173, 0.45);
 	/*border: rgb(204, 204, 255) solid 1px;
