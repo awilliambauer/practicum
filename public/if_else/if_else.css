@@ -1,3 +1,36 @@
+.if_else_problem #ifElseHeader {
+    text-align: center;
+    font-size: 25px;
+    margin-bottom: 50px;
+}
+
+.if_else_problem #submitButton {
+    width: 75px;
+    font-size: 14px;
+    vertical-align: middle;
+}
+
+.if_else_problem #inputBox {
+    width: 200px;
+    font-size: 16px;
+    vertical-align: middle;
+}
+
+.if_else_problem .startingStatesOption {
+    font-family: monospace;
+    font-size: 25px;
+}
+
+.if_else_problem #startingStates {
+    font-family: monospace;
+    font-size: 25px;
+}
+
+.if_else_problem #method_call_panel {
+    clear: both;
+    padding-top: 40px;
+}
+
 .if_else_problem div#active_method_call {
 	text-align: right;
 	width: 47.5%;
@@ -14,7 +47,7 @@
 	font-family: Arial, sans-serif;
 }
 
-.if_else_problem h3 > span,  .if_else_problem #answer_box > span, .if_else_problem input[type="text"] {
+.if_else_problem #args,  .if_else_problem #answer_box > span, .if_else_problem input[type="text"] {
 	font-family: monospace;
 }
 
@@ -22,15 +55,27 @@
 	color: #ff5900;
 }
 
+.if_else_problem #problem_content {
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 10px; padding-bottom: 10px;
+    margin-bottom: 30px;
+    margin-top: 30px;
+    text-align: center;
+    width: 925px;
+}
+
 .if_else_problem #problem_space, .if_else_problem #answer_box {
-	border: 2px solid rgb(89,79,79);
-	border-radius: 10px;
-	margin-left: auto;
-	margin-right: auto;
-	padding-top: 10px; padding-bottom: 10px;
-	margin-bottom: 30px;
-	margin-top: 30px;
+    border: 5px solid #547980;
+    border-radius: 10px;
 	background-color: #ffffff;
+    width: 725px;
+    float: left;
+}
+
+.if_else_problem pre {
+    background-color: #FFFFFF;
+    border: none;
 }
 
 .if_else_problem #problem_space ul {
@@ -40,8 +85,8 @@
 }
 
 .if_else_problem #problem_space li {
-	padding-top: 5px;
-	padding-bottom: 5px;
+	padding-top: 2px;
+	padding-bottom: 2px;
 	padding-left: 2.5%;
 	margin: 0;
 	font-size: 11pt;
@@ -52,22 +97,19 @@
 	line-height: 300%;
 }
 
-/*
-.if_else_problem #answer_box > button {
-	margin-right: 25%;
-}
-*/
 
 .if_else_problem #variable_bank {
-	border: 2px solid #82557A;
+    border: 5px solid #547980;
+    border-radius: 10px;
 	background-color: #ffffff;
-	border-radius: 10px;
-	position: fixed;
+    margin-left: 740px;
+    width: 180px;
+	/*position: fixed;
 	top: 44%;
 	right: 2.5%;
 	width: 15%;
 	padding-left: 20px;
-	z-index: 1000;
+	z-index: 1000;*/
 }
 
 .if_else_problem #variable_bank #variable_list {
@@ -89,7 +131,6 @@
 }
 
 .if_else_problem .bank_variable_value {
-	color: #82557A;
 	padding: 3px;
 	margin-left: 5px;
 }
@@ -100,18 +141,11 @@
 }
 
 .if_else_problem .just_updated_value {
-	background-color: #95FF7A;
+	color: #45ADA8;
 }
 
 .if_else_problem #just_updated_explanation {
 	font-size: 10pt;
-}
-
-.if_else_problem #just_updated_box {
-	border: 5px solid #95FF7A;
-	height: 5px;
-	width: 5px;
-	margin-right: 10px;
 }
 
 .if_else_problem #next {
@@ -129,14 +163,14 @@
 
 .if_else_problem #prompt {
 	position: absolute;
-	top: 275px;
+	top: 325px;
 	border: 2px solid #547980;
 	border-radius: 10px;
-	width: 20%;
-	left: 50%;
+	width: 250px;
+	left: 48%;
 	text-align: left;
 	padding: 10px;
-	background: rgb(244, 254, 202);
+	background: #FAFFF0;
 }
 
 .if_else_problem .yes_no_buttons {
@@ -149,21 +183,15 @@
 }
 
 .if_else_problem .block_highlight li {
-	background-color: rgba(157,224,173, 0.45);
-	/*border: rgb(204, 204, 255) solid 1px;
-	border-radius: 2px;*/
+    background-color: #EEEEEE;
 }
 
 .if_else_problem li.highlight, span.highlight {
-	background-color: rgba(69,173,168, 0.65);
-	border: #797979 solid 1px;
-	border-radius: 2px;
+	background-color: #8fcdca;
 }
 
 .if_else_problem li.clickable:hover {
-    background-color: rgba(69,173,168, 0.65);
-    border: #797979 solid 1px;
-    border-radius: 2px;
+    background-color: #8fcdca;
     cursor: pointer;
 }
 
@@ -177,12 +205,12 @@
 }
 
 .if_else_problem .cross_out {
-	color: rgb(200, 149, 149);
+	color: #555555;
 	text-decoration: line-through;
 }
 
 .if_else_problem .cross_out_able:hover {
-    color: rgb(200, 149, 149);
+    color: #555555;
     text-decoration: line-through;
     cursor: pointer;
 }

@@ -3,12 +3,11 @@ function TPLAlgorithm() {
     let theseAreTheParameters:arguments;
     let addTheParametersToTheVariableBank:variableBank;
     let thisIsTheNextLineThatWillExecute:codeLine;
-    let nextCodeBlock;
     let thisIsTheNextIfElseBranchThatWillExecute;
-    let thisIsTheNextStatementThatWillExecute;
+    let addTheNewVariableToTheVariableBank:variableBank;
     let thisLineUpdatesAVariableValue;
-    let whatDoesThisPrintlnFunctionPrint;
-    let crossOutTheBranchLines:crossedOutLines;
+    let theProblemSolutionIsTheTextThatThisPrintlnStatementPrintsOut;
+    let crossOutTheLinesThatWillNotExecute:crossedOutLines;
 
     let AST;
     [no_step]
@@ -30,9 +29,8 @@ function TPLAlgorithm() {
 		[interactive("next_line")] thisIsTheNextLineThatWillExecute = helper.getNextCodeBlock(AST, state);
 		[no_step]
 		if (helper.thisIsAVariableDeclarationStatement(AST, state)) {
-		    let thisLineDeclaresANewVariable:assignment;
+			let thisLineDeclaresANewVariable:assignment;
 			thisLineDeclaresANewVariable = helper.getDeclaredVariable(AST, state);
-			let addTheNewVariableToTheVariableBank:variableBank;
 			[interactive("add_variable")] addTheNewVariableToTheVariableBank = helper.addToTheVariableBank(thisLineDeclaresANewVariable, AST, state);
 		}
 		else [no_step] if (helper.thisIsAnIfElseStatement(AST, state)) {
@@ -55,7 +53,7 @@ function TPLAlgorithm() {
             else {
                 [prompt]
                 "Since the conditional evaluates to false, we won't go into this branch.";
-                [interactive("cross_out")] crossOutTheBranchLines = helper.crossOut(thisIsTheNextIfElseBranchThatWillExecute["then_branch"], crossOutTheBranchLines, AST, state);
+                [interactive("cross_out")] crossOutTheLinesThatWillNotExecute = helper.crossOut(thisIsTheNextIfElseBranchThatWillExecute["then_branch"], crossOutTheLinesThatWillNotExecute, AST, state);
                 [no_step]
                 while (helper.isThereAnotherIfElseStatement(AST, state)) {
                     [no_step]
@@ -68,7 +66,7 @@ function TPLAlgorithm() {
                         if (helper.doesThisConditionalEvaluateToTrue(thisIsTheNextIfElseBranchThatWillExecute, state)) {
                             [prompt]
                             "Since the conditional evaluates to true, we won't go into any of the other branches.";
-                            [interactive("cross_out")] crossOutTheBranchLines = helper.crossOutOtherBranches(thisIsTheNextIfElseBranchThatWillExecute, crossOutTheBranchLines, AST, state);
+                            [interactive("cross_out")] crossOutTheLinesThatWillNotExecute = helper.crossOutOtherBranches(thisIsTheNextIfElseBranchThatWillExecute, crossOutTheLinesThatWillNotExecute, AST, state);
                             [no_step]
                             do {
                                 [interactive("next_line")] thisIsTheNextLineThatWillExecute = helper.getNextStatement(thisIsTheNextIfElseBranchThatWillExecute["then_branch"], AST, state);
@@ -83,7 +81,7 @@ function TPLAlgorithm() {
                         else {
                             [prompt]
                             "Since the conditional evaluates to false, we won't go into this branch.";
-                            [interactive("cross_out")] crossOutTheBranchLines = helper.crossOut(thisIsTheNextIfElseBranchThatWillExecute["then_branch"], sinceTheConditionalEvaluatedToFalseWeWontGoIntoThisBranch, AST, state);
+                            [interactive("cross_out")] crossOutTheLinesThatWillNotExecute = helper.crossOut(thisIsTheNextIfElseBranchThatWillExecute["then_branch"], sinceTheConditionalEvaluatedToFalseWeWontGoIntoThisBranch, AST, state);
                         }
                     }
                     else {
@@ -104,9 +102,9 @@ function TPLAlgorithm() {
             }
 		}
 		else [no_step] if (helper.thisIsAPrintlnStatement(AST, state)) {
-			whatDoesThisPrintlnFunctionPrint = helper.getPrintlnOutput(AST, state);
+			theProblemSolutionIsTheTextThatThisPrintlnStatementPrintsOut = helper.getPrintlnOutput(AST, state);
 			[prompt]
-			"Enter the solution in the solution box.";
+			"Enter the solution in the answer box!";
 		}
 
 	}

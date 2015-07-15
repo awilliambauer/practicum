@@ -1,23 +1,39 @@
 <div class="problem if_else_problem">
     <h1>If Else Mystery</h1>
     <div class="problem-aria">
-        <h3 id="end_title">Method call: <span></span></h3>
-        <div id="problem_space"><pre></pre></div>
 
-        <div id="variable_bank">
-            <h4 id="variable_bank_title">Variable Bank</h4>
-            <ul id="variable_list"></ul>
+
+        <div id="ifElseHeader">
+            <span style='font-weight: bold;'>Problem: </span>
+            <span id="method_call"></span>
+            <span style='font-weight: bold; padding-left: 30px;'>Solution: </span>
+            <input id='inputBox' name="checkanswer" type="text" autofocus="autofocus" />
+            <button id='submitButton' type="button">Check</button>
+        </div>
+
+        <div id="problem_content">
+            <div id="problem_space"><pre></pre></div>
+
+            <div id="variable_bank">
+                <h4 id="variable_bank_title">Variable Bank</h4>
+                <ul id="variable_list"></ul>
+            </div>
         </div>
 
         <div id="prompt">Press Enter to start!</div>
 
+
+
+    </div>
+    <div id="method_call_panel">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Choose a method call to use:</h3>
+            </div>
+            <ul id="method_calls" class="list-group">
+            </ul>
+        </div>
     </div>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">For each of the following method calls, write the output produced:</h3>
-        </div>
-        <ul id="method_calls" class="list-group">
-        </ul>
-    </div>
+
 </div>

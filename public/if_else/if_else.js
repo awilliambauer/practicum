@@ -33,17 +33,15 @@ var if_else = (function() {
 		;
 
 		method_call_containers
-			.append("div")
-			.attr("class", "col-sm-8")
 			.append("a")
 			.text(function(state) { return "ifElseMystery1(" + getArgString(state.initialization) + ")"} )
 		;
 
-		method_call_containers
+		/*method_call_containers
 			.append("div")
 			.append("input")
 			.attr("placeholder", "Answer")
-		;
+		;*/
 	}
 
 
@@ -94,8 +92,7 @@ var if_else = (function() {
 		var methodCallText = "ifElseMystery1(" + args + ")";
 
 		$(".content > h2").text("If/Else Mystery Problem");
-		$("h3#end_title > span").text(methodCallText).attr("id","args");
-		$("#active_method_call_text").text(methodCallText);
+		d3.select("#method_call").text(methodCallText).attr("id","args");
 
 		// move to the next step if they hit enter or click next
 		$("#next").click(step);
@@ -261,9 +258,6 @@ var if_else = (function() {
 					if (objectToVisualize.type == "codeBlock") {
 						highlightCodeBlocks(objectToVisualize.blockIds);
 					}
-					else {
-						console.error("Unsupported variable type: " + objectToVisualize.type);
-					}
 				}
 				else if (varObject.hasOwnProperty("type")) {
 					if (varObject.type === "arguments") {
@@ -306,9 +300,6 @@ var if_else = (function() {
 							crossOutLines(varObject.value);
 						}
 					}
-					else {
-						console.error("Unsupported variable type: " + varObject.type);
-					}
 				}
 			}
 		}
@@ -322,7 +313,12 @@ var if_else = (function() {
 	}
 
 	function highlightArguments() {
-		d3.select("#args").attr("class", "highlight");
+		var argumentText = d3.select("#args").node().innerHTML;
+		var openParenIndex = argumentText.indexOf("(");
+		argumentText = argumentText.substring(0,openParenIndex+1) + "<span class='highlight'>" + argumentText.substring(openParenIndex+1);
+		var closeParenIndex = argumentText.indexOf(")");
+		argumentText = argumentText.substring(0,closeParenIndex) + "</span>" + argumentText.substring(closeParenIndex);
+		d3.select("#args").node().innerHTML = argumentText;
 	}
 
 	// highlights the variables passed in to this function in the variable bank
