@@ -39,19 +39,12 @@ var if_else = (function() {
 		;
 	}
 
-
-	function CallbackObject() {
-		this.getNextState = function(fadeLevel) {
-			return main_simulator.next(fadeLevel);
-		}
-	}
-
 	function loadState(problemConfig, state, AST) {
 		console.log("state to load:");
 		console.log(state);
 		main_simulator.initialize("if_else", {state:state}).then(function() {
 			console.log("finished initializing simulator");
-			if_else.initialize(problemConfig, new CallbackObject(), state);
+			if_else.initialize(problemConfig, callback, state);
 		}, function(error) {
 			console.error("something went wrong: ");
 			console.log(error);
