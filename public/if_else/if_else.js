@@ -11,8 +11,14 @@ var if_else = (function() {
 	var numTries;
 	var logger;
 
+	// This function is called when the main page wants
+	// to load a new problem.
 	function reset() {
+		AST_INSTALLED_INTO_DOM = false;
 
+		// HACK, ugly. This global in html_generator needs to get
+		// reset to one when loading a new problem.
+		LINENUM = 1;
 	}
 
 	var if_else_make_initial_state = function (problemConfig) {
@@ -42,13 +48,19 @@ var if_else = (function() {
 	function loadState(problemConfig, state, AST) {
 		console.log("state to load:");
 		console.log(state);
-		main_simulator.initialize("if_else", {state:state}).then(function() {
-			console.log("finished initializing simulator");
-			if_else.initialize(problemConfig, callback, state);
-		}, function(error) {
-			console.error("something went wrong: ");
-			console.log(error);
-		});
+
+        // More fetch problems. main_sim init doesn't return a Promise
+		// until fetch works...
+		main_simulator.initialize("if_else", {state:state});
+		if_else.initialize(problemConfig, callback, state, logger);
+//
+//		main_simulator.initialize("if_else", {state:state}).then(function() {
+//			console.log("finished initializing simulator");
+//			if_else.initialize(problemConfig, callback, state);
+//		}, function(error) {
+//			console.error("something went wrong: ");
+//			console.log(error);
+//		});
 	}
 
 
@@ -86,10 +98,11 @@ var if_else = (function() {
 		var methodCallText = "ifElseMystery1(" + args + ")";
 
 		$(".content > h2").text("If/Else Mystery Problem");
-		d3.select("#method_call").text(methodCallText).attr("id","args");
+		d3.select("#args").text(methodCallText);
 
 		// move to the next step if they hit enter or click next
 		$("#next").click(step);
+		$(document).off("keydown");
 		$(document).keydown(function() {
 			if (event.which == 13) {
 				step();
@@ -115,7 +128,6 @@ var if_else = (function() {
 				if (state.initialization === activeState.initialization) {
 					activeStatus = "disabled";
 					buttonClass = "btn-primary";
-					console.log("They were the same");
 				}
 
 				return "btn btn-block method_call_text " + activeStatus + " " + buttonClass;
@@ -195,11 +207,13 @@ var if_else = (function() {
 					.attr("type", "radio")
 					.attr("class", "radio")
 					.attr("name", "yes_no_radio")
+					.attr("id", "yes_radio")
 					.attr("value", "yes");
 
 				yesNoButtonDiv
 					.append("label")
 					.text("Yes")
+					.attr("for", "yes_radio")
 					.style("padding-right","30px");
 
 				yesNoButtonDiv
@@ -207,9 +221,13 @@ var if_else = (function() {
 					.attr("type", "radio")
 					.attr("class", "radio")
 					.attr("name", "yes_no_radio")
-					.attr("value", "no");
+					.attr("value", "no")
+					.attr("id", "no_radio")
+				;
+
 				yesNoButtonDiv
 					.append("label")
+					.attr("for", "no_radio")
 					.text("No");
 			}
 
