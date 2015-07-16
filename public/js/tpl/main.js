@@ -104,15 +104,23 @@ var main_simulator = (function () {"use strict";
                 }
                 var returnState = self.copy(states[stateToShow]);
 
+                if (states[currentState + 1].annotations.interactive[0] === "update_variable") {
+                    returnState.state = self.copy(states[currentState].state);
+                }
+
                 // dislay the correct prompt, based on the fade level
                 returnState.prompt = self.getInteractivePrompt(states[currentState + 1].prompt, states[currentState + 1].annotations.interactive);
-                if (fadeLevel > 1 && states[currentState + 1].annotations.interactive[0] !== "question") {
+                if (fadeLevel > 1 && states[currentState + 1].annotations.interactive[0] !== "question" && states[currentState + 1].annotations.interactive[0] !== "conditional") {
                     returnState.prompt = "Try the next step on your own!";
                 }
 
                 returnState.askForResponse = states[currentState + 1].annotations["interactive"][0];
                 waitingForUserResponse = true;
                 return returnState;
+            }
+            else if (fadeLevel === 3) {
+                currentState = currentState + 1;
+                return self.getNextStateWithInteractivity();
             }
             else {
                 currentState = currentState + 1;
@@ -148,10 +156,11 @@ var main_simulator = (function () {"use strict";
 
             // dislay the correct prompt, based on the fade level
             var prompText = returnState.prompt;
-            if (fadeLevel > 1 && currentState + 1 < states.length && states[currentState + 1].annotations.interactive[0] !== "question") {
-                prompText = "Try the next step on your own!";
+            if (states[currentState].annotations.hasOwnProperty("interactive")) {
+                if (fadeLevel > 1 && currentState < states.length && states[currentState].annotations.interactive[0] !== "question") {
+                    prompText = "Try the next step on your own!";
+                }
             }
-
             returnState.prompt = "<span style='color: #45ADA8;'>Great job! That is correct.</span><br>" + prompText;
             return returnState;
         }
@@ -161,6 +170,11 @@ var main_simulator = (function () {"use strict";
                 stateToShow = currentState;
             }
             returnState = self.copy(states[stateToShow]);
+
+            if (states[currentState + 1].annotations.interactive[0] === "update_variable") {
+                returnState.state = self.copy(states[currentState].state);
+            }
+
             if (numTries == 1) {
                 returnState.prompt = "<span style='color: red;'>Sorry, that is not correct. Try again!</span><br>";
             }
@@ -195,7 +209,7 @@ var main_simulator = (function () {"use strict";
     self.getInteractivePrompt = function(prompt, type) {
         // for now, change "this is" to "click on" for interactive prompts. not sure yet
         // how general this is, so we may need to change this to something less hacky
-        if (type == "click" &&prompt.indexOf("This is ") != -1) {
+        if ((type == "click" || type == "next_line") && prompt.indexOf("This is ") != -1) {
             prompt = "Click on " + prompt.substring(prompt.indexOf("This is ") + 8);
         }
         else if (type == "enter" &&prompt.indexOf("This is ") != -1) {

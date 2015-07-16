@@ -461,6 +461,7 @@ var expressions = (function() {
         alert("yo");
     }
 
+    // checks the solution entered into the solution box against the correct solution
     function checkSolution() {
         var userSolution = d3.select("#inputBox").node().value;
         var solutionState = callback.getFinalState();
@@ -468,7 +469,7 @@ var expressions = (function() {
         var solutionValue = solutionState.state.problemLines[lastLine][0].value;
         var solutionType = solutionState.state.problemLines[lastLine][0].type;
 
-        correct = false;
+        var correct = false;
         if (solutionType === "int") {
             if (parseInt(userSolution) === parseInt(solutionValue)) {
                 correct = true;
@@ -492,7 +493,6 @@ var expressions = (function() {
         $("#inputBox").on("animationend", function () {$("#inputBox").attr("class", "");});
         if (correct) {
             d3.select("#inputBox").attr("class", "correct");
-            d3.select("#newExpressionsProblem").classed("hidden", false);
         }
         else {
             d3.select("#inputBox").attr("class", "incorrect");

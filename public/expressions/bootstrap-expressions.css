@@ -141,7 +141,7 @@
      }
  }
 
-@-webkit-keyframes incorrectExpression {
+@-webkit-keyframes correctExpression {
     0% {
         background-color: #339944;
     }
