@@ -36,12 +36,6 @@ var if_else = (function() {
 			.append("a")
 			.text(function(state) { return "ifElseMystery1(" + getArgString(state.initialization) + ")"} )
 		;
-
-		/*method_call_containers
-			.append("div")
-			.append("input")
-			.attr("placeholder", "Answer")
-		;*/
 	}
 
 
@@ -101,9 +95,9 @@ var if_else = (function() {
 				step();
 			}
 		});
-		$("#answer_box input").change(function() {
-			checkAnswer();
-		});
+
+		//if users attempt to check a submitted answer
+		d3.select("#submitButton").on("click", checkSolution);
 
 		fillStartingStates(problemConfig, initialState);
 	}
@@ -456,17 +450,6 @@ var if_else = (function() {
 		});
 	}
 
-	// checks the entered answer against the real answer to see if they have gotten the problem correct
-	function checkAnswer() {
-		var realAnswer = state[state.length - 1].result.trim();
-		var userAnswer = $("#answer")[0].value;
-		if (realAnswer == userAnswer) {
-			$("#answer_box").addClass("correct");
-		} else {
-			$("#answer_box").addClass("incorrect");
-		}
-	}
-
 	// checks that the answer(s) the user entered into the variable bank are correct
 	function checkVariableBankAnswer() {
 		var correctAnswerObject = callback.getCorrectAnswer();
@@ -596,7 +579,25 @@ var if_else = (function() {
 		stepWithState();
 	}
 
+	// checks the solution entered into the solution box against the correct solution
+	function checkSolution() {
+		var userSolution = d3.select("#inputBox").node().value;
+		var solutionState = callback.getFinalState();
+		var correctSolution = solutionState.variables.in_scope.theProblemSolutionIsTheTextThatThisPrintlnStatementPrintsOut.value;
 
+		var correct = false;
+		if (String(userSolution) === String(correctSolution)) {
+			correct = true;
+		}
+
+		$("#inputBox").on("animationend", function () {$("#inputBox").attr("class", "");});
+		if (correct) {
+			d3.select("#inputBox").attr("class", "correct");
+		}
+		else {
+			d3.select("#inputBox").attr("class", "incorrect");
+		}
+	}
 
 
 
