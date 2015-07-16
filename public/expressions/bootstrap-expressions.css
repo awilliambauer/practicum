@@ -188,6 +188,15 @@
     vertical-align: middle;
 }
 
+.expressions_problem #newExpressionsProblem {
+    font-size: 18px;
+    vertical-align: middle;
+
+}
+
+.expressions_problem #newProblemContainer {
+    text-align: center;
+}
 
 .expressions_problem #nextstep {
     width: 100px;

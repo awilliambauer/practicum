@@ -66,6 +66,8 @@ var expressions = (function() {
         //if users attempt to check a submitted answer
         d3.select("#submitButton").on("click", checkSolution);
 
+        d3.select("#newExpressionsProblem").on("click", loadRandomExpressionsProblem);
+
         //if users attempt to step through the breakdown of the problem
         d3.select("#nextstep").on("click", step);
 
@@ -455,6 +457,10 @@ var expressions = (function() {
         stepWithState();
     }
 
+    function loadRandomExpressionsProblem() {
+        alert("yo");
+    }
+
     function checkSolution() {
         var userSolution = d3.select("#inputBox").node().value;
         var solutionState = callback.getFinalState();
@@ -486,6 +492,7 @@ var expressions = (function() {
         $("#inputBox").on("animationend", function () {$("#inputBox").attr("class", "");});
         if (correct) {
             d3.select("#inputBox").attr("class", "correct");
+            d3.select("#newExpressionsProblem").classed("hidden", false);
         }
         else {
             d3.select("#inputBox").attr("class", "incorrect");
