@@ -110,13 +110,17 @@ var main_simulator = (function () {"use strict";
 
                 // dislay the correct prompt, based on the fade level
                 returnState.prompt = self.getInteractivePrompt(states[currentState + 1].prompt, states[currentState + 1].annotations.interactive);
-                if (fadeLevel > 1 && states[currentState + 1].annotations.interactive[0] !== "question") {
+                if (fadeLevel > 1 && states[currentState + 1].annotations.interactive[0] !== "question" && states[currentState + 1].annotations.interactive[0] !== "conditional") {
                     returnState.prompt = "Try the next step on your own!";
                 }
 
                 returnState.askForResponse = states[currentState + 1].annotations["interactive"][0];
                 waitingForUserResponse = true;
                 return returnState;
+            }
+            else if (fadeLevel === 3) {
+                currentState = currentState + 1;
+                return self.getNextStateWithInteractivity();
             }
             else {
                 currentState = currentState + 1;
@@ -152,10 +156,11 @@ var main_simulator = (function () {"use strict";
 
             // dislay the correct prompt, based on the fade level
             var prompText = returnState.prompt;
-            if (fadeLevel > 1 && currentState + 1 < states.length && states[currentState + 1].annotations.interactive[0] !== "question") {
-                prompText = "Try the next step on your own!";
+            if (states[currentState].annotations.hasOwnProperty("interactive")) {
+                if (fadeLevel > 1 && currentState < states.length && states[currentState].annotations.interactive[0] !== "question") {
+                    prompText = "Try the next step on your own!";
+                }
             }
-
             returnState.prompt = "<span style='color: #45ADA8;'>Great job! That is correct.</span><br>" + prompText;
             return returnState;
         }

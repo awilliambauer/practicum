@@ -149,8 +149,8 @@ var if_else = (function() {
 			else if (responseType === "cross_out") {
 				checkCrossOutAnswer();
 			}
-			else if (responseType === "question") {
-				checkQuestionAnswer();
+			else if (responseType === "conditional") {
+				checkConditionalAnswer();
 			}
 		}
 		else {
@@ -179,7 +179,7 @@ var if_else = (function() {
 			d3.select("#prompt").node().innerHTML = prompt;
 
 			// check if we need to add "yes" and "no" radio buttons to the prompt
-			if (fadeLevel > 0 && state.hasOwnProperty("askForResponse") && state.askForResponse === "question") {
+			if (fadeLevel > 0 && state.hasOwnProperty("askForResponse") && state.askForResponse === "conditional") {
 				var yesNoButtonDiv = d3.select("#prompt")
 					.append("div")
 					.attr("class", "yes_no_buttons");
@@ -536,7 +536,7 @@ var if_else = (function() {
 		respondToAnswer(correct);
 	}
 
-	function checkQuestionAnswer() {
+	function checkConditionalAnswer() {
 		var correctAnswerObject = callback.getCorrectAnswer();
 
 		if (d3.select('input[name="yes_no_radio"]:checked').node() === null) {

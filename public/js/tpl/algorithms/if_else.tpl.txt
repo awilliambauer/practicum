@@ -39,7 +39,7 @@ function TPLAlgorithm() {
 			[no_step]
             thisIsTheNextIfElseBranchThatWillExecute = helper.getNextIfElseStatement(AST, state);
 
-            [interactive("question")]
+            [interactive("conditional")]
             if (helper.doesThisConditionalEvaluateToTrue(thisIsTheNextIfElseBranchThatWillExecute, state)) {
                 [no_step]
                 do {
@@ -62,7 +62,7 @@ function TPLAlgorithm() {
                     if (helper.doesThisStatementHaveAConditional(thisIsTheNextIfElseBranchThatWillExecute)) {
                         [interactive("next_line")] thisIsTheNextLineThatWillExecute = helper.getElseIfStatementLineNum(thisIsTheNextIfElseBranchThatWillExecute);
 
-                        [interactive("question")]
+                        [interactive("conditional")]
                         if (helper.doesThisConditionalEvaluateToTrue(thisIsTheNextIfElseBranchThatWillExecute, state)) {
                             [prompt]
                             "Since the conditional evaluates to true, we won't go into any of the other branches.";
