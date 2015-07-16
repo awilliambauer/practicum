@@ -416,7 +416,7 @@ $(document).ready(function() {
     }, function(error) {
         console.error(error);
         // if logging fails, just terminate initialization and print an error message
-        $('#main-page').html("<p>Uh oh! There appears to be a problem with the server!</p><p>Our apologies, please report this to edbutler@cs.washington.edu and we'll get it fixed ASAP.</p>");
+        $('#main-page').html('<p>Uh oh! There appears to be a problem with the server!</p><p>Our apologies, please report this with <a href="https://catalyst.uw.edu/umail/form/aaronb22/4553">our feedback form</a> and we\'ll get it fixed ASAP.</p>');
         d3.select("#main-page").classed("hidden", false);
     });
 });
