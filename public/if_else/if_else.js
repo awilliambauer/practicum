@@ -9,6 +9,7 @@ var if_else = (function() {
 	var waitingForResponse;
 	var responseType;
 	var numTries;
+	var logger;
 
 	function reset() {
 
@@ -73,14 +74,20 @@ var if_else = (function() {
 
 		state = initialState;
 		callback = callbackObject;
-		//fadeLevel = fading;
-
-		// for debugging
-		fadeLevel = 1;
-
 		waitingForResponse = false;
 		responseType = "";
 		numTries = 0;
+
+		// hold onto the task logger for logging UI event
+		logger = task_logger;
+
+		fadeLevel = 1;//fading;
+
+		// log the level of fading for this problem
+		Logging.log_task_event(logger, {
+			type: Logging.ID.FadeLevel,
+			detail: {fadeLevel:fadeLevel},
+		});
 
 		var args = getArgString(state.initialization).toString();
 		var methodCallText = "ifElseMystery1(" + args + ")";
@@ -138,6 +145,12 @@ var if_else = (function() {
 	}
 
 	function step() {
+		// log that the "next" button was clicked
+		Logging.log_task_event(logger, {
+			type: Logging.ID.NextButton,
+			detail: {},
+		});
+
 		if (waitingForResponse) {
 			numTries = numTries + 1;
 			if (responseType === "add_variable" || responseType === "update_variable") {
@@ -453,7 +466,9 @@ var if_else = (function() {
 	// checks that the answer(s) the user entered into the variable bank are correct
 	function checkVariableBankAnswer() {
 		var correctAnswerObject = callback.getCorrectAnswer();
-		var correctVariables = correctAnswerObject.rhs;
+		var allCorrectVariables = correctAnswerObject.rhs;
+		var correctVariables = {}; // for logging
+		var userVariables = {}; // for logging
 		var correctArray = [];
 
 		d3.selectAll(".variable_list_item").each(function(d,i) {
@@ -462,9 +477,11 @@ var if_else = (function() {
 			if (input.node() !== null) {
 				var varName = d3.select(this).select(".bank_variable").node().innerHTML;
 				var userValue = input.property("value");
-				for (var key in correctVariables) {
+				for (var key in allCorrectVariables) {
 					if (varName === key) {
-						if (parseInt(userValue) === parseInt(correctVariables[key])) {
+						correctVariables[key] = parseInt(allCorrectVariables[key]);
+						userVariables[key] = parseInt(userValue);
+						if (parseInt(userValue) === parseInt(allCorrectVariables[key])) {
 							correctArray.push(true);
 						}
 						else {
@@ -482,12 +499,25 @@ var if_else = (function() {
 				correct = false;
 			}
 		}
-		respondToAnswer(correct);
+
+		// log information about this question answer attempt
+		Logging.log_task_event(logger, {
+			type: Logging.ID.QuestionAnswer,
+			detail: {
+				type: "variable_bank",
+				correctAnswer: correctVariables,
+				userAnswer: userVariables,
+				correct: correct
+			},
+		});
+
+		respondToAnswer(correct, "variable_bank", correctVariables);
 	}
 
 	function checkNextLineClickAnswer() {
 		var correctAnswerObject = callback.getCorrectAnswer();
 		var correctLine = correctAnswerObject.rhs;
+		var userLine;
 		var correct = false;
 
 		var highlightedLine = d3.select("li.highlight");
@@ -495,14 +525,25 @@ var if_else = (function() {
 			var classList = highlightedLine.attr("class");
 			classList = classList.replace("highlight", "");
 			classList = classList.replace(/ /g,'');
-			var userLine = parseInt(classList);
+			userLine = parseInt(classList);
 
 			if (userLine === correctLine) {
 				correct = true;
 			}
 		}
 
-		respondToAnswer(correct);
+		// log information about this question answer attempt
+		Logging.log_task_event(logger, {
+			type: Logging.ID.QuestionAnswer,
+			detail: {
+				type: "next_line",
+				correctAnswer: correctLine,
+				userAnswer: userLine,
+				correct: correct
+			},
+		});
+
+		respondToAnswer(correct, "next_line", correctLine);
 	}
 
 	function checkCrossOutAnswer() {
@@ -533,7 +574,18 @@ var if_else = (function() {
 			});
 		}
 
-		respondToAnswer(correct);
+		// log information about this question answer attempt
+		Logging.log_task_event(logger, {
+			type: Logging.ID.QuestionAnswer,
+			detail: {
+				type: "cross_out",
+				correctAnswer: correctCrossOuts,
+				userAnswer: userCrossOuts,
+				correct: correct
+			},
+		});
+
+		respondToAnswer(correct, "cross_out", correctCrossOuts);
 	}
 
 	function checkConditionalAnswer() {
@@ -562,11 +614,33 @@ var if_else = (function() {
 				correct = true;
 			}
 
-			respondToAnswer(correct);
+			// log information about this question answer attempt
+			Logging.log_task_event(logger, {
+				type: Logging.ID.QuestionAnswer,
+				detail: {
+					type: "conditional",
+					correctAnswer: correctAnswer,
+					userAnswer: userAnswer,
+					correct: correct
+				},
+			});
+
+			respondToAnswer(correct, "conditional", correctAnswer);
 		}
 	}
 
-	function respondToAnswer(correct) {
+	function respondToAnswer(correct, type, correctAnswer) {
+		if (!correct && numTries === 3) {
+			// log that the user received a bottom-out hint
+			Logging.log_task_event(logger, {
+				type: Logging.ID.BottomOutHint,
+				detail: {
+					type: type,
+					correctAnswer: correctAnswer
+				},
+			});
+		}
+
 		if (correct || numTries === 3) {
 			waitingForResponse = false;
 			responseType = "";
