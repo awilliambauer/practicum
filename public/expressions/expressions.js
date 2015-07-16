@@ -349,21 +349,30 @@ var expressions = (function() {
             .attr("type", "radio")
             .attr("class", "radio")
             .attr("name", "yes_no_radio")
-            .attr("value", "yes");
+            .attr("value", "yes")
+            .attr("id", "yes_radio")
+        ;
 
         yesNoButtonDiv
             .append("label")
-            .text("Yes");
+            .text("Yes")
+            .attr("for", "yes_radio")
+        ;
 
         yesNoButtonDiv
             .append("input")
             .attr("type", "radio")
             .attr("class", "radio")
             .attr("name", "yes_no_radio")
-            .attr("value", "no");
+            .attr("value", "no")
+            .attr("id", "no_radio")
+        ;
+
         yesNoButtonDiv
             .append("label")
-            .text("No");
+            .text("No")
+            .attr("for", "no_radio")
+        ;
     }
 
     // asks the simulator for the statement response object and determines whether
