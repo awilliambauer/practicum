@@ -154,16 +154,16 @@ function IfElseHelper() {
     }
 
     this.crossOutOtherBranches = function(statement, crossedOutLines, AST, state) {
-        console.log("crossing out other branches");
-        console.log(statement);
-        console.log(AST["body"][this.currentCodeBlockIndex]);
-
         var branchesToCrossOut = this.getBranchesToCrossOut(statement["else_branch"], []);
-        console.log("cross out branch ids:");
-        console.log(branchesToCrossOut);
+        if (typeof crossedOutLines === "undefined") {
+            var lines = [];
+        }
+        else {
+            var lines = crossedOutLines.slice();
+        }
 
-        crossedOutLines = crossedOutLines.concat(branchesToCrossOut);
-        return crossedOutLines;
+        lines = lines.concat(branchesToCrossOut);
+        return lines;
     }
 
     this.getBranchesToCrossOut = function(statement, branchIds) {

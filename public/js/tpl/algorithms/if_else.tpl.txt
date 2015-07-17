@@ -41,6 +41,9 @@ function TPLAlgorithm() {
 
             [interactive("conditional")]
             if (helper.doesThisConditionalEvaluateToTrue(thisIsTheNextIfElseBranchThatWillExecute, state)) {
+                [prompt]
+                "Since the conditional evaluates to true, we won't go into any of the other branches.";
+                [interactive("cross_out")] crossOutTheLinesThatWillNotExecute = helper.crossOutOtherBranches(thisIsTheNextIfElseBranchThatWillExecute, crossOutTheLinesThatWillNotExecute, AST, state);
                 [no_step]
                 do {
                     [interactive("next_line")] thisIsTheNextLineThatWillExecute = helper.getNextStatement(thisIsTheNextIfElseBranchThatWillExecute["then_branch"], AST, state);
