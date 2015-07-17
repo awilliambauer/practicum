@@ -10,6 +10,7 @@ var if_else = (function() {
 	var responseType;
 	var numTries;
 	var logger;
+	var needToReset;
 
 	// This function is called when the main page wants
 	// to load a new problem.
@@ -52,6 +53,7 @@ var if_else = (function() {
         // More fetch problems. main_sim init doesn't return a Promise
 		// until fetch works...
 		main_simulator.initialize("if_else", {state:state});
+		needToReset = true;
 		if_else.initialize(problemConfig, callback, state, logger);
 //
 //		main_simulator.initialize("if_else", {state:state}).then(function() {
@@ -113,6 +115,11 @@ var if_else = (function() {
 		d3.select("#submitButton").on("click", checkSolution);
 
 		fillStartingStates(problemConfig, initialState);
+		
+		if (needToReset) {
+			resetUI();
+			needToReset = false;
+		}
 	}
 
 	// Highlight the button that represents the method call we're currently viewing and disable it
@@ -188,6 +195,24 @@ var if_else = (function() {
 		addPrompt();
 		addVaraibleBank();
 		addHighlighting();
+	}
+
+	// remove all highlighting from the UI if the user switches method calls
+	function resetUI() {
+		d3.select("#prompt").node().innerHTML = "Press Enter to start!";
+		d3.select("#variable_list").node().innerHTML = "";
+		d3.selectAll(".block_highlight").each(function() {
+			d3.select(this).classed("block_highlight", false);
+		});
+		d3.selectAll(".highlight").each(function() {
+			d3.select(this).classed("highlight", false);
+		});
+		d3.selectAll(".grey_out").each(function() {
+			d3.select(this).classed("grey_out", false);
+		});
+		d3.selectAll(".cross_out").each(function() {
+			d3.select(this).classed("cross_out", false);
+		});
 	}
 
 	// Extracts prompt from state and creates HTML
