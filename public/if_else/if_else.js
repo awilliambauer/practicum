@@ -88,7 +88,7 @@ var if_else = (function() {
 		// hold onto the task logger for logging UI event
 		logger = task_logger;
 
-		fadeLevel = 1;//fading;
+		fadeLevel = fading;
 
 		// log the level of fading for this problem
 		Logging.log_task_event(logger, {
