@@ -16,27 +16,34 @@ var csed = (function() {
     var server_savedata;
     var numProblems;
 
+    var ENABLE_TELEMETRY_LOGGING = true;
+
     function setupLogging(username) {
-        //var LOGGING_BASE_URL = "https://" + window.location.hostname + ":" + LOGGING_PORT;
-        var LOGGING_BASE_URL = "https://dev-olio.cs.washington.edu" + ":" + LOGGING_PORT;
-        return Logging.initialize(LOGGING_BASE_URL, LOGGING_RELEASE_ID, username).then(function(logging_data) {
-            experimental_condition = logging_data.condition;
-            server_savedata = logging_data.savedata ? JSON.parse(logging_data.savedata) : null;
+        if (ENABLE_TELEMETRY_LOGGING) {
+            var LOGGING_BASE_URL = "https://" + window.location.hostname + ":" + LOGGING_PORT;
+            //var LOGGING_BASE_URL = "https://dev-olio.cs.washington.edu" + ":" + LOGGING_PORT;
 
-            // initialize the number of problems so we can give the user the correct fading level
-            if (server_savedata === null) {
-                numProblems = 0;
-            }
-            else {
-                numProblems = server_savedata.numProblems;
-            }
+            return Logging.initialize(LOGGING_BASE_URL, LOGGING_RELEASE_ID, username).then(function (logging_data) {
+                experimental_condition = logging_data.condition;
+                server_savedata = logging_data.savedata ? JSON.parse(logging_data.savedata) : null;
 
-            // for debugging
-            //experimental_condition = 0;
-            //numProblems = 0;
+                // initialize the number of problems so we can give the user the correct fading level
+                if (server_savedata === null) {
+                    numProblems = 0;
+                }
+                else {
+                    numProblems = server_savedata.numProblems;
+                }
 
-            console.info('successfully started logging session');
-        });
+                // for debugging
+                //experimental_condition = 0;
+                //numProblems = 0;
+
+                console.info('successfully started logging session');
+            });
+        } else {
+            return new Promise(function(resolve) { resolve(); } );
+        }
     }
 
     function setProblemToLoad(category, problemId) {
