@@ -446,6 +446,10 @@ var if_else = (function() {
 
 	// crosses out all the lines in the array passed in as a parameter
 	function crossOutLines(lineNums) {
+		d3.selectAll(".cross_out").each(function() {
+			d3.select(this).classed("cross_out", false);
+		});
+
 		for (var i = 0; i < lineNums.length; i++) {
 			var list = document.getElementsByClassName(lineNums[i])[0];
 			$(list).addClass("cross_out");
@@ -576,7 +580,7 @@ var if_else = (function() {
 		}
 
 		// mare the lines un-cross-out-able
-		if (correct) {
+		if (correct || numTries === 3) {
 			d3.selectAll(".cross_out_able").each(function() {
 				d3.select(this)
 					.classed("cross_out_able", false)
