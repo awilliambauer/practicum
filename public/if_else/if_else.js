@@ -97,7 +97,7 @@ var if_else = (function() {
 		});
 
 		var args = getArgString(state.initialization).toString();
-		var methodCallText = "ifElseMystery1(" + args + ")";
+		var methodCallText = state.AST.name + "(" + args + ")";
 
 		$(".content > h2").text("If/Else Mystery Problem");
 		d3.select("#args").text(methodCallText);
