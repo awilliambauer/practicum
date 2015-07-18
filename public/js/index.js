@@ -132,6 +132,7 @@ var csed = (function() {
     }
 
     function getFadingLevel(condition) {
+        return 0;
         if (condition === 1) {
             if (numProblems == 1) {
                 return 0;
@@ -155,15 +156,15 @@ var csed = (function() {
 
         this.getNextState = function(fadeLevel) {
             return main_simulator.next(fadeLevel);
-        }
+        };
 
         this.getCorrectAnswer = function() {
             return main_simulator.getCorrectAnswer();
-        }
+        };
 
         this.respondToAnswer = function(correct) {
             return main_simulator.respondToAnswer(correct);
-        }
+        };
 
         this.getFinalState = function() {
             return main_simulator.getFinalState();
@@ -171,7 +172,7 @@ var csed = (function() {
 
     }
 
-    function loadProblem(problemConfig) {
+    function loadProblem(problemConfig, altState) {
         task_logger = Logging.start_task(problemConfig);
 
         // increment the number of problems this user has started
@@ -206,7 +207,7 @@ var csed = (function() {
 
             var category = problemConfig.category;
 
-            var initial_state = problemUI.create_initial_state(problemConfig);
+            var initial_state = problemUI.create_initial_state(problemConfig, altState);
             main_simulator.initialize(category, {state:initial_state});
 
             // calculate what fading level the user should see for this problem, based on their

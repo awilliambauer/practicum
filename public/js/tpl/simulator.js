@@ -176,7 +176,7 @@ function simulator(ast, globals) {
                 sr_info.result = resolveRef(expr.object, state)[evaluate(expr.index, state)];
                 return sr_info.result;
             case "literal":
-                sr_info.name = expr.value
+                sr_info.name = expr.value;
                 sr_info.result = expr.value;
                 return expr.value;
             case "call":
@@ -193,6 +193,27 @@ function simulator(ast, globals) {
                 return ret;
             default:
                 throw new Error("expression type not recognized " + JSON.stringify(expr));
+        }
+    }
+
+    function process_update(lhs, rhs_eval, state) {
+        switch (lhs.tag) {
+            case "identifier":
+                set_value(lhs.value, rhs_eval);
+                return {name:lhs.value, rhs:rhs_eval};
+                break;
+            case "reference":
+                resolveRef(lhs.object, state)[lhs.name] = rhs_eval;
+                return {name:lhs.name, rhs:rhs_eval};
+                break;
+            case "index":
+                var lookups = getLookupsArray(lhs);
+                var index = evaluate(lhs.index, state);
+                resolveRef(lhs.object, state)[index] = rhs_eval;
+                return {name:lookups[0], index:index, rhs:rhs_eval};
+                break;
+            default:
+                throw new Error("left-hand side of assignment has unrecognized type " + JSON.stringify(lhs));
         }
     }
 
@@ -226,24 +247,7 @@ function simulator(ast, globals) {
                 var rhs = stmt.expression;
                 var lhs = stmt.destination;
                 var rhs_eval = evaluate(rhs, state);
-                switch (lhs.tag) {
-                    case "identifier":
-                        set_value(lhs.value, rhs_eval);
-                        result = {name:lhs.value, rhs:rhs_eval};
-                        break;
-                    case "reference":
-                        resolveRef(lhs.object, state)[lhs.name] = rhs_eval;
-                        result = {name:lhs.name, rhs:rhs_eval};
-                        break;
-                    case "index":
-                        var lookups = getLookupsArray(lhs);
-                        var index = evaluate(lhs.index, state);
-                        resolveRef(lhs.object, state)[index] = rhs_eval;
-                        result = {name:lookups[0], index:index, rhs:rhs_eval};
-                        break;
-                    default:
-                        throw new Error("left-hand side of assignment has unrecognized type " + JSON.stringify(lhs));
-                }
+                result = process_update(lhs, rhs_eval, state);
                 break;
             case "expression":
                 evaluate(stmt.expression, state, result);

@@ -35,7 +35,7 @@ var main_simulator = (function () {"use strict";
 
         var globals = {
             helper: self.getHelper(algo)
-        }
+        };
 
         d3.text("js/tpl/algorithms/" + algo + ".tpl.txt", function(error, algoText) {
             if (error) return console.error(error);
@@ -139,12 +139,12 @@ var main_simulator = (function () {"use strict";
         else {
             return states[currentState + 1].statement_result;
         }
-    }
+    };
 
     // respond to a user answer, based on whether or not the answer was correct
     self.respondToAnswer = function(correct) {
         numTries = numTries + 1;
-        var returnState
+        var returnState;
         if (!waitingForUserResponse) {
             console.error("Called respondToAnswer, but the simulator wasn't waiting for an answer");
         }
@@ -193,11 +193,11 @@ var main_simulator = (function () {"use strict";
             returnState.prompt = "Sorry, that is not correct."
             return returnState;
         }
-    }
+    };
 
     self.getFinalState = function() {
         return states[states.length - 1];
-    }
+    };
 
     self.copy = function(obj) {
         // copy state by sending it to JSON and back; it's easy, and it'll also
@@ -220,7 +220,7 @@ var main_simulator = (function () {"use strict";
             prompt = prompt.substring(0, prompt.indexOf("?") + 1);
         }
         return prompt;
-    }
+    };
 
     return self;
 }());

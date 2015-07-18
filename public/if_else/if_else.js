@@ -22,8 +22,11 @@ var if_else = (function() {
 		LINENUM = 1;
 	}
 
-	var if_else_make_initial_state = function (problemConfig) {
+	var if_else_make_initial_state = function (problemConfig, altState) {
 		var state = problemConfig.initialState;
+		if (altState) {
+			state = altState;
+		}
 		createStartingStates(problemConfig, state);
 		return state;
 	};
@@ -141,7 +144,7 @@ var if_else = (function() {
 			})
 			.on("click", function(state) {
 				if (state.initialization !== activeState.initialization) {
-					loadState(problemConfig, state, problemConfig.AST);
+					csed.loadProblem(problemConfig, state);
 				}
 			})
 		;
