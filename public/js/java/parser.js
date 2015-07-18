@@ -104,6 +104,7 @@ var java_parsing = function() {
             "=":1, ";":1, ".":1, ",":1,
             "<":1, ">":1, "<=":1, ">=":1, "==":1, "!=":1,
             "+":1, "-":1, "*":1, "/":1, "!":1, "%":1,
+            "+=":1, "-=":1, "*=":1, "/=":1, "%=":1,
             "++":1, "--":1,
             "&":1, "|":1, "&&":1, "||":1,
         };
@@ -445,7 +446,7 @@ var java_parsing = function() {
                 case "+":  case "-": return 50;
                 case "==": case "!=": case "<=": case ">=": case "<": case ">": return 40;
                 case "&&": case "||": return 30;
-                case "=": return 10;
+                case "=": case "*=": case "/=": case "%=": case "+=":  case "-=": return 10;
                 case ";": case ")": case "]": case ",": return 0;
                 default: throw new Error("unknown operator " + token.value);
             }
