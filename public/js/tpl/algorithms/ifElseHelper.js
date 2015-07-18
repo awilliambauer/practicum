@@ -184,10 +184,20 @@ function IfElseHelper() {
     this.executeUpdateVariableStatement = function(statements, AST, state) {
         var updatedVariable, newValue, parameters;
         // we are updating a variable's value
-        if (statements[this.currentStatementIndex]["expression"]["tag"] === "binop" && statements[this.currentStatementIndex]["expression"]["operator"] === "=") {
+        if (statements[this.currentStatementIndex]["expression"]["tag"] === "binop") {
             updatedVariable = statements[this.currentStatementIndex]["expression"]["args"][0]["value"];
-            newValue = this.evaluateArg(statements[this.currentStatementIndex]["expression"]["args"][1], state);
-            //console.log("updated variable: " + updatedVariable + " new value: " + newValue);
+            var newValue = this.evaluateArg(statements[this.currentStatementIndex]["expression"]["args"][1], state);
+            var oldValue = this.evaluateArg(statements[this.currentStatementIndex]["expression"]["args"][0], state);
+
+            switch (statements[this.currentStatementIndex]["expression"]["operator"]) {
+                case '=': break; // do nothing, newValue already correct
+                case '+=': newValue = oldValue + newValue; break;
+                case '-=': newValue = oldValue - newValue; break;
+                case '*=': newValue = oldValue * newValue; break;
+                case '/=': newValue = Math.floor(oldValue / newValue); break;
+                case '%=': newValue = oldValue % newValue; break;
+                default: throw new Error('unkown binary operator ' + statements[this.currentStatementIndex]["expression"]["operator"]);
+            }
 
             parameters = {};
             parameters[updatedVariable] = newValue;
