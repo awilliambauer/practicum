@@ -193,15 +193,13 @@ function ExpressionsHelper() {
             state.problemLines[problemLine][operatorIndex - 1].type = "string";
 
         // Javascript doesn't put any type info into the the numbers, so we have to keep track
-        // If either operand was a double, then the result is a double.
         } else if ((leftOperand.type === "double" || rightOperand.type === "double")) {
+            // If either operand was a double, then the result is a double.
             state.problemLines[problemLine][operatorIndex - 1].type = "double";
-        }
-        // Otherwise, it's gonna be an int.
-        else if (typeof result === "number") {
+        } else if (typeof result === "number") {
+            // Otherwise, it's gonna be an int.
             state.problemLines[problemLine][operatorIndex - 1].type = "int";
-        }
-        else {
+        } else {
             console.error("Expressions thoughtProcess -- Encountered a type we weren't expecting: " + (typeof result));
             state.problemLines[problemLine][operatorIndex - 1].type = typeof result;
 
@@ -215,17 +213,15 @@ function ExpressionsHelper() {
         var leftOperand = calculationExpression[operatorIndex - 1];
         var rightOperand = calculationExpression[operatorIndex + 1];
 
-        // If either operand was a string, the result is a string
         if (leftOperand.type === "string" || rightOperand.type === "string") {
+            // If either operand was a string, the result is a string
             return "string";
-        }
-        // Javascript doesn't put any type info into the the numbers, so we have to keep track
-        // If either operand was a double, then the result is a double.
-        else if (leftOperand.type === "double" || rightOperand.type === "double") {
+        } else if (leftOperand.type === "double" || rightOperand.type === "double") {
+            // Javascript doesn't put any type info into the the numbers, so we have to keep track
+            // If either operand was a double, then the result is a double.
             return "double";
-        }
-        // Otherwise, it's gonna be an int.
-        else  {
+        } else  {
+            // Otherwise, it's gonna be an int.
             return "int";
         }
     }

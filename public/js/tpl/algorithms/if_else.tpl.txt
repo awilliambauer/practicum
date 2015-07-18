@@ -13,30 +13,30 @@ function TPLAlgorithm() {
     [no_step]
     AST = state.AST;
 
-	[prompt]
-	"First, look at the structure of the code in the problem.";
-	theseAreTheIfElseBlocks = helper.getIfElseBlocks(AST);
+    [prompt]
+    "First, look at the structure of the code in the problem.";
+    theseAreTheIfElseBlocks = helper.getIfElseBlocks(AST);
 
-	[prompt]
-	"Next, look at the method call.";
-	theseAreTheParameters = helper.getParameters(AST, state);
-	[interactive("add_variable")] addTheParametersToTheVariableBank = helper.addToTheVariableBank(theseAreTheParameters, AST, state);
+    [prompt]
+    "Next, look at the method call.";
+    theseAreTheParameters = helper.getParameters(AST, state);
+    [interactive("add_variable")] addTheParametersToTheVariableBank = helper.addToTheVariableBank(theseAreTheParameters, AST, state);
 
-	[prompt]
-	"Now walk through the code line-by-line, keeping track of variable values in the variable bank.";
-	[no_step]
-	while (helper.areThereMoreCodeBlocks(AST)) {
-		[interactive("next_line")] thisIsTheNextLineThatWillExecute = helper.getNextCodeBlock(AST);
-		[no_step]
-		if (helper.thisIsAVariableDeclarationStatement(AST)) {
-			let thisLineDeclaresANewVariable:assignment;
-			thisLineDeclaresANewVariable = helper.getDeclaredVariable(AST);
-			[interactive("add_variable")] addTheNewVariableToTheVariableBank = helper.addToTheVariableBank(thisLineDeclaresANewVariable, AST, state);
-		}
-		else [no_step] if (helper.thisIsAnIfElseStatement(AST)) {
-			[prompt]
-			"We're at the beginning of a new if/else block. Let's find the first branch that evaluates to true.";
-			[no_step]
+    [prompt]
+    "Now walk through the code line-by-line, keeping track of variable values in the variable bank.";
+    [no_step]
+    while (helper.areThereMoreCodeBlocks(AST)) {
+        [interactive("next_line")] thisIsTheNextLineThatWillExecute = helper.getNextCodeBlock(AST);
+        [no_step]
+        if (helper.thisIsAVariableDeclarationStatement(AST)) {
+            let thisLineDeclaresANewVariable:assignment;
+            thisLineDeclaresANewVariable = helper.getDeclaredVariable(AST);
+            [interactive("add_variable")] addTheNewVariableToTheVariableBank = helper.addToTheVariableBank(thisLineDeclaresANewVariable, AST, state);
+        }
+        else [no_step] if (helper.thisIsAnIfElseStatement(AST)) {
+            [prompt]
+            "We're at the beginning of a new if/else block. Let's find the first branch that evaluates to true.";
+            [no_step]
             thisIsTheNextIfElseBranchThatWillExecute = helper.getNextIfElseStatement(AST);
 
             [interactive("conditional")]
@@ -109,12 +109,12 @@ function TPLAlgorithm() {
                     }
                 }
             }
-		}
-		else [no_step] if (helper.thisIsAPrintlnStatement(AST)) {
-			theProblemSolutionIsTheTextThatThisPrintlnStatementPrintsOut = helper.getPrintlnOutput(AST, state);
-			[prompt]
-			"Enter the solution in the answer box!";
-		}
+        }
+        else [no_step] if (helper.thisIsAPrintlnStatement(AST)) {
+            theProblemSolutionIsTheTextThatThisPrintlnStatementPrintsOut = helper.getPrintlnOutput(AST, state);
+            [prompt]
+            "Enter the solution in the answer box!";
+        }
 
-	}
+    }
 }
