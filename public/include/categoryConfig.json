@@ -463,6 +463,11 @@
       "category": "expressions",
       "title": "12 / 3 + 5 + 3 * 2",
       "content": "12 / 3 + 5 + 3 * 2"
+    },{
+      "id": "39E2C104-8F54-4A12-B055-0229B6C6BA5E",
+      "category": "expressions",
+      "title": "10 > 5 + 4 && 33 % 2 == 0 || 34 % 2 != 0",
+      "content": "10 > 5 + 4 && 33 % 2 == 0 || 34 % 2 != 0"
     }]
 }
 ]

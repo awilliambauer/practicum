@@ -31,6 +31,18 @@ function ExpressionsHelper() {
         return foundASoperator;
     };
 
+    this.isThereAtLeastOneComparison = function (state) {
+        return state.problemLines[state.problemLines.length - 1].some(function (item) {
+            return item.type === "CompOperator";
+        });
+    };
+
+    this.isThereAtLeastOneBooleanOperator = function (state) {
+        return state.problemLines[state.problemLines.length - 1].some(function (item) {
+            return item.type === "BoolOperator";
+        });
+    };
+
     this.getFirstMultiplicationDivisionOrModOperatorFromLeft = function (state) {
         var numProblemLines = state.problemLines.length;
         var currentExpression = state.problemLines[numProblemLines - 1];
@@ -41,6 +53,8 @@ function ExpressionsHelper() {
         for (var i = 0; i < currentExpression.length; i++) {
             if (currentExpression[i].type === "MDMoperator") {
                 MDMoperator.cell = i;
+                MDMoperator.opType = "MDMoperator";
+                MDMoperator.op = currentExpression[i].value;
                 break;
             }
         }
@@ -58,11 +72,51 @@ function ExpressionsHelper() {
         for (var i = 0; i < currentExpression.length; i++) {
             if (currentExpression[i].type === "ASoperator") {
                 ASoperator.cell = i;
+                ASoperator.opType = "ASoperator";
+                ASoperator.op = currentExpression[i].value;
                 break;
             }
         }
 
         return ASoperator;
+    };
+
+    this.getFirstComparisonFromLeft = function (state) {
+        var numProblemLines = state.problemLines.length;
+        var currentExpression = state.problemLines[numProblemLines - 1];
+        var CompOperator = {};
+        CompOperator.type = "lineCell";
+        CompOperator.line = numProblemLines - 1;
+
+        for (var i = 0; i < currentExpression.length; i++) {
+            if (currentExpression[i].type === "CompOperator") {
+                CompOperator.cell = i;
+                CompOperator.opType = "CompOperator";
+                CompOperator.op = currentExpression[i].value;
+                break;
+            }
+        }
+
+        return CompOperator;
+    };
+
+    this.getFirstBooleanOperatorFromLeft = function (state) {
+        var numProblemLines = state.problemLines.length;
+        var currentExpression = state.problemLines[numProblemLines - 1];
+        var BoolOperator = {};
+        BoolOperator.type = "lineCell";
+        BoolOperator.line = numProblemLines - 1;
+
+        for (var i = 0; i < currentExpression.length; i++) {
+            if (currentExpression[i].type === "BoolOperator") {
+                BoolOperator.cell = i;
+                BoolOperator.opType = "BoolOperator";
+                BoolOperator.op = currentExpression[i].value;
+                break;
+            }
+        }
+
+        return BoolOperator;
     };
 
     this.getLeftOperand = function (state, operatorIndex) {
@@ -169,6 +223,14 @@ function ExpressionsHelper() {
         return getOperator(state, operatorObject.cell).value === "-";
     };
 
+    this.isCurrentOperationAnd = function (state, operatorObject) {
+        return getOperator(state, operatorObject.cell).value === "&&";
+    };
+
+    this.isCurrentOperationOr = function (state, operatorObject) {
+        return getOperator(state, operatorObject.cell).value === "||";
+    };
+
     function correctPrecision(result, left, right) {
         if ((left.valType !== "string" && right.valType !== "string") &&
             (left.valType === "double" || right.valType === "double") && result % 1 === 0) {
@@ -188,8 +250,11 @@ function ExpressionsHelper() {
 
         state.problemLines[problemLine][operatorIndex - 1].value = result;
 
-        // If either operand was a string, the result is a string
-        if (leftOperand.type === "string" || rightOperand.type === "string") {
+        if (operator.opType === "CompOperator" || operator.opType === "BoolOperator") {
+            // the result of a comparison or boolean operation must be a boolean
+            state.problemLines[problemLine][operatorIndex - 1].type = "boolean";
+        } else if (leftOperand.type === "string" || rightOperand.type === "string") {
+            // If either operand was a string, the result is a string
             state.problemLines[problemLine][operatorIndex - 1].type = "string";
 
         // Javascript doesn't put any type info into the the numbers, so we have to keep track
@@ -213,17 +278,21 @@ function ExpressionsHelper() {
         var leftOperand = calculationExpression[operatorIndex - 1];
         var rightOperand = calculationExpression[operatorIndex + 1];
 
+        if (operator.opType === "CompOperator" || operator.opType === "BoolOperator") {
+            // the result of a comparison or boolean operation must be a boolean
+            return "boolean";
+        }
         if (leftOperand.type === "string" || rightOperand.type === "string") {
             // If either operand was a string, the result is a string
             return "string";
-        } else if (leftOperand.type === "double" || rightOperand.type === "double") {
+        }
+        if (leftOperand.type === "double" || rightOperand.type === "double") {
             // Javascript doesn't put any type info into the the numbers, so we have to keep track
             // If either operand was a double, then the result is a double.
             return "double";
-        } else  {
-            // Otherwise, it's gonna be an int.
-            return "int";
         }
+        // Otherwise, it's gonna be an int.
+        return "int";
     }
 
     // left and right are objects returned by get{Left|Right}Operand, state is state object,
@@ -288,6 +357,67 @@ function ExpressionsHelper() {
         resultCell.valueType = getResultType(state, operator);
         return resultCell;
     };
+
+    // left and right are objects returned by get{Left|Right}Operand, state is state object,
+    // operator is operator object returned by getFirst...FromLeft
+    this.whatIsTheResultOfThisComparison = function (left, right, state, operator) {
+        var resultCell = createNewLineWithResultCell(state, operator);
+        var result;
+        switch(operator.op) {
+            case '<':
+                result = left.value < right.value;
+                break;
+            case '<=':
+                result = left.value <= right.value;
+                break;
+            case '>':
+                result = left.value > right.value;
+                break;
+            case '>=':
+                result = left.value >= right.value;
+                break;
+            case '==':
+                result = left.value === right.value;
+                break;
+            case '!=':
+                result = left.value !== right.value;
+                break;
+            default:
+                throw new Error("don't know how to get the result of operator: " + operator.op);
+        }
+        doStateUpdate(state, operator, result);
+        resultCell.value = result;
+        resultCell.valueType = getResultType(state, operator);
+        return resultCell;
+    };
+
+    // left and right are objects returned by get{Left|Right}Operand, state is state object,
+    // operator is operator object returned by getFirst...FromLeft
+    this.whatIsTheResultOfThisAnd = function (left, right, state, operator) {
+        var resultCell = createNewLineWithResultCell(state, operator);
+        if (left.valType !== "boolean" || right.valType !== "boolean") {
+            throw new Error("the operands for && must both be boolean values");
+        }
+        var result = left.value && right.value;
+        doStateUpdate(state, operator, result);
+        resultCell.value = result;
+        resultCell.valueType = getResultType(state, operator);
+        return resultCell;
+    };
+
+    // left and right are objects returned by get{Left|Right}Operand, state is state object,
+    // operator is operator object returned by getFirst...FromLeft
+    this.whatIsTheResultOfThisOr = function (left, right, state, operator) {
+        var resultCell = createNewLineWithResultCell(state, operator);
+        if (left.valType !== "boolean" || right.valType !== "boolean") {
+            throw new Error("the operands for && must both be boolean values");
+        }
+        var result = left.value || right.value;
+        doStateUpdate(state, operator, result);
+        resultCell.value = result;
+        resultCell.valueType = getResultType(state, operator);
+        return resultCell;
+    };
 }
 
 /// Creates an initial state for expressions given a problem configuration.
@@ -297,7 +427,10 @@ function expressions_make_initial_state(problemConfig) {
     function operator_type(op) {
         switch (op) {
             case '+': case '-': return 'ASoperator';
-            default: return 'MDMoperator';
+            case '>':case '>=':case '<':case '<=':case '==':case '!=': return 'CompOperator';
+            case '&&':case '||': return 'BoolOperator';
+            case '%':case '*':case '/': return 'MDMoperator';
+            default: throw new Error("no type associated with operator: " + op);
         }
     }
 

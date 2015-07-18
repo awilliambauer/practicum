@@ -271,7 +271,7 @@ function IfElseHelper() {
                 return arg1 * arg2;
             }
         }
-    }
+    };
 
     this.thisIsAPrintlnStatement = function(AST) {
         if (AST["body"][this.currentCodeBlockIndex]["tag"] === "expression") {

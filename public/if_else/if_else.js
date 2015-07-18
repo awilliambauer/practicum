@@ -106,11 +106,13 @@ var if_else = (function() {
 		d3.select("#args").text(methodCallText);
 
 		// move to the next step if they hit enter or click next
-		$("#next").click(step);
+		$("#nextstep").click(step);
 		$(document).off("keydown");
-		$(document).keydown(function() {
+		$(document).keydown(function(e) {
 			if (event.which == 13) {
+				e.preventDefault(); // stop enter from also clicking next button (if button has focus)
 				step();
+				return false; // stop enter from also clicking next button (if button has focus)
 			}
 		});
 
