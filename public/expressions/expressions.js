@@ -71,14 +71,14 @@ var expressions = (function() {
         //if users attempt to step through the breakdown of the problem
         d3.select("#nextstep").on("click", step);
 
-        // remove existing keydown handler to avoid duplicate calls to step
-        $(document).off("keydown");
-        // call step when you press the "enter" key
-        $(document).keydown(function() {
-            if (event.which == 13) {
-                step();
-            }
-        });
+        // set up the rest of the page to use the enter button
+        // as a next step button
+        d3.select("body")
+            .on("keyup", function() {
+                if (d3.event.keyCode == 13) {
+                    step();
+                }
+            });
 
         // log the level of fading for this problem
         Logging.log_task_event(logger, {

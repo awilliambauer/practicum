@@ -102,15 +102,19 @@ var if_else = (function() {
 
 		// move to the next step if they hit enter or click next
 		$("#next").click(step);
-		$(document).off("keydown");
-		$(document).keydown(function() {
-			if (event.which == 13) {
-				step();
-			}
-		});
+        d3.select("body")
+            .on("keyup", function() {
+                if (d3.event.keyCode == 13) {
+                    step();
+                }
+            });
 
 		//if users attempt to check a submitted answer
-		d3.select("#submitButton").on("click", checkSolution);
+        d3.select("#submitButton")
+            .on("click", checkSolution)
+        ;
+
+
 
 		fillStartingStates(problemConfig, initialState);
 	}
