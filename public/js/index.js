@@ -409,6 +409,13 @@ $(document).ready(function() {
             if (!categoryConfig) {
                 console.error("Unable to load problem configuration: need .../public/categoryConfig.json");
             } else {
+                // add next problem pointers
+                categoryConfig.forEach(function (category) {
+                    for(var i = 0; i < category.problems.length; i++) {
+                        category.problems[i].nextProblem = category.problems[i+1];
+                    }
+                });
+
                 csed.addProblemsToNav(categoryConfig, onProblemStart);
                 csed.addProblemsContentToLandingPage(categoryConfig, onProblemStart);
 

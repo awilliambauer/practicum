@@ -145,7 +145,7 @@ var java_parsing = function() {
             }
             // read the ending newline
             if (!cs.iseof()) cs.next();
-            return text.strip();
+            return text.trim();
         }
 
         function skip_whitespace() {

@@ -11,6 +11,7 @@ var if_else = (function() {
 	var numTries;
 	var logger;
 	var needToReset;
+	var config;
 
 	// This function is called when the main page wants
 	// to load a new problem.
@@ -81,7 +82,7 @@ var if_else = (function() {
 			$("#problem_space > pre").html(on_convert(AST));
 			AST_INSTALLED_INTO_DOM = true;
 		}
-
+		config = problemConfig;
 		state = initialState;
 		callback = callbackObject;
 		waitingForResponse = false;
@@ -118,6 +119,8 @@ var if_else = (function() {
 
 		//if users attempt to check a submitted answer
 		d3.select("#submitButton").on("click", checkSolution);
+
+		d3.select("#newProblem").on("click", function () {csed.loadProblem(problemConfig.nextProblem)});
 
 		fillStartingStates(problemConfig, initialState);
 		
@@ -712,6 +715,9 @@ var if_else = (function() {
 		$("#inputBox").on("animationend", function () {$("#inputBox").attr("class", "");});
 		if (correct) {
 			d3.select("#inputBox").attr("class", "correct");
+			if (config.nextProblem) {
+				d3.select("#newProblem").classed("hidden", false);
+			}
 		}
 		else {
 			d3.select("#inputBox").attr("class", "incorrect");

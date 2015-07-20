@@ -40,6 +40,8 @@ var expressions = (function() {
 
     var logger;
 
+    var config;
+
     // Callback function for navigation javascript -- called before problem load.
     var reset = function() {
         firstStep = true;
@@ -48,6 +50,7 @@ var expressions = (function() {
 
     // Callback function for navigation javascript. Installs a problem into the page
     var initialize = function(problemConfig, callbackObject, initial_state, task_logger, fading) {
+        config = problemConfig;
         callback = callbackObject;
         state = initial_state;
         fadeLevel = fading;
@@ -66,7 +69,7 @@ var expressions = (function() {
         //if users attempt to check a submitted answer
         d3.select("#submitButton").on("click", checkSolution);
 
-        d3.select("#newExpressionsProblem").on("click", loadRandomExpressionsProblem);
+        d3.select("#newProblem").on("click", function () {csed.loadProblem(problemConfig.nextProblem)});
 
         //if users attempt to step through the breakdown of the problem
         d3.select("#nextstep").on("click", step);
@@ -469,7 +472,7 @@ var expressions = (function() {
     }
 
     function loadRandomExpressionsProblem() {
-        alert("yo");
+
     }
 
     // checks the solution entered into the solution box against the correct solution
@@ -499,11 +502,18 @@ var expressions = (function() {
             if (String(solutionValue) === String(userSolution)) {
                 correct = true;
             }
+        } else if (solutionType === "boolean") {
+            if (String(solutionValue) === String(userSolution)) {
+                correct = true;
+            }
         }
 
         $("#inputBox").on("animationend", function () {$("#inputBox").attr("class", "");});
         if (correct) {
             d3.select("#inputBox").attr("class", "correct");
+            if (config.nextProblem) {
+                d3.select("#newProblem").classed("hidden", false);
+            }
         }
         else {
             d3.select("#inputBox").attr("class", "incorrect");
