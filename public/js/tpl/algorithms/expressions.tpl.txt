@@ -2,7 +2,7 @@ function TPLAlgorithm() {
     let weWillPlaceTheResultOfThisOperationHere;
 
     [prompt]
-    "To solve an expression problem, start by<br>evaluating all the Multiplicative operators<br>(* / %) from left to right. Then evaluate the<br>Additive operators (+ -) from left to right. Then evaluate all comparison operators (< <= > >= == !=). Finally, evaluate all boolean operators (&& ||).";
+    "To solve an expression problem, start by<br>evaluating all the Multiplicative operators<br>(* / %) from left to right. Then evaluate the<br>Additive operators (+ -) from left to right.";
 
     [interactive("question")]
     while(helper.isThereAtLeastOneMultiplicationDivisionOrModOperator(state)) {
@@ -66,40 +66,40 @@ function TPLAlgorithm() {
         }
     }
 
-    [interactive("question")]
-    while(helper.isThereAtLeastOneComparison(state)) {
-        let thisIsTheFirstComparisonFromTheLeft;
-        [interactive("click")] thisIsTheFirstComparisonFromTheLeft = helper.getFirstComparisonFromLeft(state);
-        let thisIsTheLeftOperand;
-        [interactive("click")] thisIsTheLeftOperand = helper.getLeftOperand(state, thisIsTheFirstComparisonFromTheLeft);
-        let thisIsTheRightOperand;
-        [interactive("click")] thisIsTheRightOperand = helper.getRightOperand(state, thisIsTheFirstComparisonFromTheLeft);
-        let thisIsTheResultOfTheComparison;
-        [interactive("enter")]
-        thisIsTheResultOfTheComparison = helper.whatIsTheResultOfThisComparison(thisIsTheLeftOperand, thisIsTheRightOperand, state, thisIsTheFirstComparisonFromTheLeft);
-    }
+#    [interactive("question")]
+#    while(helper.isThereAtLeastOneComparison(state)) {
+#        let thisIsTheFirstComparisonFromTheLeft;
+#        [interactive("click")] thisIsTheFirstComparisonFromTheLeft = helper.getFirstComparisonFromLeft(state);
+#        let thisIsTheLeftOperand;
+#        [interactive("click")] thisIsTheLeftOperand = helper.getLeftOperand(state, thisIsTheFirstComparisonFromTheLeft);
+#        let thisIsTheRightOperand;
+#        [interactive("click")] thisIsTheRightOperand = helper.getRightOperand(state, thisIsTheFirstComparisonFromTheLeft);
+#        let thisIsTheResultOfTheComparison;
+#        [interactive("enter")]
+#        thisIsTheResultOfTheComparison = helper.whatIsTheResultOfThisComparison(thisIsTheLeftOperand, thisIsTheRightOperand, state, thisIsTheFirstComparisonFromTheLeft);
+#    }
 
-    [interactive("question")]
-    while(helper.isThereAtLeastOneBooleanOperator(state)) {
-        let thisIsTheFirstBooleanOperatorFromTheLeft;
-        [interactive("click")] thisIsTheFirstBooleanOperatorFromTheLeft = helper.getFirstBooleanOperatorFromLeft(state);
-        let thisIsTheLeftOperand;
-        [interactive("click")] thisIsTheLeftOperand = helper.getLeftOperand(state, thisIsTheFirstBooleanOperatorFromTheLeft);
-        let thisIsTheRightOperand;
-        [interactive("click")] thisIsTheRightOperand = helper.getRightOperand(state, thisIsTheFirstBooleanOperatorFromTheLeft);
-        [no_step]
-        if (helper.isCurrentOperationAnd(state, thisIsTheFirstBooleanOperatorFromTheLeft)) {
-            let thisIsTheResultOfTheAnd;
-            [interactive("enter")]
-            thisIsTheResultOfTheAnd = helper.whatIsTheResultOfThisAnd(thisIsTheLeftOperand, thisIsTheRightOperand, state, thisIsTheFirstBooleanOperatorFromTheLeft);
-        } else
-        [no_step]
-        if (helper.isCurrentOperationOr(state, thisIsTheFirstBooleanOperatorFromTheLeft)) {
-            let thisIsTheResultOfTheOr;
-            [interactive("enter")]
-            thisIsTheResultOfTheOr = helper.whatIsTheResultOfThisOr(thisIsTheLeftOperand, thisIsTheRightOperand, state, thisIsTheFirstBooleanOperatorFromTheLeft);
-        }
-    }
+#    [interactive("question")]
+#    while(helper.isThereAtLeastOneBooleanOperator(state)) {
+#        let thisIsTheFirstBooleanOperatorFromTheLeft;
+#        [interactive("click")] thisIsTheFirstBooleanOperatorFromTheLeft = helper.getFirstBooleanOperatorFromLeft(state);
+#        let thisIsTheLeftOperand;
+#        [interactive("click")] thisIsTheLeftOperand = helper.getLeftOperand(state, thisIsTheFirstBooleanOperatorFromTheLeft);
+#        let thisIsTheRightOperand;
+#        [interactive("click")] thisIsTheRightOperand = helper.getRightOperand(state, thisIsTheFirstBooleanOperatorFromTheLeft);
+#        [no_step]
+#        if (helper.isCurrentOperationAnd(state, thisIsTheFirstBooleanOperatorFromTheLeft)) {
+#            let thisIsTheResultOfTheAnd;
+#            [interactive("enter")]
+#            thisIsTheResultOfTheAnd = helper.whatIsTheResultOfThisAnd(thisIsTheLeftOperand, thisIsTheRightOperand, state, thisIsTheFirstBooleanOperatorFromTheLeft);
+#        } else
+#        [no_step]
+#        if (helper.isCurrentOperationOr(state, thisIsTheFirstBooleanOperatorFromTheLeft)) {
+#            let thisIsTheResultOfTheOr;
+#            [interactive("enter")]
+#            thisIsTheResultOfTheOr = helper.whatIsTheResultOfThisOr(thisIsTheLeftOperand, thisIsTheRightOperand, state, thisIsTheFirstBooleanOperatorFromTheLeft);
+#        }
+#    }
 
     [prompt]
     "This is the answer!";
