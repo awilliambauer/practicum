@@ -8,7 +8,6 @@ $methodCalls = file_get_contents($METHOD_CALLS_FILE);
 ?>
 
 
-
 <!DOCTYPE html>
 <html>
 <head lang="en">
@@ -188,9 +187,9 @@ $methodCalls = file_get_contents($METHOD_CALLS_FILE);
                 problemNum++;
             } catch (e) {
                 console.error("Unable to parse id " + problemId + ": " + parsableProblemText);
-                if (problemId == 103) {
-                    throw e;
-                }
+                //if (problemId == 103) {
+                //    throw e;
+                //}
             }
         }
 
