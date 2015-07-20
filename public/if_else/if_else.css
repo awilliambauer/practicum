@@ -32,6 +32,17 @@
     -webkit-animation-duration: 2s;
 }
 
+.if_else_problem #newProblem {
+    font-size: 18px;
+    vertical-align: middle;
+
+}
+
+.if_else_problem #newProblemContainer {
+    padding-top: 30px;
+    text-align: center;
+}
+
 .if_else_problem .startingStatesOption {
     font-family: monospace;
     font-size: 25px;
