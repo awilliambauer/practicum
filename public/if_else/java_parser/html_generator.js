@@ -26,7 +26,7 @@ function to_dom(node, indent_level, special_flag) {
 			elem.attr('id', 'java-ast-' + node.id);
 			// elem.append($("<li>").html('public class <span style="color:purple">A</span> {'));
 			var text = $("<li>").html(LINENUM + "\t" + indent(0) + 'public static void <span style="color:purple">' + node.name + '</span>(');
-			text.addClass(LINENUM + "");
+			text.addClass((LINENUM-1) + "");
 			LINENUM++;    
 			firstIter = true;
 			node.params.forEach(function(p) {
@@ -41,12 +41,12 @@ function to_dom(node, indent_level, special_flag) {
 			node.body.forEach(function(s) {
 				if (s.tag === 'if') {
 					// hack to add a blank line before each if/else block
-					elem.append($("<li>").text((LINENUM)).addClass(LINENUM + ""));
+					elem.append($("<li>").text((LINENUM)).addClass((LINENUM-1) + ""));
 					LINENUM++;
 				}
 				elem.append(to_dom(s, 1));
 			});
-			elem.append($("<li>").text(LINENUM + "\t" + indent(0) + "}").addClass(LINENUM + ""));
+			elem.append($("<li>").text(LINENUM + "\t" + indent(0) + "}").addClass((LINENUM-1) + ""));
 			LINENUM++;
 			// elem.append($("<li>").text("}"));
 			break;
@@ -59,7 +59,7 @@ function to_dom(node, indent_level, special_flag) {
 			break;
 
 		case 'declaration':
-			var elem = $('<li>').text(LINENUM + "\t").addClass(LINENUM + "");
+			var elem = $('<li>').text(LINENUM + "\t").addClass((LINENUM-1) + "");
 			LINENUM++;
 			var firstIter;
 			elem.attr('id', 'java-ast-' + node.id);
@@ -74,7 +74,7 @@ function to_dom(node, indent_level, special_flag) {
 			break;
 
 		case 'expression':
-			var elem = $('<li>').text(LINENUM + "\t").addClass(LINENUM + "");
+			var elem = $('<li>').text(LINENUM + "\t").addClass((LINENUM-1) + "");
 			LINENUM++;
 			var firstIter;
 			elem.attr('id', 'java-ast-' + node.id);
@@ -112,7 +112,7 @@ function to_dom(node, indent_level, special_flag) {
 			var firstIter;
 			elem.attr('id', 'java-ast-' + node.id);
 			var text = $("<li>");
-			text.addClass(LINENUM + "").append((LINENUM) + "\t");
+			text.addClass((LINENUM-1) + "").append((LINENUM) + "\t");
 			LINENUM++;
 			text.append(indent(indent_level));
 			if (special_flag) {
@@ -133,7 +133,7 @@ function to_dom(node, indent_level, special_flag) {
 					elem.append(result);
 				} else {
 					var text = indent(indent_level) + '} <span style="color:purple">else </span>{';
-					elem.append($("<li>").html(LINENUM + "\t" + text).addClass(LINENUM + ""));
+					elem.append($("<li>").html(LINENUM + "\t" + text).addClass((LINENUM-1) + ""));
 					LINENUM++;
 					node.else_branch.forEach(function(s) {
 						elem.append(to_dom(s, indent_level + 1));
@@ -141,7 +141,7 @@ function to_dom(node, indent_level, special_flag) {
 				}
 			}
 			if (!special_flag) {
-				elem.append($("<li>").text(LINENUM + "\t" + indent(indent_level) + "}").addClass(LINENUM + ""));
+				elem.append($("<li>").text(LINENUM + "\t" + indent(indent_level) + "}").addClass((LINENUM-1) + ""));
 				LINENUM++;
 			}
 			break;

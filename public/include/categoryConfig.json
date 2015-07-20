@@ -16,7 +16,7 @@
             "lineNum": 1,
             "vars": {},
             "highlighted": [],
-            "problemText": "public static void ifElseMystery(int a, int b) {\n    int c = 2;\n    if (a + c < b) {\n        c = c + 8;\n    } else {\n        b = b + 10;\n    }\n    if (a + c < b) {\n        c = c + 8;\n    } else {\n        b = b + 10;\n    }\n    System.out.println(b + \" \" + c);\n}\n"
+            "problemText": "public static void ifElseMystery(int a, int b) {\n    int c = 2;\n\n    if (a + c < b) {\n        c = c + 8;\n    } else {\n        b = b + 10;\n    }\n\n    if (a + c < b) {\n        c = c + 8;\n    } else {\n        b = b + 10;\n    }\n    System.out.println(b + \" \" + c);\n}\n"
         },
         "alternateStartingStates": [
             {
@@ -28,7 +28,7 @@
                 "lineNum": 1,
                 "vars": {},
                 "highlighted": [],
-                "problemText": "public static void ifElseMystery(int a, int b) {\n    int c = 2;\n    if (a + c < b) {\n        c = c + 8;\n    } else {\n        b = b + 10;\n    }\n    if (a + c < b) {\n        c = c + 8;\n    } else {\n        b = b + 10;\n    }\n    System.out.println(b + \" \" + c);\n}\n"
+                "problemText": "public static void ifElseMystery(int a, int b) {\n    int c = 2;\n\n    if (a + c < b) {\n        c = c + 8;\n    } else {\n        b = b + 10;\n    }\n\n    if (a + c < b) {\n        c = c + 8;\n    } else {\n        b = b + 10;\n    }\n    System.out.println(b + \" \" + c);\n}\n"
             },
             {
                 "prompt": "First, look at the structure of the code in the problem",
@@ -39,7 +39,7 @@
                 "lineNum": 1,
                 "vars": {},
                 "highlighted": [],
-                "problemText": "public static void ifElseMystery(int a, int b) {\n    int c = 2;\n    if (a + c < b) {\n        c = c + 8;\n    } else {\n        b = b + 10;\n    }\n    if (a + c < b) {\n        c = c + 8;\n    } else {\n        b = b + 10;\n    }\n    System.out.println(b + \" \" + c);\n}\n"
+                "problemText": "public static void ifElseMystery(int a, int b) {\n    int c = 2;\n\n    if (a + c < b) {\n        c = c + 8;\n    } else {\n        b = b + 10;\n    }\n\n    if (a + c < b) {\n        c = c + 8;\n    } else {\n        b = b + 10;\n    }\n    System.out.println(b + \" \" + c);\n}\n"
             },
             {
                 "prompt": "First, look at the structure of the code in the problem",
@@ -50,7 +50,7 @@
                 "lineNum": 1,
                 "vars": {},
                 "highlighted": [],
-                "problemText": "public static void ifElseMystery(int a, int b) {\n    int c = 2;\n    if (a + c < b) {\n        c = c + 8;\n    } else {\n        b = b + 10;\n    }\n    if (a + c < b) {\n        c = c + 8;\n    } else {\n        b = b + 10;\n    }\n    System.out.println(b + \" \" + c);\n}\n"
+                "problemText": "public static void ifElseMystery(int a, int b) {\n    int c = 2;\n\n    if (a + c < b) {\n        c = c + 8;\n    } else {\n        b = b + 10;\n    }\n\n    if (a + c < b) {\n        c = c + 8;\n    } else {\n        b = b + 10;\n    }\n    System.out.println(b + \" \" + c);\n}\n"
             }
         ],
         "examProblemDatabaseId": "71"
@@ -69,7 +69,7 @@
             "lineNum": 1,
             "vars": {},
             "highlighted": [],
-            "problemText": "public static void ifElseMystery(int a, int b) {\n    if (a < b) {\n        a++;\n    }\n    if (a < b) {\n        a++;\n    } else {\n        b++;\n    }\n    if (a >= b) {\n        b = b - 5;\n    }\n    System.out.println(a + \" \" + b);\n}\n"
+            "problemText": "public static void ifElseMystery(int a, int b) {\n\n    if (a < b) {\n        a++;\n    }\n\n    if (a < b) {\n        a++;\n    } else {\n        b++;\n    }\n\n    if (a >= b) {\n        b = b - 5;\n    }\n    System.out.println(a + \" \" + b);\n}\n"
         },
         "alternateStartingStates": [
             {
@@ -81,7 +81,7 @@
                 "lineNum": 1,
                 "vars": {},
                 "highlighted": [],
-                "problemText": "public static void ifElseMystery(int a, int b) {\n    if (a < b) {\n        a++;\n    }\n    if (a < b) {\n        a++;\n    } else {\n        b++;\n    }\n    if (a >= b) {\n        b = b - 5;\n    }\n    System.out.println(a + \" \" + b);\n}\n"
+                "problemText": "public static void ifElseMystery(int a, int b) {\n\n    if (a < b) {\n        a++;\n    }\n\n    if (a < b) {\n        a++;\n    } else {\n        b++;\n    }\n\n    if (a >= b) {\n        b = b - 5;\n    }\n    System.out.println(a + \" \" + b);\n}\n"
             },
             {
                 "prompt": "First, look at the structure of the code in the problem",
@@ -92,7 +92,7 @@
                 "lineNum": 1,
                 "vars": {},
                 "highlighted": [],
-                "problemText": "public static void ifElseMystery(int a, int b) {\n    if (a < b) {\n        a++;\n    }\n    if (a < b) {\n        a++;\n    } else {\n        b++;\n    }\n    if (a >= b) {\n        b = b - 5;\n    }\n    System.out.println(a + \" \" + b);\n}\n"
+                "problemText": "public static void ifElseMystery(int a, int b) {\n\n    if (a < b) {\n        a++;\n    }\n\n    if (a < b) {\n        a++;\n    } else {\n        b++;\n    }\n\n    if (a >= b) {\n        b = b - 5;\n    }\n    System.out.println(a + \" \" + b);\n}\n"
             },
             {
                 "prompt": "First, look at the structure of the code in the problem",
@@ -103,7 +103,7 @@
                 "lineNum": 1,
                 "vars": {},
                 "highlighted": [],
-                "problemText": "public static void ifElseMystery(int a, int b) {\n    if (a < b) {\n        a++;\n    }\n    if (a < b) {\n        a++;\n    } else {\n        b++;\n    }\n    if (a >= b) {\n        b = b - 5;\n    }\n    System.out.println(a + \" \" + b);\n}\n"
+                "problemText": "public static void ifElseMystery(int a, int b) {\n\n    if (a < b) {\n        a++;\n    }\n\n    if (a < b) {\n        a++;\n    } else {\n        b++;\n    }\n\n    if (a >= b) {\n        b = b - 5;\n    }\n    System.out.println(a + \" \" + b);\n}\n"
             }
         ],
         "examProblemDatabaseId": "73"
@@ -122,7 +122,7 @@
             "lineNum": 1,
             "vars": {},
             "highlighted": [],
-            "problemText": "public static void ifElseMystery(int a, int b) {\n    if (a == b) {\n        b--;\n    } else if (a < b) {\n        a++;\n    } else {\n        b = b + 5;\n    }\n    if (a == b) {\n        a = a + 2;\n    }\n    System.out.println(a + \" \" + b);\n}\n"
+            "problemText": "public static void ifElseMystery(int a, int b) {\n\n    if (a == b) {\n        b--;\n    } else if (a < b) {\n        a++;\n    } else {\n        b = b + 5;\n    }\n\n    if (a == b) {\n        a = a + 2;\n    }\n    System.out.println(a + \" \" + b);\n}\n"
         },
         "alternateStartingStates": [
             {
@@ -134,7 +134,7 @@
                 "lineNum": 1,
                 "vars": {},
                 "highlighted": [],
-                "problemText": "public static void ifElseMystery(int a, int b) {\n    if (a == b) {\n        b--;\n    } else if (a < b) {\n        a++;\n    } else {\n        b = b + 5;\n    }\n    if (a == b) {\n        a = a + 2;\n    }\n    System.out.println(a + \" \" + b);\n}\n"
+                "problemText": "public static void ifElseMystery(int a, int b) {\n\n    if (a == b) {\n        b--;\n    } else if (a < b) {\n        a++;\n    } else {\n        b = b + 5;\n    }\n\n    if (a == b) {\n        a = a + 2;\n    }\n    System.out.println(a + \" \" + b);\n}\n"
             },
             {
                 "prompt": "First, look at the structure of the code in the problem",
@@ -145,7 +145,7 @@
                 "lineNum": 1,
                 "vars": {},
                 "highlighted": [],
-                "problemText": "public static void ifElseMystery(int a, int b) {\n    if (a == b) {\n        b--;\n    } else if (a < b) {\n        a++;\n    } else {\n        b = b + 5;\n    }\n    if (a == b) {\n        a = a + 2;\n    }\n    System.out.println(a + \" \" + b);\n}\n"
+                "problemText": "public static void ifElseMystery(int a, int b) {\n\n    if (a == b) {\n        b--;\n    } else if (a < b) {\n        a++;\n    } else {\n        b = b + 5;\n    }\n\n    if (a == b) {\n        a = a + 2;\n    }\n    System.out.println(a + \" \" + b);\n}\n"
             },
             {
                 "prompt": "First, look at the structure of the code in the problem",
@@ -156,7 +156,7 @@
                 "lineNum": 1,
                 "vars": {},
                 "highlighted": [],
-                "problemText": "public static void ifElseMystery(int a, int b) {\n    if (a == b) {\n        b--;\n    } else if (a < b) {\n        a++;\n    } else {\n        b = b + 5;\n    }\n    if (a == b) {\n        a = a + 2;\n    }\n    System.out.println(a + \" \" + b);\n}\n"
+                "problemText": "public static void ifElseMystery(int a, int b) {\n\n    if (a == b) {\n        b--;\n    } else if (a < b) {\n        a++;\n    } else {\n        b = b + 5;\n    }\n\n    if (a == b) {\n        a = a + 2;\n    }\n    System.out.println(a + \" \" + b);\n}\n"
             }
         ],
         "examProblemDatabaseId": "75"
@@ -175,7 +175,7 @@
             "lineNum": 1,
             "vars": {},
             "highlighted": [],
-            "problemText": "public static void ifElseMystery(int a, int b) {\n    int c = 2;\n    if (a + c < b) {\n        c = c + 8;\n    } else {\n        b = b + 10;\n    }\n    if (a + c < b) {\n        c = c + 8;\n    } else {\n        b = b + 10;\n    }\n    System.out.println(b + \" \" + c);\n}\n"
+            "problemText": "public static void ifElseMystery(int a, int b) {\n    int c = 2;\n\n    if (a + c < b) {\n        c = c + 8;\n    } else {\n        b = b + 10;\n    }\n\n    if (a + c < b) {\n        c = c + 8;\n    } else {\n        b = b + 10;\n    }\n    System.out.println(b + \" \" + c);\n}\n"
         },
         "alternateStartingStates": [
             {
@@ -187,7 +187,7 @@
                 "lineNum": 1,
                 "vars": {},
                 "highlighted": [],
-                "problemText": "public static void ifElseMystery(int a, int b) {\n    int c = 2;\n    if (a + c < b) {\n        c = c + 8;\n    } else {\n        b = b + 10;\n    }\n    if (a + c < b) {\n        c = c + 8;\n    } else {\n        b = b + 10;\n    }\n    System.out.println(b + \" \" + c);\n}\n"
+                "problemText": "public static void ifElseMystery(int a, int b) {\n    int c = 2;\n\n    if (a + c < b) {\n        c = c + 8;\n    } else {\n        b = b + 10;\n    }\n\n    if (a + c < b) {\n        c = c + 8;\n    } else {\n        b = b + 10;\n    }\n    System.out.println(b + \" \" + c);\n}\n"
             },
             {
                 "prompt": "First, look at the structure of the code in the problem",
@@ -198,7 +198,7 @@
                 "lineNum": 1,
                 "vars": {},
                 "highlighted": [],
-                "problemText": "public static void ifElseMystery(int a, int b) {\n    int c = 2;\n    if (a + c < b) {\n        c = c + 8;\n    } else {\n        b = b + 10;\n    }\n    if (a + c < b) {\n        c = c + 8;\n    } else {\n        b = b + 10;\n    }\n    System.out.println(b + \" \" + c);\n}\n"
+                "problemText": "public static void ifElseMystery(int a, int b) {\n    int c = 2;\n\n    if (a + c < b) {\n        c = c + 8;\n    } else {\n        b = b + 10;\n    }\n\n    if (a + c < b) {\n        c = c + 8;\n    } else {\n        b = b + 10;\n    }\n    System.out.println(b + \" \" + c);\n}\n"
             },
             {
                 "prompt": "First, look at the structure of the code in the problem",
@@ -209,7 +209,7 @@
                 "lineNum": 1,
                 "vars": {},
                 "highlighted": [],
-                "problemText": "public static void ifElseMystery(int a, int b) {\n    int c = 2;\n    if (a + c < b) {\n        c = c + 8;\n    } else {\n        b = b + 10;\n    }\n    if (a + c < b) {\n        c = c + 8;\n    } else {\n        b = b + 10;\n    }\n    System.out.println(b + \" \" + c);\n}\n"
+                "problemText": "public static void ifElseMystery(int a, int b) {\n    int c = 2;\n\n    if (a + c < b) {\n        c = c + 8;\n    } else {\n        b = b + 10;\n    }\n\n    if (a + c < b) {\n        c = c + 8;\n    } else {\n        b = b + 10;\n    }\n    System.out.println(b + \" \" + c);\n}\n"
             }
         ],
         "examProblemDatabaseId": "77"
@@ -228,7 +228,7 @@
             "lineNum": 1,
             "vars": {},
             "highlighted": [],
-            "problemText": "public static void ifElseMystery(int a, int b) {\n    if (a < b) {\n        a = a * 2;\n    }\n    if (a > b) {\n        a = a - 10;\n    } else {\n        b++;\n    }\n    System.out.println(a + \" \" + b);\n}\n"
+            "problemText": "public static void ifElseMystery(int a, int b) {\n\n    if (a < b) {\n        a = a * 2;\n    }\n\n    if (a > b) {\n        a = a - 10;\n    } else {\n        b++;\n    }\n    System.out.println(a + \" \" + b);\n}\n"
         },
         "alternateStartingStates": [
             {
@@ -240,7 +240,7 @@
                 "lineNum": 1,
                 "vars": {},
                 "highlighted": [],
-                "problemText": "public static void ifElseMystery(int a, int b) {\n    if (a < b) {\n        a = a * 2;\n    }\n    if (a > b) {\n        a = a - 10;\n    } else {\n        b++;\n    }\n    System.out.println(a + \" \" + b);\n}\n"
+                "problemText": "public static void ifElseMystery(int a, int b) {\n\n    if (a < b) {\n        a = a * 2;\n    }\n\n    if (a > b) {\n        a = a - 10;\n    } else {\n        b++;\n    }\n    System.out.println(a + \" \" + b);\n}\n"
             },
             {
                 "prompt": "First, look at the structure of the code in the problem",
@@ -251,7 +251,7 @@
                 "lineNum": 1,
                 "vars": {},
                 "highlighted": [],
-                "problemText": "public static void ifElseMystery(int a, int b) {\n    if (a < b) {\n        a = a * 2;\n    }\n    if (a > b) {\n        a = a - 10;\n    } else {\n        b++;\n    }\n    System.out.println(a + \" \" + b);\n}\n"
+                "problemText": "public static void ifElseMystery(int a, int b) {\n\n    if (a < b) {\n        a = a * 2;\n    }\n\n    if (a > b) {\n        a = a - 10;\n    } else {\n        b++;\n    }\n    System.out.println(a + \" \" + b);\n}\n"
             },
             {
                 "prompt": "First, look at the structure of the code in the problem",
@@ -262,7 +262,7 @@
                 "lineNum": 1,
                 "vars": {},
                 "highlighted": [],
-                "problemText": "public static void ifElseMystery(int a, int b) {\n    if (a < b) {\n        a = a * 2;\n    }\n    if (a > b) {\n        a = a - 10;\n    } else {\n        b++;\n    }\n    System.out.println(a + \" \" + b);\n}\n"
+                "problemText": "public static void ifElseMystery(int a, int b) {\n\n    if (a < b) {\n        a = a * 2;\n    }\n\n    if (a > b) {\n        a = a - 10;\n    } else {\n        b++;\n    }\n    System.out.println(a + \" \" + b);\n}\n"
             }
         ],
         "examProblemDatabaseId": "83"
@@ -282,7 +282,7 @@
             "lineNum": 1,
             "vars": {},
             "highlighted": [],
-            "problemText": "public static void ifElseMystery(int a, int b, int c) {\n    if (a < b && a < c) {\n        a = a + c;\n        c++;\n    } else if (a >= b) {\n        a = a - b;\n        b--;\n    }\n    if (a >= b && a >= c) {\n        a++;\n        c++;\n    }\n    System.out.println(a + \" \" + b + \" \" + c);\n}\n"
+            "problemText": "public static void ifElseMystery(int a, int b, int c) {\n\n    if (a < b && a < c) {\n        a = a + c;\n        c++;\n    } else if (a >= b) {\n        a = a - b;\n        b--;\n    }\n\n    if (a >= b && a >= c) {\n        a++;\n        c++;\n    }\n    System.out.println(a + \" \" + b + \" \" + c);\n}\n"
         },
         "alternateStartingStates": [
             {
@@ -295,7 +295,7 @@
                 "lineNum": 1,
                 "vars": {},
                 "highlighted": [],
-                "problemText": "public static void ifElseMystery(int a, int b, int c) {\n    if (a < b && a < c) {\n        a = a + c;\n        c++;\n    } else if (a >= b) {\n        a = a - b;\n        b--;\n    }\n    if (a >= b && a >= c) {\n        a++;\n        c++;\n    }\n    System.out.println(a + \" \" + b + \" \" + c);\n}\n"
+                "problemText": "public static void ifElseMystery(int a, int b, int c) {\n\n    if (a < b && a < c) {\n        a = a + c;\n        c++;\n    } else if (a >= b) {\n        a = a - b;\n        b--;\n    }\n\n    if (a >= b && a >= c) {\n        a++;\n        c++;\n    }\n    System.out.println(a + \" \" + b + \" \" + c);\n}\n"
             },
             {
                 "prompt": "First, look at the structure of the code in the problem",
@@ -307,7 +307,7 @@
                 "lineNum": 1,
                 "vars": {},
                 "highlighted": [],
-                "problemText": "public static void ifElseMystery(int a, int b, int c) {\n    if (a < b && a < c) {\n        a = a + c;\n        c++;\n    } else if (a >= b) {\n        a = a - b;\n        b--;\n    }\n    if (a >= b && a >= c) {\n        a++;\n        c++;\n    }\n    System.out.println(a + \" \" + b + \" \" + c);\n}\n"
+                "problemText": "public static void ifElseMystery(int a, int b, int c) {\n\n    if (a < b && a < c) {\n        a = a + c;\n        c++;\n    } else if (a >= b) {\n        a = a - b;\n        b--;\n    }\n\n    if (a >= b && a >= c) {\n        a++;\n        c++;\n    }\n    System.out.println(a + \" \" + b + \" \" + c);\n}\n"
             },
             {
                 "prompt": "First, look at the structure of the code in the problem",
@@ -319,7 +319,7 @@
                 "lineNum": 1,
                 "vars": {},
                 "highlighted": [],
-                "problemText": "public static void ifElseMystery(int a, int b, int c) {\n    if (a < b && a < c) {\n        a = a + c;\n        c++;\n    } else if (a >= b) {\n        a = a - b;\n        b--;\n    }\n    if (a >= b && a >= c) {\n        a++;\n        c++;\n    }\n    System.out.println(a + \" \" + b + \" \" + c);\n}\n"
+                "problemText": "public static void ifElseMystery(int a, int b, int c) {\n\n    if (a < b && a < c) {\n        a = a + c;\n        c++;\n    } else if (a >= b) {\n        a = a - b;\n        b--;\n    }\n\n    if (a >= b && a >= c) {\n        a++;\n        c++;\n    }\n    System.out.println(a + \" \" + b + \" \" + c);\n}\n"
             }
         ],
         "examProblemDatabaseId": "88"
@@ -338,7 +338,7 @@
             "lineNum": 1,
             "vars": {},
             "highlighted": [],
-            "problemText": "public static void ifElseMystery(int x, int y) {\n    int z = 4;\n    if (z <= x) {\n        z = x + 1;\n    } else {\n        z = z + 9;\n    }\n    if (z <= y) {\n        y++;\n    }\n    System.out.println(z + \" \" + y);\n}\n"
+            "problemText": "public static void ifElseMystery(int x, int y) {\n    int z = 4;\n\n    if (z <= x) {\n        z = x + 1;\n    } else {\n        z = z + 9;\n    }\n\n    if (z <= y) {\n        y++;\n    }\n    System.out.println(z + \" \" + y);\n}\n"
         },
         "alternateStartingStates": [
             {
@@ -350,7 +350,7 @@
                 "lineNum": 1,
                 "vars": {},
                 "highlighted": [],
-                "problemText": "public static void ifElseMystery(int x, int y) {\n    int z = 4;\n    if (z <= x) {\n        z = x + 1;\n    } else {\n        z = z + 9;\n    }\n    if (z <= y) {\n        y++;\n    }\n    System.out.println(z + \" \" + y);\n}\n"
+                "problemText": "public static void ifElseMystery(int x, int y) {\n    int z = 4;\n\n    if (z <= x) {\n        z = x + 1;\n    } else {\n        z = z + 9;\n    }\n\n    if (z <= y) {\n        y++;\n    }\n    System.out.println(z + \" \" + y);\n}\n"
             },
             {
                 "prompt": "First, look at the structure of the code in the problem",
@@ -361,7 +361,7 @@
                 "lineNum": 1,
                 "vars": {},
                 "highlighted": [],
-                "problemText": "public static void ifElseMystery(int x, int y) {\n    int z = 4;\n    if (z <= x) {\n        z = x + 1;\n    } else {\n        z = z + 9;\n    }\n    if (z <= y) {\n        y++;\n    }\n    System.out.println(z + \" \" + y);\n}\n"
+                "problemText": "public static void ifElseMystery(int x, int y) {\n    int z = 4;\n\n    if (z <= x) {\n        z = x + 1;\n    } else {\n        z = z + 9;\n    }\n\n    if (z <= y) {\n        y++;\n    }\n    System.out.println(z + \" \" + y);\n}\n"
             },
             {
                 "prompt": "First, look at the structure of the code in the problem",
@@ -372,7 +372,7 @@
                 "lineNum": 1,
                 "vars": {},
                 "highlighted": [],
-                "problemText": "public static void ifElseMystery(int x, int y) {\n    int z = 4;\n    if (z <= x) {\n        z = x + 1;\n    } else {\n        z = z + 9;\n    }\n    if (z <= y) {\n        y++;\n    }\n    System.out.println(z + \" \" + y);\n}\n"
+                "problemText": "public static void ifElseMystery(int x, int y) {\n    int z = 4;\n\n    if (z <= x) {\n        z = x + 1;\n    } else {\n        z = z + 9;\n    }\n\n    if (z <= y) {\n        y++;\n    }\n    System.out.println(z + \" \" + y);\n}\n"
             }
         ],
         "examProblemDatabaseId": "90"
@@ -391,7 +391,7 @@
             "lineNum": 1,
             "vars": {},
             "highlighted": [],
-            "problemText": "public static void ifElseMystery(int a, int b) {\n    if (a * 2 < b) {\n        a = a * 3;\n    }\n    if (b < a) {\n        b++;\n    } else {\n        a--;\n    }\n    System.out.println(a + \" \" + b);\n}\n"
+            "problemText": "public static void ifElseMystery(int a, int b) {\n\n    if (a * 2 < b) {\n        a = a * 3;\n    }\n\n    if (b < a) {\n        b++;\n    } else {\n        a--;\n    }\n    System.out.println(a + \" \" + b);\n}\n"
         },
         "alternateStartingStates": [
             {
@@ -403,7 +403,7 @@
                 "lineNum": 1,
                 "vars": {},
                 "highlighted": [],
-                "problemText": "public static void ifElseMystery(int a, int b) {\n    if (a * 2 < b) {\n        a = a * 3;\n    }\n    if (b < a) {\n        b++;\n    } else {\n        a--;\n    }\n    System.out.println(a + \" \" + b);\n}\n"
+                "problemText": "public static void ifElseMystery(int a, int b) {\n\n    if (a * 2 < b) {\n        a = a * 3;\n    }\n\n    if (b < a) {\n        b++;\n    } else {\n        a--;\n    }\n    System.out.println(a + \" \" + b);\n}\n"
             },
             {
                 "prompt": "First, look at the structure of the code in the problem",
@@ -414,7 +414,7 @@
                 "lineNum": 1,
                 "vars": {},
                 "highlighted": [],
-                "problemText": "public static void ifElseMystery(int a, int b) {\n    if (a * 2 < b) {\n        a = a * 3;\n    }\n    if (b < a) {\n        b++;\n    } else {\n        a--;\n    }\n    System.out.println(a + \" \" + b);\n}\n"
+                "problemText": "public static void ifElseMystery(int a, int b) {\n\n    if (a * 2 < b) {\n        a = a * 3;\n    }\n\n    if (b < a) {\n        b++;\n    } else {\n        a--;\n    }\n    System.out.println(a + \" \" + b);\n}\n"
             },
             {
                 "prompt": "First, look at the structure of the code in the problem",
@@ -425,7 +425,7 @@
                 "lineNum": 1,
                 "vars": {},
                 "highlighted": [],
-                "problemText": "public static void ifElseMystery(int a, int b) {\n    if (a * 2 < b) {\n        a = a * 3;\n    }\n    if (b < a) {\n        b++;\n    } else {\n        a--;\n    }\n    System.out.println(a + \" \" + b);\n}\n"
+                "problemText": "public static void ifElseMystery(int a, int b) {\n\n    if (a * 2 < b) {\n        a = a * 3;\n    }\n\n    if (b < a) {\n        b++;\n    } else {\n        a--;\n    }\n    System.out.println(a + \" \" + b);\n}\n"
             }
         ],
         "examProblemDatabaseId": "92"
@@ -444,7 +444,7 @@
             "lineNum": 1,
             "vars": {},
             "highlighted": [],
-            "problemText": "public static void ifElseMystery(int x, int y) {\n    if (x == y) {\n        x = x + 11;\n    } else if (x > 2 * y) {\n        x = 0;\n    }\n    if (x == 0 || y > x) {\n        x = x + 2;\n        y = y + 2;\n    }\n    System.out.println(x + \" \" + y);\n}\n"
+            "problemText": "public static void ifElseMystery(int x, int y) {\n\n    if (x == y) {\n        x = x + 11;\n    } else if (x > 2 * y) {\n        x = 0;\n    }\n\n    if (x == 0 || y > x) {\n        x = x + 2;\n        y = y + 2;\n    }\n    System.out.println(x + \" \" + y);\n}\n"
         },
         "alternateStartingStates": [
             {
@@ -456,7 +456,7 @@
                 "lineNum": 1,
                 "vars": {},
                 "highlighted": [],
-                "problemText": "public static void ifElseMystery(int x, int y) {\n    if (x == y) {\n        x = x + 11;\n    } else if (x > 2 * y) {\n        x = 0;\n    }\n    if (x == 0 || y > x) {\n        x = x + 2;\n        y = y + 2;\n    }\n    System.out.println(x + \" \" + y);\n}\n"
+                "problemText": "public static void ifElseMystery(int x, int y) {\n\n    if (x == y) {\n        x = x + 11;\n    } else if (x > 2 * y) {\n        x = 0;\n    }\n\n    if (x == 0 || y > x) {\n        x = x + 2;\n        y = y + 2;\n    }\n    System.out.println(x + \" \" + y);\n}\n"
             },
             {
                 "prompt": "First, look at the structure of the code in the problem",
@@ -467,7 +467,7 @@
                 "lineNum": 1,
                 "vars": {},
                 "highlighted": [],
-                "problemText": "public static void ifElseMystery(int x, int y) {\n    if (x == y) {\n        x = x + 11;\n    } else if (x > 2 * y) {\n        x = 0;\n    }\n    if (x == 0 || y > x) {\n        x = x + 2;\n        y = y + 2;\n    }\n    System.out.println(x + \" \" + y);\n}\n"
+                "problemText": "public static void ifElseMystery(int x, int y) {\n\n    if (x == y) {\n        x = x + 11;\n    } else if (x > 2 * y) {\n        x = 0;\n    }\n\n    if (x == 0 || y > x) {\n        x = x + 2;\n        y = y + 2;\n    }\n    System.out.println(x + \" \" + y);\n}\n"
             }
         ],
         "examProblemDatabaseId": "94"
@@ -486,7 +486,7 @@
             "lineNum": 1,
             "vars": {},
             "highlighted": [],
-            "problemText": "public static void ifElseMystery(int a, int b) {\n    if (a % 2 != 0) {\n        a = a * 2;\n    }\n    if (a > 10) {\n        b++;\n    } else if (a < 10) {\n        a--;\n        b--;\n    }\n    System.out.println(a + \" \" + b);\n}\n"
+            "problemText": "public static void ifElseMystery(int a, int b) {\n\n    if (a % 2 != 0) {\n        a = a * 2;\n    }\n\n    if (a > 10) {\n        b++;\n    } else if (a < 10) {\n        a--;\n        b--;\n    }\n    System.out.println(a + \" \" + b);\n}\n"
         },
         "alternateStartingStates": [
             {
@@ -498,7 +498,7 @@
                 "lineNum": 1,
                 "vars": {},
                 "highlighted": [],
-                "problemText": "public static void ifElseMystery(int a, int b) {\n    if (a % 2 != 0) {\n        a = a * 2;\n    }\n    if (a > 10) {\n        b++;\n    } else if (a < 10) {\n        a--;\n        b--;\n    }\n    System.out.println(a + \" \" + b);\n}\n"
+                "problemText": "public static void ifElseMystery(int a, int b) {\n\n    if (a % 2 != 0) {\n        a = a * 2;\n    }\n\n    if (a > 10) {\n        b++;\n    } else if (a < 10) {\n        a--;\n        b--;\n    }\n    System.out.println(a + \" \" + b);\n}\n"
             },
             {
                 "prompt": "First, look at the structure of the code in the problem",
@@ -509,7 +509,7 @@
                 "lineNum": 1,
                 "vars": {},
                 "highlighted": [],
-                "problemText": "public static void ifElseMystery(int a, int b) {\n    if (a % 2 != 0) {\n        a = a * 2;\n    }\n    if (a > 10) {\n        b++;\n    } else if (a < 10) {\n        a--;\n        b--;\n    }\n    System.out.println(a + \" \" + b);\n}\n"
+                "problemText": "public static void ifElseMystery(int a, int b) {\n\n    if (a % 2 != 0) {\n        a = a * 2;\n    }\n\n    if (a > 10) {\n        b++;\n    } else if (a < 10) {\n        a--;\n        b--;\n    }\n    System.out.println(a + \" \" + b);\n}\n"
             },
             {
                 "prompt": "First, look at the structure of the code in the problem",
@@ -520,7 +520,7 @@
                 "lineNum": 1,
                 "vars": {},
                 "highlighted": [],
-                "problemText": "public static void ifElseMystery(int a, int b) {\n    if (a % 2 != 0) {\n        a = a * 2;\n    }\n    if (a > 10) {\n        b++;\n    } else if (a < 10) {\n        a--;\n        b--;\n    }\n    System.out.println(a + \" \" + b);\n}\n"
+                "problemText": "public static void ifElseMystery(int a, int b) {\n\n    if (a % 2 != 0) {\n        a = a * 2;\n    }\n\n    if (a > 10) {\n        b++;\n    } else if (a < 10) {\n        a--;\n        b--;\n    }\n    System.out.println(a + \" \" + b);\n}\n"
             }
         ],
         "examProblemDatabaseId": "96"
@@ -539,7 +539,7 @@
             "lineNum": 1,
             "vars": {},
             "highlighted": [],
-            "problemText": "public static void ifElseMystery(int x, int y) {\n    int z = 0;\n    if (x >= y) {\n        x = x / 2;\n        z++;\n    }\n    if (x > z && y <= z) {\n        z++;\n    } else if (x > z) {\n        y = y - 5;\n    }\n    System.out.println(x + \" \" + y + \" \" + z);\n}\n"
+            "problemText": "public static void ifElseMystery(int x, int y) {\n    int z = 0;\n\n    if (x >= y) {\n        x = x / 2;\n        z++;\n    }\n\n    if (x > z && y <= z) {\n        z++;\n    } else if (x > z) {\n        y = y - 5;\n    }\n    System.out.println(x + \" \" + y + \" \" + z);\n}\n"
         },
         "alternateStartingStates": [
             {
@@ -551,7 +551,7 @@
                 "lineNum": 1,
                 "vars": {},
                 "highlighted": [],
-                "problemText": "public static void ifElseMystery(int x, int y) {\n    int z = 0;\n    if (x >= y) {\n        x = x / 2;\n        z++;\n    }\n    if (x > z && y <= z) {\n        z++;\n    } else if (x > z) {\n        y = y - 5;\n    }\n    System.out.println(x + \" \" + y + \" \" + z);\n}\n"
+                "problemText": "public static void ifElseMystery(int x, int y) {\n    int z = 0;\n\n    if (x >= y) {\n        x = x / 2;\n        z++;\n    }\n\n    if (x > z && y <= z) {\n        z++;\n    } else if (x > z) {\n        y = y - 5;\n    }\n    System.out.println(x + \" \" + y + \" \" + z);\n}\n"
             },
             {
                 "prompt": "First, look at the structure of the code in the problem",
@@ -562,7 +562,7 @@
                 "lineNum": 1,
                 "vars": {},
                 "highlighted": [],
-                "problemText": "public static void ifElseMystery(int x, int y) {\n    int z = 0;\n    if (x >= y) {\n        x = x / 2;\n        z++;\n    }\n    if (x > z && y <= z) {\n        z++;\n    } else if (x > z) {\n        y = y - 5;\n    }\n    System.out.println(x + \" \" + y + \" \" + z);\n}\n"
+                "problemText": "public static void ifElseMystery(int x, int y) {\n    int z = 0;\n\n    if (x >= y) {\n        x = x / 2;\n        z++;\n    }\n\n    if (x > z && y <= z) {\n        z++;\n    } else if (x > z) {\n        y = y - 5;\n    }\n    System.out.println(x + \" \" + y + \" \" + z);\n}\n"
             },
             {
                 "prompt": "First, look at the structure of the code in the problem",
@@ -573,7 +573,7 @@
                 "lineNum": 1,
                 "vars": {},
                 "highlighted": [],
-                "problemText": "public static void ifElseMystery(int x, int y) {\n    int z = 0;\n    if (x >= y) {\n        x = x / 2;\n        z++;\n    }\n    if (x > z && y <= z) {\n        z++;\n    } else if (x > z) {\n        y = y - 5;\n    }\n    System.out.println(x + \" \" + y + \" \" + z);\n}\n"
+                "problemText": "public static void ifElseMystery(int x, int y) {\n    int z = 0;\n\n    if (x >= y) {\n        x = x / 2;\n        z++;\n    }\n\n    if (x > z && y <= z) {\n        z++;\n    } else if (x > z) {\n        y = y - 5;\n    }\n    System.out.println(x + \" \" + y + \" \" + z);\n}\n"
             }
         ],
         "examProblemDatabaseId": "99"
