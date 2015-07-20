@@ -10,8 +10,8 @@
         "initialState": {
             "prompt": "First, look at the structure of the code in the problem",
             "initialization": {
-                "a": "4",
-                "b": "15"
+                "a": 4,
+                "b": 15
             },
             "lineNum": 1,
             "vars": {},
@@ -22,8 +22,8 @@
             {
                 "prompt": "First, look at the structure of the code in the problem",
                 "initialization": {
-                    "a": "7",
-                    "b": "17"
+                    "a": 7,
+                    "b": 17
                 },
                 "lineNum": 1,
                 "vars": {},
@@ -33,8 +33,8 @@
             {
                 "prompt": "First, look at the structure of the code in the problem",
                 "initialization": {
-                    "a": "12",
-                    "b": "5"
+                    "a": 12,
+                    "b": 5
                 },
                 "lineNum": 1,
                 "vars": {},
@@ -44,8 +44,8 @@
             {
                 "prompt": "First, look at the structure of the code in the problem",
                 "initialization": {
-                    "a": "16",
-                    "b": "8"
+                    "a": 16,
+                    "b": 8
                 },
                 "lineNum": 1,
                 "vars": {},
@@ -63,8 +63,8 @@
         "initialState": {
             "prompt": "First, look at the structure of the code in the problem",
             "initialization": {
-                "a": "1",
-                "b": "8"
+                "a": 1,
+                "b": 8
             },
             "lineNum": 1,
             "vars": {},
@@ -75,8 +75,8 @@
             {
                 "prompt": "First, look at the structure of the code in the problem",
                 "initialization": {
-                    "a": "3",
-                    "b": "5"
+                    "a": 3,
+                    "b": 5
                 },
                 "lineNum": 1,
                 "vars": {},
@@ -86,8 +86,8 @@
             {
                 "prompt": "First, look at the structure of the code in the problem",
                 "initialization": {
-                    "a": "4",
-                    "b": "5"
+                    "a": 4,
+                    "b": 5
                 },
                 "lineNum": 1,
                 "vars": {},
@@ -97,8 +97,8 @@
             {
                 "prompt": "First, look at the structure of the code in the problem",
                 "initialization": {
-                    "a": "8",
-                    "b": "6"
+                    "a": 8,
+                    "b": 6
                 },
                 "lineNum": 1,
                 "vars": {},
@@ -116,8 +116,8 @@
         "initialState": {
             "prompt": "First, look at the structure of the code in the problem",
             "initialization": {
-                "a": "14",
-                "b": "14"
+                "a": 14,
+                "b": 14
             },
             "lineNum": 1,
             "vars": {},
@@ -128,8 +128,8 @@
             {
                 "prompt": "First, look at the structure of the code in the problem",
                 "initialization": {
-                    "a": "4",
-                    "b": "5"
+                    "a": 4,
+                    "b": 5
                 },
                 "lineNum": 1,
                 "vars": {},
@@ -139,8 +139,8 @@
             {
                 "prompt": "First, look at the structure of the code in the problem",
                 "initialization": {
-                    "a": "10",
-                    "b": "5"
+                    "a": 10,
+                    "b": 5
                 },
                 "lineNum": 1,
                 "vars": {},
@@ -150,8 +150,8 @@
             {
                 "prompt": "First, look at the structure of the code in the problem",
                 "initialization": {
-                    "a": "2",
-                    "b": "8"
+                    "a": 2,
+                    "b": 8
                 },
                 "lineNum": 1,
                 "vars": {},
@@ -169,8 +169,8 @@
         "initialState": {
             "prompt": "First, look at the structure of the code in the problem",
             "initialization": {
-                "a": "4",
-                "b": "15"
+                "a": 4,
+                "b": 15
             },
             "lineNum": 1,
             "vars": {},
@@ -181,8 +181,8 @@
             {
                 "prompt": "First, look at the structure of the code in the problem",
                 "initialization": {
-                    "a": "7",
-                    "b": "17"
+                    "a": 7,
+                    "b": 17
                 },
                 "lineNum": 1,
                 "vars": {},
@@ -192,8 +192,8 @@
             {
                 "prompt": "First, look at the structure of the code in the problem",
                 "initialization": {
-                    "a": "12",
-                    "b": "5"
+                    "a": 12,
+                    "b": 5
                 },
                 "lineNum": 1,
                 "vars": {},
@@ -203,8 +203,8 @@
             {
                 "prompt": "First, look at the structure of the code in the problem",
                 "initialization": {
-                    "a": "16",
-                    "b": "8"
+                    "a": 16,
+                    "b": 8
                 },
                 "lineNum": 1,
                 "vars": {},
@@ -222,8 +222,8 @@
         "initialState": {
             "prompt": "First, look at the structure of the code in the problem",
             "initialization": {
-                "a": "10",
-                "b": "3"
+                "a": 10,
+                "b": 3
             },
             "lineNum": 1,
             "vars": {},
@@ -234,8 +234,8 @@
             {
                 "prompt": "First, look at the structure of the code in the problem",
                 "initialization": {
-                    "a": "6",
-                    "b": "6"
+                    "a": 6,
+                    "b": 6
                 },
                 "lineNum": 1,
                 "vars": {},
@@ -245,8 +245,8 @@
             {
                 "prompt": "First, look at the structure of the code in the problem",
                 "initialization": {
-                    "a": "3",
-                    "b": "4"
+                    "a": 3,
+                    "b": 4
                 },
                 "lineNum": 1,
                 "vars": {},
@@ -256,8 +256,8 @@
             {
                 "prompt": "First, look at the structure of the code in the problem",
                 "initialization": {
-                    "a": "4",
-                    "b": "20"
+                    "a": 4,
+                    "b": 20
                 },
                 "lineNum": 1,
                 "vars": {},
@@ -275,9 +275,9 @@
         "initialState": {
             "prompt": "First, look at the structure of the code in the problem",
             "initialization": {
-                "a": "2",
-                "b": "10",
-                "c": "3"
+                "a": 2,
+                "b": 10,
+                "c": 3
             },
             "lineNum": 1,
             "vars": {},
@@ -288,9 +288,9 @@
             {
                 "prompt": "First, look at the structure of the code in the problem",
                 "initialization": {
-                    "a": "8",
-                    "b": "6",
-                    "c": "1"
+                    "a": 8,
+                    "b": 6,
+                    "c": 1
                 },
                 "lineNum": 1,
                 "vars": {},
@@ -300,9 +300,9 @@
             {
                 "prompt": "First, look at the structure of the code in the problem",
                 "initialization": {
-                    "a": "4",
-                    "b": "6",
-                    "c": "7"
+                    "a": 4,
+                    "b": 6,
+                    "c": 7
                 },
                 "lineNum": 1,
                 "vars": {},
@@ -312,9 +312,9 @@
             {
                 "prompt": "First, look at the structure of the code in the problem",
                 "initialization": {
-                    "a": "20",
-                    "b": "5",
-                    "c": "5"
+                    "a": 20,
+                    "b": 5,
+                    "c": 5
                 },
                 "lineNum": 1,
                 "vars": {},
@@ -332,8 +332,8 @@
         "initialState": {
             "prompt": "First, look at the structure of the code in the problem",
             "initialization": {
-                "x": "3",
-                "y": "20"
+                "x": 3,
+                "y": 20
             },
             "lineNum": 1,
             "vars": {},
@@ -344,8 +344,8 @@
             {
                 "prompt": "First, look at the structure of the code in the problem",
                 "initialization": {
-                    "x": "4",
-                    "y": "5"
+                    "x": 4,
+                    "y": 5
                 },
                 "lineNum": 1,
                 "vars": {},
@@ -355,8 +355,8 @@
             {
                 "prompt": "First, look at the structure of the code in the problem",
                 "initialization": {
-                    "x": "5",
-                    "y": "5"
+                    "x": 5,
+                    "y": 5
                 },
                 "lineNum": 1,
                 "vars": {},
@@ -366,8 +366,8 @@
             {
                 "prompt": "First, look at the structure of the code in the problem",
                 "initialization": {
-                    "x": "6",
-                    "y": "10"
+                    "x": 6,
+                    "y": 10
                 },
                 "lineNum": 1,
                 "vars": {},
@@ -385,8 +385,8 @@
         "initialState": {
             "prompt": "First, look at the structure of the code in the problem",
             "initialization": {
-                "a": "10",
-                "b": "2"
+                "a": 10,
+                "b": 2
             },
             "lineNum": 1,
             "vars": {},
@@ -397,8 +397,8 @@
             {
                 "prompt": "First, look at the structure of the code in the problem",
                 "initialization": {
-                    "a": "3",
-                    "b": "8"
+                    "a": 3,
+                    "b": 8
                 },
                 "lineNum": 1,
                 "vars": {},
@@ -408,8 +408,8 @@
             {
                 "prompt": "First, look at the structure of the code in the problem",
                 "initialization": {
-                    "a": "4",
-                    "b": "4"
+                    "a": 4,
+                    "b": 4
                 },
                 "lineNum": 1,
                 "vars": {},
@@ -419,8 +419,8 @@
             {
                 "prompt": "First, look at the structure of the code in the problem",
                 "initialization": {
-                    "a": "10",
-                    "b": "30"
+                    "a": 10,
+                    "b": 30
                 },
                 "lineNum": 1,
                 "vars": {},
@@ -438,8 +438,8 @@
         "initialState": {
             "prompt": "First, look at the structure of the code in the problem",
             "initialization": {
-                "x": "5",
-                "y": "5"
+                "x": 5,
+                "y": 5
             },
             "lineNum": 1,
             "vars": {},
@@ -450,8 +450,8 @@
             {
                 "prompt": "First, look at the structure of the code in the problem",
                 "initialization": {
-                    "x": "18",
-                    "y": "4"
+                    "x": 18,
+                    "y": 4
                 },
                 "lineNum": 1,
                 "vars": {},
@@ -461,8 +461,8 @@
             {
                 "prompt": "First, look at the structure of the code in the problem",
                 "initialization": {
-                    "x": "3",
-                    "y": "6"
+                    "x": 3,
+                    "y": 6
                 },
                 "lineNum": 1,
                 "vars": {},
@@ -480,8 +480,8 @@
         "initialState": {
             "prompt": "First, look at the structure of the code in the problem",
             "initialization": {
-                "a": "12",
-                "b": "12"
+                "a": 12,
+                "b": 12
             },
             "lineNum": 1,
             "vars": {},
@@ -492,8 +492,8 @@
             {
                 "prompt": "First, look at the structure of the code in the problem",
                 "initialization": {
-                    "a": "7",
-                    "b": "4"
+                    "a": 7,
+                    "b": 4
                 },
                 "lineNum": 1,
                 "vars": {},
@@ -503,8 +503,8 @@
             {
                 "prompt": "First, look at the structure of the code in the problem",
                 "initialization": {
-                    "a": "5",
-                    "b": "8"
+                    "a": 5,
+                    "b": 8
                 },
                 "lineNum": 1,
                 "vars": {},
@@ -514,8 +514,8 @@
             {
                 "prompt": "First, look at the structure of the code in the problem",
                 "initialization": {
-                    "a": "3",
-                    "b": "42"
+                    "a": 3,
+                    "b": 42
                 },
                 "lineNum": 1,
                 "vars": {},
@@ -533,8 +533,8 @@
         "initialState": {
             "prompt": "First, look at the structure of the code in the problem",
             "initialization": {
-                "x": "4",
-                "y": "1"
+                "x": 4,
+                "y": 1
             },
             "lineNum": 1,
             "vars": {},
@@ -545,8 +545,8 @@
             {
                 "prompt": "First, look at the structure of the code in the problem",
                 "initialization": {
-                    "x": "-10",
-                    "y": "100"
+                    "x": -10,
+                    "y": 100
                 },
                 "lineNum": 1,
                 "vars": {},
@@ -556,8 +556,8 @@
             {
                 "prompt": "First, look at the structure of the code in the problem",
                 "initialization": {
-                    "x": "18",
-                    "y": "4"
+                    "x": 18,
+                    "y": 4
                 },
                 "lineNum": 1,
                 "vars": {},
@@ -567,8 +567,8 @@
             {
                 "prompt": "First, look at the structure of the code in the problem",
                 "initialization": {
-                    "x": "-12",
-                    "y": "5"
+                    "x": -12,
+                    "y": 5
                 },
                 "lineNum": 1,
                 "vars": {},
