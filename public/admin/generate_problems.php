@@ -1,7 +1,7 @@
 <?php
 
-$PROBLEMS_FILE = "/Users/whitab/projects/csedresearch/problemProcessing/data/ifelse/ifelse_problems";
-$METHOD_CALLS_FILE = "/Users/whitab/projects/csedresearch/problemProcessing/data/ifelse/ifelse_method_calls";
+$PROBLEMS_FILE = "../../problemProcessing/data/ifelse/ifelse_problems";
+$METHOD_CALLS_FILE = "../../problemProcessing/data/ifelse/ifelse_method_calls";
 $problemContents = file_get_contents($PROBLEMS_FILE);
 $methodCalls = file_get_contents($METHOD_CALLS_FILE);
 
@@ -26,12 +26,20 @@ $methodCalls = file_get_contents($METHOD_CALLS_FILE);
 
 </head>
 <body>
-<!-- <div id="content" ><?= $problemContents ?></div> -->
- <div id="content" style="display: none;"><?= $problemContents ?></div>
-<div id="methodCalls"><?= $methodCalls ?></div>
-<div id="container"></div>
-<div id="mcContainer"></div>
+<h3 >Problems file = <?= $PROBLEMS_FILE ?></h3>
+<h3 >Method calls file = <?= $METHOD_CALLS_FILE ?></h3>
 
+<div id="content" style="display: none;">
+  <h4> Problem contents: </h4>
+  <?= $problemContents ?>
+</div>
+<div id="methodCalls" style="display: none;">
+  <h4> Method calls: </h4>
+  <?= $methodCalls ?>
+</div>
+
+<h4> Problem JSON: </h4>
+<div id="container"></div>
 
 <script type="text/javascript">
 
