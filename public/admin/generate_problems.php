@@ -26,19 +26,27 @@ $methodCalls = file_get_contents($METHOD_CALLS_FILE);
 
 </head>
 <body>
-<h3 >Problems file = <?= $PROBLEMS_FILE ?></h3>
-<h3 >Method calls file = <?= $METHOD_CALLS_FILE ?></h3>
 
-<div id="content" style="display: none;">
-  <h4> Problem contents: </h4>
-  <?= $problemContents ?>
-</div>
-<div id="methodCalls" style="display: none;">
-  <h4> Method calls: </h4>
-  <?= $methodCalls ?>
+<div style="display: none;" >
+    <h3 >Problems file = <?= $PROBLEMS_FILE ?></h3>
+    <h3 >Method calls file = <?= $METHOD_CALLS_FILE ?></h3>
+
+    <div id="content" style="display: none;">
+        <h4> Problem contents: </h4>
+        <?= $problemContents ?>
+    </div>
+
+    <div id="methodCalls" style="display: none;">
+        <h4> Method calls: </h4>
+        <?= $methodCalls ?>
+    </div>
+
+    <h4> Problem Text </h4>
+    <div id="problemText"> </div>
+
+    <h4> Problem JSON: </h4>
 </div>
 
-<h4> Problem JSON: </h4>
 <div id="container"></div>
 
 <script type="text/javascript">
@@ -79,9 +87,38 @@ $methodCalls = file_get_contents($METHOD_CALLS_FILE);
         return problemText;
     }
 
+    function getFormattedProblemText(problemText) {
+        problemText = problemText.replace(/OROR/g, "||");
+
+        problemText = problemText.replace(/<.*>/g, "");
+
+
+        // UGLY, get rid of the prompts. Probably a better way to do this.
+        problemText = problemText.replace("For each call below, indicate what output is produced.", "");
+        problemText = problemText.replace("For each call below to the following method, write the output that is produced, as it would appear on the console:", "");
+        problemText = problemText.replace("Consider the following method.", "");
+        problemText = problemText.replace("Consider the following method:", "");
+        problemText = problemText.replace("For each call below, write the value that is returned", "");
+
+        // get rid of blank newlines -- not so great for problem formatting
+        problemText = problemText.replace(/\n[ \t]*\n/g, "\n");
+        problemText = problemText.replace(/\n[ \t]*\n/g, "\n");
+        problemText = problemText.replace(/\n[ \t]*\n/g, "\n");
+        problemText = problemText.replace(/\n[ \t]*\n/g, "\n");
+        problemText = problemText.replace(/\n[ \t]*\n/g, "\n");
+        problemText = problemText.replace(/^[ \t]*\n/g, "");
+        problemText = problemText.replace(/\t/g, "    ");
+
+        // A little ugly -- html decode the code
+        problemText = $("<div/>").html(problemText).text();
+
+        return problemText;
+    }
+
+
     function getArgNames(problemText) {
-        var argsString = problemText.match("\\((int .*)\\)")[1];
-        var args = replaceN(argsString, "int ", "", 10).split(", ");
+        var argsString = problemText.match("\\((int [^)]*)\\)")[1];
+        var args = argsString.replace(/int /g, "").split(", ");
         return args;
     }
 
@@ -107,7 +144,7 @@ $methodCalls = file_get_contents($METHOD_CALLS_FILE);
         return uuid;
     };
 
-    function makeStates(methodCalls, argNames, AST) {
+    function makeASTStates(methodCalls, argNames, AST) {
         var states = [];
         for (var i = 0; i < methodCalls.length; i++) {
             states.push({
@@ -121,6 +158,23 @@ $methodCalls = file_get_contents($METHOD_CALLS_FILE);
         }
         return states;
     }
+
+    function makeProblemTextStates(methodCalls, argNames, problemText) {
+        var states = [];
+        for (var i = 0; i < methodCalls.length; i++) {
+            states.push({
+                "prompt": "First, look at the structure of the code in the problem",
+                "initialization": matchArgs(argNames, methodCalls[i]),
+                "lineNum": 1,
+                "vars": {},
+                "highlighted": [],
+                "problemText": problemText,
+            });
+        }
+        return states;
+    }
+
+
 
     // Grabs method calls from the #methodCalls dom element
     // Expects sql output with:
@@ -166,18 +220,23 @@ $methodCalls = file_get_contents($METHOD_CALLS_FILE);
             var problemId = pieces[i + 1].trim();
             var problemTitle = pieces[i + 2].trim();
             var problemText = pieces[i + 3].trim();
-            problemText = cleanProblemText(problemText);
-            var argNames = getArgNames(problemText);
+            var cleanedProblemText = cleanProblemText(problemText);
+            var argNames = getArgNames(cleanedProblemText);
+
+            var formattedProblemText = getFormattedProblemText(problemText);
+
+
 
             // Parser wants the code in a class.
-            var parsableProblemText = "public class A { " + problemText + "}";
+            var parsableProblemText = "public class A { " + cleanedProblemText + "}";
 
             try {
                 // May throw error during parsing:
                 var AST = java_parsing.browser_parse(parsableProblemText);
 
                 var argsSets = methodCalls[problemId];
-                var states = makeStates(argsSets, argNames, AST);
+                //var states = makeASTStates(argsSets, argNames, AST);
+                var states = makeProblemTextStates(argsSets, argNames, formattedProblemText);
 
                 var initialState = states[0];
                 var alternateStartingStates = states.slice(1);
@@ -188,6 +247,8 @@ $methodCalls = file_get_contents($METHOD_CALLS_FILE);
                     title: "If/Else Mystery " + problemNum,
                     initialState: initialState,
                     alternateStartingStates: alternateStartingStates,
+
+                    //problemText: formattedProblemText,
 
                     // Not used by our tools, but may prove helpful...
                     examProblemDatabaseId: problemId,
@@ -205,8 +266,14 @@ $methodCalls = file_get_contents($METHOD_CALLS_FILE);
             .append("div")
             .attr("id", function(problem) { return problem.problemId; } )
             .append("pre")
-            //.text(function(problem) { return JSON.stringify(problem, false, 2); } );
-            .text(function(problem) { return JSON.stringify(problem); } );
+
+            // Pretty print, with a comma at the end so I can copy/paste into catConfig
+            .text(function(problem) { return JSON.stringify(problem, false, 4) + ", "; } );
+
+            // Minified, removes line breaks...
+            //.text(function(problem) { return JSON.stringify(problem); } );
+
+            // Just the problem text
             //.text(function(problem) { return problem.problemText; } );
         ;
 
