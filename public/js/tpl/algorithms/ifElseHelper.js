@@ -105,48 +105,63 @@ function IfElseHelper() {
         return this.evaluateConditional(statement["condition"], state);
     };
 
+    function merge(d1, d2) {
+        var r = {};
+        var key;
+        for (key in d1) {
+            r[key] = d1[key];
+        }
+        for (key in d2) {
+            r[key] = d2[key];
+        }
+        return r;
+    }
+
+    // using an object as a set, all values are placeholder
     this.crossOut = function(statement, crossedOutLines) {
-        var lines = [];
+        var lines = {};
         if (crossedOutLines) {
-            lines = crossedOutLines.slice();
+            lines = JSON.parse(JSON.stringify(crossedOutLines));
         }
         statement.forEach(function (line) {
             var start = line.location.start.line;
             var end = line.location.end.line;
             while (start <= end) {
-                lines.push(start++);
+                lines[start++] = 1;
             }
         });
         return lines;
     };
 
+    // using an object as a set, all values are placeholder
     this.crossOutOtherBranches = function(statement, crossedOutLines) {
-        var branchesToCrossOut = this.getBranchesToCrossOut(statement["else_branch"], []);
+        var branchesToCrossOut = this.getBranchesToCrossOut(statement["else_branch"], {});
         if (typeof crossedOutLines === "undefined") {
-            var lines = [];
+            var lines = {};
         } else {
-            var lines = crossedOutLines.slice();
+            var lines = JSON.parse(JSON.stringify(crossedOutLines));
         }
 
-        lines = lines.concat(branchesToCrossOut);
+        lines = merge(lines, branchesToCrossOut);
         return lines;
     };
 
+    // using an object as a set, all values are placeholder
     this.getBranchesToCrossOut = function(statement, branchIds) {
         if (statement) {
             if (statement.hasOwnProperty("tag") && statement.tag === "if") {
-                branchIds.push(statement.location.start.line);
-                var thenBranchIds = this.getBranchesToCrossOut(statement["then_branch"], []);
-                var elseBranchIds = this.getBranchesToCrossOut(statement["else_branch"], []);
-                branchIds = branchIds.concat(thenBranchIds);
-                branchIds = branchIds.concat(elseBranchIds);
+                branchIds[statement.location.start.line] = 1;
+                var thenBranchIds = this.getBranchesToCrossOut(statement["then_branch"], {});
+                var elseBranchIds = this.getBranchesToCrossOut(statement["else_branch"], {});
+                branchIds = merge(branchIds, thenBranchIds);
+                branchIds = merge(branchIds, elseBranchIds);
                 return branchIds;
             }
             else {
                 // the else line isn't in the ast, so we have to add it manually
-                branchIds.push(statement[0].location.start.line - 1);
+                branchIds[statement[0].location.start.line - 1] = 1;
                 for (var i = 0; i < statement.length; i++) {
-                    branchIds.push(statement[i].location.start.line);
+                    branchIds[statement[i].location.start.line] = 1;
                 }
                 return branchIds;
             }

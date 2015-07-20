@@ -461,14 +461,14 @@ var if_else = (function() {
 		});
 	}
 
-	// crosses out all the lines in the array passed in as a parameter
+	// crosses out all the lines in the object passed in as a parameter
 	function crossOutLines(lineNums) {
 		d3.selectAll(".cross_out").each(function() {
 			d3.select(this).classed("cross_out", false);
 		});
 
-		for (var i = 0; i < lineNums.length; i++) {
-			var list = document.getElementsByClassName(lineNums[i])[0];
+		for (var lineNum in lineNums) {
+			var list = document.getElementsByClassName(lineNum)[0];
 			$(list).addClass("cross_out");
 		}
 	}
@@ -582,17 +582,18 @@ var if_else = (function() {
 		var correctAnswerObject = callback.getCorrectAnswer();
 		var correctCrossOuts = correctAnswerObject.rhs;
 
-		var userCrossOuts = []
+		// use object as set, all values are placeholder
+		var userCrossOuts = {};
 		d3.selectAll("li.cross_out").each(function() {
 			var classList = d3.select(this).attr("class");
 			classList = classList.replace("cross_out_able", "");
 			classList = classList.replace("cross_out", "");
 			classList = classList.replace(/ /g,'');
-			userCrossOuts.push(parseInt(classList));
+			userCrossOuts[parseInt(classList)] = 1;
 		});
 
 		var correct = false;
-		if (userCrossOuts.equals(correctCrossOuts)) {
+		if (JSON.stringify(userCrossOuts) === JSON.stringify(correctCrossOuts)) {
 			correct = true;
 		}
 
