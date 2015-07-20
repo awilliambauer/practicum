@@ -25,6 +25,10 @@ var if_else = (function() {
 
 	var if_else_make_initial_state = function (problemConfig, altState) {
 		var state = problemConfig.initialState;
+        state.AST = java_parsing.parse_method(state.problemText);
+        problemConfig.alternateStartingStates.forEach(function(x) {
+            x.AST = java_parsing.parse_method(x.problemText);
+        });
 		if (altState) {
 			state = altState;
 		}
@@ -49,26 +53,6 @@ var if_else = (function() {
 			.text(function(state) { return "ifElseMystery1(" + getArgString(state.initialization) + ")"} )
 		;
 	}
-
-	function loadState(problemConfig, state, AST) {
-		console.log("state to load:");
-		console.log(state);
-
-        // More fetch problems. main_sim init doesn't return a Promise
-		// until fetch works...
-		main_simulator.initialize("if_else", {state:state});
-		needToReset = true;
-		if_else.initialize(problemConfig, callback, state, logger);
-//
-//		main_simulator.initialize("if_else", {state:state}).then(function() {
-//			console.log("finished initializing simulator");
-//			if_else.initialize(problemConfig, callback, state);
-//		}, function(error) {
-//			console.error("something went wrong: ");
-//			console.log(error);
-//		});
-	}
-
 
 	// fills in the problem space with the text of the specific problem we're working on,
 	// we will just have to replace "example.txt" with whatever file they store the problem

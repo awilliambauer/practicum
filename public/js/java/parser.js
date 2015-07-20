@@ -270,6 +270,26 @@ var java_parsing = function() {
             };
         }
 
+        function match_method() {
+            var start = lex.position();
+            // let's assume every program is a class with a single method, with nothing fancy.
+            match_keyword("public");
+            match_keyword("static");
+            match_type(); // ignore return type
+            var name = match_ident();
+            var params = match_delimited_list(match_parameter, ",");
+            var body = match_block();
+
+            return {
+                id: new_id(),
+                location: location(start),
+                tag: 'method',
+                name: name,
+                params: params,
+                body: body,
+            };
+        }
+
         function match_block() {
             var stmts = [];
             match_symbol("{");
@@ -543,6 +563,10 @@ var java_parsing = function() {
             return match_program();
         };
 
+        self.parse_method = function() {
+            return match_method();
+        }
+
         self.parse_expression = function() {
             return match_expression(0);
         };
@@ -555,6 +579,11 @@ var java_parsing = function() {
     self.parse_program = function(source) {
         var p = Parser(Lexer(CharStream(source)));
         return p.parse_program();
+    }
+
+    self.parse_method = function(source) {
+        var p = Parser(Lexer(CharStream(source)));
+        return p.parse_method();
     }
 
     self.parse_expression = function(source) {
