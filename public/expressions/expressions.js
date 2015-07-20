@@ -93,7 +93,7 @@ var expressions = (function() {
     };
 
     function step() {
-        console.log("step");
+        //console.log("step");
         // log that the "next" button was clicked
         Logging.log_task_event(logger, {
             type: Logging.ID.NextButton,
@@ -451,8 +451,8 @@ var expressions = (function() {
             // HUGE HACK to handle removing the input if the user entered the correct answer
             // need to find a better solution
             if (type === "enter") {
-                console.log("state");
-                console.log(state);
+                //console.log("state");
+                //console.log(state);
 
                 for (var variable in state.variables.in_scope) {
                     var varObject = state.variables.in_scope[variable];

@@ -14,7 +14,7 @@ var csed = (function() {
 
     var experimental_condition;
     var server_savedata;
-    var numProblems;
+    var numProblemsByCategory;
 
     var ENABLE_TELEMETRY_LOGGING = true;
 
@@ -29,10 +29,18 @@ var csed = (function() {
 
                 // initialize the number of problems so we can give the user the correct fading level
                 if (server_savedata === null) {
-                    numProblems = 0;
+                    numProblemsByCategory = {
+                        expressions: 0,
+                        if_else: 0
+                    };
                 }
-                else {
-                    numProblems = server_savedata.numProblems;
+                else if (server_savedata.numProblemsByCategory) {
+                    numProblemsByCategory = server_savedata.numProblemsByCategory;
+                } else { // has outdated savedata
+                    numProblemsByCategory = {
+                        expressions: server_savedata.numProblems,
+                        if_else: 0
+                    };
                 }
 
                 // for debugging
@@ -128,25 +136,25 @@ var csed = (function() {
     function saveProblemData() {
         if (server_savedata === null) {
             server_savedata = {
-              numProblems: numProblems
+              numProblemsByCategory: numProblemsByCategory
             };
         }
         else {
-            server_savedata.numProblems = numProblems;
+            server_savedata.numProblemsByCategory = numProblemsByCategory;
         }
 
         Logging.save_user_data(server_savedata);
     }
 
-    function getFadingLevel(condition) {
+    function getFadingLevel(condition, category) {
         if (condition === 1) {
-            if (numProblems == 1) {
+            if (numProblemsByCategory[category] == 1) {
                 return 0;
             }
-            else if (numProblems <=4) {
+            else if (numProblemsByCategory[category] <=4) {
                 return 1;
             }
-            else if (numProblems <= 7) {
+            else if (numProblemsByCategory[category] <= 7) {
                 return 2;
             }
             else {
@@ -182,7 +190,7 @@ var csed = (function() {
         task_logger = Logging.start_task(problemConfig);
 
         // increment the number of problems this user has started
-        numProblems = numProblems + 1;
+        numProblemsByCategory[problemConfig.category]++;
         saveProblemData();
 
         // remove the old problem from the DOM
@@ -218,7 +226,7 @@ var csed = (function() {
 
             // calculate what fading level the user should see for this problem, based on their
             // experimental condition and the number of problems they have completed
-            var fadeLevel = getFadingLevel(experimental_condition);
+            var fadeLevel = getFadingLevel(experimental_condition, category);
 
             // This problemUI initialize call probably needs to happen after the main_sim init call,
             // which is handled by promises/then() with fetch.
