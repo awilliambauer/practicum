@@ -75,7 +75,7 @@ var expressions = (function() {
         $(document).off("keydown");
         // call step when you press the "enter" key
         $(document).keydown(function(e) {
-            if (event.which == 13) {
+            if (e.keyCode == 13) {
                 e.preventDefault(); // stop enter from also clicking next button (if button has focus)
                 step();
                 return false; // stop enter from also clicking next button (if button has focus)
