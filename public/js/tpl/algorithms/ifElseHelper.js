@@ -23,6 +23,9 @@ function IfElseHelper() {
         for (i = 0; i < AST["params"].length; i++) {
             var name = AST["params"][i]["name"];
             var value = state["initialization"][name];
+            if (typeof value === "string") {
+                console.warn("initial parameter " + name + " is a string");
+            }
             parameters[name] = value;
         }
         return parameters;
@@ -234,8 +237,8 @@ function IfElseHelper() {
             } else if (condition["operator"] === "<=") {
                 //console.log("checking " + arg1 + " <= " + arg2);
                 return arg1 <= arg2;
-            } else if (condition["operator"] === "===") {
-                //console.log("checking " + arg1 + " === " + arg2);
+            } else if (condition["operator"] === "==") {
+                //console.log("checking " + arg1 + " == " + arg2);
                 return arg1 === arg2;
             } else if (condition["operator"] === ">=") {
                 //console.log("checking " + arg1 + " >= " + arg2);

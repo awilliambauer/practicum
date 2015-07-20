@@ -50,7 +50,7 @@ var if_else = (function() {
 
 		method_call_containers
 			.append("a")
-			.text(function(state) { return "ifElseMystery1(" + getArgString(state.initialization) + ")"} )
+			.text(function(state) { return state.AST.name + "(" + getArgString(state.initialization) + ")"} )
 		;
 	}
 
