@@ -9,8 +9,7 @@ var main_simulator = (function () {"use strict";
     self.getHelper = function(algoName) {
         if (algoName == "expressions") {
             return new ExpressionsHelper();
-        }
-        else if (algoName == "if_else") {
+        } else if (algoName == "if_else") {
             return new IfElseHelper();
         }
     };
@@ -35,7 +34,7 @@ var main_simulator = (function () {"use strict";
 
         var globals = {
             helper: self.getHelper(algo)
-        }
+        };
 
         d3.text("js/tpl/algorithms/" + algo + ".tpl.txt", function(error, algoText) {
             if (error) return console.error(error);
@@ -67,8 +66,7 @@ var main_simulator = (function () {"use strict";
 
         if (fadeLevel == 0) {
             return self.getNextState();
-        }
-        else {
+        } else {
             return self.getNextStateWithInteractivity();
         }
     };
@@ -86,8 +84,7 @@ var main_simulator = (function () {"use strict";
     self.getNextStateWithInteractivity = function() {
         if (waitingForUserResponse) {
             console.log("waiting for user response!");
-        }
-        else if (currentState + 1 < states.length) {
+        } else if (currentState + 1 < states.length) {
             if (states[currentState + 1].annotations.hasOwnProperty("interactive")) {
                 // for fade level 3 (least explanation level) don't ask questions
                 if (fadeLevel === 3 && states[currentState + 1].annotations.interactive[0] === "question") {
@@ -117,12 +114,10 @@ var main_simulator = (function () {"use strict";
                 returnState.askForResponse = states[currentState + 1].annotations["interactive"][0];
                 waitingForUserResponse = true;
                 return returnState;
-            }
-            else if (fadeLevel === 3) {
+            } else if (fadeLevel === 3) {
                 currentState = currentState + 1;
                 return self.getNextStateWithInteractivity();
-            }
-            else {
+            } else {
                 currentState = currentState + 1;
                 return states[currentState];
             }
@@ -135,20 +130,18 @@ var main_simulator = (function () {"use strict";
     self.getCorrectAnswer = function() {
         if (!waitingForUserResponse) {
             console.error("Called getCorrectAnswer, but the simulator wasn't waiting for an answer");
-        }
-        else {
+        } else {
             return states[currentState + 1].statement_result;
         }
-    }
+    };
 
     // respond to a user answer, based on whether or not the answer was correct
     self.respondToAnswer = function(correct) {
         numTries = numTries + 1;
-        var returnState
+        var returnState;
         if (!waitingForUserResponse) {
             console.error("Called respondToAnswer, but the simulator wasn't waiting for an answer");
-        }
-        else if (correct) {
+        } else if (correct) {
             numTries = 0;
             currentState = currentState + 1;
             waitingForUserResponse = false;
@@ -163,8 +156,7 @@ var main_simulator = (function () {"use strict";
             }
             returnState.prompt = "<span style='color: #45ADA8;'>Great job! That is correct.</span><br>" + prompText;
             return returnState;
-        }
-        else if (!correct && numTries < 3) {
+        } else if (!correct && numTries < 3) {
             var stateToShow = currentState + 1;
             if (states[currentState + 1].annotations.interactive[0] === "click") {
                 stateToShow = currentState;
@@ -177,15 +169,13 @@ var main_simulator = (function () {"use strict";
 
             if (numTries == 1) {
                 returnState.prompt = "<span style='color: red;'>Sorry, that is not correct. Try again!</span><br>";
-            }
-            else {
+            } else {
                 returnState.prompt = "<span style='color: red;'>Sorry, that is not correct. Try one more time!</span><br>";
             }
             returnState.prompt += self.getInteractivePrompt(states[currentState + 1].prompt, states[currentState + 1].annotations.interactive);
             returnState.askForResponse = states[currentState + 1].annotations["interactive"][0];
             return returnState;
-        }
-        else {
+        } else {
             numTries = 0;
             currentState = currentState + 1;
             waitingForUserResponse = false;
@@ -193,11 +183,11 @@ var main_simulator = (function () {"use strict";
             returnState.prompt = "Sorry, that is not correct."
             return returnState;
         }
-    }
+    };
 
     self.getFinalState = function() {
         return states[states.length - 1];
-    }
+    };
 
     self.copy = function(obj) {
         // copy state by sending it to JSON and back; it's easy, and it'll also
@@ -211,8 +201,7 @@ var main_simulator = (function () {"use strict";
         // how general this is, so we may need to change this to something less hacky
         if ((type == "click" || type == "next_line") && prompt.indexOf("This is ") != -1) {
             prompt = "Click on " + prompt.substring(prompt.indexOf("This is ") + 8);
-        }
-        else if (type == "enter" &&prompt.indexOf("This is ") != -1) {
+        } else if (type == "enter" &&prompt.indexOf("This is ") != -1) {
             prompt = "Enter " + prompt.substring(prompt.indexOf("This is ") + 8);
         }
         // for now, remove any answer after the question mark if it's interactive
@@ -220,7 +209,7 @@ var main_simulator = (function () {"use strict";
             prompt = prompt.substring(0, prompt.indexOf("?") + 1);
         }
         return prompt;
-    }
+    };
 
     return self;
 }());

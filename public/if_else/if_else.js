@@ -10,6 +10,7 @@ var if_else = (function() {
 	var responseType;
 	var numTries;
 	var logger;
+	var needToReset;
 
 	// This function is called when the main page wants
 	// to load a new problem.
@@ -21,8 +22,11 @@ var if_else = (function() {
 		LINENUM = 1;
 	}
 
-	var if_else_make_initial_state = function (problemConfig) {
+	var if_else_make_initial_state = function (problemConfig, altState) {
 		var state = problemConfig.initialState;
+		if (altState) {
+			state = altState;
+		}
 		createStartingStates(problemConfig, state);
 		return state;
 	};
@@ -52,6 +56,7 @@ var if_else = (function() {
         // More fetch problems. main_sim init doesn't return a Promise
 		// until fetch works...
 		main_simulator.initialize("if_else", {state:state});
+		needToReset = true;
 		if_else.initialize(problemConfig, callback, state, logger);
 //
 //		main_simulator.initialize("if_else", {state:state}).then(function() {
@@ -86,7 +91,7 @@ var if_else = (function() {
 		// hold onto the task logger for logging UI event
 		logger = task_logger;
 
-		fadeLevel = 1;//fading;
+		fadeLevel = fading;
 
 		// log the level of fading for this problem
 		Logging.log_task_event(logger, {
@@ -95,28 +100,31 @@ var if_else = (function() {
 		});
 
 		var args = getArgString(state.initialization).toString();
-		var methodCallText = "ifElseMystery1(" + args + ")";
+		var methodCallText = state.AST.name + "(" + args + ")";
 
 		$(".content > h2").text("If/Else Mystery Problem");
 		d3.select("#args").text(methodCallText);
 
 		// move to the next step if they hit enter or click next
-		$("#next").click(step);
-        d3.select("body")
-            .on("keyup", function() {
-                if (d3.event.keyCode == 13) {
-                    step();
-                }
-            });
+		$("#nextstep").click(step);
+		$(document).off("keydown");
+		$(document).keydown(function(e) {
+			if (event.which == 13) {
+				e.preventDefault(); // stop enter from also clicking next button (if button has focus)
+				step();
+				return false; // stop enter from also clicking next button (if button has focus)
+			}
+		});
 
 		//if users attempt to check a submitted answer
-        d3.select("#submitButton")
-            .on("click", checkSolution)
-        ;
-
-
+		d3.select("#submitButton").on("click", checkSolution);
 
 		fillStartingStates(problemConfig, initialState);
+		
+		if (needToReset) {
+			resetUI();
+			needToReset = false;
+		}
 	}
 
 	// Highlight the button that represents the method call we're currently viewing and disable it
@@ -138,7 +146,7 @@ var if_else = (function() {
 			})
 			.on("click", function(state) {
 				if (state.initialization !== activeState.initialization) {
-					loadState(problemConfig, state, problemConfig.AST);
+					csed.loadProblem(problemConfig, state);
 				}
 			})
 		;
@@ -192,6 +200,24 @@ var if_else = (function() {
 		addPrompt();
 		addVaraibleBank();
 		addHighlighting();
+	}
+
+	// remove all highlighting from the UI if the user switches method calls
+	function resetUI() {
+		d3.select("#prompt").node().innerHTML = "Press Enter to start!";
+		d3.select("#variable_list").node().innerHTML = "";
+		d3.selectAll(".block_highlight").each(function() {
+			d3.select(this).classed("block_highlight", false);
+		});
+		d3.selectAll(".highlight").each(function() {
+			d3.select(this).classed("highlight", false);
+		});
+		d3.selectAll(".grey_out").each(function() {
+			d3.select(this).classed("grey_out", false);
+		});
+		d3.selectAll(".cross_out").each(function() {
+			d3.select(this).classed("cross_out", false);
+		});
 	}
 
 	// Extracts prompt from state and creates HTML
@@ -450,6 +476,10 @@ var if_else = (function() {
 
 	// crosses out all the lines in the array passed in as a parameter
 	function crossOutLines(lineNums) {
+		d3.selectAll(".cross_out").each(function() {
+			d3.select(this).classed("cross_out", false);
+		});
+
 		for (var i = 0; i < lineNums.length; i++) {
 			var list = document.getElementsByClassName(lineNums[i])[0];
 			$(list).addClass("cross_out");
@@ -580,7 +610,7 @@ var if_else = (function() {
 		}
 
 		// mare the lines un-cross-out-able
-		if (correct) {
+		if (correct || numTries === 3) {
 			d3.selectAll(".cross_out_able").each(function() {
 				d3.select(this)
 					.classed("cross_out_able", false)

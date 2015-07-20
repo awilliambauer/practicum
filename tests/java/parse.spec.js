@@ -9,7 +9,8 @@ describe('java parsing', function() {
         "ifelse02",
         "ifelse03",
         "ifelse04",
-        "ifelse05"
+        "ifelse06",
+        "ifelse05",
     ];
 
     it("should parse programs", function() {
