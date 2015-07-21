@@ -102,7 +102,7 @@ function IfElseHelper() {
     };
 
     this.doesThisConditionalEvaluateToTrue = function(statement, state) {
-        return this.evaluateConditional(statement["condition"], state);
+        return this.evaluateExpr(statement["condition"], state);
     };
 
     function merge(d1, d2) {
@@ -204,8 +204,8 @@ function IfElseHelper() {
         // we are updating a variable's value
         if (statements[this.currentStatementIndex]["expression"]["tag"] === "binop") {
             updatedVariable = statements[this.currentStatementIndex]["expression"]["args"][0]["value"];
-            var newValue = this.evaluateArg(statements[this.currentStatementIndex]["expression"]["args"][1], state);
-            var oldValue = this.evaluateArg(statements[this.currentStatementIndex]["expression"]["args"][0], state);
+            var newValue = this.evaluateExpr(statements[this.currentStatementIndex]["expression"]["args"][1], state);
+            var oldValue = this.evaluateExpr(statements[this.currentStatementIndex]["expression"]["args"][0], state);
 
             switch (statements[this.currentStatementIndex]["expression"]["operator"]) {
                 case '=': break; // do nothing, newValue already correct
@@ -224,10 +224,10 @@ function IfElseHelper() {
             updatedVariable = statements[this.currentStatementIndex]["expression"]["args"][0]["value"];
             switch (statements[this.currentStatementIndex]["expression"]["operator"]) {
                 case "++":
-                    newValue = this.evaluateArg(statements[this.currentStatementIndex]["expression"]["args"][0], state) + 1;
+                    newValue = this.evaluateExpr(statements[this.currentStatementIndex]["expression"]["args"][0], state) + 1;
                     break;
                 case "--":
-                    newValue = this.evaluateArg(statements[this.currentStatementIndex]["expression"]["args"][0], state) - 1;
+                    newValue = this.evaluateExpr(statements[this.currentStatementIndex]["expression"]["args"][0], state) - 1;
                     break;
                 default:
                     throw new Error("unrecognized postfix operator: " + statements[this.currentStatementIndex]["expression"]["operator"]);
@@ -241,53 +241,51 @@ function IfElseHelper() {
         }
     };
 
-    this.evaluateConditional = function(condition, state) {
-        if (condition["tag"] === "binop") {
-            var arg1 = this.evaluateArg(condition["args"][0], state);
-            var arg2 = this.evaluateArg(condition["args"][1], state);
-
-            if (condition["operator"] === "<") {
-                //console.log("checking " + arg1 + " < " + arg2);
-                return arg1 < arg2;
-            } else if (condition["operator"] === "<=") {
-                //console.log("checking " + arg1 + " <= " + arg2);
-                return arg1 <= arg2;
-            } else if (condition["operator"] === "==") {
-                //console.log("checking " + arg1 + " == " + arg2);
-                return arg1 === arg2;
-            } else if (condition["operator"] === ">=") {
-                //console.log("checking " + arg1 + " >= " + arg2);
-                return arg1 >= arg2;
-            } else if (condition["operator"] === ">") {
-                //console.log("checking " + arg1 + " > " + arg2);
-                return arg1 > arg2;
-            }
-        } else {
-            //console.log("tried to evaluate non-binop conditional. not currently supported");
-        }
-    };
-
-    this.evaluateArg = function(arg, state) {
-        if (arg["tag"] === "literal") {
-            return arg["value"];
-        } else if (arg["tag"] === "identifier") {
-            return state["vars"][arg["value"]];
-        } else if (arg["tag"] === "binop") {
-
-            var arg1 = this.evaluateArg(arg["args"][0], state);
-            var arg2 = this.evaluateArg(arg["args"][1], state);
-            //console.log("computing binop with arg1: " + arg1 + " arg2: " + arg2 + " operator: " + arg["operator"]);
+    this.evaluateExpr = function(expr, state) {
+        if (expr.tag === "binop") {
+            var arg1 = this.evaluateExpr(expr.args[0], state);
+            var arg2 = this.evaluateExpr(expr.args[1], state);
 
             // Will probably need to update this to work with strings and doubles?!
-            if (arg["operator"] === "+") {
+            if (expr.operator === "<") {
+                console.log("checking " + arg1 + " < " + arg2);
+                return arg1 < arg2;
+            } else if (expr.operator === "<=") {
+                console.log("checking " + arg1 + " <= " + arg2);
+                return arg1 <= arg2;
+            } else if (expr.operator === "==") {
+                console.log("checking " + arg1 + " == " + arg2);
+                return arg1 === arg2;
+            } else if (expr.operator === "!=") {
+                console.log("checking " + arg1 + " != " + arg2);
+                return arg1 !== arg2;
+            } else if (expr.operator === ">=") {
+                console.log("checking " + arg1 + " >= " + arg2);
+                return arg1 >= arg2;
+            } else if (expr.operator === ">") {
+                console.log("checking " + arg1 + " > " + arg2);
+                return arg1 > arg2;
+            } else if (expr.operator === "&&") {
+                console.log("checking " + arg1 + " && " + arg2);
+                return arg1 && arg2;
+            } else if (expr.operator === "||") {
+                console.log("checking " + arg1 + " || " + arg2);
+                return arg1 || arg2;
+            } else if (expr.operator === "+") {
                 return arg1 + arg2;
-            } else if (arg["operator"] === "-") {
+            } else if (expr.operator === "-") {
                 return arg1 - arg2;
-            } else if (arg["operator"] === "/") {
+            } else if (expr.operator === "/") {
                 return arg1 / arg2;
-            } else if (arg["operator"] === "*") {
+            } else if (expr.operator === "*") {
                 return arg1 * arg2;
             }
+        } else if (expr.tag === "literal") {
+            return expr.value;
+        } else if (expr.tag === "identifier") {
+            return state.vars[expr.value];
+        } else {
+            throw new Error("expr type " + binop.tag + " cannot be evaluated");
         }
     };
 
