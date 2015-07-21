@@ -248,28 +248,28 @@ function IfElseHelper() {
 
             // Will probably need to update this to work with strings and doubles?!
             if (expr.operator === "<") {
-                console.log("checking " + arg1 + " < " + arg2);
+                //console.log("checking " + arg1 + " < " + arg2);
                 return arg1 < arg2;
             } else if (expr.operator === "<=") {
-                console.log("checking " + arg1 + " <= " + arg2);
+                //console.log("checking " + arg1 + " <= " + arg2);
                 return arg1 <= arg2;
             } else if (expr.operator === "==") {
-                console.log("checking " + arg1 + " == " + arg2);
+                //console.log("checking " + arg1 + " == " + arg2);
                 return arg1 === arg2;
             } else if (expr.operator === "!=") {
-                console.log("checking " + arg1 + " != " + arg2);
+                //console.log("checking " + arg1 + " != " + arg2);
                 return arg1 !== arg2;
             } else if (expr.operator === ">=") {
-                console.log("checking " + arg1 + " >= " + arg2);
+                //console.log("checking " + arg1 + " >= " + arg2);
                 return arg1 >= arg2;
             } else if (expr.operator === ">") {
-                console.log("checking " + arg1 + " > " + arg2);
+                //console.log("checking " + arg1 + " > " + arg2);
                 return arg1 > arg2;
             } else if (expr.operator === "&&") {
-                console.log("checking " + arg1 + " && " + arg2);
+                //console.log("checking " + arg1 + " && " + arg2);
                 return arg1 && arg2;
             } else if (expr.operator === "||") {
-                console.log("checking " + arg1 + " || " + arg2);
+                //console.log("checking " + arg1 + " || " + arg2);
                 return arg1 || arg2;
             } else if (expr.operator === "+") {
                 return arg1 + arg2;
