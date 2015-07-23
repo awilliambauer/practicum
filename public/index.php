@@ -65,7 +65,7 @@ $disagreeData = array_merge(['response' => 'disagree'], $studentData);
     <script src="expressions/thoughtProcess.js"></script>
     <script src="expressions/expressions.js"></script>
 
-    <script type="text/javascript" src="if_else/java_parser/html_generator.js"></script>
+    <script src="if_else/html_generator.js"></script>
     <script src="if_else/if_else.js"></script>
 
 
