@@ -87,7 +87,7 @@
         $(".clear").empty();
 
         // Reinsert the html of the problem text
-        on_convert();
+        addAST();
 
         // Rebuild the HTML of the array to ensure any styling is removed
         var elements = state.array;
@@ -110,7 +110,7 @@
 
         var tableBody = $("<tbody>", {id: "arraydata"});
         for (var i = 0; i < elements.length; i++) {
-            var child = $("<td>", {id: "box" + i, class: "box"});
+            var child = $("<td>", {id: "box" + i, class: "array_box"});
             var input = $("<input>", {id: "ele" + i});
             input.val(elements[i]);
             child.append(input);
@@ -126,7 +126,7 @@
         $("#idiv").val($("#islider").val());
 
         // Update prompt text
-        $("#promptwords").html(state.promptText);
+        $("#prompt").html(state.promptText);
 
         // Update Variables
         var variablelist = state.variables;
@@ -146,23 +146,6 @@
             arrayElements[indices[x]].classList.add("accent2Highlight");
         }
 
-
-        /*update size of problem text*/
-        if (!state.smallText) {
-
-            /*reduce size of problem description*/
-            document.getElementById("problemdescription").classList.add("littletext");
-
-            /*increase size of problem text*/
-            document.getElementById("problemtext").classList.add("bigtext");
-
-            /*old way
-            document.getElementById("problemdescription").style.fontSize = "10px";
-            document.getElementById("problemdescription").style.color = "gray";
-             document.getElementById("problemtext").style.fontSize = "17px";*/
-
-
-        }
         compareValues2();
         if (state.clickableArray) {
             console.log("array should be clickable now");
@@ -418,9 +401,9 @@
         $('#java-ast-' + id).addClass(clazz);
     }
 
-    function on_convert() {
-        var dom = to_dom(mainAst, 0);
-        $('#problemtext').html('').append(dom[0]);
+    function addAST() {
+        //$("#problem_space > pre").html(on_convert(mainAst, 0));
+        $("#problem_space > pre").html(to_dom(mainAst, 0));
     }
 
     function on_show() {
@@ -512,7 +495,7 @@
             var thisState = states[step];
             if (state.indices.length > thisState.indices.length) {
                 enterInput = true;
-                var boxes = $(".box");
+                var boxes = $(".array_box");
                 boxes.on("click", addIndex);
                 boxes.keydown(buttonsVisible);
                 boxes.addClass("mainColorBorderRadius");

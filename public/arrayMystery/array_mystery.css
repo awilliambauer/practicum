@@ -1,0 +1,439 @@
+/*
+I demand a pancake color scheme:
+
+dark gray: #594F4F
+dark blue: #547980
+med green-blue: #45ADA8
+light green: #9DE0AD
+lightest green: #E5FCC2
+*/
+
+
+.array_mystery_problem #ArrayMysteryHeader {
+    text-align: center;
+    font-size: 25px;
+}
+
+.array_mystery_problem #submitButton {
+    width: 75px;
+    font-size: 14px;
+    vertical-align: middle;
+}
+
+.array_mystery_problem #inputBox {
+    width: 200px;
+    font-size: 16px;
+    vertical-align: middle;
+}
+
+.array_mystery_problem #description {
+    font-size: 16px;
+    width: 700px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.array_mystery_problem #args {
+    font-family: monospace;
+}
+
+.array_mystery_problem #prompt {
+    position: absolute;
+    top: 325px;
+    border: 2px solid #547980;
+    border-radius: 10px;
+    width: 250px;
+    left: 10%;
+    text-align: left;
+    padding: 10px;
+    background: #FAFFF0;
+}
+
+.array_mystery_problem #next-container {
+    text-align: center;
+    padding-bottom: 20px;
+    width: 725px;
+}
+
+.array_mystery_problem #nextstep {
+    position: relative;
+    font-size: 20pt;
+    margin: 0 auto;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.array_mystery_problem #problem_content {
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 10px; padding-bottom: 10px;
+    margin-bottom: 30px;
+    margin-top: 30px;
+    text-align: center;
+    width: 925px;
+}
+
+.array_mystery_problem #problem_space {
+    border: 5px solid #547980;
+    border-radius: 10px;
+    background-color: #ffffff;
+    width: 525px;
+    float: left;
+}
+
+.array_mystery_problem pre {
+    background-color: #FFFFFF;
+    border: none;
+    text-align: left;
+}
+
+.array_mystery_problem #problem_space ul {
+    list-style: none;
+    text-align: left;
+    padding-left: 0; padding-right: 0;
+}
+
+.array_mystery_problem #problem_space li {
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-left: 2.5%;
+    margin: 0;
+    font-size: 11pt;
+    overflow: auto;
+}
+
+.array_mystery_problem #variable_bank {
+    border: 5px solid #547980;
+    border-radius: 10px;
+    background-color: #ffffff;
+    margin-left: 540px;
+    width: 400px;
+}
+
+.array_mystery_problem #variable_bank_title {
+    text-decoration: underline;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.if_else_problem #variable_list {
+    margin-top: 5px;
+}
+
+
+
+
+
+
+
+
+
+
+.array_mystery_problem body {
+    background-color: #45ADA8;
+}
+
+.array_mystery_problem .color0Text {
+    color: #45ADA8;
+    font-weight: bold;
+}
+
+.array_mystery_problem .color0Border {
+    border-color: #45ADA8;
+}
+
+.array_mystery_problem .color2Highlight {
+    background: #9DE0AD;
+}
+
+.array_mystery_problem .color2Border {
+    border-color: #9DE0AD;
+}
+
+.array_mystery_problem .color1Highlight {
+    background: #E5FCC2;
+}
+
+.array_mystery_problem .color1Border {
+    border-color: #E5FCC2;
+}
+
+.array_mystery_problem #contentwindow {
+    background-color: white;
+    border-color: #547980;
+    border-style: solid;
+    border-radius: 20px;
+    border-width: 2px;
+    font-family: sans-serif;
+    color: #594F4F;
+    overflow: hidden;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 70px;
+    width: 900px;
+    box-shadow: 0px 0px 15px #888888;
+    position: relative;
+}
+
+.array_mystery_problem #arraymysterytitle {
+    margin-bottom: 0px;
+    text-align: center;
+}
+
+.array_mystery_problem #problemcontents {
+    width: 450px;
+    height: 250px; /* to make sure that the gray divider stays in the right spot.*/
+    padding-left: 30px;
+    padding-bottom: 30px;
+    float: left;
+}
+
+.array_mystery_problem #problemtext {
+    position: relative;
+    bottom: 10px;
+}
+
+
+/*all variable bank input styling*/
+
+.array_mystery_problem #arraydata {
+    border: 2px solid darkgray;
+    border-collapse: collapse;
+}
+
+/*.array_mystery_problem input {
+    width: 26px;
+    text-align: center;
+    background-color:rgba(0, 0, 0, 0);
+}*/
+
+.array_mystery_problem #arraydata td, #varvalues input {
+    padding: 8px;
+}
+
+.array_mystery_problem #arraydata input {
+    border: none;
+    width: 50px;
+}
+
+.array_mystery_problem #arraydata input, #varvalues input {
+    font-size: 22px;
+}
+
+.array_mystery_problem #indices input {
+    font-size: 20px;
+}
+
+.array_mystery_problem #arraydata input:focus, #varvalues input:focus, #indices input:focus{
+    outline: 0;
+    box-shadow: 0 0 5px 2px #9DE0AD;
+}
+
+.array_mystery_problem #indices {
+    font-size: 20px;
+}
+
+.array_mystery_problem .varlabel {
+    text-align: right;
+    margin-bottom: 27px;
+}
+
+.array_mystery_problem #arrLabel {
+    margin-top: 70px;
+}
+
+.array_mystery_problem .arraylabel {
+    margin-top: 40px;
+}
+
+.array_mystery_problem td {
+    width: 50px;
+    text-align: center;
+    border: 5px solid darkgrey;
+}
+
+.array_mystery_problem .varlabelcolumn {
+    float: left;
+}
+
+.array_mystery_problem .varcolumn {
+    float: left;
+}
+
+.array_mystery_problem .varlabelcolumn, .varcolumn {
+    padding: 10px;
+}
+
+.array_mystery_problem .digit {
+    width: 40px;
+    text-align: center;
+    border: 4px solid darkgray;
+    padding: 15px;
+}
+
+.array_mystery_problem h1.problemdescription {
+    color: red;
+}
+
+.array_mystery_problem hr {
+    clear: left;
+}
+.array_mystery_problem #islider {
+    margin-left: 36px;
+    width: 320px;
+}
+.array_mystery_problem .right {
+    background-color: lawngreen;
+}
+
+.array_mystery_problem #next, #next1 {
+    float: right;
+    margin-right: 8px;
+}
+
+.array_mystery_problem #next, #next1, #back {
+    background: #547980;
+    background-image: -webkit-linear-gradient(top, #547980, #45ADA8);
+    background-image: -moz-linear-gradient(top, #547980, #45ADA8);
+    background-image: -ms-linear-gradient(top, #547980, #45ADA8);
+    background-image: -o-linear-gradient(top, #547980, #45ADA8);
+    background-image: linear-gradient(to bottom, #547980, #45ADA8);
+    -webkit-border-radius: 28%;
+    border-radius: 28px;
+    text-shadow: 4px 3px 10px #666666;
+    font-family: Arial;
+    color: #ffffff;
+    font-size: 15px;
+    padding: 5px 10px 5px 10px;
+    text-decoration: none;
+}
+
+.array_mystery_problem #next:hover, #back:hover, #next1:hover {
+    background: #9de0ad;
+    background-image: -webkit-linear-gradient(top, #9de0ad, #81b38d);
+    background-image: linear-gradient(to bottom, #9de0ad, #81b38d);
+    text-decoration: none;
+}
+
+.array_mystery_problem #next:focus, #back:focus, #next1:hover {
+    outline: 0;
+}
+
+.array_mystery_problem #varvalues div {
+    padding-top: 12px;
+}
+
+.array_mystery_problem #next1 {
+    float: right;
+    position: absolute;
+    bottom: 0;
+    right: 48%;
+    margin-bottom: 35px;
+}
+
+.array_mystery_problem .littletext {
+    font-size: 10px;
+    color: gray;
+    -webkit-transition: font-size 1s, color 1s;
+    -moz-transition: font-size 1s, color 1s;
+    -ms-transition: font-size 1s, color 1s;
+    -o-transition: font-size 1s, color 1s;
+    transition: font-size 1s, color 1s;
+}
+
+.array_mystery_problem .bigtext {
+    font-size: 17px;
+    -webkit-transition: font-size 1s;
+    -moz-transition: font-size 1s;
+    -ms-transition: font-size 1s;
+    -o-transition: font-size 1s;
+    transition: font-size 1s;
+}
+
+.array_mystery_problem input[type=range] {
+    -webkit-appearance: none;
+    margin: 18px 0;
+    width: 100%;
+}
+.array_mystery_problem input[type=range]:focus {
+    outline: none;
+}
+.array_mystery_problem input[type=range]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 5px;
+    cursor: pointer;
+    animate: 0.2s;
+    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+    background: #45ADA8;
+    border-radius: 1.3px;
+    border: 0.2px solid #010101;
+}
+.array_mystery_problem input[type=range]::-webkit-slider-thumb {
+    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+    border: 1px solid #000000;
+    height: 25px;
+    width: 10px;
+    background: #ffffff;
+    cursor: pointer;
+    -webkit-appearance: none;
+    margin-top: -10px;
+}
+
+.array_mystery_problem input[type=range]:focus::-webkit-slider-runnable-track {
+    background: #45ADA8;
+}
+
+
+/*
+DYNAMIC STYLING CLASSES
+The following classes need to remain at the bottom of the file to ensure
+the dynamic styling works correctly.
+*/
+.array_mystery_problem .mainColorText {
+    color: #45ADA8;
+    font-weight: bold;
+}
+
+.array_mystery_problem .mainColorBorder {
+    border-color: #45ADA8;
+}
+
+.array_mystery_problem .mainColorBorderRadius {
+    border-color: #45ADA8;
+    border-radius: 10px;
+}
+
+.array_mystery_problem .accent2Highlight {
+    background: #9DE0AD;
+}
+
+.array_mystery_problem .accent2Border {
+    border-color: #9DE0AD;
+    border-radius: 10px;
+}
+
+.array_mystery_problem .accent1Highlight {
+    background: #E5FCC2;
+}
+
+.array_mystery_problem .accent1Border {
+    border-color: #E5FCC2;
+}
+
+.array_mystery_problem .wrong {
+    background-color: #DE6363;
+}
+
+.array_mystery_problem .ihighlight {
+    border: 4px solid dodgerblue;
+}
+
+.array_mystery_problem .hidden {
+    visibility: hidden;
+}
+
+/* DON'T PUT STUFF BELOW THIS COMMENT!! PLACE ADDITIONAL CODE ABOVE
+   DYNAMIC STYLING CLASSES!!
+*/
+
