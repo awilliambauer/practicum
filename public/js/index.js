@@ -421,6 +421,7 @@ $(document).ready(function() {
                 categoryConfig.forEach(function (category) {
                     for(var i = 0; i < category.problems.length; i++) {
                         category.problems[i].nextProblem = category.problems[i+1];
+                        category.problems[i].category = category.name;
                     }
                 });
 
