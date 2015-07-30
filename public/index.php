@@ -52,6 +52,7 @@ $disagreeData = array_merge(['response' => 'disagree'], $studentData);
 
     <script src="js/java/ast.js"></script>
     <script src="js/java/parser.js"></script>
+    <script src="js/java/simulator.js"></script>
 
     <script src="js/tpl/main.js"></script>
     <script src="js/tpl/parser.js"></script>

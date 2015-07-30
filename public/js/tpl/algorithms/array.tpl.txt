@@ -1,4 +1,10 @@
 function TPLAlgorithm() {
+    // types:
+    // AstNode: a java ast node
+    // Line: a java ast node, but we want to highlight the line rather than the node
+    // VariableBank: the bank of all local variables
+    // Variable: a value that will be added to the variable bank, of form {name:string, type:string, value:*}.
+
     let ast: AstNode;
     [no_step]
     ast = state.ast;
@@ -6,9 +12,9 @@ function TPLAlgorithm() {
     [no_step]
     state.vars = helper.copy_args(state.args);
 
-    let variable_bank: VariableBank;
+    let variables: VariableBank;
     [no_step]
-    variable_bank = helper.create_new_variable_bank();
+    variables = helper.create_new_variable_bank();
 
     [no_step]
     {
@@ -18,7 +24,7 @@ function TPLAlgorithm() {
         let this_is_the_parameter: Parameter;
         this_is_the_parameter = helper.get_parameter(state.args);
 
-        helper.add_this_to_the_variable_bank(variable_bank, this_is_the_parameter);
+        helper.add_this_to_the_variable_bank(variables, this_is_the_parameter);
     }
 
     let loop: TotallyAnAstNodeButDontWantHighlighting;
@@ -34,8 +40,8 @@ function TPLAlgorithm() {
         this_is_the_loop_initializer = loop.initializer;
 
         let this_is_the_loop_index: Variable;
-        this_is_the_loop_index = helper.get_loop_init_variable(variable_bank, this_is_the_loop_initializer);
-        helper.add_this_to_the_variable_bank(variable_bank, this_is_the_loop_index);
+        this_is_the_loop_index = helper.get_loop_init_variable(variables, this_is_the_loop_initializer);
+        helper.add_this_to_the_variable_bank(variables, this_is_the_loop_index);
     }
 
     let this_is_the_loop_condition: AstNode;
@@ -44,10 +50,21 @@ function TPLAlgorithm() {
     let this_is_the_loop_increment: AstNode;
     this_is_the_loop_increment = loop.increment;
 
-    while (helper.does_the_loop_condition_hold(variable_bank, this_is_the_loop_condition)) {
+    while (helper.does_the_loop_condition_hold(variables, this_is_the_loop_condition)) {
+        let this_is_the_next_line_to_execute: Line;
+        [no_step]
+        this_is_the_next_line_to_execute = null;
 
-        helper.execute_the_loop_increment(variable_bank, this_is_the_loop_increment);
+        do {
+            this_is_the_next_line_to_execute = helper.get_the_next_loop_body_line_to_execute(loop, this_is_the_next_line_to_execute);
+            helper.execute_statement(variables, this_is_the_next_line_to_execute);
+        } while (helper.is_there_another_line_to_execute(ast, this_is_the_next_line_to_execute));
+
+        helper.execute_the_loop_increment(variables, this_is_the_loop_increment);
     }
+
+    [no_step]
+    state.answer = helper.calculate_answer(variables);
 
     [prompt]
     "Write the answer in the box.";
