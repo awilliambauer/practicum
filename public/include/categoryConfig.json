@@ -4,12 +4,22 @@
   "description": "Practice for loops and arrays",
   "problems": [
     {
-        "id": "d45fb259-338b-4884-bd84-29e33fd9f656",
+        "id": "a30abcb4-327b-4f91-83f5-dd534e98f56a",
         "title": "Array Mystery 1",
         "content": {
             "text": "public static void arrMys(int[] arr) {\nfor (int i = 1; i < arr.length - 1; i++) {\narr[i] = i * arr[i + 1] + arr[i - 1];\n}\n}",
             "arguments": [
                 {"arr": [11, 14, 2, 4, 7]}
+            ]
+        }
+    },
+    {
+        "id": "de34255c-a634-4bdf-92f9-dd71bff9f76a",
+        "title": "Array Mystery 2",
+        "content": {
+            "text": "public static void mystery(int[] list) {\nfor (int i = 1; i < list.length; i++) {\nlist[i] = list[i] + list[i - 1];\nlist[i] = list[i] + list[i - 1];\n\n}\n}",
+            "arguments": [
+                {"list": [1, 2, 3, 4, 5]}
             ]
         }
     }

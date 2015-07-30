@@ -15,7 +15,7 @@ function ArrayHelper() {
     };
 
     this.evaluate_expression = function(state, expr) {
-        var arg1, arg2, obj, idx, arg1v, arg2v;
+        var arg1, arg2, obj, idx, arg1v, arg2v, r;
 
         // HACK this only works for integers and booleans kinda!
         // FIXME add type checking and make it behave correctly for overloaded operators.
@@ -52,12 +52,17 @@ function ArrayHelper() {
                     default: throw new Error("Unknown postfix operator " + expr.operator);
                 }
             case 'literal': return {type:expr.type, value:expr.value};
-            case 'identifier': return state.vars[expr.value];
+            case 'identifier':
+                r = state.vars[expr.value];
+                if (!r) throw new Error("unknown identifier " + expr.value);
+                return r;
             case 'index':
                 obj = this.evaluate_expression(state, expr.object);
                 idx = this.evaluate_expression(state, expr.index);
                 if (obj.type !== 'array') throw new Error("Cannot index into object of type " + obj.type);
-                return obj.value[idx.value];
+                r = obj.value[idx.value];
+                if (!r) throw new Error("invalid array index " + idx.value + " of " + obj.type);
+                return r;
             case 'reference':
                 obj = this.evaluate_expression(state, expr.object);
                 // HACK hooray for hacky array lengths
@@ -80,15 +85,17 @@ function ArrayHelper() {
 
     this.get_next_statement = function(ast, stmt) {
         var parent = java_ast.parent_of(stmt, ast);
+        if (!parent) return null;
+
         var children = java_ast.children_of(parent);
         for (var idx in children) {
             if (children[idx] === stmt) break;
         }
         idx++;
-        if (idx === children.length) {
-            return this.get_next_statement(ast, parent);
-        } else {
+        if (idx < children.length) {
             return children[idx];
+        } else {
+            return this.get_next_statement(ast, parent);
         }
     }
 
@@ -101,7 +108,7 @@ function ArrayHelper() {
     this.get_array_argument = function(state) {
         // assume that the array is the first and only argument
         for (var key in state.args) {
-            return state.args[key];
+            return key;
         }
     };
 
@@ -117,14 +124,13 @@ function ArrayHelper() {
 
         // populate the variable bank
         state.vars = this.copy_args(state.args);
-        var array = this.get_array_argument(state);
+        var array_name = this.get_array_argument(state);
 
         console.info(array);
 
         // assume the first statement is a for loop
         var loop = state.ast.body[0];
         if (loop.tag !== 'for') throw new Error("can't find the for loop!");
-        console.log(loop);
 
         // run the initializer, assume it's a declaration of an int
         if (loop.initializer.tag !== 'declaration' || loop.initializer.type !== 'int') throw new Error("for loop initializer isn't an int declaration!");
@@ -147,16 +153,17 @@ function ArrayHelper() {
                 } else {
                     this.execute_statement(state, current_statement);
                 }
-
-            } while (false);
-
-            console.log(state.vars);
+                current_statement = this.get_next_statement(loop, current_statement);
+                console.info(current_statement);
+            } while (current_statement);
 
             this.execute_statement(state, loop.increment);
             counter++;
         }
 
-        console.log(state.vars);
+        console.info("OUTPUT:");
+        var result = state.vars[array_name].value.map(function(x) { return x.value; });
+        console.info(result);
     }
 }
 
