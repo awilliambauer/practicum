@@ -58,6 +58,7 @@ $disagreeData = array_merge(['response' => 'disagree'], $studentData);
     <script src="js/tpl/explainer.js"></script>
     <script src="js/tpl/algorithms/expressionsHelper.js"></script>
     <script src="js/tpl/algorithms/ifElseHelper.js"></script>
+    <script src="js/tpl/algorithms/arrayHelper.js"></script>
 
     <!-- load index before problem-specific JS -->
     <script src="js/index.js"></script>
@@ -67,6 +68,8 @@ $disagreeData = array_merge(['response' => 'disagree'], $studentData);
 
     <script src="if_else/html_generator.js"></script>
     <script src="if_else/if_else.js"></script>
+
+    <script src="array/array.js"></script>
 
 
 </head>
