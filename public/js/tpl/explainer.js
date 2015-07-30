@@ -21,12 +21,19 @@ var explainer = (function() {
 
     // convert camel case to nice text
     function format_identifier(id) {
-        var words = id.split(/(?=[A-Z])/);
-        words[0] = words[0].charAt(0).toUpperCase() + words[0].slice(1); // capitalize first letter of first word
-        for (var i = 1; i < words.length; i++) {
-            words[i] = words[i].toLowerCase(); // remove initial capital from other words
+        if (id.indexOf('_') >= 0) {
+            // assume underscored
+            var s = id.replace(/_/g, ' ');
+            return s.charAt(0).toUpperCase() + s.slice(1);
+        } else {
+            // assume camel-case
+            var words = id.split(/(?=[A-Z])/);
+            words[0] = words[0].charAt(0).toUpperCase() + words[0].slice(1); // capitalize first letter of first word
+            for (var i = 1; i < words.length; i++) {
+                words[i] = words[i].toLowerCase(); // remove initial capital from other words
+            }
+            return words.join(" ");
         }
-        return words.join(" ");
     }
 
     self.explanation_text_of = function(sim_result) {

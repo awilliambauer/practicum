@@ -2,17 +2,34 @@ function ArrayHelper() {
     "use strict";
 
     this.copy_args = function(o) {
-        var vars = {};
-        // assumes everything is an array!
         for (var key in o) {
-            vars[key] = {
+            return {
+                name: key,
                 type: 'array',
                 value: o[key].map(function(i) { return {type:'int', value:i}; })
             };
         }
-
-        return vars;
     };
+
+    this.get_parameter = function(args) {
+        // assumes everything is an array!
+        for (var key in args) {
+            return {
+                name: key,
+                type: 'array',
+                value: args[key].map(function(i) { return {type:'int', value:i}; })
+            };
+        }
+    }
+
+    // HACK FIXME remove this asap
+    this.True = function() { return true; };
+
+    this.create_new_variable_bank = function() { return {}; };
+
+    this.add_this_to_the_variable_bank = function(bank, variable) {
+        bank[variable.name] = {type:variable.type, value:variable.value};
+    }
 
     this.evaluate_expression = function(state, expr) {
         var arg1, arg2, obj, idx, arg1v, arg2v, r;
@@ -112,6 +129,13 @@ function ArrayHelper() {
         }
     };
 
+    this.get_loop = function(ast) {
+        // assume loop is the top node
+        var loop = ast.body[0];
+        if (!loop || loop.tag !== 'for') throw new Error("can't find the for loop!");
+        return loop;
+    }
+
     this.loop_condition_true = function(state, condition_stmt) {
         var e = this.evaluate_expression(state, condition_stmt);
         if (e.type !== 'bool') throw new Error("Condition is not of type boolean!");
@@ -119,6 +143,7 @@ function ArrayHelper() {
     }
 
     this.solve_the_problem = function(state) {
+        return;
 
         console.info(state);
 
@@ -180,14 +205,6 @@ function array_make_initial_state(problem, argumentIndex) {
 
     var ast = java_parsing.parse_method(problem.content.text);
     var args = problem.content.arguments[argumentIndex];
-
-    var helper = new ArrayHelper();
-
-    // HACK let's just try solving the problem right here
-    helper.solve_the_problem({
-        ast: ast,
-        args: args
-    });
 
     return {
         ast: ast,
