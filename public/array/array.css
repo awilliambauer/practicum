@@ -103,6 +103,18 @@ lightest green: #E5FCC2
     overflow: auto;
 }
 
+.array_mystery_problem #variable_bank_title {
+    text-decoration: underline;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.array_mystery_problem #variable_bank #variable_list {
+    list-style-type: none;
+    font-size: 15pt;
+    padding-left: 0px;
+}
+
 .array_mystery_problem #variable_bank {
     border: 5px solid #547980;
     border-radius: 10px;
@@ -111,15 +123,49 @@ lightest green: #E5FCC2
     width: 400px;
 }
 
-.array_mystery_problem #variable_bank_title {
-    text-decoration: underline;
-    font-weight: bold;
-    margin-bottom: 15px;
-}
-
 .array_mystery_problem #variable_list {
     margin-top: 5px;
 }
+
+.array_mystery_problem .variable_list_item {
+    margin-bottom: 15px;
+}
+
+.array_mystery_problem .variable_list_table {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.array_mystery_problem .bank_variable {
+    color: black;
+}
+
+.array_mystery_problem .bank_variable_label {
+    padding-top: 20px;
+    padding-right: 10px;
+}
+
+.array_mystery_problem .bank_variable_value {
+    padding: 3px;
+    margin-left: 5px;
+}
+
+.array_mystery_problem .bank_variable_array_index {
+    padding: 5px;
+    padding-bottom: 0px;
+    font-size: 11pt;
+    width: 40px;
+}
+
+.array_mystery_problem .bank_variable_array_value {
+    padding: 5px;
+    border: 3px solid darkgray;
+    width: 40px;
+}
+
+
+
+
 
 .array_mystery_problem body {
     background-color: #45ADA8;
@@ -236,12 +282,6 @@ lightest green: #E5FCC2
 
 .array_mystery_problem .arraylabel {
     margin-top: 40px;
-}
-
-.array_mystery_problem td {
-    width: 50px;
-    text-align: center;
-    border: 5px solid darkgrey;
 }
 
 .array_mystery_problem .varlabelcolumn {
