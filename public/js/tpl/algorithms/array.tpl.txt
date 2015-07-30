@@ -1,4 +1,4 @@
 function TPLAlgorithm() {
-
-
+    [prompt]
+    "First, look at the structure of the code in the problem.";
 }

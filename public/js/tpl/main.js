@@ -6,11 +6,13 @@ var main_simulator = (function () {"use strict";
     var numTries;
     var fadeLevel;
 
+    // FIXME move to problem file js interface
     self.getHelper = function(algoName) {
-        if (algoName == "expressions") {
-            return new ExpressionsHelper();
-        } else if (algoName == "if_else") {
-            return new IfElseHelper();
+        switch (algoName) {
+            case "expressions": return new ExpressionsHelper();
+            case "if_else": return new IfElseHelper();
+            case "array": return new ArrayHelper();
+            default: throw new Error("cannot create helper for unknown algorithm " + algoName);
         }
     };
 

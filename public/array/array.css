@@ -117,18 +117,9 @@ lightest green: #E5FCC2
     margin-bottom: 15px;
 }
 
-.if_else_problem #variable_list {
+.array_mystery_problem #variable_list {
     margin-top: 5px;
 }
-
-
-
-
-
-
-
-
-
 
 .array_mystery_problem body {
     background-color: #45ADA8;

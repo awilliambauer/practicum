@@ -35,6 +35,7 @@ $disagreeData = array_merge(['response' => 'disagree'], $studentData);
     <link href="css/csed.css" type="text/css" rel="stylesheet" />
     <link href="expressions/bootstrap-expressions.css" type="text/css" rel="stylesheet" />
     <link href="if_else/if_else.css" type="text/css" rel="stylesheet" />
+    <link href="array/array.css" type="text/css" rel="stylesheet" />
 
     <!-- load jQuery before cookie plugin, bootstrap, d3 -->
     <script src="vendor/jquery/jquery-1.11.2.min.js"></script>
