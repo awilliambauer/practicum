@@ -253,6 +253,9 @@ function simulator(ast, globals) {
             case "expression":
                 evaluate(stmt.expression, state, result);
                 break;
+            case "block":
+                push_stack_state(stmt.body, 'block');
+                break;
             case "if":
                 // TODO format condition expressions in prompts
                 if (evaluate(stmt.condition, state, result)) {

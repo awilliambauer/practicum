@@ -11,7 +11,7 @@ function TPLAlgorithm() {
     variable_bank = helper.create_new_variable_bank();
 
     [no_step]
-    if (helper.True()) {
+    {
         [prompt]
         "First, look at the method call.";
 
@@ -26,7 +26,7 @@ function TPLAlgorithm() {
     loop = helper.get_loop(ast);
 
     [no_step]
-    if (helper.True()) {
+    {
         [prompt]
         "Next, look at the loop header.";
 
