@@ -31,15 +31,15 @@ function ArrayHelper() {
         bank[variable.name] = {type:variable.type, value:variable.value};
     }
 
-    this.evaluate_expression = function(state, expr) {
+    this.evaluate_expression = function(context, expr) {
         var arg1, arg2, obj, idx, arg1v, arg2v, r;
 
         // HACK this only works for integers and booleans kinda!
         // FIXME add type checking and make it behave correctly for overloaded operators.
         switch (expr.tag) {
             case 'binop':
-                arg1 = this.evaluate_expression(state, expr.args[0]);
-                arg2 = this.evaluate_expression(state, expr.args[1]);
+                arg1 = this.evaluate_expression(context, expr.args[0]);
+                arg2 = this.evaluate_expression(context, expr.args[1]);
                 arg1v = arg1.value;
                 arg2v = arg2.value;
                 switch (expr.operator) {
@@ -62,7 +62,7 @@ function ArrayHelper() {
                     default: throw new Error("Unknown binary operator " + expr.operator);
                 }
             case 'postfix':
-                arg1 = this.evaluate_expression(state, expr.args[0]);
+                arg1 = this.evaluate_expression(context, expr.args[0]);
                 switch (expr.operator) {
                     case '++': arg1.value++; return arg1;
                     case '--': arg1.value--; return arg1;
@@ -70,18 +70,18 @@ function ArrayHelper() {
                 }
             case 'literal': return {type:expr.type, value:expr.value};
             case 'identifier':
-                r = state.vars[expr.value];
+                r = context[expr.value];
                 if (!r) throw new Error("unknown identifier " + expr.value);
                 return r;
             case 'index':
-                obj = this.evaluate_expression(state, expr.object);
-                idx = this.evaluate_expression(state, expr.index);
+                obj = this.evaluate_expression(context, expr.object);
+                idx = this.evaluate_expression(context, expr.index);
                 if (obj.type !== 'array') throw new Error("Cannot index into object of type " + obj.type);
                 r = obj.value[idx.value];
                 if (!r) throw new Error("invalid array index " + idx.value + " of " + obj.type);
                 return r;
             case 'reference':
-                obj = this.evaluate_expression(state, expr.object);
+                obj = this.evaluate_expression(context, expr.object);
                 // HACK hooray for hacky array lengths
                 if (obj.type === 'array' && expr.name === 'length') {
                     return {type:'int', value:obj.value.length};
@@ -116,24 +116,27 @@ function ArrayHelper() {
         }
     }
 
-    this.add_to_variable_bank = function(state, declaration_stmt) {
+    this.create_variable = function(variable_bank, declaration_stmt) {
         if (declaration_stmt.expression.args[0].tag !== 'identifier') throw new Error("not a valid variable declaration!");
         var name = declaration_stmt.expression.args[0].value;
-        state.vars[name] = this.evaluate_expression(state, declaration_stmt.expression.args[1]);
+        var val = this.evaluate_expression(variable_bank, declaration_stmt.expression.args[1]);
+        return {
+            name: name,
+            type: val.type,
+            value: val.value
+        };
     }
-
-    this.get_array_argument = function(state) {
-        // assume that the array is the first and only argument
-        for (var key in state.args) {
-            return key;
-        }
-    };
 
     this.get_loop = function(ast) {
         // assume loop is the top node
         var loop = ast.body[0];
         if (!loop || loop.tag !== 'for') throw new Error("can't find the for loop!");
         return loop;
+    }
+
+    this.get_loop_init_variable = function(variable_bank, initializer) {
+        if (initializer.tag !== 'declaration' || initializer.type !== 'int') throw new Error("for loop initializer isn't an int declaration!");
+        return this.create_variable(variable_bank, initializer);
     }
 
     this.loop_condition_true = function(state, condition_stmt) {

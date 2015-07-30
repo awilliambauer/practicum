@@ -33,5 +33,14 @@ function TPLAlgorithm() {
         let this_is_the_loop_initializer: AstNode;
         this_is_the_loop_initializer = loop.initializer;
 
+        let this_is_the_loop_index: Variable;
+        this_is_the_loop_index = helper.get_loop_init_variable(variable_bank, this_is_the_loop_initializer);
+        helper.add_this_to_the_variable_bank(variable_bank, this_is_the_loop_index);
     }
+
+    do {
+
+        break;
+
+    } while (true);
 }
