@@ -74,8 +74,6 @@ var array = (function() {
             throw new Error("unimplemented, I don't know how to wait for responses yet!");
         }
 
-        console.log(state);
-
         // update the UI
         addPrompt();
         // FIXME
@@ -133,69 +131,74 @@ var array = (function() {
 
     function addVaraibleBank() {
         // clear the variable bank so we can re-draw it
-        d3.select("#variable_list").node().innerHTML = "";
+        d3.select("#variable_list_table").node().innerHTML = "";
 
-        // add all of the currently defined variables to the variable bank
-        for (var variable in state.state.vars) {
-
-            console.log(state.state.vars[variable]);
-
-            if (state.state.vars[variable].hasOwnProperty("type") && state.state.vars[variable].type == "array") {
-                var listItem = d3.select("#variable_list").append("li").attr("class", "variable_list_item");
-                var listTable = listItem.append("table").attr("class", "variable_list_table");
-                var listRow = listTable.append("tr");
-
-                var listCell1 = listRow.append("td").attr("class", "bank_variable_label");
-                listCell1.append("span").attr("class", "bank_variable").text("arr");
-                listCell1.append("span").text(" :");
-
-                var listCell2 = listRow.append("td");
-                var arrayTable = listCell2.append("table").attr("class", "bank_variable_array");
-
-                var indexRow = arrayTable.append("tr");
-                var index = 0;
-                for (var arrayIndex in state.state.vars[variable].value) {
-                    indexRow
-                        .append("td")
-                        .attr("class", "bank_variable_array_index")
-                        .text(index)
-                    ;
-                    index++;
-                }
-
-                var valueRow = arrayTable.append("tr");
-                for (var arrayIndex in state.state.vars[variable].value) {
-                    valueRow
-                        .append("td")
-                        .attr("class", "bank_variable_array_value")
-                        .text(state.state.vars[variable].value[arrayIndex].value)
-                    ;
-                }
-            }
-            else {
-                var listItem = d3.select("#variable_list")
-                        .append("li")
-                        .attr("class", "variable_list_item")
-                    ;
-
-                listItem
-                    .append("span")
-                    .attr("class", "bank_variable")
-                    .text(variable)
-                ;
-
-                listItem
-                    .append("span")
-                    .text(" :")
-                ;
-
-                listItem
-                    .append("span")
-                    .attr("class", "bank_variable_value")
-                    .text(state.state.vars[variable])
-                ;
+        // grab the variable bank object out fo the in_scope variable list
+        var variableBankObject;
+        for (var v in state.variables.in_scope) {
+            if (state.variables.in_scope[v].hasOwnProperty("type") && state.variables.in_scope[v].type == "VariableBank") {
+                variableBankObject = state.variables.in_scope[v].value;
             }
         }
+
+        // if there are variable bank objects to display
+        if (!isObjectEmpty(variableBankObject)) {
+
+            // add all of the currently defined variables to the variable bank
+            for (var variable in variableBankObject) {
+                var listRow = d3.select("#variable_list_table").append("tr").attr("class", "variable_list_table_row");
+                var listCell1 = listRow.append("td");
+                var listCell2 = listRow.append("td");
+
+                if (variableBankObject[variable].hasOwnProperty("type") && variableBankObject[variable].type == "array") {
+                    listCell1.attr("class", "array_label");
+                    listCell1.append("span").attr("class", "bank_variable").text(variable);
+                    listCell1.append("span").text(" :");
+
+                    var arrayTable = listCell2.append("table").attr("class", "bank_variable_array");
+                    var indexRow = arrayTable.append("tr");
+                    var index = 0;
+                    for (var arrayIndex in variableBankObject[variable].value) {
+                        indexRow
+                            .append("td")
+                            .attr("class", "bank_variable_array_index")
+                            .text(index)
+                        ;
+                        index++;
+                    }
+
+                    var valueRow = arrayTable.append("tr");
+                    for (var arrayIndex in variableBankObject[variable].value) {
+                        valueRow
+                            .append("td")
+                            .attr("class", "bank_variable_array_value")
+                            .text(variableBankObject[variable].value[arrayIndex].value)
+                        ;
+                    }
+                }
+                else {
+                    listCell1.attr("class", "bank_variable_label");
+                    listCell1.append("span").attr("class", "bank_variable").text(variable);
+                    listCell1.append("span").text(" :");
+                    
+                    listCell2.attr("style", "text-align: left;");
+                    listCell2
+                        .append("span")
+                        .attr("class", "bank_variable_value")
+                        .text(variableBankObject[variable].value)
+                    ;
+                }
+            }
+        }
+    }
+
+    function isObjectEmpty(obj) {
+        for(var prop in obj) {
+            if(obj.hasOwnProperty(prop))
+                return false;
+        }
+
+        return true;
     }
 
     function checkSolution() {

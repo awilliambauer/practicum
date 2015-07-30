@@ -109,7 +109,7 @@ lightest green: #E5FCC2
     margin-bottom: 15px;
 }
 
-.array_mystery_problem #variable_bank #variable_list {
+.array_mystery_problem #variable_bank #variable_list_table {
     list-style-type: none;
     font-size: 15pt;
     padding-left: 0px;
@@ -123,17 +123,14 @@ lightest green: #E5FCC2
     width: 400px;
 }
 
-.array_mystery_problem #variable_list {
-    margin-top: 5px;
-}
-
-.array_mystery_problem .variable_list_item {
-    margin-bottom: 15px;
-}
-
-.array_mystery_problem .variable_list_table {
+.array_mystery_problem #variable_list_table {
     margin-left: auto;
     margin-right: auto;
+    margin-top: 5px;
+    margin-bottom: 15px;
+
+    border-collapse: separate;
+    border-spacing: 0px 15px;
 }
 
 .array_mystery_problem .bank_variable {
@@ -141,12 +138,19 @@ lightest green: #E5FCC2
 }
 
 .array_mystery_problem .bank_variable_label {
+    padding-right: 10px;
+    text-align: right;
+}
+
+.array_mystery_problem .array_label {
     padding-top: 20px;
     padding-right: 10px;
+    text-align: right;
 }
 
 .array_mystery_problem .bank_variable_value {
     padding: 3px;
+    padding-top: 20px;
     margin-left: 5px;
 }
 
