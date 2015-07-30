@@ -1,4 +1,7 @@
 function TPLAlgorithm() {
+    [no_step]
+    state.vars = helper.copy_args(state.args);
+
     [prompt]
     "First, look at the structure of the code in the problem.";
 }

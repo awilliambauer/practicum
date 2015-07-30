@@ -191,7 +191,8 @@ function array_make_initial_state(problem, argumentIndex) {
 
     return {
         ast: ast,
-        args: args
+        args: args,
+        vars: {}
     };
 }
 

@@ -41,6 +41,8 @@ var array = (function() {
             throw new Error("unimplemented, I don't know how to wait for responses yet!");
         }
 
+        console.log(state);
+
         // update the UI
         addPrompt();
         // FIXME
