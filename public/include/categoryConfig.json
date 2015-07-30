@@ -7,7 +7,7 @@
         "id": "d45fb259-338b-4884-bd84-29e33fd9f656",
         "title": "Array Mystery 1",
         "content": {
-            "text": "public static void arrMys(int[] arr) {\nfor (int i = 1; i < arr.length; i++) {\narr[i] = i * arr[i + 1] + arr[i - 1];\n}\n}",
+            "text": "public static void arrMys(int[] arr) {\nfor (int i = 1; i < arr.length - 1; i++) {\narr[i] = i * arr[i + 1] + arr[i - 1];\n}\n}",
             "arguments": [
                 {"arr": [11, 14, 2, 4, 7]}
             ]

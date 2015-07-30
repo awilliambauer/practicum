@@ -95,5 +95,12 @@ var java_ast = function() {
     }
     self.find_by_id = find_by_id;
 
+    function parent_of(node, root) {
+        find_first(function(n) {
+            return children_of(n).some(function(c) { return c === node; } );
+        }, ast);
+    }
+    self.parent_of = parent_of;
+
     return self;
 }();

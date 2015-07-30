@@ -15,30 +15,33 @@ function ArrayHelper() {
     };
 
     this.evaluate_expression = function(state, expr) {
-        var arg1, arg2, obj;
+        var arg1, arg2, obj, idx, arg1v, arg2v;
 
         // HACK this only works for integers and booleans kinda!
         // FIXME add type checking and make it behave correctly for overloaded operators.
         switch (expr.tag) {
             case 'binop':
-                arg1 = this.evaluate_expression(state, expr.args[0]).value;
-                arg2 = this.evaluate_expression(state, expr.args[1]).value;
+                arg1 = this.evaluate_expression(state, expr.args[0]);
+                arg2 = this.evaluate_expression(state, expr.args[1]);
+                arg1v = arg1.value;
+                arg2v = arg2.value;
                 switch (expr.operator) {
-                    case '<': return {type: 'bool', value: arg1 < arg2};
-                    case '<=': return {type: 'bool', value: arg1 <= arg2};
-                    case '>': return {type: 'bool', value: arg1 > arg2};
-                    case '>=': return {type: 'bool', value: arg1 >= arg2};
-                    case '==': return {type: 'bool', value: arg1 === arg2};
-                    case '!=': return {type: 'bool', value: arg1 !== arg2};
+                    case '<': return {type: 'bool', value: arg1v < arg2v};
+                    case '<=': return {type: 'bool', value: arg1v <= arg2v};
+                    case '>': return {type: 'bool', value: arg1v > arg2v};
+                    case '>=': return {type: 'bool', value: arg1v >= arg2v};
+                    case '==': return {type: 'bool', value: arg1v === arg2v};
+                    case '!=': return {type: 'bool', value: arg1v !== arg2v};
                     // FIXME these do not short-circuit
-                    case '&&': return {type: 'bool', value: arg1 && arg2};
-                    case '||': return {type: 'bool', value: arg1 || arg2};
-                    case '+': return {type: 'int', value: arg1 + arg2};
-                    case '-': return {type: 'int', value: arg1 - arg2};
-                    case '*': return {type: 'int', value: arg1 * arg2};
+                    case '&&': return {type: 'bool', value: arg1v && arg2v};
+                    case '||': return {type: 'bool', value: arg1v || arg2v};
+                    case '+': return {type: 'int', value: arg1v + arg2v};
+                    case '-': return {type: 'int', value: arg1v - arg2v};
+                    case '*': return {type: 'int', value: arg1v * arg2v};
                     // FIXME this probably doesn't do the correct thing for negatives
-                    case '/': return {type: 'int', value: Math.floor(arg1 / arg2)};
-                    case '%': return {type: 'int', value: arg1 % arg2};
+                    case '/': return {type: 'int', value: Math.floor(arg1v / arg2v)};
+                    case '%': return {type: 'int', value: arg1v % arg2v};
+                    case '=': arg1.value = arg2.value; return arg1;
                     default: throw new Error("Unknown binary operator " + expr.operator);
                 }
             case 'postfix':
@@ -50,6 +53,11 @@ function ArrayHelper() {
                 }
             case 'literal': return {type:expr.type, value:expr.value};
             case 'identifier': return state.vars[expr.value];
+            case 'index':
+                obj = this.evaluate_expression(state, expr.object);
+                idx = this.evaluate_expression(state, expr.index);
+                if (obj.type !== 'array') throw new Error("Cannot index into object of type " + obj.type);
+                return obj.value[idx.value];
             case 'reference':
                 obj = this.evaluate_expression(state, expr.object);
                 // HACK hooray for hacky array lengths
@@ -67,6 +75,20 @@ function ArrayHelper() {
         switch (stmt.tag) {
             case 'expression': return this.evaluate_expression(state, stmt.expression);
             default: throw new Error("unkown statement type " + stmt.tag);
+        }
+    }
+
+    this.get_next_statement = function(ast, stmt) {
+        var parent = java_ast.parent_of(stmt, ast);
+        var children = java_ast.children_of(parent);
+        for (var idx in children) {
+            if (children[idx] === stmt) break;
+        }
+        idx++;
+        if (idx === children.length) {
+            return this.get_next_statement(ast, parent);
+        } else {
+            return children[idx];
         }
     }
 
@@ -114,8 +136,21 @@ function ArrayHelper() {
         var counter = 0;
 
         while (this.loop_condition_true(state, loop_condition) && counter < MAX_ITER) {
+            if (loop.body.length === 0) throw new Error ("Empty loop body!");
+            var current_statement = loop.body[0];
 
-            console.log('IM IN UR LOOP');
+            console.log("LOOP " + counter);
+
+            do {
+                if (current_statement.tag === 'if') {
+                    throw new Error('unimplemented');
+                } else {
+                    this.execute_statement(state, current_statement);
+                }
+
+            } while (false);
+
+            console.log(state.vars);
 
             this.execute_statement(state, loop.increment);
             counter++;
