@@ -164,8 +164,14 @@ var simulator_parsing = function() {
             var c = cs.next();
             var token;
 
-            // check for tokens
-            if (c in symbols) {
+            // check for comments (BEFORE symbols, since / is a symbol)
+            if (c === '/' && cs.peek() === '/') {
+                while (!iseof() && cs.peek() !== '\n') {
+                    cs.next();
+                }
+                skip_whitespace();
+                return null;
+            } else if (c in symbols) {
                 // super hack: also check if next token is in symbols.
                 // this assumes any two-character symbol has a prefix that is also a symbol
                 if ((c + cs.peek()) in symbols) {
@@ -206,7 +212,9 @@ var simulator_parsing = function() {
 
         function peek() {
             if (!is_peeked) {
-                current_token = get_next();
+                do {
+                    current_token = get_next();
+                } while (!current_token);
                 is_peeked = true;
             }
             return current_token;
