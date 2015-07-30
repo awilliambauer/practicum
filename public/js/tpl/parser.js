@@ -94,6 +94,7 @@ var simulator_parsing = function() {
         var keywords = {
             "if":1, "else":1, "do":1, "while":1, "for":1,
             "function":1, "var":1, "let":1, "of":1, "break":1,
+            "true":1, "false":1, "null":1
         };
 
         var symbols = {
@@ -493,14 +494,25 @@ var simulator_parsing = function() {
         // match prefix operators or sub-expressions of operators
         function match_prefix() {
             var start = lex.position();
+            function create(tag, val) {
+                return {id:new_id(), location: location(start), tag:tag, value:val};
+            }
+
             var t = lex.next();
             switch (t.type) {
                 // literals
                 case TokenType.INT_LITERAL:
                 case TokenType.STR_LITERAL:
-                    return {id:new_id(), location: location(start), tag:'literal', value:t.value};
+                    return create('literal', t.value);
                 case TokenType.IDENTIFIER:
-                    return {id:new_id(), location: location(start), tag:'identifier', value:t.value};
+                    return create('identifier', t.value);
+                case TokenType.KEYWORD:
+                    switch (t.value) {
+                        case "true": return create('literal', true);
+                        case "false": return create('literal', false);
+                        case "null": return create('literal', null);
+                        default: throw_error(t.position, "Keyword " + t.value + " cannot be used as an expression.");
+                    }
                 default: throw_error(t.position, "Expected expression");
             }
         }

@@ -120,6 +120,19 @@ function ArrayHelper() {
         }
     }
 
+    this.get_the_next_loop_body_line_to_execute = function(loop, current_statement) {
+        if (current_statement) {
+            return this.get_next_statement(loop, current_statement);
+        } else {
+            if (loop.body.length === 0) throw new Error ("Empty loop body!");
+            return loop.body[0];
+        }
+    }
+
+    this.is_there_another_line_to_execute = function(ast, stmt) {
+        return !!this.get_next_statement(ast, stmt);
+    }
+
     this.create_variable = function(variable_bank, declaration_stmt) {
         if (declaration_stmt.expression.args[0].tag !== 'identifier') throw new Error("not a valid variable declaration!");
         var name = declaration_stmt.expression.args[0].value;
@@ -147,6 +160,15 @@ function ArrayHelper() {
         var e = this.evaluate_expression(variable_bank, condition_stmt);
         if (e.type !== 'bool') throw new Error("Condition is not of type boolean!");
         return e.value;
+    }
+
+    this.calculate_answer = function(variable_bank) {
+        for (var key in variable_bank) {
+            var v = variable_bank[key];
+            if (v.type === 'array') {
+                return v.value.map(function(x) { return x.value; });
+            }
+        }
     }
 
     this.solve_the_problem = function(state) {
@@ -194,7 +216,6 @@ function ArrayHelper() {
         }
 
         console.info("OUTPUT:");
-        var result = state.vars[array_name].value.map(function(x) { return x.value; });
         console.info(result);
     }
 }
