@@ -20,8 +20,8 @@ var csed = (function() {
 
     function setupLogging(username) {
         if (ENABLE_TELEMETRY_LOGGING) {
-            var LOGGING_BASE_URL = "https://" + window.location.hostname + ":" + LOGGING_PORT;
-            //var LOGGING_BASE_URL = "https://dev-olio.cs.washington.edu" + ":" + LOGGING_PORT;
+            //var LOGGING_BASE_URL = "https://" + window.location.hostname + ":" + LOGGING_PORT;
+            var LOGGING_BASE_URL = "https://dev-olio.cs.washington.edu" + ":" + LOGGING_PORT;
 
             return Logging.initialize(LOGGING_BASE_URL, LOGGING_RELEASE_ID, username).then(function (logging_data) {
                 experimental_condition = logging_data.condition;

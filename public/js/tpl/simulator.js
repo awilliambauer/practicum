@@ -185,6 +185,7 @@ function simulator(ast, globals) {
                 // last lookup object is the function we want to call, and the one before that is the appropriate
                 // this object for those functions that need one
                 var fn = objs[objs.length - 1];
+                if (!fn) throw new Error("no such function " + expr.object.name);
                 var fn_this = objs[objs.length - 2];
                 var args = expr.args.map(function (arg) { return evaluate(arg, state)});
                 var ret = fn.apply(fn_this, args);
@@ -251,6 +252,9 @@ function simulator(ast, globals) {
                 break;
             case "expression":
                 evaluate(stmt.expression, state, result);
+                break;
+            case "block":
+                push_stack_state(stmt.body, 'block');
                 break;
             case "if":
                 // TODO format condition expressions in prompts

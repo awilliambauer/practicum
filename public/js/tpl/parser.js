@@ -289,6 +289,7 @@ var simulator_parsing = function() {
                 case "if": stmt = match_ifelse(); break;
                 case "while": stmt = match_while(); break;
                 case "break": stmt = match_break(); break;
+                case "{": stmt = match_standalone_block(); break;
                 default: stmt = match_simple_statement(true); break;
             }
             stmt.annotations = annotations;
@@ -434,6 +435,17 @@ var simulator_parsing = function() {
                 condition: cond,
                 then_branch: thenb,
                 else_branch: elseb,
+            };
+        }
+
+        function match_standalone_block() {
+            var start = lex.position();
+            var body = match_block();
+            return {
+                id: new_id(),
+                location: location(start),
+                tag: 'block',
+                body: body
             };
         }
 

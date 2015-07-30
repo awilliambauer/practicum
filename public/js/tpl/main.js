@@ -65,6 +65,8 @@ var main_simulator = (function () {"use strict";
 
     self.next = function(fading) {
         fadeLevel = fading;
+        // HACK
+        fadeLevel = 0;
 
         if (fadeLevel == 0) {
             return self.getNextState();

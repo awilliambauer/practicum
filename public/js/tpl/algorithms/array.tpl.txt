@@ -1,7 +1,54 @@
 function TPLAlgorithm() {
+    let ast: AstNode;
+    [no_step]
+    ast = state.ast;
+
     [no_step]
     state.vars = helper.copy_args(state.args);
 
+    let variable_bank: VariableBank;
+    [no_step]
+    variable_bank = helper.create_new_variable_bank();
+
+    [no_step]
+    {
+        [prompt]
+        "First, look at the method call.";
+
+        let this_is_the_parameter: Parameter;
+        this_is_the_parameter = helper.get_parameter(state.args);
+
+        helper.add_this_to_the_variable_bank(variable_bank, this_is_the_parameter);
+    }
+
+    let loop: TotallyAnAstNodeButDontWantHighlighting;
+    [no_step]
+    loop = helper.get_loop(ast);
+
+    [no_step]
+    {
+        [prompt]
+        "Next, look at the loop header.";
+
+        let this_is_the_loop_initializer: AstNode;
+        this_is_the_loop_initializer = loop.initializer;
+
+        let this_is_the_loop_index: Variable;
+        this_is_the_loop_index = helper.get_loop_init_variable(variable_bank, this_is_the_loop_initializer);
+        helper.add_this_to_the_variable_bank(variable_bank, this_is_the_loop_index);
+    }
+
+    let this_is_the_loop_condition: AstNode;
+    this_is_the_loop_condition = loop.condition;
+
+    let this_is_the_loop_increment: AstNode;
+    this_is_the_loop_increment = loop.increment;
+
+    while (helper.does_the_loop_condition_hold(variable_bank, this_is_the_loop_condition)) {
+
+        helper.execute_the_loop_increment(variable_bank, this_is_the_loop_increment);
+    }
+
     [prompt]
-    "First, look at the structure of the code in the problem.";
+    "Write the answer in the box.";
 }
