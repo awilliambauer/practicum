@@ -38,9 +38,17 @@ function TPLAlgorithm() {
         helper.add_this_to_the_variable_bank(variable_bank, this_is_the_loop_index);
     }
 
-    do {
+    let this_is_the_loop_condition: AstNode;
+    this_is_the_loop_condition = loop.condition;
 
-        break;
+    let this_is_the_loop_increment: AstNode;
+    this_is_the_loop_increment = loop.increment;
 
-    } while (true);
+    while (helper.does_the_loop_condition_hold(variable_bank, this_is_the_loop_condition)) {
+
+        helper.execute_the_loop_increment(variable_bank, this_is_the_loop_increment);
+    }
+
+    [prompt]
+    "Write the answer in the box.";
 }

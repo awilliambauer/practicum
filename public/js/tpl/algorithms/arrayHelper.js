@@ -93,11 +93,15 @@ function ArrayHelper() {
         }
     };
 
-    this.execute_statement = function(state, stmt) {
+    this.execute_statement = function(context, stmt) {
         switch (stmt.tag) {
-            case 'expression': return this.evaluate_expression(state, stmt.expression);
+            case 'expression': return this.evaluate_expression(context, stmt.expression);
             default: throw new Error("unkown statement type " + stmt.tag);
         }
+    }
+
+    this.execute_the_loop_increment = function(variable_bank, increment_stmt) {
+        return this.execute_statement(variable_bank, increment_stmt);
     }
 
     this.get_next_statement = function(ast, stmt) {
@@ -139,8 +143,8 @@ function ArrayHelper() {
         return this.create_variable(variable_bank, initializer);
     }
 
-    this.loop_condition_true = function(state, condition_stmt) {
-        var e = this.evaluate_expression(state, condition_stmt);
+    this.does_the_loop_condition_hold = function(variable_bank, condition_stmt) {
+        var e = this.evaluate_expression(variable_bank, condition_stmt);
         if (e.type !== 'bool') throw new Error("Condition is not of type boolean!");
         return e.value;
     }
