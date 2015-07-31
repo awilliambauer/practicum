@@ -82,10 +82,34 @@ lightest green: #E5FCC2
     float: left;
 }
 
+.array_mystery_problem #problem_space * {
+    font-size: 13pt;
+}
+
 .array_mystery_problem pre {
     background-color: #FFFFFF;
     border: none;
     text-align: left;
+}
+
+.array_mystery_problem .java-keyword {
+    color: black;
+}
+
+.array_mystery_problem .java-ident {
+    color: blue;
+}
+
+.array_mystery_problem .java-literal {
+    color: green;
+}
+
+.array_mystery_problem .java-method {
+    color: purple;
+}
+
+.array_mystery_problem .java-reference {
+    font-style: italic;
 }
 
 .array_mystery_problem #problem_space ul {
