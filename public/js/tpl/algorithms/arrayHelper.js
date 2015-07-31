@@ -31,11 +31,11 @@ function ArrayHelper() {
 
     this.add_this_to_the_variable_bank = function(bank, variable) {
         bank[variable.name] = {type:variable.type, value:variable.value};
-    }
+    };
 
     this.execute_the_loop_increment = function(variable_bank, increment_stmt) {
         return this.execute_statement(variable_bank, increment_stmt);
-    }
+    };
 
     this.get_the_next_loop_body_line_to_execute = function(loop, current_statement) {
         if (current_statement) {
@@ -44,11 +44,15 @@ function ArrayHelper() {
             if (loop.body.length === 0) throw new Error ("Empty loop body!");
             return loop.body[0];
         }
-    }
+    };
 
     this.is_there_another_line_to_execute = function(ast, stmt) {
         return !!sim.get_next_statement(ast, stmt);
-    }
+    };
+
+    this.copy = function(x) {
+        return JSON.parse(JSON.stringify(x));
+    };
 
     this.create_variable = function(variable_bank, declaration_stmt) {
         if (declaration_stmt.expression.args[0].tag !== 'identifier') throw new Error("not a valid variable declaration!");
@@ -59,24 +63,30 @@ function ArrayHelper() {
             type: val.type,
             value: val.value
         };
-    }
+    };
 
     this.get_loop = function(ast) {
         // assume loop is the top node
         var loop = ast.body[0];
         if (!loop || loop.tag !== 'for') throw new Error("can't find the for loop!");
         return loop;
-    }
+    };
 
     this.get_loop_init_variable = function(variable_bank, initializer) {
         if (initializer.tag !== 'declaration' || initializer.type !== 'int') throw new Error("for loop initializer isn't an int declaration!");
         return this.create_variable(variable_bank, initializer);
-    }
+    };
 
     this.does_the_loop_condition_hold = function(variable_bank, condition_stmt) {
         var e = sim.evaluate_expression(variable_bank, condition_stmt);
         if (e.type !== 'bool') throw new Error("Condition is not of type boolean!");
         return e.value;
+    };
+
+    this.all_array_lookups_in_the_expression = function(expr) {
+        return java_ast.find_all(function(n) {
+            return n.tag === 'index';
+        }, expr);
     }
 
     this.calculate_answer = function(variable_bank) {
@@ -86,11 +96,11 @@ function ArrayHelper() {
                 return v.value.map(function(x) { return x.value; });
             }
         }
-    }
+    };
 
     this.execute_statement = function(variable_bank, stmt) {
         sim.execute_statement(variable_bank, stmt);
-    }
+    };
 }
 
 /**

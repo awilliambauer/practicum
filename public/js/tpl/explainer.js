@@ -91,6 +91,12 @@ var explainer = (function() {
                     }
                     prompt = p;
                     break;
+                case "foreach":
+                    prompt = "Loop over " + format_identifier(sr.name);
+                    break;
+                case "foreach:increment":
+                    prompt = format_identifier(stmt.parent.variable);
+                    break;
                 default:
                     prompt = "";
                     break;

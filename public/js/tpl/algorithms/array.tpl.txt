@@ -58,6 +58,23 @@ function TPLAlgorithm() {
         do {
             this_is_the_next_line_to_execute = helper.get_the_next_loop_body_line_to_execute(loop, this_is_the_next_line_to_execute);
             helper.execute_statement(variables, this_is_the_next_line_to_execute);
+
+            // FIXME assume it's an assignment statement
+            // copy expression to workspace
+            let this_is_the_expression: Expression;
+            this_is_the_expression = helper.copy(this_is_the_next_line_to_execute.expression.args[1]);
+
+            // for each array lookup in the expression, do the array lookup
+            for (let this_is_the_array_lookup: ExpressionNode of helper.all_array_lookups_in_the_expression(this_is_the_expression)) {
+                // evaluate this node of the ast down to a literal
+            }
+            // evalute the rest of the expression
+
+            // for the array being assigned to, lookup the box
+
+            // assign the new value to the box
+
+
         } while (helper.is_there_another_line_to_execute(ast, this_is_the_next_line_to_execute));
 
         helper.execute_the_loop_increment(variables, this_is_the_loop_increment);

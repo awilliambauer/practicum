@@ -275,7 +275,7 @@ function simulator(ast, globals) {
             case "foreach:increment":
                 push_stack_state(stmt.parent.body);
                 // TODO foreach should use a declaration with a type
-                add_to_context(stmt.parent.variable, stmt.element, undefined);
+                add_to_context(stmt.parent.variable, stmt.element, stmt.parent.type);
                 break;
             case "dowhile":
                 last(call_stack).to_execute.push({tag:'dowhile:condition', parent:stmt, annotations:stmt.annotations});

@@ -407,6 +407,11 @@ var simulator_parsing = function() {
             match_symbol("(");
             match_keyword("let");
             var variable = match_ident();
+            var type;
+            if (peek_symbol(':')) {
+                match_symbol(':');
+                type = match_type();
+            }
             match_keyword("of");
             var collection = match_expression(0);
             match_symbol(")");
@@ -416,6 +421,7 @@ var simulator_parsing = function() {
                 location: location(start),
                 tag:'foreach',
                 variable: variable,
+                type: type,
                 collection: collection,
                 body: body
             };
