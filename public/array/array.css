@@ -149,9 +149,7 @@ lightest green: #E5FCC2
 }
 
 .array_mystery_problem .bank_variable_value {
-    padding: 3px;
     padding-top: 20px;
-    margin-left: 5px;
 }
 
 .array_mystery_problem .bank_variable_array_index {
@@ -167,9 +165,29 @@ lightest green: #E5FCC2
     width: 40px;
 }
 
+.array_mystery_problem li.highlight{
+    background-color: #8fcdca;
+}
+
+.array_mystery_problem span.highlight {
+    background-color: #8fcdca;
+}
+
+.array_mystery_problem .varValue {
+    width: 60px;
+    text-align: center;
+}
+
+.array_mystery_problem .arrayVarValue {
+    width: 30px;
+    text-align: center;
+}
 
 
 
+
+
+/* OLD STYLES */
 
 .array_mystery_problem body {
     background-color: #45ADA8;

@@ -76,9 +76,8 @@ var array = (function() {
 
         // update the UI
         addPrompt();
-        // FIXME
         addVaraibleBank();
-        //addHighlighting();
+        addHighlighting();
     }
 
     // Extracts prompt from state and creates HTML
@@ -180,7 +179,7 @@ var array = (function() {
                     listCell1.attr("class", "bank_variable_label");
                     listCell1.append("span").attr("class", "bank_variable").text(variable);
                     listCell1.append("span").text(" :");
-                    
+
                     listCell2.attr("style", "text-align: left;");
                     listCell2
                         .append("span")
@@ -200,6 +199,140 @@ var array = (function() {
 
         return true;
     }
+
+    function addHighlighting() {
+        // remove all highlighting first so it can be re-drawn
+        // FIXME should write a real reset function
+        $(".highlight").removeClass("highlight");
+
+        for (var variable in state.variables.in_scope) {
+            var varObject = state.variables.in_scope[variable];
+
+            if (varObject.hasOwnProperty("value") && varObject.hasOwnProperty("type")) {
+                switch(varObject.type) {
+                    case "Parameter":
+                        highlightArguments();
+                        break;
+
+                    case "AstNode":
+                        highlightASTNode(varObject.value);
+                        break;
+
+                    case "Line":
+                        //highlightLine(varObject.value);
+                        break;
+
+                }
+            }
+        }
+
+        //interactiveVariableBank({"arr":{"index":2}, "i":0}, true);
+    }
+
+    function highlightArguments() {
+        var argumentText = d3.select("#args").node().innerHTML;
+        var openParenIndex = argumentText.indexOf("(");
+        argumentText = argumentText.substring(0,openParenIndex+1) + "<span class='highlight'>" + argumentText.substring(openParenIndex+1);
+        var closeParenIndex = argumentText.indexOf(")");
+        argumentText = argumentText.substring(0,closeParenIndex) + "</span>" + argumentText.substring(closeParenIndex);
+        d3.select("#args").node().innerHTML = argumentText;
+    }
+
+    function highlightASTNode(node) {
+        var htmlID = "java-ast-" + node.id;
+        $("#" + htmlID).addClass("highlight");
+    }
+
+    // highlights the line of code passed in as a parameter
+    function highlightLine(lineNum) {
+        $("#problem_space li").removeClass("highlight");
+        $("." + lineNum).addClass("highlight");
+    }
+
+    // adds input boxes to the variable bank so the user can add new variables
+    function interactiveVariableBank(variables, newVariable) {
+        console.log("in interactiveVariableBank");
+        console.log(d3.selectAll(".variable_list_table_row"));
+        d3.selectAll(".variable_list_table_row").each(function() {
+            var varName = d3.select(this).select(".bank_variable").node().innerHTML;
+            console.log("varName: " + varName);
+            for (var key in variables) {
+                if (varName === key) {
+
+                    // check to see if this variable is an array
+                    if (d3.select(this).select(".bank_variable_array").node() != null) {
+                        if (variables[key].hasOwnProperty("index")) {
+                            interactiveVariableBankArrayCell(d3.select(this).select(".bank_variable_array"), variables[key].index, newVariable);
+                        }
+                        else {
+                            interactiveVariableBankArray(d3.select(this).select(".bank_variable_array"));
+                        }
+                    }
+                    else {
+                        interactiveVariableBankValue(d3.select(this).select(".bank_variable_value"), newVariable);
+                    }
+                }
+            }
+        });
+    }
+
+    function interactiveVariableBankArrayCell(arrayTable, index, newVariable) {
+        arrayTable.selectAll(".bank_variable_array_value").each(function(d, i) {
+            if (i == index) {
+                // store the current value
+                var currentValue = d3.select(this).node().innerHTML;
+
+                // remove the current value
+                d3.select(this).node().innerHTML = "";
+
+                // add an input box for the value
+                var inputField = d3.select(this)
+                    .append("input")
+                    .attr("class", "arrayVarValue")
+                ;
+
+                // show the current value in the input box
+                if (!newVariable) {
+                    inputField.property("value", currentValue);
+                }
+            }
+        });
+    }
+
+    function interactiveVariableBankArray(arrayTable) {
+        arrayTable.selectAll(".bank_variable_array_value").each(function() {
+            // remove the current value
+            d3.select(this).node().innerHTML = "";
+
+            // add an input box for the value
+            var inputField = d3.select(this)
+                .append("input")
+                .attr("class", "arrayVarValue")
+            ;
+        });
+    }
+
+    function interactiveVariableBankValue(variableValue, newVariable) {
+        // store the current value
+        var currentValue = variableValue.node().innerHTML;
+
+        // remove the current value
+        variableValue.node().innerHTML = "";
+
+        // add an input box for the value
+        var inputField = variableValue
+            .append("input")
+            .attr("class", "varValue")
+        ;
+
+        // show the current value in the input box
+        if (!newVariable) {
+            inputField.property("value", currentValue);
+        }
+    }
+
+
+
 
     function checkSolution() {
         var userSolution = d3.select("#inputBox").node().value;

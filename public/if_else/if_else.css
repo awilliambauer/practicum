@@ -220,7 +220,11 @@
     background-color: #EEEEEE;
 }
 
-.if_else_problem li.highlight, span.highlight {
+.if_else_problem li.highlight{
+    background-color: #8fcdca;
+}
+
+.if_else_problem span.highlight {
     background-color: #8fcdca;
 }
 
