@@ -35,7 +35,8 @@ function ArrayHelper() {
     };
 
     this.execute_the_loop_increment = function(variable_bank, increment_stmt) {
-        return this.execute_statement(variable_bank, increment_stmt);
+        this.execute_statement(variable_bank, increment_stmt);
+        // TODO return the variable
     };
 
     this.get_the_next_loop_body_line_to_execute = function(loop, current_statement) {
@@ -128,13 +129,23 @@ function ArrayHelper() {
 
     this.do_the_array_lookup = function(array, index, origExpr) {
         if (array.type !== 'array') throw new Error("Cannot index into object of type " + array.type);
-        var r = array.value[index.value];
-        if (!r) throw new Error("invalid array index " + index.value + " of " + array.type);
-        replace_expr_with_literal(origExpr, r);
+        var value = array.value[index.value];
+        if (!value) throw new Error("invalid array index " + index.value + " of " + array.type);
+        replace_expr_with_literal(origExpr, value);
+        return {
+            array: array,
+            index: index,
+            value: value
+        };
     }
 
     this.assign_the_new_value_to_the_array_element = function(array, index, value) {
         array.value[index.value] = value;
+        return {
+            array: array,
+            index: index,
+            value: value
+        };
     };
 }
 

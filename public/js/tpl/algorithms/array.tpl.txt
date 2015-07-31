@@ -25,7 +25,9 @@ function TPLAlgorithm() {
         let this_is_the_parameter: Parameter;
         this_is_the_parameter = helper.get_parameter(state.args);
 
-        helper.add_this_to_the_variable_bank(variables, this_is_the_parameter);
+        let add_the_array_to_the_variable_bank: Variable;
+        [interactive("add_variable")]
+        add_the_array_to_the_variable_bank = helper.add_this_to_the_variable_bank(variables, this_is_the_parameter);
     }
 
     // FIXME get this out of here once simulator handles refs correctly
@@ -41,8 +43,9 @@ function TPLAlgorithm() {
         let this_is_the_loop_initializer: AstNode;
         this_is_the_loop_initializer = loop.initializer;
 
-        let add_this_to_the_variable_bank:Variable;
-        add_this_to_the_variable_bank = helper.add_this_to_the_variable_bank(variables, helper.get_loop_init_variable(variables, this_is_the_loop_initializer));
+        let add_the_loop_variable_to_the_variable_bank: Variable;
+        [interactive("add_variable")]
+        add_the_loop_variable_to_the_variable_bank = helper.add_this_to_the_variable_bank(variables, helper.get_loop_init_variable(variables, this_is_the_loop_initializer));
     }
 
     let this_is_the_loop_condition: AstNode;
@@ -51,14 +54,15 @@ function TPLAlgorithm() {
     let this_is_the_loop_increment: AstNode;
     this_is_the_loop_increment = loop.increment;
 
+    [interactive("conditional")]
     while (helper.does_the_loop_condition_hold(variables, this_is_the_loop_condition)) {
         let this_is_the_next_line_to_execute: Line;
         [no_step]
         this_is_the_next_line_to_execute = null;
 
+        [no_step]
         do {
             this_is_the_next_line_to_execute = helper.get_the_next_loop_body_line_to_execute(loop, this_is_the_next_line_to_execute);
-            helper.execute_statement(variables, this_is_the_next_line_to_execute);
 
             let this_is_the_expression_result: Variable;
 
@@ -70,41 +74,52 @@ function TPLAlgorithm() {
                 this_is_the_expression = helper.copy(this_is_the_next_line_to_execute.expression.args[1]);
 
                 // for each array lookup in the expression, do the array lookup
-                for (let this_is_the_array_lookup: IndexExpression of helper.all_array_lookups_in_the_expression(this_is_the_expression)) {
-                    // evaluate this node of the ast down to a literal
-                    let this_is_the_index: Index;
-                    this_is_the_index = this_is_the_array_lookup.index;
-                    helper.evaluate_this_expression(variables, this_is_the_index);
-
+                for (let this_is_the_array_lookup: ScratchAstNode of helper.all_array_lookups_in_the_expression(this_is_the_expression)) {
                     let this_is_the_array: Variable;
                     this_is_the_array = helper.evaluate_this_expression2(variables, this_is_the_array_lookup.object);
 
-                    helper.do_the_array_lookup(this_is_the_array, this_is_the_index, this_is_the_array_lookup);
+                    // evaluate this node of the ast down to a literal
+                    let this_is_the_index: ScratchAstNode;
+                    this_is_the_index = this_is_the_array_lookup.index;
+                    [no_step]
+                    helper.evaluate_this_expression(variables, this_is_the_index);
+
+                    let do_the_array_lookup: ArrayGet;
+                    [interactive("array_get")]
+                    do_the_array_lookup = helper.do_the_array_lookup(this_is_the_array, this_is_the_index, this_is_the_array_lookup);
                 }
 
                 // evalute the rest of the expression
+                // FIXME make this an interactive in-line edit
                 this_is_the_expression_result = helper.evaluate_this_expression2(variables, this_is_the_expression);
             }
 
             // for the array being assigned to, lookup the box
-            let this_is_the_assigner;
+            let this_is_the_assigner: AstNode;
             this_is_the_assigner = helper.copy(this_is_the_next_line_to_execute.expression.args[0]);
-
-            let this_is_the_index: Index;
-            this_is_the_index = this_is_the_assigner.index;
-            helper.evaluate_this_expression(variables, this_is_the_index);
 
             let this_is_the_array: Variable;
             this_is_the_array = helper.evaluate_this_expression2(variables, this_is_the_assigner.object);
 
+            // FIXME this needs to be an object that has the pointer to the array
+            [interactive]
+            let this_is_the_index: Index;
+            this_is_the_index = this_is_the_assigner.index;
+            helper.evaluate_this_expression(variables, this_is_the_index);
+
             // assign the new value to the box
-            helper.assign_the_new_value_to_the_array_element(this_is_the_array, this_is_the_index, this_is_the_expression_result);
+            let assign_the_new_value_to_the_array_element: ArraySet;
+            [interactive("array_set")]
+            assign_the_new_value_to_the_array_element = helper.assign_the_new_value_to_the_array_element(this_is_the_array, this_is_the_index, this_is_the_expression_result);
 
         } while (helper.is_there_another_line_to_execute(ast, this_is_the_next_line_to_execute));
 
-        helper.execute_the_loop_increment(variables, this_is_the_loop_increment);
+        let execute_the_loop_increment_and_update_the_variable: Variable;
+        [interactive("update_variable")]
+        execute_the_loop_increment_and_update_the_variable = helper.execute_the_loop_increment(variables, this_is_the_loop_increment);
     }
 
+    // TODO maybe just put the answer in a variable
     [no_step]
     state.answer = helper.calculate_answer(variables);
 
