@@ -242,7 +242,6 @@ var array = (function() {
     }
 
     function createScratchArea(lines) {
-        console.info(lines);
         var scratch = d3.select('#scratch_area').classed('hidden', false);
 
         // TODO this should probably be d3 except d3 crashes with some unhelpful error when appending the result of java_formatter.format(...) that I don't have time to debug

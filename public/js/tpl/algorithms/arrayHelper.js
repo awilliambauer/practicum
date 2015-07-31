@@ -123,7 +123,6 @@ function ArrayHelper() {
         return expr;
     }
 
-    // evaluates the given ast expression, mutating the node to a new literal ast node
     this.evaluate_this_expression = function(variable_bank, array, expr) {
         var val = sim.evaluate_expression(variable_bank, expr);
         val[array] = array;

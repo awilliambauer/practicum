@@ -199,7 +199,6 @@ var java_formatter = function() {
 
     self.format = function(ast, options) {
         options = options || {};
-        console.log(ast);
         var dom = to_dom(ast, options, 0);
         return dom[0];
     }
