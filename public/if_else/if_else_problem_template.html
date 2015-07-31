@@ -5,7 +5,10 @@
 
         <div id="ifElseHeader">
             <span style='font-weight: bold;'>Problem: </span>
-            <span id="args"></span>
+            <span class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span id="methodCall"></span><span class="caret"></span></a>
+                <ul id="methodCallDropdown" class="dropdown-menu"></ul>
+            </span>
             <span style='font-weight: bold; padding-left: 30px;'>Solution: </span>
             <input id='inputBox' name="checkanswer" type="text" autofocus="autofocus" />
             <button id='submitButton' type="button">Check</button>
@@ -29,18 +32,5 @@
             </div>
         </div>
 
-
-
     </div>
-    <div id="method_call_panel">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">Choose a method call to use:</h3>
-            </div>
-            <ul id="method_calls" class="list-group">
-            </ul>
-        </div>
-    </div>
-
-
 </div>

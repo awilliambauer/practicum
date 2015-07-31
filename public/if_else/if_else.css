@@ -43,6 +43,14 @@
     text-align: center;
 }
 
+.if_else_problem #methodCall {
+    font-family: monospace;
+}
+
+.if_else_problem .monospace {
+    font-family: monospace;
+}
+
 .if_else_problem .startingStatesOption {
     font-family: monospace;
     font-size: 25px;
@@ -51,22 +59,6 @@
 .if_else_problem #startingStates {
     font-family: monospace;
     font-size: 25px;
-}
-
-.if_else_problem #method_call_panel {
-    clear: both;
-    padding-top: 40px;
-}
-
-.if_else_problem div#active_method_call {
-    text-align: right;
-    width: 47.5%;
-    float: left;
-    padding-right: 5%;
-}
-
-.if_else_problem span#active_method_call_text {
-    font-family: monospace;
 }
 
 #problem-area.if_else_problem {

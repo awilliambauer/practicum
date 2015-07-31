@@ -32,9 +32,33 @@ var if_else = (function() {
         if (altState) {
             state = altState;
         }
-        createStartingStates(problemConfig, state);
+        createStartingStatesDropdown(problemConfig, state);
         return state;
     };
+
+    function createStartingStatesDropdown(problemConfig, state) {
+        var availableMethodCalls = [problemConfig.initialState].concat(problemConfig.alternateStartingStates);
+
+        // fill in dropdowns in nav
+        d3.selectAll("#methodCallDropdown")
+            .selectAll("li")
+            .data(availableMethodCalls)
+            .enter()
+            .append("li")
+            .append("a")
+            .attr("class", "monospace")
+            .text(function(s) { return s.AST.name + "(" + getArgString(s.initialization) + ")"} )
+            .on("click", function(s) {
+                if (s.initialization !== state.initialization) {
+                    csed.loadProblem(problemConfig, s);
+                }
+            })
+        ;
+
+        d3.select("#methodCall")
+            .text(function() { return state.AST.name + "(" + getArgString(state.initialization) + ")"} )
+        ;
+    }
 
     // create the method call list in the dom
     function createStartingStates(problemConfig) {
@@ -84,12 +108,6 @@ var if_else = (function() {
             detail: {fadeLevel:fadeLevel},
         });
 
-        var args = getArgString(state.initialization).toString();
-        var methodCallText = state.AST.name + "(" + args + ")";
-
-        $(".content > h2").text("If/Else Mystery Problem");
-        d3.select("#args").text(methodCallText);
-
         // move to the next step if they hit enter or click next
         $("#nextstep").click(step);
         $(document).off("keydown");
@@ -106,37 +124,10 @@ var if_else = (function() {
 
         d3.select("#newProblem").on("click", function () {csed.loadProblem(problemConfig.nextProblem)});
 
-        fillStartingStates(problemConfig, initialState);
-
         if (needToReset) {
             resetUI();
             needToReset = false;
         }
-    }
-
-    // Highlight the button that represents the method call we're currently viewing and disable it
-    // Make the other method calls into buttons
-    function fillStartingStates(problemConfig, activeState) {
-        var availableMethodCalls = [problemConfig.initialState].concat(problemConfig.alternateStartingStates);
-        d3.selectAll(".method_call_container a")
-            .data(availableMethodCalls)
-
-            .attr("class", function(state) {
-                var activeStatus = "active";
-                var buttonClass = "btn-default";
-                if (state.initialization === activeState.initialization) {
-                    activeStatus = "disabled";
-                    buttonClass = "btn-primary";
-                }
-
-                return "btn btn-block method_call_text " + activeStatus + " " + buttonClass;
-            })
-            .on("click", function(state) {
-                if (state.initialization !== activeState.initialization) {
-                    csed.loadProblem(problemConfig, state);
-                }
-            })
-        ;
     }
 
     // gets the initial values that the method will be called with
@@ -348,12 +339,12 @@ var if_else = (function() {
     }
 
     function highlightArguments() {
-        var argumentText = d3.select("#args").node().innerHTML;
+        var argumentText = d3.select("#methodCall").node().innerHTML;
         var openParenIndex = argumentText.indexOf("(");
         argumentText = argumentText.substring(0,openParenIndex+1) + "<span class='highlight'>" + argumentText.substring(openParenIndex+1);
         var closeParenIndex = argumentText.indexOf(")");
         argumentText = argumentText.substring(0,closeParenIndex) + "</span>" + argumentText.substring(closeParenIndex);
-        d3.select("#args").node().innerHTML = argumentText;
+        d3.select("#methodCall").node().innerHTML = argumentText;
     }
 
     // highlights the variables passed in to this function in the variable bank
