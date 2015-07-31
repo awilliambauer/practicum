@@ -103,6 +103,21 @@ lightest green: #E5FCC2
     overflow: auto;
 }
 
+.array_mystery_problem #scratch_area {
+    border: 5px solid #547980;
+    border-radius: 10px;
+    background-color: #ffffff;
+    margin-left: 540px;
+    margin-top: 20px;
+    width: 400px;
+}
+
+.array_mystery_problem #scratch_area_title {
+    text-decoration: underline;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
 .array_mystery_problem #variable_bank_title {
     text-decoration: underline;
     font-weight: bold;

@@ -253,14 +253,10 @@ var array = (function() {
 
     // adds input boxes to the variable bank so the user can add new variables
     function interactiveVariableBank(variables, newVariable) {
-        console.log("in interactiveVariableBank");
-        console.log(d3.selectAll(".variable_list_table_row"));
         d3.selectAll(".variable_list_table_row").each(function() {
             var varName = d3.select(this).select(".bank_variable").node().innerHTML;
-            console.log("varName: " + varName);
             for (var key in variables) {
                 if (varName === key) {
-
                     // check to see if this variable is an array
                     if (d3.select(this).select(".bank_variable_array").node() != null) {
                         if (variables[key].hasOwnProperty("index")) {
