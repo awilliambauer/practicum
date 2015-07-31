@@ -31,6 +31,7 @@ function ArrayHelper() {
 
     this.add_this_to_the_variable_bank = function(bank, variable) {
         bank[variable.name] = {type:variable.type, value:variable.value};
+        return variable;
     };
 
     this.execute_the_loop_increment = function(variable_bank, increment_stmt) {
