@@ -191,7 +191,7 @@ var if_else = (function() {
 
     // remove all highlighting from the UI if the user switches method calls
     function resetUI() {
-        d3.select("#prompt").node().innerHTML = "Press Enter to start!";
+        d3.select("#promptText").node().innerHTML = "Press Enter or click Next to start!";
         d3.select("#variable_list").node().innerHTML = "";
         d3.selectAll(".block_highlight").each(function() {
             d3.select(this).classed("block_highlight", false);
@@ -211,11 +211,11 @@ var if_else = (function() {
     function addPrompt() {
         if(state.hasOwnProperty("prompt")) {
             var prompt =  state.prompt;
-            d3.select("#prompt").node().innerHTML = prompt;
+            d3.select("#promptText").node().innerHTML = prompt;
 
             // check if we need to add "yes" and "no" radio buttons to the prompt
             if (fadeLevel > 0 && state.hasOwnProperty("askForResponse") && state.askForResponse === "conditional") {
-                var yesNoButtonDiv = d3.select("#prompt")
+                var yesNoButtonDiv = d3.select("#promptText")
                     .append("div")
                     .attr("class", "yes_no_buttons");
 

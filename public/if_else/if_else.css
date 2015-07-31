@@ -177,13 +177,12 @@
 
 .if_else_problem #next-container {
     text-align: center;
-    padding-bottom: 20px;
-    width: 725px;
+    padding-top: 20px;
 }
 
 .if_else_problem #nextstep {
     position: relative;
-    font-size: 20pt;
+    font-size: 10pt;
     margin: 0 auto;
     padding-left: 20px;
     padding-right: 20px;
