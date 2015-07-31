@@ -5,7 +5,8 @@ function TPLAlgorithm() {
     // VariableBank: the bank of all local variables
     // Variable: a value that will be added to the variable bank, of form {name:string, type:string, value:*}.
 
-    let ast: AstNode;
+    // FIXME get this out of here once simulator can pass input parameters
+    let ast;
     [no_step]
     ast = state.ast;
 
@@ -27,7 +28,8 @@ function TPLAlgorithm() {
         helper.add_this_to_the_variable_bank(variables, this_is_the_parameter);
     }
 
-    let loop: TotallyAnAstNodeButDontWantHighlighting;
+    // FIXME get this out of here once simulator handles refs correctly
+    let loop;
     [no_step]
     loop = helper.get_loop(ast);
 
@@ -39,9 +41,8 @@ function TPLAlgorithm() {
         let this_is_the_loop_initializer: AstNode;
         this_is_the_loop_initializer = loop.initializer;
 
-        let this_is_the_loop_index: Variable;
-        this_is_the_loop_index = helper.get_loop_init_variable(variables, this_is_the_loop_initializer);
-        helper.add_this_to_the_variable_bank(variables, this_is_the_loop_index);
+        let add_this_to_the_variable_bank:Variable;
+        add_this_to_the_variable_bank = helper.add_this_to_the_variable_bank(variables, helper.get_loop_init_variable(variables, this_is_the_loop_initializer));
     }
 
     let this_is_the_loop_condition: AstNode;

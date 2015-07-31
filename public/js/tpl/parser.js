@@ -504,6 +504,8 @@ var simulator_parsing = function() {
                 return {id:new_id(), location: location(start), tag:tag, value:val};
             }
 
+            var e;
+
             var t = lex.next();
             switch (t.type) {
                 // literals
@@ -518,6 +520,14 @@ var simulator_parsing = function() {
                         case "false": return create('literal', false);
                         case "null": return create('literal', null);
                         default: throw_error(t.position, "Keyword " + t.value + " cannot be used as an expression.");
+                    }
+                case TokenType.SYMBOL:
+                    switch (t.value) {
+                        case '(':
+                            e = match_expression(0);
+                            match_symbol(')');
+                            return e;
+                        default: throw_error(t.position, "Symbol " + t.value + " cannot be used as an expression.");
                     }
                 default: throw_error(t.position, "Expected expression");
             }
