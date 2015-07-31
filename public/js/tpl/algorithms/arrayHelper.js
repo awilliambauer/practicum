@@ -56,6 +56,10 @@ function ArrayHelper() {
         return JSON.parse(JSON.stringify(x));
     };
 
+    this.create_scratch = function(x) {
+        return [this.copy(x)];
+    }
+
     this.create_variable = function(variable_bank, declaration_stmt) {
         if (declaration_stmt.expression.args[0].tag !== 'identifier') throw new Error("not a valid variable declaration!");
         var name = declaration_stmt.expression.args[0].value;
@@ -85,11 +89,11 @@ function ArrayHelper() {
         return e.value;
     };
 
-    this.all_array_lookups_in_the_expression = function(expr) {
+    this.all_array_lookups_in_the_expression = function(scratch_list) {
         return java_ast.find_all(function(n) {
             return n.tag === 'index';
-        }, expr);
-    }
+        }, scratch_list[0]);
+    };
 
     this.calculate_answer = function(variable_bank) {
         for (var key in variable_bank) {
@@ -115,28 +119,39 @@ function ArrayHelper() {
         expr.tag = 'literal';
         expr.type = val.type;
         expr.value = val.value;
+
+        return expr;
     }
 
     // evaluates the given ast expression, mutating the node to a new literal ast node
-    this.evaluate_this_expression = function(variable_bank, expr) {
+    this.evaluate_this_expression = function(variable_bank, array, expr) {
         var val = sim.evaluate_expression(variable_bank, expr);
-        replace_expr_with_literal(expr, val);
+        val[array] = array;
+        return val;
     };
 
     this.evaluate_this_expression2 = function(variable_bank, expr) {
         return sim.evaluate_expression(variable_bank, expr);
     }
 
-    this.do_the_array_lookup = function(array, index, origExpr) {
+
+    this.evaluate_this_expression_and_add_to_scratch = function(variable_bank, scratch_list) {
+        var value = sim.evaluate_expression(variable_bank, last(scratch_list));
+        var new_line = this.copy(last(scratch_list));
+        scratch_list.push(new_line);
+
+        return replace_expr_with_literal(new_line, value);
+    }
+
+    this.do_the_array_lookup = function(scratch_list, array, index, origExpr) {
         if (array.type !== 'array') throw new Error("Cannot index into object of type " + array.type);
         var value = array.value[index.value];
         if (!value) throw new Error("invalid array index " + index.value + " of " + array.type);
-        replace_expr_with_literal(origExpr, value);
-        return {
-            array: array,
-            index: index,
-            value: value
-        };
+
+        var new_line = this.copy(last(scratch_list));
+        scratch_list.push(new_line);
+
+        return replace_expr_with_literal(java_ast.find_by_id(origExpr.id, new_line), value);
     }
 
     this.assign_the_new_value_to_the_array_element = function(array, index, value) {
