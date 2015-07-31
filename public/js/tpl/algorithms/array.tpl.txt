@@ -59,21 +59,45 @@ function TPLAlgorithm() {
             this_is_the_next_line_to_execute = helper.get_the_next_loop_body_line_to_execute(loop, this_is_the_next_line_to_execute);
             helper.execute_statement(variables, this_is_the_next_line_to_execute);
 
-            // FIXME assume it's an assignment statement
-            // copy expression to workspace
-            let this_is_the_expression: Expression;
-            this_is_the_expression = helper.copy(this_is_the_next_line_to_execute.expression.args[1]);
+            let this_is_the_expression_result: Variable;
 
-            // for each array lookup in the expression, do the array lookup
-            for (let this_is_the_array_lookup: ExpressionNode of helper.all_array_lookups_in_the_expression(this_is_the_expression)) {
-                // evaluate this node of the ast down to a literal
+            [no_step]
+            {
+                // FIXME assume it's an assignment statement
+                // copy expression to workspace
+                let this_is_the_expression: Expression;
+                this_is_the_expression = helper.copy(this_is_the_next_line_to_execute.expression.args[1]);
+
+                // for each array lookup in the expression, do the array lookup
+                for (let this_is_the_array_lookup: IndexExpression of helper.all_array_lookups_in_the_expression(this_is_the_expression)) {
+                    // evaluate this node of the ast down to a literal
+                    let this_is_the_index: Index;
+                    this_is_the_index = this_is_the_array_lookup.index;
+                    helper.evaluate_this_expression(variables, this_is_the_index);
+
+                    let this_is_the_array: Variable;
+                    this_is_the_array = helper.evaluate_this_expression2(variables, this_is_the_array_lookup.object);
+
+                    helper.do_the_array_lookup(this_is_the_array, this_is_the_index, this_is_the_array_lookup);
+                }
+
+                // evalute the rest of the expression
+                this_is_the_expression_result = helper.evaluate_this_expression2(variables, this_is_the_expression);
             }
-            // evalute the rest of the expression
 
             // for the array being assigned to, lookup the box
+            let this_is_the_assigner;
+            this_is_the_assigner = helper.copy(this_is_the_next_line_to_execute.expression.args[0]);
+
+            let this_is_the_index: Index;
+            this_is_the_index = this_is_the_assigner.index;
+            helper.evaluate_this_expression(variables, this_is_the_index);
+
+            let this_is_the_array: Variable;
+            this_is_the_array = helper.evaluate_this_expression2(variables, this_is_the_assigner.object);
 
             // assign the new value to the box
-
+            helper.assign_the_new_value_to_the_array_element(this_is_the_array, this_is_the_index, this_is_the_expression_result);
 
         } while (helper.is_there_another_line_to_execute(ast, this_is_the_next_line_to_execute));
 

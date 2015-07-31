@@ -101,6 +101,40 @@ function ArrayHelper() {
     this.execute_statement = function(variable_bank, stmt) {
         sim.execute_statement(variable_bank, stmt);
     };
+
+    function replace_expr_with_literal(expr, val) {
+        // clear out old tag-specific data
+        for (var prop in expr) {
+            if (prop !== 'id' && prop !== 'location') {
+                delete expr[prop];
+            }
+        }
+        // replace with literal data
+        expr.tag = 'literal';
+        expr.type = val.type;
+        expr.value = val.value;
+    }
+
+    // evaluates the given ast expression, mutating the node to a new literal ast node
+    this.evaluate_this_expression = function(variable_bank, expr) {
+        var val = sim.evaluate_expression(variable_bank, expr);
+        replace_expr_with_literal(expr, val);
+    };
+
+    this.evaluate_this_expression2 = function(variable_bank, expr) {
+        return sim.evaluate_expression(variable_bank, expr);
+    }
+
+    this.do_the_array_lookup = function(array, index, origExpr) {
+        if (array.type !== 'array') throw new Error("Cannot index into object of type " + array.type);
+        var r = array.value[index.value];
+        if (!r) throw new Error("invalid array index " + index.value + " of " + array.type);
+        replace_expr_with_literal(origExpr, r);
+    }
+
+    this.assign_the_new_value_to_the_array_element = function(array, index, value) {
+        array.value[index.value] = value;
+    };
 }
 
 /**

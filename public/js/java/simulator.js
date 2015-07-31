@@ -9,6 +9,8 @@ var java_simulator = function() {
      * @param context: an object mapping local variable names to {type:string, value:*} objects.
      */
     function evaluate_expression(context, expr) {
+        if (!context || !expr || !expr.tag) throw new Error("invalid arguments to evaluate!");
+
         var arg1, arg2, obj, idx, arg1v, arg2v, r;
 
         // HACK this only works for integers and booleans kinda!
