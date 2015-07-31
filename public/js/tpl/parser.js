@@ -586,7 +586,7 @@ var simulator_parsing = function() {
                 case "&&": case "||": return 30;
                 case "=": return 10;
                 case ";": case ")": case "]": case ",": return 0;
-                default: throw new Error("unknown operator " + token.value);
+                default: throw_error(token.position, "unknown operator " + token.value);
             }
         }
 
