@@ -1,11 +1,11 @@
 <div class="problem array_mystery_problem">
     <h1>Array Mystery</h1>
-    <div id="description">
+    <!--<div id="description">
         <p>In this problem, you are to simulate the execution of a method that manipulates an array of integers.
         In the solution box, indicate what values will be stored in the array after the method executes based
         on the initial values in the array passed in to the method as a parameter.</p>
         <br>
-    </div>
+    </div>-->
     <div id="ArrayMysteryHeader">
         <span style='font-weight: bold;'>Problem: </span>
         <span id="args">Mystery({11,14,2,4,7})</span>
@@ -13,11 +13,10 @@
         <input id='inputBox' name="checkanswer" type="text" autofocus="autofocus" />
         <button id='submitButton' type="button">Check</button>
     </div>
-
+    <div id="newProblemContainer">
+        <button id='newProblem' type="button" class="hidden">Try another problem!</button>
+    </div>
     <div id="problem_content">
-        <div id="next-container">
-            <button id="nextstep">Next</button>
-        </div>
         <div id="problem_space"><pre></pre></div>
 
         <div id="variable_bank">
@@ -31,5 +30,10 @@
         </div>
     </div>
 
-    <div id="prompt">Press Enter to start!</div>
+    <div id="prompt">
+        <span id="promptText">Press Enter or click Next to start!</span>
+        <div id="next-container">
+            <button id="nextstep">Next</button>
+        </div>
+    </div>
 </div>

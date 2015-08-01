@@ -86,11 +86,11 @@ var array = (function() {
     function addPrompt() {
         if (state.hasOwnProperty("prompt")) {
             var prompt =  state.prompt;
-            d3.select("#prompt").node().innerHTML = prompt;
+            d3.select("#promptText").node().innerHTML = prompt;
 
             // check if we need to add "yes" and "no" radio buttons to the prompt
             if (state.hasOwnProperty("askForResponse") && state.askForResponse === "conditional") {
-                var yesNoButtonDiv = d3.select("#prompt")
+                var yesNoButtonDiv = d3.select("#promptText")
                     .append("div")
                     .attr("class", "yes_no_buttons")
                     ;

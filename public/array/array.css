@@ -34,17 +34,23 @@ lightest green: #E5FCC2
     margin-right: auto;
 }
 
-.array_mystery_problem #args {
-    font-family: monospace;
+.array_mystery_problem #newProblem {
+    font-size: 18px;
+    vertical-align: middle;
+}
+
+.array_mystery_problem #newProblemContainer {
+    padding-top: 30px;
+    text-align: center;
 }
 
 .array_mystery_problem #prompt {
     position: absolute;
-    top: 325px;
+    top: 380px;
     border: 2px solid #547980;
     border-radius: 10px;
     width: 250px;
-    left: 10%;
+    left: 25%;
     text-align: left;
     padding: 10px;
     background: #FAFFF0;
@@ -52,13 +58,12 @@ lightest green: #E5FCC2
 
 .array_mystery_problem #next-container {
     text-align: center;
-    padding-bottom: 20px;
-    width: 725px;
+    padding-top: 20px;
 }
 
 .array_mystery_problem #nextstep {
     position: relative;
-    font-size: 20pt;
+    font-size: 10pt;
     margin: 0 auto;
     padding-left: 20px;
     padding-right: 20px;
@@ -79,17 +84,19 @@ lightest green: #E5FCC2
     border-radius: 10px;
     background-color: #ffffff;
     width: 525px;
+    min-height: 250px;
     float: left;
 }
 
 .array_mystery_problem #problem_space * {
-    font-size: 13pt;
+    font-size: 11pt;
 }
 
 .array_mystery_problem pre {
     background-color: #FFFFFF;
     border: none;
     text-align: left;
+    padding-left: 50px;
 }
 
 .array_mystery_problem .java-keyword {
@@ -140,6 +147,15 @@ lightest green: #E5FCC2
     text-decoration: underline;
     font-weight: bold;
     margin-bottom: 15px;
+}
+
+.array_mystery_problem #scratch_list {
+    list-style: none;
+}
+.array_mystery_problem #scratch_list li {
+    font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
+    font-size: 11pt;
+    padding-bottom: 10px;
 }
 
 .array_mystery_problem #variable_bank_title {
