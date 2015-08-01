@@ -143,5 +143,5 @@ function TPLAlgorithm() {
     state.answer = helper.calculate_answer(variables);
 
     [prompt]
-    "Write the answer in the box.";
+    "Write the values of the array in the solution box.";
 }
