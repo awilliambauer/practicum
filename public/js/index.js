@@ -15,6 +15,7 @@ var csed = (function() {
     var experimental_condition;
     var server_savedata;
     var numProblemsByCategory;
+    var problemIdsByCategory;
 
     var ENABLE_TELEMETRY_LOGGING = true;
 
@@ -28,19 +29,40 @@ var csed = (function() {
                 server_savedata = logging_data.savedata ? JSON.parse(logging_data.savedata) : null;
 
                 // initialize the number of problems so we can give the user the correct fading level
+                // initialize the problems the user has tried so we can display problem highlighting
                 if (server_savedata === null) {
                     numProblemsByCategory = {
                         expressions: 0,
-                        if_else: 0
+                        if_else: 0,
+                        array: 0
+                    };
+                    problemIdsByCategory = {
+                        expressions: [],
+                        if_else: [],
+                        array: []
                     };
                 }
-                else if (server_savedata.numProblemsByCategory) {
-                    numProblemsByCategory = server_savedata.numProblemsByCategory;
-                } else { // has outdated savedata
-                    numProblemsByCategory = {
-                        expressions: server_savedata.numProblems,
-                        if_else: 0
-                    };
+                else {
+                    if (server_savedata.numProblemsByCategory) {
+                        numProblemsByCategory = server_savedata.numProblemsByCategory;
+                    } else { // has outdated savedata
+                        numProblemsByCategory = {
+                            expressions: server_savedata.numProblems,
+                            if_else: 0,
+                            array: 0
+                        };
+                    }
+
+                    if (server_savedata.problemIdsByCategory) {
+                        problemIdsByCategory = server_savedata.problemIdsByCategory;
+                    }
+                    else {
+                        problemIdsByCategory = {
+                            expressions: [],
+                            if_else: [],
+                            array: []
+                        };
+                    }
                 }
 
                 // for debugging
@@ -127,20 +149,42 @@ var csed = (function() {
             .data(function(problemsConfig) { return problemsConfig.problems; })
             .enter()
             .append("a")
-            .attr("class", "list-group-item")
+            .attr("class", function(problem) {
+                var foundProblem = false;
+                for (var category in problemIdsByCategory) {
+                    if (problemIdsByCategory[category].indexOf(problem.id) !== -1) {
+                        foundProblem = true;
+                    }
+                }
+                if (foundProblem) {
+                    return "uuid_" + problem.id + " list-group-item problem-visited";
+                }
+                else {
+                    return "uuid_" + problem.id + " list-group-item";
+                }
+            })
             .text(function(problemConfig) { return problemConfig.title; })
             .on("click", onProblemStartCallback)
         ;
     }
 
-    function saveProblemData() {
+    function saveProblemData(problemConfig) {
+        // increment the number of problems this user has started
+        numProblemsByCategory[problemConfig.category]++;
+        // add the problem id to the list of problems the user has tried
+        if (problemIdsByCategory[problemConfig.category].indexOf(problemConfig.id) == -1) {
+            problemIdsByCategory[problemConfig.category].push(problemConfig.id);
+        }
+
         if (server_savedata === null) {
             server_savedata = {
-              numProblemsByCategory: numProblemsByCategory
+                numProblemsByCategory: numProblemsByCategory,
+                problemIdsByCategory: problemIdsByCategory
             };
         }
         else {
             server_savedata.numProblemsByCategory = numProblemsByCategory;
+            server_savedata.problemIdsByCategory = problemIdsByCategory;
         }
 
         Logging.save_user_data(server_savedata);
@@ -189,9 +233,8 @@ var csed = (function() {
     function loadProblem(problemConfig, altState) {
         task_logger = Logging.start_task(problemConfig);
 
-        // increment the number of problems this user has started
-        numProblemsByCategory[problemConfig.category]++;
-        saveProblemData();
+        saveProblemData(problemConfig);
+        updateProblemDisplay(problemConfig)
 
         // remove the old problem from the DOM
         d3.selectAll("#problem-container .problem").remove();
@@ -244,6 +287,12 @@ var csed = (function() {
         });
     }
 
+    // add the "problem-visited" class to the newly visited problem
+    function updateProblemDisplay(problemsConfig) {
+        d3.selectAll(".uuid_" + problemsConfig.id)
+            .classed("problem-visited", true);
+    }
+
     function addProblemsToNav(problemsConfig, onProblemStartCallback) {
         // add problems to nav
         d3.select("#problems-nav-container").selectAll("li")
@@ -277,6 +326,20 @@ var csed = (function() {
             .append("li")
             .append("a")
             .text(function(problem) { return problem.title; })
+            .attr("class", function(problem) {
+                var foundProblem = false;
+                for (var category in problemIdsByCategory) {
+                    if (problemIdsByCategory[category].indexOf(problem.id) !== -1) {
+                        foundProblem = true;
+                    }
+                }
+                if (foundProblem) {
+                    return "uuid_" + problem.id + " problem-visited";
+                }
+                else {
+                    return "uuid_" + problem.id;
+                }
+            })
             .on("click", onProblemStartCallback)
         ;
     }

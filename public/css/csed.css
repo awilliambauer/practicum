@@ -70,3 +70,7 @@ a:hover.btn-primary, a:active.btn-primary, a:focus.btn-primary {
     overflow-y: auto;
 }
 
+.problem-visited {
+    color: #337ab7 !important;
+}
+
