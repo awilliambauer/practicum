@@ -48,7 +48,7 @@ var array = (function() {
 
         d3.select("#submitButton").on("click", checkSolution);
 
-        console.log(state);
+        //console.log(state);
     }
 
     function step() {
@@ -74,7 +74,7 @@ var array = (function() {
             throw new Error("unimplemented, I don't know how to wait for responses yet!");
         }
 
-        console.log(state);
+        //console.log(state);
 
         // update the UI
         addPrompt();
@@ -207,8 +207,18 @@ var array = (function() {
         // FIXME should write a real reset function
         $(".highlight").removeClass("highlight");
 
-        for (var variable in state.variables.in_scope) {
-            var varObject = state.variables.in_scope[variable];
+        var variable, varObject;
+
+        // first track down the scratch area, if it exists
+        for (variable in state.variables.in_scope) {
+            varObject = state.variables.in_scope[variable];
+            if (varObject.type === 'ScratchList') {
+                createScratchArea(varObject.value);
+            }
+        }
+
+        for (variable in state.variables.in_scope) {
+            varObject = state.variables.in_scope[variable];
 
             if (varObject.hasOwnProperty("value") && varObject.hasOwnProperty("type")) {
                 switch(varObject.type) {
@@ -229,6 +239,23 @@ var array = (function() {
         }
 
         //interactiveVariableBank({"arr":{"index":2}, "i":0}, true);
+    }
+
+    function createScratchArea(lines) {
+        var scratch = d3.select('#scratch_area').classed('hidden', false);
+
+        // TODO this should probably be d3 except d3 crashes with some unhelpful error when appending the result of java_formatter.format(...) that I don't have time to debug
+
+        // create a ul with an li for each step of the scratch work
+        var ul = $('#scratch_list');
+        ul.empty();
+
+        lines.forEach(function(line, index) {
+            var li = $('<li>');
+            // set ast element ids to "scratch-<linenum>-<nodeid>"
+            li.append(java_formatter.format(line, {id_prefix: 'scratch-' + index + '-'}));
+            ul.append(li);
+        });
     }
 
     function highlightArguments() {

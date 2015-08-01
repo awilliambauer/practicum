@@ -70,47 +70,57 @@ function TPLAlgorithm() {
             {
                 // FIXME assume it's an assignment statement
                 // copy expression to workspace
-                let this_is_the_expression: Expression;
-                this_is_the_expression = helper.copy(this_is_the_next_line_to_execute.expression.args[1]);
+                let this_is_the_expression: ScratchList;
+                this_is_the_expression = helper.create_scratch(this_is_the_next_line_to_execute.expression.args[1]);
 
                 // for each array lookup in the expression, do the array lookup
                 for (let this_is_the_array_lookup: ScratchAstNode of helper.all_array_lookups_in_the_expression(this_is_the_expression)) {
                     let this_is_the_array: Variable;
+                    // can do this on the original scratch expression because it will never change and doesn't affect highlighting
                     this_is_the_array = helper.evaluate_this_expression2(variables, this_is_the_array_lookup.object);
 
                     // evaluate this node of the ast down to a literal
+                    // can also do this on the original expression because the UI will know to highlight the last line of scratch
+                    // TODO nell: do we want to highlight this node or just skip this?
                     let this_is_the_index: ScratchAstNode;
                     this_is_the_index = this_is_the_array_lookup.index;
-                    [no_step]
-                    helper.evaluate_this_expression(variables, this_is_the_index);
 
-                    let do_the_array_lookup: ArrayGet;
+                    // TODO intended interaction: user has to click on the array cell corresponding to the correct index.
+                    // this will be a variable {type:string, value:int} with an additional field array:Variable that points to the array being indexed.
+                    let click_on_the_array_cell_at_this_index: ArrayIndex;
+                    [interactive("array_access")]
+                    click_on_the_array_cell_at_this_index = helper.evaluate_this_expression(variables, this_is_the_array, this_is_the_index);
+
+                    let do_the_array_lookup: ScratchAstNode;
                     [interactive("array_get")]
-                    do_the_array_lookup = helper.do_the_array_lookup(this_is_the_array, this_is_the_index, this_is_the_array_lookup);
+                    do_the_array_lookup = helper.do_the_array_lookup(this_is_the_expression, this_is_the_array, click_on_the_array_cell_at_this_index, this_is_the_array_lookup);
                 }
 
+                // TODO nell: these interactive names are all made up without too much thought, probably some should be renamed and/or merged.
+                // TODO also probably the types are wrong.
                 // evalute the rest of the expression
-                // FIXME make this an interactive in-line edit
-                this_is_the_expression_result = helper.evaluate_this_expression2(variables, this_is_the_expression);
+                [interactive("evaluate_expression")]
+                this_is_the_expression_result = helper.evaluate_this_expression_and_add_to_scratch(variables, this_is_the_expression);
             }
 
             // for the array being assigned to, lookup the box
             let this_is_the_assigner: AstNode;
-            this_is_the_assigner = helper.copy(this_is_the_next_line_to_execute.expression.args[0]);
+            this_is_the_assigner = this_is_the_next_line_to_execute.expression.args[0];
 
             let this_is_the_array: Variable;
             this_is_the_array = helper.evaluate_this_expression2(variables, this_is_the_assigner.object);
 
-            // FIXME this needs to be an object that has the pointer to the array
-            [interactive]
-            let this_is_the_index: Index;
+            let this_is_the_index: AstNode;
             this_is_the_index = this_is_the_assigner.index;
-            helper.evaluate_this_expression(variables, this_is_the_index);
+
+            let click_on_the_array_cell_at_this_index: ArrayIndex;
+            [interactive("array_access")]
+            click_on_the_array_cell_at_this_index = helper.evaluate_this_expression(variables, this_is_the_array, this_is_the_index);
 
             // assign the new value to the box
             let assign_the_new_value_to_the_array_element: ArraySet;
             [interactive("array_set")]
-            assign_the_new_value_to_the_array_element = helper.assign_the_new_value_to_the_array_element(this_is_the_array, this_is_the_index, this_is_the_expression_result);
+            assign_the_new_value_to_the_array_element = helper.assign_the_new_value_to_the_array_element(this_is_the_array, click_on_the_array_cell_at_this_index, this_is_the_expression_result);
 
         } while (helper.is_there_another_line_to_execute(ast, this_is_the_next_line_to_execute));
 
