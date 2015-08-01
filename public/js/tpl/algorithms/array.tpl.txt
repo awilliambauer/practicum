@@ -22,47 +22,52 @@ function TPLAlgorithm() {
         [prompt]
         "First, look at the method call.";
 
-        let this_is_the_parameter: Parameter;
-        this_is_the_parameter = helper.get_parameter(state.args);
+        let this_array_is_the_parameter: Parameter;
+        this_array_is_the_parameter = helper.get_parameter(state.args);
 
         let add_the_array_to_the_variable_bank: Variable;
         [interactive("add_variable")]
-        add_the_array_to_the_variable_bank = helper.add_this_to_the_variable_bank(variables, this_is_the_parameter);
+        add_the_array_to_the_variable_bank = helper.add_this_to_the_variable_bank(variables, this_array_is_the_parameter);
     }
 
+    [prompt]
+    "Now walk through the code line-by-line, keeping track of variable values in the variable bank.";
+
     // FIXME get this out of here once simulator handles refs correctly
-    let loop;
+    let loop: LoopBody;
     [no_step]
     loop = helper.get_loop(ast);
+    [prompt]
+    "We're at the beginning of a new for loop block. Let's look at the loop header.";
 
     [no_step]
     {
+        let this_is_the_loop_initialization: AstNode;
+        this_is_the_loop_initialization = loop.initializer;
+
         [prompt]
-        "Next, look at the loop header.";
+        "The loop initialization defines a new variable.";
 
-        let this_is_the_loop_initializer: AstNode;
-        this_is_the_loop_initializer = loop.initializer;
-
-        let add_the_loop_variable_to_the_variable_bank: Variable;
+        let add_this_variable_to_the_variable_bank: Variable;
         [interactive("add_variable")]
-        add_the_loop_variable_to_the_variable_bank = helper.add_this_to_the_variable_bank(variables, helper.get_loop_init_variable(variables, this_is_the_loop_initializer));
+        add_this_variable_to_the_variable_bank = helper.add_this_to_the_variable_bank(variables, helper.get_loop_init_variable(variables, this_is_the_loop_initialization));
     }
 
     let this_is_the_loop_condition: AstNode;
     this_is_the_loop_condition = loop.condition;
 
-    let this_is_the_loop_increment: AstNode;
-    this_is_the_loop_increment = loop.increment;
+    [prompt]
+    "We will only enter the loop if this conditional evaluates true.";
 
     [interactive("conditional")]
-    while (helper.does_the_loop_condition_hold(variables, this_is_the_loop_condition)) {
-        let this_is_the_next_line_to_execute: Line;
+    while (helper.does_this_conditional_evaluate_to_true(variables, this_is_the_loop_condition)) {
+        let this_is_the_next_line_that_will_execute: Line;
         [no_step]
-        this_is_the_next_line_to_execute = null;
+        this_is_the_next_line_that_will_execute = null;
 
         [no_step]
         do {
-            this_is_the_next_line_to_execute = helper.get_the_next_loop_body_line_to_execute(loop, this_is_the_next_line_to_execute);
+            this_is_the_next_line_that_will_execute = helper.get_the_next_loop_body_line_to_execute(loop, this_is_the_next_line_that_will_execute);
 
             let this_is_the_expression_result: Variable;
 
@@ -71,7 +76,7 @@ function TPLAlgorithm() {
                 // FIXME assume it's an assignment statement
                 // copy expression to workspace
                 let this_is_the_expression: ScratchList;
-                this_is_the_expression = helper.create_scratch(this_is_the_next_line_to_execute.expression.args[1]);
+                this_is_the_expression = helper.create_scratch(this_is_the_next_line_that_will_execute.expression.args[1]);
 
                 // for each array lookup in the expression, do the array lookup
                 for (let this_is_the_array_lookup: ScratchAstNode of helper.all_array_lookups_in_the_expression(this_is_the_expression)) {
@@ -105,7 +110,7 @@ function TPLAlgorithm() {
 
             // for the array being assigned to, lookup the box
             let this_is_the_assigner: AstNode;
-            this_is_the_assigner = this_is_the_next_line_to_execute.expression.args[0];
+            this_is_the_assigner = this_is_the_next_line_that_will_execute.expression.args[0];
 
             let this_is_the_array: Variable;
             this_is_the_array = helper.evaluate_this_expression2(variables, this_is_the_assigner.object);
@@ -122,7 +127,11 @@ function TPLAlgorithm() {
             [interactive("array_set")]
             assign_the_new_value_to_the_array_element = helper.assign_the_new_value_to_the_array_element(this_is_the_array, click_on_the_array_cell_at_this_index, this_is_the_expression_result);
 
-        } while (helper.is_there_another_line_to_execute(ast, this_is_the_next_line_to_execute));
+        } while (helper.is_there_another_line_to_execute(ast, this_is_the_next_line_that_will_execute));
+
+
+        let this_is_the_loop_increment: AstNode;
+        this_is_the_loop_increment = loop.increment;
 
         let execute_the_loop_increment_and_update_the_variable: Variable;
         [interactive("update_variable")]

@@ -204,8 +204,7 @@ var array = (function() {
 
     function addHighlighting() {
         // remove all highlighting first so it can be re-drawn
-        // FIXME should write a real reset function
-        $(".highlight").removeClass("highlight");
+        resetHighlighting();
 
         var variable, varObject;
 
@@ -226,12 +225,16 @@ var array = (function() {
                         highlightArguments();
                         break;
 
+                    case "LoopBody":
+                        highlightLoopBody(varObject.value);
+                        break;
+
                     case "AstNode":
                         highlightASTNode(varObject.value);
                         break;
 
                     case "Line":
-                        //highlightLine(varObject.value);
+                        highlightLine(varObject.value);
                         break;
 
                 }
@@ -239,6 +242,14 @@ var array = (function() {
         }
 
         //interactiveVariableBank({"arr":{"index":2}, "i":0}, true);
+    }
+
+    // remove all existing highlighting
+    function resetHighlighting() {
+        $(".highlight").removeClass("highlight");
+        $(".block_highlight").removeClass("block_highlight");
+        $(".node_highlight").removeClass("node_highlight");
+        $(".line_highlight").removeClass("line_highlight");
     }
 
     function createScratchArea(lines) {
@@ -267,15 +278,19 @@ var array = (function() {
         d3.select("#args").node().innerHTML = argumentText;
     }
 
+    function highlightLoopBody(loop) {
+        var idString = "#java-ast-" + loop.id;
+        d3.select(idString).attr("class", "block_highlight");
+    }
+
     function highlightASTNode(node) {
         var htmlID = "java-ast-" + node.id;
-        $("#" + htmlID).addClass("highlight");
+        $("#" + htmlID).addClass("node_highlight");
     }
 
     // highlights the line of code passed in as a parameter
-    function highlightLine(lineNum) {
-        $("#problem_space li").removeClass("highlight");
-        $("." + lineNum).addClass("highlight");
+    function highlightLine(line) {
+        $("#java-ast-" + line.id).addClass("line_highlight");
     }
 
     // adds input boxes to the variable bank so the user can add new variables

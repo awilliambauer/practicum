@@ -220,14 +220,6 @@ lightest green: #E5FCC2
     width: 40px;
 }
 
-.array_mystery_problem li.highlight{
-    background-color: #8fcdca;
-}
-
-.array_mystery_problem span.highlight {
-    background-color: #8fcdca;
-}
-
 .array_mystery_problem .varValue {
     width: 60px;
     text-align: center;
@@ -236,6 +228,22 @@ lightest green: #E5FCC2
 .array_mystery_problem .arrayVarValue {
     width: 30px;
     text-align: center;
+}
+
+.array_mystery_problem .highlight{
+    background-color: #8fcdca;
+}
+
+.array_mystery_problem .block_highlight {
+    background-color: #EEEEEE;
+}
+
+.array_mystery_problem .line_highlight{
+    background-color: #8fcdca;
+}
+
+.array_mystery_problem .node_highlight {
+    background-color: #BBBBBB;
 }
 
 

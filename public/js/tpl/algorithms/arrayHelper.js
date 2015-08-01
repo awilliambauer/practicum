@@ -77,13 +77,13 @@ function ArrayHelper() {
         if (!loop || loop.tag !== 'for') throw new Error("can't find the for loop!");
         return loop;
     };
-
+    
     this.get_loop_init_variable = function(variable_bank, initializer) {
         if (initializer.tag !== 'declaration' || initializer.type !== 'int') throw new Error("for loop initializer isn't an int declaration!");
         return this.create_variable(variable_bank, initializer);
     };
 
-    this.does_the_loop_condition_hold = function(variable_bank, condition_stmt) {
+    this.does_this_conditional_evaluate_to_true = function(variable_bank, condition_stmt) {
         var e = sim.evaluate_expression(variable_bank, condition_stmt);
         if (e.type !== 'bool') throw new Error("Condition is not of type boolean!");
         return e.value;
