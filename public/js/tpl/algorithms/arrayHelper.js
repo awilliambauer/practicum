@@ -125,7 +125,7 @@ function ArrayHelper() {
 
     this.evaluate_this_expression = function(variable_bank, array, expr) {
         var val = sim.evaluate_expression(variable_bank, expr);
-        val[array] = array;
+        val["array"] = array;
         return val;
     };
 

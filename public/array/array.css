@@ -246,6 +246,14 @@ lightest green: #E5FCC2
     background-color: #BBBBBB;
 }
 
+.array_mystery_problem .text_highlight {
+    color: #45ADA8;
+}
+
+.array_mystery_problem .array_element_highlight {
+    background-color: #BBBBBB;
+}
+
 
 
 

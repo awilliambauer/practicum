@@ -212,7 +212,11 @@ var array = (function() {
         for (variable in state.variables.in_scope) {
             varObject = state.variables.in_scope[variable];
             if (varObject.type === 'ScratchList') {
-                createScratchArea(varObject.value);
+                // FIXME variable shouldn't be added to in_scope until it's initialized
+                if (varObject.hasOwnProperty("value")) {
+                    createScratchArea(varObject.value);
+                }
+
             }
         }
 
@@ -225,12 +229,25 @@ var array = (function() {
                         highlightArguments();
                         break;
 
+                    case "Variable":
+                        highlightVariableBank(varObject.value);
+                        //interactiveVariableBank({"arr":{"index":2}, "i":0}, true);
+                        break;
+
+                    case "ArrayIndex":
+                        highlightArrayIndex(varObject.value);
+                        break;
+
                     case "LoopBody":
                         highlightLoopBody(varObject.value);
                         break;
 
                     case "AstNode":
                         highlightASTNode(varObject.value);
+                        break;
+
+                    case "ScratchAstNode":
+                        highlightScratchASTNode(varObject.value);
                         break;
 
                     case "Line":
@@ -240,8 +257,6 @@ var array = (function() {
                 }
             }
         }
-
-        //interactiveVariableBank({"arr":{"index":2}, "i":0}, true);
     }
 
     // remove all existing highlighting
@@ -250,6 +265,12 @@ var array = (function() {
         $(".block_highlight").removeClass("block_highlight");
         $(".node_highlight").removeClass("node_highlight");
         $(".line_highlight").removeClass("line_highlight");
+        $(".text_highlight").removeClass("text_highlight");
+        $(".array_element_highlight").removeClass("array_element_highlight");
+
+        //remove the scratch area
+        var scratch = d3.select('#scratch_area').classed('hidden', true);
+        $('#scratch_list').empty();
     }
 
     function createScratchArea(lines) {
@@ -278,6 +299,57 @@ var array = (function() {
         d3.select("#args").node().innerHTML = argumentText;
     }
 
+    // highlights the (single) variable passed in as a paramenter. cannot handle multiple variables at once
+    function highlightVariableBank(variable) {
+        // FIXME HACK -- this should be passed in by the tpa
+        if (typeof variable.name === "undefined") {
+            variable.name = "arr";
+        }
+
+        d3.selectAll(".variable_list_table_row").each(function(d,i) {
+            var varName = d3.select(this).select(".bank_variable").node().innerHTML;
+            if (varName === variable.name) {
+                d3.select(this)
+                    .select(".bank_variable_value")
+                    .attr("class","bank_variable_value text_highlight")
+                ;
+                d3.select(this)
+                    .selectAll(".bank_variable_array_value")
+                    .attr("class","bank_variable_array_value text_highlight")
+                ;
+            }
+        });
+    }
+
+    function highlightArrayIndex(arrayElement) {
+        // FIXME HACK -- this should be passed in by the tpa
+        arrayElement.array.name = "arr";
+
+        console.log("in highlightArrayIndex");
+        console.log(arrayElement);
+
+        d3.selectAll(".variable_list_table_row").each(function(d,i) {
+            var varName = d3.select(this).select(".bank_variable").node().innerHTML;
+            console.log("varName: " + varName + " array name: " + arrayElement.array.name);
+            if (varName === arrayElement.array.name) {
+                console.log("highlighting array element")
+                var i = -1;
+                d3.select(this)
+                    .selectAll(".bank_variable_array_value")
+                    .attr("class", (function() {
+                        i++;
+                        if (i == arrayElement.value) {
+                            return "bank_variable_array_value array_element_highlight";
+                        }
+                        else {
+                            return "bank_variable_array_value";
+                        }
+                    }))
+                ;
+            }
+        });
+    }
+
     function highlightLoopBody(loop) {
         var idString = "#java-ast-" + loop.id;
         d3.select(idString).attr("class", "block_highlight");
@@ -285,6 +357,16 @@ var array = (function() {
 
     function highlightASTNode(node) {
         var htmlID = "java-ast-" + node.id;
+        $("#" + htmlID).addClass("node_highlight");
+    }
+
+    // highlights this AST node in the *LAST* line of the scratch list
+    function highlightScratchASTNode(node) {
+        var numLines = -1;
+        d3.select("#scratch_list").selectAll("li").each(function () {
+            numLines++;
+        });
+        var htmlID = "scratch-" + numLines.toString() + "-" + node.id;
         $("#" + htmlID).addClass("node_highlight");
     }
 
