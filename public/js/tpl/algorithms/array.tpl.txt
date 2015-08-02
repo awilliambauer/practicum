@@ -17,6 +17,9 @@ function TPLAlgorithm() {
     [no_step]
     variables = helper.create_new_variable_bank();
 
+    let this_is_the_index_of_the_first_array_element: ArrayIndex;
+    let the_index_increases_by_one_for_each_array_element: ArrayIndices;
+
     [no_step]
     {
         [prompt]
@@ -28,6 +31,22 @@ function TPLAlgorithm() {
         let add_the_array_to_the_variable_bank: Variable;
         [interactive("add_variable")]
         add_the_array_to_the_variable_bank = helper.add_this_to_the_variable_bank(variables, this_array_is_the_parameter);
+
+        [interactive("add_array_index")]
+        this_is_the_index_of_the_first_array_element = 0;
+
+        the_index_increases_by_one_for_each_array_element = helper.get_array_indices(this_array_is_the_parameter);
+
+        [prompt]
+        "The array length is the number of elements in the array";
+
+        let array_length;
+        [no_step]
+        array_length = helper.get_array_length(this_array_is_the_parameter);
+
+        let add_the_array_length_to_the_variable_bank: Variable;
+        [interactive("add_variable")]
+        add_the_array_length_to_the_variable_bank = helper.add_this_to_the_variable_bank(variables, array_length);
     }
 
     [prompt]
@@ -100,7 +119,7 @@ function TPLAlgorithm() {
 
                     // TODO intended interaction: user has to click on the array cell corresponding to the correct index.
                     // this will be a variable {type:string, value:int} with an additional field array:Variable that points to the array being indexed.
-                    let this_is_the_array_element_that_the_operand_references: ArrayIndex;
+                    let this_is_the_array_element_that_the_operand_references: ArrayElement;
                     [interactive("array_access")]
                     this_is_the_array_element_that_the_operand_references = helper.evaluate_this_expression(variables, this_is_the_array, this_is_the_index);
 
@@ -128,7 +147,7 @@ function TPLAlgorithm() {
             [no_step]
             this_is_the_index = the_expression_result_is_assigned_to_this_array_element.index;
 
-            let this_is_the_array_element_that_is_being_updated: ArrayIndex;
+            let this_is_the_array_element_that_is_being_updated: ArrayElement;
             [interactive("array_access")]
             this_is_the_array_element_that_is_being_updated = helper.evaluate_this_expression(variables, this_is_the_array, this_is_the_index);
 

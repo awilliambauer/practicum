@@ -163,7 +163,8 @@ var array = (function() {
                         indexRow
                             .append("td")
                             .attr("class", "bank_variable_array_index")
-                            .text(index)
+                            .attr("id","array-index-" + index.toString())
+                            .text("")
                         ;
                         index++;
                     }
@@ -216,7 +217,6 @@ var array = (function() {
                 if (varObject.hasOwnProperty("value")) {
                     createScratchArea(varObject.value);
                 }
-
             }
         }
 
@@ -236,6 +236,14 @@ var array = (function() {
 
                     case "ArrayIndex":
                         highlightArrayIndex(varObject.value);
+                        break;
+
+                    case "ArrayIndices":
+                        highlightArrayIndices(varObject.value);
+                        break;
+
+                    case "ArrayElement":
+                        highlightArrayElement(varObject.value);
                         break;
 
                     case "LoopBody":
@@ -321,7 +329,17 @@ var array = (function() {
         });
     }
 
-    function highlightArrayIndex(arrayElement) {
+    function highlightArrayIndex(index) {
+        d3.select("#array-index-" + index.toString()).text(index);
+    }
+
+    function highlightArrayIndices(indices) {
+        for (var i = 0; i < indices.length; i++) {
+            d3.select("#array-index-" + i.toString()).text(i);
+        }
+    }
+
+    function highlightArrayElement(arrayElement) {
         // FIXME HACK -- this should be passed in by the tpa
         arrayElement.array.name = "arr";
 

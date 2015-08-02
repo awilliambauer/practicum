@@ -34,6 +34,22 @@ function ArrayHelper() {
         return variable;
     };
 
+    this.get_array_indices = function(array) {
+        var indices = [];
+        for (var i = 0; i < array.value.length; i++) {
+            indices.push(i);
+        }
+        return indices;
+    }
+
+    this.get_array_length = function(array) {
+        return {
+            name: array.name + ".length",
+            type: 'int',
+            value: array.value.length
+        }
+    }
+
     this.execute_the_loop_increment = function(variable_bank, increment_stmt) {
         this.execute_statement(variable_bank, increment_stmt);
         // TODO return the variable
