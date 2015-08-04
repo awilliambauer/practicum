@@ -93,10 +93,19 @@ lightest green: #E5FCC2
 }
 
 .array_mystery_problem pre {
+    counter-reset: line-number;
     background-color: #FFFFFF;
     border: none;
     text-align: left;
-    padding-left: 50px;
+    padding-left: 10px;
+}
+
+.java-line::before {
+    counter-increment: line-number;
+    display: inline-block;
+    width: 2em;
+    color: #777;
+    content: counter(line-number);
 }
 
 .array_mystery_problem .java-keyword {

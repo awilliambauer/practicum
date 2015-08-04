@@ -16,7 +16,7 @@ var java_formatter = function() {
 
     // returns a string representing indentation to given level.
     function indent(level) {
-        return Array(4*level+1).join(" ");
+        return '<span class="java-line">' + Array(4*level+1).join(" ") + '</span>';
     }
 
     function span(clazz, s) {
