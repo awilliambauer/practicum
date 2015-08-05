@@ -230,8 +230,17 @@ var csed = (function() {
 
     }
 
-    function loadProblem(problemConfig, altState) {
+    function loadProblem(problemConfig, variant) {
         task_logger = Logging.start_task(problemConfig);
+
+        // if no alt state, choose the first
+        if (problemConfig.content.variants) {
+            variant = variant || problemConfig.content.variants[0];
+            Logging.log_task_event(task_logger, {
+                type: Logging.ID.SubtaskStart,
+                detail: {id: variant.id},
+            });
+        }
 
         saveProblemData(problemConfig);
         updateProblemDisplay(problemConfig)
@@ -248,15 +257,11 @@ var csed = (function() {
         problemUI.reset();
 
         // Load in the template for the problem
-//        fetch(problemUI.template_url).then(function(response) {
-//            return response.text();
-//        }).then(function(problemHtml) {
 
         d3.html(problemUI.template_url, function(error, problemHtml){
             if (error) console.error(error);
 
             // Uh, not sure why I can't append raw html into the dom with D3. Using jQuery for the moment...
-            //d3.select("#problem").append(problemHtml);
             $("#problem-container").append(problemHtml);
 
             d3.select("#main-page").classed("hidden", true);
@@ -264,7 +269,7 @@ var csed = (function() {
 
             var category = problemConfig.category;
 
-            var initial_state = problemUI.create_initial_state(problemConfig, altState);
+            var initial_state = problemUI.create_initial_state(problemConfig, variant);
             main_simulator.initialize(category, {state:initial_state});
 
             // calculate what fading level the user should see for this problem, based on their
@@ -274,16 +279,6 @@ var csed = (function() {
             // This problemUI initialize call probably needs to happen after the main_sim init call,
             // which is handled by promises/then() with fetch.
             problemUI.initialize(problemConfig, new CallbackObject(), initial_state, task_logger, fadeLevel);
-
-//            main_simulator.initialize(category, {state:initial_state}).then(function() {
-//                console.log("finished initializing simulator");
-//                problemUI.initialize(problemConfig, new CallbackObject(), initial_state, task_logger);
-//            }, function(error) {
-//                console.error("something went wrong: ");
-//                console.log(error);
-//            });
-//        }, function(error) {
-//            console.error(error);
         });
     }
 

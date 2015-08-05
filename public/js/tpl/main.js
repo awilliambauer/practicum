@@ -52,15 +52,6 @@ var main_simulator = (function () {"use strict";
             // to indicate that the UI hasn't displayed the first state yet
             currentState = -1;
         });
-
-
-        //return self.parse(algo).then(function(ast) {
-        //    var sim = simulator(ast, globals);
-        //    // HACK function name currently ignored
-        //    sim.start_function(undefined, args);
-        //    states = explainer.create_explanations(sim.run_all(state));
-        //    currentState = -1;
-        //});
     };
 
     self.next = function(fading) {

@@ -5,6 +5,7 @@ var Logging = (function() {
     self.ID = {
         TaskStart: 2,
         TaskEnd: 3,
+        SubtaskStart: 4,
 
         Consent: 11,
         FadeLevel: 12,

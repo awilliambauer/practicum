@@ -328,3 +328,22 @@ function IfElseHelper() {
     };
 
 }
+
+function if_else_make_initial_state(problem, variant) {
+    "use strict";
+
+    var ast = java_parsing.parse_method(problem.content.text);
+    var args = JSON.parse(JSON.stringify(variant.arguments));
+
+    return {
+        variant: variant,
+        AST: ast,
+        prompt: "First, look at the structure of the code in the problem",
+        initialization: args,
+        lineNum: 1,
+        vars: {},
+        highlighted: [],
+        problemText: problem.content.text
+    };
+}
+

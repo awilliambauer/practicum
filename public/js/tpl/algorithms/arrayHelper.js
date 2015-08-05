@@ -184,14 +184,11 @@ function ArrayHelper() {
  * @param problem: the problem configuration.
  * @param argumentIndex: which argument set is being used (i.e.,the parameters to the problem).
  */
-function array_make_initial_state(problem, argumentIndex) {
+function array_make_initial_state(problem, variant) {
     "use strict";
 
-    // HACK this isn't being passed in as a parameter yet
-    argumentIndex = 0;
-
     var ast = java_parsing.parse_method(problem.content.text);
-    var args = problem.content.arguments[argumentIndex];
+    var args = variant.arguments;
 
     return {
         ast: ast,

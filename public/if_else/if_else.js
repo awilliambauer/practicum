@@ -23,7 +23,7 @@ var if_else = (function() {
         LINENUM = 1;
     }
 
-    var if_else_make_initial_state = function (problemConfig, altState) {
+    var OLD_if_else_make_initial_state = function (problemConfig, altState) {
         var state = problemConfig.initialState;
         state.AST = java_parsing.parse_method(state.problemText);
         problemConfig.alternateStartingStates.forEach(function(x) {
@@ -37,19 +37,17 @@ var if_else = (function() {
     };
 
     function createStartingStatesDropdown(problemConfig, state) {
-        var availableMethodCalls = [problemConfig.initialState].concat(problemConfig.alternateStartingStates);
-
         // fill in dropdowns in nav
         d3.selectAll("#methodCallDropdown")
             .selectAll("li")
-            .data(availableMethodCalls)
+            .data(problemConfig.content.variants)
             .enter()
             .append("li")
             .append("a")
             .attr("class", "monospace")
-            .text(function(s) { return s.AST.name + "(" + getArgString(s.initialization) + ")"} )
+            .text(function(s) { return state.AST.name + "(" + getArgString(s.arguments) + ")"; })
             .on("click", function(s) {
-                if (s.initialization !== state.initialization) {
+                if (s !== state.variant) {
                     csed.loadProblem(problemConfig, s);
                 }
             })
@@ -57,24 +55,6 @@ var if_else = (function() {
 
         d3.select("#methodCall")
             .text(function() { return state.AST.name + "(" + getArgString(state.initialization) + ")"} )
-        ;
-    }
-
-    // create the method call list in the dom
-    function createStartingStates(problemConfig) {
-        var availableMethodCalls = [problemConfig.initialState].concat(problemConfig.alternateStartingStates);
-
-        var method_call_containers = d3.select("#method_calls")
-            .selectAll("li.method_call_container")
-            .data(availableMethodCalls)
-            .enter()
-            .append("li")
-            .attr("class", "method_call_container list-group-item")
-        ;
-
-        method_call_containers
-            .append("a")
-            .text(function(state) { return state.AST.name + "(" + getArgString(state.initialization) + ")"} )
         ;
     }
 
@@ -128,6 +108,8 @@ var if_else = (function() {
             resetUI();
             needToReset = false;
         }
+
+        createStartingStatesDropdown(problemConfig, state);
     }
 
     // gets the initial values that the method will be called with
