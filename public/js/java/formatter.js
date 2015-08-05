@@ -16,7 +16,7 @@ var java_formatter = function() {
 
     // returns a string representing indentation to given level.
     function indent(level) {
-        return '<span class="java-line">' + Array(4*level+1).join(" ") + '</span>';
+        return Array(4*level+1).join(" ");
     }
 
     function span(clazz, s) {
@@ -41,28 +41,40 @@ var java_formatter = function() {
         // HACK special_flag is a boolean used to indicate things like "don't put a semi/newline on this statement"
         // or "don't put a newline before this if". It's very hacky.
 
+        var prefix = options.id_prefix || 'java-ast-';
+
+        function newline(parent) {
+            var l = $('<span>');
+            l.attr('id', prefix + 'line-' + options.line);
+            l.addClass('java-line');
+            options.line += 1;
+            parent.append(l);
+            return l;
+        }
+
         var elem = $('<span>');
+        var line;
         var firstIter;
 
-        var prefix = options.id_prefix || 'java-ast-';
         elem.attr('id', prefix + node.id);
 
         switch (node.tag) {
             case 'method':
-                elem.html(sprintf('{0}{1} {2} {3} {4}(', indent(indent_level), keyword('public'), keyword('static'), keyword('void'), method(node.name)));
+                line = newline(elem);
+                line.html(sprintf('{0}{1} {2} {3} {4}(', indent(indent_level), keyword('public'), keyword('static'), keyword('void'), method(node.name)));
                 firstIter = true;
                 node.params.forEach(function(p) {
                     if (!firstIter) {
-                        elem.append(", ");
+                        line.append(", ");
                     }
                     firstIter = false;
-                    elem.append(to_dom(p, options, 0));
+                    line.append(to_dom(p, options, 0));
                 });
-                elem.append(') ' + symbol('{') + '\n');
+                line.append(') ' + symbol('{') + '\n');
                 node.body.forEach(function(s) {
                     elem.append(to_dom(s, options, 1));
                 });
-                elem.append(indent(0) + symbol("}")+"\n");
+                newline(elem).append(indent(0) + symbol("}")+"\n");
                 break;
 
             case 'parameter':
@@ -83,7 +95,7 @@ var java_formatter = function() {
             case 'expression':
                 // add some space if top-level (could replace this with something fancier)
                 if (!special_flag) {
-                    if (indent_level <= 2) { elem.append("\n"); }
+                    elem = newline(elem);
                     elem.append(indent(indent_level));
                 }
                 var expression = to_dom(node.expression, options, indent_level);
@@ -95,28 +107,28 @@ var java_formatter = function() {
                 break;
 
             case 'for':
-                elem.addClass("for");
-                elem.append(indent(indent_level) + keyword('for') + ' (');
+                line = newline(elem);
+                line.append(indent(indent_level) + keyword('for') + ' (');
                 // statements inside of for loop header should not be indented/have newlines
                 var init = $('<span>');
                 init.attr('id', 'init');
                 init.append(to_dom(node.initializer, options, indent_level, true));
-                elem.append(init);
-                elem.append('; ');
+                line.append(init);
+                line.append('; ');
                 var cond = $('<span>');
                 cond.attr('id', 'test');
                 cond.append(to_dom(node.condition, options, indent_level, true));
-                elem.append(cond);
-                elem.append('; ');
+                line.append(cond);
+                line.append('; ');
                 var update = $('<span>');
                 update.attr('id', 'update');
                 update.append(to_dom(node.increment, options, indent_level, true));
-                elem.append(update);
-                elem.append(') {');
+                line.append(update);
+                line.append(') {\n');
                 node.body.forEach(function(s) {
                     elem.append(to_dom(s, options, indent_level + 1));
                 });
-                elem.append(indent(indent_level) + '}\n');
+                newline(elem).append(indent(indent_level) + '}\n');
                 break;
 
             case 'if':
@@ -199,6 +211,7 @@ var java_formatter = function() {
 
     self.format = function(ast, options) {
         options = options || {};
+        options.line = 0;
         var dom = to_dom(ast, options, 0);
         return dom[0];
     }
