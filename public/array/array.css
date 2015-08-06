@@ -100,6 +100,10 @@ lightest green: #E5FCC2
     padding-left: 10px;
 }
 
+.java-line {
+    display: block;
+}
+
 .java-line::before {
     counter-increment: line-number;
     display: inline-block;
