@@ -52,7 +52,9 @@ function ArrayHelper() {
 
     this.execute_the_loop_increment = function(variable_bank, increment_stmt) {
         this.execute_statement(variable_bank, increment_stmt);
-        // TODO return the variable
+        var variable = {};
+        variable.name = increment_stmt.expression.args[0].value;
+        return variable;
     };
 
     this.get_the_next_loop_body_line_to_execute = function(loop, current_statement) {
@@ -66,6 +68,10 @@ function ArrayHelper() {
 
     this.is_there_another_line_to_execute = function(ast, stmt) {
         return !!sim.get_next_statement(ast, stmt);
+    };
+
+    this.get_loop_end = function(loop) {
+        return loop.location.end.line-1;
     };
 
     this.copy = function(x) {
@@ -146,7 +152,9 @@ function ArrayHelper() {
     };
 
     this.evaluate_this_expression2 = function(variable_bank, expr) {
-        return sim.evaluate_expression(variable_bank, expr);
+        var array = sim.evaluate_expression(variable_bank, expr);
+        array.name = expr.value;
+        return array;
     }
 
 

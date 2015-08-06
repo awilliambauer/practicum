@@ -17,7 +17,7 @@ function TPLAlgorithm() {
     [no_step]
     variables = helper.create_new_variable_bank();
 
-    let this_is_the_index_of_the_first_array_element: ArrayIndex;
+    let this_is_the_first_array_index: ArrayIndex;
     let the_index_increases_by_one_for_each_array_element: ArrayIndices;
 
     [no_step]
@@ -33,8 +33,9 @@ function TPLAlgorithm() {
         add_the_array_to_the_variable_bank = helper.add_this_to_the_variable_bank(variables, this_array_is_the_parameter);
 
         [interactive("add_array_index")]
-        this_is_the_index_of_the_first_array_element = 0;
+        this_is_the_first_array_index = 0;
 
+        [no_step]
         the_index_increases_by_one_for_each_array_element = helper.get_array_indices(this_array_is_the_parameter);
 
         [prompt]
@@ -44,28 +45,32 @@ function TPLAlgorithm() {
         [no_step]
         array_length = helper.get_array_length(this_array_is_the_parameter);
 
-        let add_the_array_length_to_the_variable_bank: Variable;
+        let add_the_length_to_the_variable_bank: Variable;
         [interactive("add_variable")]
-        add_the_array_length_to_the_variable_bank = helper.add_this_to_the_variable_bank(variables, array_length);
+        add_the_length_to_the_variable_bank = helper.add_this_to_the_variable_bank(variables, array_length);
     }
 
     [prompt]
     "Now walk through the code line-by-line, keeping track of variable values in the variable bank.";
 
+    let this_is_the_next_line_that_will_execute: Line;
+    this_is_the_next_line_that_will_execute = helper.get_loop(ast);
+
     // FIXME get this out of here once simulator handles refs correctly
-    let loop: LoopBody;
+    let loop;
     [no_step]
     loop = helper.get_loop(ast);
     [prompt]
-    "We're at the beginning of a new for loop block. Let's look at the loop header.";
+    "We're at the beginning of a new for-loop block. Look at the loop header.";
 
     [no_step]
     {
         let this_is_the_loop_initialization: AstNode;
+        [no_step]
         this_is_the_loop_initialization = loop.initializer;
-
         [prompt]
-        "The loop initialization defines a loop variable.";
+        "This is the loop initialization. It defines a loop variable.";
+
 
         let add_this_loop_variable_to_the_variable_bank: Variable;
         [interactive("add_variable")]
@@ -80,15 +85,18 @@ function TPLAlgorithm() {
 
     [interactive("conditional")]
     while (helper.does_this_conditional_evaluate_to_true(variables, this_is_the_loop_condition)) {
-        let this_is_the_next_line_that_will_execute: Line;
         [no_step]
         this_is_the_next_line_that_will_execute = null;
+
+        // FIXME hack to remove loop condition highlighting. maybe the variable context idea doesn't actually work?
+        [no_step]
+        this_is_the_loop_condition = null;
 
         [no_step]
         do {
             this_is_the_next_line_that_will_execute = helper.get_the_next_loop_body_line_to_execute(loop, this_is_the_next_line_that_will_execute);
 
-            let this_is_the_result_of_the_expression: Variable;
+            let this_is_the_result_of_the_expression: ScratchAstNode;
             let copy_the_expression_into_the_scratch_area: ScratchList;
 
             [no_step]
@@ -96,8 +104,12 @@ function TPLAlgorithm() {
                 // FIXME assume it's an assignment statement
                 [prompt]
                 "This line updates the value of an array element";
+
+                let expression: AstNode;
+                [no_step]
+                expression = this_is_the_next_line_that_will_execute.expression.args[1];
                 [prompt]
-                "First, let's evaluate the expression on the right-hand side to determine what the array element's new value will be.";
+                "First, let's evaluate the expression on the right-hand side.";
 
                 // copy expression to workspace
                 copy_the_expression_into_the_scratch_area = helper.create_scratch(this_is_the_next_line_that_will_execute.expression.args[1]);
@@ -105,15 +117,15 @@ function TPLAlgorithm() {
                 // for each array lookup in the expression, do the array lookup
                 [no_step]
                 for (let this_operand_references_an_element_in_the_array: ScratchAstNode of helper.all_array_lookups_in_the_expression(copy_the_expression_into_the_scratch_area)) {
-                    let this_is_the_array: Variable;
+                    let this_is_the_array;
                     // can do this on the original scratch expression because it will never change and doesn't affect highlighting
                     [no_step]
-                    this_is_the_array = helper.evaluate_this_expression2(variables, this_operand_references_an_element_in_the_array.object);
+                    this_is_the_array = helper.evaluate_this_expression2(variables, this_operand_references_an_element_in_the_array.object, this_operand_references_an_element_in_the_array);
 
                     // evaluate this node of the ast down to a literal
                     // can also do this on the original expression because the UI will know to highlight the last line of scratch
                     // TODO nell: do we want to highlight this node or just skip this?
-                    let this_is_the_index: ScratchAstNode;
+                    let this_is_the_index;
                     [no_step]
                     this_is_the_index = this_operand_references_an_element_in_the_array.index;
 
@@ -139,11 +151,11 @@ function TPLAlgorithm() {
             let the_expression_result_is_assigned_to_this_array_element: AstNode;
             the_expression_result_is_assigned_to_this_array_element = this_is_the_next_line_that_will_execute.expression.args[0];
 
-            let this_is_the_array: Variable;
+            let this_is_the_array;
             [no_step]
             this_is_the_array = helper.evaluate_this_expression2(variables, the_expression_result_is_assigned_to_this_array_element.object);
 
-            let this_is_the_index: AstNode;
+            let this_is_the_index;
             [no_step]
             this_is_the_index = the_expression_result_is_assigned_to_this_array_element.index;
 
@@ -158,15 +170,29 @@ function TPLAlgorithm() {
 
         } while (helper.is_there_another_line_to_execute(ast, this_is_the_next_line_that_will_execute));
 
+        [no_step]
+        this_is_the_next_line_that_will_execute = helper.get_loop_end(loop);
         [prompt]
-        "We reached the end of the for loop body. Now we need to execute the loop update.";
+        "We reached the end of the for loop body.";
 
-        let this_is_the_loop_update: AstNode;
-        this_is_the_loop_update = loop.increment;
+        [no_step]
+        this_is_the_next_line_that_will_execute = helper.get_loop(ast);
+        [prompt]
+        "Loop back up to the declaration and execute the loop update.";
 
-        let update_the_value_of_the_loop_variable_in_the_variable_bank: Variable;
-        [interactive("update_variable")]
-        update_the_value_of_the_loop_variable_in_the_variable_bank = helper.execute_the_loop_increment(variables, this_is_the_loop_update);
+        [no_step]
+        {
+            let this_is_the_loop_update: AstNode;
+            this_is_the_loop_update = loop.increment;
+
+            let update_the_value_of_the_loop_variable_in_the_variable_bank: Variable;
+            [interactive("update_variable")]
+            update_the_value_of_the_loop_variable_in_the_variable_bank = helper.execute_the_loop_increment(variables, this_is_the_loop_update);
+        }
+
+        [prompt]
+        "Now let's check the loop condition again.";
+        this_is_the_loop_condition = loop.condition;
     }
 
     // TODO maybe just put the answer in a variable

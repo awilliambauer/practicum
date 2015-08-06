@@ -84,7 +84,7 @@ lightest green: #E5FCC2
     border-radius: 10px;
     background-color: #ffffff;
     width: 525px;
-    min-height: 250px;
+    height: 255px;
     float: left;
 }
 
@@ -199,6 +199,8 @@ lightest green: #E5FCC2
 
 .array_mystery_problem .bank_variable {
     color: black;
+    float: left;
+    width: 100px;
 }
 
 .array_mystery_problem .bank_variable_label {
@@ -253,7 +255,12 @@ lightest green: #E5FCC2
 }
 
 .array_mystery_problem .node_highlight {
-    background-color: #BBBBBB;
+    box-shadow: 0px 0px 0px 1px #333333;
+    background-color: #d2ebe9;
+}
+
+.array_mystery_problem .scratch_node_highlight {
+    background-color: #8fcdca;
 }
 
 .array_mystery_problem .text_highlight {
@@ -261,7 +268,7 @@ lightest green: #E5FCC2
 }
 
 .array_mystery_problem .array_element_highlight {
-    background-color: #BBBBBB;
+    background-color: #8fcdca;
 }
 
 

@@ -246,10 +246,6 @@ var array = (function() {
                         highlightArrayElement(varObject.value);
                         break;
 
-                    case "LoopBody":
-                        highlightLoopBody(varObject.value);
-                        break;
-
                     case "AstNode":
                         highlightASTNode(varObject.value);
                         break;
@@ -272,6 +268,7 @@ var array = (function() {
         $(".highlight").removeClass("highlight");
         $(".block_highlight").removeClass("block_highlight");
         $(".node_highlight").removeClass("node_highlight");
+        $(".scratch_node_highlight").removeClass("scratch_node_highlight");
         $(".line_highlight").removeClass("line_highlight");
         $(".text_highlight").removeClass("text_highlight");
         $(".array_element_highlight").removeClass("array_element_highlight");
@@ -309,11 +306,6 @@ var array = (function() {
 
     // highlights the (single) variable passed in as a paramenter. cannot handle multiple variables at once
     function highlightVariableBank(variable) {
-        // FIXME HACK -- this should be passed in by the tpa
-        if (typeof variable.name === "undefined") {
-            variable.name = "arr";
-        }
-
         d3.selectAll(".variable_list_table_row").each(function(d,i) {
             var varName = d3.select(this).select(".bank_variable").node().innerHTML;
             if (varName === variable.name) {
@@ -340,17 +332,9 @@ var array = (function() {
     }
 
     function highlightArrayElement(arrayElement) {
-        // FIXME HACK -- this should be passed in by the tpa
-        arrayElement.array.name = "arr";
-
-        console.log("in highlightArrayIndex");
-        console.log(arrayElement);
-
         d3.selectAll(".variable_list_table_row").each(function(d,i) {
             var varName = d3.select(this).select(".bank_variable").node().innerHTML;
-            console.log("varName: " + varName + " array name: " + arrayElement.array.name);
             if (varName === arrayElement.array.name) {
-                console.log("highlighting array element")
                 var i = -1;
                 d3.select(this)
                     .selectAll(".bank_variable_array_value")
@@ -368,14 +352,11 @@ var array = (function() {
         });
     }
 
-    function highlightLoopBody(loop) {
-        var idString = "#java-ast-" + loop.id;
-        d3.select(idString).attr("class", "block_highlight");
-    }
-
     function highlightASTNode(node) {
-        var htmlID = "java-ast-" + node.id;
-        $("#" + htmlID).addClass("node_highlight");
+        if (node !== null) {
+            var htmlID = "java-ast-" + node.id;
+            $("#" + htmlID).addClass("node_highlight");
+        }
     }
 
     // highlights this AST node in the *LAST* line of the scratch list
@@ -385,12 +366,17 @@ var array = (function() {
             numLines++;
         });
         var htmlID = "scratch-" + numLines.toString() + "-" + node.id;
-        $("#" + htmlID).addClass("node_highlight");
+        $("#" + htmlID).addClass("scratch_node_highlight");
     }
 
     // highlights the line of code passed in as a parameter
     function highlightLine(line) {
-        $("#java-ast-" + line.id).addClass("line_highlight");
+        if (line.hasOwnProperty("location")) {
+            d3.select("#java-ast-line-" + line.location.start.line).classed("line_highlight", true);
+        }
+        else {
+            d3.select("#java-ast-line-" + line).classed("line_highlight", true);
+        }
     }
 
     // adds input boxes to the variable bank so the user can add new variables
