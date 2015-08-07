@@ -680,6 +680,12 @@ var if_else = (function() {
         else {
             d3.select("#inputBox").attr("class", "incorrect");
         }
+
+        // log the "check" button click, along with the answer correctness
+        Logging.log_task_event(logger, {
+            type: Logging.ID.CheckSolutionButton,
+            detail: {correct:correct},
+        });
     }
 
     return {

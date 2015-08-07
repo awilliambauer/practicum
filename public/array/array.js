@@ -30,12 +30,13 @@ var array = (function() {
         waitingForResponse = false;
         responseType = "";
         numTries = 0;
+        fadeLevel = fading;
 
-        // hold onto the task logger for logging UI event
-        logger = task_logger;
-
-        //fadeLevel = fading;
-        fadeLevel = 1;
+        // log the level of fading for this problem
+        Logging.log_task_event(logger, {
+            type: Logging.ID.FadeLevel,
+            detail: {fadeLevel:fadeLevel},
+        });
 
         // move to the next step if they hit enter or click next
         $("#nextstep").click(step);
@@ -88,6 +89,12 @@ var array = (function() {
     }
 
     function step() {
+        // log that the "next" button was clicked
+        Logging.log_task_event(logger, {
+            type: Logging.ID.NextButton,
+            detail: {},
+        });
+
         if (waitingForResponse) {
             numTries = numTries + 1;
             switch (responseType) {
@@ -211,22 +218,22 @@ var array = (function() {
 
                     var arrayTable = listCell2.append("table").attr("class", "bank_variable_array");
                     var indexRow = arrayTable.append("tr");
-                    for (var arrayIndex in variableBankObject[variable].value) {
+                    for (var i in variableBankObject[variable].value) {
                         indexRow
                             .append("td")
                             .attr("class", "bank_variable_array_index")
-                            .attr("id","array-index-" + arrayIndex.toString())
+                            .attr("id","array-index-" + i.toString())
                             .text("")
                         ;
                     }
 
                     var valueRow = arrayTable.append("tr");
-                    for (var arrayIndex in variableBankObject[variable].value) {
+                    for (var j in variableBankObject[variable].value) {
                         valueRow
                             .append("td")
                             .attr("class", "bank_variable_array_value")
-                            .attr("id", "array-elem-" + arrayIndex.toString())
-                            .text(variableBankObject[variable].value[arrayIndex].value)
+                            .attr("id", "array-elem-" + j.toString())
+                            .text(variableBankObject[variable].value[j].value)
                         ;
                     }
                 }
@@ -506,7 +513,7 @@ var array = (function() {
     }
 
     function highlightArrayElement(arrayElement) {
-        d3.selectAll(".variable_list_table_row").each(function(d,i) {
+        d3.selectAll(".variable_list_table_row").each(function() {
             var varName = d3.select(this).select(".bank_variable").node().innerHTML;
             if (varName === arrayElement.array.name) {
                 var i = -1;
@@ -632,8 +639,8 @@ var array = (function() {
 
             // check to see if this variable is an array
             if (d3.select(this).select(".bank_variable_array").node() != null) {
+                var arrayTable = d3.select(this).select(".bank_variable_array");
                 if (correctAnswer.hasOwnProperty("index")) {
-                    var arrayTable = d3.select(this).select(".bank_variable_array");
                     userValue = parseInt(arrayTable.select(".arrayVarValue").property("value"));
                     correctValue = parseInt(correctAnswer.value[correctAnswer.index.value].value);
                     correctVariable[correctAnswer.name] = correctValue;
@@ -645,8 +652,6 @@ var array = (function() {
                 else {
                     correctVariable[correctAnswer.name] = [];
                     userVariable[correctAnswer.name] = [];
-
-                    var arrayTable = d3.select(this).select(".bank_variable_array");
                     arrayTable.selectAll(".arrayVarValue").each(function(d, i) {
                         correctValue = parseInt(correctAnswer.value[i].value);
                         correctVariable[correctAnswer.name].push(correctValue);
@@ -893,9 +898,9 @@ var array = (function() {
         var userSolution = d3.select("#inputBox").node().value;
         userSolution = userSolution.replace(/ /g,'');
         userSolution = userSolution.replace(/\{/g,'');
-        userSolution = userSolution.replace(/\}/g,'');
+        userSolution = userSolution.replace(/}/g,'');
         userSolution = userSolution.replace(/\[/g,'');
-        userSolution = userSolution.replace(/\]/g,'');
+        userSolution = userSolution.replace(/]/g,'');
 
         // create string of raw array values from correct solution
         var solutionState = simulatorInterface.getFinalState();
@@ -920,6 +925,12 @@ var array = (function() {
         } else {
             d3.select("#inputBox").attr("class", "incorrect");
         }
+
+        // log the "check" button click, along with the answer correctness
+        Logging.log_task_event(logger, {
+            type: Logging.ID.CheckSolutionButton,
+            detail: {correct:correct},
+        });
     }
 
     return {
