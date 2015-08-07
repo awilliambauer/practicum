@@ -853,12 +853,24 @@ var array = (function() {
     }
 
     function checkSolution() {
+        // create string of raw array values from user solution
         var userSolution = d3.select("#inputBox").node().value;
+        userSolution = userSolution.replace(/ /g,'');
+        userSolution = userSolution.replace(/\{/g,'');
+        userSolution = userSolution.replace(/\}/g,'');
+        userSolution = userSolution.replace(/\[/g,'');
+        userSolution = userSolution.replace(/\]/g,'');
+
+        // create string of raw array values from correct solution
         var solutionState = simulatorInterface.getFinalState();
-        var correctSolution = solutionState.result;
+        var correctSolutionArray = solutionState.state.answer;
+        var correctSolution = "";
+        for (var i in correctSolutionArray) {
+            correctSolution = correctSolution + correctSolutionArray[i] + ",";
+        }
+        correctSolution = correctSolution.substring(0, correctSolution.length-1);
 
         var correct = false;
-        // FIXME totally wrong!
         if (String(userSolution) === String(correctSolution)) {
             correct = true;
         }

@@ -26,6 +26,23 @@ lightest green: #E5FCC2
     vertical-align: middle;
 }
 
+/* This references animations defined in bootstrap-expressions.css */
+.array_mystery_problem input[type="text"].correct {
+    animation-name: correctExpression;
+    animation-duration: 2s;
+    -webkit-animation-name: correctExpression;
+    -webkit-animation-duration: 2s;
+
+}
+
+/* This references animations defined in bootstrap-expressions.css */
+.array_mystery_problem input[type="text"].incorrect {
+    animation-name: incorrectExpression;
+    animation-duration: 2s;
+    -webkit-animation-name: incorrectExpression;
+    -webkit-animation-duration: 2s;
+}
+
 .array_mystery_problem #description {
     font-size: 16px;
     width: 700px;
