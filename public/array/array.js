@@ -12,7 +12,9 @@ var array = (function() {
     var numTries;
 
     function reset() {
-        // TODO unimplemented
+        // HACK, ugly. This global in html_generator needs to get
+        // reset to one when loading a new problem.
+        LINENUM = 1;
     }
 
     function initialize(problemConfig, simulatorInterface_, initialState, task_logger, fading) {
@@ -48,7 +50,41 @@ var array = (function() {
 
         d3.select("#submitButton").on("click", checkSolution);
 
-        //console.log(state);
+        createStartingStatesDropdown(problemConfig, state);
+    }
+
+    function createStartingStatesDropdown(problemConfig, state) {
+        console.log(state);
+
+        // fill in dropdowns in nav
+        d3.selectAll("#methodCallDropdown")
+            .selectAll("li")
+            .data(problemConfig.content.variants)
+            .enter()
+            .append("li")
+            .append("a")
+            .attr("class", "monospace")
+            .text(function(s) { return state.ast.name + "(" + getArgString(s.arguments) + ")"; })
+            .on("click", function(s) {
+                if (s !== state.variant) {
+                    csed.loadProblem(problemConfig, s);
+                }
+            })
+        ;
+
+        d3.select("#methodCall")
+            .text(function() { return state.ast.name + "(" + getArgString(state.args) + ")"} )
+        ;
+    }
+
+    // gets the initial values that the method will be called with
+    function getArgString(args) {
+        var callVals = [];
+        for (var variable in args) {
+            var arrayString = "{" + args[variable] + "}";
+            callVals.push(arrayString);
+        }
+        return callVals;
     }
 
     function step() {
@@ -351,12 +387,12 @@ var array = (function() {
     }
 
     function highlightArguments() {
-        var argumentText = d3.select("#args").node().innerHTML;
+        var argumentText = d3.select("#methodCall").node().innerHTML;
         var openParenIndex = argumentText.indexOf("(");
         argumentText = argumentText.substring(0,openParenIndex+1) + "<span class='highlight'>" + argumentText.substring(openParenIndex+1);
         var closeParenIndex = argumentText.indexOf(")");
         argumentText = argumentText.substring(0,closeParenIndex) + "</span>" + argumentText.substring(closeParenIndex);
-        d3.select("#args").node().innerHTML = argumentText;
+        d3.select("#methodCall").node().innerHTML = argumentText;
     }
 
     // highlights the (single) variable passed in as a paramenter. cannot handle multiple variables at once
