@@ -599,7 +599,7 @@ var if_else = (function() {
 
         if (d3.select('input[name="yes_no_radio"]:checked').node() === null) {
             if (d3.select("#errorMessage").node() === null) {
-                var errorMessage = "<span id='errorMessage' style='color: red;'>Try entering an answer first!</span><br>";
+                var errorMessage = "<span id='errorMessage' style='color: red;'>Try entering an answer first!<br></span>";
                 d3.select("#prompt").node().innerHTML = errorMessage + d3.select("#prompt").node().innerHTML;
             }
         }

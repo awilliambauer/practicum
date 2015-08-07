@@ -54,7 +54,7 @@ function TPLAlgorithm() {
     "Now walk through the code line-by-line, keeping track of variable values in the variable bank.";
 
     let this_is_the_next_line_that_will_execute: Line;
-    this_is_the_next_line_that_will_execute = helper.get_loop(ast);
+    [interactive("next_line")] this_is_the_next_line_that_will_execute = helper.get_loop(ast);
 
     // FIXME get this out of here once simulator handles refs correctly
     let loop;
@@ -81,7 +81,7 @@ function TPLAlgorithm() {
     this_is_the_loop_condition = loop.condition;
 
     [prompt]
-    "We will only enter the loop if this conditional evaluates true.";
+    "We will only enter the loop if this conditional evaluates to true.";
 
     [interactive("conditional")]
     while (helper.does_this_conditional_evaluate_to_true(variables, this_is_the_loop_condition)) {
@@ -94,7 +94,7 @@ function TPLAlgorithm() {
 
         [no_step]
         do {
-            this_is_the_next_line_that_will_execute = helper.get_the_next_loop_body_line_to_execute(loop, this_is_the_next_line_that_will_execute);
+            [interactive("next_line")] this_is_the_next_line_that_will_execute = helper.get_the_next_loop_body_line_to_execute(loop, this_is_the_next_line_that_will_execute);
 
             let this_is_the_result_of_the_expression: ScratchAstNode;
             let copy_the_expression_into_the_scratch_area: ScratchList;
@@ -132,11 +132,11 @@ function TPLAlgorithm() {
                     // TODO intended interaction: user has to click on the array cell corresponding to the correct index.
                     // this will be a variable {type:string, value:int} with an additional field array:Variable that points to the array being indexed.
                     let this_is_the_array_element_that_the_operand_references: ArrayElement;
-                    [interactive("array_access")]
+                    [interactive("array_element_click")]
                     this_is_the_array_element_that_the_operand_references = helper.evaluate_this_expression(variables, this_is_the_array, this_is_the_index);
 
                     let copy_the_array_element_value_into_the_scratch_area: ScratchAstNode;
-                    [interactive("array_get")]
+                    [interactive("array_element_get")]
                     copy_the_array_element_value_into_the_scratch_area = helper.do_the_array_lookup(copy_the_expression_into_the_scratch_area, this_is_the_array, this_is_the_array_element_that_the_operand_references, this_operand_references_an_element_in_the_array);
                 }
 
@@ -160,12 +160,12 @@ function TPLAlgorithm() {
             this_is_the_index = the_expression_result_is_assigned_to_this_array_element.index;
 
             let this_is_the_array_element_that_is_being_updated: ArrayElement;
-            [interactive("array_access")]
+            [interactive("array_element_click")]
             this_is_the_array_element_that_is_being_updated = helper.evaluate_this_expression(variables, this_is_the_array, this_is_the_index);
 
             // assign the new value to the box
-            let update_the_array_element: ArraySet;
-            [interactive("array_set")]
+            let update_the_array_element: Variable;
+            [interactive("update_variable")]
             update_the_array_element = helper.assign_the_new_value_to_the_array_element(this_is_the_array, this_is_the_array_element_that_is_being_updated, this_is_the_result_of_the_expression);
 
         } while (helper.is_there_another_line_to_execute(ast, this_is_the_next_line_that_will_execute));

@@ -246,6 +246,11 @@ lightest green: #E5FCC2
     text-align: center;
 }
 
+.array_mystery_problem .indexVarValue {
+    width: 20px;
+    text-align: center;
+}
+
 .array_mystery_problem .highlight{
     background-color: #8fcdca;
 }
@@ -273,6 +278,20 @@ lightest green: #E5FCC2
 
 .array_mystery_problem .array_element_highlight {
     background-color: #8fcdca;
+}
+
+.array_mystery_problem .clickable:hover {
+    background-color: #8fcdca;
+    cursor: pointer;
+}
+
+.array_mystery_problem .radio {
+    display: inline;
+    width: 25px;
+}
+
+.array_mystery_problem .yes_no_buttons {
+    text-align: center;
 }
 
 

@@ -51,9 +51,10 @@ function ArrayHelper() {
     }
 
     this.execute_the_loop_increment = function(variable_bank, increment_stmt) {
-        this.execute_statement(variable_bank, increment_stmt);
+        var result = this.execute_statement(variable_bank, increment_stmt);
         var variable = {};
         variable.name = increment_stmt.expression.args[0].value;
+        variable.value = result.value;
         return variable;
     };
 
@@ -127,7 +128,7 @@ function ArrayHelper() {
     };
 
     this.execute_statement = function(variable_bank, stmt) {
-        sim.execute_statement(variable_bank, stmt);
+        return sim.execute_statement(variable_bank, stmt);
     };
 
     function replace_expr_with_literal(expr, val) {
@@ -180,9 +181,9 @@ function ArrayHelper() {
     this.assign_the_new_value_to_the_array_element = function(array, index, value) {
         array.value[index.value] = value;
         return {
-            array: array,
             index: index,
-            value: value
+            value: array.value,
+            name: array.name
         };
     };
 }

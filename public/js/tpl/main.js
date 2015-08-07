@@ -56,8 +56,6 @@ var main_simulator = (function () {"use strict";
 
     self.next = function(fading) {
         fadeLevel = fading;
-        // HACK
-        fadeLevel = 0;
 
         if (fadeLevel == 0) {
             return self.getNextState();
@@ -98,6 +96,13 @@ var main_simulator = (function () {"use strict";
 
                 if (states[currentState + 1].annotations.interactive[0] === "update_variable") {
                     returnState.state = self.copy(states[currentState].state);
+                    // FIXME HACK -- array mystyery stores variables in an TPA variable with type VariableBank (not general)
+                    for (var v in states[currentState].variables.in_scope) {
+                        if (states[currentState].variables.in_scope[v].hasOwnProperty("type") &&
+                            states[currentState].variables.in_scope[v].type == "VariableBank") {
+                            returnState.variables.in_scope[v] = self.copy(states[currentState].variables.in_scope[v]);
+                        }
+                    }
                 }
 
                 // dislay the correct prompt, based on the fade level
@@ -149,7 +154,7 @@ var main_simulator = (function () {"use strict";
                     prompText = "Try the next step on your own!";
                 }
             }
-            returnState.prompt = "<span style='color: #45ADA8;'>Great job! That is correct.</span><br>" + prompText;
+            returnState.prompt = "<span id='responseMessage' style='color: #45ADA8;'>Great job! That is correct.<br></span>" + prompText;
             return returnState;
         } else if (!correct && numTries < 3) {
             var stateToShow = currentState + 1;
@@ -163,9 +168,9 @@ var main_simulator = (function () {"use strict";
             }
 
             if (numTries == 1) {
-                returnState.prompt = "<span style='color: red;'>Sorry, that is not correct. Try again!</span><br>";
+                returnState.prompt = "<span id='responseMessage' style='color: red;'>Sorry, that is not correct. Try again!<br></span>";
             } else {
-                returnState.prompt = "<span style='color: red;'>Sorry, that is not correct. Try one more time!</span><br>";
+                returnState.prompt = "<span id='responseMessage' style='color: red;'>Sorry, that is not correct. Try one more time!<br></span>";
             }
             returnState.prompt += self.getInteractivePrompt(states[currentState + 1].prompt, states[currentState + 1].annotations.interactive);
             returnState.askForResponse = states[currentState + 1].annotations["interactive"][0];
@@ -194,9 +199,9 @@ var main_simulator = (function () {"use strict";
     self.getInteractivePrompt = function(prompt, type) {
         // for now, change "this is" to "click on" for interactive prompts. not sure yet
         // how general this is, so we may need to change this to something less hacky
-        if ((type == "click" || type == "next_line") && prompt.indexOf("This is ") != -1) {
+        if ((type == "click" || type == "next_line" || type == "array_element_click") && prompt.indexOf("This is ") != -1) {
             prompt = "Click on " + prompt.substring(prompt.indexOf("This is ") + 8);
-        } else if (type == "enter" &&prompt.indexOf("This is ") != -1) {
+        } else if ((type == "enter" || type == "add_array_index" || type == "evaluate_expression") && prompt.indexOf("This is ") != -1) {
             prompt = "Enter " + prompt.substring(prompt.indexOf("This is ") + 8);
         }
         // for now, remove any answer after the question mark if it's interactive
