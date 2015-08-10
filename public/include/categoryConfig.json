@@ -30,7 +30,7 @@
     "id": "de34255c-a634-4bdf-92f9-dd71bff9f76a",
     "title": "Array Mystery 3",
     "content": {
-      "text": "public static void arrayMystery3(int[] list) {\nfor (int i = 1; i < list.length; i++) {\nlist[i] = list[i] + list[i - 1];\nlist[i] = list[i] + list[i - 1];\n}\n}",
+      "text": "public static void arrayMystery3(int[] list) {\nfor (int i = 1; i < list.length; i++) {\nlist[i] = list[i] + list[i - 1];\n}\n}",
       "variants": [{
         "id": "33b4551b-8768-4136-81de-2a9481b6e717",
         "arguments": {"list": [2, 3, 5, 7, 11]}
