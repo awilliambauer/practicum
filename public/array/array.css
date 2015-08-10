@@ -93,8 +93,11 @@ lightest green: #E5FCC2
     margin-top: 30px;
     text-align: center;
     display: flex;
+    display: -webkit-flex;
     justify-content: center;
+    -webkit-justify-content: center;
     align-items: flex-start;
+    -webkit-align-items: flex-start;
 }
 
 .array_mystery_problem #problem_space {
@@ -166,6 +169,7 @@ lightest green: #E5FCC2
 
 .array_mystery_problem #workspace {
     display: flex;
+    display: -webkit-flex;
     flex-direction: column;
     -webkit-flex-direction: column;
 }
@@ -221,13 +225,19 @@ lightest green: #E5FCC2
     margin-bottom: 15px;
 
     border-collapse: separate;
-    border-spacing: 0px 15px;
+}
+
+.array_mystery_problem .variable_list_table_row {
+    display: flex;
+    display: -webkit-flex;
+    align-items: center;
+    -webkit-align-items: center;
+    padding: 10px;
 }
 
 .array_mystery_problem .bank_variable {
     color: black;
     float: left;
-    width: 100px;
 }
 
 .array_mystery_problem .bank_variable_label {
@@ -236,9 +246,11 @@ lightest green: #E5FCC2
 }
 
 .array_mystery_problem .array_label {
-    padding-top: 20px;
+    padding-top: 22px;
     padding-right: 10px;
     text-align: right;
+    display: flex;
+    display: -webkit-flex;
 }
 
 .array_mystery_problem .bank_variable_value {

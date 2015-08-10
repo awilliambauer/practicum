@@ -7,10 +7,10 @@
     "id": "3939090F-1EDC-4FCF-854A-2D87B9FDA251",
     "title": "Array Mystery 1",
     "content": {
-      "text": "public static void arrayMystery1(int[] numbers) {\nfor (int i = 0; i < 9; i++) {\nnumbers[i] = numbers[i + 1];\n}\n}",
+      "text": "public static void arrayMystery1(int[] nums) {\nfor (int i = 0; i < 9; i++) {\nnums[i] = nums[i + 1];\n}\n}",
       "variants": [{
         "id": "58CB27DD-8EA3-4E48-9BB6-92705224801F",
-        "arguments": {"numbers": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]}
+        "arguments": {"nums": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]}
       }]
     }
   }, {
@@ -56,32 +56,32 @@
     "id": "2762BA3C-73E6-4792-A76F-A9496AB7894E",
     "title": "Array Mystery 5",
     "content": {
-      "text": "public static void arrayMystery5(int[] array) {\nfor (int i = 0; i < array.length; i++) {\narray[i] = array[array.length - 1 - i];\narray[array.length - 1 - i] = array[i];\n}\n}",
+      "text": "public static void arrayMystery5(int[] arr) {\nfor (int i = 0; i < arr.length; i++) {\narr[i] = arr[arr.length - 1 - i];\narr[arr.length - 1 - i] = arr[i];\n}\n}",
       "variants": [{
         "id": "77900298-25A3-4899-B7F5-9A6F3E41FF5A",
-        "arguments": {"array": [7, 1, 3, 2, 0, 4]}
+        "arguments": {"arr": [7, 1, 3, 2, 0, 4]}
       },{
         "id": "0881E25F-EF6A-4C29-9EDA-0F9406741E53",
-        "arguments": {"array": [10, 8, 9, 5, 6]}
+        "arguments": {"arr": [10, 8, 9, 5, 6]}
       },{
         "id": "4B3962FB-18AA-473A-9B01-79122CE095FC",
-        "arguments": {"array": [8, 10, 8, 6, 4, 2]}
+        "arguments": {"arr": [8, 10, 8, 6, 4, 2]}
       }]
     }
   }, {
     "id": "59B3C734-6B0E-48B4-9578-D91BB9B96A1C",
     "title": "Array Mystery 6",
     "content": {
-      "text": "public static void arrayMystery6(int[] array) {\nfor (int i = 2; i < array.length; i++) {\narray[i] = array[i] + array[i - 1] + array[i - 2];\n}\n}",
+      "text": "public static void arrayMystery6(int[] arr) {\nfor (int i = 2; i < arr.length; i++) {\narr[i] = arr[i] + arr[i - 1] + arr[i - 2];\n}\n}",
       "variants": [{
         "id": "C50D5AB5-3B62-4C0D-9092-D1F42A3419D7",
-        "arguments": {"array": [3, 0, 1, 4, 7]}
+        "arguments": {"arr": [3, 0, 1, 4, 7]}
       },{
         "id": "2C6BE31E-F94D-4B20-B041-B93D7233BFC2",
-        "arguments": {"array": [0, 1, 2, 3, 4, 5]}
+        "arguments": {"arr": [0, 1, 2, 3, 4, 5]}
       },{
         "id": "36668252-98C6-476B-810A-54346FF83A4F",
-        "arguments": {"array": [7, 4, -10, 8, 2]}
+        "arguments": {"arr": [7, 4, -10, 8, 2]}
       }]
     }
   }]
