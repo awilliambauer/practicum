@@ -7,7 +7,7 @@
     "id": "a30abcb4-327b-4f91-83f5-dd534e98f56a",
     "title": "Array Mystery 1",
     "content": {
-      "text": "public static void arrMys(int[] arr) {\nfor (int i = 1; i < arr.length - 1; i++) {\narr[i] = i * arr[i + 1] + arr[i - 1];\n}\n}",
+      "text": "public static void arrayMystery1(int[] arr) {\nfor (int i = 1; i < arr.length - 1; i++) {\narr[i] = i * arr[i + 1] + arr[i - 1];\n}\n}",
       "variants": [{
         "id": "2d525b55-2ea0-414f-b3e2-67fb53421dfc",
         "arguments": {"arr": [11, 14, 2, 4, 7]}
@@ -20,7 +20,7 @@
     "id": "de34255c-a634-4bdf-92f9-dd71bff9f76a",
     "title": "Array Mystery 2",
     "content": {
-      "text": "public static void mystery(int[] list) {\nfor (int i = 1; i < list.length; i++) {\nlist[i] = list[i] + list[i - 1];\nlist[i] = list[i] + list[i - 1];\n}\n}",
+      "text": "public static void arrayMystery2(int[] list) {\nfor (int i = 1; i < list.length; i++) {\nlist[i] = list[i] + list[i - 1];\nlist[i] = list[i] + list[i - 1];\n}\n}",
       "variants": [{
         "id": "33b4551b-8768-4136-81de-2a9481b6e717",
         "arguments": {"list": [1, 2, 3, 4, 5]}

@@ -156,7 +156,7 @@ function ArrayHelper() {
         var array = sim.evaluate_expression(variable_bank, expr);
         array.name = expr.value;
         return array;
-    }
+    };
 
 
     this.evaluate_this_expression_and_add_to_scratch = function(variable_bank, scratch_list) {
@@ -165,7 +165,7 @@ function ArrayHelper() {
         scratch_list.push(new_line);
 
         return replace_expr_with_literal(new_line, value);
-    }
+    };
 
     this.do_the_array_lookup = function(scratch_list, array, index, origExpr) {
         if (array.type !== 'array') throw new Error("Cannot index into object of type " + array.type);
@@ -176,13 +176,13 @@ function ArrayHelper() {
         scratch_list.push(new_line);
 
         return replace_expr_with_literal(java_ast.find_by_id(origExpr.id, new_line), value);
-    }
+    };
 
     this.assign_the_new_value_to_the_array_element = function(array, index, value) {
         array.value[index.value] = value;
         return {
-            index: index,
-            value: array.value,
+            index: this.copy(index),
+            value: this.copy(array.value),
             name: array.name
         };
     };

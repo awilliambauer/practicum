@@ -51,12 +51,12 @@ var array = (function() {
 
         d3.select("#submitButton").on("click", checkSolution);
 
+        d3.select("#newProblem").on("click", function () {csed.loadProblem(problemConfig.nextProblem)});
+
         createStartingStatesDropdown(problemConfig, state);
     }
 
     function createStartingStatesDropdown(problemConfig, state) {
-        console.log(state);
-
         // fill in dropdowns in nav
         d3.selectAll("#methodCallDropdown")
             .selectAll("li")
@@ -96,7 +96,6 @@ var array = (function() {
         });
 
         if (waitingForResponse) {
-            numTries = numTries + 1;
             switch (responseType) {
                 case 'add_variable':
                     checkVariableBankAnswer();
@@ -138,7 +137,7 @@ var array = (function() {
 
         // update the UI
         addPrompt();
-        addVaraibleBank();
+        addVariableBank();
         addHighlighting();
     }
 
@@ -190,7 +189,7 @@ var array = (function() {
         }
     }
 
-    function addVaraibleBank() {
+    function addVariableBank() {
         // clear the variable bank so we can re-draw it
         d3.select("#variable_list_table").node().innerHTML = "";
 
@@ -626,9 +625,9 @@ var array = (function() {
     function checkVariableBankAnswer() {
         var correctAnswerObject = simulatorInterface.getCorrectAnswer();
 
-        // FIXME -- the value stored in the correctAnswerObject (state.statement_result) should be correct
-        var correctAnswer = state.variables.in_scope[correctAnswerObject.name].value;
-        //var correctVariable = correctAnswerObject.rhs;
+        // I think this is working -- awb
+        //var correctAnswer = state.variables.in_scope[correctAnswerObject.name].value;
+        var correctAnswer = correctAnswerObject.rhs;
 
         var userVariable = {}; // for logging
         var correctVariable = {}; // for logging
@@ -753,7 +752,7 @@ var array = (function() {
             }
             if (d3.select("#errorMessage").node() === null) {
                 var errorMessage = "<span id='errorMessage' style='color: red;'>Try entering an answer first!<br></span>";
-                d3.select("#prompt").node().innerHTML = errorMessage + d3.select("#prompt").node().innerHTML;
+                d3.select("#promptText").node().innerHTML = errorMessage + d3.select("#promptText").node().innerHTML;
             }
         }
     }
@@ -762,9 +761,12 @@ var array = (function() {
         var correctAnswerObject = simulatorInterface.getCorrectAnswer();
 
         if (d3.select('input[name="yes_no_radio"]:checked').node() === null) {
+            if (d3.select("#responseMessage").node() !== null) {
+                d3.select("#responseMessage").remove();
+            }
             if (d3.select("#errorMessage").node() === null) {
                 var errorMessage = "<span id='errorMessage' style='color: red;'>Try entering an answer first!<br></span>";
-                d3.select("#prompt").node().innerHTML = errorMessage + d3.select("#prompt").node().innerHTML;
+                d3.select("#promptText").node().innerHTML = errorMessage + d3.select("#promptText").node().innerHTML;
             }
         }
         else {
@@ -840,7 +842,7 @@ var array = (function() {
             }
             if (d3.select("#errorMessage").node() === null) {
                 var errorMessage = "<span id='errorMessage' style='color: red;'>Try entering an answer first!<br></span>";
-                d3.select("#prompt").node().innerHTML = errorMessage + d3.select("#prompt").node().innerHTML;
+                d3.select("#promptText").node().innerHTML = errorMessage + d3.select("#promptText").node().innerHTML;
             }
         }
     }
@@ -870,6 +872,8 @@ var array = (function() {
     }
 
     function respondToAnswer(correct, type, correctAnswer) {
+        // update numTries here because simulator respondToAnswer updates its numTries and we need them to be in sync
+        numTries = numTries + 1;
         if (!correct && numTries === 3) {
             // log that the user received a bottom-out hint
             Logging.log_task_event(logger, {

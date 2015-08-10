@@ -62,12 +62,11 @@ lightest green: #E5FCC2
 }
 
 .array_mystery_problem #prompt {
-    position: absolute;
-    top: 380px;
+    margin-left: auto;
+    margin-right: auto;
     border: 2px solid #547980;
     border-radius: 10px;
     width: 250px;
-    left: 25%;
     text-align: left;
     padding: 10px;
     background: #FAFFF0;
@@ -101,8 +100,8 @@ lightest green: #E5FCC2
     border-radius: 10px;
     background-color: #ffffff;
     width: 525px;
-    height: 255px;
     float: left;
+    padding-bottom: 15px;
 }
 
 .array_mystery_problem #problem_space * {

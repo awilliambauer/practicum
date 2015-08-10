@@ -45,7 +45,7 @@ var if_else = (function() {
             .append("li")
             .append("a")
             .attr("class", "monospace")
-            .text(function(s) { return state.AST.name + "(" + getArgString(s.arguments) + ")"; })
+            .text(function(s) { return state.AST.name + "(" + getArgString(s.arguments, problemConfig) + ")"; })
             .on("click", function(s) {
                 if (s !== state.variant) {
                     csed.loadProblem(problemConfig, s);
@@ -54,7 +54,7 @@ var if_else = (function() {
         ;
 
         d3.select("#methodCall")
-            .text(function() { return state.AST.name + "(" + getArgString(state.initialization) + ")"} )
+            .text(function() { return state.AST.name + "(" + getArgString(state.initialization, problemConfig) + ")"} )
         ;
     }
 
@@ -113,11 +113,18 @@ var if_else = (function() {
     }
 
     // gets the initial values that the method will be called with
-    function getArgString(args) {
+    function getArgString(args, config) {
+        var text = config.content.text;
+        // parse method call for variable order so they display correctly
+        var varNames = text.substring(text.indexOf('(')+1, text.indexOf(')')).replace(/int /g,"").split(", ");
         var callVals = [];
-        for (var variable in args) {
-            callVals.push(args[variable]);
-        }
+        varNames.forEach(function (variable) {
+            if (args.hasOwnProperty(variable)) {
+                callVals.push(args[variable]);
+            } else {
+                throw new Error("variant args don't contain value for " + variable);
+            }
+        });
         return callVals;
     }
 
@@ -600,7 +607,7 @@ var if_else = (function() {
         if (d3.select('input[name="yes_no_radio"]:checked').node() === null) {
             if (d3.select("#errorMessage").node() === null) {
                 var errorMessage = "<span id='errorMessage' style='color: red;'>Try entering an answer first!<br></span>";
-                d3.select("#prompt").node().innerHTML = errorMessage + d3.select("#prompt").node().innerHTML;
+                d3.select("#promptText").node().innerHTML = errorMessage + d3.select("#promptText").node().innerHTML;
             }
         }
         else {

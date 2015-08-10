@@ -164,7 +164,11 @@ var main_simulator = (function () {"use strict";
             returnState = self.copy(states[stateToShow]);
 
             if (states[currentState + 1].annotations.interactive[0] === "update_variable") {
-                returnState.state = self.copy(states[currentState].state);
+                returnState.state = self.copy(states[currentState].state); // for if/else
+                if (returnState.variables.in_scope.variables) {
+                    // copy over the previous problem variable values so it doesn't auto-update to the correct answer
+                    returnState.variables.in_scope.variables = self.copy(states[currentState].variables.in_scope.variables); // for array
+                }
             }
 
             if (numTries == 1) {
@@ -179,8 +183,8 @@ var main_simulator = (function () {"use strict";
             numTries = 0;
             currentState = currentState + 1;
             waitingForUserResponse = false;
-            returnState = self.copy(states[currentState])
-            returnState.prompt = "Sorry, that is not correct."
+            returnState = self.copy(states[currentState]);
+            returnState.prompt = "Sorry, that is not correct.";
             return returnState;
         }
     };
