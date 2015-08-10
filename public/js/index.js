@@ -5,7 +5,7 @@ var csed = (function() {
 
     var COOKIE_KEY_PREFIX = "csed-consent-form-";
     var LOGGING_PORT = 5678;
-    var LOGGING_RELEASE_ID = 'cdc1f97e-cf3a-4901-aa46-6b3c4374336e';
+    var LOGGING_RELEASE_ID = 'f4ed191d-133a-423b-9e17-36e94db6cc06';
 
     var categoryToLoad;
     var problemToLoad;
@@ -21,8 +21,8 @@ var csed = (function() {
 
     function setupLogging(username) {
         if (ENABLE_TELEMETRY_LOGGING) {
-            //var LOGGING_BASE_URL = "https://" + window.location.hostname + ":" + LOGGING_PORT;
-            var LOGGING_BASE_URL = "https://dev-olio.cs.washington.edu" + ":" + LOGGING_PORT;
+            var LOGGING_BASE_URL = "https://" + window.location.hostname + ":" + LOGGING_PORT;
+            //var LOGGING_BASE_URL = "https://dev-olio.cs.washington.edu" + ":" + LOGGING_PORT;
 
             return Logging.initialize(LOGGING_BASE_URL, LOGGING_RELEASE_ID, username).then(function (logging_data) {
                 experimental_condition = logging_data.condition;
