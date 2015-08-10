@@ -4,10 +4,20 @@
   "title": "Array Mystery",
   "description": "Practice for loops and arrays",
   "problems": [{
-    "id": "a30abcb4-327b-4f91-83f5-dd534e98f56a",
+    "id": "3939090F-1EDC-4FCF-854A-2D87B9FDA251",
     "title": "Array Mystery 1",
     "content": {
-      "text": "public static void arrayMystery1(int[] arr) {\nfor (int i = 1; i < arr.length - 1; i++) {\narr[i] = i * arr[i + 1] + arr[i - 1];\n}\n}",
+      "text": "public static void arrayMystery1(int[] numbers) {\nfor (int i = 0; i < 9; i++) {\nnumbers[i] = numbers[i + 1];\n}\n}",
+      "variants": [{
+        "id": "58CB27DD-8EA3-4E48-9BB6-92705224801F",
+        "arguments": {"numbers": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]}
+      }]
+    }
+  }, {
+    "id": "a30abcb4-327b-4f91-83f5-dd534e98f56a",
+    "title": "Array Mystery 2",
+    "content": {
+      "text": "public static void arrayMystery2(int[] arr) {\nfor (int i = 1; i < arr.length - 1; i++) {\narr[i] = i * arr[i + 1] + arr[i - 1];\n}\n}",
       "variants": [{
         "id": "2d525b55-2ea0-414f-b3e2-67fb53421dfc",
         "arguments": {"arr": [11, 14, 2, 4, 7]}
@@ -18,12 +28,60 @@
     }
   }, {
     "id": "de34255c-a634-4bdf-92f9-dd71bff9f76a",
-    "title": "Array Mystery 2",
+    "title": "Array Mystery 3",
     "content": {
-      "text": "public static void arrayMystery2(int[] list) {\nfor (int i = 1; i < list.length; i++) {\nlist[i] = list[i] + list[i - 1];\nlist[i] = list[i] + list[i - 1];\n}\n}",
+      "text": "public static void arrayMystery3(int[] list) {\nfor (int i = 1; i < list.length; i++) {\nlist[i] = list[i] + list[i - 1];\nlist[i] = list[i] + list[i - 1];\n}\n}",
       "variants": [{
         "id": "33b4551b-8768-4136-81de-2a9481b6e717",
-        "arguments": {"list": [1, 2, 3, 4, 5]}
+        "arguments": {"list": [2, 3, 5, 7, 11]}
+      }]
+    }
+  }, {
+    "id": "FE17370D-DBAA-4118-9309-8EF1165881CD",
+    "title": "Array Mystery 4",
+    "content": {
+      "text": "public static void arrayMystery4(int[] list) {\nfor (int i = 0; i < list.length; i++) {\nlist[i] = i * list[i];\n}\n}",
+      "variants": [{
+        "id": "095078EF-7929-4AAD-8162-BC9B7D4AE42A",
+        "arguments": {"list": [3, 2]}
+      },{
+        "id": "94DDC458-DB89-43D3-A2EF-CBD8260CC514",
+        "arguments": {"list": [5, 4, 3]}
+      },{
+        "id": "8A3F5DA9-07B5-4022-B5D2-DB914437A080",
+        "arguments": {"list": [2, 4, 6 ,8]}
+      }]
+    }
+  }, {
+    "id": "2762BA3C-73E6-4792-A76F-A9496AB7894E",
+    "title": "Array Mystery 5",
+    "content": {
+      "text": "public static void arrayMystery5(int[] array) {\nfor (int i = 0; i < array.length; i++) {\narray[i] = array[array.length - 1 - i];\narray[array.length - 1 - i] = array[i];\n}\n}",
+      "variants": [{
+        "id": "77900298-25A3-4899-B7F5-9A6F3E41FF5A",
+        "arguments": {"array": [7, 1, 3, 2, 0, 4]}
+      },{
+        "id": "0881E25F-EF6A-4C29-9EDA-0F9406741E53",
+        "arguments": {"array": [10, 8, 9, 5, 6]}
+      },{
+        "id": "4B3962FB-18AA-473A-9B01-79122CE095FC",
+        "arguments": {"array": [8, 10, 8, 6, 4, 2]}
+      }]
+    }
+  }, {
+    "id": "59B3C734-6B0E-48B4-9578-D91BB9B96A1C",
+    "title": "Array Mystery 6",
+    "content": {
+      "text": "public static void arrayMystery6(int[] array) {\nfor (int i = 2; i < array.length; i++) {\narray[i] = array[i] + array[i - 1] + array[i - 2];\n}\n}",
+      "variants": [{
+        "id": "C50D5AB5-3B62-4C0D-9092-D1F42A3419D7",
+        "arguments": {"array": [3, 0, 1, 4, 7]}
+      },{
+        "id": "2C6BE31E-F94D-4B20-B041-B93D7233BFC2",
+        "arguments": {"array": [0, 1, 2, 3, 4, 5]}
+      },{
+        "id": "36668252-98C6-476B-810A-54346FF83A4F",
+        "arguments": {"array": [7, 4, -10, 8, 2]}
       }]
     }
   }]

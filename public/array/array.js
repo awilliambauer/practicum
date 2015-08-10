@@ -624,9 +624,6 @@ var array = (function() {
 
     function checkVariableBankAnswer() {
         var correctAnswerObject = simulatorInterface.getCorrectAnswer();
-
-        // I think this is working -- awb
-        //var correctAnswer = state.variables.in_scope[correctAnswerObject.name].value;
         var correctAnswer = correctAnswerObject.rhs;
 
         var userVariable = {}; // for logging

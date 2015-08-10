@@ -22,7 +22,7 @@ function ArrayHelper() {
                 value: args[key].map(function(i) { return {type:'int', value:i}; })
             };
         }
-    }
+    };
 
     // HACK FIXME remove this asap
     this.True = function() { return true; };
@@ -30,7 +30,7 @@ function ArrayHelper() {
     this.create_new_variable_bank = function() { return {}; };
 
     this.add_this_to_the_variable_bank = function(bank, variable) {
-        bank[variable.name] = {type:variable.type, value:variable.value};
+        bank[variable.name] = {type:variable.type, value:this.copy(variable.value)};
         return variable;
     };
 
@@ -40,7 +40,7 @@ function ArrayHelper() {
             indices.push(i);
         }
         return indices;
-    }
+    };
 
     this.get_array_length = function(array) {
         return {
@@ -48,7 +48,7 @@ function ArrayHelper() {
             type: 'int',
             value: array.value.length
         }
-    }
+    };
 
     this.execute_the_loop_increment = function(variable_bank, increment_stmt) {
         var result = this.execute_statement(variable_bank, increment_stmt);
