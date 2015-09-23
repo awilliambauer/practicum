@@ -162,7 +162,6 @@ var expressions = (function() {
 
     function addStepHTML() {
         var highlighting = getCurrentHighlighting();
-
         for (var i = 0; i < state.state.problemLines.length; i++) {
             var expression = state.state.problemLines[i];
 
@@ -253,7 +252,7 @@ var expressions = (function() {
 
     // look at the current variables in scope to determine which rows and cells should be highlighted
     function getCurrentHighlighting() {
-        var highlighting = [];
+        var highlighting = {standard:[], paren:{}}; // HACK hideous workaround to get highlighting applied inside parens
         for (var i = 0; i < state.state.problemLines.length; i++) {
             highlighting.push([]);
         }
@@ -265,7 +264,11 @@ var expressions = (function() {
 
                 if (objectToVisualize.hasOwnProperty("type")) {
                     if (objectToVisualize.type == "lineCell") {
-                        highlighting[objectToVisualize.line].push(objectToVisualize.cell);
+                        if (objectToVisualize.isParen) {
+                            highlighting.paren[objectToVisualize.line].push({parenCell:objectToVisualize.parenCell, cell:objectToVisualize.cell});
+                        } else {
+                            highlighting.standard[objectToVisualize.line].push(objectToVisualize.cell);
+                        }
                     }
                     else if (objectToVisualize.type == "result") {
                         if (fadeLevel > 0) {
@@ -322,8 +325,12 @@ var expressions = (function() {
     function getExpressionValue(arr, index) {
         if (arr[index].type == 'double' && arr[index].value % 1 == 0) {
             return arr[index].value + ".0";
-        } else if (arr[index].type == 'string') {
+        } else if (arr[index].type === 'string') {
             return "\"" + arr[index].value + "\"";
+        } else if(arr[index].type === 'paren_expr') {
+            return "(" + arr[index].value.map(function(e) {
+                return e.value;
+            }).join(" ") + ")";
         } else {
             return arr[index].value;
         }
@@ -469,10 +476,6 @@ var expressions = (function() {
         }
 
         stepWithState();
-    }
-
-    function loadRandomExpressionsProblem() {
-
     }
 
     // checks the solution entered into the solution box against the correct solution

@@ -1,21 +1,25 @@
 /**!
  * Papika telemetry client library.
  * Copyright 2015 Eric Butler.
- * Revision Id: af2dd17aade53a16a7ce8d2ff4dcf07d94f15a87
+ * Revision Id: 5992d5b098491103653e4bca5d3b20aa39ae143a
  */
 
 var papika = function(){
     "use strict";
     var mdl = {};
 
-    var PROTOCOL_VESRION = 1;
-    var REVISION_ID = 'af2dd17aade53a16a7ce8d2ff4dcf07d94f15a87';
+    var PROTOCOL_VESRION = 2;
+    var REVISION_ID = '5992d5b098491103653e4bca5d3b20aa39ae143a';
 
     var uuid_regex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
     function is_uuid(str) {
         return uuid_regex.test(str);
     }
     mdl.is_uuid = is_uuid;
+
+    function is_short(x) {
+        return x === +x && x === (x|0) && x >= 0 && x <= 32767;
+    }
 
     function send_post_request(url, params) {
         return fetch(url, {
@@ -181,11 +185,13 @@ var papika = function(){
         self.log_event = function(args, do_create_promise) {
             // TODO add some argument checking and error handling
             if (!p_session_id) throw Error('session not yet logged!');
-            if (typeof args.type !== 'number') throw Error('bad/missing type!');
+            if (!is_short(args.category)) throw Error('bad/missing category!');
+            if (!is_short(args.type)) throw Error('bad/missing type!');
             if (typeof args.detail === 'undefined') throw Error("bad/missing session detail object!");
             var detail = JSON.stringify(args.detail);
 
             var data = {
+                category_id: args.category,
                 type_id: args.type,
                 session_sequence_index: session_sequence_counter,
                 client_time: new Date().toISOString(),
@@ -241,4 +247,5 @@ var papika = function(){
 
     return mdl;
 }();
+
 

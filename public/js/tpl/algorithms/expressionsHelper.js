@@ -3,9 +3,8 @@
 function ExpressionsHelper() {
     "use strict";
 
-    this.isThereAtLeastOneMultiplicationDivisionOrModOperator = function (state) {
-        var numProblemLines = state.problemLines.length;
-        var currentExpression = state.problemLines[numProblemLines - 1];
+    this.isThereAtLeastOneMultiplicationDivisionOrModOperator = function(state) {
+        var currentExpression = state.problemLines[state.problemLines.length - 1];
         var foundMDMoperator = false;
 
         for (var i = 0; i < currentExpression.length; i++) {
@@ -17,14 +16,82 @@ function ExpressionsHelper() {
         return foundMDMoperator;
     };
 
-    this.isThereAtLeastOneAdditionOrSubtractionOperator = function (state) {
-        var numProblemLines = state.problemLines.length;
-        var currentExpression = state.problemLines[numProblemLines - 1];
+
+    //this.isAnyPartOfTheExpressionInsideParentheses = function(state) {
+    //    var currentExpression = state.problemLines[state.problemLines.length - 1];
+    //
+    //    var foundParenthesizedExpr = false;
+    //
+    //    for (var i = 0; i < currentExpression.length; i++) {
+    //        if (currentExpression[i].type === "paren_expr") {
+    //            foundParenthesizedExpr = true;
+    //        }
+    //    }
+    //
+    //    return foundParenthesizedExpr;
+    //};
+    //
+    //this.getFirstParenthesizedPartFromTheLeft = function(state) {
+    //    var currentExpression = state.problemLines[state.problemLines.length - 1];
+    //    var parenExpr = {};
+    //    parenExpr.type = "lineBlock";
+    //    parenExpr.line = state.problemLines.length - 1;
+    //
+    //    for (var i = 0; i < currentExpression.length; i++) {
+    //        if (currentExpression[i].type === "paren_expr") {
+    //            parenExpr.cell = i;
+    //            parenExpr.opType = "paren_expr";
+    //            parenExpr.expr = currentExpression[i].value;
+    //            break;
+    //        }
+    //    }
+    //
+    //    return parenExpr;
+    //};
+
+    this.isThereAtLeastOneMultiplicationDivisionOrModOperatorInsideParentheses = function(state) {
+        var currentExpression = state.problemLines[state.problemLines.length - 1];
+        var foundMDMoperator = false;
+
+        for (var i = 0; i < currentExpression.length; i++) {
+            if (currentExpression[i].type === "paren_expr") {
+                var parenExpr = currentExpression[i].value;
+                for (var j = 0; j < parenExpr.length; j++) {
+                    if (parenExpr[j].type === "MDMoperator") {
+                        foundMDMoperator = true;
+                    }
+                }
+            }
+        }
+
+        return foundMDMoperator;
+    };
+
+    this.isThereAtLeastOneAdditionOrSubtractionOperator = function(state) {
+        var currentExpression = state.problemLines[state.problemLines.length - 1];
         var foundASoperator = false;
 
         for (var i = 0; i < currentExpression.length; i++) {
             if (currentExpression[i].type === "ASoperator") {
                 foundASoperator = true;
+            }
+        }
+
+        return foundASoperator;
+    };
+
+    this.isThereAtLeastOneAdditionOrSubtractionOperatorInsideParentheses = function(state) {
+        var currentExpression = state.problemLines[state.problemLines.length - 1];
+        var foundASoperator = false;
+
+        for (var i = 0; i < currentExpression.length; i++) {
+            if (currentExpression[i].type === "paren_expr") {
+                var parenExpr = currentExpression[i].value;
+                for (var j = 0; j < parenExpr.length; j++) {
+                    if (parenExpr[j].type === "ASoperator") {
+                        foundASoperator = true;
+                    }
+                }
             }
         }
 
@@ -44,41 +111,81 @@ function ExpressionsHelper() {
     };
 
     this.getFirstMultiplicationDivisionOrModOperatorFromLeft = function (state) {
-        var numProblemLines = state.problemLines.length;
-        var currentExpression = state.problemLines[numProblemLines - 1];
+        var currentExpression = state.problemLines[state.problemLines.length - 1];
         var MDMoperator = {};
         MDMoperator.type = "lineCell";
-        MDMoperator.line = numProblemLines - 1;
+        MDMoperator.line = state.problemLines.length - 1;
 
         for (var i = 0; i < currentExpression.length; i++) {
             if (currentExpression[i].type === "MDMoperator") {
                 MDMoperator.cell = i;
                 MDMoperator.opType = "MDMoperator";
                 MDMoperator.op = currentExpression[i].value;
-                break;
+                return MDMoperator;
             }
         }
+    };
 
-        return MDMoperator;
+    this.getFirstMultiplicationDivisionOrModOperatorFromLeftInsideParentheses = function (state) {
+        var currentExpression = state.problemLines[state.problemLines.length - 1];
+        var MDMoperator = {};
+        MDMoperator.type = "lineCell";
+        MDMoperator.line = state.problemLines.length - 1;
+
+        for (var i = 0; i < currentExpression.length; i++) {
+            if (currentExpression[i].type === "paren_expr") {
+                var parenExpr = currentExpression[i].value;
+                for (var j = 0; j < parenExpr.length; j++) {
+                    if (parenExpr[j].type === "MDMoperator") {
+                        MDMoperator.cell = j;
+                        MDMoperator.opType = "MDMoperator";
+                        MDMoperator.op = parenExpr[j].value;
+                        MDMoperator.isParen = true;
+                        MDMoperator.parenCell = i;
+                        return MDMoperator;
+                    }
+                }
+            }
+        }
     };
 
     this.getFirstAdditionOrSubtractionOperatorFromLeft = function (state) {
-        var numProblemLines = state.problemLines.length;
-        var currentExpression = state.problemLines[numProblemLines - 1];
+        var currentExpression = state.problemLines[state.problemLines.length - 1];
         var ASoperator = {};
         ASoperator.type = "lineCell";
-        ASoperator.line = numProblemLines - 1;
+        ASoperator.line = state.problemLines.length - 1;
 
         for (var i = 0; i < currentExpression.length; i++) {
             if (currentExpression[i].type === "ASoperator") {
                 ASoperator.cell = i;
                 ASoperator.opType = "ASoperator";
                 ASoperator.op = currentExpression[i].value;
-                break;
+                return ASoperator;
             }
         }
+    };
 
-        return ASoperator;
+    this.getFirstAdditionOrSubtractionOperatorFromLeftInsideParentheses = function (state) {
+        var currentExpression = state.problemLines[state.problemLines.length - 1];
+        var ASoperator = {};
+        ASoperator.type = "lineCell";
+        ASoperator.line = state.problemLines.length - 1;
+
+        for (var i = 0; i < currentExpression.length; i++) {
+            if (currentExpression[i].type === "paren_expr") {
+                var parenExpr = currentExpression[i].value;
+                for (var j = 0; j < parenExpr.length; j++) {
+                    if (parenExpr[j].type === "ASoperator") {
+                        ASoperator.cell = j;
+                        ASoperator.opType = "ASoperator";
+                        ASoperator.op = parenExpr[j].value;
+                        ASoperator.isParen = true;
+                        ASoperator.parenCell = i;
+                        return ASoperator;
+                    }
+                }
+            }
+        }
     };
 
     this.getFirstComparisonFromLeft = function (state) {
@@ -124,8 +231,14 @@ function ExpressionsHelper() {
         leftOperand.type = "lineCell";
         leftOperand.line = state.problemLines.length - 1;
         leftOperand.cell = operatorIndex.cell - 1;
-        leftOperand.value = state.problemLines[leftOperand.line][leftOperand.cell].value;
-        leftOperand.valType = state.problemLines[leftOperand.line][leftOperand.cell].type;
+        if (operatorIndex.isParen) {
+            leftOperand.value = state.problemLines[leftOperand.line][operatorIndex.parenCell].value[leftOperand.cell].value;
+            leftOperand.valType = state.problemLines[leftOperand.line][operatorIndex.parenCell].value[leftOperand.cell].type;
+            leftOperand.isParen = true;
+        } else {
+            leftOperand.value = state.problemLines[leftOperand.line][leftOperand.cell].value;
+            leftOperand.valType = state.problemLines[leftOperand.line][leftOperand.cell].type;
+        }
         leftOperand.asString = function () {
             if (this.valType === "double" && this.value % 1 === 0) { // double without non-zero decimals
                 return this.value.toFixed(1);
@@ -140,8 +253,14 @@ function ExpressionsHelper() {
         rightOperand.type = "lineCell";
         rightOperand.line = state.problemLines.length - 1;
         rightOperand.cell = operatorIndex.cell + 1;
-        rightOperand.value = state.problemLines[rightOperand.line][rightOperand.cell].value;
-        rightOperand.valType = state.problemLines[rightOperand.line][rightOperand.cell].type;
+        if (operatorIndex.isParen) {
+            rightOperand.value = state.problemLines[rightOperand.line][operatorIndex.parenCell].value[rightOperand.cell].value;
+            rightOperand.valType = state.problemLines[rightOperand.line][operatorIndex.parenCell].value[rightOperand.cell].type;
+            rightOperand.isParen = true;
+        } else {
+            rightOperand.value = state.problemLines[rightOperand.line][rightOperand.cell].value;
+            rightOperand.valType = state.problemLines[rightOperand.line][rightOperand.cell].type;
+        }
         rightOperand.asString = function () {
             if (this.valType === "double" && this.value % 1 === 0) { // double without non-zero decimals
                 return this.value.toFixed(1);
@@ -156,12 +275,30 @@ function ExpressionsHelper() {
         var currentExpression = state.problemLines[state.problemLines.length - 1];
         var newProblemLine = JSON.parse(JSON.stringify(currentExpression));
 
-        var part1 = newProblemLine.slice(0, operatorIndex - 1);
-        var part2 = newProblemLine.slice(operatorIndex, operatorIndex + 1);
-        var part3 = newProblemLine.slice(operatorIndex + 2);
-        newProblemLine = part1.concat(part2).concat(part3);
-        newProblemLine[operatorIndex - 1].type = "empty";
-        newProblemLine[operatorIndex - 1].value = "";
+        var parenExpr;
+        var part1, part2, part3;
+        if (operatorObject.isParen) {
+            parenExpr = newProblemLine[operatorObject.parenCell].value;
+            part1 = parenExpr.slice(0, operatorIndex - 1);
+            part2 = parenExpr.slice(operatorIndex, operatorIndex + 1);
+            part3 = parenExpr.slice(operatorIndex + 2);
+            parenExpr = part1.concat(part2).concat(part3);
+            parenExpr[operatorIndex - 1].type = "empty";
+            parenExpr[operatorIndex - 1].value = "";
+            operatorIndex = operatorObject.parenCell;
+            if (parenExpr.length === 1) { // expression inside has been evaluated, discard parens
+                newProblemLine[operatorObject.parenCell] = parenExpr[0];
+            } else {
+                newProblemLine[operatorObject.parenCell].value = parenExpr;
+            }
+        } else {
+            part1 = newProblemLine.slice(0, operatorIndex - 1);
+            part2 = newProblemLine.slice(operatorIndex, operatorIndex + 1);
+            part3 = newProblemLine.slice(operatorIndex + 2);
+            newProblemLine = part1.concat(part2).concat(part3);
+            newProblemLine[operatorIndex - 1].type = "empty";
+            newProblemLine[operatorIndex - 1].value = "";
+        }
 
         state.problemLines.push(newProblemLine);
 
@@ -170,7 +307,7 @@ function ExpressionsHelper() {
         resultCell.line = state.problemLines.length - 1;
         resultCell.cell = operatorIndex - 1;
         return resultCell;
-    };
+    }
 
     function getOperator(state, index) {
         var lastProblemLine = state.problemLines.length - 1;
@@ -179,14 +316,18 @@ function ExpressionsHelper() {
         return calculationExpression[index];
     }
 
-    this.isCurrentOperatorMod = function (state, operatorObject) {
-        return getOperator(state, operatorObject.cell).value === "%";
+    this.isCurrentOperatorMod = function (operatorObject) {
+        return operatorObject.op === "%";
     };
 
     this.isCurrentOperationIntDiv = function (state, operatorObject) {
         var operatorIndex = operatorObject.cell;
         var lastProblemLine = state.problemLines.length - 1;
         var calculationExpression = state.problemLines[lastProblemLine];
+
+        if (operatorObject.isParen) {
+            calculationExpression = calculationExpression[operatorObject.parenCell].value;
+        }
 
         var operator = calculationExpression[operatorIndex];
         var leftOperand = calculationExpression[operatorIndex - 1];
@@ -195,18 +336,22 @@ function ExpressionsHelper() {
         return operator.value === "/" && leftOperand.type === "int" && rightOperand.type === "int";
     };
 
-    this.isCurrentOperationDiv = function (state, operatorObject) {
-        return getOperator(state, operatorObject.cell).value === "/";
+    this.isCurrentOperationDiv = function (operatorObject) {
+        return operatorObject.op === "/";
     };
 
-    this.isCurrentOperationMult = function (state, operatorObject) {
-        return getOperator(state, operatorObject.cell).value === "*";
+    this.isCurrentOperationMult = function (operatorObject) {
+        return operatorObject.op === "*";
     };
 
     this.isCurrentOperationConcat = function (state, operatorObject) {
         var operatorIndex = operatorObject.cell;
         var lastProblemLine = state.problemLines.length - 1;
         var calculationExpression = state.problemLines[lastProblemLine];
+
+        if (operatorObject.isParen) {
+            calculationExpression = calculationExpression[operatorObject.parenCell].value;
+        }
 
         var operator = calculationExpression[operatorIndex];
         var leftOperand = calculationExpression[operatorIndex - 1];
@@ -215,20 +360,20 @@ function ExpressionsHelper() {
         return operator.value === "+" && (leftOperand.type === "string" || rightOperand.type === "string");
     };
 
-    this.isCurrentOperationAdd = function (state, operatorObject) {
-        return getOperator(state, operatorObject.cell).value === "+";
+    this.isCurrentOperationAdd = function (operatorObject) {
+        return operatorObject.op === "+";
     };
 
-    this.isCurrentOperationSub = function (state, operatorObject) {
-        return getOperator(state, operatorObject.cell).value === "-";
+    this.isCurrentOperationSub = function (operatorObject) {
+        return operatorObject.op === "-";
     };
 
-    this.isCurrentOperationAnd = function (state, operatorObject) {
-        return getOperator(state, operatorObject.cell).value === "&&";
+    this.isCurrentOperationAnd = function (operatorObject) {
+        return operatorObject.op === "&&";
     };
 
-    this.isCurrentOperationOr = function (state, operatorObject) {
-        return getOperator(state, operatorObject.cell).value === "||";
+    this.isCurrentOperationOr = function (operatorObject) {
+        return operatorObject.op === "||";
     };
 
     function correctPrecision(result, left, right) {
@@ -240,33 +385,42 @@ function ExpressionsHelper() {
     }
 
     function doStateUpdate(state, operator, result) {
-        var operatorIndex = operator.cell;
         var nextToLastProblemLine = state.problemLines.length - 2;
         var problemLine = state.problemLines.length - 1;
         var calculationExpression = state.problemLines[nextToLastProblemLine];
+        var target = state.problemLines[problemLine][operator.cell - 1];
+        if (operator.isParen) {
+            calculationExpression = calculationExpression[operator.parenCell].value;
+            target = state.problemLines[problemLine][operator.parenCell]; // replace paren_expr with result
+        }
 
-        var leftOperand = calculationExpression[operatorIndex - 1];
-        var rightOperand = calculationExpression[operatorIndex + 1];
+        var leftOperand = calculationExpression[operator.cell - 1];
+        var rightOperand = calculationExpression[operator.cell + 1];
 
-        state.problemLines[problemLine][operatorIndex - 1].value = result;
+        // if there are still operators to resolve inside parens, update inside them
+        if (operator.isParen && state.problemLines[problemLine][operator.parenCell].value.length > 1) {
+            target = target.value[operator.cell - 1];
+        }
+
+        target.value = result;
 
         if (operator.opType === "CompOperator" || operator.opType === "BoolOperator") {
             // the result of a comparison or boolean operation must be a boolean
-            state.problemLines[problemLine][operatorIndex - 1].type = "boolean";
+            target.type = "boolean";
         } else if (leftOperand.type === "string" || rightOperand.type === "string") {
             // If either operand was a string, the result is a string
-            state.problemLines[problemLine][operatorIndex - 1].type = "string";
+            target.type = "string";
 
         // Javascript doesn't put any type info into the the numbers, so we have to keep track
         } else if ((leftOperand.type === "double" || rightOperand.type === "double")) {
             // If either operand was a double, then the result is a double.
-            state.problemLines[problemLine][operatorIndex - 1].type = "double";
+            target.type = "double";
         } else if (typeof result === "number") {
             // Otherwise, it's gonna be an int.
-            state.problemLines[problemLine][operatorIndex - 1].type = "int";
+            target.type = "int";
         } else {
             console.error("Expressions thoughtProcess -- Encountered a type we weren't expecting: " + (typeof result));
-            state.problemLines[problemLine][operatorIndex - 1].type = typeof result;
+            target.type = typeof result;
 
         }
     }
@@ -442,6 +596,8 @@ function expressions_make_initial_state(problemConfig) {
                 return left.concat({type:operator_type(node.operator), value:node.operator}, right);
             case 'literal':
                 return [{type:node.type, value:node.value}];
+            case 'paren_expr':
+                return [{type:'paren_expr', value:flatten(node.value)}];
         }
     }
 

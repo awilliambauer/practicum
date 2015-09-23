@@ -60,8 +60,9 @@ var Logging = (function() {
 
     /// Logs a (non-task) event and returns a promise that is fulfilled when the event is scuessfully logged.
     self.log_event_with_promise = function(data) {
+        data.category = 0; // dummy category to conform to updated protocol
         return telemetry_client.log_event(data, true);
-    }
+    };
 
     /// Starts a task.
     /// The returned object should be passed to log_task_event as the first argument.
@@ -69,13 +70,15 @@ var Logging = (function() {
         return telemetry_client.start_task({
             type: self.ID.TaskStart,
             detail: null,
-            group: problemConfig.id
+            group: problemConfig.id,
+            category: 0 // dummy category to conform to updated protocol
         });
     };
 
     /// Logs a task event.
     /// `task_logger` should be the object returned by start_task.
     self.log_task_event = function(task_logger, data) {
+        data.category = 0; // dummy category to conform to updated protocol
         task_logger.log_event(data);
     };
 

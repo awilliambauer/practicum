@@ -413,6 +413,15 @@ var java_parsing = function() {
                     return {id:new_id(), location:location(start), tag:'literal', type:'string', value:t.value};
                 case TokenType.IDENTIFIER:
                     return {id:new_id(), location:location(start), tag:'identifier', value:t.value};
+                case TokenType.SYMBOL:
+                    if (t.value === '(') {
+                        var e = match_expression(0);
+                        match_symbol(")"); // ) has bind power of 0, so match_expression halts and doesn't consume it
+                        return {id:new_id(), location:location(start), tag:'paren_expr', value:e};
+                    } else {
+                        throw_error(t.postion, "( is the only symbol that can prefix an expression");
+                        break;
+                    }
                 default: throw_error(t.position, "Expected expression");
             }
         }
@@ -428,7 +437,7 @@ var java_parsing = function() {
             switch (t.value) {
                 // reference
                 case ".":
-                    var name = match_ident()
+                    var name = match_ident();
                     return {id:new_id(), location:location(start), tag:'reference', object:left, name:name};
                 // method call
                 case "(":
@@ -565,7 +574,7 @@ var java_parsing = function() {
 
         self.parse_method = function() {
             return match_method();
-        }
+        };
 
         self.parse_expression = function() {
             return match_expression(0);
@@ -579,12 +588,12 @@ var java_parsing = function() {
     self.parse_program = function(source) {
         var p = Parser(Lexer(CharStream(source)));
         return p.parse_program();
-    }
+    };
 
     self.parse_method = function(source) {
         var p = Parser(Lexer(CharStream(source)));
         return p.parse_method();
-    }
+    };
 
     self.parse_expression = function(source) {
         var p = Parser(Lexer(CharStream(source)));

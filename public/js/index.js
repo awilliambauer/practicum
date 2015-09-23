@@ -21,7 +21,7 @@ var csed = (function() {
 
     function setupLogging(username) {
         if (ENABLE_TELEMETRY_LOGGING) {
-            var LOGGING_BASE_URL = "https://" + window.location.hostname + ":" + LOGGING_PORT;
+            var LOGGING_BASE_URL = "http://" + window.location.hostname + ":" + LOGGING_PORT;
             //var LOGGING_BASE_URL = "https://dev-olio.cs.washington.edu" + ":" + LOGGING_PORT;
 
             return Logging.initialize(LOGGING_BASE_URL, LOGGING_RELEASE_ID, username).then(function (logging_data) {
@@ -43,26 +43,8 @@ var csed = (function() {
                     };
                 }
                 else {
-                    if (server_savedata.numProblemsByCategory) {
-                        numProblemsByCategory = server_savedata.numProblemsByCategory;
-                    } else { // has outdated savedata
-                        numProblemsByCategory = {
-                            expressions: server_savedata.numProblems,
-                            if_else: 0,
-                            array: 0
-                        };
-                    }
-
-                    if (server_savedata.problemIdsByCategory) {
-                        problemIdsByCategory = server_savedata.problemIdsByCategory;
-                    }
-                    else {
-                        problemIdsByCategory = {
-                            expressions: [],
-                            if_else: [],
-                            array: []
-                        };
-                    }
+                    numProblemsByCategory = server_savedata.numProblemsByCategory;
+                    problemIdsByCategory = server_savedata.problemIdsByCategory;
                 }
 
                 // for debugging
@@ -191,22 +173,18 @@ var csed = (function() {
     }
 
     function getFadingLevel(condition, category) {
-        if (condition === 1) {
-            if (numProblemsByCategory[category] == 1) {
-                return 0;
-            }
-            else if (numProblemsByCategory[category] <=4) {
-                return 1;
-            }
-            else if (numProblemsByCategory[category] <= 7) {
-                return 2;
-            }
-            else {
-                return 3;
-            }
+        return 0;
+        if (numProblemsByCategory[category] == 1) {
+            return 0;
+        }
+        else if (numProblemsByCategory[category] <=4) {
+            return 1;
+        }
+        else if (numProblemsByCategory[category] <= 7) {
+            return 2;
         }
         else {
-            return 1;
+            return 3;
         }
     }
 
@@ -243,7 +221,7 @@ var csed = (function() {
         }
 
         saveProblemData(problemConfig);
-        updateProblemDisplay(problemConfig)
+        updateProblemDisplay(problemConfig);
 
         // remove the old problem from the DOM
         d3.selectAll("#problem-container .problem").remove();
