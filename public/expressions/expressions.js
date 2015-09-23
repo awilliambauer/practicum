@@ -62,7 +62,7 @@ var expressions = (function() {
         var expressionHeader = document.getElementById("expressionHeader");
         var expression = state.problemLines[0];
         var expresionHeaderString = "<span style='font-weight: bold;'>Problem: </span>";
-        expresionHeaderString += buildExpressionString(expression, [], false, false);
+        expresionHeaderString += buildExpressionString(expression, {standard:[], paren:[]}, false, false);
         expresionHeaderString += "<span style='font-weight: bold; padding-left: 30px;'>Solution: </span>";
         expressionHeader.innerHTML = expresionHeaderString + expressionHeader.innerHTML;
 
@@ -252,9 +252,9 @@ var expressions = (function() {
 
     // look at the current variables in scope to determine which rows and cells should be highlighted
     function getCurrentHighlighting() {
-        var highlighting = {standard:[], paren:{}}; // HACK hideous workaround to get highlighting applied inside parens
+        var highlighting = [{standard:[], paren:[]}]; // HACK hideous workaround to get highlighting applied inside parens
         for (var i = 0; i < state.state.problemLines.length; i++) {
-            highlighting.push([]);
+            highlighting.push({standard:[], paren:[]});
         }
 
         for (var variable in state.variables.in_scope) {
@@ -265,21 +265,27 @@ var expressions = (function() {
                 if (objectToVisualize.hasOwnProperty("type")) {
                     if (objectToVisualize.type == "lineCell") {
                         if (objectToVisualize.isParen) {
-                            highlighting.paren[objectToVisualize.line].push({parenCell:objectToVisualize.parenCell, cell:objectToVisualize.cell});
+                            highlighting[objectToVisualize.line].paren.push({parenCell:objectToVisualize.parenCell, cell:objectToVisualize.cell});
                         } else {
-                            highlighting.standard[objectToVisualize.line].push(objectToVisualize.cell);
+                            highlighting[objectToVisualize.line].standard.push(objectToVisualize.cell);
                         }
-                    }
-                    else if (objectToVisualize.type == "result") {
+                    } else if (objectToVisualize.type == "result") {
                         if (fadeLevel > 0) {
                             resultSize = String(objectToVisualize.value).length + 2;
-                            highlighting[objectToVisualize.line].push("result_" + objectToVisualize.cell);
+                            if (objectToVisualize.isParen) {
+                                highlighting[objectToVisualize.line].paren.push({parenCell:objectToVisualize.parenCell, cell:"result_" + objectToVisualize.cell});
+                            } else {
+                                highlighting[objectToVisualize.line].standard.push("result_" + objectToVisualize.cell);
+                            }
                         }
                         else {
-                            highlighting[objectToVisualize.line].push(objectToVisualize.cell);
+                            if (objectToVisualize.isParen) {
+                                highlighting[objectToVisualize.line].paren.push({parenCell:objectToVisualize.parenCell, cell:objectToVisualize.cell});
+                            } else {
+                                highlighting[objectToVisualize.line].standard.push(objectToVisualize.cell);
+                            }
                         }
-                    }
-                    else {
+                    } else {
                         console.error("Unsupported variable type: " + objectToVisualize.type);
                     }
                 }
@@ -290,49 +296,89 @@ var expressions = (function() {
     }
 
     // create the expression HTML from the array of objects
-    function buildExpressionString(expression, highlighting, makeClickable, allowInput) {
+    function buildExpressionString(expression, highlighting, makeClickable) {
         var expressionString = "";
         for (var i = 0; i < expression.length; i++) {
-            var value = getExpressionValue(expression, i);
-            if (highlighting.length > 0 && highlighting.indexOf(i) >= 0) {
-                if (value === "%" || value === "*" || value === "/" || value ==="+" || value ==="-") {
-                    expressionString += "<span class='clickedOperand'>" + value + "</span> ";
+            var value = getExpressionValue(expression[i]);
+            if (expression[i].type === "paren_expr") {
+                if (highlighting.paren.some(function (e) {
+                        return e.parenCell === i;
+                    })) {
+                    expressionString += "(";
+                    for (var j = 0; j < expression[i].value.length; j++) {
+                        if (highlighting.paren.some(function (e) {
+                                return e.cell === j;
+                            })) {
+                            expressionString += getHighlightedHTML(getExpressionValue(expression[i].value[j]), i + "_" + j, false);
+                        } else if (highlighting.paren.some(function (e) {
+                                return e.cell === "result_" + j;
+                            })) {
+                            expressionString += "<input type=text id=answer size=" + resultSize + "/> ";
+                        } else if (makeClickable) {
+                            expressionString += getHighlightedHTML(getExpressionValue(expression[i].value[j]), i + "_" + j, true);
+                        } else {
+                            expressionString += getExpressionValue(expression[i].value[j]) + " ";
+                        }
+                    }
+                    expressionString = expressionString.trim(); // get rid of trailing space before )
+                    expressionString += ") ";
+                } else if (makeClickable) {
+                    expressionString += "(";
+                    for (var j = 0; j < expression[i].value.length; j++) {
+                        expressionString += getHighlightedHTML(getExpressionValue(expression[i].value[j]), i + "_" + j, true);
+                    }
+                    expressionString = expressionString.trim(); // get rid of trailing space before )
+                    expressionString += ") ";
+                } else {
+                    expressionString += value + " ";
+                }
+            } else {
+                if (highlighting.standard.length > 0 && highlighting.standard.indexOf(i) >= 0) {
+                    expressionString += getHighlightedHTML(value, i, false);
+                }
+                else if (highlighting.standard.indexOf("result_" + i) >= 0) {
+                    expressionString += "<input type=text id=answer size=" + resultSize + "/> ";
+                }
+                else if (makeClickable) {
+                    expressionString += getHighlightedHTML(value, i, true);
                 }
                 else {
-                    expressionString += "<span class='clicked'>" + value + "</span> ";
+                    expressionString += value + " ";
                 }
-            }
-            else if (highlighting.indexOf("result_" + i) >= 0) {
-                expressionString += "<input type=text id=answer size=" + resultSize + "/> ";
-            }
-            else if (makeClickable) {
-                if (value === "%" || value === "*" || value === "/" || value ==="+" || value ==="-") {
-                    expressionString += "<span class='clickableOperand' id='expression_" + i + "'>" + value + "</span> ";
-                }
-                else {
-                    expressionString += "<span class='clickable' id='expression_" + i + "'>" + value + "</span> ";
-                }
-            }
-            else {
-                expressionString += value + " ";
             }
         }
         return expressionString;
     }
 
+    function getHighlightedHTML(value, i, makeClickable) {
+        if (makeClickable) {
+            if (value === "%" || value === "*" || value === "/" || value === "+" || value === "-") {
+                return "<span class='clickableOperand' id='expression_" + i + "'>" + value + "</span> ";
+            }
+            else {
+                return "<span class='clickable' id='expression_" + i + "'>" + value + "</span> ";
+            }
+        } else {
+            if (value === "%" || value === "*" || value === "/" || value === "+" || value === "-") {
+                return "<span class='clickedOperand'>" + value + "</span> ";
+            }
+            else {
+                return "<span class='clicked'>" + value + "</span> ";
+            }
+        }
+    }
+
     // gets the value at a particular index
     // formats it based on int/double/String type
-    function getExpressionValue(arr, index) {
-        if (arr[index].type == 'double' && arr[index].value % 1 == 0) {
-            return arr[index].value + ".0";
-        } else if (arr[index].type === 'string') {
-            return "\"" + arr[index].value + "\"";
-        } else if(arr[index].type === 'paren_expr') {
-            return "(" + arr[index].value.map(function(e) {
-                return e.value;
-            }).join(" ") + ")";
+    function getExpressionValue(elem) {
+        if (elem.type == 'double' && elem.value % 1 == 0) {
+            return elem.value + ".0";
+        } else if (elem.type === 'string') {
+            return "\"" + elem.value + "\"";
+        } else if(elem.type === 'paren_expr') {
+            return "(" + elem.value.map(getExpressionValue).join(" ") + ")";
         } else {
-            return arr[index].value;
+            return elem.value;
         }
     }
 
@@ -340,12 +386,23 @@ var expressions = (function() {
     // the simulator if the response was correct or not
     function addExpressionOnClickListeners(expression) {
         for (var i = 0; i < expression.length; i++) {
-            d3.select("#expression_" + i).on("click", function() {
-                var id = d3.select(this).attr("id");
-                var index = id.substring(id.indexOf("_") + 1);
-                d3.select("#errorMessage").style("visibility", "hidden");
-                checkAnswer("click", index);
-            });
+            if (expression[i].type === "paren_expr") {
+                for (var j = 0; j < expression[i].value.length; j++) {
+                    d3.select("#expression_" + i + "_" + j).on("click", function () {
+                        var id = d3.select(this).attr("id");
+                        var index = id.substring(id.indexOf("_") + 1);
+                        d3.select("#errorMessage").style("visibility", "hidden");
+                        checkAnswer("click", index);
+                    });
+                }
+            } else {
+                d3.select("#expression_" + i).on("click", function () {
+                    var id = d3.select(this).attr("id");
+                    var index = id.substring(id.indexOf("_") + 1);
+                    d3.select("#errorMessage").style("visibility", "hidden");
+                    checkAnswer("click", index);
+                });
+            }
         }
     }
 
@@ -398,8 +455,12 @@ var expressions = (function() {
 
         if (type === "click") {
             correctAnswer = statementResponseObject.rhs["cell"];
-            if (statementResponseObject.rhs["cell"] === parseInt(value)) {
-                correct = true;
+            if (statementResponseObject.rhs.isParen) {
+                // value will be "i_j" where i is the index of paren_expr and j is the index of the term within paren_expr
+                correct = statementResponseObject.rhs.parenCell === parseInt(value.split("_")[0]) &&
+                    statementResponseObject.rhs.cell === parseInt(value.split("_")[1])
+            } else {
+                correct = statementResponseObject.rhs["cell"] === parseInt(value);
             }
         }
         else if (type === "enter") {
@@ -407,9 +468,7 @@ var expressions = (function() {
             if (statementResponseObject.rhs.valueType === "string") {
                 correctAnswer = '"' + correctAnswer + '"';
             }
-            if (String(correctAnswer) === String(value)) {
-                correct = true;
-            }
+            correct = String(correctAnswer) === String(value);
         }
         else if (type === "question") {
             if (statementResponseObject.result == true) {
@@ -419,9 +478,7 @@ var expressions = (function() {
                 correctAnswer = "no";
             }
 
-            if (correctAnswer === value) {
-                correct = true;
-            }
+            correct = correctAnswer === value;
         }
 
         // Get the response based on whether or not the answer was

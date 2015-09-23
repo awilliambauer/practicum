@@ -235,6 +235,7 @@ function ExpressionsHelper() {
             leftOperand.value = state.problemLines[leftOperand.line][operatorIndex.parenCell].value[leftOperand.cell].value;
             leftOperand.valType = state.problemLines[leftOperand.line][operatorIndex.parenCell].value[leftOperand.cell].type;
             leftOperand.isParen = true;
+            leftOperand.parenCell = operatorIndex.parenCell;
         } else {
             leftOperand.value = state.problemLines[leftOperand.line][leftOperand.cell].value;
             leftOperand.valType = state.problemLines[leftOperand.line][leftOperand.cell].type;
@@ -257,6 +258,7 @@ function ExpressionsHelper() {
             rightOperand.value = state.problemLines[rightOperand.line][operatorIndex.parenCell].value[rightOperand.cell].value;
             rightOperand.valType = state.problemLines[rightOperand.line][operatorIndex.parenCell].value[rightOperand.cell].type;
             rightOperand.isParen = true;
+            rightOperand.parenCell = operatorIndex.parenCell;
         } else {
             rightOperand.value = state.problemLines[rightOperand.line][rightOperand.cell].value;
             rightOperand.valType = state.problemLines[rightOperand.line][rightOperand.cell].type;
@@ -274,6 +276,7 @@ function ExpressionsHelper() {
         var operatorIndex = operatorObject.cell;
         var currentExpression = state.problemLines[state.problemLines.length - 1];
         var newProblemLine = JSON.parse(JSON.stringify(currentExpression));
+        var resultCell = {};
 
         var parenExpr;
         var part1, part2, part3;
@@ -285,11 +288,14 @@ function ExpressionsHelper() {
             parenExpr = part1.concat(part2).concat(part3);
             parenExpr[operatorIndex - 1].type = "empty";
             parenExpr[operatorIndex - 1].value = "";
-            operatorIndex = operatorObject.parenCell;
+            resultCell.parenCell = operatorObject.parenCell;
             if (parenExpr.length === 1) { // expression inside has been evaluated, discard parens
                 newProblemLine[operatorObject.parenCell] = parenExpr[0];
+                resultCell.cell = operatorObject.parenCell;
             } else {
+                resultCell.isParen = true;
                 newProblemLine[operatorObject.parenCell].value = parenExpr;
+                resultCell.cell = operatorIndex - 1;
             }
         } else {
             part1 = newProblemLine.slice(0, operatorIndex - 1);
@@ -298,14 +304,13 @@ function ExpressionsHelper() {
             newProblemLine = part1.concat(part2).concat(part3);
             newProblemLine[operatorIndex - 1].type = "empty";
             newProblemLine[operatorIndex - 1].value = "";
+            resultCell.cell = operatorIndex - 1;
         }
 
         state.problemLines.push(newProblemLine);
 
-        var resultCell = {};
         resultCell.type = "result";
         resultCell.line = state.problemLines.length - 1;
-        resultCell.cell = operatorIndex - 1;
         return resultCell;
     }
 

@@ -173,14 +173,13 @@ var csed = (function() {
     }
 
     function getFadingLevel(condition, category) {
-        return 0;
-        if (numProblemsByCategory[category] == 1) {
+        if (numProblemsByCategory[category] === 1) {
             return 0;
         }
-        else if (numProblemsByCategory[category] <=4) {
+        else if (numProblemsByCategory[category] <= 4) {
             return 1;
         }
-        else if (numProblemsByCategory[category] <= 7) {
+        else if (numProblemsByCategory[category] <= 6) {
             return 2;
         }
         else {
