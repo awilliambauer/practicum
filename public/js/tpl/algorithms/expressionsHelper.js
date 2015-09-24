@@ -434,6 +434,9 @@ function ExpressionsHelper() {
         var operatorIndex = operator.cell;
         var nextToLastProblemLine = state.problemLines.length - 2;
         var calculationExpression = state.problemLines[nextToLastProblemLine];
+        if (operator.isParen) {
+            calculationExpression = calculationExpression[operator.parenCell].value;
+        }
         var leftOperand = calculationExpression[operatorIndex - 1];
         var rightOperand = calculationExpression[operatorIndex + 1];
 
