@@ -81,18 +81,16 @@ var csed = (function() {
     }
 
     function findProblem(categoryConfig, requestedCategory, requestedProblemId)  {
-        for (var index in categoryConfig) {
-            var category = categoryConfig[index];
+        categoryConfig.forEach(function (category) {
             if (category.name == requestedCategory) {
                 var problems = category['problems'];
-                for (var index in problems) {
-                    var problem = problems[index];
+                problem.forEach(function (problem) {
                     if (problem.id == requestedProblemId) {
                         return problem;
                     }
-                }
+                });
             }
-        }
+        });
         return null;
     }
 

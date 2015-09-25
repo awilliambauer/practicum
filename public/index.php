@@ -66,7 +66,6 @@ $disagreeData = array_merge(['response' => 'disagree'], $studentData);
     <!-- load index before problem-specific JS -->
     <script src="js/index.js"></script>
 
-    <script src="expressions/thoughtProcess.js"></script>
     <script src="expressions/expressions.js"></script>
 
     <script src="if_else/html_generator.js"></script>
@@ -118,7 +117,7 @@ $disagreeData = array_merge(['response' => 'disagree'], $studentData);
                 <h2>Welcome to Practicum!</h2>
                 <p>
                     On this site you can practice a problems related to introductory<br>programming
-                    through our in-depth learning environment.<br>Click on a type of problem and let's get programming!
+                    through our in-depth learning environment.<br>Click on a problem to get started!
                 </p>
             </div>
         </div>

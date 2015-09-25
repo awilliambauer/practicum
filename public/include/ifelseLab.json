@@ -1,0 +1,47 @@
+{
+  "name": "if_else",
+  "title": "Lab 4 If Else Mystery Practicez2",
+  "description": "Practice conditionals and if/else structures",
+  "problems": [{
+    "id": "cdc108de-6317-11e5-bdde-c326ba197c28",
+    "title": "If/Else Mystery 1",
+    "content": {
+      "text": "public static void mystery3(int x, int y) {\nint z = 4;\nif (z <= x) {\nz = x + 1;\n} else {\nz = z + 9;\n}\nif (z <= y) {\ny++;\n}\nSystem.out.println(z + \" \" + y);\n}",
+      "variants": [{
+        "id": "f753c3a8-6317-11e5-9a1e-230673f347a1",
+        "arguments": {"x": 3, "y": 20}
+      },{
+        "id": "0497d234-6318-11e5-ac2e-7b8190505400",
+        "arguments": {"x": 4, "y": 5}
+      },{
+        "id": "0941a49a-6318-11e5-ba19-3331336cdc7b",
+        "arguments": {"x": 5, "y": 5}
+      },{
+        "id": "0f786218-6318-11e5-8d70-2734991c12e5",
+        "arguments": {"x": 6, "y": 10}
+      }]
+    }
+  },{
+    "id": "8bb32fd4-6318-11e5-bbd7-db8254c92513",
+    "title": "If/Else Mystery 2",
+    "content": {
+      "text": "public static void mystery(int n) {\nSystem.out.print(n + \" \");\nif (n > 10) {\nn = n / 2;\n} else {\nn = n + 7;\n}\nif (n * 2 < 25) {\nn = n + 10;\n}\nSystem.out.println(n);\n}",
+      "variants": [{
+        "id": "8fea2a12-6318-11e5-8251-d7faf4efa5ab",
+        "arguments": {"n": 40}
+      },{
+        "id": "956603c6-6318-11e5-846b-3be20f8e4230",
+        "arguments": {"n": 8}
+      },{
+        "id": "992f5408-6318-11e5-8303-f719ec38a0a9",
+        "arguments": {"n": 0}
+      },{
+        "id": "9d667ca4-6318-11e5-8169-4f0296695883",
+        "arguments": {"n": 12}
+      },{
+        "id": "a2e9cae6-6318-11e5-ae8d-0fb534b3491b",
+        "arguments": {"n": 20}
+      }]
+    }
+  }]
+}

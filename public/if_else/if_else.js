@@ -59,11 +59,6 @@ var if_else = (function() {
     }
 
     // fills in the problem space with the text of the specific problem we're working on,
-    // we will just have to replace "example.txt" with whatever file they store the problem
-    // text in
-    // fills in the problem space with the text of the specific problem we're working on,
-    // we will just have to replace "example.txt" with whatever file they store the problem
-    // text in
     function initialize(problemConfig, callbackObject, initialState, task_logger, fading) {
         if (!AST_INSTALLED_INTO_DOM) {
             AST = initialState.AST;
