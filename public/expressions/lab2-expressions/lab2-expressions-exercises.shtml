@@ -1,0 +1,6 @@
+<!--#set var="LAB_NUMBER" value="2" -->
+<!--#set var="LAB_NAME" value="Expressions, Variables, and Loops" -->
+<!--#include virtual="header.shtml" -->
+
+<!--#include virtual="exercises1.shtml" -->
+<!--#include virtual="exercises2.shtml" -->

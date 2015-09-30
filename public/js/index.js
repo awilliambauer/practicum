@@ -19,6 +19,21 @@ var csed = (function() {
 
     var ENABLE_TELEMETRY_LOGGING = true;
 
+    // from https://css-tricks.com/snippets/javascript/get-url-variables/
+    // doesn't handle every valid query string, but should work for our purposes
+    function getQueryVariable(variable)
+    {
+        var query = window.location.search.substring(1);
+        var vars = query.split("&");
+        for (var i=0; i < vars.length; i++) {
+            var pair = vars[i].split("=");
+            if(pair[0] == variable){
+                return pair[1];
+            }
+        }
+        return false;
+    }
+
     function setupLogging(username) {
         if (ENABLE_TELEMETRY_LOGGING) {
             var LOGGING_BASE_URL = "http://" + window.location.hostname + ":" + LOGGING_PORT;
@@ -26,6 +41,11 @@ var csed = (function() {
 
             return Logging.initialize(LOGGING_BASE_URL, LOGGING_RELEASE_ID, username).then(function (logging_data) {
                 experimental_condition = logging_data.condition;
+
+                if (getQueryVariable("lab") === "true" && experimental_condition === 1) {
+
+                }
+
                 server_savedata = logging_data.savedata ? JSON.parse(logging_data.savedata) : null;
 
                 // initialize the number of problems so we can give the user the correct fading level
