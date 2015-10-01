@@ -1,4 +1,3 @@
 AuthType Shibboleth
 ShibRequireSession On
 require valid-user
-Options +Includes

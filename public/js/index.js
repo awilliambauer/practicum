@@ -36,14 +36,25 @@ var csed = (function() {
 
     function setupLogging(username) {
         if (ENABLE_TELEMETRY_LOGGING) {
-            var LOGGING_BASE_URL = "http://" + window.location.hostname + ":" + LOGGING_PORT;
+            var LOGGING_BASE_URL = window.location.protocol + "//" + window.location.hostname + ":" + LOGGING_PORT;
             //var LOGGING_BASE_URL = "https://dev-olio.cs.washington.edu" + ":" + LOGGING_PORT;
 
             return Logging.initialize(LOGGING_BASE_URL, LOGGING_RELEASE_ID, username).then(function (logging_data) {
                 experimental_condition = logging_data.condition;
 
                 if (getQueryVariable("lab") === "true" && experimental_condition === 1) {
-
+                    var labNo = getQueryVariable("labNo");
+                    switch(labNo) {
+                        case "2":
+                            window.location.href = window.location.origin + "/expressions/lab2-expressions/lab2-expressions-exercises.shtml";
+                            break;
+                        case "4":
+                            break;
+                        case "7":
+                            break;
+                        default:
+                            throw new Error("lab number " + labNo + " not supported");
+                    }
                 }
 
                 server_savedata = logging_data.savedata ? JSON.parse(logging_data.savedata) : null;
