@@ -42,21 +42,6 @@ var csed = (function() {
             return Logging.initialize(LOGGING_BASE_URL, LOGGING_RELEASE_ID, username).then(function (logging_data) {
                 experimental_condition = logging_data.condition;
 
-                if (getQueryVariable("lab") === "true" && experimental_condition === 1) {
-                    var labNo = getQueryVariable("labNo");
-                    switch(labNo) {
-                        case "2":
-                            window.location.href = window.location.origin + "/expressions/lab2-expressions/lab2-expressions-exercises.shtml";
-                            break;
-                        case "4":
-                            break;
-                        case "7":
-                            break;
-                        default:
-                            throw new Error("lab number " + labNo + " not supported");
-                    }
-                }
-
                 server_savedata = logging_data.savedata ? JSON.parse(logging_data.savedata) : null;
 
                 // initialize the number of problems so we can give the user the correct fading level
@@ -417,6 +402,24 @@ var csed = (function() {
                 domain: window.location.hostname
             });
         }
+        processQueryString();
+    }
+
+    function processQueryString() {
+        if (getQueryVariable("lab") === "true" && experimental_condition === 1) {
+            var labNo = getQueryVariable("labNo");
+            switch(labNo) {
+                case "2":
+                    window.location.href = window.location.origin + window.location.pathname + "expressions/lab2-expressions/lab2-expressions-exercises.shtml";
+                    break;
+                case "4":
+                    break;
+                case "7":
+                    break;
+                default:
+                    throw new Error("lab number " + labNo + " not supported");
+            }
+        }
     }
 
     return {
@@ -435,7 +438,8 @@ var csed = (function() {
         "setProblemToLoad": setProblemToLoad,
         "setupLogging": setupLogging,
         "showConsentFormModal": showConsentFormModal,
-        "showHome": showHome
+        "showHome": showHome,
+        "processQueryString": processQueryString
     };
 
 }) ();
@@ -463,7 +467,9 @@ $(document).ready(function() {
     csed.setupLogging(username).then(function() {
         csed.installConsentFormModal();
         if (!hasResponded) {
-            csed.showConsentFormModal();
+            csed.showConsentFormModal(); // will process query string after consent response
+        } else {
+            csed.processQueryString();
         }
 
         // set up home link
