@@ -66,7 +66,7 @@ var csed = (function() {
                 }
 
                 // for debugging
-                experimental_condition = 0;
+                //experimental_condition = 0;
                 //numProblems = 0;
 
                 console.info('successfully started logging session');
