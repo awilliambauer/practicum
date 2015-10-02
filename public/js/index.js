@@ -7,6 +7,7 @@ var csed = (function() {
     var LOGGING_PORT = 5678;
     var LOGGING_RELEASE_ID = 'f4ed191d-133a-423b-9e17-36e94db6cc06';
 
+    var enabledCategories;
     var categoryToLoad;
     var problemToLoad;
 
@@ -51,6 +52,7 @@ var csed = (function() {
                         expressions: 0,
                         if_else: 0,
                         array: 0
+
                     };
                     problemIdsByCategory = {
                         expressions: [],
@@ -64,7 +66,7 @@ var csed = (function() {
                 }
 
                 // for debugging
-                //experimental_condition = 0;
+                experimental_condition = 0;
                 //numProblems = 0;
 
                 console.info('successfully started logging session');
@@ -98,10 +100,10 @@ var csed = (function() {
 
     function findProblem(categoryConfig, requestedCategory, requestedProblemId)  {
         categoryConfig.forEach(function (category) {
-            if (category.name == requestedCategory) {
+            if (category.category === requestedCategory) {
                 var problems = category['problems'];
                 problem.forEach(function (problem) {
-                    if (problem.id == requestedProblemId) {
+                    if (problem.id === requestedProblemId) {
                         return problem;
                     }
                 });
@@ -111,8 +113,18 @@ var csed = (function() {
     }
 
     function addProblemsContentToLandingPage(problemsConfig, onProblemStartCallback) {
+        var enabledConfig = [];
+        if (enabledCategories) {
+            problemsConfig.forEach(function (config) {
+                if (enabledCategories.indexOf(config.name) > -1) {
+                    enabledConfig.push(config);
+                }
+            });
+        }
+        console.log(enabledCategories);
+        console.log(enabledConfig);
         var problemArea = d3.select("#problems-content-container").selectAll("div")
-                .data(problemsConfig)
+                .data(enabledConfig)
                 .enter()
                 .append("div")
                 .attr("class", "panel-group")
@@ -142,7 +154,7 @@ var csed = (function() {
 
         problemListArea
             .selectAll("a")
-            .data(function(problemsConfig) { return problemsConfig.problems; })
+            .data(function(configs) { return configs.problems; })
             .enter()
             .append("a")
             .attr("class", function(problem) {
@@ -168,7 +180,7 @@ var csed = (function() {
         // increment the number of problems this user has started
         numProblemsByCategory[problemConfig.category]++;
         // add the problem id to the list of problems the user has tried
-        if (problemIdsByCategory[problemConfig.category].indexOf(problemConfig.id) == -1) {
+        if (problemIdsByCategory[problemConfig.category].indexOf(problemConfig.id) === -1) {
             problemIdsByCategory[problemConfig.category].push(problemConfig.id);
         }
 
@@ -280,9 +292,17 @@ var csed = (function() {
     }
 
     function addProblemsToNav(problemsConfig, onProblemStartCallback) {
+        var enabledConfig = [];
+        if (enabledCategories) {
+            problemsConfig.forEach(function (config) {
+                if (enabledCategories.indexOf(config.name) > -1) {
+                    enabledConfig.push(config);
+                }
+            });
+        }
         // add problems to nav
         d3.select("#problems-nav-container").selectAll("li")
-            .data(problemsConfig)
+            .data(enabledConfig)
             .enter()
             .append("li")
             .attr("class", "dropdown")
@@ -303,7 +323,7 @@ var csed = (function() {
 
         // fill in dropdowns in nav
         d3.selectAll("#problems-nav-container li")
-            .data(problemsConfig)
+            .data(enabledConfig)
             .append("ul")
             .attr("class", "dropdown-menu")
             .selectAll("li")
@@ -402,13 +422,13 @@ var csed = (function() {
                 domain: window.location.hostname
             });
         }
-        processQueryString();
+        checkForLabRedirect();
     }
 
-    function processQueryString() {
+    function checkForLabRedirect() {
         if (getQueryVariable("lab") === "true" && experimental_condition === 1) {
             var labNo = getQueryVariable("labNo");
-            switch(labNo) {
+            switch (labNo) {
                 case "2":
                     window.location.href = window.location.origin + window.location.pathname + "expressions/lab2-expressions/lab2-expressions-exercises.shtml";
                     break;
@@ -419,6 +439,30 @@ var csed = (function() {
                 default:
                     throw new Error("lab number " + labNo + " not supported");
             }
+        }
+    }
+
+    function determineEnabledCategories() {
+        if (getQueryVariable("lab") === "true") {
+            var labNo = getQueryVariable("labNo");
+            switch (labNo) {
+                case "2":
+                    if (experimental_condition === 0) {
+                        enabledCategories = ["lab2-expressions"];
+                    }
+                    break;
+                case "4":
+                    if (experimental_condition === 0) {
+                        enabledCategories = ["lab4-if_else"];
+                    }
+                    break;
+                case "7":
+                    break;
+                default:
+                    throw new Error("lab number " + labNo + " not supported");
+            }
+        } else {
+            enabledCategories = ["default-expressions"]; // only enable expressions for now
         }
     }
 
@@ -439,7 +483,8 @@ var csed = (function() {
         "setupLogging": setupLogging,
         "showConsentFormModal": showConsentFormModal,
         "showHome": showHome,
-        "processQueryString": processQueryString
+        "checkForLabRedirect": checkForLabRedirect,
+        "determineEnabledCategories": determineEnabledCategories
     };
 
 }) ();
@@ -469,13 +514,14 @@ $(document).ready(function() {
         if (!hasResponded) {
             csed.showConsentFormModal(); // will process query string after consent response
         } else {
-            csed.processQueryString();
+            csed.checkForLabRedirect();
         }
 
         // set up home link
         d3.select("#home-link")
             .on("click", csed.showHome);
 
+        csed.determineEnabledCategories();
 
         // pull in problems
         var categoryJSON = $("#category-config").html();
@@ -491,7 +537,7 @@ $(document).ready(function() {
                 categoryConfig.forEach(function (category) {
                     for(var i = 0; i < category.problems.length; i++) {
                         category.problems[i].nextProblem = category.problems[i+1];
-                        category.problems[i].category = category.name;
+                        category.problems[i].category = category.category;
                     }
                 });
 

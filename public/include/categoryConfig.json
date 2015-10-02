@@ -1,6 +1,7 @@
 
 [{
-  "name": "array",
+  "name": "default-array",
+  "category": "array",
   "title": "Array Mystery",
   "description": "Practice for loops and arrays",
   "problems": [{
@@ -86,7 +87,8 @@
     }
   }]
 }, {
-  "name": "if_else",
+  "name": "default-if_else",
+  "category": "if_else",
   "title": "If Else Mystery",
   "description": "Practice conditionals and if/else structures",
   "problems": [{
@@ -308,7 +310,8 @@
     }
   }]
 }, {
-  "name": "expressions",
+  "name": "default-expressions",
+  "category": "expressions",
   "title": "Expressions",
   "description": "Practice expressions - addition, subtraction, multiplication and more!",
   "problems": [{
@@ -435,6 +438,103 @@
     "id": "fce154c8-6251-11e5-b588-4f8dc6dbd9cd",
     "title": "12 / 3 + (5 + 3) * 2",
     "content": "12 / 3 + (5 + 3) * 2"
+  }]
+},{
+  "name": "lab2-expressions",
+  "category": "expressions",
+  "title": "Lab 2 Expressions Practice",
+  "description": "Practice expressions - addition, subtraction, multiplication and more!",
+  "problems": [{
+    "id": "16e307e2-6255-11e5-83be-af8920c6b72b",
+    "title": "12 / 5 + 8 / 4",
+    "content": "12 / 5 + 8 / 4"
+  },{
+    "id": "1e7defe4-6255-11e5-b430-33516979e8d1",
+    "title": "3 * 4 + 15 / 2",
+    "content": "3 * 4 + 15 / 2"
+  },{
+    "id": "2300c3f2-6255-11e5-a3a6-6b8e3c8f9816",
+    "title": "(1 + 2 * 3) * (1 + 2) * 3",
+    "content": "(1 + 2 * 3) * (1 + 2) * 3"
+  },{
+    "id": "281fa100-6255-11e5-ac1d-1f40d5278d7c",
+    "title": "42 % 5 + 16 % 3",
+    "content": "42 % 5 + 16 % 3"
+  },{
+    "id": "2c44bdc4-6255-11e5-b31e-ef6b906bb020",
+    "title": "2.5 * 2 + 17 / 4",
+    "content": "2.5 * 2 + 17 / 4"
+  },{
+    "id": "303ff042-6255-11e5-972c-0bd9e2a8b444",
+    "title": "4.5 / 3 / 2 + 1",
+    "content": "4.5 / 3 / 2 + 1"
+  },{
+    "id": "3480e4a4-6255-11e5-8491-677544b81c0e",
+    "title": "2 + 6 + \"cse 142\"",
+    "content": "2 + 6 + \"cse 142\""
+  },{
+    "id": "38db2776-6255-11e5-8e6f-6bab2e4527d5",
+    "title": "\"cse 142\" + 2 + 6",
+    "content": "\"cse 142\" + 2 + 6"
+  },{
+    "id": "3da258b0-6255-11e5-bfd3-27a6c9f36cf8",
+    "title": "1 + 9 / 2 * 2.0",
+    "content": "1 + 9 / 2 * 2.0"
+  },{
+    "id": "41f0d4dc-6255-11e5-9440-8ffa23e740d7",
+    "title": "46 / 3 / 2.0 / 3 * 4/5",
+    "content": "46 / 3 / 2.0 / 3 * 4/5"
+  },{
+    "id": "46d2bbc8-6255-11e5-9828-cb9688390667",
+    "title": "50 / 9 / 2.0 + 200 / 10 / (5.0 / 2)",
+    "content": "50 / 9 / 2.0 + 200 / 10 / (5.0 / 2)"
+  }]
+},{
+  "name": "lab4-if_else",
+  "category": "if_else",
+  "title": "Lab 4 If Else Mystery Practice",
+  "description": "Practice conditionals and if/else structures",
+  "problems": [{
+    "id": "cdc108de-6317-11e5-bdde-c326ba197c28",
+    "title": "If/Else Mystery 1",
+    "content": {
+      "text": "public static void mystery3(int x, int y) {\nint z = 4;\n\nif (z <= x) {\nz = x + 1;\n} else {\nz = z + 9;\n}\n\nif (z <= y) {\ny++;\n}\nSystem.out.println(z + \" \" + y);\n}",
+      "variants": [{
+        "id": "f753c3a8-6317-11e5-9a1e-230673f347a1",
+        "arguments": {"x": 3, "y": 20}
+      },{
+        "id": "0497d234-6318-11e5-ac2e-7b8190505400",
+        "arguments": {"x": 4, "y": 5}
+      },{
+        "id": "0941a49a-6318-11e5-ba19-3331336cdc7b",
+        "arguments": {"x": 5, "y": 5}
+      },{
+        "id": "0f786218-6318-11e5-8d70-2734991c12e5",
+        "arguments": {"x": 6, "y": 10}
+      }]
+    }
+  },{
+    "id": "8bb32fd4-6318-11e5-bbd7-db8254c92513",
+    "title": "If/Else Mystery 2",
+    "content": {
+      "text": "public static void mystery(int n) {\nSystem.out.print(n + \" \");\n\nif (n > 10) {\nn = n / 2;\n} else {\nn = n + 7;\n}\n\nif (n * 2 < 25) {\nn = n + 10;\n}\nSystem.out.println(n);\n}",
+      "variants": [{
+        "id": "8fea2a12-6318-11e5-8251-d7faf4efa5ab",
+        "arguments": {"n": 40}
+      },{
+        "id": "956603c6-6318-11e5-846b-3be20f8e4230",
+        "arguments": {"n": 8}
+      },{
+        "id": "992f5408-6318-11e5-8303-f719ec38a0a9",
+        "arguments": {"n": 0}
+      },{
+        "id": "9d667ca4-6318-11e5-8169-4f0296695883",
+        "arguments": {"n": 12}
+      },{
+        "id": "a2e9cae6-6318-11e5-ae8d-0fb534b3491b",
+        "arguments": {"n": 20}
+      }]
+    }
   }]
 }]
 

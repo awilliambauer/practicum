@@ -678,6 +678,8 @@ var if_else = (function() {
             if (config.nextProblem) {
                 d3.select("#newProblem").classed("hidden", false);
             }
+            //d3.select("#dropdownTitle").transition().duration(500).style('background-color', '#00ff00')
+            //    .transition().duration(600).style('background-color', '')
         }
         else {
             d3.select("#inputBox").attr("class", "incorrect");
