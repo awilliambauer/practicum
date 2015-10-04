@@ -5,7 +5,7 @@ var csed = (function() {
 
     var COOKIE_KEY_PREFIX = "csed-consent-form-";
     var LOGGING_PORT = 5678;
-    var LOGGING_RELEASE_ID = 'f4ed191d-133a-423b-9e17-36e94db6cc06';
+    var LOGGING_RELEASE_ID = '9f3a58f8-6ad8-11e5-ad05-cf9b2e7a722c';
 
     var enabledCategories;
     var categoryToLoad;
