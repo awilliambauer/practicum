@@ -426,7 +426,7 @@ var csed = (function() {
     }
 
     function checkForLabRedirect() {
-        if (getQueryVariable("lab") === "true" && experimental_condition === 1) {
+        if (getQueryVariable("lab") === "true" && experimental_condition === 2) {
             var labNo = getQueryVariable("labNo");
             switch (labNo) {
                 case "2":
@@ -447,12 +447,12 @@ var csed = (function() {
             var labNo = getQueryVariable("labNo");
             switch (labNo) {
                 case "2":
-                    if (experimental_condition === 0) {
+                    if (experimental_condition === 1) {
                         enabledCategories = ["lab2-expressions"];
                     }
                     break;
                 case "4":
-                    if (experimental_condition === 0) {
+                    if (experimental_condition === 1) {
                         enabledCategories = ["lab4-if_else"];
                     }
                     break;
