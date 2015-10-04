@@ -48,22 +48,21 @@ var csed = (function() {
                 // initialize the number of problems so we can give the user the correct fading level
                 // initialize the problems the user has tried so we can display problem highlighting
                 if (server_savedata === null) {
-                    numProblemsByCategory = {
-                        expressions: 0,
-                        if_else: 0,
-                        array: 0
-
-                    };
-                    problemIdsByCategory = {
-                        expressions: [],
-                        if_else: [],
-                        array: []
+                    server_savedata = {
+                        numProblemsByCategory: {
+                            expressions: 0,
+                            if_else: 0,
+                            array: 0
+                        },
+                        problemIdsByCategory: {
+                            expressions: [],
+                            if_else: [],
+                            array: []
+                        }
                     };
                 }
-                else {
-                    numProblemsByCategory = server_savedata.numProblemsByCategory;
-                    problemIdsByCategory = server_savedata.problemIdsByCategory;
-                }
+                numProblemsByCategory = server_savedata.numProblemsByCategory;
+                problemIdsByCategory = server_savedata.problemIdsByCategory;
 
                 // for debugging
                 //experimental_condition = 0;
@@ -121,8 +120,6 @@ var csed = (function() {
                 }
             });
         }
-        console.log(enabledCategories);
-        console.log(enabledConfig);
         var problemArea = d3.select("#problems-content-container").selectAll("div")
                 .data(enabledConfig)
                 .enter()
@@ -354,17 +351,8 @@ var csed = (function() {
         return $("#__username").text();
     }
 
-    /**
-     * Checks cookies to see whether they've responded?
-     *
-     * @returns {boolean}
-     */
     function hasRespondedToConsentForm() {
-        // Looks like poor boolean zen, necessary because string "false"
-        // evaluates to true.
-        var cookieKey = COOKIE_KEY_PREFIX + getUsername();
-        console.log("Checking cookie key: " + cookieKey);
-        return $.cookie(cookieKey) === "true";
+        return server_savedata && server_savedata.hasOwnProperty("consentResponse");
     }
 
     function showConsentFormModal() {
@@ -411,17 +399,13 @@ var csed = (function() {
             detail: data
         }, true).then(function() {
             console.info("successfully logged consent response.");
-            consentFormResponseSuccess();
+            consentFormResponseSuccess(data);
         });
     }
 
-    function consentFormResponseSuccess() {
-        var cookieKey = COOKIE_KEY_PREFIX + getUsername();
-        if ($.cookie(cookieKey) !== "true") {
-            $.cookie(cookieKey, true, {
-                domain: window.location.hostname
-            });
-        }
+    function consentFormResponseSuccess(data) {
+        server_savedata.consentResponse = data;
+        Logging.save_user_data(server_savedata);
         checkForLabRedirect();
     }
 
@@ -510,13 +494,12 @@ $(document).ready(function() {
     if (forceUser) {
         username = forceUser;
     }
-    var hasResponded = csed.hasRespondedToConsentForm();
 
     // start logging system
     csed.setupLogging(username).then(function() {
         csed.installConsentFormModal();
-        if (!hasResponded) {
-            csed.showConsentFormModal(); // will process query string after consent response
+        if (!csed.hasRespondedToConsentForm()) {
+            csed.showConsentFormModal(); // will check for lab redirect after consent response
         } else {
             csed.checkForLabRedirect();
         }
