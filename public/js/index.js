@@ -1,4 +1,19 @@
 
+// from https://css-tricks.com/snippets/javascript/get-url-variables/
+// doesn't handle every valid query string, but should work for our purposes
+function getQueryVariable(variable)
+{
+    var query = window.location.search.substring(1);
+    var vars = query.split("&");
+    for (var i=0; i < vars.length; i++) {
+        var pair = vars[i].split("=");
+        if(pair[0] == variable){
+            return pair[1];
+        }
+    }
+    return false;
+}
+
 /// main page management functions
 var csed = (function() {
     "use strict";
@@ -19,21 +34,6 @@ var csed = (function() {
     var problemIdsByCategory;
 
     var ENABLE_TELEMETRY_LOGGING = true;
-
-    // from https://css-tricks.com/snippets/javascript/get-url-variables/
-    // doesn't handle every valid query string, but should work for our purposes
-    function getQueryVariable(variable)
-    {
-        var query = window.location.search.substring(1);
-        var vars = query.split("&");
-        for (var i=0; i < vars.length; i++) {
-            var pair = vars[i].split("=");
-            if(pair[0] == variable){
-                return pair[1];
-            }
-        }
-        return false;
-    }
 
     function setupLogging(username) {
         if (ENABLE_TELEMETRY_LOGGING) {
@@ -506,6 +506,10 @@ $(document).ready(function() {
     });
 
     var username = csed.getUsername();
+    var forceUser = getQueryVariable("username");
+    if (forceUser) {
+        username = forceUser;
+    }
     var hasResponded = csed.hasRespondedToConsentForm();
 
     // start logging system

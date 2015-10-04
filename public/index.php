@@ -1,9 +1,14 @@
 <?php
-$userEmail = $_SERVER["eppn"];
-$parts = explode("@", $userEmail);
-$username = $parts[0];
-if (!$username) {
-    $username = "NOT_LOGGED_IN";
+$forceUser = $_GET["username"];
+if ($forceUser) {
+    $username = $forceUser;
+} else {
+    $userEmail = $_SERVER["eppn"];
+    $parts = explode("@", $userEmail);
+    $username = $parts[0];
+    if (!$username) {
+        $username = "NOT_LOGGED_IN";
+    }
 }
 
 $version = 1;
