@@ -6,7 +6,11 @@
     <h1> Expressions Problems for Lab <!--#echo var="LAB_NUMBER" --></h1>
 
     <p>
-        When you finish with these problems, close out this window and resume the rest of the lab.
+        Complete exercises here until you feel comfortable with basic expressions problems
+    </p>
+
+    <p>
+        Then, close this tab, and resume lab <!--#echo var="LAB_NUMBER" -->
     </p>
 </div>
 
