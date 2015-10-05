@@ -32,13 +32,13 @@
 
         <tr>
             <td class="expression">
-                <code>-(1 + 2 * 3) * (1 + 2) * 3</code>
+                <code>(1 + 2 * 3) * (1 + 2) * 3</code>
             </td>
             <td>
                 <input type="text" class="expressionanswer" size="8" spellcheck="false" />
             </td>
             <td>
-                <pre class="expressionsolution">-16</pre>
+                <pre class="expressionsolution">63</pre>
             </td>
         </tr>
 

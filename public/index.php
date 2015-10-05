@@ -129,7 +129,7 @@ $lab = $_GET["lab"];
                 <?php if ($lab) { ?>
 
                 <p>
-                    After you have completed these exercises, please close this tab, and return to the labs.
+                    After you have completed these exercises, please close this tab and resume the lab slides.
                 </p>
 
                 <?php } else { ?>
