@@ -18,7 +18,6 @@ function getQueryVariable(variable)
 var csed = (function() {
     "use strict";
 
-    var COOKIE_KEY_PREFIX = "csed-consent-form-";
     var LOGGING_PORT = 5678;
     var LOGGING_RELEASE_ID = '9f3a58f8-6ad8-11e5-ad05-cf9b2e7a722c';
 
@@ -368,7 +367,7 @@ var csed = (function() {
     function installConsentFormModal() {
         d3.select("#age-input").on("input", function () {
             var age = d3.select("#age-input").property("value");
-            if ($.isNumeric(age)) {
+            if ($.isNumeric(age) && Math.floor(age) > 17) {
                 // GUH. remove the attribute by passing null. Passing false leaves the attribute there,
                 //      which leaves the element disabled.
                 d3.select("#consent-form-agree").attr("disabled", null);
@@ -377,7 +376,7 @@ var csed = (function() {
             }
         });
         $("#age-input").keypress(function(e){
-            if(e.keyCode==13 && !d3.select("#consent-form-agree").attr("disabled")) {
+            if(e.keyCode===13 && !d3.select("#consent-form-agree").attr("disabled")) {
                 $('#consent-form-agree').click();
             }
         });
@@ -451,8 +450,6 @@ var csed = (function() {
     }
 
     return {
-        "COOKIE_KEY_PREFIX": COOKIE_KEY_PREFIX,
-
         "addProblemsToNav": addProblemsToNav,
         "addProblemsContentToLandingPage": addProblemsContentToLandingPage,
         "getUsername": getUsername,
