@@ -413,7 +413,7 @@ var csed = (function() {
             var labNo = getQueryVariable("labNo");
             switch (labNo) {
                 case "2":
-                    window.location.href = window.location.origin + window.location.pathname + "expressions/lab2-expressions/lab2-expressions-exercises.shtml";
+                    window.location.href = window.location.origin + window.location.pathname + "expressions/lab2-expressions/lab2-expressions-exercises.shtml#slide1";
                     break;
                 case "4":
                     break;
