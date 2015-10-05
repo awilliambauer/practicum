@@ -99,7 +99,7 @@ var main_simulator = (function () {"use strict";
                     // FIXME HACK -- array mystyery stores variables in an TPA variable with type VariableBank (not general)
                     for (var v in states[currentState].variables.in_scope) {
                         if (states[currentState].variables.in_scope[v].hasOwnProperty("type") &&
-                            states[currentState].variables.in_scope[v].type == "VariableBank") {
+                            states[currentState].variables.in_scope[v].type === "VariableBank") {
                             returnState.variables.in_scope[v] = self.copy(states[currentState].variables.in_scope[v]);
                         }
                     }
@@ -147,14 +147,7 @@ var main_simulator = (function () {"use strict";
             waitingForUserResponse = false;
             returnState = self.copy(self.getNextStateWithInteractivity());
 
-            // dislay the correct prompt, based on the fade level
-            var prompText = returnState.prompt;
-            if (states[currentState].annotations.hasOwnProperty("interactive")) {
-                if (fadeLevel > 1 && currentState < states.length && states[currentState].annotations.interactive[0] !== "question") {
-                    prompText = "Try the next step on your own!";
-                }
-            }
-            returnState.prompt = "<span id='responseMessage' style='color: #45ADA8;'>Great job! That is correct.<br></span>" + prompText;
+            returnState.prompt = "<span id='responseMessage' style='color: #45ADA8;'>Great job! That is correct.<br></span>" + returnState.prompt;
             return returnState;
         } else if (!correct && numTries < 3) {
             var stateToShow = currentState + 1;

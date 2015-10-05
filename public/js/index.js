@@ -195,6 +195,10 @@ var csed = (function() {
     }
 
     function getFadingLevel(condition, category) {
+        var forceFading = getQueryVariable("fading");
+        if (forceFading && $.isNumeric(forceFading)) {
+            return parseInt(forceFading);
+        }
         if (numProblemsByCategory[category] === 1) {
             return 0;
         }
