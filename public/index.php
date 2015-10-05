@@ -126,7 +126,7 @@ $lab = $_GET["lab"];
                     through our in-depth learning environment.
                 </p>
 
-                <?php if ($labDisplay) { ?>
+                <?php if ($lab) { ?>
 
                 <p>
                     After you have completed these exercises, please close this tab, and return to the labs.
