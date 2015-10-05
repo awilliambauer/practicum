@@ -23,6 +23,7 @@ $studentData = [
 $agreeData = array_merge(['response' => 'agree'], $studentData);
 $disagreeData = array_merge(['response' => 'disagree'], $studentData);
 
+$lab = $_GET["lab"];
 ?>
 
 <!DOCTYPE html>
@@ -122,8 +123,22 @@ $disagreeData = array_merge(['response' => 'disagree'], $studentData);
                 <h2>Welcome to Practicum!</h2>
                 <p>
                     On this site you can practice a problems related to introductory<br>programming
-                    through our in-depth learning environment.<br>Click on a problem to get started!
+                    through our in-depth learning environment.
                 </p>
+
+                <?php if ($labDisplay) { ?>
+
+                <p>
+                    After you have completed these exercises, please close this tab, and return to the labs.
+                </p>
+
+                <?php } else { ?>
+
+                <p>
+                    Click on a problem to get started!
+                </p>
+
+                <?php } ?>
             </div>
         </div>
 
