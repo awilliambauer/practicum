@@ -170,7 +170,7 @@ var expressions = (function() {
             lineHTML.classList.add("expressionStatement");
 
             // display the prompt text next to the last line
-            if (i == state.state.problemLines.length - 1) {
+            if (i === state.state.problemLines.length - 1) {
                 var promptHTML = document.createElement("p");
                 promptHTML.classList.add("step");
                 promptHTML.innerHTML = formatPrompt(state.prompt);
@@ -178,8 +178,11 @@ var expressions = (function() {
             }
 
             // HACK to make the next button disappear at the end of the problem
-            if (state.prompt.indexOf("This is the answer!") !== -1) {
+            var lastLine = state.state.problemLines.length - 1;
+            if (state.prompt.indexOf("This is the answer!") !== -1 && i === lastLine) {
                 d3.select("#nextstep").style("visibility", "hidden");
+                $("#inputBox").val(buildExpressionString(state.state.problemLines[lastLine], highlighting[lastLine], false).trim());
+                $("#submitButton").click();
             }
 
             var expressionHTML = document.createElement("div");
@@ -190,7 +193,7 @@ var expressions = (function() {
                 // if we're asking for a click response, only make the last line of the problem click-able
                 if (state["askForResponse"] === "click" && i === state.state.problemLines.length -1) {
                     // make the expression string click-able
-                    expressionHTML.innerHTML = buildExpressionString(expression, highlighting[i], true, false);
+                    expressionHTML.innerHTML = buildExpressionString(expression, highlighting[i], true);
                     lineHTML.appendChild(expressionHTML);
                     document.getElementById("steps").appendChild(lineHTML);
                     waitingForResponse = true;
@@ -199,7 +202,7 @@ var expressions = (function() {
                 }
                 else if (state["askForResponse"] === "enter") {
                     // add an input to allow the user to enter a calculation result
-                    expressionHTML.innerHTML = buildExpressionString(expression, highlighting[i], false, true);
+                    expressionHTML.innerHTML = buildExpressionString(expression, highlighting[i], false);
                     lineHTML.appendChild(expressionHTML);
                     document.getElementById("steps").appendChild(lineHTML);
                     waitingForResponse = true;
@@ -207,7 +210,7 @@ var expressions = (function() {
                 }
                 else if (state["askForResponse"] === "question") {
                     // add yes/no radio buttons to the prompt so the user can answer the question
-                    expressionHTML.innerHTML = buildExpressionString(expression, highlighting[i], false, false);
+                    expressionHTML.innerHTML = buildExpressionString(expression, highlighting[i], false);
                     lineHTML.appendChild(expressionHTML);
                     document.getElementById("steps").appendChild(lineHTML);
                     waitingForResponse = true;
@@ -216,13 +219,13 @@ var expressions = (function() {
 
                 }
                 else {
-                    expressionHTML.innerHTML = buildExpressionString(expression, highlighting[i], false, false);
+                    expressionHTML.innerHTML = buildExpressionString(expression, highlighting[i], false);
                     lineHTML.appendChild(expressionHTML);
                     document.getElementById("steps").appendChild(lineHTML);
                 }
             }
             else {
-                expressionHTML.innerHTML = buildExpressionString(expression, highlighting[i], false, false);
+                expressionHTML.innerHTML = buildExpressionString(expression, highlighting[i], false);
                 lineHTML.appendChild(expressionHTML);
                 document.getElementById("steps").appendChild(lineHTML);
             }
