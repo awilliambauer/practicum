@@ -3,12 +3,13 @@
 <!--#include virtual="header.shtml" -->
 
 <div class="slide">
-<h1> Expressions Problems for Lab <!--#echo var="LAB_NUMBER" --></h1>
-<p>
-When you finish with these problems, close out this window and resume the rest of the lab.
-</p>
+    <h1> Expressions Problems for Lab <!--#echo var="LAB_NUMBER" --></h1>
 
+    <p>
+        When you finish with these problems, close out this window and resume the rest of the lab.
+    </p>
 </div>
 
 <!--#include virtual="exercises1.shtml" -->
 <!--#include virtual="exercises2.shtml" -->
+<!--#include virtual="if-youve-finished.shtml" -->
