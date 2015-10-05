@@ -1,5 +1,5 @@
 <div class="slide">
-    <h1>Once you've finished these exercises...</h1>
+    <h1>If you've finished these exercises...</h1>
     <p>
         Please close out of this tab, and resume lab <!--#echo var="LAB_NUMBER" -->
     </p>
