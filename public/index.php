@@ -132,7 +132,7 @@ $lab = $_GET["lab"];
                     Complete exercises here until you feel comfortable with basic expressions problems.
                 </p>
                 <p>
-                    Then close this tab and return to the labs.
+                    Then, close this tab and return to the labs.
                 </p>
 
                 <?php } else { ?>
