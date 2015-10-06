@@ -358,6 +358,10 @@ var csed = (function() {
         return server_savedata && server_savedata.hasOwnProperty("consentResponse");
     }
 
+    function getConsentFormResponse() {
+        return JSON.parse(server_savedata.consentResponse).response.toUpperCase();
+    }
+
     function showConsentFormModal() {
         // go modal
         var m = $("#consent-form-modal");
@@ -368,7 +372,17 @@ var csed = (function() {
         m.modal("show");
     }
 
+    // Fill out the flash-style message and show it, if they've responded:
+    function updateConsentMessage() {
+        if (csed.hasRespondedToConsentForm()) {
+            d3.select("#consent-status").text(csed.getConsentFormResponse());
+            d3.select("#consent-existed-message").classed("hidden", false);
+        }
+    }
+
     function installConsentFormModal() {
+        updateConsentMessage();
+
         d3.select("#age-input").on("input", function () {
             var age = d3.select("#age-input").property("value");
             if ($.isNumeric(age) && Math.floor(age) > 17) {
@@ -409,6 +423,7 @@ var csed = (function() {
     function consentFormResponseSuccess(data) {
         server_savedata.consentResponse = data;
         Logging.save_user_data(server_savedata);
+        updateConsentMessage();
         checkForLabRedirect();
     }
 
@@ -458,6 +473,7 @@ var csed = (function() {
         "addProblemsContentToLandingPage": addProblemsContentToLandingPage,
         "getUsername": getUsername,
         "hasRespondedToConsentForm": hasRespondedToConsentForm,
+        "getConsentFormResponse": getConsentFormResponse,
         "hasProblemToLoad": hasProblemToLoad,
         "installConsentFormModal": installConsentFormModal,
         "getProblemToLoad": getProblemToLoad,
