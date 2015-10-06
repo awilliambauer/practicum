@@ -358,7 +358,15 @@ var csed = (function() {
         return server_savedata && server_savedata.hasOwnProperty("consentResponse");
     }
 
+    function getConsentFormResponse() {
+        return server_savedata.consentResponse;
+    }
+
     function showConsentFormModal() {
+        if (csed.hasRespondedToConsentForm()) {
+            d3.select("#consent-status").text(csed.getConsentFormResponse());
+            d3.select("#consent-existed-message").classed("hidden", false);
+        }
         // go modal
         var m = $("#consent-form-modal");
         m.modal({
@@ -458,6 +466,7 @@ var csed = (function() {
         "addProblemsContentToLandingPage": addProblemsContentToLandingPage,
         "getUsername": getUsername,
         "hasRespondedToConsentForm": hasRespondedToConsentForm,
+        "getConsentFormResponse": getConsentFormResponse,
         "hasProblemToLoad": hasProblemToLoad,
         "installConsentFormModal": installConsentFormModal,
         "getProblemToLoad": getProblemToLoad,
