@@ -359,14 +359,10 @@ var csed = (function() {
     }
 
     function getConsentFormResponse() {
-        return server_savedata.consentResponse;
+        return JSON.parse(server_savedata.consentResponse).response.toUpperCase();
     }
 
     function showConsentFormModal() {
-        if (csed.hasRespondedToConsentForm()) {
-            d3.select("#consent-status").text(csed.getConsentFormResponse());
-            d3.select("#consent-existed-message").classed("hidden", false);
-        }
         // go modal
         var m = $("#consent-form-modal");
         m.modal({
@@ -376,7 +372,17 @@ var csed = (function() {
         m.modal("show");
     }
 
+    // Fill out the flash-style message and show it, if they've responded:
+    function updateConsentMessage() {
+        if (csed.hasRespondedToConsentForm()) {
+            d3.select("#consent-status").text(csed.getConsentFormResponse());
+            d3.select("#consent-existed-message").classed("hidden", false);
+        }
+    }
+
     function installConsentFormModal() {
+        updateConsentMessage();
+
         d3.select("#age-input").on("input", function () {
             var age = d3.select("#age-input").property("value");
             if ($.isNumeric(age) && Math.floor(age) > 17) {
@@ -417,6 +423,7 @@ var csed = (function() {
     function consentFormResponseSuccess(data) {
         server_savedata.consentResponse = data;
         Logging.save_user_data(server_savedata);
+        updateConsentMessage();
         checkForLabRedirect();
     }
 
