@@ -64,7 +64,7 @@ var csed = (function() {
                 problemIdsByCategory = server_savedata.problemIdsByCategory;
 
                 // for debugging
-                //experimental_condition = 0;
+                //experimental_condition = 1;
                 //numProblems = 0;
 
                 console.info('successfully started logging session');
@@ -432,9 +432,10 @@ var csed = (function() {
             var labNo = getQueryVariable("labNo");
             switch (labNo) {
                 case "2":
-                    window.location.href = window.location.origin + window.location.pathname + "expressions/lab2-expressions/lab2-expressions-exercises.shtml#slide1";
+                    window.location.href = window.location.origin + window.location.pathname + "lab_files/lab2-expressions-exercises.shtml";
                     break;
                 case "4":
+                    window.location.href = window.location.origin + window.location.pathname + "lab_files/lab4-ifelse-exercises.shtml";
                     break;
                 case "7":
                     break;
@@ -540,7 +541,10 @@ $(document).ready(function() {
                 // add next problem pointers
                 categoryConfig.forEach(function (category) {
                     for(var i = 0; i < category.problems.length; i++) {
-                        category.problems[i].nextProblem = category.problems[i+1];
+                        if (category.problems[i].content.variants && category.problems[i].content.variants.length > 1) {
+                            category.problems[i].nextVariant = 1;
+                        }
+                        category.problems[i].nextProblem = category.problems[i + 1];
                         category.problems[i].category = category.category;
                     }
                 });

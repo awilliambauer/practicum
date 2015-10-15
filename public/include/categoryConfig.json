@@ -498,7 +498,7 @@
     "id": "cdc108de-6317-11e5-bdde-c326ba197c28",
     "title": "If/Else Mystery 1",
     "content": {
-      "text": "public static void mystery3(int x, int y) {\nint z = 4;\n\nif (z <= x) {\nz = x + 1;\n} else {\nz = z + 9;\n}\n\nif (z <= y) {\ny++;\n}\nSystem.out.println(z + \" \" + y);\n}",
+      "text": "public static void mystery1(int x, int y) {\nint z = 4;\n\nif (z <= x) {\nz = x + 1;\n} else {\nz = z + 9;\n}\n\nif (z <= y) {\ny++;\n}\nSystem.out.println(z + \" \" + y);\n}",
       "variants": [{
         "id": "f753c3a8-6317-11e5-9a1e-230673f347a1",
         "arguments": {"x": 3, "y": 20}
@@ -517,7 +517,7 @@
     "id": "8bb32fd4-6318-11e5-bbd7-db8254c92513",
     "title": "If/Else Mystery 2",
     "content": {
-      "text": "public static void mystery(int n) {\nSystem.out.print(n + \" \");\n\nif (n > 10) {\nn = n / 2;\n} else {\nn = n + 7;\n}\n\nif (n * 2 < 25) {\nn = n + 10;\n}\nSystem.out.println(n);\n}",
+      "text": "public static void mystery2(int n) {\n\nif (n > 10) {\nn = n / 2;\n} else {\nn = n + 7;\n}\n\nif (n * 2 < 25) {\nn = n + 10;\n}\nSystem.out.println(n);\n}",
       "variants": [{
         "id": "8fea2a12-6318-11e5-8251-d7faf4efa5ab",
         "arguments": {"n": 40}
@@ -533,6 +533,25 @@
       },{
         "id": "a2e9cae6-6318-11e5-ae8d-0fb534b3491b",
         "arguments": {"n": 20}
+      }]
+    }
+  },{
+    "id": "30791a68-72d9-11e5-bfd1-a3bf6874baec",
+    "title": "If/Else Mystery 3",
+    "content": {
+      "text": "public static void mystery3(int a, int b) {\n\nif (a < b) {\na = a * 2;\n}\n\nif (a > b) {\na = a - 10;\n} else {\nb++;\n}\nSystem.out.println(a + \" \" + b);\n}",
+      "variants": [{
+        "id": "42f412a6-72d9-11e5-83ca-3766e6ff93d6",
+        "arguments": {"a": 10, "b": 3}
+      },{
+        "id": "432758a0-72d9-11e5-9c44-1fab141a1271",
+        "arguments": {"a": 6, "b": 6}
+      },{
+        "id": "4356ed86-72d9-11e5-a93c-e704c20cb47b",
+        "arguments": {"a": 3, "b": 4}
+      },{
+        "id": "4382da72-72d9-11e5-ba87-5f99582545af",
+        "arguments": {"a": 4, "b": 20}
       }]
     }
   }]

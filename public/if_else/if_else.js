@@ -97,7 +97,8 @@ var if_else = (function() {
         //if users attempt to check a submitted answer
         d3.select("#submitButton").on("click", checkSolution);
 
-        d3.select("#newProblem").on("click", function () {csed.loadProblem(problemConfig.nextProblem)});
+        d3.select("#newVariant").on("click", function () {csed.loadProblem(problemConfig, problemConfig.content.variants[problemConfig.nextVariant++]);});
+        d3.select("#newProblem").on("click", function () {csed.loadProblem(problemConfig.nextProblem);});
 
         if (needToReset) {
             resetUI();
@@ -185,8 +186,7 @@ var if_else = (function() {
     // Extracts prompt from state and creates HTML
     function addPrompt() {
         if(state.hasOwnProperty("prompt")) {
-            var prompt =  state.prompt;
-            d3.select("#promptText").node().innerHTML = prompt;
+            d3.select("#promptText").node().innerHTML = state.prompt;
 
             // check if we need to add "yes" and "no" radio buttons to the prompt
             if (fadeLevel > 0 && state.hasOwnProperty("askForResponse") && state.askForResponse === "conditional") {
@@ -675,6 +675,9 @@ var if_else = (function() {
         $("#inputBox").on("animationend", function () {$("#inputBox").attr("class", "");});
         if (correct) {
             d3.select("#inputBox").attr("class", "correct");
+            if (config.content.variants && config.content.variants[config.nextVariant]) {
+                d3.select("#newVariant").classed("hidden", false);
+            }
             if (config.nextProblem) {
                 d3.select("#newProblem").classed("hidden", false);
             }
