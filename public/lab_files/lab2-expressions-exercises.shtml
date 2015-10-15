@@ -10,6 +10,6 @@
     </p>
 </div>
 
-<!--#include virtual="exercises1.shtml" -->
-<!--#include virtual="exercises2.shtml" -->
+<!--#include virtual="lab2-exercises1.shtml" -->
+<!--#include virtual="lab2-exercises2.shtml" -->
 <!--#include virtual="if-youve-finished.shtml" -->

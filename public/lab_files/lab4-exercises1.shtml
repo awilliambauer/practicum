@@ -1,0 +1,76 @@
+			<div class="slide">
+				<h1>Exercise <span class="exercisenumber"></span>: <code>if</code>/<code>else</code> mystery</h1>
+
+				<p>
+					Consider the following Java code.
+
+							<pre style="font-size: smaller">
+public static void mystery3(int x, int y) {
+    int z = 4;
+    if (z &lt;= x) {
+        z = x + 1;
+    } else {
+        z = z + 9;
+    }
+    if (z &lt;= y) {
+        y++;
+    }
+    System.out.println(z + " " + y);
+}
+</pre>
+				</p>
+
+				<p>
+					Fill in the boxes with the output produced by each of the method calls.
+					<table class="expressiontable">
+						<tr>
+							<td class="expression">
+								<code>mystery3(3, 20);</code>
+							</td>
+							<td>
+								<input type="text" class="expressionanswer" size="8" spellcheck="false" />
+							</td>
+							<td>
+								<pre class="expressionsolution">13 21</pre>
+							</td>
+						</tr>
+
+						<tr>
+							<td class="expression">
+								<code>mystery3(4, 5);</code>
+							</td>
+							<td>
+								<input type="text" class="expressionanswer" size="8" spellcheck="false" />
+							</td>
+							<td>
+								<pre class="expressionsolution">5 6</pre>
+							</td>
+						</tr>
+
+						<tr>
+							<td class="expression">
+								<code>mystery3(5, 5);</code>
+							</td>
+							<td>
+								<input type="text" class="expressionanswer" size="8" spellcheck="false" />
+							</td>
+							<td>
+								<pre class="expressionsolution">6 5</pre>
+							</td>
+						</tr>
+
+						<tr>
+							<td class="expression">
+								<code>mystery3(6, 10);</code>
+							</td>
+							<td>
+								<input type="text" class="expressionanswer" size="8" spellcheck="false" />
+							</td>
+							<td>
+								<pre class="expressionsolution">7 11</pre>
+							</td>
+						</tr>
+
+					</table>
+				</p>
+			</div>
