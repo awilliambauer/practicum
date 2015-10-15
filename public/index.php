@@ -129,7 +129,10 @@ $lab = $_GET["lab"];
                 <?php if ($lab) { ?>
 
                 <p>
-                    After you have completed these exercises, please close this tab and resume the lab slides.
+                    Complete exercises here until you feel comfortable with basic expressions problems.
+                </p>
+                <p>
+                    Then, close this tab and return to the labs.
                 </p>
 
                 <?php } else { ?>
