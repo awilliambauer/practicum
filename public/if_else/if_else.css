@@ -32,15 +32,15 @@
     -webkit-animation-duration: 2s;
 }
 
-.if_else_problem #newProblem {
-    font-size: 18px;
-    vertical-align: middle;
-
-}
-
 .if_else_problem #newProblemContainer {
     padding-top: 30px;
     text-align: center;
+}
+
+.if_else_problem #newProblemContainer > button {
+    font-size: 18px;
+    vertical-align: middle;
+    margin-right: 80px;
 }
 
 .if_else_problem #methodCall {

@@ -178,6 +178,7 @@ var expressions = (function() {
             }
 
             // HACK to make the next button disappear at the end of the problem
+            // also, fill in the solution box after the last step
             var lastLine = state.state.problemLines.length - 1;
             if (state.prompt.indexOf("This is the answer!") !== -1 && i === lastLine) {
                 d3.select("#nextstep").style("visibility", "hidden");

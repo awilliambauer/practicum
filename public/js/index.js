@@ -541,7 +541,10 @@ $(document).ready(function() {
                 // add next problem pointers
                 categoryConfig.forEach(function (category) {
                     for(var i = 0; i < category.problems.length; i++) {
-                        category.problems[i].nextProblem = category.problems[i+1];
+                        if (category.problems[i].content.variants && category.problems[i].content.variants.length > 1) {
+                            category.problems[i].nextVariant = 1;
+                        }
+                        category.problems[i].nextProblem = category.problems[i + 1];
                         category.problems[i].category = category.category;
                     }
                 });
