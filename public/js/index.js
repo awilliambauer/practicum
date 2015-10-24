@@ -465,7 +465,7 @@ var csed = (function() {
                     throw new Error("lab number " + labNo + " not supported");
             }
         } else {
-            enabledCategories = ["default-expressions"]; // only enable expressions for now
+            enabledCategories = ["default-expressions", "default-if_else"];
         }
     }
 
