@@ -279,6 +279,8 @@ function IfElseHelper() {
                 return arg1 / arg2;
             } else if (expr.operator === "*") {
                 return arg1 * arg2;
+            } else if (expr.operator === "%") {
+                return arg1 % arg2;
             }
         } else if (expr.tag === "literal") {
             return expr.value;
