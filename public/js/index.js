@@ -460,6 +460,9 @@ var csed = (function() {
                     }
                     break;
                 case "7":
+                    if (experimental_condition === 1) {
+                        enabledCategories = ["lab7-array"];
+                    }
                     break;
                 default:
                     throw new Error("lab number " + labNo + " not supported");

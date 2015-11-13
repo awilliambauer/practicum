@@ -70,7 +70,7 @@ var java_simulator = function() {
 
             default: throw new Error("expression type " + expr.tag + " cannot be evaluated");
         }
-    };
+    }
     self.evaluate_expression = evaluate_expression;
 
     /**
@@ -101,9 +101,9 @@ var java_simulator = function() {
         if (idx < children.length) {
             return children[idx];
         } else {
-            return this.get_next_statement(ast, parent);
+            return self.get_next_statement(ast, parent);
         }
-    }
+    };
 
     return self;
 }();

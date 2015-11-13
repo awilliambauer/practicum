@@ -26,7 +26,7 @@ function TPLAlgorithm() {
         "First, look at the method call.";
 
         let this_array_is_the_parameter: Parameter;
-        this_array_is_the_parameter = helper.get_parameter(state.args);
+        this_array_is_the_parameter = helper.get_array_parameter(state.args);
 
         let add_the_array_to_the_variable_bank: Variable;
         [interactive("add_variable")]
@@ -48,6 +48,13 @@ function TPLAlgorithm() {
         let add_the_length_to_the_variable_bank: Variable;
         [interactive("add_variable")]
         add_the_length_to_the_variable_bank = helper.add_this_to_the_variable_bank(variables, array_length);
+
+        [no_step]
+        if (state.vars.length > 1) {
+            let add_other_parameters_to_the_variable_bank : Variable;
+            [interactive("add_variable")]
+            add_other_parameters_to_the_variable_bank = helper.add_other_parameters_to_the_variable_bank(variables, state.vars);
+        }
     }
 
     [prompt]
@@ -87,6 +94,12 @@ function TPLAlgorithm() {
     while (helper.does_this_conditional_evaluate_to_true(variables, this_is_the_loop_condition)) {
         [no_step]
         this_is_the_next_line_that_will_execute = null;
+        let condition_outcome;
+        [no_step]
+        condition_outcome = null;
+        let parent;
+        [no_step]
+        parent = loop;
 
         // FIXME hack to remove loop condition highlighting. maybe the variable context idea doesn't actually work?
         [no_step]
@@ -94,81 +107,119 @@ function TPLAlgorithm() {
 
         [no_step]
         do {
-            [interactive("next_line")] this_is_the_next_line_that_will_execute = helper.get_the_next_loop_body_line_to_execute(loop, this_is_the_next_line_that_will_execute);
-
-            let this_is_the_result_of_the_expression: ScratchAstNode;
-            let copy_the_expression_into_the_scratch_area: ScratchList;
+            [interactive("next_line")] this_is_the_next_line_that_will_execute = helper.get_the_next_loop_body_line_to_execute(parent, this_is_the_next_line_that_will_execute, condition_outcome);
 
             [no_step]
-            {
-                // FIXME assume it's an assignment statement
-                [prompt]
-                "This line updates the value of an array element";
-
-                let expression: AstNode;
-                [no_step]
-                expression = this_is_the_next_line_that_will_execute.expression.args[1];
-                [prompt]
-                "First, let's evaluate the expression on the right-hand side.";
-
-                // copy expression to workspace
-                copy_the_expression_into_the_scratch_area = helper.create_scratch(this_is_the_next_line_that_will_execute.expression.args[1]);
-
-                // for each array lookup in the expression, do the array lookup
-                [no_step]
-                for (let this_operand_references_an_element_in_the_array: ScratchAstNode of helper.all_array_lookups_in_the_expression(copy_the_expression_into_the_scratch_area)) {
-                    let this_is_the_array;
-                    // can do this on the original scratch expression because it will never change and doesn't affect highlighting
+            if (helper.is_if(this_is_the_next_line_that_will_execute)) {
+                let this_is_the_if_condition: AstNode;
+                this_is_the_if_condition = this_is_the_next_line_that_will_execute.condition;
+                [interactive("conditional")]
+                if (helper.does_this_conditional_evaluate_to_true(variables, this_is_the_if_condition)) {
                     [no_step]
-                    this_is_the_array = helper.evaluate_this_expression2(variables, this_operand_references_an_element_in_the_array.object, this_operand_references_an_element_in_the_array);
+                    parent = this_is_the_next_line_that_will_execute;
+                    [no_step]
+                    this_is_the_next_line_that_will_execute = null;
+                    [no_step]
+                    condition_outcome = true;
+                } else {
+                    // assume no else if
+                    [no_step]
+                    if (helper.has_else(this_is_the_next_line_that_will_execute)) {
+                        [no_step]
+                        parent = this_is_the_next_line_that_will_execute;
+                        [no_step]
+                        this_is_the_next_line_that_will_execute = null;
+                        [no_step]
+                        condition_outcome = false;
+                    }
+                }
+            } else {
 
-                    // evaluate this node of the ast down to a literal
-                    // can also do this on the original expression because the UI will know to highlight the last line of scratch
-                    // TODO nell: do we want to highlight this node or just skip this?
+                [no_step]
+                if (helper.does_this_line_update_array(this_is_the_next_line_that_will_execute)) {
+
+                    let this_is_the_result_of_the_expression: ScratchAstNode;
+                    let copy_the_expression_into_the_scratch_area: ScratchList;
+
+                    [no_step]
+                    {
+                        // FIXME assume it's an assignment statement
+                        [prompt]
+                        "This line updates the value of an array element.";
+
+                        let expression: AstNode;
+                        [no_step]
+                        expression = this_is_the_next_line_that_will_execute.expression.args[1];
+                        [prompt]
+                        "First, let's evaluate the expression on the right-hand side.";
+
+                        // copy expression to workspace
+                        copy_the_expression_into_the_scratch_area = helper.create_scratch(this_is_the_next_line_that_will_execute.expression.args[1]);
+
+                        // for each array lookup in the expression, do the array lookup
+                        [no_step]
+                        for (let this_operand_references_an_element_in_the_array: ScratchAstNode of helper.all_array_lookups_in_the_expression(copy_the_expression_into_the_scratch_area)) {
+                            let this_is_the_array;
+                            // can do this on the original scratch expression because it will never change and doesn't affect highlighting
+                            [no_step]
+                            this_is_the_array = helper.evaluate_this_expression2(variables, this_operand_references_an_element_in_the_array.object, this_operand_references_an_element_in_the_array);
+
+                            // evaluate this node of the ast down to a literal
+                            // can also do this on the original expression because the UI will know to highlight the last line of scratch
+                            // TODO nell: do we want to highlight this node or just skip this?
+                            let this_is_the_index;
+                            [no_step]
+                            this_is_the_index = this_operand_references_an_element_in_the_array.index;
+
+                            // TODO intended interaction: user has to click on the array cell corresponding to the correct index.
+                            // this will be a variable {type:string, value:int} with an additional field array:Variable that points to the array being indexed.
+                            let this_is_the_array_element_that_the_operand_references: ArrayElement;
+                            [interactive("array_element_click")]
+                            this_is_the_array_element_that_the_operand_references = helper.evaluate_this_expression(variables, this_is_the_array, this_is_the_index);
+
+                            let copy_the_array_element_value_into_the_scratch_area: ScratchAstNode;
+                            [interactive("array_element_get")]
+                            copy_the_array_element_value_into_the_scratch_area = helper.do_the_array_lookup(copy_the_expression_into_the_scratch_area, this_is_the_array, this_is_the_array_element_that_the_operand_references, this_operand_references_an_element_in_the_array);
+                        }
+
+                        // TODO nell: these interactive names are all made up without too much thought, probably some should be renamed and/or merged.
+                        // TODO also probably the types are wrong.
+                        // evalute the rest of the expression
+                        [interactive("evaluate_expression")]
+                        this_is_the_result_of_the_expression = helper.evaluate_this_expression_and_add_to_scratch(variables, copy_the_expression_into_the_scratch_area);
+                    }
+
+                    // for the array being assigned to, lookup the box
+                    let the_expression_result_is_assigned_to_this_array_element: AstNode;
+                    the_expression_result_is_assigned_to_this_array_element = this_is_the_next_line_that_will_execute.expression.args[0];
+
+                    let this_is_the_array;
+                    [no_step]
+                    this_is_the_array = helper.evaluate_this_expression2(variables, the_expression_result_is_assigned_to_this_array_element.object);
+
                     let this_is_the_index;
                     [no_step]
-                    this_is_the_index = this_operand_references_an_element_in_the_array.index;
+                    this_is_the_index = the_expression_result_is_assigned_to_this_array_element.index;
 
-                    // TODO intended interaction: user has to click on the array cell corresponding to the correct index.
-                    // this will be a variable {type:string, value:int} with an additional field array:Variable that points to the array being indexed.
-                    let this_is_the_array_element_that_the_operand_references: ArrayElement;
+                    let this_is_the_array_element_that_is_being_updated: ArrayElement;
                     [interactive("array_element_click")]
-                    this_is_the_array_element_that_the_operand_references = helper.evaluate_this_expression(variables, this_is_the_array, this_is_the_index);
+                    this_is_the_array_element_that_is_being_updated = helper.evaluate_this_expression(variables, this_is_the_array, this_is_the_index);
 
-                    let copy_the_array_element_value_into_the_scratch_area: ScratchAstNode;
-                    [interactive("array_element_get")]
-                    copy_the_array_element_value_into_the_scratch_area = helper.do_the_array_lookup(copy_the_expression_into_the_scratch_area, this_is_the_array, this_is_the_array_element_that_the_operand_references, this_operand_references_an_element_in_the_array);
+                    // assign the new value to the box
+                    let update_the_array_element: Variable;
+                    [interactive("update_variable")]
+                    update_the_array_element = helper.assign_the_new_value_to_the_array_element(this_is_the_array, this_is_the_array_element_that_is_being_updated, this_is_the_result_of_the_expression);
+                } else {
+                    [prompt]
+                    "This line updates the value of a variable.";
+
+                    let update_the_variable_in_the_variable_bank: Variable;
+                    [interactive("update_variable")]
+                    update_the_variable_in_the_variable_bank = helper.assign_the_new_value_to_the_variable(variables, this_is_the_next_line_that_will_execute);
                 }
-
-                // TODO nell: these interactive names are all made up without too much thought, probably some should be renamed and/or merged.
-                // TODO also probably the types are wrong.
-                // evalute the rest of the expression
-                [interactive("evaluate_expression")]
-                this_is_the_result_of_the_expression = helper.evaluate_this_expression_and_add_to_scratch(variables, copy_the_expression_into_the_scratch_area);
             }
 
-            // for the array being assigned to, lookup the box
-            let the_expression_result_is_assigned_to_this_array_element: AstNode;
-            the_expression_result_is_assigned_to_this_array_element = this_is_the_next_line_that_will_execute.expression.args[0];
-
-            let this_is_the_array;
-            [no_step]
-            this_is_the_array = helper.evaluate_this_expression2(variables, the_expression_result_is_assigned_to_this_array_element.object);
-
-            let this_is_the_index;
-            [no_step]
-            this_is_the_index = the_expression_result_is_assigned_to_this_array_element.index;
-
-            let this_is_the_array_element_that_is_being_updated: ArrayElement;
-            [interactive("array_element_click")]
-            this_is_the_array_element_that_is_being_updated = helper.evaluate_this_expression(variables, this_is_the_array, this_is_the_index);
-
-            // assign the new value to the box
-            let update_the_array_element: Variable;
-            [interactive("update_variable")]
-            update_the_array_element = helper.assign_the_new_value_to_the_array_element(this_is_the_array, this_is_the_array_element_that_is_being_updated, this_is_the_result_of_the_expression);
-
-        } while (helper.is_there_another_line_to_execute(ast, this_is_the_next_line_that_will_execute));
+        } while (helper.is_there_another_line_to_execute(parent, this_is_the_next_line_that_will_execute, condition_outcome));
 
         [no_step]
         this_is_the_next_line_that_will_execute = helper.get_loop_end(loop);

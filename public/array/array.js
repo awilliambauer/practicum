@@ -51,6 +51,7 @@ var array = (function() {
 
         d3.select("#submitButton").on("click", checkSolution);
 
+        d3.select("#newVariant").on("click", function () {csed.loadProblem(problemConfig, problemConfig.content.variants[problemConfig.nextVariant++]);});
         d3.select("#newProblem").on("click", function () {csed.loadProblem(problemConfig.nextProblem)});
 
         createStartingStatesDropdown(problemConfig, state);
@@ -82,7 +83,12 @@ var array = (function() {
     function getArgString(args) {
         var callVals = [];
         for (var variable in args) {
-            var arrayString = "{" + args[variable] + "}";
+            var arrayString;
+            if (Array.isArray(args[variable])) {
+                arrayString = "{" + args[variable] + "}";
+            } else {
+                arrayString = args[variable];
+            }
             callVals.push(arrayString);
         }
         return callVals;
@@ -290,8 +296,13 @@ var array = (function() {
                     case "Variable":
                         if (fadeLevel > 0 && variable === state.statement_result.name &&
                             state.hasOwnProperty("askForResponse") && state.askForResponse === "add_variable") {
-
-                            interactiveVariableBank(varObject.value, true);
+                            if (Array.isArray(varObject.value)) {
+                                varObject.value.forEach(function (v) {
+                                    interactiveVariableBank(v, true);
+                                });
+                            } else {
+                                interactiveVariableBank(varObject.value, true);
+                            }
                         }
                         else if (fadeLevel > 0 && variable === state.statement_result.name &&
                             state.hasOwnProperty("askForResponse") && state.askForResponse === "update_variable") {
@@ -299,7 +310,13 @@ var array = (function() {
                             interactiveVariableBank(varObject.value, false);
                         }
                         else {
-                            highlightVariableBank(varObject.value);
+                            if (Array.isArray(varObject.value)) {
+                                varObject.value.forEach(function (v) {
+                                    highlightVariableBank(v);
+                                });
+                            } else {
+                                highlightVariableBank(varObject.value);
+                            }
                         }
                         break;
 
@@ -663,7 +680,13 @@ var array = (function() {
                 var input = d3.select(this).select(".bank_variable_value").select(".varValue");
                 if (input.node() !== null) {
                     userValue = parseInt(d3.select(this).select(".bank_variable_value").select(".varValue").property("value"));
-                    correctValue = parseInt(correctAnswer.value);
+                    if (Array.isArray(correctAnswer)) {
+                        correctValue = parseInt(correctAnswer.find(function(v) {
+                            return v.name === d3.select(this).select(".bank_variable_label").select(".bank_variable").html();
+                        }, this).value);
+                    } else {
+                        correctValue = parseInt(correctAnswer.value);
+                    }
                     correctVariable[correctAnswer.name] = correctValue;
                     userVariable[correctAnswer.name] = userValue;
                     if (userValue !== correctValue) {
@@ -920,6 +943,9 @@ var array = (function() {
         $("#inputBox").on("animationend", function () {$("#inputBox").attr("class", "");});
         if (correct) {
             d3.select("#inputBox").attr("class", "correct");
+            if (config.content.variants && config.content.variants[config.nextVariant]) {
+                d3.select("#newVariant").classed("hidden", false);
+            }
             if (config.nextProblem) {
                 d3.select("#newProblem").classed("hidden", false);
             }

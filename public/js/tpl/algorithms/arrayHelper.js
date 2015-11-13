@@ -4,25 +4,36 @@ function ArrayHelper() {
     var sim = java_simulator;
 
     this.copy_args = function(o) {
+        var args = [];
         for (var key in o) {
-            return {
-                name: key,
-                type: 'array',
-                value: o[key].map(function(i) { return {type:'int', value:i}; })
-            };
+            var arg = {name: key};
+            if (Array.isArray(o[key])) {
+                arg.type = 'array';
+                arg.value = o[key].map(function(i) { return {type:'int', value:i}; });
+            } else {
+                arg.type = 'int';
+                arg.value = o[key];
+            }
+            args.push(arg);
+        }
+        return args;
+    };
+
+    this.get_array_parameter = function(args) {
+        // assumes only one array
+        for (var key in args) {
+            if (Array.isArray(args[key])) {
+                return {
+                    name: key,
+                    type: 'array',
+                    value: args[key].map(function (i) {
+                        return {type: 'int', value: i};
+                    })
+                };
+            }
         }
     };
 
-    this.get_parameter = function(args) {
-        // assumes everything is an array!
-        for (var key in args) {
-            return {
-                name: key,
-                type: 'array',
-                value: args[key].map(function(i) { return {type:'int', value:i}; })
-            };
-        }
-    };
 
     // HACK FIXME remove this asap
     this.True = function() { return true; };
@@ -50,6 +61,17 @@ function ArrayHelper() {
         }
     };
 
+    this.add_other_parameters_to_the_variable_bank = function(bank, variables) {
+        var ret = [];
+        variables.forEach(function (v) {
+            if (v.type !== "array") {
+                bank[v.name] = {type: v.type, value: v.value};
+                ret.push(v);
+            }
+        });
+        return ret;
+    };
+
     this.execute_the_loop_increment = function(variable_bank, increment_stmt) {
         var result = this.execute_statement(variable_bank, increment_stmt);
         var variable = {};
@@ -58,17 +80,54 @@ function ArrayHelper() {
         return variable;
     };
 
-    this.get_the_next_loop_body_line_to_execute = function(loop, current_statement) {
-        if (current_statement) {
-            return sim.get_next_statement(loop, current_statement);
-        } else {
-            if (loop.body.length === 0) throw new Error ("Empty loop body!");
-            return loop.body[0];
+    function get_next_statement(body, stmt) {
+        for (var idx in body) {
+            if (body[idx] === stmt) break;
+        }
+        idx++;
+        if (idx < body.length) {
+            return body[idx];
+        }
+        return null;
+    }
+
+    this.get_the_next_loop_body_line_to_execute = function(parent, current_statement, condition) {
+        switch(parent.tag) {
+            case "for":
+                if (parent.body.length === 0) throw new Error ("Empty loop body!");
+                if (current_statement) {
+                    return get_next_statement(parent.body, current_statement);
+                }
+                return parent.body[0];
+            case "if":
+                if (condition) {
+                    if (parent.then_branch.length === 0) throw new Error("Empty then branch");
+                    if (current_statement) {
+                        return get_next_statement(parent.then_branch, current_statement);
+                    }
+                    return parent.then_branch[0];
+                } else {
+                    if (parent.else_branch.length === 0) throw new Error("Empty else branch");
+                    if (current_statement) {
+                        return get_next_statement(parent.else_branch, current_statement);
+                    }
+                    return parent.else_branch[0];
+                }
+            default:
+                throw new Error("parent must be a for loop or an if");
         }
     };
 
-    this.is_there_another_line_to_execute = function(ast, stmt) {
-        return !!sim.get_next_statement(ast, stmt);
+    this.is_there_another_line_to_execute = function(parent, stmt, condition) {
+        return !!this.get_the_next_loop_body_line_to_execute(parent, stmt, condition);
+    };
+
+    this.is_if = function(stmt) {
+        return stmt.tag === "if";
+    };
+
+    this.has_else = function(stmt) {
+        return stmt.hasOwnProperty("else_branch") && stmt.else_branch.length > 0;
     };
 
     this.get_loop_end = function(loop) {
@@ -81,7 +140,7 @@ function ArrayHelper() {
 
     this.create_scratch = function(x) {
         return [this.copy(x)];
-    }
+    };
 
     this.create_variable = function(variable_bank, declaration_stmt) {
         if (declaration_stmt.expression.args[0].tag !== 'identifier') throw new Error("not a valid variable declaration!");
@@ -185,6 +244,19 @@ function ArrayHelper() {
             value: this.copy(array.value),
             name: array.name
         };
+    };
+
+    this.assign_the_new_value_to_the_variable = function(variable_bank, stmt) {
+        var result = this.execute_statement(variable_bank, stmt);
+        var variable = {};
+        variable.name = stmt.expression.args[0].value;
+        variable.value = result.value;
+        return variable;
+    };
+
+    this.does_this_line_update_array = function(stmt) {
+        return stmt.tag === "expression" && stmt.expression.tag === "binop" &&
+                stmt.expression.operator === "=" && stmt.expression.args[0].tag === "index";
     };
 }
 
