@@ -38,6 +38,18 @@ var java_formatter = function() {
      * @returns {*|jQuery|HTMLElement}
      */
     function to_dom(node, options, indent_level, special_flag) {
+        /*
+         * Brief implementation notes:
+         * All AST nodes are put into their own spans, with subelements are children.
+         * Any code that should be its own line is put in a span with the 'java-line' class,
+         * and CSS takes care of adding a line number and making sure it ends with a newline.
+         * So no manual newlines are required!
+         *
+         * Because it uses spans for new lines, all elements must be an integer number of lines,
+         * e.g., you cannot have one element take 1.5 lines and a follwing element take 1.5 lines,
+         * where they share the middle line. Elements, can, of course, take 0 lines, such as expressions.
+         */
+
         // HACK special_flag is a boolean used to indicate things like "don't put a semi/newline on this statement"
         // or "don't put a newline before this if". It's very hacky.
 
