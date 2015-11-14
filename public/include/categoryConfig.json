@@ -575,10 +575,32 @@
       "id": "6f24fb2e-8684-11e5-82ba-53c72563698d",
       "title": "Array Mystery 2",
       "content": {
-        "text": "public static void arrayMystery2(int[] a, int x, int y) {\nfor (int i = 0; i < a.length; i++) {\n\nif (y < x) {\ny = y + 1;\na[y] = 17;\n} else {\na[x] = 42;\n}\n}\n}",
+        "text": "public static void arrayMystery2(int[] a, int x, int y) {\nfor (int i = 0; i < a.length; i++) {\nif (y < x) {\ny = y + 1;\na[y] = 17;\n} else {\na[x] = 42;\n}\n}\n}",
         "variants": [{
           "id": "3a413e30-8685-11e5-89d5-030836a5bff0",
           "arguments": {"a": [0, 0, 0, 0], "x": 3, "y": 1}
+        }]
+      }
+    }, {
+      "id": "035960aa-8a63-11e5-9340-f781aa6d38e2",
+      "title": "Array Mystery 3",
+      "content": {
+        "text": "public static void arrayMystery3(int[] a) {\nfor (int i = 0; i < a.length - 1; i++) {\nif (a[i] < a[i + 1]) {\na[i] = a[i + 1];\n}\n}\n}",
+        "variants": [{
+          "id": "03dabef2-8a63-11e5-8a9e-bf26cd5a3522",
+          "arguments": {"a": [2, 4]}
+        },{
+          "id": "4398a054-8a63-11e5-a7b2-a7d61c75240a",
+          "arguments": {"a": [1, 3, 6]}
+        },{
+          "id": "43d07e52-8a63-11e5-9252-57a98e64f04a",
+          "arguments": {"a": [7, 2, 8, 4]}
+        },{
+          "id": "4409deb8-8a63-11e5-be95-4f57bafca26b",
+          "arguments": {"a": [5, 2, 7, 2, 4]}
+        },{
+          "id": "4435b01a-8a63-11e5-bb56-475c15a29667",
+          "arguments": {"a": [2, 4, 6, 3, 7, 9]}
         }]
       }
     }

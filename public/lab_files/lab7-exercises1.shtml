@@ -1,0 +1,57 @@
+<div class="slide">
+	<h1>
+		Exercise <span class="exercisenumber"></span>: array mystery
+	</h1>
+
+	<p>
+		What values are stored in the array at the comment in <code>main</code>?
+		Note that the <code>incrementAll</code> method returns <code>void</code>, but does take an <code>int[]</code> parameter.
+	</p>
+
+	<pre class="compressed">
+public class ArrayReference {
+    public static void main(String[] args) {
+        int[] nums = {2, 4, -1, 3};
+        incrementAll(nums);
+
+        <span class="comment">// HERE!</span>
+    }
+
+    public static void incrementAll(int[] data) {
+        for (int i = 0; i &lt; data.length; i++) {
+            data[i] = data[i] + 1;
+        }
+    }
+}
+</pre>
+
+	<table class="arraytable">
+		<tr>
+			<th style="padding-right: 1em">index</th>
+			<th>0</th>
+			<th>1</th>
+			<th>2</th>
+			<th>3</th>
+		</tr>
+
+		<tr>
+			<th style="padding-right: 1em">value</th>
+			<td class="expressionarea">
+				<input type="text" value="" class="expressionanswer" size="3" />
+				<span class="expressionsolution">3</span>
+			</td>
+			<td class="expressionarea">
+				<input type="text" value="" class="expressionanswer" size="3" />
+				<span class="expressionsolution">5</span>
+			</td>
+			<td class="expressionarea">
+				<input type="text" value="" class="expressionanswer" size="3" />
+				<span class="expressionsolution">0</span>
+			</td>
+			<td class="expressionarea">
+				<input type="text" value="" class="expressionanswer" size="3" />
+				<span class="expressionsolution">4</span>
+			</td>
+		</tr>
+	</table>
+</div>
