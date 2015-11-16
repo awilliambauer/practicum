@@ -239,6 +239,7 @@ var csed = (function() {
         // if no alt state, choose the first
         if (problemConfig.content.variants) {
             variant = variant || problemConfig.content.variants[0];
+            variant.started = true;
             Logging.log_task_event(task_logger, {
                 type: Logging.ID.SubtaskStart,
                 detail: {id: variant.id},
@@ -438,6 +439,7 @@ var csed = (function() {
                     window.location.href = window.location.origin + window.location.pathname + "lab_files/lab4-ifelse-exercises.shtml";
                     break;
                 case "7":
+                    window.location.href = window.location.origin + window.location.pathname + "lab_files/lab7-array-exercises.shtml";
                     break;
                 default:
                     throw new Error("lab number " + labNo + " not supported");
@@ -460,6 +462,9 @@ var csed = (function() {
                     }
                     break;
                 case "7":
+                    if (experimental_condition === 1) {
+                        enabledCategories = ["lab7-array"];
+                    }
                     break;
                 default:
                     throw new Error("lab number " + labNo + " not supported");
@@ -541,9 +546,6 @@ $(document).ready(function() {
                 // add next problem pointers
                 categoryConfig.forEach(function (category) {
                     for(var i = 0; i < category.problems.length; i++) {
-                        if (category.problems[i].content.variants && category.problems[i].content.variants.length > 1) {
-                            category.problems[i].nextVariant = 1;
-                        }
                         category.problems[i].nextProblem = category.problems[i + 1];
                         category.problems[i].category = category.category;
                     }

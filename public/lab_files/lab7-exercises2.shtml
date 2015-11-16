@@ -1,0 +1,46 @@
+<div class="slide">
+	<h1>
+		Exercise <span class="exercisenumber"></span>: array mystery
+	</h1>
+
+	<p>
+		Suppose that the array and <code>int</code>s at right were passed as parameters to
+		the <code>mystery</code> method below.  Fill in the boxes with the array
+		contents after the method call.
+	</p>
+
+	<table class="compressed">
+		<tr>
+			<td style="vertical-align: top">
+        <pre>
+public static void mystery(int[] a, int x, int y) {
+    for (int i = 0; i < a.length; i++) {
+        if (x < y) {
+            y = y + 1;
+	    a[y] = 17;
+        } else {
+	    a[x] = 42;
+	}
+    }
+}
+</pre>
+			</td>
+
+			<td>
+				<table class="expressiontable">
+					<tr>
+						<td class="expression"><code>int[] a = {0,
+							0,0,0};<br/>int x = 3;<br/>int y = 1;<br/>mystery(a, x, y);</code></td>
+						<td><input type="text" class="expressionanswer" size="22"
+								   spellcheck="false" /></td>
+						<td>
+							<pre class="expressionsolution">{0, 0, 17, 42}</pre>
+							<pre class="ignore">[^0-9,]+</pre>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+
+</div>

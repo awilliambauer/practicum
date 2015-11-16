@@ -38,6 +38,18 @@ var java_formatter = function() {
      * @returns {*|jQuery|HTMLElement}
      */
     function to_dom(node, options, indent_level, special_flag) {
+        /*
+         * Brief implementation notes:
+         * All AST nodes are put into their own spans, with subelements are children.
+         * Any code that should be its own line is put in a span with the 'java-line' class,
+         * and CSS takes care of adding a line number and making sure it ends with a newline.
+         * So no manual newlines are required!
+         *
+         * Because it uses spans for new lines, all elements must be an integer number of lines,
+         * e.g., you cannot have one element take 1.5 lines and a follwing element take 1.5 lines,
+         * where they share the middle line. Elements, can, of course, take 0 lines, such as expressions.
+         */
+
         // HACK special_flag is a boolean used to indicate things like "don't put a semi/newline on this statement"
         // or "don't put a newline before this if". It's very hacky.
 
@@ -70,11 +82,11 @@ var java_formatter = function() {
                     firstIter = false;
                     line.append(to_dom(p, options, 0));
                 });
-                line.append(') ' + symbol('{') + '\n');
+                line.append(') ' + symbol('{'));
                 node.body.forEach(function(s) {
                     elem.append(to_dom(s, options, 1));
                 });
-                newline(elem).append(indent(0) + symbol("}")+"\n");
+                newline(elem).append(indent(0) + symbol("}"));
                 break;
 
             case 'parameter':
@@ -88,7 +100,7 @@ var java_formatter = function() {
                 elem.append(keyword(node.type) + " ");
                 elem.append(to_dom(node.expression, options, indent_level));
                 if (!special_flag) {
-                    elem.append(";\n");
+                    elem.append(";");
                 }
                 break;
 
@@ -102,7 +114,7 @@ var java_formatter = function() {
                 var children = expression.children();
                 elem.append(to_dom(node.expression, options, indent_level));
                 if (!special_flag) {
-                    elem.append(";\n");
+                    elem.append(";");
                 }
                 break;
 
@@ -124,39 +136,44 @@ var java_formatter = function() {
                 update.attr('id', 'update');
                 update.append(to_dom(node.increment, options, indent_level, true));
                 line.append(update);
-                line.append(') {\n');
+                line.append(') {');
                 node.body.forEach(function(s) {
                     elem.append(to_dom(s, options, indent_level + 1));
                 });
-                newline(elem).append(indent(indent_level) + '}\n');
+                newline(elem).append(indent(indent_level) + '}');
                 break;
 
             case 'if':
                 elem.addClass("if");
-                if (!special_flag) {
-                    // leave a blank line between ifs (could replace with something fancier like boxes)
-                    elem.append("\n" + indent(indent_level));
+                if (special_flag) {
+                    // HACK pass in the previous line (with the }) as the flag so it's one line
+                    line = special_flag;
+                } else {
+                    line = newline(elem);
+                    line.append(indent(indent_level));
                 }
-                elem.append("if (");
-                elem.append(to_dom(node.condition, options, indent_level));
-                elem.append(") {\n");
+                line.append(keyword("if") + " (");
+                line.append(to_dom(node.condition, options, indent_level));
+                line.append(") {");
                 node.then_branch.forEach(function(s) {
                     elem.append(to_dom(s, options, indent_level + 1));
                 });
                 if (node.else_branch) {
-                    elem.append(indent(indent_level) + '} else ');
-                    // check if the else branch is another if/else, if so, skip brackets/newlines
+                    line = newline(elem);
+                    line.append(indent(indent_level) + '} ' + keyword("else") + ' ');
                     if (node.else_branch.tag === 'if') {
-                        elem.append(to_dom(node.else_branch, options, indent_level, true));
+                        // HACK pass in the previous line (with the }) as the flag so it's one line
+                        elem.append(to_dom(node.else_branch, options, indent_level, line));
                     } else {
-                        elem.append('{\n');
+                        line.append('{');
                         node.else_branch.forEach(function(s) {
                             elem.append(to_dom(s, options, indent_level + 1));
                         });
                     }
                 }
                 if (!special_flag) {
-                    elem.append(indent(indent_level) + "}\n");
+                    line = newline(elem);
+                    line.append(indent(indent_level) + "}");
                 }
                 break;
 

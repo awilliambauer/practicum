@@ -38,6 +38,8 @@ var java_simulator = function() {
                     case '/': return {type: 'int', value: Math.floor(arg1v / arg2v)};
                     case '%': return {type: 'int', value: arg1v % arg2v};
                     case '=': arg1.value = arg2.value; return arg1;
+                    case '+=': arg1.value += arg2.value; return arg1;
+                    case '-=': arg1.value -= arg2.value; return arg1;
                     default: throw new Error("Unknown binary operator " + expr.operator);
                 }
             case 'postfix':
@@ -70,7 +72,7 @@ var java_simulator = function() {
 
             default: throw new Error("expression type " + expr.tag + " cannot be evaluated");
         }
-    };
+    }
     self.evaluate_expression = evaluate_expression;
 
     /**
@@ -101,9 +103,9 @@ var java_simulator = function() {
         if (idx < children.length) {
             return children[idx];
         } else {
-            return this.get_next_statement(ast, parent);
+            return self.get_next_statement(ast, parent);
         }
-    }
+    };
 
     return self;
 }();

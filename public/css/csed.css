@@ -63,7 +63,7 @@ a:hover.btn-primary, a:active.btn-primary, a:focus.btn-primary {
 
 /* for the consent form, so scrolling works */
 .modal-body {
-    height: 600px;
+    height: 450px;
 }
 .modal-body .overflow {
     height: 100%;
