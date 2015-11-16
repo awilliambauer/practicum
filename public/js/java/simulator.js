@@ -38,6 +38,8 @@ var java_simulator = function() {
                     case '/': return {type: 'int', value: Math.floor(arg1v / arg2v)};
                     case '%': return {type: 'int', value: arg1v % arg2v};
                     case '=': arg1.value = arg2.value; return arg1;
+                    case '+=': arg1.value += arg2.value; return arg1;
+                    case '-=': arg1.value -= arg2.value; return arg1;
                     default: throw new Error("Unknown binary operator " + expr.operator);
                 }
             case 'postfix':
