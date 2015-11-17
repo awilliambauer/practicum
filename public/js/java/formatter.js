@@ -219,6 +219,12 @@ var java_formatter = function() {
                 elem.text(typeof node.value === 'number' ? node.value : '"' + node.value + '"');
                 break;
 
+            case 'paren_expr':
+                elem.append('(');
+                elem.append(to_dom(node.value, options, indent_level));
+                elem.append(')');
+                break;
+
             default:
                 throw new Error("unknown ast tag " + node.tag);
                 break;

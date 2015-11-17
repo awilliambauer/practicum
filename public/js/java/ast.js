@@ -28,6 +28,9 @@ var java_ast = function() {
             case 'postfix':
                 return node.args;
 
+            case 'paren_expr':
+                return [node.value];
+
             case 'call':
                 return [node.object].concat(node.args);
 
