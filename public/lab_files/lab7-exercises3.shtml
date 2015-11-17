@@ -29,10 +29,12 @@ public static void mystery(int[] a, int x, int y) {
 			<td>
 				<table class="expressiontable">
 					<tr>
-						<td class="expression"><code>int[] a = {0,
-							0,0,0};<br/>int x = 3;<br/>int y = 1;<br/>mystery(a, x, y);</code></td>
-						<td><input type="text" class="expressionanswer" size="22"
-								   spellcheck="false" /></td>
+						<td class="expression">
+							<code>int[] a = {0, 0, 0, 0};<br/>
+								int x = 3;<br/>
+								int y = 1;<br/>
+								mystery(a, x, y);</code>
+						</td>
 						<td>
 							<pre class="expressionsolution">{0, 0, 17, 42}</pre>
 							<pre class="ignore">[^0-9,]+</pre>
@@ -42,5 +44,36 @@ public static void mystery(int[] a, int x, int y) {
 			</td>
 		</tr>
 	</table>
+
+	<table class="arraytable">
+		<tr>
+			<th style="padding-right: 1em">index</th>
+			<th>0</th>
+			<th>1</th>
+			<th>2</th>
+			<th>3</th>
+		</tr>
+
+		<tr>
+			<th style="padding-right: 1em">value</th>
+			<td class="expressionarea">
+				<input type="text" value="" class="expressionanswer" size="3" />
+				<span class="expressionsolution">0</span>
+			</td>
+			<td class="expressionarea">
+				<input type="text" value="" class="expressionanswer" size="3" />
+				<span class="expressionsolution">0</span>
+			</td>
+			<td class="expressionarea">
+				<input type="text" value="" class="expressionanswer" size="3" />
+				<span class="expressionsolution">17</span>
+			</td>
+			<td class="expressionarea">
+				<input type="text" value="" class="expressionanswer" size="3" />
+				<span class="expressionsolution">42</span>
+			</td>
+		</tr>
+	</table>
+
 
 </div>
