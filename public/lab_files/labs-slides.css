@@ -130,19 +130,19 @@ ol label.almost,
 td.correct,
 ol label.correct,
 .expressionarea.correct {
-	background-image: url(images/correct.gif) !important;
+	background-image: url(lib/images/correct.gif) !important;
 }
 
 td.incorrect,
 ol label.incorrect,
 .expressionarea.incorrect {
-	background-image: url(images/incorrect.gif) !important;
+	background-image: url(lib/images/incorrect.gif) !important;
 }
 
 td.almost,
 ol label.almost,
 .expressionarea.almost {
-	background-image: url(images/incorrect.gif) !important;
+	background-image: url(lib/images/incorrect.gif) !important;
 }
 
 .mcresultimage {
