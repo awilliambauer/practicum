@@ -16,6 +16,9 @@ var java_simulator = function() {
         // HACK this only works for integers and booleans kinda!
         // FIXME add type checking and make it behave correctly for overloaded operators.
         switch (expr.tag) {
+            case 'paren_expr':
+                return evaluate_expression(context, expr.value);
+                break;
             case 'binop':
                 arg1 = evaluate_expression(context, expr.args[0]);
                 arg2 = evaluate_expression(context, expr.args[1]);
@@ -34,8 +37,7 @@ var java_simulator = function() {
                     case '+': return {type: 'int', value: arg1v + arg2v};
                     case '-': return {type: 'int', value: arg1v - arg2v};
                     case '*': return {type: 'int', value: arg1v * arg2v};
-                    // FIXME this probably doesn't do the correct thing for negatives
-                    case '/': return {type: 'int', value: Math.floor(arg1v / arg2v)};
+                    case '/': return {type: 'int', value: arg1v / arg2v < 0 ? Math.ceil(arg1v / arg2v) : Math.floor(arg1v / arg2v)};
                     case '%': return {type: 'int', value: arg1v % arg2v};
                     case '=': arg1.value = arg2.value; return arg1;
                     case '+=': arg1.value += arg2.value; return arg1;
