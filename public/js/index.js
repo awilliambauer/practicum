@@ -19,7 +19,7 @@ var csed = (function() {
     "use strict";
 
     var LOGGING_PORT = 5678;
-    var LOGGING_RELEASE_ID = '9f3a58f8-6ad8-11e5-ad05-cf9b2e7a722c';
+    var LOGGING_RELEASE_ID = '3ce21db8-b596-11e5-80a4-b73188311715';
 
     var enabledCategories;
     var categoryToLoad;
@@ -199,17 +199,21 @@ var csed = (function() {
         if (forceFading && $.isNumeric(forceFading)) {
             return parseInt(forceFading);
         }
-        if (numProblemsByCategory[category] === 1) {
-            return 0;
-        }
-        else if (numProblemsByCategory[category] <= 4) {
-            return 1;
-        }
-        else if (numProblemsByCategory[category] <= 6) {
-            return 2;
-        }
-        else {
-            return 3;
+        if (condition === 2) { // control is normal fading progression
+            if (numProblemsByCategory[category] === 1) {
+                return 0;
+            }
+            else if (numProblemsByCategory[category] <= 4) {
+                return 1;
+            }
+            else if (numProblemsByCategory[category] <= 6) {
+                return 2;
+            }
+            else {
+                return 3;
+            }
+        } else { // condition 1
+            return 1; // treatment is fixed fading level
         }
     }
 
@@ -425,7 +429,7 @@ var csed = (function() {
         server_savedata.consentResponse = data;
         Logging.save_user_data(server_savedata);
         updateConsentMessage();
-        checkForLabRedirect();
+        //checkForLabRedirect(); // not part of current experiment
     }
 
     function checkForLabRedirect() {
@@ -450,21 +454,21 @@ var csed = (function() {
     function determineEnabledCategories() {
         if (getQueryVariable("lab") === "true") {
             var labNo = getQueryVariable("labNo");
-            switch (labNo) {
+            switch (labNo) { // all labs using Practicum in current experiment
                 case "2":
-                    if (experimental_condition === 1) {
+                    //if (experimental_condition === 1) {
                         enabledCategories = ["lab2-expressions"];
-                    }
+                    //}
                     break;
                 case "4":
-                    if (experimental_condition === 1) {
+                    //if (experimental_condition === 1) {
                         enabledCategories = ["lab4-if_else"];
-                    }
+                    //}
                     break;
                 case "7":
-                    if (experimental_condition === 1) {
+                    //if (experimental_condition === 1) {
                         enabledCategories = ["lab7-array"];
-                    }
+                    //}
                     break;
                 default:
                     throw new Error("lab number " + labNo + " not supported");
@@ -524,7 +528,7 @@ $(document).ready(function() {
         if (!csed.hasRespondedToConsentForm()) {
             csed.showConsentFormModal(); // will check for lab redirect after consent response
         } else {
-            csed.checkForLabRedirect();
+            //csed.checkForLabRedirect(); // not part of current experiment
         }
 
         // set up home link

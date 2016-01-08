@@ -21,7 +21,7 @@ var Logging = (function() {
     var savedata;
 
     // HACK hooray hardcoded configuration
-    var EXPERIMENT_ID = '240c0a18-6ad4-11e5-b551-0f481f7c36e1';
+    var EXPERIMENT_ID = '4f5fd16a-b596-11e5-a59b-439e43f4c599';
 
     /// Initialize the logging system, fetching the user id and logging the session.
     /// This should be invoked before any other function.
