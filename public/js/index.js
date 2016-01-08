@@ -212,7 +212,7 @@ var csed = (function() {
             else {
                 return 3;
             }
-        } else {
+        } else { // condition 1
             return 1; // treatment is fixed fading level
         }
     }
@@ -528,7 +528,7 @@ $(document).ready(function() {
         if (!csed.hasRespondedToConsentForm()) {
             csed.showConsentFormModal(); // will check for lab redirect after consent response
         } else {
-            csed.checkForLabRedirect();
+            //csed.checkForLabRedirect(); // not part of current experiment
         }
 
         // set up home link
