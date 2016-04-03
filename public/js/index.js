@@ -19,7 +19,7 @@ var csed = (function() {
     "use strict";
 
     var LOGGING_PORT = 5678;
-    var LOGGING_RELEASE_ID = '3ce21db8-b596-11e5-80a4-b73188311715';
+    var LOGGING_RELEASE_ID = '9c62cfb4-f9eb-11e5-9b44-b346ec364aea';
 
     var enabledCategories;
     var categoryToLoad;
@@ -199,7 +199,7 @@ var csed = (function() {
         if (forceFading && $.isNumeric(forceFading)) {
             return parseInt(forceFading);
         }
-        if (condition === 2) { // control is normal fading progression
+        //if (condition === 2) { // control is normal fading progression
             if (numProblemsByCategory[category] === 1) {
                 return 0;
             }
@@ -212,9 +212,9 @@ var csed = (function() {
             else {
                 return 3;
             }
-        } else { // condition 1
-            return 1; // treatment is fixed fading level
-        }
+        //} else { // condition 1
+        //    return 1; // treatment is fixed fading level
+        //}
     }
 
     function CallbackObject() {
