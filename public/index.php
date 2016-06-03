@@ -122,7 +122,7 @@ $lab = $_GET["lab"];
             <div id="welcome">
                 <h2>Welcome to Practicum!</h2>
                 <p>
-                    On this site you can practice a problems related to introductory<br>programming
+                    On this site you can practice problems related to introductory<br>programming
                     through our in-depth learning environment.
                 </p>
 
