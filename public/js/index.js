@@ -390,13 +390,13 @@ var csed = (function() {
 
         d3.select("#age-input").on("input", function () {
             var age = d3.select("#age-input").property("value");
-            if ($.isNumeric(age) && Math.floor(age) > 17) {
-                // GUH. remove the attribute by passing null. Passing false leaves the attribute there,
-                //      which leaves the element disabled.
+            // if ($.isNumeric(age) && Math.floor(age) > 17) {
+            // GUH. remove the attribute by passing null. Passing false leaves the attribute there,
+            //      which leaves the element disabled.
                 d3.select("#consent-form-agree").attr("disabled", null);
-            } else {
-                d3.select("#consent-form-agree").attr("disabled", true);
-            }
+            // } else {
+            //    d3.select("#consent-form-agree").attr("disabled", true);
+            // }
         });
         $("#age-input").keypress(function(e){
             if(e.keyCode===13 && !d3.select("#consent-form-agree").attr("disabled")) {
