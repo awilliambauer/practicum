@@ -461,7 +461,8 @@ function ExpressionsHelper() {
     // operator is operator object returned by getFirst...FromLeft
     this.whatIsTheResultOfThisModulus = function(left, right, state, operator) {
         var resultCell = createNewLineWithResultCell(state, operator);
-        var result = left.value % right.value;
+        var l = new Big(left.value);
+        var result = Number(l.mod(right.value).valueOf());
         doStateUpdate(state, operator, result);
         resultCell.value = correctPrecision(result, left, right);
         resultCell.valueType = getResultType(state, operator);
@@ -472,7 +473,8 @@ function ExpressionsHelper() {
     // operator is operator object returned by getFirst...FromLeft
     this.whatIsTheResultOfThisDivision = function (left, right, state, operator) {
         var resultCell = createNewLineWithResultCell(state, operator);
-        var result = left.value / right.value;
+        var l = new Big(left.value);
+        var result = Number(l.div(right.value).valueOf());
         // check for integer division
         if (left.valType === "int" && right.valType === "int") {
             result = Math.floor(result);
@@ -487,7 +489,8 @@ function ExpressionsHelper() {
     // operator is operator object returned by getFirst...FromLeft
     this.whatIsTheResultOfThisMultiplication = function (left, right, state, operator) {
         var resultCell = createNewLineWithResultCell(state, operator);
-        var result = left.value * right.value;
+        var l = new Big(left.value);
+        var result = Number(l.times(right.value).valueOf());
         doStateUpdate(state, operator, result);
         resultCell.value = correctPrecision(result, left, right);
         resultCell.valueType = getResultType(state, operator);
@@ -498,7 +501,8 @@ function ExpressionsHelper() {
     // operator is operator object returned by getFirst...FromLeft
     this.whatIsTheResultOfThisAddition = function (left, right, state, operator) {
         var resultCell = createNewLineWithResultCell(state, operator);
-        var result = left.value + right.value;
+        var l = new Big(left.value);
+        var result = Number(l.plus(right.value).valueOf());
         // check for string concatenation
         if (left.valType === "string" || right.valType === "string") {
             result = left.asString() + right.asString();
@@ -513,7 +517,8 @@ function ExpressionsHelper() {
     // operator is operator object returned by getFirst...FromLeft
     this.whatIsTheResultOfThisSubtraction = function (left, right, state, operator) {
         var resultCell = createNewLineWithResultCell(state, operator);
-        var result = left.value - right.value;
+        var l = new Big(left.value);
+        var result = Number(l.minus(right.value).valueOf());
         doStateUpdate(state, operator, result);
         resultCell.value = correctPrecision(result, left, right);
         resultCell.valueType = getResultType(state, operator);
