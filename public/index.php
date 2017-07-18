@@ -53,6 +53,7 @@ $lab = $_GET["lab"];
     <!-- polyfill fetch for older browsers -->
     <script src="vendor/fetch/fetch.js"></script>
     <script src="vendor/papika.js"></script>
+    <script src="vendor/big.js"></script>
 
     <script src="js/logging.js"></script>
 
