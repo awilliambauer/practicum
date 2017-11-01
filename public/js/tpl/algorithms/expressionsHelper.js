@@ -501,11 +501,13 @@ function ExpressionsHelper() {
     // operator is operator object returned by getFirst...FromLeft
     this.whatIsTheResultOfThisAddition = function (left, right, state, operator) {
         var resultCell = createNewLineWithResultCell(state, operator);
-        var l = new Big(left.value);
-        var result = Number(l.plus(right.value).valueOf());
+        var result;
         // check for string concatenation
         if (left.valType === "string" || right.valType === "string") {
             result = left.asString() + right.asString();
+        } else {
+            var l = new Big(left.value);
+            result = Number(l.plus(right.value).valueOf());
         }
         doStateUpdate(state, operator, result);
         resultCell.value = correctPrecision(result, left, right);
