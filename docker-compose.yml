@@ -8,7 +8,7 @@ services:
       - pgdb
     environment:
       - SHA
-#      - HTTPSPORT
+      - PORT
       - DOMAIN
     volumes:
       - server_keys:/var/keys
@@ -16,8 +16,9 @@ services:
       - /tmp:/tmp
     security_opt:
       - label:disable # disable SELinux for Shibboleth
-#    ports:
-#      - "$HTTPSPORT:$HTTPSPORT"
+    ports:
+    - "${PORT}:443"
+    - "12080:80"
   pgdb:
     restart: always
     image: postgres:9.3.24

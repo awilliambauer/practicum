@@ -2,8 +2,8 @@ version: '2'
 services:
   web:
     volumes:
-      - /webkeys/intro-exams-staging:/var/keys
+      - /webkeys/practicum-staging:/var/keys
   shibd:
     volumes:
-      - /webkeys/intro-exams-staging:/var/keys
+      - /webkeys/practicum-staging:/var/keys
 
