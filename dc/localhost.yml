@@ -1,0 +1,11 @@
+# What else is needed for local development?
+
+version: '2'
+services:
+  web:
+    # This volume linking lets me use the (host) version of the bundles (in ./public) inside
+    # the docker container. Makes it so we don't have to restart the container every time
+    # we want to change anything inside.
+    volumes:
+    - /Users/whitab/projects/intro-exam-frontend/public:/srv/exams/public
+    - /Users/whitab/projects/intro-exam-frontend/server:/srv/exams/server
