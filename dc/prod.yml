@@ -12,17 +12,17 @@ services:
       - /webkeys/practicum:/var/keys
       - /etc/hostname:/etc/hostname_docker
       - /tmp:/tmp
-  shibd:
-    restart: always
-    build: containers/shibd
+  #shibd:
+  #  restart: always
+  #  build: containers/shibd
     # This MUST be incremented whenever changes are made to the shibd image,
     # else they won't be deployed.
     # It also MUST match what is specified in .gitlab-ci.yml
-    environment:
-      - DOMAIN
-      - SHIBBOLETH_SP_ENTITYID=https://${DOMAIN}/
-      - CONTACT_EMAIL=practicum@cs.uw.edu
-    volumes:
-      - /webkeys/practicum:/var/keys
+  #  environment:
+  #    - DOMAIN
+  #    - SHIBBOLETH_SP_ENTITYID=https://${DOMAIN}/
+  #    - CONTACT_EMAIL=practicum@cs.uw.edu
+  #  volumes:
+  #    - /webkeys/practicum:/var/keys
 # HEY, YOU!  Did you just add a new service to this file?
 # Don't forget to also add it to .gitlab-ci.yml

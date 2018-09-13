@@ -22,7 +22,7 @@ stages:
   except:
     - tags
   only:
-    - staging@cse14x/csedresearch
+    - staging@csedresearch/csedresearch
   tags:
     - staging
   variables:
@@ -33,7 +33,7 @@ stages:
   except:
     - tags
   only:
-    - master@cse14x/csedresearch
+    - master@csedresearch/csedresearch
   tags:
     - prod
 
@@ -52,7 +52,7 @@ stages:
 .build:web: &build_web
   stage: build
   script:
-    - export HTTPSPORT=54321
+    - export PORT=54321 # doesn't matter, just needs to be set to something to satisify docker-compose * commands
     - CONFIG_STACK="-f docker-compose.yml -f dc/prod.yml -f dc/registry.yml"
     # Try to pull from registry if possible
     - if docker-compose ${CONFIG_STACK} pull web; then exit; fi
@@ -63,7 +63,7 @@ stages:
 .build:shibd: &build_shibd
   stage: build
   script:
-    - export HTTPSPORT=54321
+    - export PORT=54321 # doesn't matter, just needs to be set to something to satisify docker-compose * commands
     - CONFIG_STACK="-f docker-compose.yml -f dc/prod.yml -f dc/registry.yml"
     # Try to pull from registry if possible
     - if docker-compose ${CONFIG_STACK} pull shibd; then exit; fi
