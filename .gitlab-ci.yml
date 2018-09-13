@@ -52,7 +52,8 @@ stages:
 .build:web: &build_web
   stage: build
   script:
-    - export PORT=54321 # doesn't matter, just needs to be set to something to satisify docker-compose * commands
+    - export PORT=54321 # doesn't matter, just needs to be set to something to satisfy docker-compose * commands
+    - export HTTPPORT=54380 # doesn't matter, just needs to be set to something to satisfy docker-compose * commands
     - CONFIG_STACK="-f docker-compose.yml -f dc/prod.yml -f dc/registry.yml"
     # Try to pull from registry if possible
     - if docker-compose ${CONFIG_STACK} pull web; then exit; fi
@@ -63,7 +64,8 @@ stages:
 .build:shibd: &build_shibd
   stage: build
   script:
-    - export PORT=54321 # doesn't matter, just needs to be set to something to satisify docker-compose * commands
+    - export PORT=54321 # doesn't matter, just needs to be set to something to satisfy docker-compose * commands
+    - export HTTPPORT=54380 # doesn't matter, just needs to be set to something to satisfy docker-compose * commands
     - CONFIG_STACK="-f docker-compose.yml -f dc/prod.yml -f dc/registry.yml"
     # Try to pull from registry if possible
     - if docker-compose ${CONFIG_STACK} pull shibd; then exit; fi

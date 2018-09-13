@@ -12,11 +12,6 @@ services:
       - /webkeys/practicum:/var/keys
       - /etc/hostname:/etc/hostname_docker
       - /tmp:/tmp
-    ports:
-      # the 443 port is specified through an env variable via docker-compose.yml.
-      # This is just to get the prod and staging a way to redirect http traffic to https
-      # could have instr docker do this, too... hm...
-      - "12080:80"
 
     #shibd:
   #  restart: always
