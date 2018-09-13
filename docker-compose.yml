@@ -17,8 +17,11 @@ services:
     security_opt:
       - label:disable # disable SELinux for Shibboleth
     ports:
-    - "${PORT}:443"
-    - "11080:80"
+      # These stupid environment variables... You can't use the values from the section above,
+      # these have to come from the Dockerfile environment, or whatever shell is running docker-compose.
+      # See weirdness in some .gitlab-ci.yml build steps where we are setting env variables
+      - "${PORT}:443"
+      - "${HTTPPORT}:80"
   pgdb:
     restart: always
     image: postgres:9.3.24

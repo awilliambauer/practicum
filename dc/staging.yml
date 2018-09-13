@@ -3,11 +3,6 @@ services:
   web:
     volumes:
       - /webkeys/practicum-staging:/var/keys
-    ports:
-      # the 443 port is specified through an env variable via docker-compose.yml.
-      # This is just to get the prod and staging a way to redirect http traffic to https
-      # could have instr docker do this, too... hm...
-      - "13080:80"
 
   shibd:
     volumes:
