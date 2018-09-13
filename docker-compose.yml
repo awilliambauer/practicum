@@ -18,7 +18,7 @@ services:
       - label:disable # disable SELinux for Shibboleth
     ports:
     - "${PORT}:443"
-    - "12080:80"
+    - "11080:80"
   pgdb:
     restart: always
     image: postgres:9.3.24
