@@ -1,0 +1,117 @@
+###################################
+# GitLab CI script
+#
+# This file defines the CI logic.
+before_script:
+  - ( [ -e ~/.env ] ) && source ~/.env
+  - env | grep -v '^SECRET_'
+  - docker info
+  # These must be exported
+  - export SHA="${CI_COMMIT_SHA}" COMPOSE_PROJECT_NAME
+  - docker login -u gitlab-runner -p "${SECRET_REGISTRY_PWD}" registry.gradeit-build.cs.washington.edu
+
+variables:
+  COMPOSE_HTTP_TIMEOUT: "180"
+
+stages:
+  - build
+  - deploy
+
+# Filter for commits tagged with
+.staging:filter: &staging_filter
+  except:
+    - tags
+  only:
+    - staging@cse14x/csedresearch
+  tags:
+    - staging
+  variables:
+    COMPOSE_PROJECT_NAME: "practicum-staging"
+
+# Filter for all master commits. When we commit to master, gotta run a build to get ready for a deployment.
+.master:filter: &master_filter
+  except:
+    - tags
+  only:
+    - master@cse14x/csedresearch
+  tags:
+    - prod
+
+# Filter for production deployments.
+.prod:filter: &prod_filter
+  only:
+    - /^prod-.*$/
+  except:
+    - branches
+  tags:
+    - prod
+  variables:
+    COMPOSE_PROJECT_NAME: "practicum"
+
+# Templates:
+.build:web: &build_web
+  stage: build
+  script:
+    - export HTTPSPORT=54321
+    - CONFIG_STACK="-f docker-compose.yml -f dc/prod.yml -f dc/registry.yml"
+    # Try to pull from registry if possible
+    - if docker-compose ${CONFIG_STACK} pull web; then exit; fi
+    # Else build and push to registry
+    - docker-compose ${CONFIG_STACK} build web
+    - docker-compose ${CONFIG_STACK} push web
+
+.build:shibd: &build_shibd
+  stage: build
+  script:
+    - export HTTPSPORT=54321
+    - CONFIG_STACK="-f docker-compose.yml -f dc/prod.yml -f dc/registry.yml"
+    # Try to pull from registry if possible
+    - if docker-compose ${CONFIG_STACK} pull shibd; then exit; fi
+    # Else build and push to registry
+    - docker-compose ${CONFIG_STACK} build shibd
+    - docker-compose ${CONFIG_STACK} push shibd
+
+
+staging_build_web:
+  <<: *staging_filter
+  <<: *build_web
+
+staging_build_shibd:
+  <<: *staging_filter
+  <<: *build_shibd
+
+staging:deploy:
+  <<: *staging_filter
+  stage: deploy
+  script:
+    - CONFIG_STACK="-f docker-compose.yml -f dc/prod.yml -f dc/staging.yml -f dc/registry.yml"
+    - source env/staging.env
+    - docker-compose ${CONFIG_STACK} pull
+    - docker-compose ${CONFIG_STACK} up --no-build -d
+  environment:
+    name: staging
+    url: https://practicum-staging.cs.washington.edu/
+  retry: 2
+
+
+
+master_build_web:
+  <<: *master_filter
+  <<: *build_web
+
+master_build_shibd:
+  <<: *master_filter
+  <<: *build_shibd
+
+prod:deploy:
+  <<: *prod_filter
+  stage: deploy
+  script:
+    - CONFIG_STACK="-f docker-compose.yml -f dc/prod.yml -f dc/registry.yml"
+    - source env/prod.env
+    - docker-compose ${CONFIG_STACK} pull
+    - docker-compose ${CONFIG_STACK} up --no-build -d
+  environment:
+    name: prod
+    url: https://practicum.cs.washington.edu/
+  retry: 2

@@ -1,0 +1,7 @@
+# Adjusts service images to exist in gradeit-build registry
+version: '2'
+services:
+  web:
+    image: registry.gradeit-build.cs.washington.edu/exams_web:git${SHA}
+  shibd:
+    image: registry.gradeit-build.cs.washington.edu/uwcse_shibd:v2018-05-18

@@ -1,0 +1,34 @@
+version: '2'
+services:
+  web:
+    restart: always
+    build: .
+    image: practicum_web:git${SHA}
+    depends_on:
+      - pgdb
+    environment:
+      - SHA
+#      - HTTPSPORT
+      - DOMAIN
+    volumes:
+      - server_keys:/var/keys
+      - /etc/hostname:/etc/hostname_docker
+      - /tmp:/tmp
+    security_opt:
+      - label:disable # disable SELinux for Shibboleth
+#    ports:
+#      - "$HTTPSPORT:$HTTPSPORT"
+  pgdb:
+    restart: always
+    image: postgres:9.3.24
+#    environment:
+#      - MONGO_DATA_DIR=/data/db
+#      - MONGO_LOG_DIR=/dev/null
+    volumes:
+      - pgsql_home:/var/lib/pgsql
+#    command: mongod --smallfiles --logpath=/dev/null # --quiet
+volumes:
+  server_keys:
+      driver: local
+  pgsql_home:
+    driver: local
