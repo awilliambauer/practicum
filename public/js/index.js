@@ -32,7 +32,7 @@ var csed = (function() {
     var numProblemsByCategory;
     var problemIdsByCategory;
 
-    var ENABLE_TELEMETRY_LOGGING = true;
+    var ENABLE_TELEMETRY_LOGGING = false;
 
     function setupLogging(username) {
         if (ENABLE_TELEMETRY_LOGGING) {
@@ -70,6 +70,17 @@ var csed = (function() {
                 console.info('successfully started logging session');
             });
         } else {
+            // use local storage
+            numProblemsByCategory = (window.localStorage.numProblemsByCategory && JSON.parse(window.localStorage.numProblemsByCategory)) || {
+                expressions: 0,
+                if_else: 0,
+                array: 0
+            }
+            problemIdsByCategory = (window.localStorage.problemIdsByCategory && JSON.parse(window.localStorage.problemIdsByCategory)) || {
+                expressions: [],
+                if_else: [],
+                array: []
+            }
             return new Promise(function(resolve) { resolve(); } );
         }
     }
@@ -180,7 +191,7 @@ var csed = (function() {
             problemIdsByCategory[problemConfig.category].push(problemConfig.id);
         }
 
-        if (server_savedata === null) {
+        if (server_savedata == null) {
             server_savedata = {
                 numProblemsByCategory: numProblemsByCategory,
                 problemIdsByCategory: problemIdsByCategory
@@ -359,78 +370,78 @@ var csed = (function() {
         return $("#__username").text();
     }
 
-    function hasRespondedToConsentForm() {
-        return server_savedata && server_savedata.hasOwnProperty("consentResponse");
-    }
-
-    function getConsentFormResponse() {
-        return JSON.parse(server_savedata.consentResponse).response.toUpperCase();
-    }
-
-    function showConsentFormModal() {
-        // go modal
-        var m = $("#consent-form-modal");
-        m.modal({
-              keyboard: false,
-              backdrop: 'static'
-        });
-        m.modal("show");
-    }
+    // function hasRespondedToConsentForm() {
+    //     return server_savedata && server_savedata.hasOwnProperty("consentResponse");
+    // }
+    //
+    // function getConsentFormResponse() {
+    //     return JSON.parse(server_savedata.consentResponse).response.toUpperCase();
+    // }
+    //
+    // function showConsentFormModal() {
+    //     // go modal
+    //     var m = $("#consent-form-modal");
+    //     m.modal({
+    //           keyboard: false,
+    //           backdrop: 'static'
+    //     });
+    //     m.modal("show");
+    // }
 
     // Fill out the flash-style message and show it, if they've responded:
-    function updateConsentMessage() {
-        if (csed.hasRespondedToConsentForm()) {
-            d3.select("#consent-status").text(csed.getConsentFormResponse());
-            d3.select("#consent-existed-message").classed("hidden", false);
-        }
-    }
+    // function updateConsentMessage() {
+    //     if (csed.hasRespondedToConsentForm()) {
+    //         d3.select("#consent-status").text(csed.getConsentFormResponse());
+    //         d3.select("#consent-existed-message").classed("hidden", false);
+    //     }
+    // }
 
-    function installConsentFormModal() {
-        updateConsentMessage();
+    // function installConsentFormModal() {
+    //     updateConsentMessage();
+    //
+    //     d3.select("#age-input").on("input", function () {
+    //         var age = d3.select("#age-input").property("value");
+    //         // if ($.isNumeric(age) && Math.floor(age) > 17) {
+    //         // GUH. remove the attribute by passing null. Passing false leaves the attribute there,
+    //         //      which leaves the element disabled.
+    //             d3.select("#consent-form-agree").attr("disabled", null);
+    //         // } else {
+    //         //    d3.select("#consent-form-agree").attr("disabled", true);
+    //         // }
+    //     });
+    //     $("#age-input").keypress(function(e){
+    //         if(e.keyCode===13 && !d3.select("#consent-form-agree").attr("disabled")) {
+    //             $('#consent-form-agree').click();
+    //         }
+    //     });
+    // }
 
-        d3.select("#age-input").on("input", function () {
-            var age = d3.select("#age-input").property("value");
-            // if ($.isNumeric(age) && Math.floor(age) > 17) {
-            // GUH. remove the attribute by passing null. Passing false leaves the attribute there,
-            //      which leaves the element disabled.
-                d3.select("#consent-form-agree").attr("disabled", null);
-            // } else {
-            //    d3.select("#consent-form-agree").attr("disabled", true);
-            // }
-        });
-        $("#age-input").keypress(function(e){
-            if(e.keyCode===13 && !d3.select("#consent-form-agree").attr("disabled")) {
-                $('#consent-form-agree').click();
-            }
-        });
-    }
+    // function sendConsentFormAgree() {
+    //     sendConsentFormResponse($("#__consent-form-agree-data").text());
+    // }
+    //
+    // function sendConsentFormDisagree() {
+    //     sendConsentFormResponse($("#__consent-form-disagree-data").text());
+    // }
+    //
+    // function sendConsentFormResponse(data) {
+    //     console.log("Sending consent data: " + data);
+    //
+    //     Logging.log_event_with_promise({
+    //         type: Logging.ID.Consent,
+    //         detail: data
+    //     }, true).then(function() {
+    //         console.info("successfully logged consent response.");
+    //         consentFormResponseSuccess(data);
+    //     });
+    // }
 
-    function sendConsentFormAgree() {
-        sendConsentFormResponse($("#__consent-form-agree-data").text());
-    }
-
-    function sendConsentFormDisagree() {
-        sendConsentFormResponse($("#__consent-form-disagree-data").text());
-    }
-
-    function sendConsentFormResponse(data) {
-        console.log("Sending consent data: " + data);
-
-        Logging.log_event_with_promise({
-            type: Logging.ID.Consent,
-            detail: data
-        }, true).then(function() {
-            console.info("successfully logged consent response.");
-            consentFormResponseSuccess(data);
-        });
-    }
-
-    function consentFormResponseSuccess(data) {
-        server_savedata.consentResponse = data;
-        Logging.save_user_data(server_savedata);
-        updateConsentMessage();
-        //checkForLabRedirect(); // not part of current experiment
-    }
+    // function consentFormResponseSuccess(data) {
+    //     server_savedata.consentResponse = data;
+    //     Logging.save_user_data(server_savedata);
+    //     updateConsentMessage();
+    //     //checkForLabRedirect(); // not part of current experiment
+    // }
 
     function checkForLabRedirect() {
         if (getQueryVariable("lab") === "true" && experimental_condition === 2) {
@@ -482,17 +493,17 @@ var csed = (function() {
         "addProblemsToNav": addProblemsToNav,
         "addProblemsContentToLandingPage": addProblemsContentToLandingPage,
         "getUsername": getUsername,
-        "hasRespondedToConsentForm": hasRespondedToConsentForm,
-        "getConsentFormResponse": getConsentFormResponse,
+        // "hasRespondedToConsentForm": hasRespondedToConsentForm,
+        // "getConsentFormResponse": getConsentFormResponse,
         "hasProblemToLoad": hasProblemToLoad,
-        "installConsentFormModal": installConsentFormModal,
+        // "installConsentFormModal": installConsentFormModal,
         "getProblemToLoad": getProblemToLoad,
         "loadProblem": loadProblem,
-        "sendConsentFormAgree": sendConsentFormAgree,
-        "sendConsentFormDisagree": sendConsentFormDisagree,
+        // "sendConsentFormAgree": sendConsentFormAgree,
+        // "sendConsentFormDisagree": sendConsentFormDisagree,
         "setProblemToLoad": setProblemToLoad,
         "setupLogging": setupLogging,
-        "showConsentFormModal": showConsentFormModal,
+        // "showConsentFormModal": showConsentFormModal,
         "showHome": showHome,
         "checkForLabRedirect": checkForLabRedirect,
         "determineEnabledCategories": determineEnabledCategories
@@ -524,12 +535,12 @@ $(document).ready(function() {
 
     // start logging system
     csed.setupLogging(username).then(function() {
-        csed.installConsentFormModal();
-        if (!csed.hasRespondedToConsentForm()) {
-            csed.showConsentFormModal(); // will check for lab redirect after consent response
-        } else {
-            //csed.checkForLabRedirect(); // not part of current experiment
-        }
+        // csed.installConsentFormModal();
+        // if (!csed.hasRespondedToConsentForm()) {
+        //     csed.showConsentFormModal(); // will check for lab redirect after consent response
+        // } else {
+        //     //csed.checkForLabRedirect(); // not part of current experiment
+        // }
 
         // set up home link
         d3.select("#home-link")
@@ -538,12 +549,7 @@ $(document).ready(function() {
         csed.determineEnabledCategories();
 
         // pull in problems
-        var categoryJSON = $("#category-config").html();
-        if (!categoryJSON) {
-            console.error("Unable to load problem configuration: need .../public/categoryConfig.json");
-        } else {
-            var categoryConfig = JSON.parse(categoryJSON);
-
+        $.getJSON("include/categoryConfig.json", function (categoryConfig) {
             if (!categoryConfig) {
                 console.error("Unable to load problem configuration: need .../public/categoryConfig.json");
             } else {
@@ -565,7 +571,10 @@ $(document).ready(function() {
                     csed.showHome();
                 }
             }
-        }
+        })
+        .fail(function () {
+            console.error("Unable to load problem configuration: need .../public/categoryConfig.json");
+        });
     }, function(error) {
         console.error(error);
         // if logging fails, just terminate initialization and print an error message

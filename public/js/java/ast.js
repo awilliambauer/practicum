@@ -8,7 +8,7 @@ var java_ast = function() {
     // - visit all nodes/statements/expressions
 
     /// Returns an array of all direct child nodes of this node.
-    /// Useful for functions that need to recusively explore all nodes.
+    /// Useful for functions that need to recursively explore all nodes.
     function children_of(node) {
         switch (node.tag) {
             case 'method':

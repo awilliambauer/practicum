@@ -15,71 +15,34 @@ var Logging = (function() {
         BottomOutHint: 16,
     };
 
-    var telemetry_client;
-    var userid;
-    var condition;
-    var savedata;
-
-    // HACK hooray hardcoded configuration
-    var EXPERIMENT_ID = 'a4ccc3bc-f9eb-11e5-be11-6b17f2b2a73e';
-
-    /// Initialize the logging system, fetching the user id and logging the session.
+    /// Initialize the logging system
     /// This should be invoked before any other function.
-    /// Will return a promise with the following items:
-    /// - saved user data
-    /// - experimental condition
     /// No other logging functions should be called unless this succeeds.
-    self.initialize = function(base_uri, release_id, username) {
-        telemetry_client = papika.TelemetryClient(base_uri, release_id, '');
-
-        return telemetry_client.query_user_id({username:username})
-            .then(function(_userid) {
-                userid = _userid;
-                return telemetry_client.log_session({
-                    user: userid,
-                    detail: null
-                });
-            }).then(function() {
-                return telemetry_client.query_user_data({user:userid});
-            }).then(function(_savedata) {
-                savedata = _savedata;
-                return telemetry_client.query_experimental_condition({user:userid, experiment:EXPERIMENT_ID});
-            }).then(function(_condition) {
-                condition = _condition;
-            }).then(function() {
-                return {
-                    condition: condition,
-                    savedata: savedata
-                };
-            });
+    self.initialize = function(filename, release_id, username) {
+        // TODO
     };
 
     self.save_user_data = function(savedata) {
-        return telemetry_client.save_user_data({user:userid, savedata:savedata});
+       for (const k in savedata) {
+           window.localStorage[k] = JSON.stringify(savedata[k]);
+       }
     };
 
-    /// Logs a (non-task) event and returns a promise that is fulfilled when the event is scuessfully logged.
+    /// Logs a (non-task) event and returns a promise that is fulfilled when the event is successfully logged.
     self.log_event_with_promise = function(data) {
-        data.category = 0; // dummy category to conform to updated protocol
-        return telemetry_client.log_event(data, true);
+        // TODO
     };
 
     /// Starts a task.
     /// The returned object should be passed to log_task_event as the first argument.
     self.start_task = function(problemConfig) {
-        return telemetry_client.start_task({
-            type: self.ID.TaskStart,
-            detail: null,
-            group: problemConfig.id,
-            category: 0 // dummy category to conform to updated protocol
-        });
+        // TODO
     };
 
     /// Logs a task event.
     /// `task_logger` should be the object returned by start_task.
     self.log_task_event = function(task_logger, data) {
-        data.category = 0; // dummy category to conform to updated protocol
-        task_logger.log_event(data);
+        // TODO
     };
 
     return self;
