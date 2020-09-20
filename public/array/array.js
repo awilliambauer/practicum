@@ -554,6 +554,7 @@ var array = (function() {
         d3.selectAll(".bank_variable_array_value").each(function () {
             d3.select(this)
                 .classed("clickable", true)
+                .attr("tabindex", 0)
                 .on("click", function() {
                     // highlight this line
                     d3.select(this).classed("array_element_highlight", true);
@@ -561,11 +562,18 @@ var array = (function() {
                     d3.selectAll(".clickable").each(function() {
                         d3.select(this)
                             .classed("clickable", false)
+                            .attr("tabindex", null)
                             .on("click", null)
+                            .on("keydown", null)
                         ;
                     });
                     // call step to respond to the user answer
                     step();
+                })
+                .on("keydown", function() {
+                    if (d3.event.keyCode === 32) {
+                        this.click();
+                    }
                 })
             ;
         });
@@ -618,6 +626,7 @@ var array = (function() {
         d3.selectAll(".java-line").each(function () {
             d3.select(this)
                 .classed("clickable", true)
+                .attr("tabindex", 0)
                 .on("click", function() {
                     // highlight this line
                     d3.select(this).classed("line_highlight", true);
@@ -625,11 +634,18 @@ var array = (function() {
                     d3.selectAll(".clickable").each(function() {
                         d3.select(this)
                             .classed("clickable", false)
+                            .attr("tabindex", null)
                             .on("click", null)
+                            .on("keydown", null)
                         ;
                     });
                     // call step to respond to the user answer
                     step();
+                })
+                .on("keydown", function() {
+                    if (d3.event.keyCode === 32) {
+                        this.click();
+                    }
                 })
             ;
         });

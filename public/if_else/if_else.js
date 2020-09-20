@@ -419,6 +419,7 @@ var if_else = (function() {
             var newClassList = currentClassList + " clickable";
             d3.select(this)
                 .attr("class", newClassList)
+                .attr("tabindex", 0)
                 .on("click", function() {
                     // highlight this line
                     d3.select(this).classed("highlight", true);
@@ -426,11 +427,18 @@ var if_else = (function() {
                     d3.selectAll(".clickable").each(function() {
                         d3.select(this)
                             .classed("clickable", false)
+                            .attr("tabindex", null)
                             .on("click", null)
+                            .on("keydown", null)
                         ;
                     });
                     // call step to respond to the user answer
                     step();
+                })
+                .on("keydown", function() {
+                    if (d3.event.keyCode === 32) {
+                        this.click();
+                    }
                 })
             ;
         });
