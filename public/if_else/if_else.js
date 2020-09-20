@@ -675,6 +675,8 @@ var if_else = (function() {
         $("#inputBox").on("animationend", function () {$("#inputBox").attr("class", "");});
         if (correct) {
             d3.select("#inputBox").attr("class", "correct");
+            d3.select("#correctHeader").classed("hidden", false);
+            d3.select("#incorrectHeader").classed("hidden", true);
             if (config.content.variants && config.content.variants.some(function (v) { return !v.started; })) {
                 d3.select("#newVariant").classed("hidden", false);
             }
@@ -685,6 +687,8 @@ var if_else = (function() {
             //    .transition().duration(600).style('background-color', '')
         }
         else {
+            d3.select("#incorrectHeader").classed("hidden", false);
+            d3.select("#correctHeader").classed("hidden", true);
             d3.select("#inputBox").attr("class", "incorrect");
         }
 
