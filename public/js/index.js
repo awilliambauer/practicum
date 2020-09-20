@@ -32,6 +32,8 @@ var csed = (function() {
     var numProblemsByCategory;
     var problemIdsByCategory;
 
+    var fading_level = 3;
+
     var ENABLE_TELEMETRY_LOGGING = false;
 
     function setupLogging(username) {
@@ -205,6 +207,30 @@ var csed = (function() {
         Logging.save_user_data(server_savedata);
     }
 
+    function setFadingLevel() {
+        var forceFading = getQueryVariable("fading");
+        if (forceFading && $.isNumeric(forceFading)) {
+            return parseInt(forceFading);
+        }
+
+        var selection = $('#fading-level').find(":selected").val();
+
+        console.log("selection", selection);
+
+        if (selection === 'no-choice') {
+            fading_level = 3;
+        }
+        else if (selection === 'easy') {
+            fading_level = 0;
+        }
+        else if (selection === 'medium') {
+            fading_level = 1;
+        }
+        else if (selection === 'hard') {
+            fading_level = 2;
+        }
+    }
+
     function getFadingLevel(condition, category) {
         var forceFading = getQueryVariable("fading");
         if (forceFading && $.isNumeric(forceFading)) {
@@ -293,11 +319,15 @@ var csed = (function() {
 
             // calculate what fading level the user should see for this problem, based on their
             // experimental condition and the number of problems they have completed
-            var fadeLevel = getFadingLevel(experimental_condition, category);
+            setFadingLevel();
 
+            if (fading_level === 3) {
+                fading_level = getFadingLevel(experimental_condition, category);
+            }
+            console.log(fading_level);
             // This problemUI initialize call probably needs to happen after the main_sim init call,
             // which is handled by promises/then() with fetch.
-            problemUI.initialize(problemConfig, new CallbackObject(), initial_state, task_logger, fadeLevel);
+            problemUI.initialize(problemConfig, new CallbackObject(), initial_state, task_logger, fading_level);
         });
     }
 
