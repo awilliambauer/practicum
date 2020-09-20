@@ -28,6 +28,7 @@ lightest green: #E5FCC2
 
 /* This references animations defined in bootstrap-expressions.css */
 .array_mystery_problem input[type="text"].correct {
+    background-color: #339944;
     animation-name: correctExpression;
     animation-duration: 2s;
     -webkit-animation-name: correctExpression;
@@ -37,6 +38,7 @@ lightest green: #E5FCC2
 
 /* This references animations defined in bootstrap-expressions.css */
 .array_mystery_problem input[type="text"].incorrect {
+    background-color: red;
     animation-name: incorrectExpression;
     animation-duration: 2s;
     -webkit-animation-name: incorrectExpression;
