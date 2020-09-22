@@ -1,5 +1,5 @@
 function TPLAlgorithm() {
-    let theseAreTheIfElseBlocks;
+    let theseAreTheIfElseBlocksForThisProblem;
     let theseAreTheParameters:arguments;
     let addTheParametersToTheVariableBank:variableBank;
     let thisIsTheNextLineThatWillExecute:codeLine;
@@ -15,7 +15,7 @@ function TPLAlgorithm() {
 
     [prompt]
     "First, look at the structure of the code. The structure tells us what kind of problem we are looking at.";
-    theseAreTheIfElseBlocks = helper.getIfElseBlocks(AST);
+    theseAreTheIfElseBlocksForThisProblem = helper.getIfElseBlocks(AST);
 
     [prompt]
     "Next, look at the method call.";
