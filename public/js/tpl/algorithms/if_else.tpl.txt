@@ -14,7 +14,7 @@ function TPLAlgorithm() {
     AST = state.AST;
 
     [prompt]
-    "First, look at the structure of the code in the problem.";
+    "First, look at the structure of the code. The structure tells us what kind of problem we are looking at.";
     theseAreTheIfElseBlocks = helper.getIfElseBlocks(AST);
 
     [prompt]
