@@ -41,7 +41,7 @@ var java_parsing = function() {
         /// Advance the stream, returning the next character.
         self.next = function() {
             var c = str.charAt(bufidx);
-            if (c == "\n") {
+            if (c === "\n") {
                 line++;
                 col = 0;
             } else {
@@ -54,6 +54,22 @@ var java_parsing = function() {
         /// The position of the _next_ character in the stream.
         self.position = function() {
             return {line:line, col:col};
+        };
+
+        self.last = function() {
+            // HACK assume we are not retreating a line
+            if (str.charAt(bufidx) === "\n") return undefined;
+            bufidx--;
+            var c = str.charAt(bufidx);
+            col--;
+            return c;
+        }
+
+        self.rewind = function(num_steps) {
+            for (let i = 0; i < num_steps; i++) {
+                let c = self.last();
+                if (c === undefined) return false;
+            }
         };
 
         return self;
@@ -121,7 +137,7 @@ var java_parsing = function() {
         self.iseof = iseof;
 
         function isspace(c) {
-            return c == ' ' || c == '\t' || c == '\r' || c == '\n';
+            return c === ' ' || c === '\r' || c === '\n';
         }
 
         function isalpha(c) {
@@ -297,17 +313,17 @@ var java_parsing = function() {
         function match_block(indent_level) {
             var stmts = [];
             // first line in block must be fully indented
-            for (var i = 1; i <= indent_level; i++) {
+            for (let i = 1; i <= indent_level; i++) {
                 match_symbol("\t");
             }
             stmts.push(match_statement(indent_level));
             // match_symbol("{");
             while (true) {
-                for (var i = 1; i <= indent_level; i++) {
-                    // first line after block must have one less indent
-                    if (i == indent_level && !peek_symbol("\t")) {
-                        // TODO: reset progress in current line
-                        // TODO: handle EOF for line after top-level method
+                if (indent_level === 1 && peek_eof()) return stmts;
+                for (let i = 0; i < indent_level; i++) {
+                    // first line after block must have one less indent OR be eof at level 1
+                    if (i === indent_level - 1 && !peek_symbol("\t")) {
+                        lex.rewind(i)
                         return stmts;
                     }
                     match_symbol("\t")
@@ -364,7 +380,7 @@ var java_parsing = function() {
                 location: location(start),
                 tag:'for',
                 variable: variable,
-                iterable: iter,
+                iterable: iter, // TODO: whatever handles this in the simulator needs updating
                 body: body
             };
         }
@@ -589,6 +605,10 @@ var java_parsing = function() {
         function peek_token(expected_type, expected_value) {
             var t = lex.peek();
             return t.type === expected_type && t.value === expected_value;
+        }
+
+        function peek_eof() {
+            return lex.iseof();
         }
 
         self.parse_program = function() {
