@@ -94,24 +94,26 @@ var java_parsing = function() {
 
         // these are all dicts because javascript doesn't have sets, boo
         var keywords = {
-            "class":1, "public":1, "static":1,
-            "void":1, "int":1,
-            "for":1, "if":1, "else":1
+            // "class":1, "public":1, "static":1,
+            // "void":1, "int":1,
+            "def":1,
+            "for":1, "in":1, "if":1, "else":1
         };
 
         var symbols = {
-            "[":1, "]":1, "{":1, "}":1, "(":1, ")":1,
+            "[":1, "]":1, "{":1, "}":1, "(":1, ")":1, ":":1,
             "=":1, ";":1, ".":1, ",":1,
             "<":1, ">":1, "<=":1, ">=":1, "==":1, "!=":1,
             "+":1, "-":1, "*":1, "/":1, "!":1, "%":1,
             "+=":1, "-=":1, "*=":1, "/=":1, "%=":1,
             "++":1, "--":1,
             "&":1, "|":1, "&&":1, "||":1,
+            "\t":1
         };
 
-        var text_start_chars = {
-            ":":1, "*":1, "$":1
-        };
+        // var text_start_chars = {
+        //     ":":1, "*":1, "$":1
+        // };
 
         function iseof() {
             return cs.iseof();
@@ -249,16 +251,15 @@ var java_parsing = function() {
         function match_program() {
             var start = lex.position();
             // let's assume every program is a class with a single method, with nothing fancy.
-            match_keyword("public");
-            match_keyword("class");
-            match_ident(); // ignore the class name
-            match_symbol("{");
-            match_keyword("public");
-            match_keyword("static");
-            match_type(); // ignore return type
+            // match_keyword("public");
+            // match_keyword("class");
+            // match_ident(); // ignore the class name
+            // match_symbol("{");
+            match_keyword("def");
             var name = match_ident();
             var params = match_delimited_list(match_parameter, ",");
-            var body = match_block();
+            match_symbol(":");
+            var body = match_block(); // HACK assumes only top-level methods
 
             return {
                 id: new_id(),
@@ -273,12 +274,15 @@ var java_parsing = function() {
         function match_method() {
             var start = lex.position();
             // let's assume every program is a class with a single method, with nothing fancy.
-            match_keyword("public");
-            match_keyword("static");
-            match_type(); // ignore return type
+            // match_keyword("public");
+            // match_keyword("class");
+            // match_ident(); // ignore the class name
+            // match_symbol("{");
+            match_keyword("def");
             var name = match_ident();
             var params = match_delimited_list(match_parameter, ",");
-            var body = match_block();
+            match_symbol(":");
+            var body = match_block(1); // HACK assumes only top-level methods
 
             return {
                 id: new_id(),
@@ -290,22 +294,37 @@ var java_parsing = function() {
             };
         }
 
-        function match_block() {
+        function match_block(indent_level) {
             var stmts = [];
-            match_symbol("{");
-            while (!peek_symbol("}")) {
-                stmts.push(match_statement());
+            // first line in block must be fully indented
+            for (var i = 1; i <= indent_level; i++) {
+                match_symbol("\t");
             }
-            match_symbol("}");
-            return stmts;
+            stmts.push(match_statement(indent_level));
+            // match_symbol("{");
+            while (true) {
+                for (var i = 1; i <= indent_level; i++) {
+                    // first line after block must have one less indent
+                    if (i == indent_level && !peek_symbol("\t")) {
+                        // TODO: reset progress in current line
+                        // TODO: handle EOF for line after top-level method
+                        return stmts;
+                    }
+                    match_symbol("\t")
+                }
+                stmts.push(match_statement(indent_level));
+            }
+
+            // match_symbol("}");
+            // return stmts;
         }
 
-        function match_statement() {
+        function match_statement(indent_level) {
             var next = lex.peek();
             switch (next.value) {
-                case "for": return match_forloop();
-                case "if": return match_ifelse();
-                default: return match_simple_statement(true);
+                case "for": return match_forloop(indent_level);
+                case "if": return match_ifelse(indent_level);
+                default: return match_simple_statement(false);
             }
         }
 
@@ -327,44 +346,48 @@ var java_parsing = function() {
             return result;
         }
 
-        function match_forloop() {
+        function match_forloop(indent_level) {
             var start = lex.position();
             match_keyword("for");
-            match_symbol("(");
-            var init = match_simple_statement(true);
-            var cond = match_expression(0);
-            match_symbol(";");
-            var incr = match_simple_statement(false);
-            match_symbol(")");
-            var body = match_block();
+            var variable = match_ident()
+            match_keyword("in");
+            // match_symbol("(");
+            // var init = match_simple_statement(true);
+            // var cond = match_expression(0);
+            // match_symbol(";");
+            var iter = match_simple_statement(false); // TODO: need to implement range
+            // match_symbol(")");
+            match_symbol(":");
+            var body = match_block(indent_level + 1);
             return {
                 id: new_id(),
                 location: location(start),
                 tag:'for',
-                initializer: init,
-                condition: cond,
-                increment: incr,
+                variable: variable,
+                iterable: iter,
                 body: body
             };
         }
 
-        function match_ifelse() {
+        function match_ifelse(indent_level) {
             var start = lex.position();
             match_keyword("if");
-            match_symbol("(");
+            // match_symbol("(");
             var cond = match_expression(0);
-            match_symbol(")");
-            var thenb = match_block();
+            // match_symbol(")");
+            match_symbol(":");
+            var thenb = match_block(indent_level + 1);
             var elseb = undefined;
             if (peek_keyword("else")) {
                 match_keyword("else");
-                if (peek_symbol("{")) {
+                if (peek_symbol(":")) {
+                    match_symbol(":");
                     elseb = match_block();
                 } else {
                     // HACK assume another if here, so match the block. this is probably not what we want eventually.
                     elseb = match_statement();
                 }
-            }
+            } // TODO: elif keyword?
             return {
                 id: new_id(),
                 location: location(start),
@@ -476,7 +499,7 @@ var java_parsing = function() {
                 case "==": case "!=": case "<=": case ">=": case "<": case ">": return 40;
                 case "&&": case "||": return 30;
                 case "=": case "*=": case "/=": case "%=": case "+=":  case "-=": return 10;
-                case ";": case ")": case "]": case ",": return 0;
+                case ";": case ")": case "]": case ",": case ":": case "\t": return 0;
                 default: throw new Error("unknown operator " + token.value);
             }
         }
