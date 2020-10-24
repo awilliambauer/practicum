@@ -11,7 +11,7 @@ var java_simulator = function() {
     function evaluate_expression(context, expr) {
         if (!context || !expr || !expr.tag) throw new Error("invalid arguments to evaluate!");
 
-        var arg1, arg2, obj, idx, arg1v, arg2v, r;
+        var arg1, arg2, obj, idx, arg1v, arg2v, r, args;
 
         // HACK this only works for integers and booleans kinda!
         // FIXME add type checking and make it behave correctly for overloaded operators.
@@ -70,6 +70,20 @@ var java_simulator = function() {
                     return {type:'int', value:obj.value.length};
                 } else {
                     throw new Error("Unable to evaluate reference.");
+                }
+            case 'call':
+                obj = evaluate_expression(context, expr.object);
+                args = [];
+                for (let arg of expr.args) {
+                    args.concat(evaluate_expression(context, arg));
+                }
+                if (obj.name === 'range' && args[0].type === 'int') {
+                    // HACK: assumes only single-param range
+                    return {type:'array', value:Array(args[0]).keys()};
+                } else if (obj.name === 'len' && args[0].type === 'array') {
+                    return {type:'int', value:args[0].value.length};
+                } else {
+                    throw new Error("unable to evaluate function call.")
                 }
 
             default: throw new Error("expression type " + expr.tag + " cannot be evaluated");
