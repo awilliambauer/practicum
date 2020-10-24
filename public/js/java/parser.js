@@ -120,7 +120,7 @@ var java_parsing = function() {
             "<":1, ">":1, "<=":1, ">=":1, "==":1, "!=":1,
             "+":1, "-":1, "*":1, "/":1, "!":1, "%":1,
             "+=":1, "-=":1, "*=":1, "/=":1, "%=":1,
-            "++":1, "--":1,
+            // "++":1, "--":1,
             "&":1, "|":1, "&&":1, "||":1,
             "\t":1
         };
@@ -326,7 +326,7 @@ var java_parsing = function() {
         function match_block(indent_level) {
             var stmts = [];
             // first line in block must be fully indented
-            for (let i = 1; i <= indent_level; i++) {
+            for (let i = 0; i < indent_level; i++) {
                 match_symbol("\t");
             }
             stmts.push(match_statement(indent_level));
@@ -336,7 +336,7 @@ var java_parsing = function() {
                 for (let i = 0; i < indent_level; i++) {
                     // first line after block must have less indentation
                     if (!peek_symbol("\t")) {
-                        lex.home()
+                        lex.home();
                         return stmts;
                     }
                     match_symbol("\t")
@@ -478,9 +478,9 @@ var java_parsing = function() {
             }
         }
 
-        var postfix_operators = {
-            '++':1, "--":1,
-        };
+        // var postfix_operators = {
+        //     '++':1, "--":1,
+        // };
 
         // match binary operators
         function match_infix(left) {
@@ -504,10 +504,10 @@ var java_parsing = function() {
                 default:
                     if (t.type !== TokenType.SYMBOL) {
                         throw_error(t.position, "Expected infix operator");
-                    }
-
-                    if (t.value in postfix_operators) {
-                        return {id:new_id(), location:location(start), tag:"postfix", operator:t.value, args:[left]};
+                    // }
+                    //
+                    // if (t.value in postfix_operators) {
+                    //     return {id:new_id(), location:location(start), tag:"postfix", operator:t.value, args:[left]};
                     } else {
                         // this assumes all operators are left-associative!
                         // if we need to make them right-associative, match the right expr with a lower bind power
@@ -522,7 +522,7 @@ var java_parsing = function() {
             switch (token.value) {
                 case ".": return 100;
                 case "(": case "[": return 90;
-                case "++": case "--": return 80;
+                // case "++": case "--": return 80;
                 case "*": case "/": case "%": return 60;
                 case "+":  case "-": return 50;
                 case "==": case "!=": case "<=": case ">=": case "<": case ">": return 40;

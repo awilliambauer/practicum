@@ -44,13 +44,13 @@ var java_simulator = function() {
                     case '-=': arg1.value -= arg2.value; return arg1;
                     default: throw new Error("Unknown binary operator " + expr.operator);
                 }
-            case 'postfix':
-                arg1 = evaluate_expression(context, expr.args[0]);
-                switch (expr.operator) {
-                    case '++': arg1.value++; return arg1;
-                    case '--': arg1.value--; return arg1;
-                    default: throw new Error("Unknown postfix operator " + expr.operator);
-                }
+            // case 'postfix':
+            //     arg1 = evaluate_expression(context, expr.args[0]);
+            //     switch (expr.operator) {
+            //         case '++': arg1.value++; return arg1;
+            //         case '--': arg1.value--; return arg1;
+            //         default: throw new Error("Unknown postfix operator " + expr.operator);
+            //     }
             case 'literal': return {type:expr.type, value:expr.value};
             case 'identifier':
                 r = context[expr.value];
