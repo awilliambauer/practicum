@@ -66,7 +66,7 @@ var java_simulator = function() {
             case 'reference':
                 obj = evaluate_expression(context, expr.object);
                 // HACK hooray for hacky array lengths
-                if (obj.type === 'array' && expr.name === 'length') {
+                if (obj.type === 'array' && expr.name === 'length') { // FIXME: get rid of this
                     return {type:'int', value:obj.value.length};
                 } else {
                     throw new Error("Unable to evaluate reference.");
@@ -98,7 +98,7 @@ var java_simulator = function() {
     function execute_statement(context, stmt) {
         switch (stmt.tag) {
             case 'expression': return this.evaluate_expression(context, stmt.expression);
-            default: throw new Error("unkown statement type " + stmt.tag);
+            default: throw new Error("unknown statement type " + stmt.tag);
         }
     }
     self.execute_statement = execute_statement;
