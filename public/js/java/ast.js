@@ -19,7 +19,7 @@ var java_ast = function() {
                 return [node.expression];
 
             case 'for':
-                return [node.initializer, node.condition, node.increment].concat(node.body);
+                return [node.variable, node.iterable].concat(node.body); // TODO: structure has changed
 
             case 'if':
                 return [node.condition].concat(node.then_branch).concat(node.else_branch ? node.else_branch : []);
