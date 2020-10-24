@@ -56,21 +56,19 @@ var java_parsing = function() {
             return {line:line, col:col};
         };
 
-        self.last = function() {
-            // HACK assume we are not retreating a line
-            if (str.charAt(bufidx) === "\n") return undefined;
-            bufidx--;
-            var c = str.charAt(bufidx);
-            col--;
-            return c;
-        }
+        // self.last = function() {
+        //     // HACK assume we are not retreating a line
+        //     if (str.charAt(bufidx) === "\n") return undefined;
+        //     bufidx--;
+        //     var c = str.charAt(bufidx);
+        //     col--;
+        //     return c;
+        // }
 
-        self.rewind = function(num_steps) {
-            for (let i = 0; i < num_steps; i++) {
-                let c = self.last();
-                if (c === undefined) return false;
-            }
-        };
+        self.home = function() {
+            bufidx -= col;
+            col = 0;
+        }
 
         return self;
     };
@@ -250,6 +248,21 @@ var java_parsing = function() {
         }
         self.position = position;
 
+        // function rewind(num_steps) {
+        //     // HACK really messy, for indentation only
+        //     for (let i = 0; i < num_steps; i++) {
+        //         (cs.last())
+        //     }
+        // }
+        // self.rewind = rewind
+
+        function home() {
+            cs.home();
+            is_peeked = false;
+            next()
+        }
+        self.home = home
+
         return self;
     };
 
@@ -319,11 +332,11 @@ var java_parsing = function() {
             stmts.push(match_statement(indent_level));
             // match_symbol("{");
             while (true) {
-                if (indent_level === 1 && peek_eof()) return stmts;
+                if (lex.iseof()) return stmts;
                 for (let i = 0; i < indent_level; i++) {
-                    // first line after block must have one less indent OR be eof at level 1
-                    if (i === indent_level - 1 && !peek_symbol("\t")) {
-                        lex.rewind(i)
+                    // first line after block must have less indentation
+                    if (!peek_symbol("\t")) {
+                        lex.home()
                         return stmts;
                     }
                     match_symbol("\t")
@@ -365,7 +378,7 @@ var java_parsing = function() {
         function match_forloop(indent_level) {
             var start = lex.position();
             match_keyword("for");
-            var variable = match_ident()
+            var variable = match_ident();
             match_keyword("in");
             // match_symbol("(");
             // var init = match_simple_statement(true);
@@ -605,10 +618,6 @@ var java_parsing = function() {
         function peek_token(expected_type, expected_value) {
             var t = lex.peek();
             return t.type === expected_type && t.value === expected_value;
-        }
-
-        function peek_eof() {
-            return lex.iseof();
         }
 
         self.parse_program = function() {
