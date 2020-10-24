@@ -288,7 +288,7 @@ var java_parsing = function() {
             var name = match_ident();
             var params = match_delimited_list(match_parameter, ",");
             match_symbol(":");
-            var body = match_block(); // HACK assumes only top-level methods
+            var body = match_block(1); // HACK assumes only top-level methods
 
             return {
                 id: new_id(),
@@ -362,7 +362,7 @@ var java_parsing = function() {
             var next = lex.peek();
             var result;
             switch (next.type) {
-                case TokenType.KEYWORD:
+                case TokenType.IDENTIFIER:
                     result = match_declaration();
                     break;
                 default:
@@ -429,14 +429,14 @@ var java_parsing = function() {
 
         function match_declaration() {
             var start = lex.position();
-            var type = match_type();
+            // var type = match_type();
             var expression = match_expression(0);
             // assumes that if the first token is a keyword, then there is a type, otherwise there isn't
             return {
                 id: new_id(),
                 location: location(start),
                 tag: "declaration",
-                type: type,
+                // type: type,
                 expression: expression
             };
         }
@@ -470,7 +470,7 @@ var java_parsing = function() {
                         var e = match_expression(0);
                         match_symbol(")"); // ) has bind power of 0, so match_expression halts and doesn't consume it
                         return {id:new_id(), location:location(start), tag:'paren_expr', value:e};
-                    } else {
+                    } else { // TODO: add lists here
                         throw_error(t.postion, "( is the only symbol that can prefix an expression");
                         break;
                     }
@@ -555,13 +555,13 @@ var java_parsing = function() {
 
         function match_parameter() {
             var start = lex.position();
-            var type = match_type();
+            // var type = match_type();
             var name = match_ident();
             return {
                 id: new_id(),
                 location: location(start),
                 tag: 'parameter',
-                type: type,
+                // type: type, // TODO: clear references to type
                 name: name
             };
         }
