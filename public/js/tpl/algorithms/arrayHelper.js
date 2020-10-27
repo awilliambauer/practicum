@@ -3,6 +3,8 @@ function ArrayHelper() {
 
     var sim = java_simulator;
 
+    this.iterable = undefined;
+
     this.copy_args = function(o) {
         var args = [];
         for (var key in o) {
@@ -18,7 +20,7 @@ function ArrayHelper() {
         }
         return args;
     };
-
+    // TODO
     this.get_array_parameter = function(args) {
         // assumes only one array
         for (var key in args) {
@@ -72,10 +74,11 @@ function ArrayHelper() {
         return ret;
     };
 
-    this.execute_the_loop_increment = function(variable_bank, increment_stmt) {
-        var result = this.execute_statement(variable_bank, increment_stmt);
+    //TODO
+    this.execute_the_loop_increment = function(variable_bank, iter_variable) {
+        var result = this.execute_statement(variable_bank, java_parsing.parse_expression(iter_variable + " = " + this.iterable + '[' + (this.iterable.index++) + ']')); //TODO: check; and consider factoring out parsing?
         var variable = {};
-        variable.name = increment_stmt.expression.args[0].value;
+        variable.name = iter_variable.value;
         variable.value = result.value;
         return variable;
     };
@@ -91,6 +94,7 @@ function ArrayHelper() {
         return null;
     }
 
+    //TODO
     this.get_the_next_loop_body_line_to_execute = function(parent, current_statement, condition) {
         switch(parent.tag) {
             case "for":
@@ -130,6 +134,7 @@ function ArrayHelper() {
         return stmt.hasOwnProperty("else_branch") && stmt.else_branch.length > 0;
     };
 
+    //TODO
     this.get_loop_end = function(loop) {
         return loop.location.end.line-1;
     };
@@ -153,18 +158,29 @@ function ArrayHelper() {
         };
     };
 
+    //TODO
     this.get_loop = function(ast) {
-        // assume loop is the top node
+        // HACK assumes loop is the top node
         var loop = ast.body[0];
         if (!loop || loop.tag !== 'for') throw new Error("can't find the for loop!");
         return loop;
     };
-    
-    this.get_loop_init_variable = function(variable_bank, initializer) {
-        if (initializer.tag !== 'declaration' || initializer.type !== 'int') throw new Error("for loop initializer isn't an int declaration!");
-        return this.create_variable(variable_bank, initializer);
+
+    //TODO: find where this is called and change input
+    this.get_loop_init_variable = function(variable_bank, iter_variable, iterable) {
+        this.initialize_loop_iterable(variable_bank, iterable);
+        if (iter_variable.tag !== 'identifier') throw new Error("for loop initializer isn't an int declaration!");
+        return this.create_variable(variable_bank, java_parsing.parse_expression(iter_variable + ' = ' + this.iterable + '[' + (this.iterable.index++) + ']')); // TODO: expression syntax?
     };
 
+    this.initialize_loop_iterable = function(variable_bank, iterable) {
+        if (iterable.tag === 'call') iterable = sim.evaluate_expression(variable_bank, iterable);
+        if ((iterable.type !== 'array') && (iterable.type !== 'string')) throw new Error("for loop iterable isn't an array or string")
+        this.iterable = iterable;
+        this.iterable.index = 0; // HACK this is a hack
+    }
+
+    //TODO: remove this
     this.does_this_conditional_evaluate_to_true = function(variable_bank, condition_stmt) {
         var e = sim.evaluate_expression(variable_bank, condition_stmt);
         if (e.type !== 'bool') throw new Error("Condition is not of type boolean!");
