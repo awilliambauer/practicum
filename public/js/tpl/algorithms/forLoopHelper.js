@@ -2,7 +2,6 @@ function ArrayHelper() {
     "use strict";
 
     var sim = java_simulator;
-    this.current_code_block_index = -1;
 
     this.copy_args = function(o) {
         var args = [];
@@ -32,17 +31,7 @@ function ArrayHelper() {
                     })
                 };
             }
-            return {
-                name: key,
-                type: 'int',
-                value: args[key]
-            };
         }
-    };
-
-    this.get_next_code_block = function(ast) {
-        this.current_code_block_index++;
-        return ast["body"][this.current_code_block_index]["location"]["start"]["line"];
     };
 
 
@@ -54,10 +43,6 @@ function ArrayHelper() {
     this.add_this_to_the_variable_bank = function(bank, variable) {
         bank[variable.name] = {type:variable.type, value:this.copy(variable.value)};
         return variable;
-    };
-
-    this.add_number_to_the_variable_bank = function(bank, number) {
-        bank["number"] = {type: 'int', value: number};
     };
 
     this.get_array_indices = function(array) {
@@ -107,9 +92,6 @@ function ArrayHelper() {
     }
 
     this.get_the_next_loop_body_line_to_execute = function(parent, current_statement, condition) {
-        console.log(parent);
-        console.log(current_statement);
-        console.log(condition);
         switch(parent.tag) {
             case "for":
                 if (parent.body.length === 0) throw new Error ("Empty loop body!");
@@ -149,7 +131,6 @@ function ArrayHelper() {
     };
 
     this.get_loop_end = function(loop) {
-        console.log(loop.location.end.line);
         return loop.location.end.line-1;
     };
 
@@ -174,55 +155,17 @@ function ArrayHelper() {
 
     this.get_loop = function(ast) {
         // assume loop is the top node
-        var loop = ast.body[2];
-        console.log(loop);
+        var loop = ast.body[0];
         if (!loop || loop.tag !== 'for') throw new Error("can't find the for loop!");
         return loop;
     };
 
-    this.check_if_loop = function(ast) {
-        if (ast.body[this.current_code_block_index] === 'for') {
-            return true;
-        }
-        return false;
-    };
-
-    this.get_instance_variables = function(variable_bank, ast) {
-        // assume first two statements are instance varibale declarations
-        var firstInst = ast.body[0];
-        console.log(ast);
-        // console.log(firstInst["expression"]["args"][0]);
-        // console.log(firstInst["expression"]["args"][1]);
-        var secInst = ast.body[1];
-        // console.log(secInst);
-        // return this.create_variable(variable_bank, firstInst);
-
-
-    };
-    
     this.get_loop_init_variable = function(variable_bank, initializer) {
         if (initializer.tag !== 'declaration' || initializer.type !== 'int') throw new Error("for loop initializer isn't an int declaration!");
         return this.create_variable(variable_bank, initializer);
     };
 
-    this.get_instance_variable = function(variable_bank, ast, line) {
-        let variableName = ast["body"][line]["expression"]["args"][0].value;
-        let variableValue = ast["body"][line]["expression"]["args"][1].value;
-        let variableType = ast["body"][line]["expression"]["args"][1].type;
-        console.log(ast);
-        return this.add_this_to_the_variable_bank(variable_bank, {
-            name: variableName,
-            type: variableType,
-            value: variableValue
-        });
-    };
-
-    this.this_is_a_variable_declaration_statement = function(ast) {
-        return ast["body"][this.current_code_block_index]["tag"] === "declaration";
-    };
-
     this.does_this_conditional_evaluate_to_true = function(variable_bank, condition_stmt) {
-        console.log(condition_stmt);
         var e = sim.evaluate_expression(variable_bank, condition_stmt);
         if (e.type !== 'bool') throw new Error("Condition is not of type boolean!");
         return e.value;
@@ -304,9 +247,7 @@ function ArrayHelper() {
     };
 
     this.assign_the_new_value_to_the_variable = function(variable_bank, stmt) {
-        console.log(stmt);
         var result = this.execute_statement(variable_bank, stmt);
-        console.log(result);
         var variable = {};
         variable.name = stmt.expression.args[0].value;
         variable.value = result.value;
@@ -315,7 +256,7 @@ function ArrayHelper() {
 
     this.does_this_line_update_array = function(stmt) {
         return stmt.tag === "expression" && stmt.expression.tag === "binop" &&
-                stmt.expression.operator === "=" && stmt.expression.args[0].tag === "index";
+            stmt.expression.operator === "=" && stmt.expression.args[0].tag === "index";
     };
 }
 

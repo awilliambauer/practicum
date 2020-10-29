@@ -158,7 +158,7 @@ var array = (function() {
                 var yesNoButtonDiv = d3.select("#promptText")
                     .append("div")
                     .attr("class", "yes_no_buttons")
-                    ;
+                ;
 
                 yesNoButtonDiv
                     .append("input")
@@ -167,14 +167,14 @@ var array = (function() {
                     .attr("name", "yes_no_radio")
                     .attr("id", "yes_radio")
                     .attr("value", "yes")
-                    ;
+                ;
 
                 yesNoButtonDiv
                     .append("label")
                     .text("Yes")
                     .attr("for", "yes_radio")
                     .style("padding-right","30px")
-                    ;
+                ;
 
                 yesNoButtonDiv
                     .append("input")
@@ -183,13 +183,13 @@ var array = (function() {
                     .attr("name", "yes_no_radio")
                     .attr("value", "no")
                     .attr("id", "no_radio")
-                    ;
+                ;
 
                 yesNoButtonDiv
                     .append("label")
                     .attr("for", "no_radio")
                     .text("No")
-                    ;
+                ;
             }
 
         }
@@ -369,7 +369,6 @@ var array = (function() {
                             interactiveLines();
                         }
                         else {
-                            console.log(varObject);
                             highlightLine(varObject.value);
                         }
                         break;
@@ -468,9 +467,9 @@ var array = (function() {
 
                 // add an input box for the value
                 var inputField = d3.select(this)
-                        .append("input")
-                        .attr("class", "arrayVarValue")
-                    ;
+                    .append("input")
+                    .attr("class", "arrayVarValue")
+                ;
 
                 // show the current value in the input box
                 if (!newVariable) {
@@ -487,9 +486,9 @@ var array = (function() {
 
             // add an input box for the value
             var inputField = d3.select(this)
-                    .append("input")
-                    .attr("class", "arrayVarValue")
-                ;
+                .append("input")
+                .attr("class", "arrayVarValue")
+            ;
         });
     }
 
@@ -502,9 +501,9 @@ var array = (function() {
 
         // add an input box for the value
         var inputField = variableValue
-                .append("input")
-                .attr("class", "varValue")
-            ;
+            .append("input")
+            .attr("class", "varValue")
+        ;
 
         // show the current value in the input box
         if (!newVariable) {
@@ -610,7 +609,6 @@ var array = (function() {
 
     // highlights the line of code passed in as a parameter
     function highlightLine(line) {
-        console.log(line);
         if (line.hasOwnProperty("location")) {
             d3.select("#java-ast-line-" + line.location.start.line).classed("line_highlight", true);
         }
@@ -759,7 +757,6 @@ var array = (function() {
         var correct = false;
 
         var highlightedLine = d3.select(".line_highlight");
-        console.log(highlightedLine);
         if (highlightedLine.node() !== null) {
             if (d3.select("#errorMessage").node() !== null) {
                 d3.select("#errorMessage").remove();
@@ -851,7 +848,6 @@ var array = (function() {
         var correct = false;
 
         var highlightedElement = d3.select(".array_element_highlight");
-        console.log(highlightedElement);
         if (highlightedElement.node() !== null) {
             if (d3.select("#errorMessage").node() !== null) {
                 d3.select("#errorMessage").remove();
