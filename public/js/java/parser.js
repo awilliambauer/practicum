@@ -387,7 +387,7 @@ var java_parsing = function() {
             // var init = match_simple_statement(true);
             // var cond = match_expression(0);
             // match_symbol(";");
-            var iter = match_simple_statement(false); // TODO: need to implement range
+            var iter = {id:new_id(), location: location(lex.position()), tag:'expression', expression:match_expression(0)}; // TODO: need to implement range
             // match_symbol(")");
             match_symbol(":");
             var body = match_block(indent_level + 1);
