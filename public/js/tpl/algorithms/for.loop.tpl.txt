@@ -1,0 +1,255 @@
+function TPLAlgorithm() {
+    // types:
+    // AstNode: a java ast node
+    // Line: a java ast node, but we want to highlight the line rather than the node
+    // VariableBank: the bank of all local variables
+    // Variable: a value that will be added to the variable bank, of form {name:string, type:string, value:*}.
+
+    // FIXME get this out of here once simulator can pass input parameters
+    let ast;
+    [no_step]
+    ast = state.ast;
+
+    [no_step]
+    state.vars = helper.copy_args(state.args);
+
+    let variables: VariableBank;
+    [no_step]
+    variables = helper.create_new_variable_bank();
+
+    let this_is_the_first_array_index: ArrayIndex;
+    let the_index_increases_by_one_for_each_array_element: ArrayIndices;
+
+    [no_step]
+    {
+        [prompt]
+        "First, look at the method call.";
+
+        let this_array_is_the_parameter: Parameter;
+        this_array_is_the_parameter = helper.get_array_parameter(state.args);
+
+        let add_the_array_to_the_variable_bank: Variable;
+        [interactive("add_variable")]
+        add_the_array_to_the_variable_bank = helper.add_this_to_the_variable_bank(variables, this_array_is_the_parameter);
+
+        [interactive("add_array_index")]
+        this_is_the_first_array_index = 0;
+
+        [no_step]
+        the_index_increases_by_one_for_each_array_element = helper.get_array_indices(this_array_is_the_parameter);
+
+        [prompt]
+        "The array length is the number of elements in the array";
+
+        let array_length;
+        [no_step]
+        array_length = helper.get_array_length(this_array_is_the_parameter);
+
+        let add_the_length_to_the_variable_bank: Variable;
+        [interactive("add_variable")]
+        add_the_length_to_the_variable_bank = helper.add_this_to_the_variable_bank(variables, array_length);
+
+        [no_step]
+        if (state.vars.length > 1) {
+            let add_other_parameters_to_the_variable_bank : Variable;
+            [interactive("add_variable")]
+            add_other_parameters_to_the_variable_bank = helper.add_other_parameters_to_the_variable_bank(variables, state.vars);
+        }
+    }
+
+    [prompt]
+    "Now walk through the code line-by-line, keeping track of variable values in the variable bank.";
+
+    let this_is_the_next_line_that_will_execute: Line;
+    [interactive("next_line")] this_is_the_next_line_that_will_execute = helper.get_loop(ast);
+
+    // FIXME get this out of here once simulator handles refs correctly
+    let loop;
+    [no_step]
+    loop = helper.get_loop(ast);
+    [prompt]
+    "We're at the beginning of a new for-loop block. Look at the loop header.";
+
+    [no_step]
+    {
+        let this_is_the_loop_initialization: AstNode;
+        [no_step]
+        this_is_the_loop_initialization = loop.initializer;
+        [prompt]
+        "This is the loop initialization. It defines a loop variable.";
+
+
+        let add_this_loop_variable_to_the_variable_bank: Variable;
+        [interactive("add_variable")]
+        add_this_loop_variable_to_the_variable_bank = helper.add_this_to_the_variable_bank(variables, helper.get_loop_init_variable(variables, this_is_the_loop_initialization));
+    }
+
+    let this_is_the_loop_condition: AstNode;
+    this_is_the_loop_condition = loop.condition;
+
+    [prompt]
+    "We will only enter the loop if this conditional evaluates to true.";
+
+    [interactive("conditional")]
+    while (helper.does_this_conditional_evaluate_to_true(variables, this_is_the_loop_condition)) {
+        [no_step]
+        this_is_the_next_line_that_will_execute = null;
+        let condition_outcome;
+        [no_step]
+        condition_outcome = null;
+        let parent;
+        [no_step]
+        parent = loop;
+
+        // FIXME hack to remove loop condition highlighting. maybe the variable context idea doesn't actually work?
+        [no_step]
+        this_is_the_loop_condition = null;
+
+        [no_step]
+        do {
+            [interactive("next_line")] this_is_the_next_line_that_will_execute = helper.get_the_next_loop_body_line_to_execute(parent, this_is_the_next_line_that_will_execute, condition_outcome);
+
+            [no_step]
+            if (helper.is_if(this_is_the_next_line_that_will_execute)) {
+                let this_is_the_if_condition: AstNode;
+                this_is_the_if_condition = this_is_the_next_line_that_will_execute.condition;
+                [interactive("conditional")]
+                if (helper.does_this_conditional_evaluate_to_true(variables, this_is_the_if_condition)) {
+                    [no_step]
+                    parent = this_is_the_next_line_that_will_execute;
+                    [no_step]
+                    this_is_the_next_line_that_will_execute = null;
+                    [no_step]
+                    condition_outcome = true;
+                } else {
+                    // assume no else if
+                    [no_step]
+                    if (helper.has_else(this_is_the_next_line_that_will_execute)) {
+                        [no_step]
+                        parent = this_is_the_next_line_that_will_execute;
+                        [no_step]
+                        this_is_the_next_line_that_will_execute = null;
+                        [no_step]
+                        condition_outcome = false;
+                    }
+                }
+            } else {
+
+                [no_step]
+                if (helper.does_this_line_update_array(this_is_the_next_line_that_will_execute)) {
+
+                    let this_is_the_result_of_the_expression: ScratchAstNode;
+                    let copy_the_expression_into_the_scratch_area: ScratchList;
+
+                    [no_step]
+                    {
+                        // FIXME assume it's an assignment statement
+                        [prompt]
+                        "This line updates the value of an array element.";
+
+                        let expression: AstNode;
+                        [no_step]
+                        expression = this_is_the_next_line_that_will_execute.expression.args[1];
+                        [prompt]
+                        "First, let's evaluate the expression on the right-hand side.";
+
+                        // copy expression to workspace
+                        copy_the_expression_into_the_scratch_area = helper.create_scratch(this_is_the_next_line_that_will_execute.expression.args[1]);
+
+                        // for each array lookup in the expression, do the array lookup
+                        [no_step]
+                        for (let this_operand_references_an_element_in_the_array: ScratchAstNode of helper.all_array_lookups_in_the_expression(copy_the_expression_into_the_scratch_area)) {
+                            let this_is_the_array;
+                            // can do this on the original scratch expression because it will never change and doesn't affect highlighting
+                            [no_step]
+                            this_is_the_array = helper.evaluate_this_expression2(variables, this_operand_references_an_element_in_the_array.object, this_operand_references_an_element_in_the_array);
+
+                            // evaluate this node of the ast down to a literal
+                            // can also do this on the original expression because the UI will know to highlight the last line of scratch
+                            // TODO nell: do we want to highlight this node or just skip this?
+                            let this_is_the_index;
+                            [no_step]
+                            this_is_the_index = this_operand_references_an_element_in_the_array.index;
+
+                            // TODO intended interaction: user has to click on the array cell corresponding to the correct index.
+                            // this will be a variable {type:string, value:int} with an additional field array:Variable that points to the array being indexed.
+                            let this_is_the_array_element_that_the_operand_references: ArrayElement;
+                            [interactive("array_element_click")]
+                            this_is_the_array_element_that_the_operand_references = helper.evaluate_this_expression(variables, this_is_the_array, this_is_the_index);
+
+                            let copy_the_array_element_value_into_the_scratch_area: ScratchAstNode;
+                            [interactive("array_element_get")]
+                            copy_the_array_element_value_into_the_scratch_area = helper.do_the_array_lookup(copy_the_expression_into_the_scratch_area, this_is_the_array, this_is_the_array_element_that_the_operand_references, this_operand_references_an_element_in_the_array);
+                        }
+
+                        // TODO nell: these interactive names are all made up without too much thought, probably some should be renamed and/or merged.
+                        // TODO also probably the types are wrong.
+                        // evalute the rest of the expression
+                        [interactive("evaluate_expression")]
+                        this_is_the_result_of_the_expression = helper.evaluate_this_expression_and_add_to_scratch(variables, copy_the_expression_into_the_scratch_area);
+                    }
+
+                    // for the array being assigned to, lookup the box
+                    let the_expression_result_is_assigned_to_this_array_element: AstNode;
+                    the_expression_result_is_assigned_to_this_array_element = this_is_the_next_line_that_will_execute.expression.args[0];
+
+                    let this_is_the_array;
+                    [no_step]
+                    this_is_the_array = helper.evaluate_this_expression2(variables, the_expression_result_is_assigned_to_this_array_element.object);
+
+                    let this_is_the_index;
+                    [no_step]
+                    this_is_the_index = the_expression_result_is_assigned_to_this_array_element.index;
+
+                    let this_is_the_array_element_that_is_being_updated: ArrayElement;
+                    [interactive("array_element_click")]
+                    this_is_the_array_element_that_is_being_updated = helper.evaluate_this_expression(variables, this_is_the_array, this_is_the_index);
+
+                    // assign the new value to the box
+                    let update_the_array_element: Variable;
+                    [interactive("update_variable")]
+                    update_the_array_element = helper.assign_the_new_value_to_the_array_element(this_is_the_array, this_is_the_array_element_that_is_being_updated, this_is_the_result_of_the_expression);
+                } else {
+                    [prompt]
+                    "This line updates the value of a variable.";
+
+                    let update_the_variable_in_the_variable_bank: Variable;
+                    [interactive("update_variable")]
+                    update_the_variable_in_the_variable_bank = helper.assign_the_new_value_to_the_variable(variables, this_is_the_next_line_that_will_execute);
+                }
+            }
+
+        } while (helper.is_there_another_line_to_execute(parent, this_is_the_next_line_that_will_execute, condition_outcome));
+
+        [no_step]
+        this_is_the_next_line_that_will_execute = helper.get_loop_end(loop);
+        [prompt]
+        "We reached the end of the for loop body.";
+
+        [no_step]
+        this_is_the_next_line_that_will_execute = helper.get_loop(ast);
+        [prompt]
+        "Loop back up to the declaration and execute the loop update.";
+
+        [no_step]
+        {
+            let this_is_the_loop_update: AstNode;
+            this_is_the_loop_update = loop.increment;
+
+            let update_the_value_of_the_loop_variable_in_the_variable_bank: Variable;
+            [interactive("update_variable")]
+            update_the_value_of_the_loop_variable_in_the_variable_bank = helper.execute_the_loop_increment(variables, this_is_the_loop_update);
+        }
+
+        [prompt]
+        "Now let's check the loop condition again.";
+        this_is_the_loop_condition = loop.condition;
+    }
+
+    // TODO maybe just put the answer in a variable
+    [no_step]
+    state.answer = helper.calculate_answer(variables);
+
+    [prompt]
+    "Write the values of the array in the solution box.";
+}
