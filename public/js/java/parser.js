@@ -381,7 +381,7 @@ var java_parsing = function() {
         function match_forloop(indent_level) {
             var start = lex.position();
             match_keyword("for");
-            var variable = match_ident();
+            var variable = {id:new_id(), location:location(lex.position()), tag:'identifier', value:match_ident()}; // HACK stole this from match_expression
             match_keyword("in");
             // match_symbol("(");
             // var init = match_simple_statement(true);
@@ -636,6 +636,10 @@ var java_parsing = function() {
             return match_expression(0);
         };
 
+        self.parse_statement = function() {
+            return match_statement(0);
+        };
+
         return self;
     };
 
@@ -654,6 +658,11 @@ var java_parsing = function() {
     self.parse_expression = function(source) {
         var p = Parser(Lexer(CharStream(source)));
         return p.parse_expression();
+    };
+
+    self.parse_statement = function(source) {
+        var p = Parser(Lexer(CharStream(source)));
+        return p.parse_statement();
     };
 
     return self;

@@ -76,11 +76,11 @@ function TPLAlgorithm() {
 
     }
 
-    let this_is_the_loop_condition: AstNode;
-    this_is_the_loop_condition = loop.condition;
+    // let this_is_the_loop_condition: AstNode;
+    // this_is_the_loop_condition = loop.condition;
 
-    [prompt]
-    "We will only enter the loop if this conditional evaluates to true.";
+    // [prompt]
+    // "We will only enter the loop if this conditional evaluates to true.";
 
     let this_is_the_loop_increment: AstNode;
     this_is_the_loop_increment = loop.increment;

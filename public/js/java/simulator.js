@@ -77,10 +77,10 @@ var java_simulator = function() {
                 for (let arg of expr.args) {
                     args.push(evaluate_expression(context, arg));
                 }
-                console.log(args[0]);
-                if (obj.value === 'range' && args[0].type === 'int') {
+                console.log(args);
+                if (obj.value === 'range' && args[0].type === 'int') { // TODO: adjust for multi-param
                     // HACK: assumes only single-param range
-                    return {type:'array', value:Array(args[0]).keys()};
+                    return {type:'array', value:[...Array(args[1].value).keys()]};
                 } else if (obj.value === 'len' && args[0].type === 'array') {
                     return {type:'int', value:args[0].value.length};
                 } else {

@@ -91,7 +91,7 @@ function ArrayHelper() {
 
     //TODO
     this.execute_the_loop_increment = function(variable_bank, iter_variable) {
-        var result = this.execute_statement(variable_bank, java_parsing.parse_expression(iter_variable + " = " + this.iterable + '[' + (this.iterable.index++) + ']')); //TODO: check; and consider factoring out parsing?
+        var result = this.execute_statement(variable_bank, java_parsing.parse_statement(iter_variable.value + ' = ' + this.iterable.value[this.iterable.index++])); //TODO: check; and consider factoring out parsing?
         var variable = {};
         variable.name = iter_variable.value;
         variable.value = result.value;
@@ -188,8 +188,11 @@ function ArrayHelper() {
     //TODO: find where this is called and change input
     this.get_loop_init_variable = function(variable_bank, iter_variable, iterable) {
         this.initialize_loop_iterable(variable_bank, iterable);
+        console.log(iter_variable);
         if (iter_variable.tag !== 'identifier') throw new Error("for loop initializer isn't an int declaration!");
-        return this.create_variable(variable_bank, java_parsing.parse_expression(iter_variable + ' = ' + this.iterable + '[' + (this.iterable.index++) + ']')); // TODO: expression syntax?
+        console.log(this.iterable);
+        console.log(java_parsing.parse_statement(iter_variable.value + ' = ' + this.iterable.value[this.iterable.index++]));
+        return this.create_variable(variable_bank, java_parsing.parse_statement(iter_variable.value + ' = ' + this.iterable.value[this.iterable.index++])); // TODO & HACK: expression syntax?
     }
 
     this.check_if_loop = function(ast) {
