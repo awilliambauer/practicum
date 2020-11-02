@@ -8,7 +8,7 @@
     "id": "3939090f-1edc-4fcf-854a-2d87b9fda251",
     "title": "Array Mystery 1",
     "content": {
-      "text": "def forLoopInvestigation(start, end, step):\n\ta = 4\n\tb = 21\n\tfor i in range (start, end, step):\n\t\ta = a + 6\n\t\tif (a > b):\n\t\t\tb = b + 8\n\tprint(a, b)",
+      "text": "def forLoopInvestigation(start, end, step):\n\ta = 4\n\tb = 21\n\tfor i in range(start, end, step):\n\t\ta = a + 6\n\t\tif (a > b):\n\t\t\tb = b + 8\n\tprint(a, b)",
       "variants": [{
         "id": "58cb27dd-8ea3-4e48-9bb6-92705224801f",
         "arguments": {"start": 0, "end": 6, "step": 1}

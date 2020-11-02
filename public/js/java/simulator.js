@@ -72,15 +72,16 @@ var java_simulator = function() {
                     throw new Error("Unable to evaluate reference.");
                 }
             case 'call':
-                obj = evaluate_expression(context, expr.object);
+                obj = expr.object; // HACK ignore defined functions
                 args = [];
                 for (let arg of expr.args) {
-                    args.concat(evaluate_expression(context, arg));
+                    args.push(evaluate_expression(context, arg));
                 }
-                if (obj.name === 'range' && args[0].type === 'int') {
+                console.log(args[0]);
+                if (obj.value === 'range' && args[0].type === 'int') {
                     // HACK: assumes only single-param range
                     return {type:'array', value:Array(args[0]).keys()};
-                } else if (obj.name === 'len' && args[0].type === 'array') {
+                } else if (obj.value === 'len' && args[0].type === 'array') {
                     return {type:'int', value:args[0].value.length};
                 } else {
                     throw new Error("unable to evaluate function call.")
