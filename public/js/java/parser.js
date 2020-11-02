@@ -15,7 +15,10 @@ var java_parsing = function() {
     /// pos can either be a token or a character stream position object
     /// msg is a string containing a human-readable description of the type of error.
     function throw_error(pos, msg) {
+        console.log(pos);
+        console.log(msg);
         var str = sprintf("ERROR @ {0}:{1}: {2}", pos.line + 1, pos.col + 1, msg);
+        console.log(str);
         throw new Error(str);
     }
 
@@ -471,7 +474,8 @@ var java_parsing = function() {
                         match_symbol(")"); // ) has bind power of 0, so match_expression halts and doesn't consume it
                         return {id:new_id(), location:location(start), tag:'paren_expr', value:e};
                     } else { // TODO: add lists here
-                        throw_error(t.postion, "( is the only symbol that can prefix an expression");
+                        console.log(t);
+                        throw_error(t.position, "( is the only symbol that can prefix an expression");
                         break;
                     }
                 default: throw_error(t.position, "Expected expression");

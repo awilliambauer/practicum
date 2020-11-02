@@ -218,8 +218,9 @@ function ArrayHelper() {
     // };
 
     this.initialize_loop_iterable = function(variable_bank, iterable) {
-        if (iterable.tag === 'call') iterable = sim.evaluate_expression(variable_bank, iterable);
-        if ((iterable.type !== 'array') && (iterable.type !== 'string')) throw new Error("for loop iterable isn't an array or string")
+        console.log(iterable.expression);
+        if (iterable.expression.tag === 'call') iterable = sim.evaluate_expression(variable_bank, iterable);
+        if ((iterable.expression.type !== 'array') && (iterable.type !== 'string')) throw new Error("for loop iterable isn't an array or string")
         this.iterable = iterable;
         this.iterable.index = 0; // HACK this is a hack
     }

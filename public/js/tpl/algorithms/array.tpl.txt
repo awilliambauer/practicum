@@ -60,15 +60,19 @@ function TPLAlgorithm() {
     [no_step]
     {
         let this_is_the_loop_initialization: AstNode;
+        let this_is_the_loop_iterable: AstNode;
+        let this_is_the_loop_variable: AstNode;
         [no_step]
-        this_is_the_loop_initialization = loop.initializer;
+        this_is_the_loop_iterable = loop.iterable;
+        [no_step]
+        this_is_the_loop_variable = loop.variable;
         [prompt]
         "This is the loop initialization. It defines a loop variable.";
 
 
         let add_this_loop_variable_to_the_variable_bank: Variable;
         [interactive("add_variable")]
-        add_this_loop_variable_to_the_variable_bank = helper.add_this_to_the_variable_bank(variables, helper.get_loop_init_variable(variables, this_is_the_loop_initialization));
+        add_this_loop_variable_to_the_variable_bank = helper.add_this_to_the_variable_bank(variables, helper.get_loop_init_variable(variables, this_is_the_loop_variable, this_is_the_loop_iterable));
 
     }
 
