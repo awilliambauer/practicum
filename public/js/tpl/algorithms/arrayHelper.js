@@ -190,6 +190,7 @@ function ArrayHelper() {
         this.initialize_loop_iterable(variable_bank, iterable);
         if (iter_variable.tag !== 'identifier') throw new Error("for loop initializer isn't an int declaration!");
         return this.create_variable(variable_bank, java_parsing.parse_expression(iter_variable + ' = ' + this.iterable + '[' + (this.iterable.index++) + ']')); // TODO: expression syntax?
+    }
 
     this.check_if_loop = function(ast) {
         if (ast.body[this.current_code_block_index] === 'for') {
