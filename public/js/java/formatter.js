@@ -75,7 +75,7 @@ var java_formatter = function() {
         switch (node.tag) {
             case 'method':
                 line = newline(elem);
-                line.html(sprintf('{0}{1} {2} {3} {4}(', indent(indent_level), keyword('public'), keyword('static'), keyword('void'), method(node.name)));
+                line.html(sprintf('{0}{1} {2} (', indent(indent_level), keyword('def'), method(node.name)));
                 firstIter = true;
                 node.params.forEach(function(p) {
                     if (!firstIter) {
@@ -84,26 +84,26 @@ var java_formatter = function() {
                     firstIter = false;
                     line.append(to_dom(p, options, 0));
                 });
-                line.append(') ' + symbol('{'));
+                line.append('): ');
                 node.body.forEach(function(s) {
                     elem.append(to_dom(s, options, 1));
                 });
-                newline(elem).append(indent(0) + symbol("}"));
+                newline(elem).append(indent(0));
                 break;
 
             case 'parameter':
-                elem.append(keyword(node.type) + " " + ident(node.name));
+                elem.append(ident(node.name));
                 break;
 
             case 'declaration':
                 if (!special_flag) {
                     elem.append(indent(indent_level));
                 }
-                elem.append(keyword(node.type) + " ");
+                // elem.append(keyword(node.type) + " ");
                 elem.append(to_dom(node.expression, options, indent_level));
-                if (!special_flag) {
-                    elem.append(";");
-                }
+                // if (!special_flag) {
+                //     elem.append(";");
+                // }
                 break;
 
             case 'expression':
@@ -138,11 +138,11 @@ var java_formatter = function() {
                 update.attr('id', 'update');
                 update.append(to_dom(node.iterable, options, indent_level, true));
                 line.append(update);
-                line.append(' {');
+                line.append(':');
                 node.body.forEach(function(s) {
                     elem.append(to_dom(s, options, indent_level + 1));
                 });
-                newline(elem).append(indent(indent_level) + '}');
+                newline(elem).append(indent(indent_level));
                 break;
 
             case 'if':
@@ -154,20 +154,20 @@ var java_formatter = function() {
                     line = newline(elem);
                     line.append(indent(indent_level));
                 }
-                line.append(keyword("if") + " (");
+                line.append(keyword("if"));
                 line.append(to_dom(node.condition, options, indent_level));
-                line.append(") {");
+                line.append(":");
                 node.then_branch.forEach(function(s) {
                     elem.append(to_dom(s, options, indent_level + 1));
                 });
                 if (node.else_branch) {
                     line = newline(elem);
-                    line.append(indent(indent_level) + '} ' + keyword("else") + ' ');
+                    line.append(indent(indent_level) + keyword("else") + ' ');
                     if (node.else_branch.tag === 'if') {
                         // HACK pass in the previous line (with the }) as the flag so it's one line
                         elem.append(to_dom(node.else_branch, options, indent_level, line));
                     } else {
-                        line.append('{');
+                        line.append(':');
                         node.else_branch.forEach(function(s) {
                             elem.append(to_dom(s, options, indent_level + 1));
                         });
@@ -175,7 +175,7 @@ var java_formatter = function() {
                 }
                 if (!special_flag) {
                     line = newline(elem);
-                    line.append(indent(indent_level) + "}");
+                    line.append(indent(indent_level) );
                 }
                 break;
 
