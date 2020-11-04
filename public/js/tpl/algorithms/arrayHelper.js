@@ -91,8 +91,10 @@ function ArrayHelper() {
 
     //TODO
     this.execute_the_loop_increment = function(variable_bank, iter_variable) {
-        var result = this.execute_statement(variable_bank, java_parsing.parse_statement(iter_variable.value + ' = ' + this.iterable.value[this.iterable.index++])); //TODO: check; and consider factoring out parsing?
+        console.log(iter_variable);
+        var result = this.execute_statement(variable_bank, java_parsing.parse_statement(iter_variable.value + ' = ' + this.iterable.value[this.iterable.index++])); //TODO: check; and consider factoring out parsing? //it works, no more need to check
         var variable = {};
+        console.log(result);
         variable.name = iter_variable.value;
         variable.value = result.value;
         return variable;
@@ -196,7 +198,18 @@ function ArrayHelper() {
     };
 
     this.is_the_loop_still_iterating = function(variable_bank) {
-        return (this.iterable.index < this.iterable.value);
+        console.log(this.iterable);
+        console.log(this.iterable.value);
+        var value = this.iterable.value;
+        console.log(Array.from(value).length);
+        console.log(Array.from(this.iterable.value).length);
+        var value2 = Array.from(this.iterable.value).length;
+        var truth = (this.iterable.index < Array.from(this.iterable.value).length);
+        console.log(truth);
+        console.log(this.iterable.index);
+        console.log(this.iterable.value);
+        console.log((this.iterable.index < this.iterable.value));
+        return truth;
     };
 
     this.check_if_loop = function(ast) {

@@ -133,7 +133,7 @@ function TPLAlgorithm() {
 
             let update_the_value_of_the_loop_variable_in_the_variable_bank: Variable;
             [interactive("update_variable")]
-            update_the_value_of_the_loop_variable_in_the_variable_bank = helper.execute_the_loop_increment(variables, this_is_the_loop_update);
+            update_the_value_of_the_loop_variable_in_the_variable_bank = helper.execute_the_loop_increment(variables, loop.variable);
         }
 
         // [prompt]

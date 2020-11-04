@@ -99,6 +99,7 @@ var java_simulator = function() {
     function execute_statement(context, stmt) {
         switch (stmt.tag) {
             case 'expression': return this.evaluate_expression(context, stmt.expression);
+            case 'declaration': return this.evaluate_expression(context, stmt.expression);
             default: throw new Error("unknown statement type " + stmt.tag);
         }
     }
