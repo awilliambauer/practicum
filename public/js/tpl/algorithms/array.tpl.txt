@@ -92,7 +92,7 @@ function TPLAlgorithm() {
     "Now we will look at the code in the for loop.";
 
     [interactive("conditional")]
-    while (helper.does_this_conditional_evaluate_to_true(variables, this_is_the_loop_condition))  {
+    while (helper.is_the_loop_still_iterating(variables))  {
 
         [no_step]
         this_is_the_next_line_that_will_execute = null;
@@ -104,8 +104,8 @@ function TPLAlgorithm() {
         parent = loop;
 
         // FIXME hack to remove loop condition highlighting. maybe the variable context idea doesn't actually work?
-        [no_step]
-        this_is_the_loop_condition  = null;
+        // [no_step]
+        // this_is_the_loop_condition  = null;
 
         [interactive("next_line")] this_is_the_next_line_that_will_execute = helper.get_the_next_loop_body_line_to_execute(parent, this_is_the_next_line_that_will_execute, condition_outcome);
 
@@ -136,9 +136,9 @@ function TPLAlgorithm() {
             update_the_value_of_the_loop_variable_in_the_variable_bank = helper.execute_the_loop_increment(variables, this_is_the_loop_update);
         }
 
-        [prompt]
-        "Now let's check the loop condition again.";
-        this_is_the_loop_condition = loop.condition;
+        // [prompt]
+        // "Now let's check the loop condition again.";
+        // this_is_the_loop_condition = loop.condition;
 
     }
 

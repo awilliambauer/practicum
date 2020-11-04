@@ -53,6 +53,8 @@ var java_formatter = function() {
         // HACK special_flag is a boolean used to indicate things like "don't put a semi/newline on this statement"
         // or "don't put a newline before this if". It's very hacky.
 
+        // console.log(node);
+
         var prefix = options.id_prefix || 'java-ast-';
 
         function newline(parent) {
@@ -120,23 +122,23 @@ var java_formatter = function() {
 
             case 'for':
                 line = newline(elem);
-                line.append(indent(indent_level) + keyword('for') + ' (');
+                line.append(indent(indent_level) + keyword('for') + ' ');
                 // statements inside of for loop header should not be indented/have newlines
                 var init = $('<span>');
                 init.attr('id', 'init');
-                init.append(to_dom(node.initializer, options, indent_level, true));
+                init.append(to_dom(node.variable, options, indent_level, true));
                 line.append(init);
-                line.append('; ');
-                var cond = $('<span>');
-                cond.attr('id', 'test');
-                cond.append(to_dom(node.condition, options, indent_level, true));
-                line.append(cond);
-                line.append('; ');
+                line.append(' in ');
+                // var cond = $('<span>');
+                // cond.attr('id', 'test');
+                // cond.append(to_dom(node.condition, options, indent_level, true));
+                // line.append(cond);
+                // line.append('; ');
                 var update = $('<span>');
                 update.attr('id', 'update');
-                update.append(to_dom(node.increment, options, indent_level, true));
+                update.append(to_dom(node.iterable, options, indent_level, true));
                 line.append(update);
-                line.append(') {');
+                line.append(' {');
                 node.body.forEach(function(s) {
                     elem.append(to_dom(s, options, indent_level + 1));
                 });
@@ -235,6 +237,7 @@ var java_formatter = function() {
     self.format = function(ast, options) {
         options = options || {};
         options.line = 0;
+        console.log(ast);
         var dom = to_dom(ast, options, 0);
         return dom[0];
     }

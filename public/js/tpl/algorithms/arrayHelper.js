@@ -193,7 +193,11 @@ function ArrayHelper() {
         console.log(this.iterable);
         console.log(java_parsing.parse_statement(iter_variable.value + ' = ' + this.iterable.value[this.iterable.index++]));
         return this.create_variable(variable_bank, java_parsing.parse_statement(iter_variable.value + ' = ' + this.iterable.value[this.iterable.index++])); // TODO & HACK: expression syntax?
-    }
+    };
+
+    this.is_the_loop_still_iterating = function(variable_bank) {
+        return (this.iterable.index < this.iterable.value);
+    };
 
     this.check_if_loop = function(ast) {
         if (ast.body[this.current_code_block_index] === 'for') {
