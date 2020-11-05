@@ -88,7 +88,7 @@ var java_formatter = function() {
                 node.body.forEach(function(s) {
                     elem.append(to_dom(s, options, 1));
                 });
-                newline(elem).append(indent(0));
+                // newline(elem).append(indent(0));
                 break;
 
             case 'parameter':
@@ -99,6 +99,8 @@ var java_formatter = function() {
                 if (!special_flag) {
                     elem.append(indent(indent_level));
                 }
+                elem = newline(elem);
+                elem.append(indent(indent_level));
                 // elem.append(keyword(node.type) + " ");
                 elem.append(to_dom(node.expression, options, indent_level));
                 // if (!special_flag) {
@@ -136,13 +138,14 @@ var java_formatter = function() {
                 // line.append('; ');
                 var update = $('<span>');
                 update.attr('id', 'update');
+                console.log(node);
                 update.append(to_dom(node.iterable, options, indent_level, true));
                 line.append(update);
                 line.append(':');
                 node.body.forEach(function(s) {
                     elem.append(to_dom(s, options, indent_level + 1));
                 });
-                newline(elem).append(indent(indent_level));
+                // newline(elem).append(indent(indent_level));
                 break;
 
             case 'if':
@@ -195,7 +198,18 @@ var java_formatter = function() {
                 elem.append('(');
                 // HACK this totally assumes function calls have only one argument,
                 // which happens to be true for array and if/else mysteries.
-                elem.append(to_dom(node.args[0], options, indent_level));
+                // node.args.forEach(function(arg){
+                //     elem.append(to_dom(arg, options, indent_level));
+                //     elem.append(', ');
+                // });
+                firstIter = true;
+                node.args.forEach(function(arg) {
+                    if (!firstIter) {
+                        elem.append(", ");
+                    }
+                    firstIter = false;
+                    elem.append(to_dom(arg, options, indent_level));
+                });
                 elem.append(')');
                 break;
 
