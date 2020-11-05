@@ -115,6 +115,7 @@ var java_simulator = function() {
                     } else {
                         throw new Error("wrong number of arguments to range (expected 1, 2, or 3)")
                     }
+                    return {type:'array', value:val};
                 } else if (obj.value === 'len' && args[0].type === 'array') {
                     return {type:'int', value:args[0].value.length};
                 } else {
