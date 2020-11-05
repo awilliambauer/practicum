@@ -25,24 +25,47 @@ var java_simulator = function() {
                 arg1v = arg1.value;
                 arg2v = arg2.value;
                 switch (expr.operator) {
-                    case '<': return {type: 'bool', value: arg1v < arg2v};
-                    case '<=': return {type: 'bool', value: arg1v <= arg2v};
-                    case '>': return {type: 'bool', value: arg1v > arg2v};
-                    case '>=': return {type: 'bool', value: arg1v >= arg2v};
-                    case '==': return {type: 'bool', value: arg1v === arg2v};
-                    case '!=': return {type: 'bool', value: arg1v !== arg2v};
+                    case '<':
+                        return {type: 'bool', value: arg1v < arg2v};
+                    case '<=':
+                        return {type: 'bool', value: arg1v <= arg2v};
+                    case '>':
+                        return {type: 'bool', value: arg1v > arg2v};
+                    case '>=':
+                        return {type: 'bool', value: arg1v >= arg2v};
+                    case '==':
+                        return {type: 'bool', value: arg1v === arg2v};
+                    case '!=':
+                        return {type: 'bool', value: arg1v !== arg2v};
                     // FIXME these do not short-circuit
-                    case '&&': return {type: 'bool', value: arg1v && arg2v};
-                    case '||': return {type: 'bool', value: arg1v || arg2v};
-                    case '+': return {type: 'int', value: arg1v + arg2v};
-                    case '-': return {type: 'int', value: arg1v - arg2v};
-                    case '*': return {type: 'int', value: arg1v * arg2v};
-                    case '/': return {type: 'int', value: arg1v / arg2v < 0 ? Math.ceil(arg1v / arg2v) : Math.floor(arg1v / arg2v)};
-                    case '%': return {type: 'int', value: arg1v % arg2v};
-                    case '=': arg1.value = arg2.value; return arg1;
-                    case '+=': arg1.value += arg2.value; return arg1;
-                    case '-=': arg1.value -= arg2.value; return arg1;
-                    default: throw new Error("Unknown binary operator " + expr.operator);
+                    case '&&':
+                        return {type: 'bool', value: arg1v && arg2v};
+                    case '||':
+                        return {type: 'bool', value: arg1v || arg2v};
+                    case '+':
+                        return {type: 'int', value: arg1v + arg2v};
+                    case '-':
+                        return {type: 'int', value: arg1v - arg2v};
+                    case '*':
+                        return {type: 'int', value: arg1v * arg2v};
+                    case '/':
+                        return {
+                            type: 'int',
+                            value: arg1v / arg2v < 0 ? Math.ceil(arg1v / arg2v) : Math.floor(arg1v / arg2v)
+                        };
+                    case '%':
+                        return {type: 'int', value: arg1v % arg2v};
+                    case '=':
+                        arg1.value = arg2.value;
+                        return arg1;
+                    case '+=':
+                        arg1.value += arg2.value;
+                        return arg1;
+                    case '-=':
+                        arg1.value -= arg2.value;
+                        return arg1;
+                    default:
+                        throw new Error("Unknown binary operator " + expr.operator);
                 }
             // case 'postfix':
             //     arg1 = evaluate_expression(context, expr.args[0]);
@@ -51,7 +74,8 @@ var java_simulator = function() {
             //         case '--': arg1.value--; return arg1;
             //         default: throw new Error("Unknown postfix operator " + expr.operator);
             //     }
-            case 'literal': return {type:expr.type, value:expr.value};
+            case 'literal':
+                return {type: expr.type, value: expr.value};
             case 'identifier':
                 r = context[expr.value];
                 if (!r) throw new Error("unknown identifier " + expr.value);
@@ -67,7 +91,7 @@ var java_simulator = function() {
                 obj = evaluate_expression(context, expr.object);
                 // HACK hooray for hacky array lengths
                 if (obj.type === 'array' && expr.name === 'length') { // FIXME: get rid of this
-                    return {type:'int', value:obj.value.length};
+                    return {type: 'int', value: obj.value.length};
                 } else {
                     throw new Error("Unable to evaluate reference.");
                 }
@@ -78,9 +102,20 @@ var java_simulator = function() {
                     args.push(evaluate_expression(context, arg));
                 }
                 console.log(args);
-                if (obj.value === 'range' && args[0].type === 'int') { // TODO: adjust for multi-param
+                if (obj.value === 'range') { // TODO: adjust for multi-param
                     // HACK: assumes only single-param range
-                    return {type:'array', value:[...Array(args[1].value).keys()]};
+                    var val;
+                    if (args.length === 1) {
+                        val = [...Array(args[0].value).keys()];
+                    } else if (args.length <= 3) {
+                        val = []
+                        for (let i = args[0]; i < args[1]; i += (args.length === 2 ? 1 : args[2])) {
+                            val.append(i);
+                        }
+                    } else {
+                        throw new Error("wrong number of arguments to range (expected 1, 2, or 3)")
+                    }
+                    return {type:'array', value:val};
                 } else if (obj.value === 'len' && args[0].type === 'array') {
                     return {type:'int', value:args[0].value.length};
                 } else {
