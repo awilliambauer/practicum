@@ -6,9 +6,9 @@
   "description": "Practice for loops and arrays",
   "problems": [{
     "id": "3939090f-1edc-4fcf-854a-2d87b9fda251",
-    "title": "Array Mystery 1",
+    "title": "For Loop Investigation 1",
     "content": {
-      "text": "def forLoopInvestigation(start, end, step):\n\ta = 4\n\tb = 21\n\tfor i in range(start, end, step):\n\t\ta = a + 6\n\t\tif (a > b):\n\t\t\tb = b + 8\n\tprint(a, b)",
+      "text": "def forLoopInvestigation(start, end, step):\n\ta = 4\n\tb = 21\n\tfor i in range(start, end, step):\n\t\ta = a + 6\n\t\tif (a > b):\n\t\t\tb = b + 8\t",
       "variants": [{
         "id": "58cb27dd-8ea3-4e48-9bb6-92705224801f",
         "arguments": {"start": 0, "end": 6, "step": 1}
@@ -16,15 +16,15 @@
     }
   }, {
     "id": "a30abcb4-327b-4f91-83f5-dd534e98f56a",
-    "title": "Array Mystery 2",
+    "title": "For Loop Investigation 2",
     "content": {
-      "text": "public static void arrayMystery2(int[] arr) {\nfor (int i = 1; i < arr.length - 1; i++) {\nif (i % 2 == 0) {\narr[i] = i * arr[i + 1] + arr[i - 1];\n}\n}\n}",
+      "text": "def forLoopInvestigation(array):\n\ta = 4\n\tfor i in array:\n\t\tif (i % 5 == 0):\n\t\t\ta = a + 2\t",
       "variants": [{
         "id": "2d525b55-2ea0-414f-b3e2-67fb53421dfc",
-        "arguments": {"arr": [11, 14, 2, 4, 7]}
+        "arguments": {"arr": [5, 11, 15, 19, 25]}
       },{
         "id": "1a698d19-0166-4962-a1ff-8f5277fd02b7",
-        "arguments": {"arr": [1, 2, 3, 4, 5]}
+        "arguments": {"arr": [6, 10, 14, 0, 22]}
       }]
     }
   }, {

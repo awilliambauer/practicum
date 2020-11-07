@@ -73,7 +73,7 @@ function IfElseHelper() {
         variableObject[variableName] = variableValue;
         return variableObject;
     };
-
+    getDeclaredVariable
     this.thisIsAnIfElseStatement = function(AST) {
         return AST["body"][this.currentCodeBlockIndex]["tag"] === "if";
     };
