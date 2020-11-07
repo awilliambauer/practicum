@@ -102,16 +102,15 @@ var java_simulator = function() {
                     args.push(evaluate_expression(context, arg));
                 }
                 console.log(args);
-                if (obj.value === 'range') { // TODO: adjust for multi-param
-                    // HACK: assumes only single-param range
-                    var val;
+                if (obj.value === 'range') {
+                    var val = [];
                     if (args.length === 1) {
                         val = [...Array(args[0].value).keys()];
                     } else if (args.length <= 3) {
-                        val = []
-                        for (let i = args[0]; i < args[1]; i += (args.length === 2 ? 1 : args[2])) {
-                            val.append(i);
+                        for (let i = args[0].value; i < args[1].value; i += (args.length === 2 ? 1 : args[2].value)) {
+                            val.push(i);
                         }
+                        console.log(val);
                     } else {
                         throw new Error("wrong number of arguments to range (expected 1, 2, or 3)")
                     }
