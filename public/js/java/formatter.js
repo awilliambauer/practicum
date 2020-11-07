@@ -130,7 +130,7 @@ var java_formatter = function() {
                 init.attr('id', 'init');
                 init.append(to_dom(node.variable, options, indent_level, true));
                 line.append(init);
-                line.append(' in ');
+                line.append(' ' + keyword('in') + ' ');
                 // var cond = $('<span>');
                 // cond.attr('id', 'test');
                 // cond.append(to_dom(node.condition, options, indent_level, true));
@@ -157,7 +157,7 @@ var java_formatter = function() {
                     line = newline(elem);
                     line.append(indent(indent_level));
                 }
-                line.append(keyword("if"));
+                line.append(keyword("if") + ' ');
                 line.append(to_dom(node.condition, options, indent_level));
                 line.append(":");
                 node.then_branch.forEach(function(s) {
@@ -177,8 +177,8 @@ var java_formatter = function() {
                     }
                 }
                 if (!special_flag) {
-                    line = newline(elem);
-                    line.append(indent(indent_level) );
+                    // line = newline(elem);
+                    // line.append(indent(indent_level) );
                 }
                 break;
 
