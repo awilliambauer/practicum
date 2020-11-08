@@ -113,7 +113,7 @@ var java_parsing = function() {
         var keywords = {
             // "class":1, "public":1, "static":1,
             // "void":1, "int":1,
-            "def":1,
+            "def":1, "return":1,
             "for":1, "in":1, "if":1, "else":1
         };
 
@@ -356,8 +356,26 @@ var java_parsing = function() {
             switch (next.value) {
                 case "for": return match_forloop(indent_level);
                 case "if": return match_ifelse(indent_level);
+                case "return": return match_return_statement();
                 default: return match_simple_statement(false);
             }
+        }
+
+        function match_return_statement() {
+            var start = lex.position();
+            match_keyword("return");
+            var values = match_delimited_list(function(){return match_expression(0);}, ",");
+            return {
+                id:new_id(),
+                location: location(start),
+                tag: "expression",
+                expression: {
+                    id: new_id(),
+                    location: location(start),
+                    tag: "return",
+                    value: {type: "array", value: values}
+                }
+            };
         }
 
         function match_simple_statement(do_match_ending_semicolon) {
@@ -410,7 +428,7 @@ var java_parsing = function() {
             match_symbol(":");
             var thenb = match_block(indent_level + 1);
             var elseb = undefined;
-            if (peek_keyword("else")) {
+            if (!lex.iseof() && peek_keyword("else")) {
                 match_keyword("else");
                 if (peek_symbol(":")) {
                     match_symbol(":");

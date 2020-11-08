@@ -101,7 +101,6 @@ var java_simulator = function() {
                 for (let arg of expr.args) {
                     args.push(evaluate_expression(context, arg));
                 }
-                console.log(args);
                 if (obj.value === 'range') {
                     var val = [];
                     if (args.length === 1) {
@@ -110,7 +109,6 @@ var java_simulator = function() {
                         for (let i = args[0].value; i < args[1].value; i += (args.length === 2 ? 1 : args[2].value)) {
                             val.push(i);
                         }
-                        console.log(val);
                     } else {
                         throw new Error("wrong number of arguments to range (expected 1, 2, or 3)")
                     }
@@ -120,7 +118,12 @@ var java_simulator = function() {
                 } else {
                     throw new Error("unable to evaluate function call.")
                 }
-
+            case "return":
+                obj = expr.value;
+                for (let i = 0; i < obj.value.length; i++) {
+                    obj.value[i] = evaluate_expression(context, obj.value[i]);
+                }
+                return obj;
             default: throw new Error("expression type " + expr.tag + " cannot be evaluated");
         }
     }
@@ -132,8 +135,9 @@ var java_simulator = function() {
      */
     function execute_statement(context, stmt) {
         switch (stmt.tag) {
-            case 'expression': return this.evaluate_expression(context, stmt.expression);
-            case 'declaration': return this.evaluate_expression(context, stmt.expression);
+            case 'expression':
+            case 'declaration':
+                return this.evaluate_expression(context, stmt.expression);
             default: throw new Error("unknown statement type " + stmt.tag);
         }
     }

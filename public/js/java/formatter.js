@@ -241,6 +241,11 @@ var java_formatter = function() {
                 elem.append(')');
                 break;
 
+            case 'return':
+                elem.append(keyword("return") + ' ');
+                elem.append(to_dom(node.value, options, indent_level));
+                break;
+
             default:
                 throw new Error("unknown ast tag " + node.tag);
                 break;
