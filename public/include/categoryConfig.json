@@ -18,7 +18,7 @@
     "id": "a30abcb4-327b-4f91-83f5-dd534e98f56a",
     "title": "For Loop Investigation 2",
     "content": {
-      "text": "def forLoopInvestigation(array):\n\ta = 4\n\tfor i in array:\n\t\tif (i % 5 == 0):\n\t\t\ta = a + 2\t",
+      "text": "def forLoopInvestigation(arr):\n\ta = 0\n\tfor i in arr:\n\t\tif (i % 5 == 0):\n\t\t\ta = a + 1\n\treturn a",
       "variants": [{
         "id": "2d525b55-2ea0-414f-b3e2-67fb53421dfc",
         "arguments": {"arr": [5, 11, 15, 19, 25]}
@@ -29,79 +29,91 @@
     }
   }, {
     "id": "de34255c-a634-4bdf-92f9-dd71bff9f76a",
-    "title": "Array Mystery 3",
+    "title": "For Loop Investigation 3",
     "content": {
-      "text": "public static void arrayMystery3(int[] list) {\nfor (int i = 2; i < list.length; i++) {\nlist[i] = list[i] + list[i - 1];\n}\n}",
+      "text": "def forLoopInvestigation(word):\n\tb = 1\n\tfor i in array:\n\t\tif (i == “a”):\n\t\t\tb = b * 3\n\treturn b",
       "variants": [{
         "id": "33b4551b-8768-4136-81de-2a9481b6e717",
-        "arguments": {"list": [2, 3, 5, 7, 11]}
+        "arguments": {"word": "banana"}
       },{
         "id": "7314e514-8bf2-11e5-9681-9b12b415583c",
-        "arguments": {"list": [1, 2, 3, 4, 5, 6]}
+        "arguments": {"word": "aardvark"}
       }]
     }
   }, {
     "id": "fe17370d-dbaa-4118-9309-8ef1165881cd",
-    "title": "Array Mystery 4",
+    "title": "For Loop Investigation 4",
     "content": {
-      "text": "public static void arrayMystery4(int[] list) {\nfor (int i = 0; i < list.length; i++) {\nlist[i] = i * list[i];\n}\n}",
+      "text": "def forLoopInvestigation(start, end, step):\n\ta = 3\n\tb = 0\n\tfor i in range(start, end, step):\n\t\tif (i > b):\n\t\t\tb = b + a\n\t\t\ta = a + 1\n\treturn (a,b)",
       "variants": [{
         "id": "095078ef-7929-4aad-8162-bc9b7d4ae42a",
-        "arguments": {"list": [3, 2]}
-      },{
-        "id": "94ddc458-db89-43d3-a2ef-cbd8260cc514",
-        "arguments": {"list": [5, 4, 3]}
-      },{
-        "id": "8a3f5da9-07b5-4022-b5d2-db914437a080",
-        "arguments": {"list": [2, 4, 6 ,8]}
+        "arguments": {"list": [0, 9, 2]}
       }]
     }
   }, {
     "id": "2f82d86e-8bf8-11e5-98ee-479dfac69b62",
-    "title": "Array Mystery 5",
+    "title": "For Loop Investigation 5",
     "content": {
-      "text": "public static void arrayMystery5(int[] list, int d, int t) {\nfor (int i = 0; i < list.length ; i += d) {\nif (list[i] > t){\nlist[i] = t;\n}\n}\n}",
+      "text": "def forLoopInvestigation(start, end):\n\ta = 5\n\tb = 2\n\tfor i in range(start, end):\n\t\ta = a + 1\n\t\tif (a > b):\n\t\t\tb = b + a\n\treturn (a,b)",
       "variants": [{
         "id": "2fb966ae-8bf8-11e5-9242-77f4f7bfb078",
-        "arguments": {"list": [10, 2, 5, 6], "d": 2, "t": 5}
+        "arguments": {"start": 7, "end": 12}
       },{
         "id": "30077e16-8bf8-11e5-bb98-bb65b9913aac",
-        "arguments": {"list": [6, 7, 8], "d": 1, "t": 0}
-      },{
-        "id": "303d3c40-8bf8-11e5-80f1-cf2c9e93534b",
-        "arguments": {"list": [11, 15, 15, 18, 13], "d": 3, "t": 10}
+        "arguments": {"start": 18, "end": 24}
       }]
     }
   }, {
     "id": "2762ba3c-73e6-4792-a76f-a9496ab7894e",
-    "title": "Array Mystery 6",
+    "title": "For Loop Investigation 6",
     "content": {
-      "text": "public static void arrayMystery6(int[] arr) {\nfor (int i = 0; i < arr.length; i++) {\narr[i] = arr[arr.length - 1 - i];\narr[arr.length - 1 - i] = arr[i];\n}\n}",
+      "text": "def forLoopInvestigation(end):\n\ta = -2\n\tfor i in range(end):\n\t\ta = a + i\n\treturn (a)",
       "variants": [{
         "id": "77900298-25a3-4899-b7f5-9a6f3e41ff5a",
-        "arguments": {"arr": [7, 1, 3, 2, 0, 4]}
-      },{
-        "id": "0881e25f-ef6a-4c29-9eda-0f9406741e53",
-        "arguments": {"arr": [10, 8, 9, 5, 6]}
-      },{
-        "id": "4b3962fb-18aa-473a-9b01-79122ce095fc",
-        "arguments": {"arr": [8, 10, 8, 6, 4, 2]}
+        "arguments": {"end": 5}
       }]
     }
   }, {
     "id": "59b3c734-6b0e-48b4-9578-d91bb9b96a1c",
-    "title": "Array Mystery 7",
+    "title": "For Loop Investigation 7",
     "content": {
-      "text": "public static void arrayMystery7(int[] arr) {\nfor (int i = 2; i < arr.length; i++) {\narr[i] = arr[i] + arr[i - 1] + arr[i - 2];\n}\n}",
+      "text": "def forLoopInvestigation(arr):\n\ta = 5\n\tfor i in arr:\n\t\ta = a - 3\n\t\tif (i < 0):\n\t\t\ta = a + 3\n\treturn a",
       "variants": [{
         "id": "c50d5ab5-3b62-4c0d-9092-d1f42a3419d7",
-        "arguments": {"arr": [3, 0, 1, 4, 7]}
+        "arguments": {"arr": [-3, 200, 56, -0.2, -19, 88]}
       },{
         "id": "2c6be31e-f94d-4b20-b041-b93d7233bfc2",
-        "arguments": {"arr": [0, 1, 2, 3, 4, 5]}
-      },{
-        "id": "36668252-98c6-476b-810a-54346ff83a4f",
-        "arguments": {"arr": [7, 4, -10, 8, 2]}
+        "arguments": {"arr": [82, -66, -0.01, 102, 5]}
+      }]
+    }
+  }, {
+    "id": "hereisthenextid",
+    "title": "For Loop Investigation 8",
+    "content": {
+      "text": "def forLoopInvestigation(start, end):\n\tb = 0\n\tfor i in array:\n\t\tb = b + 4\n\t\tif (i % 2 == 0):\n\t\t\ti = i + 3\n\treturn b",
+      "variants": [{
+        "id": "betterchangethis",
+        "arguments": {"start": 1, "end": 10}
+      }]
+    }
+  }, {
+    "id": "sothisisjustmeaningless",
+    "title": "For Loop Investigation 9",
+    "content": {
+      "text": "def forLoopInvestigation(start, end, step):\n\ta = 10\n\tb = 0\n\tfor i in range(start, end, step):\n\t\tif (a > i): \n\t\t\ta = a - 2\n\t\t\tb = b + 1\n\treturn (a,b)",
+      "variants": [{
+        "id": "whydoesthisexist",
+        "arguments": {"start": 1, "end": 10, "step": -1}
+      }]
+    }
+  }, {
+    "id": "stillnotgettingthepoint",
+    "title": "For Loop Investigation 10",
+    "content": {
+      "text": "def forLoopInvestigation(word):\n\tb = “”\n\tfor i in array:\n\t\tif (index % 2 == 1):\n\t\t\tb = b + i\n\treturn b",
+      "variants": [{
+        "id": "forthiseither",
+        "arguments": {"string": "macroeconomics"}
       }]
     }
   }]
