@@ -2,6 +2,7 @@ function ArrayHelper() {
     "use strict";
 
     var sim = java_simulator;
+    var lineNum = 0;
     this.current_code_block_index = -1;
 
     this.iterable = undefined;
@@ -111,6 +112,22 @@ function ArrayHelper() {
         return null;
     }
 
+    function get_next_instance_variable(body) {
+        lineNum = lineNum + 1;
+        if(lineNum < body.length) {
+            return body[lineNum];
+        }
+        return null;
+    }
+
+    this.get_next_line = function(body) {
+        return get_next_instance_variable(body);
+    }
+
+    this.get_first_line = function(ast) {
+        return ast.body[0];
+    }
+
     //TODO
     this.get_the_next_loop_body_line_to_execute = function(parent, current_statement, condition) {
         console.log(parent);
@@ -181,7 +198,7 @@ function ArrayHelper() {
 
     this.get_loop = function(ast) {
         // assume loop is the top node
-        var loop = ast.body[2];
+        var loop = ast.body[lineNum];
         console.log(loop);
         if (!loop || loop.tag !== 'for') throw new Error("can't find the for loop!");
         return loop;
@@ -219,6 +236,13 @@ function ArrayHelper() {
         return false;
     };
 
+    this.check_for_loop = function(ast) {
+        if(ast.body[lineNum].tag === 'for') {
+            return false;
+        }
+        return true;
+    }
+
     this.get_instance_variables = function(variable_bank, ast) {
         // assume first two statements are instance varibale declarations
         var firstInst = ast.body[0];
@@ -245,11 +269,10 @@ function ArrayHelper() {
     }
 
     //TODO: remove this
-    this.get_instance_variable = function(variable_bank, ast, line) {
-        let variableName = ast["body"][line]["expression"]["args"][0].value;
-        let variableValue = ast["body"][line]["expression"]["args"][1].value;
-        let variableType = ast["body"][line]["expression"]["args"][1].type;
-        console.log(ast);
+    this.get_instance_variable = function(variable_bank, ast) {
+        let variableName = ast["body"][lineNum]["expression"]["args"][0].value;
+        let variableValue = ast["body"][lineNum]["expression"]["args"][1].value;
+        let variableType = ast["body"][lineNum]["expression"]["args"][1].type;
         return this.add_this_to_the_variable_bank(variable_bank, {
             name: variableName,
             type: variableType,

@@ -36,13 +36,25 @@ function TPLAlgorithm() {
         }
     }
 
+    [no_step]
+    {
+        [no_step]
+        let first_line: Line;
+        [interactive("next_line")] first_line = helper.get_first_line(ast);
+    }
+
     let this_is_the_first_instance_variable: Variable;
     [interactive("add_variable")]
-    this_is_the_first_instance_variable = helper.get_instance_variable(variables, ast, 0);
+    this_is_the_first_instance_variable = helper.get_instance_variable(variables, ast);
 
-    let this_is_the_second_instance_variable: Variable;
-    [interactive("add_variable")]
-    this_is_the_second_instance_variable = helper.get_instance_variable(variables, ast, 1);
+    while(helper.check_for_loop(ast)) {
+        let this_is_the_next_instance_variable: Variable;
+        [interactive("add_variable")]
+        this_is_the_next_instance_variable = helper.get_instance_variable(variables, ast);
+
+        let next_line: Line;
+        [interactive("next_line")] next_line = helper.get_next_line(ast.body, next_line);
+    }
 
     [prompt]
     "Now walk through the code line-by-line, keeping track of variable values in the variable bank.";
