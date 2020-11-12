@@ -31,7 +31,7 @@
     "id": "de34255c-a634-4bdf-92f9-dd71bff9f76a",
     "title": "For Loop Investigation 3",
     "content": {
-      "text": "def forLoopInvestigation(word):\n\tb = 1\n\tfor i in array:\n\t\tif (i == “a”):\n\t\t\tb = b * 3\n\treturn b",
+      "text": "def forLoopInvestigation(word):\n\tb = 1\n\tfor i in word:\n\t\tif (i == “a”):\n\t\t\tb = b * 3\n\treturn b",
       "variants": [{
         "id": "33b4551b-8768-4136-81de-2a9481b6e717",
         "arguments": {"word": "banana"}
@@ -47,7 +47,7 @@
       "text": "def forLoopInvestigation(start, end, step):\n\ta = 3\n\tb = 0\n\tfor i in range(start, end, step):\n\t\tif (i > b):\n\t\t\tb = b + a\n\t\t\ta = a + 1\n\treturn (a,b)",
       "variants": [{
         "id": "095078ef-7929-4aad-8162-bc9b7d4ae42a",
-        "arguments": {"list": [0, 9, 2]}
+        "arguments": {"start": 0, "end": 9, "step": 2}
       }]
     }
   }, {
