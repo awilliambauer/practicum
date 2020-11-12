@@ -3,7 +3,7 @@
   "name": "default-array",
   "category": "array",
   "title": "Array Mystery",
-  "description": "Practice for loops and arrays",
+  "description": "Practice for loops",
   "problems": [{
     "id": "3939090f-1edc-4fcf-854a-2d87b9fda251",
     "title": "For Loop Investigation 1",
@@ -590,7 +590,7 @@
   "name": "lab7-array",
   "category": "array",
   "title": "Lab 7 Array Mystery Practice",
-  "description": "Practice for loops and arrays",
+  "description": "Practice for loops",
   "problems": [
     {
       "id": "3609bb36-8684-11e5-98ff-4f1b87c94154",
