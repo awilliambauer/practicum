@@ -29,7 +29,7 @@ function TPLAlgorithm() {
         these_are_the_function_parameters = helper.get_array_parameter(state.args);
 
         [no_step]
-        if (state.vars.length > 1) {
+        if (state.vars.length > 0) {
             let add_the_parameters_to_the_variable_bank: Variable;
             [interactive("add_variable")]
             add_the_parameters_to_the_variable_bank = helper.add_other_parameters_to_the_variable_bank(variables, state.vars);

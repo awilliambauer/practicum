@@ -82,10 +82,8 @@ function ArrayHelper() {
     this.add_other_parameters_to_the_variable_bank = function(bank, variables) {
         var ret = [];
         variables.forEach(function (v) {
-            if (v.type !== "array") {
-                bank[v.name] = {type: v.type, value: v.value};
-                ret.push(v);
-            }
+            bank[v.name] = {type: v.type, value: v.value};
+            ret.push(v);
         });
         return ret;
     };
@@ -93,7 +91,7 @@ function ArrayHelper() {
     //TODO
     this.execute_the_loop_increment = function(variable_bank, iter_variable) {
         console.log(iter_variable);
-        var result = this.execute_statement(variable_bank, java_parsing.parse_statement(iter_variable.value + ' = ' + this.iterable.value[this.iterable.index++])); //TODO: check; and consider factoring out parsing? //it works, no more need to check
+        var result = this.execute_statement(variable_bank, java_parsing.parse_statement(iter_variable.value + ' = ' + (this.iterable.value[this.iterable.index++]).value));
         var variable = {};
         console.log(result);
         variable.name = iter_variable.value;
@@ -204,14 +202,14 @@ function ArrayHelper() {
         return loop;
     };
 
-    //TODO: find where this is called and change input
     this.get_loop_init_variable = function(variable_bank, iter_variable, iterable) {
         this.initialize_loop_iterable(variable_bank, iterable);
         console.log(iter_variable);
         if (iter_variable.tag !== 'identifier') throw new Error("for loop initializer isn't an int declaration!");
         console.log(this.iterable);
-        console.log(java_parsing.parse_statement(iter_variable.value + ' = ' + this.iterable.value[this.iterable.index++]));
-        return this.create_variable(variable_bank, java_parsing.parse_statement(iter_variable.value + ' = ' + this.iterable.value[this.iterable.index++])); // TODO & HACK: expression syntax?
+        console.log(this.iterable.value[this.iterable.index]);
+        console.log(java_parsing.parse_statement(iter_variable.value + ' = ' + (this.iterable.value[this.iterable.index++]).value));
+        return this.create_variable(variable_bank, java_parsing.parse_statement(iter_variable.value + ' = ' + (this.iterable.value[this.iterable.index++]).value));
     };
 
     this.is_the_loop_still_iterating = function(variable_bank) {
@@ -262,7 +260,8 @@ function ArrayHelper() {
     // };
 
     this.initialize_loop_iterable = function(variable_bank, iterable) {
-        if (iterable.tag === 'call') iterable = sim.evaluate_expression(variable_bank, iterable);
+        console.log(variable_bank)
+        iterable = sim.evaluate_expression(variable_bank, iterable);
         if ((iterable.type !== 'array') && (iterable.type !== 'string')) throw new Error("for loop iterable isn't an array or string")
         this.iterable = iterable;
         this.iterable.index = 0; // HACK this is a hack

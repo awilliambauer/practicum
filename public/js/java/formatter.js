@@ -75,7 +75,7 @@ var java_formatter = function() {
         switch (node.tag) {
             case 'method':
                 line = newline(elem);
-                line.html(sprintf('{0}{1} {2} (', indent(indent_level), keyword('def'), method(node.name)));
+                line.html(sprintf('{0}{1} {2}(', indent(indent_level), keyword('def'), method(node.name)));
                 firstIter = true;
                 node.params.forEach(function(p) {
                     if (!firstIter) {

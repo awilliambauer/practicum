@@ -104,10 +104,12 @@ var java_simulator = function() {
                 if (obj.value === 'range') {
                     var val = [];
                     if (args.length === 1) {
-                        val = [...Array(args[0].value).keys()];
+                        for (let i = 0; i < args[0].value; i++) {
+                            val.push({type: 'int', value: i})
+                        }
                     } else if (args.length <= 3) {
                         for (let i = args[0].value; i < args[1].value; i += (args.length === 2 ? 1 : args[2].value)) {
-                            val.push(i);
+                            val.push({type: 'int', value: i});
                         }
                     } else {
                         throw new Error("wrong number of arguments to range (expected 1, 2, or 3)")
