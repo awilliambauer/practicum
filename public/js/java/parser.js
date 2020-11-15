@@ -496,6 +496,12 @@ var java_parsing = function() {
                         var e = match_expression(0);
                         match_symbol(")"); // ) has bind power of 0, so match_expression halts and doesn't consume it
                         return {id:new_id(), location:location(start), tag:'paren_expr', value:e};
+                    } else if (t.value === "-") {
+                        if (lex.peek().type === TokenType.INT_LITERAL) {
+                            t = lex.next();
+                            return {id:new_id(), location:location(start), tag:'literal', type:'int', value:t.value*-1};
+                        }
+                        throw_error(t.position, "only integers can be negative");
                     } else { // TODO: add lists here
                         console.log(t);
                         throw_error(t.position, "( is the only symbol that can prefix an expression");
