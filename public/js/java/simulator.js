@@ -121,7 +121,7 @@ var java_simulator = function() {
                     throw new Error("unable to evaluate function call.")
                 }
             case "return":
-                obj = expr.value;
+                obj = expr.args;
                 for (let i = 0; i < obj.value.length; i++) {
                     obj.value[i] = evaluate_expression(context, obj.value[i]);
                 }

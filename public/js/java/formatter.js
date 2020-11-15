@@ -117,9 +117,9 @@ var java_formatter = function() {
                 var expression = to_dom(node.expression, options, indent_level);
                 var children = expression.children();
                 elem.append(to_dom(node.expression, options, indent_level));
-                if (!special_flag) {
-                    elem.append(";");
-                }
+                // if (!special_flag) {
+                //     elem.append(";");
+                // }
                 break;
 
             case 'for':
@@ -243,7 +243,19 @@ var java_formatter = function() {
 
             case 'return':
                 elem.append(keyword("return") + ' ');
-                elem.append(to_dom(node.value, options, indent_level));
+                if (node.args.value.length > 1) {
+                    let firstIter = true;
+                    elem.append("(");
+                    node.args.value.forEach(function(arg) {
+                        if (!firstIter) {
+                            elem.append(", ");
+                        }
+                        firstIter = false;
+                        console.log("return_arg: " + arg);
+                        elem.append(to_dom(arg, options, indent_level));
+                    });
+                    elem.append(")");
+                } else elem.append(to_dom(node.args.value[0], options, indent_level));
                 break;
 
             default:

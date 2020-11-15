@@ -71,6 +71,7 @@ var java_parsing = function() {
         self.home = function() {
             bufidx -= col;
             col = 0;
+            console.log(str.charAt(bufidx) === "\t");
         }
 
         return self;
@@ -262,7 +263,7 @@ var java_parsing = function() {
         function home() {
             cs.home();
             is_peeked = false;
-            next()
+            peek();
         }
         self.home = home
 
@@ -334,17 +335,21 @@ var java_parsing = function() {
             }
             stmts.push(match_statement(indent_level));
             // match_symbol("{");
+            let j = 0;
             while (true) {
                 if (lex.iseof()) return stmts;
                 for (let i = 0; i < indent_level; i++) {
                     // first line after block must have less indentation
+                    if (indent_level === 1) console.log(j + " " + i);
                     if (!peek_symbol("\t")) {
                         lex.home();
+                        if (indent_level === 1) console.log(lex.peek());
                         return stmts;
                     }
                     match_symbol("\t")
                 }
                 stmts.push(match_statement(indent_level));
+                j++;
             }
 
             // match_symbol("}");
@@ -356,7 +361,7 @@ var java_parsing = function() {
             switch (next.value) {
                 case "for": return match_forloop(indent_level);
                 case "if": return match_ifelse(indent_level);
-                case "return": return match_return_statement();
+                case "return": {console.log("return"); return match_return_statement();}
                 default: return match_simple_statement(false);
             }
         }
@@ -373,7 +378,7 @@ var java_parsing = function() {
                     id: new_id(),
                     location: location(start),
                     tag: "return",
-                    value: {type: "array", value: values}
+                    args: {type: "array", value: values}
                 }
             };
         }
