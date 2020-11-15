@@ -90,15 +90,26 @@ var java_formatter = function() {
                 });
                 // newline(elem).append(indent(0));
                 if (special_flag) {
-                    let args = "";
+                    // HACK: TAKEN FROM arrayHelper.js
+                    line = newline(newline(elem));
+                    line.html('print(' + method(node.name) + '(');
                     firstIter = true;
                     node.params.forEach(function(p) {
-                        if (!firstIter) args += ', ';
+                        if (!firstIter) line.append(', ');
                         firstIter = false;
-                        args += options.args[p.name];
+                        let arg = options.args[p.name];
+                        if (Array.isArray(arg)) {
+                            line.append('[');
+                            if (arg.length > 0) firstIter = true;
+                            for (let item of arg) {
+                                if (!firstIter) line.append(',')
+                                firstIter = false;
+                                line.append(item);
+                            }
+                            line.append(']');
+                        } else line.append(arg);
                     });
-                    line = newline(newline(elem));
-                    line.html('print(' + method(node.name) + '(' + args + '))');
+                    line.append('))');
                 }
                 break;
 
