@@ -20,7 +20,7 @@ var array = (function() {
     function initialize(problemConfig, simulatorInterface_, initialState, task_logger, fading) {
 
         // add problem AST
-        $("#problem_space > pre").html(java_formatter.format(initialState.ast));
+        $("#problem_space > pre").html(java_formatter.format(initialState.ast, {args:initialState.args}));
 
         logger = task_logger;
         simulatorInterface = simulatorInterface_;

@@ -89,6 +89,17 @@ var java_formatter = function() {
                     elem.append(to_dom(s, options, 1));
                 });
                 // newline(elem).append(indent(0));
+                if (special_flag) {
+                    let args = "";
+                    firstIter = true;
+                    node.params.forEach(function(p) {
+                        if (!firstIter) args += ', ';
+                        firstIter = false;
+                        args += options.args[p.name];
+                    });
+                    line = newline(newline(elem));
+                    line.html('print(' + method(node.name) + '(' + args + '))');
+                }
                 break;
 
             case 'parameter':
@@ -269,7 +280,7 @@ var java_formatter = function() {
         options = options || {};
         options.line = 0;
         console.log(ast);
-        var dom = to_dom(ast, options, 0);
+        var dom = to_dom(ast, options, 0, true);
         return dom[0];
     }
 
