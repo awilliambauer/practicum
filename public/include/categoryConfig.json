@@ -90,7 +90,7 @@
     "id": "1fe899d4-24fa-11eb-adc1-0242ac120002",
     "title": "For Loop Investigation 8",
     "content": {
-      "text": "def forLoopInvestigation(start, end):\n\tb = 0\n\tfor i in array:\n\t\tb = b + 4\n\t\tif (i % 2 == 0):\n\t\t\ti = i + 3\n\treturn (b)",
+      "text": "def forLoopInvestigation(start, end):\n\tb = 0\n\tfor i in range(start, end):\n\t\tb = b + 4\n\t\tif (i % 2 == 0):\n\t\t\ti = i + 3\n\treturn (b)",
       "variants": [{
         "id": "1fe89bfa-24fa-11eb-adc1-0242ac120002\n",
         "arguments": {"start": 1, "end": 10}
@@ -103,7 +103,7 @@
       "text": "def forLoopInvestigation(start, end, step):\n\ta = 10\n\tb = 0\n\tfor i in range(start, end, step):\n\t\tif (a > i): \n\t\t\ta = a - 2\n\t\t\tb = b + 1\n\treturn (a,b)",
       "variants": [{
         "id": "1fe8a19a-24fa-11eb-adc1-0242ac120002\n",
-        "arguments": {"start": 1, "end": 10, "step": -1}
+        "arguments": {"start": 10, "end": 1, "step": -1}
       }]
     }
   }, {
