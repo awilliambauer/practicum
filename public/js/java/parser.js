@@ -497,9 +497,10 @@ var java_parsing = function() {
                         match_symbol(")"); // ) has bind power of 0, so match_expression halts and doesn't consume it
                         return {id:new_id(), location:location(start), tag:'paren_expr', value:e};
                     } else if (t.value === "-") {
-                        if (lex.peek().type === TokenType.INT_LITERAL) {
+                        let peek_type = lex.peek().type
+                        if (peek_type === TokenType.INT_LITERAL || peek_type === TokenType.DOUBLE_LITERAL) {
                             t = lex.next();
-                            return {id:new_id(), location:location(start), tag:'literal', type:'int', value:t.value*-1};
+                            return {id:new_id(), location:location(start), tag:'literal', type:(peek_type===TokenType.INT_LITERAL?'int':'double'), value:t.value*-1};
                         }
                         throw_error(t.position, "only integers can be negative");
                     } else { // TODO: add lists here
