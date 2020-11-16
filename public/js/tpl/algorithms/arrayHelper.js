@@ -91,7 +91,13 @@ function ArrayHelper() {
     //TODO
     this.execute_the_loop_increment = function(variable_bank, iter_variable) {
         console.log(iter_variable);
-        var result = this.execute_statement(variable_bank, java_parsing.parse_statement(iter_variable.value + ' = ' + (this.iterable.value[this.iterable.index++]).value));
+        var result;
+        if (this.iterable.index >= this.iterable.value.length) {
+            result = this.execute_statement(variable_bank, java_parsing.parse_statement(iter_variable.value + ' = ' + (this.iterable.value[this.iterable.index - 1]).value));
+            this.iterable.index++;
+        } else {
+            result = this.execute_statement(variable_bank, java_parsing.parse_statement(iter_variable.value + ' = ' + (this.iterable.value[this.iterable.index++]).value));
+        }
         var variable = {};
         console.log(result);
         variable.name = iter_variable.value;
@@ -214,18 +220,7 @@ function ArrayHelper() {
     };
 
     this.is_the_loop_still_iterating = function(variable_bank) {
-        console.log(this.iterable);
-        console.log(this.iterable.value);
-        var value = this.iterable.value;
-        console.log(Array.from(value).length);
-        console.log(Array.from(this.iterable.value).length);
-        var value2 = Array.from(this.iterable.value).length;
-        var truth = (this.iterable.index < Array.from(this.iterable.value).length);
-        console.log(truth);
-        console.log(this.iterable.index);
-        console.log(this.iterable.value);
-        console.log((this.iterable.index < this.iterable.value));
-        return truth;
+        return (this.iterable.index < this.iterable.value.length + 1);
     };
 
     this.check_if_loop = function(ast) {
