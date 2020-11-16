@@ -122,17 +122,50 @@ function TPLAlgorithm() {
         // [no_step]
         // this_is_the_loop_condition  = null;
 
-        [interactive("next_line")] this_is_the_next_line_that_will_execute = helper.get_the_next_loop_body_line_to_execute(parent, this_is_the_next_line_that_will_execute, condition_outcome);
-
-        [prompt]
-        "This line updates the value of a variable.";
-
-        let update_the_variable_in_the_variable_bank: Variable;
-        [interactive("update_variable")]
-        update_the_variable_in_the_variable_bank = helper.assign_the_new_value_to_the_variable(variables, this_is_the_next_line_that_will_execute);
+        //[interactive("next_line")] this_is_the_next_line_that_will_execute = helper.get_the_next_loop_body_line_to_execute(parent, this_is_the_next_line_that_will_execute, condition_outcome);
 
         [no_step]
-        this_is_the_next_line_that_will_execute = helper.get_loop_end(loop);
+        do {
+            [interactive("next_line")] this_is_the_next_line_that_will_execute = helper.get_the_next_loop_body_line_to_execute(parent, this_is_the_next_line_that_will_execute, condition_outcome);
+            if (helper.is_if(this_is_the_next_line_that_will_execute)) {
+                let this_is_the_if_condition: AstNode;
+                this_is_the_if_condition = this_is_the_next_line_that_will_execute.condition;
+
+                [interactive("conditional")]
+                if (helper.does_this_conditional_evaluate_to_true(variables, this_is_the_if_condition)) {
+                    [no_step]
+                    parent = this_is_the_next_line_that_will_execute;
+                    [no_step]
+                    this_is_the_next_line_that_will_execute = null;
+                    [no_step]
+                    condition_outcome = true;
+                } else {
+                    // assume no else if
+                    [no_step]
+                    if (helper.has_else(this_is_the_next_line_that_will_execute)) {
+                        [no_step]
+                        parent = this_is_the_next_line_that_will_execute;
+                        [no_step]
+                        this_is_the_next_line_that_will_execute = null;
+                        [no_step]
+                        condition_outcome = false;
+                    }
+                }
+            } else {
+                [prompt]
+                "This line updates the value of a variable.";
+
+                let update_the_variable_in_the_variable_bank: Variable;
+                [interactive("update_variable")]
+                update_the_variable_in_the_variable_bank = helper.assign_the_new_value_to_the_variable(variables, this_is_the_next_line_that_will_execute);
+                //this_is_the_next_line_that_will_execute = helper.get_the_next_loop_body_line_to_execute(parent, this_is_the_next_line_that_will_execute, condition_outcome);
+            }
+
+        } while (helper.is_there_another_line_to_execute(parent, this_is_the_next_line_that_will_execute, condition_outcome));
+
+
+        //[no_step]
+        //this_is_the_next_line_that_will_execute = helper.get_loop_end(loop);
         [prompt]
         "We reached the end of the for loop body.";
 

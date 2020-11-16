@@ -202,13 +202,14 @@ function ArrayHelper() {
         return loop;
     };
 
+    //TODO: find where this is called and change input
     this.get_loop_init_variable = function(variable_bank, iter_variable, iterable) {
         this.initialize_loop_iterable(variable_bank, iterable);
         console.log(iter_variable);
         if (iter_variable.tag !== 'identifier') throw new Error("for loop initializer isn't an int declaration!");
         console.log(this.iterable);
         console.log(this.iterable.value[this.iterable.index]);
-        console.log(java_parsing.parse_statement(iter_variable.value + ' = ' + (this.iterable.value[this.iterable.index++]).value));
+        //console.log(java_parsing.parse_statement(iter_variable.value + ' = ' + (this.iterable.value[this.iterable.index++]).value));
         return this.create_variable(variable_bank, java_parsing.parse_statement(iter_variable.value + ' = ' + (this.iterable.value[this.iterable.index++]).value));
     };
 
