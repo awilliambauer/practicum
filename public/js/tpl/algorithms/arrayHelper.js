@@ -125,7 +125,8 @@ function ArrayHelper() {
     }
 
     this.get_next_line = function(body) {
-        return get_next_instance_variable(body);
+        //get_next_instance_variable(body)
+        return body[lineNum];
     }
 
     this.get_first_line = function(ast) {
@@ -265,9 +266,11 @@ function ArrayHelper() {
 
     //TODO: remove this
     this.get_instance_variable = function(variable_bank, ast) {
+        console.log(lineNum);
         let variableName = ast["body"][lineNum]["expression"]["args"][0].value;
         let variableValue = ast["body"][lineNum]["expression"]["args"][1].value;
         let variableType = ast["body"][lineNum]["expression"]["args"][1].type;
+        lineNum = lineNum + 1;
         return this.add_this_to_the_variable_bank(variable_bank, {
             name: variableName,
             type: variableType,
@@ -278,6 +281,10 @@ function ArrayHelper() {
     this.this_is_a_variable_declaration_statement = function(ast) {
         return ast["body"][this.current_code_block_index]["tag"] === "declaration";
     };
+
+    this.is_loop_arr_type = function(loop) {
+        return loop.iterable.args === undefined;
+    }
 
     this.does_this_conditional_evaluate_to_true = function(variable_bank, condition_stmt) {
         console.log(condition_stmt);
