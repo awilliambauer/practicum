@@ -220,7 +220,7 @@ function ArrayHelper() {
         return this.create_variable(variable_bank, java_parsing.parse_statement(iter_variable.value + ' = ' + (this.iterable.value[this.iterable.index++]).value));
     };
 
-    this.is_the_loop_still_iterating = function(variable_bank) {
+    this.is_i_within_the_range = function(variable_bank) {
         return (this.iterable.index < this.iterable.value.length + 1);
     };
 

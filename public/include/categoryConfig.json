@@ -103,7 +103,7 @@
       "text": "def forLoopInvestigation(start, end, step):\n\ta = 10\n\tb = 0\n\tfor i in range(start, end, step):\n\t\tif (a > i): \n\t\t\ta = a - 2\n\t\t\tb = b + 1\n\treturn (a,b)",
       "variants": [{
         "id": "1fe8a19a-24fa-11eb-adc1-0242ac120002\n",
-        "arguments": {"start": 10, "end": 1, "step": -1}
+        "arguments": {"start": 10, "end": 1, "step": -2}
       }]
     }
   }, {
