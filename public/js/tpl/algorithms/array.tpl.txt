@@ -87,6 +87,17 @@ function TPLAlgorithm() {
         "The step size determines by how much the loop variable changes each iteration of the array. Every time we run the loop we will add step to i.";
     }
 
+    let this_creates_a_loop_array: Variable;
+    this_creates_a_loop_array = helper.get_iterable_array();
+
+    let add_the_array_to_the_variable_bank: Variable;
+    [interactive("add_variable")]
+    add_the_array_to_the_variable_bank = helper.add_this_to_the_variable_bank(variables, this_creates_a_loop_array);
+
+    let this_is_the_first_index_for_the_loop_array: ArrayElement;
+    [interactive("array_element_get")]
+    this_is_the_first_index_for_the_loop_array = helper.evaluate_this_expression(variables, this_creates_a_loop_array, loop.variable);
+
     [prompt]
     "We will only start the loop if the loop variable i is within our range.";
 
@@ -171,6 +182,10 @@ function TPLAlgorithm() {
             [interactive("update_variable")]
             update_the_value_of_the_loop_variable_in_the_variable_bank = helper.execute_the_loop_increment(variables, loop.variable);
         }
+
+        let this_is_the_next_index_for_the_loop_array: ArrayElement;
+        [interactive("array_element_get")]
+        this_is_the_next_index_for_the_loop_array = helper.evaluate_this_expression(variables, this_creates_a_loop_array, loop.variable);
 
         // [prompt]
         // "Now let's check the loop condition again.";

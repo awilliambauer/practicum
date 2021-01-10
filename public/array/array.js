@@ -369,7 +369,6 @@ var array = (function() {
                             interactiveLines();
                         }
                         else {
-                            console.log(varObject);
                             highlightLine(varObject.value);
                         }
                         break;
@@ -610,7 +609,6 @@ var array = (function() {
 
     // highlights the line of code passed in as a parameter
     function highlightLine(line) {
-        console.log(line);
         if (line.hasOwnProperty("location")) {
             d3.select("#java-ast-line-" + line.location.start.line).classed("line_highlight", true);
         }
@@ -759,7 +757,6 @@ var array = (function() {
         var correct = false;
 
         var highlightedLine = d3.select(".line_highlight");
-        console.log(highlightedLine);
         if (highlightedLine.node() !== null) {
             if (d3.select("#errorMessage").node() !== null) {
                 d3.select("#errorMessage").remove();
@@ -851,7 +848,6 @@ var array = (function() {
         var correct = false;
 
         var highlightedElement = d3.select(".array_element_highlight");
-        console.log(highlightedElement);
         if (highlightedElement.node() !== null) {
             if (d3.select("#errorMessage").node() !== null) {
                 d3.select("#errorMessage").remove();

@@ -215,8 +215,6 @@ var csed = (function() {
 
         var selection = $('#fading-level').find(":selected").val();
 
-        console.log("selection", selection);
-
         if (selection === 'no-choice') {
             fading_level = 3;
         }
@@ -324,7 +322,6 @@ var csed = (function() {
             if (fading_level === 3) {
                 fading_level = getFadingLevel(experimental_condition, category);
             }
-            console.log(fading_level);
             // This problemUI initialize call probably needs to happen after the main_sim init call,
             // which is handled by promises/then() with fetch.
             problemUI.initialize(problemConfig, new CallbackObject(), initial_state, task_logger, fading_level);

@@ -160,7 +160,6 @@ var java_formatter = function() {
                 // line.append('; ');
                 var update = $('<span>');
                 update.attr('id', 'update');
-                console.log(node);
                 update.append(to_dom(node.iterable, options, indent_level, true));
                 line.append(update);
                 line.append(':');
@@ -273,7 +272,6 @@ var java_formatter = function() {
                             elem.append(", ");
                         }
                         firstIter = false;
-                        console.log("return_arg: " + arg);
                         elem.append(to_dom(arg, options, indent_level));
                     });
                     elem.append(")");
@@ -290,7 +288,6 @@ var java_formatter = function() {
     self.format = function(ast, options) {
         options = options || {};
         options.line = 0;
-        console.log(ast);
         var dom = to_dom(ast, options, 0, true);
         return dom[0];
     }
