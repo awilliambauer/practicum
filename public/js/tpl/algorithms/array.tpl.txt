@@ -18,7 +18,7 @@ function TPLAlgorithm() {
     variables = helper.create_new_variable_bank();
 
     [prompt]
-    "Welcome to for loop practice";
+    "Welcome to for loop practice.";
 
     [no_step]
     {
@@ -70,39 +70,58 @@ function TPLAlgorithm() {
         this_is_the_loop_iterable = loop.iterable;
         [no_step]
         this_is_the_loop_variable = loop.variable;
-        [prompt]
-        "When range more than one parameter, the first number is the starting value for loop variable i.";
 
-        let add_the_starting_value_for_i_to_the_variable_bank: Variable;
-        [interactive("add_variable")]
-        add_the_starting_value_for_i_to_the_variable_bank = helper.add_this_to_the_variable_bank(variables, helper.get_loop_init_variable(variables, this_is_the_loop_variable, this_is_the_loop_iterable));
+        [no_step]
+        if (helper.is_loop_arr_type(loop)) {
+            [prompt]
+            "i will be iterating through an array during our for loop, starting with the first element at index 0 and moving to the next element each time the loop starts again.";
 
-        [prompt]
-        "The second value in the range is the endpoint of the loop which we already have in the variable bank.";
-        [prompt]
-        "The end parameter is also called the “loop condition”. We only continue the loop if the loop variable is within our range defined by start and end.";
-        [prompt]
-        "The last value in the range is the step size. If there are only two values, the step size defaults to 1.";
-        [prompt]
-        "The step size determines by how much the loop variable changes each iteration of the array. Every time we run the loop we will add step to i.";
+            [prompt]
+            "We need to set the initial value of i to the starting element of the array. ";
+        } else {
+            [prompt]
+            "When range is called with some integer parameters in Python, it makes a sequence of numbers to match the range call.";
+
+            [prompt]
+            "You can pass 1 to 3 numbers to range. If there’s only one number then the sequence goes from 0 to one less than that number because Python starts indexing at 0.";
+
+            [prompt]
+            "Two numbers in the range call sets a specific start and end for the sequence, and a third number is the step which tells Python how quickly to move through the sequence. Normally the step is 1.";
+
+            [prompt]
+            "First let’s set our loop variable i to the first element of the array.";
+        }
+
+        [no_step]
+        if (helper.is_loop_arr_type(loop)) {
+            let add_the_starting_value_for_i_to_the_variable_bank: Variable;
+            [interactive("add_variable")]
+            add_the_starting_value_for_i_to_the_variable_bank = helper.add_this_to_the_variable_bank(variables, helper.get_loop_init_variable(variables, this_is_the_loop_variable, this_is_the_loop_iterable));
+
+            [prompt]
+            "The for loop will end when i has moved through each element in the array. Now let’s move on into the for loop.";
+        } else {
+            let add_the_starting_value_for_i_to_the_variable_bank: Variable;
+            [interactive("add_variable")]
+            add_the_starting_value_for_i_to_the_variable_bank = helper.add_this_to_the_variable_bank(variables, helper.get_loop_init_variable(variables, this_is_the_loop_variable, this_is_the_loop_iterable));
+
+            let now_python_turns_our_sequence_into_an_array: Variable;
+            now_python_turns_our_sequence_into_an_array = helper.get_iterable_array();
+
+            let add_the_array_to_the_variable_bank: Variable;
+            [interactive("add_variable")]
+            add_the_array_to_the_variable_bank = helper.add_this_to_the_variable_bank(variables, now_python_turns_our_sequence_into_an_array);
+
+            [prompt]
+            "Every time the for loop starts again, i moves to the next index of the array and takes on the next value.";
+
+            [prompt]
+            "The for loop will end when i has moved through each element in the array. Now let’s move on into the for loop.";
+        }
     }
 
-    let this_creates_a_loop_array: Variable;
-    this_creates_a_loop_array = helper.get_iterable_array();
-
-    let add_the_array_to_the_variable_bank: Variable;
-    [interactive("add_variable")]
-    add_the_array_to_the_variable_bank = helper.add_this_to_the_variable_bank(variables, this_creates_a_loop_array);
-
-    let this_is_the_first_index_for_the_loop_array: ArrayElement;
-    [interactive("array_element_get")]
-    this_is_the_first_index_for_the_loop_array = helper.evaluate_this_expression(variables, this_creates_a_loop_array, loop.variable);
-
-    [prompt]
-    "We will only start the loop if the loop variable i is within our range.";
-
-    [interactive("conditional")]
-    while (helper.is_i_within_the_range(variables))  {
+    [no_step]
+    while (helper.was_that_the_last_element_in_the_array(variables))  {
 
         [no_step]
         this_is_the_next_line_that_will_execute = null;
@@ -112,12 +131,6 @@ function TPLAlgorithm() {
         let parent;
         [no_step]
         parent = loop;
-
-        // FIXME hack to remove loop condition highlighting. maybe the variable context idea doesn't actually work?
-        // [no_step]
-        // this_is_the_loop_condition  = null;
-
-        //[interactive("next_line")] this_is_the_next_line_that_will_execute = helper.get_the_next_loop_body_line_to_execute(parent, this_is_the_next_line_that_will_execute, condition_outcome);
 
         [no_step]
         do {
@@ -141,7 +154,6 @@ function TPLAlgorithm() {
                 } else {
                     [prompt]
                     "Since it’s not true we will be ignoring all of the lines in the if statement.";
-                    // assume no else if
                     [no_step]
                     if (helper.has_else(this_is_the_next_line_that_will_execute)) {
                         [no_step]
@@ -159,14 +171,10 @@ function TPLAlgorithm() {
                 let update_the_variable_in_the_variable_bank: Variable;
                 [interactive("update_variable")]
                 update_the_variable_in_the_variable_bank = helper.assign_the_new_value_to_the_variable(variables, this_is_the_next_line_that_will_execute);
-                //this_is_the_next_line_that_will_execute = helper.get_the_next_loop_body_line_to_execute(parent, this_is_the_next_line_that_will_execute, condition_outcome);
             }
 
         } while (helper.is_there_another_line_to_execute(parent, this_is_the_next_line_that_will_execute, condition_outcome));
 
-
-        //[no_step]
-        //this_is_the_next_line_that_will_execute = helper.get_loop_end(loop);
         [prompt]
         "We have reached the end of the for loop.";
 
@@ -182,15 +190,6 @@ function TPLAlgorithm() {
             [interactive("update_variable")]
             update_the_value_of_the_loop_variable_in_the_variable_bank = helper.execute_the_loop_increment(variables, loop.variable);
         }
-
-        let this_is_the_next_index_for_the_loop_array: ArrayElement;
-        [interactive("array_element_get")]
-        this_is_the_next_index_for_the_loop_array = helper.evaluate_this_expression(variables, this_creates_a_loop_array, loop.variable);
-
-        // [prompt]
-        // "Now let's check the loop condition again.";
-        // this_is_the_loop_condition = loop.condition;
-
     }
 
     [prompt]

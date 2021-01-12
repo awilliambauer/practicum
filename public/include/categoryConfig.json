@@ -90,10 +90,10 @@
     "id": "1fe899d4-24fa-11eb-adc1-0242ac120002",
     "title": "For Loop Investigation 8",
     "content": {
-      "text": "def forLoopInvestigation(start, end):\n\tb = 0\n\tfor i in range(start, end):\n\t\tb = b + 4\n\t\tif (i % 2 == 0):\n\t\t\ti = i + 3\n\treturn (b)",
+      "text": "def forLoopInvestigation(start, end):\n\tb = 0\n\tfor i in range(start, end):\n\t\tif (i % 2 == 0):\n\t\t\tb = b + i\n\treturn (b)",
       "variants": [{
         "id": "1fe89bfa-24fa-11eb-adc1-0242ac120002\n",
-        "arguments": {"start": 1, "end": 10}
+        "arguments": {"start": -2, "end": 3}
       }]
     }
   }, {
