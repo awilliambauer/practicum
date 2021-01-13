@@ -192,7 +192,11 @@ function TPLAlgorithm() {
         }
     }
 
-    [prompt]
-    "Write the final values of the variables to be returned in the solution box.";
+    [no_step] if (helper.this_is_a_return_statement(ast)) {
+        let the_return_value_of_the_function_is_determined_here;
+        the_return_value_of_the_function_is_determined_here = helper.get_return_output(ast, variables); // TODO: better text, highlight
+        [prompt]
+        "The print statement below prints out the value(s) that the function returned. Enter that solution in the answer box!";
+    }
 
 }

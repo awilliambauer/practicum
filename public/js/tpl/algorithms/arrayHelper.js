@@ -378,6 +378,60 @@ function ArrayHelper() {
         return stmt.tag === "expression" && stmt.expression.tag === "binop" &&
                 stmt.expression.operator === "=" && stmt.expression.args[0].tag === "index";
     };
+
+    this.this_is_a_return_statement = function(ast) {
+        this.current_code_block_index = ast.body.length - 1;//HACK
+        if (ast.body[this.current_code_block_index].tag === "expression") {
+            if (ast.body[this.current_code_block_index].expression.hasOwnProperty("tag")) {
+                if (ast.body[this.current_code_block_index].expression.tag === "return") {
+                    return true;
+                }
+            }
+        }
+        return false;
+    };
+
+    this.get_return_output = function(ast, variable_bank) {
+        console.log(variable_bank);
+        var return_args = ast.body[this.current_code_block_index].expression.args.value;
+
+        var return_vals = new Array();
+        for (let i = 0; i < return_args.length; i++) {
+            return_vals[i] = sim.evaluate_expression(variable_bank, return_args[i]);
+        }
+
+        console.log(return_vals);
+        var return_output = this.create_print_string(return_vals, "")
+
+        console.log(return_output);
+        return return_output;
+        // var return_output = this.create_return_output(return_args, "");
+        //
+        // console.log(return_args);
+        //
+        // for (var variable_name in state.vars) {
+        //     while (return_output.indexOf(variable_name) !== -1) {
+        //         return_output = return_output.replace(variable_name, state.vars[variable_name]);
+        //     }
+        // }
+        //
+        // console.log(return_output);
+    };
+
+    this.create_print_string = function(vals, string) {
+        console.log(vals.length);
+        for (let i = 0; i < vals.length; i++) {
+            console.log(vals[i].hasOwnProperty("tag"));
+            if (!vals[i].hasOwnProperty("tag") || vals[i]["tag"] === "identifier" || vals[i]["tag"] === "literal") {
+                string += vals[i]["value"];
+            } else if (vals[i].tag === "binop") {
+                string += this.create_print_string(vals[i].args, string); // TODO: what does this do?
+            }
+            if (i + 1 < vals.length) string += ",";
+        }
+
+        return string;
+    };
 }
 
 /**
