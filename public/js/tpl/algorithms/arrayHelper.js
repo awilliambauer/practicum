@@ -14,9 +14,12 @@ function ArrayHelper() {
             if (Array.isArray(o[key])) {
                 arg.type = 'array';
                 arg.value = o[key].map(function(i) { return {type:'int', value:i}; });
+            } else if (typeof o[key] === "string" || o[key] instanceof String) {
+                arg.type = 'string';
+                arg.value = [...o[key]].map(function (i) { return { type: "char", value: i };});
             } else {
-                arg.type = 'int';
-                arg.value = o[key];
+              arg.type = "int";
+              arg.value = o[key];
             }
             args.push(arg);
         }
@@ -34,11 +37,19 @@ function ArrayHelper() {
                         return {type: 'int', value: i};
                     })
                 };
+            } else if (typeof args[key] === "string" || args[key] instanceof String) {
+                return {
+                  name: key,
+                  type: "string",
+                  value: [...args[key]].map(function (i) {
+                    return { type: "char", value: i };
+                  }),
+                };
             }
             return {
-                name: key,
-                type: 'int',
-                value: args[key]
+            name: key,
+            type: "int",
+            value: args[key],
             };
         }
     };
