@@ -193,8 +193,11 @@ function TPLAlgorithm() {
     }
 
     [no_step] if (helper.this_is_a_return_statement(ast)) {
+        let this_is_the_next_line_that_will_execute: Line;
+        [interactive("next_line")] this_is_the_next_line_that_will_execute = helper.get_return_statement(ast);
+
         let the_return_value_of_the_function_is_determined_here;
-        the_return_value_of_the_function_is_determined_here = helper.get_return_output(ast, variables); // TODO: better text, highlight
+        the_return_value_of_the_function_is_determined_here = helper.get_return_output(this_is_the_next_line_that_will_execute, variables); // TODO: better text, highlight
         [prompt]
         "The print statement below prints out the value(s) that the function returned. Enter that solution in the answer box!";
     }

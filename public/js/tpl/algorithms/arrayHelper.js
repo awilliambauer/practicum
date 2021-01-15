@@ -380,7 +380,7 @@ function ArrayHelper() {
     };
 
     this.this_is_a_return_statement = function(ast) {
-        this.current_code_block_index = ast.body.length - 1;//HACK
+        if (this.current_code_block_index === -1) this.current_code_block_index = ast.body.length - 1; // TODO HACK for when current_code_block_index is not being used
         if (ast.body[this.current_code_block_index].tag === "expression") {
             if (ast.body[this.current_code_block_index].expression.hasOwnProperty("tag")) {
                 if (ast.body[this.current_code_block_index].expression.tag === "return") {
@@ -391,20 +391,21 @@ function ArrayHelper() {
         return false;
     };
 
-    this.get_return_output = function(ast, variable_bank) {
-        console.log(variable_bank);
-        var return_args = ast.body[this.current_code_block_index].expression.args.value;
+    this.get_return_statement = function(ast) {
+        if (!this.this_is_a_return_statement(ast)) throw new Error("could not find return!");
+        return ast.body[this.current_code_block_index];
+    }
 
-        var return_vals = new Array();
+    this.get_return_output = function(stmt, variable_bank) {
+        console.log(stmt);
+        var return_args = stmt.expression.args.value;
+
+        var return_vals = [];
         for (let i = 0; i < return_args.length; i++) {
             return_vals[i] = sim.evaluate_expression(variable_bank, return_args[i]);
         }
 
-        console.log(return_vals);
-        var return_output = this.create_print_string(return_vals, "")
-
-        console.log(return_output);
-        return return_output;
+        return this.create_print_string(return_vals, "")
         // var return_output = this.create_return_output(return_args, "");
         //
         // console.log(return_args);
