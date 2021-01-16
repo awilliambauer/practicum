@@ -105,12 +105,12 @@ function TPLAlgorithm() {
             [interactive("add_variable")]
             add_the_starting_value_for_i_to_the_variable_bank = helper.add_this_to_the_variable_bank(variables, helper.get_loop_init_variable(variables, this_is_the_loop_variable, this_is_the_loop_iterable));
 
-            let now_python_turns_our_sequence_into_an_array: Variable;
-            now_python_turns_our_sequence_into_an_array = helper.get_iterable_array();
+            let lets_visualize_our_sequence_with_an_array: Variable;
+            lets_visualize_our_sequence_with_an_array = helper.get_iterable_array();
 
             let add_the_array_to_the_variable_bank: Variable;
             [interactive("add_variable")]
-            add_the_array_to_the_variable_bank = helper.add_this_to_the_variable_bank(variables, now_python_turns_our_sequence_into_an_array);
+            add_the_array_to_the_variable_bank = helper.add_this_to_the_variable_bank(variables, lets_visualize_our_sequence_with_an_array);
 
             [prompt]
             "Every time the for loop starts again, i moves to the next index of the array and takes on the next value.";
@@ -121,7 +121,7 @@ function TPLAlgorithm() {
     }
 
     [interactive("conditional")]
-    while (helper.should_we_do_another_iteration_of_the_for_loop(variables)) {
+    while (helper.is_there_another_item_in_the_loop_sequence(variables)) {
 
         [no_step]
         this_is_the_next_line_that_will_execute = null;
