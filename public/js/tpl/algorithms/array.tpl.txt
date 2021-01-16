@@ -120,8 +120,9 @@ function TPLAlgorithm() {
         }
     }
 
+    //[interactive("conditional")]
     [no_step]
-    while (helper.was_that_the_last_element_in_the_array(variables))  {
+    while (helper.was_that_the_last_element_in_the_array(variables)) {
 
         [no_step]
         this_is_the_next_line_that_will_execute = null;
