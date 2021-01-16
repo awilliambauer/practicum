@@ -224,7 +224,7 @@ function ArrayHelper() {
         return this.create_variable(variable_bank, java_parsing.parse_statement(iter_variable.value + ' = ' + (this.iterable.value[this.iterable.index++]).value));
     };
 
-    this.was_that_the_last_element_in_the_array = function(variable_bank) {
+    this.should_we_do_another_iteration_of_the_for_loop = function(variable_bank) {
         return (this.iterable.index < this.iterable.value.length + 1);
     };
 
