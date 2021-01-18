@@ -62,7 +62,7 @@ function TPLAlgorithm() {
     "We're at the beginning of a new for-loop block. Look at the loop header.";
 
     [no_step]
-    let now_python_turns_our_sequence_into_an_array: Variable;
+    let lets_visualize_our_sequence_with_an_array: Variable;
 
     [no_step]
     {
@@ -104,18 +104,16 @@ function TPLAlgorithm() {
             [prompt]
             "The for loop will end when i has moved through each element in the array. Now let’s move on into the for loop.";
 
-            now_python_turns_our_sequence_into_an_array = helper.get_iterable_array();
+            lets_visualize_our_sequence_with_an_array = helper.get_iterable_array();
 
             let this_is_the_first_index_for_the_loop_array: ArrayElement;
             [interactive("array_element_get")]
-            this_is_the_first_index_for_the_loop_array = helper.loop_array_index(variables, now_python_turns_our_sequence_into_an_array);
+            this_is_the_first_index_for_the_loop_array = helper.loop_array_index(variables, lets_visualize_our_sequence_with_an_array);
         } else {
             let add_the_starting_value_for_i_to_the_variable_bank: Variable;
             [interactive("add_variable")]
             add_the_starting_value_for_i_to_the_variable_bank = helper.add_this_to_the_variable_bank(variables, helper.get_loop_init_variable(variables, this_is_the_loop_variable, this_is_the_loop_iterable));
 
-            now_python_turns_our_sequence_into_an_array = helper.get_iterable_array();
-            let lets_visualize_our_sequence_with_an_array: Variable;
             lets_visualize_our_sequence_with_an_array = helper.get_iterable_array();
 
             let add_the_array_to_the_variable_bank: Variable;
@@ -124,7 +122,7 @@ function TPLAlgorithm() {
 
             let this_is_the_first_index_for_the_loop_array: ArrayElement;
             [interactive("array_element_get")]
-            this_is_the_first_index_for_the_loop_array = helper.loop_array_index(variables, now_python_turns_our_sequence_into_an_array);
+            this_is_the_first_index_for_the_loop_array = helper.loop_array_index(variables, lets_visualize_our_sequence_with_an_array);
 
             [prompt]
             "Every time the for loop starts again, i moves to the next index of the array and takes on the next value.";
@@ -206,7 +204,7 @@ function TPLAlgorithm() {
 
             let this_is_the_next_index_for_the_loop_array: ArrayElement;
             [interactive("array_element_get")]
-            this_is_the_next_index_for_the_loop_array = helper.loop_array_index(variables, now_python_turns_our_sequence_into_an_array);
+            this_is_the_next_index_for_the_loop_array = helper.loop_array_index(variables, lets_visualize_our_sequence_with_an_array);
         }
     }
 

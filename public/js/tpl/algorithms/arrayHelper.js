@@ -225,10 +225,8 @@ function ArrayHelper() {
         return this.create_variable(variable_bank, java_parsing.parse_statement(iter_variable.value + ' = ' + (this.iterable.value[this.iterable.index]).value));
     };
 
-    this.was_that_the_last_element_in_the_array = function(variable_bank) {
-        return (this.iterable.index < this.iterable.value.length);
     this.is_there_another_item_in_the_loop_sequence = function(variable_bank) {
-        return (this.iterable.index < this.iterable.value.length + 1);
+        return (this.iterable.index < this.iterable.value.length);
     };
 
     this.check_if_loop = function(ast) {
