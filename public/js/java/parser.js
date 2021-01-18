@@ -508,6 +508,7 @@ var java_parsing = function() {
                         throw_error(t.position, "( is the only symbol that can prefix an expression");
                         break;
                     }
+                    break;
                 default: throw_error(t.position, "Expected expression");
             }
         }
