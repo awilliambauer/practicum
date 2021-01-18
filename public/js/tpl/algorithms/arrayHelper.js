@@ -91,11 +91,12 @@ function ArrayHelper() {
     //TODO
     this.execute_the_loop_increment = function(variable_bank, iter_variable) {
         var result;
-        if (this.iterable.index >= this.iterable.value.length) {
-            result = this.execute_statement(variable_bank, java_parsing.parse_statement(iter_variable.value + ' = ' + (this.iterable.value[this.iterable.index - 1]).value));
+        if (this.iterable.index >= this.iterable.value.length - 1) {
+            result = this.execute_statement(variable_bank, java_parsing.parse_statement(iter_variable.value + ' = ' + (this.iterable.value[this.iterable.index]).value));
             this.iterable.index++;
         } else {
-            result = this.execute_statement(variable_bank, java_parsing.parse_statement(iter_variable.value + ' = ' + (this.iterable.value[this.iterable.index++]).value));
+            this.iterable.index++;
+            result = this.execute_statement(variable_bank, java_parsing.parse_statement(iter_variable.value + ' = ' + (this.iterable.value[this.iterable.index]).value));
         }
         var variable = {};
         variable.name = iter_variable.value;
@@ -210,11 +211,11 @@ function ArrayHelper() {
     this.get_loop_init_variable = function(variable_bank, iter_variable, iterable) {
         this.initialize_loop_iterable(variable_bank, iterable);
         if (iter_variable.tag !== 'identifier') throw new Error("for loop initializer isn't an int declaration!");
-        return this.create_variable(variable_bank, java_parsing.parse_statement(iter_variable.value + ' = ' + (this.iterable.value[this.iterable.index++]).value));
+        return this.create_variable(variable_bank, java_parsing.parse_statement(iter_variable.value + ' = ' + (this.iterable.value[this.iterable.index]).value));
     };
 
     this.was_that_the_last_element_in_the_array = function(variable_bank) {
-        return (this.iterable.index < this.iterable.value.length + 1);
+        return (this.iterable.index < this.iterable.value.length);
     };
 
     this.check_if_loop = function(ast) {
@@ -326,6 +327,11 @@ function ArrayHelper() {
         return array;
     };
 
+    this.loop_array_index = function(variable_bank, array) {
+        var val = sim.evaluate_expression(variable_bank, {tag: 'literal', type: 'int', value: this.iterable.index});
+        val["array"] = array;
+        return val;
+    };
 
     this.evaluate_this_expression_and_add_to_scratch = function(variable_bank, scratch_list) {
         var value = sim.evaluate_expression(variable_bank, last(scratch_list));
