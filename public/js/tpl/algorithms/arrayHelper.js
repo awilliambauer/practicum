@@ -102,11 +102,12 @@ function ArrayHelper() {
     //TODO
     this.execute_the_loop_increment = function(variable_bank, iter_variable) {
         var result;
-        if (this.iterable.index >= this.iterable.value.length) {
-            result = this.execute_statement(variable_bank, java_parsing.parse_statement(iter_variable.value + ' = ' + (this.iterable.value[this.iterable.index - 1]).value));
+        if (this.iterable.index >= this.iterable.value.length - 1) {
+            result = this.execute_statement(variable_bank, java_parsing.parse_statement(iter_variable.value + ' = ' + (this.iterable.value[this.iterable.index]).value));
             this.iterable.index++;
         } else {
-            result = this.execute_statement(variable_bank, java_parsing.parse_statement(iter_variable.value + ' = ' + (this.iterable.value[this.iterable.index++]).value));
+            this.iterable.index++;
+            result = this.execute_statement(variable_bank, java_parsing.parse_statement(iter_variable.value + ' = ' + (this.iterable.value[this.iterable.index]).value));
         }
         var variable = {};
         variable.name = iter_variable.value;
@@ -221,11 +222,11 @@ function ArrayHelper() {
     this.get_loop_init_variable = function(variable_bank, iter_variable, iterable) {
         this.initialize_loop_iterable(variable_bank, iterable);
         if (iter_variable.tag !== 'identifier') throw new Error("for loop initializer isn't an int declaration!");
-        return this.create_variable(variable_bank, java_parsing.parse_statement(iter_variable.value + ' = ' + (this.iterable.value[this.iterable.index++]).value));
+        return this.create_variable(variable_bank, java_parsing.parse_statement(iter_variable.value + ' = ' + (this.iterable.value[this.iterable.index]).value));
     };
 
-    this.was_that_the_last_element_in_the_array = function(variable_bank) {
-        return (this.iterable.index < this.iterable.value.length + 1);
+    this.is_there_another_item_in_the_loop_sequence = function(variable_bank) {
+        return (this.iterable.index < this.iterable.value.length);
     };
 
     this.check_if_loop = function(ast) {
@@ -337,6 +338,11 @@ function ArrayHelper() {
         return array;
     };
 
+    this.loop_array_index = function(variable_bank, array) {
+        var val = sim.evaluate_expression(variable_bank, {tag: 'literal', type: 'int', value: this.iterable.index});
+        val["array"] = array;
+        return val;
+    };
 
     this.evaluate_this_expression_and_add_to_scratch = function(variable_bank, scratch_list) {
         var value = sim.evaluate_expression(variable_bank, last(scratch_list));
@@ -377,6 +383,61 @@ function ArrayHelper() {
     this.does_this_line_update_array = function(stmt) {
         return stmt.tag === "expression" && stmt.expression.tag === "binop" &&
                 stmt.expression.operator === "=" && stmt.expression.args[0].tag === "index";
+    };
+
+    this.this_is_a_return_statement = function(ast) {
+        if (this.current_code_block_index === -1) this.current_code_block_index = ast.body.length - 1; // TODO HACK for when current_code_block_index is not being used
+        if (ast.body[this.current_code_block_index].tag === "expression") {
+            if (ast.body[this.current_code_block_index].expression.hasOwnProperty("tag")) {
+                if (ast.body[this.current_code_block_index].expression.tag === "return") {
+                    return true;
+                }
+            }
+        }
+        return false;
+    };
+
+    this.get_return_statement = function(ast) {
+        if (!this.this_is_a_return_statement(ast)) throw new Error("could not find return!");
+        return ast.body[this.current_code_block_index];
+    }
+
+    this.get_return_output = function(stmt, variable_bank) {
+        console.log(stmt);
+        var return_args = stmt.expression.args.value;
+
+        var return_vals = [];
+        for (let i = 0; i < return_args.length; i++) {
+            return_vals[i] = sim.evaluate_expression(variable_bank, return_args[i]);
+        }
+
+        return this.create_print_string(return_vals, "")
+        // var return_output = this.create_return_output(return_args, "");
+        //
+        // console.log(return_args);
+        //
+        // for (var variable_name in state.vars) {
+        //     while (return_output.indexOf(variable_name) !== -1) {
+        //         return_output = return_output.replace(variable_name, state.vars[variable_name]);
+        //     }
+        // }
+        //
+        // console.log(return_output);
+    };
+
+    this.create_print_string = function(vals, string) {
+        console.log(vals.length);
+        for (let i = 0; i < vals.length; i++) {
+            console.log(vals[i].hasOwnProperty("tag"));
+            if (!vals[i].hasOwnProperty("tag") || vals[i]["tag"] === "identifier" || vals[i]["tag"] === "literal") {
+                string += vals[i]["value"];
+            } else if (vals[i].tag === "binop") {
+                string += this.create_print_string(vals[i].args, string); // TODO: what does this do?
+            }
+            if (i + 1 < vals.length) string += ",";
+        }
+
+        return string;
     };
 }
 
