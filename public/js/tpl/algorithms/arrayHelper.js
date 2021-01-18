@@ -14,9 +14,12 @@ function ArrayHelper() {
             if (Array.isArray(o[key])) {
                 arg.type = 'array';
                 arg.value = o[key].map(function(i) { return {type:'int', value:i}; });
+            } else if (typeof o[key] === "string" || o[key] instanceof String) {
+                arg.type = 'string';
+                arg.value = [...o[key]].map(function (i) { return { type: "char", value: i };});
             } else {
-                arg.type = 'int';
-                arg.value = o[key];
+              arg.type = "int";
+              arg.value = o[key];
             }
             args.push(arg);
         }
@@ -34,11 +37,19 @@ function ArrayHelper() {
                         return {type: 'int', value: i};
                     })
                 };
+            } else if (typeof args[key] === "string" || args[key] instanceof String) {
+                return {
+                  name: key,
+                  type: "string",
+                  value: [...args[key]].map(function (i) {
+                    return { type: "char", value: i };
+                  }),
+                };
             }
             return {
-                name: key,
-                type: 'int',
-                value: args[key]
+            name: key,
+            type: "int",
+            value: args[key],
             };
         }
     };
@@ -216,6 +227,8 @@ function ArrayHelper() {
 
     this.was_that_the_last_element_in_the_array = function(variable_bank) {
         return (this.iterable.index < this.iterable.value.length);
+    this.is_there_another_item_in_the_loop_sequence = function(variable_bank) {
+        return (this.iterable.index < this.iterable.value.length + 1);
     };
 
     this.check_if_loop = function(ast) {
@@ -372,6 +385,61 @@ function ArrayHelper() {
     this.does_this_line_update_array = function(stmt) {
         return stmt.tag === "expression" && stmt.expression.tag === "binop" &&
                 stmt.expression.operator === "=" && stmt.expression.args[0].tag === "index";
+    };
+
+    this.this_is_a_return_statement = function(ast) {
+        if (this.current_code_block_index === -1) this.current_code_block_index = ast.body.length - 1; // TODO HACK for when current_code_block_index is not being used
+        if (ast.body[this.current_code_block_index].tag === "expression") {
+            if (ast.body[this.current_code_block_index].expression.hasOwnProperty("tag")) {
+                if (ast.body[this.current_code_block_index].expression.tag === "return") {
+                    return true;
+                }
+            }
+        }
+        return false;
+    };
+
+    this.get_return_statement = function(ast) {
+        if (!this.this_is_a_return_statement(ast)) throw new Error("could not find return!");
+        return ast.body[this.current_code_block_index];
+    }
+
+    this.get_return_output = function(stmt, variable_bank) {
+        console.log(stmt);
+        var return_args = stmt.expression.args.value;
+
+        var return_vals = [];
+        for (let i = 0; i < return_args.length; i++) {
+            return_vals[i] = sim.evaluate_expression(variable_bank, return_args[i]);
+        }
+
+        return this.create_print_string(return_vals, "")
+        // var return_output = this.create_return_output(return_args, "");
+        //
+        // console.log(return_args);
+        //
+        // for (var variable_name in state.vars) {
+        //     while (return_output.indexOf(variable_name) !== -1) {
+        //         return_output = return_output.replace(variable_name, state.vars[variable_name]);
+        //     }
+        // }
+        //
+        // console.log(return_output);
+    };
+
+    this.create_print_string = function(vals, string) {
+        console.log(vals.length);
+        for (let i = 0; i < vals.length; i++) {
+            console.log(vals[i].hasOwnProperty("tag"));
+            if (!vals[i].hasOwnProperty("tag") || vals[i]["tag"] === "identifier" || vals[i]["tag"] === "literal") {
+                string += vals[i]["value"];
+            } else if (vals[i].tag === "binop") {
+                string += this.create_print_string(vals[i].args, string); // TODO: what does this do?
+            }
+            if (i + 1 < vals.length) string += ",";
+        }
+
+        return string;
     };
 }
 

@@ -537,7 +537,7 @@ var array = (function() {
                     .selectAll(".bank_variable_array_value")
                     .attr("class", (function() {
                         i++;
-                        if (i == arrayElement.value) {
+                        if (i === arrayElement.value) {
                             return "bank_variable_array_value array_element_highlight";
                         }
                         else {
@@ -801,7 +801,7 @@ var array = (function() {
                 d3.select("#responseMessage").remove();
             }
             if (d3.select("#errorMessage").node() === null) {
-                var errorMessage = "<span id='errorMessage' style='color: red;'>Try entering an answer first!<br></span>";
+                var errorMessage = "<span id='errorMessage' style='color: #ff0000;'>Try entering an answer first!<br></span>";
                 d3.select("#promptText").node().innerHTML = errorMessage + d3.select("#promptText").node().innerHTML;
             }
         }
@@ -941,15 +941,18 @@ var array = (function() {
         userSolution = userSolution.replace(/}/g,'');
         userSolution = userSolution.replace(/\[/g,'');
         userSolution = userSolution.replace(/]/g,'');
+        userSolution = userSolution.replace(/\(/g,'');
+        userSolution = userSolution.replace(/\)/g,'');
 
         // create string of raw array values from correct solution
         var solutionState = simulatorInterface.getFinalState();
-        var correctSolutionArray = solutionState.state.answer;
-        var correctSolution = "";
-        for (var i in correctSolutionArray) {
-            correctSolution = correctSolution + correctSolutionArray[i] + ",";
-        }
-        correctSolution = correctSolution.substring(0, correctSolution.length-1);
+        console.log(solutionState);
+        var correctSolution = solutionState.variables.in_scope.the_return_value_of_the_function_is_determined_here.value;
+        // var correctSolution = "";
+        // for (var i in correctSolutionArray) {
+        //     correctSolution = correctSolution + correctSolutionArray[i] + ",";
+        // }
+        // correctSolution = correctSolution.substring(0, correctSolution.length-1);
 
         var correct = false;
         if (String(userSolution) === String(correctSolution)) {
