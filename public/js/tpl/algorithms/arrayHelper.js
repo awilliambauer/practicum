@@ -99,8 +99,7 @@ function ArrayHelper() {
         return ret;
     };
 
-    //TODO
-    this.execute_the_loop_increment = function(variable_bank, iter_variable) {
+    this.execute_the_loop_increment = function(variable_bank, iter_variable) { // TODO: Try putting a special case for strings in this function (check the type of the iterable and see if it's a string type)
         var result;
         if (this.iterable.index >= this.iterable.value.length - 1) {
             result = this.execute_statement(variable_bank, java_parsing.parse_statement(iter_variable.value + ' = ' + (this.iterable.value[this.iterable.index]).value));

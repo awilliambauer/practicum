@@ -588,7 +588,7 @@ var java_parsing = function() {
             return arr;
         }
 
-        function match_parameter() {
+        function match_parameter() { // TODO: If string in parameter, parse as character array. Otherwise 
             var start = lex.position();
             // var type = match_type();
             var name = match_ident();
