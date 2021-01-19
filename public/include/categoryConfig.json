@@ -127,7 +127,7 @@
     "title": "If/Else Mystery 1",
     "examProblemDatabaseId": "71",
     "content": {
-      "text": "public static void ifElseMystery1(int a, int b) {\n    int c = 2;\n\n    if (a + c < b) {\n        c = c + 8;\n    } else {\n        b = b + 10;\n    }\n\n    if (a + c < b) {\n        c = c + 8;\n    } else {\n        b = b + 10;\n    }\n    System.out.println(b + \" \" + c);\n}\n",
+      "text": "def ifElseInvestigation(a, b):\n\tc = 2\n\tif a + c < b:\n\t\tc = c + 8\n\telse:\n\t\tb = b + 10\n\tif a + c < b:\n\t\tc = c + 8\n\tElse:\n\t\tb = b + 10\n\treturn (b, c)",
       "variants": [{
         "id": "8fd7eabe-8b2a-4344-bd31-13e713c04285",
         "arguments": {"b": 15, "a": 4}
@@ -147,7 +147,7 @@
     "title": "If/Else Mystery 2",
     "examProblemDatabaseId": "73",
     "content": {
-      "text": "public static void ifElseMystery2(int a, int b) {\n\n    if (a < b) {\n        a++;\n    }\n\n    if (a < b) {\n        a++;\n    } else {\n        b++;\n    }\n\n    if (a >= b) {\n        b = b - 5;\n    }\n    System.out.println(a + \" \" + b);\n}\n",
+      "text": "def ifElseInvestigation(a, b):\n\tif a < b:\n\t\ta++\n\tif a < b:\n\t\ta++\n\telse:\n\t\tb++\n\tif a >= b:\n\t\tb = b - 5\n\treturn (a, b)",
       "variants": [{
         "id": "a986158b-a63e-49fa-a1ef-cdfd40acb112",
         "arguments": {"b": 8, "a": 1}
@@ -167,7 +167,7 @@
     "title": "If/Else Mystery 3",
     "examProblemDatabaseId": "75",
     "content": {
-      "text": "public static void ifElseMystery3(int a, int b) {\n\n    if (a == b) {\n        b--;\n    } else if (a < b) {\n        a++;\n    } else {\n        b = b + 5;\n    }\n\n    if (a == b) {\n        a = a + 2;\n    }\n    System.out.println(a + \" \" + b);\n}\n",
+      "text": "def ifElseInvestigation(a, b):\n\tif a == b:\n\t\tb--\n\telse if a < b:\n\t\ta++\n\telse: \n\t\tb = b + 5\n\tif a == b:\n\t\ta = a + 2\nreturn (14, 14)",
       "variants": [{
         "id": "f833048f-b4bf-4ddb-8d2a-f3d9cf775285",
         "arguments": {"b": 14, "a": 14}
@@ -187,19 +187,19 @@
     "title": "If/Else Mystery 4",
     "examProblemDatabaseId": "77",
     "content": {
-      "text": "public static void ifElseMystery4(int a, int b) {\n    int c = 2;\n\n    if (a + c < b) {\n        c = c + 8;\n    } else {\n        b = b + 10;\n    }\n\n    if (a + c < b) {\n        c = c + 8;\n    } else {\n        b = b + 10;\n    }\n    System.out.println(b + \" \" + c);\n}\n",
+      "text": "def ifElseInvestigation(a, b):\n\tif a < b:\n\t\ta = a * 2\n\tif a > b:\n\t\ta = a - 10\n\telse:\n\t\tb++\n\treturn (a, b)",
       "variants": [{
         "id": "f739f0d3-487b-42ef-b7e5-d2dd87a62d8a",
-        "arguments": {"b": 15, "a": 4}
+        "arguments": {"b": 3, "a": 10}
       },{
         "id": "79d53dec-943e-4388-b3cd-04d24d6c129f",
-        "arguments": {"b": 17, "a": 7}
+        "arguments": {"b": 6, "a": 6}
       },{
         "id": "95e0b993-3c4d-4a97-a248-953b465c37cd",
-        "arguments": {"b": 5, "a": 12}
+        "arguments": {"b": 4, "a": 3}
       },{
         "id": "5f14ec51-6bb0-42d2-ad9b-6c743f7aafd3",
-        "arguments": {"b": 8, "a": 16}
+        "arguments": {"b": 20, "a": 4}
       }]
     }
   },{
@@ -207,19 +207,19 @@
     "title": "If/Else Mystery 5",
     "examProblemDatabaseId": "83",
     "content": {
-      "text": "public static void ifElseMystery5(int a, int b) {\n\n    if (a < b) {\n        a = a * 2;\n    }\n\n    if (a > b) {\n        a = a - 10;\n    } else {\n        b++;\n    }\n    System.out.println(a + \" \" + b);\n}\n",
+      "text": "def ifElseInvestigation(a, b, c):\n\tif a < b and a < c:\n\t\ta = a + c\n\t\tc++\n\telse if a >= b:\n\t\ta = a - b\n\t\tb--\n\tif a >= b and a >= c:\n\t\ta++\n\t\tc++\n\treturn (a, b, c)",
       "variants": [{
         "id": "2d350f7e-6ffa-463b-9c6a-9b94bd648d97",
-        "arguments": {"b": 3, "a": 10}
+        "arguments": {"c": 3, "b": 10, "a": 2}
       },{
         "id": "c5837dcb-005b-4302-a383-93b03ce12e22",
-        "arguments": {"b": 6, "a": 6}
+        "arguments": {"c": 1, "b": 6, "a": 8}
       },{
         "id": "164d5046-8dd7-49ce-b300-f03c64d7f7dc",
-        "arguments": {"b": 4, "a": 3}
+        "arguments": {"c": 7, "b": 6, "a": 4}
       },{
         "id": "0c2dfa58-144c-4a5b-b548-4d4eb755cf9c",
-        "arguments": {"b": 20, "a": 4}
+        "arguments": {"c":5, "b": 5, "a": 20}
       }]
     }
   },{
@@ -227,19 +227,19 @@
     "title": "If/Else Mystery 6",
     "examProblemDatabaseId": "88",
     "content": {
-      "text": "public static void ifElseMystery6(int a, int b, int c) {\n\n    if (a < b && a < c) {\n        a = a + c;\n        c++;\n    } else if (a >= b) {\n        a = a - b;\n        b--;\n    }\n\n    if (a >= b && a >= c) {\n        a++;\n        c++;\n    }\n    System.out.println(a + \" \" + b + \" \" + c);\n}\n",
+      "text": "def ifElseInvestigation(x, y):\n\tz = 4\n\tif z <= x:\n\t\tz = x + 1\n\telse:\n\t\tz = z + 9\n\tif z <= y:\n\t\ty++\n\treturn (z, y)",
       "variants": [{
         "id": "34e2566a-4f21-4be1-9267-b7a0e501833f",
-        "arguments": {"c": 3, "b": 10, "a": 2}
+        "arguments": {"y": 20, "x": 3}
       },{
         "id": "5e79d83b-1884-48e4-aea2-1dae1542532e",
-        "arguments": {"c": 1, "b": 6, "a": 8}
+        "arguments": {"y": 5, "x": 4}
       },{
         "id": "509cf0d7-d241-4bda-89ef-cf7be6765385",
-        "arguments": {"c": 7, "b": 6, "a": 4}
+        "arguments": {"y": 5, "x": 5}
       },{
         "id": "a8b369bf-cb91-41e4-9d62-5035da9bdf50",
-        "arguments": {"c": 5, "b": 5, "a": 20}
+        "arguments": {"y": 10, "x": 6}
       }]
     }
   },{
@@ -247,19 +247,19 @@
     "title": "If/Else Mystery 7",
     "examProblemDatabaseId": "90",
     "content": {
-      "text": "public static void ifElseMystery7(int x, int y) {\n    int z = 4;\n\n    if (z <= x) {\n        z = x + 1;\n    } else {\n        z = z + 9;\n    }\n\n    if (z <= y) {\n        y++;\n    }\n    System.out.println(z + \" \" + y);\n}\n",
+      "text": "def ifElseInvestigation(a, b):\n\tif a * 2 < b:\n\t\ta = a * 3\n\tif b < a:\n\t\tb++\n\telse:\n\t\ta--\n\treturn (a, b)",
       "variants": [{
         "id": "2e8e875b-a48e-4c46-bcbc-32de9cf253a9",
-        "arguments": {"y": 20, "x": 3}
+        "arguments": {"b": 2, "a": 10}
       },{
         "id": "c517fd6b-8631-4d73-a76b-da7685d0bb0a",
-        "arguments": {"y": 5, "x": 4}
+        "arguments": {"b": 8, "a": 3}
       },{
         "id": "9a2e7222-f4f1-4bfa-9973-63ff99affd7b",
-        "arguments": {"y": 5, "x": 5}
+        "arguments": {"b": 4, "a": 4}
       },{
         "id": "6c8be38a-af45-4e1d-8032-a72ae5e7cbe0",
-        "arguments": {"y": 10, "x": 6}
+        "arguments": {"b": 30, "a": 10}
       }]
     }
   },{
@@ -267,19 +267,16 @@
     "title": "If/Else Mystery 8",
     "examProblemDatabaseId": "92",
     "content": {
-      "text": "public static void ifElseMystery8(int a, int b) {\n\n    if (a * 2 < b) {\n        a = a * 3;\n    }\n\n    if (b < a) {\n        b++;\n    } else {\n        a--;\n    }\n    System.out.println(a + \" \" + b);\n}\n",
+      "text": "def ifElseInvestigation(x, y):\n\tif x == y:\n\t\tx = x + 11\n\telse if x > 2 * y:\n\t\tx = 0\n\tif x == 0 and y > x:\n\t\tx = x + 2\n\t\ty = y + 2\n\treturn (x, y)",
       "variants": [{
         "id": "09b242f8-a03d-491d-b737-c922359cd8ba",
-        "arguments": {"b": 2, "a": 10}
+        "arguments": {"y": 5, "x": 5}
       },{
         "id": "1e658162-826f-4379-bf61-6e825098c828",
-        "arguments": {"b": 8, "a": 3}
+        "arguments": {"y": 4, "x": 18}
       },{
         "id": "98c73002-32dd-43d3-abb1-a3ffec1e5dc7",
-        "arguments": {"b": 4, "a": 4}
-      },{
-        "id": "8a66180d-0248-46b4-a278-674572483776",
-        "arguments": {"b": 30, "a": 10}
+        "arguments": {"y": 6, "x": 3}
       }]
     }
   },{
@@ -287,16 +284,19 @@
     "title": "If/Else Mystery 9",
     "examProblemDatabaseId": "94",
     "content": {
-      "text": "public static void ifElseMystery9(int x, int y) {\n\n    if (x == y) {\n        x = x + 11;\n    } else if (x > 2 * y) {\n        x = 0;\n    }\n\n    if (x == 0 || y > x) {\n        x = x + 2;\n        y = y + 2;\n    }\n    System.out.println(x + \" \" + y);\n}\n",
+      "text": "def ifElseInvestigation(a, b):\n\tif a %2 != 0:\n\t\ta = a * 2\n\tif a < 10:\n\t\tb++\n\telse if a < 10:\n\t\ta--\n\t\tb--\n\treturn (a, b)",
       "variants": [{
         "id": "5395fdde-da93-4a5c-bfdc-7daab5ce27fe",
-        "arguments": {"y": 5, "x": 5}
+        "arguments": {"b": 12, "a": 12}
       },{
         "id": "41d87e4b-8d03-4fd1-81cf-ceb30fb04845",
-        "arguments": {"y": 4, "x": 18}
+        "arguments": {"b": 4, "a": 7}
       },{
         "id": "7b81969b-2809-4c37-8770-30985b8c41c9",
-        "arguments": {"y": 6, "x": 3}
+        "arguments": {"b": 8, "a": 5}
+      },{
+        "id": "8a66180d-0248-46b4-a278-674572483776",
+        "arguments": {"b": 42, "a": 3}
       }]
     }
   },{
@@ -304,38 +304,18 @@
     "title": "If/Else Mystery 10",
     "examProblemDatabaseId": "96",
     "content": {
-      "text": "public static void ifElseMystery10(int a, int b) {\n\n    if (a % 2 != 0) {\n        a = a * 2;\n    }\n\n    if (a > 10) {\n        b++;\n    } else if (a < 10) {\n        a--;\n        b--;\n    }\n    System.out.println(a + \" \" + b);\n}\n",
+      "text": "def ifElseInvestigation(x, y):\n\tint z = 0\n\tif x >= y:\n\t\tx = x / 2\n\t\tz++\n\tif x > z and y <= z:\n\t\tz++\n\telse if x > z:\n\t\ty = y - 5\n\treturn (x, y, z)",
       "variants": [{
         "id": "217efa62-9c15-40e6-954d-910691f6b44a",
-        "arguments": {"b": 12, "a": 12}
+        "arguments": {"y": 1, "x": 3}
       },{
         "id": "ff6347d1-bb82-4f4b-a97c-1e5c0b665db1",
-        "arguments": {"b": 4, "a": 7}
-      },{
-        "id": "8f54610a-34ed-448d-a425-0f652398fcc6",
-        "arguments": {"b": 8, "a": 5}
-      },{
-        "id": "4d00077f-fea0-406a-8cf7-08d3f7c136c1",
-        "arguments": {"b": 42, "a": 3}
-      }]
-    }
-  },{
-    "id": "10f6f83c-ad64-42a8-b6a1-598e8c429eb9",
-    "title": "If/Else Mystery 11",
-    "examProblemDatabaseId": "99",
-    "content": {
-      "text": "public static void ifElseMystery11(int x, int y) {\n    int z = 0;\n\n    if (x >= y) {\n        x = x / 2;\n        z++;\n    }\n\n    if (x > z && y <= z) {\n        z++;\n    } else if (x > z) {\n        y = y - 5;\n    }\n    System.out.println(x + \" \" + y + \" \" + z);\n}\n",
-      "variants": [{
-        "id": "0e599604-0616-4850-b3ea-8cbbe03f0286",
-        "arguments": {"y": 1, "x": 4}
-      },{
-        "id": "f27bc39d-d7b6-4dba-9a2e-23ac17536159",
         "arguments": {"y": 100, "x": -10}
       },{
-        "id": "ee8c996c-9173-4ad1-aaca-fb8e247bf8a3",
+        "id": "8f54610a-34ed-448d-a425-0f652398fcc6",
         "arguments": {"y": 4, "x": 18}
       },{
-        "id": "5a064ef0-5072-445e-8800-c9ea4ae19ba2",
+        "id": "4d00077f-fea0-406a-8cf7-08d3f7c136c1",
         "arguments": {"y": 5, "x": -12}
       }]
     }
@@ -343,132 +323,133 @@
 }, {
   "name": "default-expressions",
   "category": "expressions",
-  "title": "Expressions",
-  "description": "Practice expressions - addition, subtraction, multiplication and more!",
+  "title": "While Loop Mystery",
+  "description": "Practice while loops",
   "problems": [{
-    "id": "86fdd9c7-1004-4e33-a0f4-2fb3634c8958",
-    "title": "22 % 7 + 4 * 3 - 6.0 / 2.0",
-    "content": "22 % 7 + 4 * 3 - 6.0 / 2.0"
+    "id": "Unique1",
+    "title": "While Loop Investigation 1",
+    "content": {
+      "text": "def whileLoopInvestigation(i):\n\tfact = 1\n\twhile i  > 0:\n\t\tfact = fact * i\n\t\ti--\n\treturn fact",
+      "variants": [{
+        "id": "Unique2",
+        "arguments": {"i": 6}
+      }]
+    }
   },{
-    "id": "84e73b08-60c7-11e5-b87d-bf23127ef044",
-    "title": "(1 / 2 + 3) * (3 / 2) * 3",
-    "content": "(1 / 2 + 3) * (3 / 2) * 3"
+    "id": "Unique6",
+    "title": "While Loop Investigation 2",
+    "content": {
+      "text": "def whileLoopInvestigation(arr):\n\ti = 0\n\tsum = 0\n\twhile i < len(arr):\n\t\tsum = sum + arr[i]\n\t\ti++\n\treturn sum",
+      "variants": [{
+        "id": "Unique7",
+        "arguments": {"arr": [2, 4, 6, 8, 10]}
+      },{
+        "id": "Unique8",
+        "arguments": {"arr": [-3, 0, 5, 8, 12]}
+      }]
+    }
   },{
-    "id": "0e5f8705-13f6-4fbf-822b-54c803bee683",
-    "title": "\"hello\" + 6 * 3",
-    "content": "\"hello\" + 6 * 3"
+    "id": "Unique11",
+    "title": "While Loop Investigation 3",
+    "content": {
+      "text": "def whileLoopInvestigation(num):\n\tdivByTwo = 0\n\twhile num != 1:\n\t\tnum = num - 2\n\t\tdivByTwo++\n\treturn divByTwo",
+      "variants": [{
+        "id": "Unique12",
+        "arguments": {"num": 12}
+      },{
+        "id": "Unique13",
+        "arguments": {"num": 14}
+      }]
+    }
   },{
-    "id": "be79b84f-6364-42bc-8d2b-b68ac6a0e47d",
-    "title": "4.0 + \"CSE142\" + 143",
-    "content": "4.0 + \"CSE142\" + 143"
+    "id": "Unique16",
+    "title": "While Loop Investigation 4",
+    "content": {
+      "text": "def whileLoopInvestigation(arr):\n\ti = 0\n\twhile i < len(arr):\n\t\tarr[i] = arr[i] * -1\n\treturn arr",
+      "variants": [{
+        "id": "Unique17",
+        "arguments": {"arr": [6, 0, -4, -11, 20]}
+      },{
+        "id": "Unique18",
+        "arguments": {"arr": [-12, 300, 42, -6, 11]}
+      }]
+    }
   },{
-    "id": "646ecf4a-e1c6-4b7a-a730-4b9ac96afc9a",
-    "title": "208 % 10 - 90 % 55 % 10",
-    "content": "208 % 10 - 90 % 55 % 10"
+    "id": "Unique21",
+    "title": "While Loop Investigation 5",
+    "content": {
+      "text": "def whileLoopInvestigation(arr):\n\ttoAdd = 13\n\ti = 0\n\twhile i < len(arr):\n\t\tarr[i] = arr[i] + toAdd\n\treturn arr",
+      "variants": [{
+        "id": "Unique22",
+        "arguments": {"arr": [22, 36, 55, 91, 107]}
+      },{
+        "id": "Unique23",
+        "arguments": {"arr": [14, 55, 114, 303, 600]}
+      }]
+    }
   },{
-    "id": "64443577-036f-4fad-8978-45707efa626e",
-    "title": "203 / 10 / 2.0 / 4",
-    "content": "203 / 10 / 2.0 / 4"
+    "id": "Unique26",
+    "title": "While Loop Investigation 6",
+    "content": {
+      "text": "def whileLoopInvestigation(a, b):\n\tpower = 0\n\twhile b != 1:\n\t\tb = b / a\n\t\tpower++\n\treturn power",
+      "variants": [{
+        "id": "Unique27",
+        "arguments": {"b": 16807, "a": 7}
+      },{
+        "id": "Unique28",
+        "arguments": {"b": 14641, "x": 11}
+      }]
+    }
   },{
-    "id": "bbcfd770-75c2-4c5f-ba84-ac91ff8d245a",
-    "title": "2 + 3 + \"-\" + 8 * 2 + 3 * 4",
-    "content": "2 + 3 + \"-\" + 8 * 2 + 3 * 4"
+    "id": "Unique31",
+    "title": "While Loop Investigation 7",
+    "content": {
+      "text": "def whileLoopInvestigation(num):\n\tpower = 1\n\ti = 0\n\twhile i < 5:\n\t\tpower = power * num\n\treturn num\n",
+      "variants": [{
+        "id": "Unique32",
+        "arguments": {"num": 3}
+      }]
+    }
   },{
-    "id": "d6107f3d-3e2f-4a50-bd8f-e4da8ce28260",
-    "title": "8/7 + \"5/4\" + 8/3",
-    "content": "8/7 + \"5/4\" + 8/3"
+    "id": "Unique36",
+    "title": "While Loop Investigation 8",
+    "content": {
+      "text": "def whileLoopInvestigation(a, b):\n\twhile a < 1000:\n\t\ta = a * b\n\treturn a",
+      "variants": [{
+        "id": "Unique37",
+        "arguments": {"b": 3, "a": 8}
+      },{
+        "id": "Unique38",
+        "arguments": {"b": 5, "a": 6}
+      }]
+    }
   },{
-    "id": "f373c7ab-eb14-475c-adcd-bfc3f4e34765",
-    "title": "29/3/2/4.0 + 3.6 * 2",
-    "content": "29/3/2/4.0 + 3.6 * 2"
+    "id": "Unique40",
+    "title": "While Loop Investigation 9",
+    "content": {
+      "text": "def whileLoopInvestigation(arr):\n\ti = 0\n\tsum = 0\n\twhile i < len(arr):\n\t\tif arr[i] % 2 == 1:\n\t\t\tsum = sum + arr[i]\n\treturn sum",
+      "variants": [{
+        "id": "Unique41",
+        "arguments": {"arr": [1, 1, 2, 3, 5]}
+      },{
+        "id": "Unique42",
+        "arguments": {"arr": [1, 1, 2, 5, 14]}
+      }]
+    }
   },{
-    "id": "cb9bc1a0-6251-11e5-ad3b-5b76c5f13710",
-    "title": "5 + (5 + \"23.0\") + 5 + 2 * 5",
-    "content": "5 + (5 + \"23.0\") + 5 + 2 * 5"
-  },{
-    "id": "5be29006-fec6-4da2-8acb-e9c45a337081",
-    "title": "15 % 9 % 4 + 4 % 6 % 3",
-    "content": "15 % 9 % 4 + 4 % 6 % 3"
-  },{
-    "id": "10e788b7-684a-4689-97cf-133d3425b9bd",
-    "title": "5 + 6 + \"7\" + 8 + 9 + 2 * 3",
-    "content": "5 + 6 + \"7\" + 8 + 9 + 2 * 3"
-  },{
-    "id": "3d246646-387c-4c3c-8c2f-565e1d1c9a12",
-    "title": "5 / 2 + 123 / 10 / 10.0",
-    "content": "5 / 2 + 123 / 10 / 10.0"
-  },{
-    "id": "23d085e9-14ee-4d52-81b1-6cc75b49ecc2",
-    "title": "2.0 * 2.2 + 23 / 2 / 2.0",
-    "content": "2.0 * 2.2 + 23 / 2 / 2.0"
-  },{
-    "id": "3983ca9b-d9ea-464a-b986-1da25b9fc01c",
-    "title": "109 % 100 / 2 + 3 * 3 / 2.0",
-    "content": "109 % 100 / 2 + 3 * 3 / 2.0"
-  },{
-    "id": "d54238f6-6251-11e5-80cc-5327678d4012",
-    "title": "1 - 3 / (6 * 2.0) + 14 / 5",
-    "content": "1 - 3 / (6 * 2.0) + 14 / 5"
-  },{
-    "id": "d56fbbaa-af0d-4b64-919f-0eae9efd2d1d",
-    "title": "1 + \"x\" + 11 / 10 + \" is\" + 10 / 2",
-    "content": "1 + \"x\" + 11 / 10 + \" is\" + 10 / 2"
-  },{
-    "id": "c9d782ce-bcbd-4dd3-857f-e6f284109c97",
-    "title": "10 % 8 * 10 % 8 * 10 % 8",
-    "content": "10 % 8 * 10 % 8 * 10 % 8"
-  },{
-    "id": "dc6a6a72-6251-11e5-a72f-d3f4a7469fec",
-    "title": "108 / 20 * 3 / 4 / (2.0 + 1.0 / 2)",
-    "content": "108 / 20 * 3 / 4 / (2.0 + 1.0 / 2)"
-  },{
-    "id": "8d148df0-7a9e-4a78-9cf7-12a6b06edb6a",
-    "title": "3 * 2 + 4 + \"+\" + 2 + 3 * 4",
-    "content": "3 * 2 + 4 + \"+\" + 2 + 3 * 4"
-  },{
-    "id": "c652ff29-c858-49ed-ad99-da81d9048936",
-    "title": "2.3 * 3 + 19 / 5 / 2 + 6.0 / 5",
-    "content": "2.3 * 3 + 19 / 5 / 2 + 6.0 / 5"
-  },{
-    "id": "cabe9387-719a-45f9-b4df-852238eefb6d",
-    "title": "108 / 20 * 3 / 4 / 2.0 + 1.0 / 2",
-    "content": "108 / 20 * 3 / 4 / 2.0 + 1.0 / 2"
-  },{
-    "id": "d221a377-0d4d-4c37-820b-8a640734d2a3",
-    "title": "\"0\" + 10 * 5 + \"0\" + 5 + 6",
-    "content": "\"0\" + 10 * 5 + \"0\" + 5 + 6"
-  },{
-    "id": "b709a657-9c96-4b08-bc4d-bce257272515",
-    "title": "115 / 10 + 115 % 10 + 11 / 7 * 3.5",
-    "content": "115 / 10 + 115 % 10 + 11 / 7 * 3.5"
-  },{
-    "id": "ea5e6b56-6251-11e5-98cc-13836e773dfb",
-    "title": "(11 - 7) * 2 + 3 * 4",
-    "content": "(11 - 7) * 2 + 3 * 4"
-  },{
-    "id": "f010e3c6-6251-11e5-80b2-872559c420a1",
-    "title": "1.5 * (2 + 20) / 3 / 4.0 + 6 / 4",
-    "content": "1.5 * (2 + 20) / 3 / 4.0 + 6 / 4"
-  },{
-    "id": "36c25bda-6447-45f5-a326-06bdf59fd68f",
-    "title": "3 * 4 + 5 * 6",
-    "content": "3 * 4 + 5 * 6"
-  },{
-    "id": "23cc5006-0c6c-42c4-a560-c052af73c6db",
-    "title": "10.0 / 4 + 15 / 7 + 1.5",
-    "content": "10.0 / 4 + 15 / 7 + 1.5"
-  },{
-    "id": "f5f88c62-6251-11e5-8859-cbd92825661e",
-    "title": "5 * 2 * (4 - 3 * 3)",
-    "content": "5 * 2 * (4 - 3 * 3)"
-  },{
-    "id": "09a5fb01-4e30-4f5d-b410-5c7f323e6e28",
-    "title": "29 / 4 / 2.0 + 18 / 5 + 1.5",
-    "content": "29 / 4 / 2.0 + 18 / 5 + 1.5"
-  },{
-    "id": "fce154c8-6251-11e5-b588-4f8dc6dbd9cd",
-    "title": "12 / 3 + (5 + 3) * 2",
-    "content": "12 / 3 + (5 + 3) * 2"
+    "id": "Unique45",
+    "title": "While Loop Investigation 10",
+    "examProblemDatabaseId": "96",
+    "content": {
+      "text": "def whileLoopInvestigation(a, b):\n\trollSum = 0\n\twhile a < b:\n\t\trollSum = rollSum + a\n\t\ta++\n\treturn rollSum",
+      "variants": [{
+        "id": "Unique46",
+        "arguments": {"b": 13, "a": 8}
+      },{
+        "id": "Unique47",
+        "arguments": {"b": 17, "a": 12}
+      }]
+    }
   }]
 },{
   "name": "lab2-expressions",
