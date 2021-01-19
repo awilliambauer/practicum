@@ -2,7 +2,7 @@
 [{
   "name": "default-array",
   "category": "array",
-  "title": "Array Mystery",
+  "title": "For Loop Investigation",
   "description": "Practice for loops",
   "problems": [{
     "id": "3939090f-1edc-4fcf-854a-2d87b9fda251",
