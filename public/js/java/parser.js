@@ -221,6 +221,7 @@ var java_parsing = function() {
                 cs.next();
                 token = Token.string(str);
             } else {
+                console.log(`The character that's throwing a problem is ${c}`);
                 throw_error(pos, sprintf("Unexpected character '{0}'", c));
             }
 

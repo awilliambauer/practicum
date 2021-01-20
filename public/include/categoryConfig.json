@@ -31,7 +31,7 @@
     "id": "de34255c-a634-4bdf-92f9-dd71bff9f76a",
     "title": "For Loop Investigation 3",
     "content": {
-      "text": "def forLoopInvestigation(word):\n\tb = 1\n\tfor i in word:\n\t\tif (i == “a”):\n\t\t\tb = b * 3\n\treturn (b)",
+      "text": "def forLoopInvestigation(word):\n\tb = 1\n\tfor i in word:\n\t\tif (i == \"a\"):\n\t\t\tb = b * 3\n\treturn (b)",
       "variants": [{
         "id": "33b4551b-8768-4136-81de-2a9481b6e717",
         "arguments": {"word": "banana"}
@@ -110,7 +110,7 @@
     "id": "1fe8a276-24fa-11eb-adc1-0242ac120002\n",
     "title": "For Loop Investigation 10",
     "content": {
-      "text": "def forLoopInvestigation(word):\n\tb = “”\n\tfor i in array:\n\t\tif (index % 2 == 1):\n\t\t\tb = b + i\n\treturn (b)",
+      "text": "def forLoopInvestigation(word):\n\tb = \"\"\n\tfor i in array:\n\t\tif (index % 2 == 1):\n\t\t\tb = b + i\n\treturn (b)",
       "variants": [{
         "id": "39989b68-24fa-11eb-adc1-0242ac120002\n",
         "arguments": {"string": "macroeconomics"}
