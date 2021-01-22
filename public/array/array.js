@@ -242,17 +242,40 @@ var array = (function() {
                         ;
                     }
                 }
-                else {
-                    listCell1.attr("class", "bank_variable_label");
-                    listCell1.append("span").attr("class", "bank_variable").text(variable);
-                    listCell1.append("span").text(" :");
+                else if (
+                  variableBankObject[variable].hasOwnProperty("type") &&
+                  variableBankObject[variable].type == "string" &&
+                  Array.isArray(variableBankObject[variable].value)
+                ) {
+                  listCell1.attr("class", "bank_variable_label");
+                  listCell1
+                    .append("span")
+                    .attr("class", "bank_variable")
+                    .text(variable);
+                  listCell1.append("span").text(" :");
 
-                    listCell2.attr("style", "text-align: left;");
-                    listCell2
-                        .append("span")
-                        .attr("class", "bank_variable_value")
-                        .text(variableBankObject[variable].value)
-                    ;
+                  listCell2.attr("style", "text-align: left;");
+                  let word = variableBankObject[variable].value
+                    .map((item) => item.value)
+                    .join("");
+
+                  listCell2
+                    .append("span")
+                    .attr("class", "bank_variable_value")
+                    .text(word);
+                } else {
+                  listCell1.attr("class", "bank_variable_label");
+                  listCell1
+                    .append("span")
+                    .attr("class", "bank_variable")
+                    .text(variable);
+                  listCell1.append("span").text(" :");
+
+                  listCell2.attr("style", "text-align: left;");
+                  listCell2
+                    .append("span")
+                    .attr("class", "bank_variable_value")
+                    .text(variableBankObject[variable].value);
                 }
             }
         }
