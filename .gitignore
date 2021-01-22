@@ -1,6 +1,6 @@
 
 #JetBrains preference files
-.idea
+.idea/
 public/.htaccess
 node_modules/
 *~

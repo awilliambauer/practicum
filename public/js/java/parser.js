@@ -219,13 +219,16 @@ var java_parsing = function() {
                     str += cs.next();
                 }
                 cs.next();
+
                 token = Token.string(str);
+                console.log("Value at Lexer.get_next(string) is ", token);
             } else {
                 console.log(`The character that's throwing a problem is ${c}`);
                 throw_error(pos, sprintf("Unexpected character '{0}'", c));
             }
 
             skip_whitespace();
+            console.log("Value at Lexer.get_next() is ", token);
 
             token.position = pos;
             return token;
@@ -236,12 +239,14 @@ var java_parsing = function() {
                 current_token = get_next();
                 is_peeked = true;
             }
+            console.log("Value at Lexer.peek() is ", current_token);
             return current_token;
         }
         self.peek = peek;
 
         function next() {
             var token = peek();
+            console.log("Value at Lexer.next() is ", token);
             is_peeked = false;
             last_position = cs.position();
             return token;
@@ -472,6 +477,7 @@ var java_parsing = function() {
         /// rbp means "right bind power". Top-level expressions should be parsed with match_expression(0).
         function match_expression(rbp) {
             var left = match_prefix();
+            console.log("the left of the prefix is: ", left);
             while (!lex.iseof() && rbp < binop_bind_power(lex.peek())) {
                 left = match_infix(left);
             }
@@ -482,6 +488,7 @@ var java_parsing = function() {
         function match_prefix() {
             var start = lex.position();
             var t = lex.next();
+            console.log("The token at this point is: ", t);
             switch (t.type) {
                 // literals
                 case TokenType.INT_LITERAL:
