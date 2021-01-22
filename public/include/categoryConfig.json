@@ -113,7 +113,7 @@
       "text": "def forLoopInvestigation(word):\n\tx = 0\n\tfor i in word:\n\t\tif i == \"s\":\n\t\t\tx = x + 7\n\t\tif i == \"i\":\n\t\t\tx = x - 3\n\treturn (x)",
       "variants": [{
         "id": "39989b68-24fa-11eb-adc1-0242ac120002\n",
-        "arguments": {"string": "Mississippi"}
+        "arguments": {"word": "Mississippi"}
       }]
     }
   }]
