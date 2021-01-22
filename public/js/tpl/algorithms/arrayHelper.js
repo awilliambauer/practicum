@@ -105,6 +105,8 @@ function ArrayHelper() {
             result = this.execute_statement(variable_bank, java_parsing.parse_statement(iter_variable.value + ' = ' + (this.iterable.value[this.iterable.index]).value));
             this.iterable.index++;
         } else {
+            console.log("The iterable is the following: ", this.iterable);
+            console.log("The iter_variable is the following: ", iter_variable);
             this.iterable.index++;
             result = this.execute_statement(variable_bank, java_parsing.parse_statement(iter_variable.value + ' = ' + (this.iterable.value[this.iterable.index]).value));
         }

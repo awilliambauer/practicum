@@ -219,6 +219,7 @@ var java_parsing = function() {
                     str += cs.next();
                 }
                 cs.next();
+                
                 token = Token.string(str);
             } else {
                 console.log(`The character that's throwing a problem is ${c}`);
@@ -472,6 +473,7 @@ var java_parsing = function() {
         /// rbp means "right bind power". Top-level expressions should be parsed with match_expression(0).
         function match_expression(rbp) {
             var left = match_prefix();
+            console.log("the left of the prefix is: ", left);
             while (!lex.iseof() && rbp < binop_bind_power(lex.peek())) {
                 left = match_infix(left);
             }
@@ -482,6 +484,7 @@ var java_parsing = function() {
         function match_prefix() {
             var start = lex.position();
             var t = lex.next();
+            console.log("The token at this point is: ", t);
             switch (t.type) {
                 // literals
                 case TokenType.INT_LITERAL:
