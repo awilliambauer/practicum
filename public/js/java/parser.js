@@ -219,14 +219,16 @@ var java_parsing = function() {
                     str += cs.next();
                 }
                 cs.next();
-                
+
                 token = Token.string(str);
+                console.log("Value at Lexer.get_next(string) is ", token);
             } else {
                 console.log(`The character that's throwing a problem is ${c}`);
                 throw_error(pos, sprintf("Unexpected character '{0}'", c));
             }
 
             skip_whitespace();
+            console.log("Value at Lexer.get_next() is ", token);
 
             token.position = pos;
             return token;
@@ -237,12 +239,14 @@ var java_parsing = function() {
                 current_token = get_next();
                 is_peeked = true;
             }
+            console.log("Value at Lexer.peek() is ", current_token);
             return current_token;
         }
         self.peek = peek;
 
         function next() {
             var token = peek();
+            console.log("Value at Lexer.next() is ", token);
             is_peeked = false;
             last_position = cs.position();
             return token;

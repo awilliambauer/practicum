@@ -100,21 +100,30 @@ function ArrayHelper() {
     };
 
     this.execute_the_loop_increment = function(variable_bank, iter_variable) { // TODO: Try putting a special case for strings in this function (check the type of the iterable and see if it's a string type)
-        var result;
+        var value;
         if (this.iterable.index >= this.iterable.value.length - 1) {
-            result = this.execute_statement(variable_bank, java_parsing.parse_statement(iter_variable.value + ' = ' + (this.iterable.value[this.iterable.index]).value));
+            value = this.next_loop_variable_value(iter_variable);
             this.iterable.index++;
         } else {
-            console.log("The iterable is the following: ", this.iterable);
-            console.log("The iter_variable is the following: ", iter_variable);
             this.iterable.index++;
-            result = this.execute_statement(variable_bank, java_parsing.parse_statement(iter_variable.value + ' = ' + (this.iterable.value[this.iterable.index]).value));
+            value = this.next_loop_variable_value(iter_variable);
         }
+        var result = this.execute_statement(variable_bank, value);
         var variable = {};
         variable.name = iter_variable.value;
         variable.value = result.value;
         return variable;
     };
+
+    this.next_loop_variable_value = function(iter_variable) {
+        let value;
+        if (this.iterable.value[this.iterable.index].hasOwnProperty("type") && (this.iterable.value[this.iterable.index].type === "char") || (this.iterable.value[this.iterable.index].type === "string")) {
+            value = java_parsing.parse_statement(iter_variable.value + ' = "' + (this.iterable.value[this.iterable.index]).value + '"');
+        } else {
+            value = java_parsing.parse_statement(iter_variable.value + ' = ' + (this.iterable.value[this.iterable.index]).value);
+        }
+        return value;
+    }
 
     function get_next_statement(body, stmt) {
         for (var idx in body) {
@@ -156,6 +165,7 @@ function ArrayHelper() {
                 if (current_statement) {
                     return get_next_statement(parent.body, current_statement);
                 }
+                console.log("Next statement: ", parent.body[0]);
                 return parent.body[0];
             case "if":
                 if (condition) {
@@ -223,7 +233,7 @@ function ArrayHelper() {
     this.get_loop_init_variable = function(variable_bank, iter_variable, iterable) {
         this.initialize_loop_iterable(variable_bank, iterable);
         if (iter_variable.tag !== 'identifier') throw new Error("for loop initializer isn't an int declaration!");
-        return this.create_variable(variable_bank, java_parsing.parse_statement(iter_variable.value + ' = ' + (this.iterable.value[this.iterable.index]).value));
+        return this.create_variable(variable_bank, this.next_loop_variable_value(iter_variable));
     };
 
     this.is_there_another_item_in_the_loop_sequence = function(variable_bank) {
@@ -288,6 +298,7 @@ function ArrayHelper() {
     }
 
     this.does_this_conditional_evaluate_to_true = function(variable_bank, condition_stmt) {
+        console.log("Value at conditional: ", condition_stmt);
         var e = sim.evaluate_expression(variable_bank, condition_stmt);
         if (e.type !== 'bool') throw new Error("Condition is not of type boolean!");
         return e.value;
