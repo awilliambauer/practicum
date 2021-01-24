@@ -7,13 +7,8 @@ var main_simulator = (function () {"use strict";
     var fadeLevel;
 
     // FIXME move to problem file js interface
-    self.getHelper = function(algoName) {
-        switch (algoName) {
-            case "expressions": return new ExpressionsHelper();
-            case "if_else": return new IfElseHelper();
-            case "array": return new TplHelper();
-            default: throw new Error("cannot create helper for unknown algorithm " + algoName);
-        }
+    self.getHelper = function() {
+        return new TplHelper();
     };
 
     self.parse = function(algoName) {
@@ -35,7 +30,7 @@ var main_simulator = (function () {"use strict";
         var state = options.state ? options.state : {};
 
         var globals = {
-            helper: self.getHelper(algo)
+            helper: self.getHelper()
         };
 
         d3.text("js/tpl/algorithms/" + algo + ".tpl.txt", function(error, algoText) {
