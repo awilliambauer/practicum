@@ -1,5 +1,5 @@
 
-var array = (function() {
+var controller = (function() {
     "use strict";
 
     var logger;
@@ -412,7 +412,7 @@ var array = (function() {
 
         //remove the scratch area
         var scratch = d3.select('#scratch_area').classed('hidden', true);
-        $('#scratch_list').empty();
+        $('#scratch-list').empty();
     }
 
     function createScratchArea(lines) {
@@ -421,7 +421,7 @@ var array = (function() {
         // TODO this should probably be d3 except d3 crashes with some unhelpful error when appending the result of java_formatter.format(...) that I don't have time to debug
 
         // create a ul with an li for each step of the scratch work
-        var ul = $('#scratch_list');
+        var ul = $('#scratch-list');
         ul.empty();
 
         lines.forEach(function(line, index) {
@@ -982,7 +982,7 @@ var array = (function() {
             correct = true;
         }
 
-        $("#inputBox").on("animationend", function () {$("#inputBox").attr("class", "");});
+        $("#input-box").on("animationend", function () {$("#input-box").attr("class", "");});
         if (correct) {
             d3.select("#inputBox").attr("class", "correct");
             d3.select("#correctHeader").classed("hidden", false);
@@ -1007,9 +1007,9 @@ var array = (function() {
     }
 
     return {
-        create_initial_state: array_make_initial_state,
-        template_url: "array/problemTemplate.html",
-        template_id: "array-problem-template",
+        create_initial_state: make_initial_state,
+        template_url: "controller/problemTemplate.html",
+        template_id: "problem-template",
         initialize: initialize,
         reset: reset
     };
@@ -1018,5 +1018,5 @@ var array = (function() {
 
 // Register this problem type with the csed global.
 (function(csed) {
-    csed.array = array;
+    csed.controller = controller;
 }) (csed);

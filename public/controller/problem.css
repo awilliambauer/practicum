@@ -9,25 +9,25 @@ lightest green: #E5FCC2
 */
 
 
-.array_mystery_problem #ArrayMysteryHeader {
+.problem #ProblemHeader {
     text-align: center;
     font-size: 25px;
 }
 
-.array_mystery_problem #submitButton {
+.problem #submitButton {
     width: 75px;
     font-size: 14px;
     vertical-align: middle;
 }
 
-.array_mystery_problem #inputBox {
+.problem #inputBox {
     width: 200px;
     font-size: 16px;
     vertical-align: middle;
 }
 
 /* This references animations defined in bootstrap-expressions.css */
-.array_mystery_problem input[type="text"].correct {
+.problem input[type="text"].correct {
     background-color: #339944;
     animation-name: correctExpression;
     animation-duration: 2s;
@@ -37,7 +37,7 @@ lightest green: #E5FCC2
 }
 
 /* This references animations defined in bootstrap-expressions.css */
-.array_mystery_problem input[type="text"].incorrect {
+.problem input[type="text"].incorrect {
     background-color: red;
     animation-name: incorrectExpression;
     animation-duration: 2s;
@@ -45,7 +45,7 @@ lightest green: #E5FCC2
     -webkit-animation-duration: 2s;
 }
 
-.array_mystery_problem #description {
+.problem #description {
     font-size: 16px;
     width: 700px;
     text-align: center;
@@ -53,17 +53,17 @@ lightest green: #E5FCC2
     margin-right: auto;
 }
 
-.array_mystery_problem #newProblem {
+.problem #newProblem {
     font-size: 18px;
     vertical-align: middle;
 }
 
-.array_mystery_problem #newProblemContainer {
+.problem #newProblemContainer {
     padding-top: 30px;
     text-align: center;
 }
 
-.array_mystery_problem #prompt {
+.problem #prompt {
     margin-left: auto;
     margin-right: auto;
     border: 2px solid #547980;
@@ -74,12 +74,12 @@ lightest green: #E5FCC2
     background: #FAFFF0;
 }
 
-.array_mystery_problem #next-container {
+.problem #next-container {
     text-align: center;
     padding-top: 20px;
 }
 
-.array_mystery_problem #nextstep {
+.problem #nextstep {
     position: relative;
     font-size: 10pt;
     margin: 0 auto;
@@ -87,7 +87,7 @@ lightest green: #E5FCC2
     padding-right: 20px;
 }
 
-.array_mystery_problem #problem_content {
+.problem #problem_content {
     margin-left: auto;
     margin-right: auto;
     padding-top: 10px; padding-bottom: 10px;
@@ -102,7 +102,7 @@ lightest green: #E5FCC2
     -webkit-align-items: flex-start;
 }
 
-.array_mystery_problem #problem_space {
+.problem #problem_space {
     border: 5px solid #547980;
     border-radius: 10px;
     background-color: #ffffff;
@@ -110,11 +110,11 @@ lightest green: #E5FCC2
     padding-bottom: 15px;
 }
 
-.array_mystery_problem #problem_space * {
+.problem #problem_space * {
     font-size: 11pt;
 }
 
-.array_mystery_problem pre {
+.problem pre {
     counter-reset: line-number;
     background-color: #FFFFFF;
     border: none;
@@ -134,33 +134,33 @@ lightest green: #E5FCC2
     content: counter(line-number);
 }
 
-.array_mystery_problem .java-keyword {
+.problem .java-keyword {
     color: black;
 }
 
-.array_mystery_problem .java-ident {
+.problem .java-ident {
     color: blue;
 }
 
-.array_mystery_problem .java-literal {
+.problem .java-literal {
     color: green;
 }
 
-.array_mystery_problem .java-method {
+.problem .java-method {
     color: purple;
 }
 
-.array_mystery_problem .java-reference {
+.problem .java-reference {
     font-style: italic;
 }
 
-.array_mystery_problem #problem_space ul {
+.problem #problem_space ul {
     list-style: none;
     text-align: left;
     padding-left: 0; padding-right: 0;
 }
 
-.array_mystery_problem #problem_space li {
+.problem #problem_space li {
     padding-top: 2px;
     padding-bottom: 2px;
     padding-left: 2.5%;
@@ -169,14 +169,14 @@ lightest green: #E5FCC2
     overflow: auto;
 }
 
-.array_mystery_problem #workspace {
+.problem #workspace {
     display: flex;
     display: -webkit-flex;
     flex-direction: column;
     -webkit-flex-direction: column;
 }
 
-.array_mystery_problem #scratch_area {
+.problem #scratch_area {
     border: 5px solid #547980;
     border-radius: 10px;
     background-color: #ffffff;
@@ -184,34 +184,34 @@ lightest green: #E5FCC2
     margin-left: 20px;
 }
 
-.array_mystery_problem #scratch_area_title {
+.problem #scratch_area_title {
     text-decoration: underline;
     font-weight: bold;
     margin-bottom: 15px;
 }
 
-.array_mystery_problem #scratch_list {
+.problem #scratch_list {
     list-style: none;
 }
-.array_mystery_problem #scratch_list li {
+.problem #scratch_list li {
     font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
     font-size: 11pt;
     padding-bottom: 10px;
 }
 
-.array_mystery_problem #variable_bank_title {
+.problem #variable_bank_title {
     text-decoration: underline;
     font-weight: bold;
     margin-bottom: 15px;
 }
 
-.array_mystery_problem #variable_bank #variable_list_table {
+.problem #variable_bank #variable_list_table {
     list-style-type: none;
     font-size: 15pt;
     padding-left: 0px;
 }
 
-.array_mystery_problem #variable_bank {
+.problem #variable_bank {
     border: 5px solid #547980;
     border-radius: 10px;
     background-color: #ffffff;
@@ -220,7 +220,7 @@ lightest green: #E5FCC2
     min-width: 400px;
 }
 
-.array_mystery_problem #variable_list_table {
+.problem #variable_list_table {
     margin-left: auto;
     margin-right: auto;
     margin-top: 5px;
@@ -229,7 +229,7 @@ lightest green: #E5FCC2
     border-collapse: separate;
 }
 
-.array_mystery_problem .variable_list_table_row {
+.problem .variable_list_table_row {
     display: flex;
     display: -webkit-flex;
     align-items: center;
@@ -237,17 +237,17 @@ lightest green: #E5FCC2
     padding: 10px;
 }
 
-.array_mystery_problem .bank_variable {
+.problem .bank_variable {
     color: black;
     float: left;
 }
 
-.array_mystery_problem .bank_variable_label {
+.problem .bank_variable_label {
     padding-right: 10px;
     text-align: right;
 }
 
-.array_mystery_problem .array_label {
+.problem .array_label {
     padding-top: 22px;
     padding-right: 10px;
     text-align: right;
@@ -255,11 +255,11 @@ lightest green: #E5FCC2
     display: -webkit-flex;
 }
 
-.array_mystery_problem .bank_variable_value {
+.problem .bank_variable_value {
     padding-top: 20px;
 }
 
-.array_mystery_problem .bank_variable_array_index {
+.problem .bank_variable_array_index {
     padding: 5px;
     padding-bottom: 0px;
     font-size: 11pt;
@@ -267,67 +267,67 @@ lightest green: #E5FCC2
     height:27px;
 }
 
-.array_mystery_problem .bank_variable_array_value {
+.problem .bank_variable_array_value {
     padding: 5px;
     border: 3px solid darkgray;
     width: 40px;
 }
 
-.array_mystery_problem .varValue {
+.problem .varValue {
     width: 60px;
     text-align: center;
 }
 
-.array_mystery_problem .arrayVarValue {
+.problem .arrayVarValue {
     width: 30px;
     text-align: center;
 }
 
-.array_mystery_problem .indexVarValue {
+.problem .indexVarValue {
     width: 20px;
     text-align: center;
 }
 
-.array_mystery_problem .highlight{
+.problem .highlight{
     background-color: #8fcdca;
 }
 
-.array_mystery_problem .block_highlight {
+.problem .block_highlight {
     background-color: #EEEEEE;
 }
 
-.array_mystery_problem .line_highlight{
+.problem .line_highlight{
     background-color: #8fcdca;
 }
 
-.array_mystery_problem .node_highlight {
+.problem .node_highlight {
     box-shadow: 0px 0px 0px 1px #333333;
     background-color: #d2ebe9;
 }
 
-.array_mystery_problem .scratch_node_highlight {
+.problem .scratch_node_highlight {
     background-color: #8fcdca;
 }
 
-.array_mystery_problem .text_highlight {
+.problem .text_highlight {
     color: #45ADA8;
 }
 
-.array_mystery_problem .array_element_highlight {
+.problem .array_element_highlight {
     background-color: #8fcdca;
 }
 
-.array_mystery_problem .clickable:hover {
+.problem .clickable:hover {
     background-color: #8fcdca;
     cursor: pointer;
 }
 
-.array_mystery_problem .radio {
+.problem .radio {
     display: inline;
     width: 25px;
 }
 
-.array_mystery_problem .yes_no_buttons {
+.problem .yes_no_buttons {
     text-align: center;
 }
 
@@ -337,36 +337,36 @@ lightest green: #E5FCC2
 
 /* OLD STYLES */
 
-.array_mystery_problem body {
+.problem body {
     background-color: #45ADA8;
 }
 
-.array_mystery_problem .color0Text {
+.problem .color0Text {
     color: #45ADA8;
     font-weight: bold;
 }
 
-.array_mystery_problem .color0Border {
+.problem .color0Border {
     border-color: #45ADA8;
 }
 
-.array_mystery_problem .color2Highlight {
+.problem .color2Highlight {
     background: #9DE0AD;
 }
 
-.array_mystery_problem .color2Border {
+.problem .color2Border {
     border-color: #9DE0AD;
 }
 
-.array_mystery_problem .color1Highlight {
+.problem .color1Highlight {
     background: #E5FCC2;
 }
 
-.array_mystery_problem .color1Border {
+.problem .color1Border {
     border-color: #E5FCC2;
 }
 
-.array_mystery_problem #contentwindow {
+.problem #contentwindow {
     background-color: white;
     border-color: #547980;
     border-style: solid;
@@ -383,12 +383,12 @@ lightest green: #E5FCC2
     position: relative;
 }
 
-.array_mystery_problem #arraymysterytitle {
+.problem #arraymysterytitle {
     margin-bottom: 0px;
     text-align: center;
 }
 
-.array_mystery_problem #problemcontents {
+.problem #problemcontents {
     width: 450px;
     height: 250px; /* to make sure that the gray divider stays in the right spot.*/
     padding-left: 30px;
@@ -396,7 +396,7 @@ lightest green: #E5FCC2
     float: left;
 }
 
-.array_mystery_problem #problemtext {
+.problem #problemtext {
     position: relative;
     bottom: 10px;
 }
@@ -404,96 +404,96 @@ lightest green: #E5FCC2
 
 /*all variable bank input styling*/
 
-.array_mystery_problem #arraydata {
+.problem #arraydata {
     border: 2px solid darkgray;
     border-collapse: collapse;
 }
 
-/*.array_mystery_problem input {
+/*.problem input {
     width: 26px;
     text-align: center;
     background-color:rgba(0, 0, 0, 0);
 }*/
 
-.array_mystery_problem #arraydata td, #varvalues input {
+.problem #arraydata td, #varvalues input {
     padding: 8px;
 }
 
-.array_mystery_problem #arraydata input {
+.problem #arraydata input {
     border: none;
     width: 50px;
 }
 
-.array_mystery_problem #arraydata input, #varvalues input {
+.problem #arraydata input, #varvalues input {
     font-size: 22px;
 }
 
-.array_mystery_problem #indices input {
+.problem #indices input {
     font-size: 20px;
 }
 
-.array_mystery_problem #arraydata input:focus, #varvalues input:focus, #indices input:focus{
+.problem #arraydata input:focus, #varvalues input:focus, #indices input:focus{
     outline: 0;
     box-shadow: 0 0 5px 2px #9DE0AD;
 }
 
-.array_mystery_problem #indices {
+.problem #indices {
     font-size: 20px;
 }
 
-.array_mystery_problem .varlabel {
+.problem .varlabel {
     text-align: right;
     margin-bottom: 27px;
 }
 
-.array_mystery_problem #arrLabel {
+.problem #arrLabel {
     margin-top: 70px;
 }
 
-.array_mystery_problem .arraylabel {
+.problem .arraylabel {
     margin-top: 40px;
 }
 
-.array_mystery_problem .varlabelcolumn {
+.problem .varlabelcolumn {
     float: left;
 }
 
-.array_mystery_problem .varcolumn {
+.problem .varcolumn {
     float: left;
 }
 
-.array_mystery_problem .varlabelcolumn, .varcolumn {
+.problem .varlabelcolumn, .varcolumn {
     padding: 10px;
 }
 
-.array_mystery_problem .digit {
+.problem .digit {
     width: 40px;
     text-align: center;
     border: 4px solid darkgray;
     padding: 15px;
 }
 
-.array_mystery_problem h1.problemdescription {
+.problem h1.problemdescription {
     color: red;
 }
 
-.array_mystery_problem hr {
+.problem hr {
     clear: left;
 }
-.array_mystery_problem #islider {
+.problem #islider {
     margin-left: 36px;
     width: 320px;
 }
-.array_mystery_problem .right {
+.problem .right {
     background-color: lawngreen;
 }
 
-.array_mystery_problem #next, #next1 {
+.problem #next, #next1 {
     float: right;
     margin-right: 8px;
 }
 
-.array_mystery_problem #next, #next1, #back {
+.problem #next, #next1, #back {
     background: #547980;
     background-image: -webkit-linear-gradient(top, #547980, #45ADA8);
     background-image: -moz-linear-gradient(top, #547980, #45ADA8);
@@ -510,22 +510,22 @@ lightest green: #E5FCC2
     text-decoration: none;
 }
 
-.array_mystery_problem #next:hover, #back:hover, #next1:hover {
+.problem #next:hover, #back:hover, #next1:hover {
     background: #9de0ad;
     background-image: -webkit-linear-gradient(top, #9de0ad, #81b38d);
     background-image: linear-gradient(to bottom, #9de0ad, #81b38d);
     text-decoration: none;
 }
 
-.array_mystery_problem #next:focus, #back:focus, #next1:hover {
+.problem #next:focus, #back:focus, #next1:hover {
     outline: 0;
 }
 
-.array_mystery_problem #varvalues div {
+.problem #varvalues div {
     padding-top: 12px;
 }
 
-.array_mystery_problem #next1 {
+.problem #next1 {
     float: right;
     position: absolute;
     bottom: 0;
@@ -533,7 +533,7 @@ lightest green: #E5FCC2
     margin-bottom: 35px;
 }
 
-.array_mystery_problem .littletext {
+.problem .littletext {
     font-size: 10px;
     color: gray;
     -webkit-transition: font-size 1s, color 1s;
@@ -543,7 +543,7 @@ lightest green: #E5FCC2
     transition: font-size 1s, color 1s;
 }
 
-.array_mystery_problem .bigtext {
+.problem .bigtext {
     font-size: 17px;
     -webkit-transition: font-size 1s;
     -moz-transition: font-size 1s;
@@ -552,15 +552,15 @@ lightest green: #E5FCC2
     transition: font-size 1s;
 }
 
-.array_mystery_problem input[type=range] {
+.problem input[type=range] {
     -webkit-appearance: none;
     margin: 18px 0;
     width: 100%;
 }
-.array_mystery_problem input[type=range]:focus {
+.problem input[type=range]:focus {
     outline: none;
 }
-.array_mystery_problem input[type=range]::-webkit-slider-runnable-track {
+.problem input[type=range]::-webkit-slider-runnable-track {
     width: 100%;
     height: 5px;
     cursor: pointer;
@@ -570,7 +570,7 @@ lightest green: #E5FCC2
     border-radius: 1.3px;
     border: 0.2px solid #010101;
 }
-.array_mystery_problem input[type=range]::-webkit-slider-thumb {
+.problem input[type=range]::-webkit-slider-thumb {
     box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
     border: 1px solid #000000;
     height: 25px;
@@ -581,7 +581,7 @@ lightest green: #E5FCC2
     margin-top: -10px;
 }
 
-.array_mystery_problem input[type=range]:focus::-webkit-slider-runnable-track {
+.problem input[type=range]:focus::-webkit-slider-runnable-track {
     background: #45ADA8;
 }
 
@@ -591,46 +591,46 @@ DYNAMIC STYLING CLASSES
 The following classes need to remain at the bottom of the file to ensure
 the dynamic styling works correctly.
 */
-.array_mystery_problem .mainColorText {
+.problem .mainColorText {
     color: #45ADA8;
     font-weight: bold;
 }
 
-.array_mystery_problem .mainColorBorder {
+.problem .mainColorBorder {
     border-color: #45ADA8;
 }
 
-.array_mystery_problem .mainColorBorderRadius {
+.problem .mainColorBorderRadius {
     border-color: #45ADA8;
     border-radius: 10px;
 }
 
-.array_mystery_problem .accent2Highlight {
+.problem .accent2Highlight {
     background: #9DE0AD;
 }
 
-.array_mystery_problem .accent2Border {
+.problem .accent2Border {
     border-color: #9DE0AD;
     border-radius: 10px;
 }
 
-.array_mystery_problem .accent1Highlight {
+.problem .accent1Highlight {
     background: #E5FCC2;
 }
 
-.array_mystery_problem .accent1Border {
+.problem .accent1Border {
     border-color: #E5FCC2;
 }
 
-.array_mystery_problem .wrong {
+.problem .wrong {
     background-color: #DE6363;
 }
 
-.array_mystery_problem .ihighlight {
+.problem .ihighlight {
     border: 4px solid dodgerblue;
 }
 
-.array_mystery_problem .hidden {
+.problem .hidden {
     visibility: hidden;
 }
 

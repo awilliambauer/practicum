@@ -1,4 +1,4 @@
-function ArrayHelper() {
+function TplHelper() {
     "use strict";
 
     var sim = java_simulator;
@@ -158,36 +158,32 @@ function ArrayHelper() {
     }
 
     //TODO
-    this.get_the_next_loop_body_line_to_execute = function(parent, current_statement, condition) {
+    this.get_the_next_line_in_this_block_to_execute = function(parent, current_statement, condition) {
         switch(parent.tag) {
+            case "method":
+                if (current_statement) return get_next_statement(parent.body, current_statement);
+                return parent.body[0];
             case "for":
                 if (parent.body.length === 0) throw new Error ("Empty loop body!");
-                if (current_statement) {
-                    return get_next_statement(parent.body, current_statement);
-                }
-                console.log("Next statement: ", parent.body[0]);
+                if (current_statement) return get_next_statement(parent.body, current_statement);
                 return parent.body[0];
             case "if":
                 if (condition) {
                     if (parent.then_branch.length === 0) throw new Error("Empty then branch");
-                    if (current_statement) {
-                        return get_next_statement(parent.then_branch, current_statement);
-                    }
+                    if (current_statement) return get_next_statement(parent.then_branch, current_statement);
                     return parent.then_branch[0];
                 } else {
                     if (parent.else_branch.length === 0) throw new Error("Empty else branch");
-                    if (current_statement) {
-                        return get_next_statement(parent.else_branch, current_statement);
-                    }
+                    if (current_statement) return get_next_statement(parent.else_branch, current_statement);
                     return parent.else_branch[0];
                 }
             default:
-                throw new Error("parent must be a for loop or an if");
+                throw new Error("Unknown code block parent: " + parent.tag);
         }
     };
 
     this.is_there_another_line_to_execute = function(parent, stmt, condition) {
-        return !!this.get_the_next_loop_body_line_to_execute(parent, stmt, condition);
+        return !!this.get_the_next_line_in_this_block_to_execute(parent, stmt, condition);
     };
 
     this.is_if = function(stmt) {
@@ -458,7 +454,7 @@ function ArrayHelper() {
  * @param problem: the problem configuration.
  * @param argumentIndex: which argument set is being used (i.e.,the parameters to the problem).
  */
-function array_make_initial_state(problem, variant) {
+function make_initial_state(problem, variant) {
     "use strict";
 
     var ast = java_parsing.parse_method(problem.content.text);

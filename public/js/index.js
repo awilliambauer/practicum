@@ -292,11 +292,11 @@ var csed = (function() {
         d3.selectAll("#problem-container .problem").remove();
 
         // reset any global state in the category js runner
-        if (!csed.hasOwnProperty(problemConfig.category)) {
-            throw new Error("unknown category " + problemConfig.category + "!");
-        }
+        // if (!csed.hasOwnProperty(problemConfig.category)) {
+        //     throw new Error("unknown category " + problemConfig.category + "!");
+        // }
 
-        var problemUI = csed[problemConfig.category];
+        var problemUI = csed.controller;
         problemUI.reset();
 
         // Load in the template for the problem
@@ -311,6 +311,7 @@ var csed = (function() {
             d3.select("#problem-container").classed("hidden", false);
 
             var category = problemConfig.category;
+            d3.select("#PageHeader").html(problemConfig.title);
 
             var initial_state = problemUI.create_initial_state(problemConfig, variant);
             main_simulator.initialize(category, {state:initial_state});

@@ -146,7 +146,7 @@ function TPLAlgorithm() {
 
         [no_step]
         do {
-            [interactive("next_line")] this_is_the_next_line_that_will_execute = helper.get_the_next_loop_body_line_to_execute(parent, this_is_the_next_line_that_will_execute, condition_outcome);
+            [interactive("next_line")] this_is_the_next_line_that_will_execute = helper.get_the_next_line_in_this_block_to_execute(parent, this_is_the_next_line_that_will_execute, condition_outcome);
 
             [no_step]
             if (helper.is_if(this_is_the_next_line_that_will_execute)) {

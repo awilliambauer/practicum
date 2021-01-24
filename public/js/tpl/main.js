@@ -11,7 +11,7 @@ var main_simulator = (function () {"use strict";
         switch (algoName) {
             case "expressions": return new ExpressionsHelper();
             case "if_else": return new IfElseHelper();
-            case "array": return new ArrayHelper();
+            case "array": return new TplHelper();
             default: throw new Error("cannot create helper for unknown algorithm " + algoName);
         }
     };

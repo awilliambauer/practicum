@@ -90,7 +90,7 @@ var java_formatter = function() {
                 });
                 // newline(elem).append(indent(0));
                 if (special_flag) {
-                    // HACK: TAKEN FROM arrayHelper.js
+                    // HACK: TAKEN FROM tplHelper.js
                     line = newline(newline(elem));
                     line.html('print(' + method(node.name) + '(');
                     firstIter = true;
