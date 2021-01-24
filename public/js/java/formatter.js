@@ -186,8 +186,8 @@ var java_formatter = function() {
                 });
                 if (node.else_branch) {
                     line = newline(elem);
-                    line.append(indent(indent_level) + keyword("else") + ' ');
-                    if (node.else_branch.tag === 'if') {
+                    line.append(indent(indent_level) + keyword("else"));
+                    if (node.else_branch.tag === 'if') { // TODO: python doesn't use else if
                         // HACK pass in the previous line (with the }) as the flag so it's one line
                         elem.append(to_dom(node.else_branch, options, indent_level, line));
                     } else {

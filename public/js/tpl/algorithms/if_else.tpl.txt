@@ -1,120 +1,122 @@
 function TPLAlgorithm() {
-    let theseAreTheIfElseBlocksForThisProblem;
-    let theseAreTheParameters:arguments;
-    let addTheParametersToTheVariableBank:variableBank;
-    let thisIsTheNextLineThatWillExecute:codeLine;
-    let thisIsTheNextIfElseBranchThatWillExecute;
-    let addTheNewVariableToTheVariableBank:variableBank;
-    let thisLineUpdatesAVariableValue;
-    let theProblemSolutionIsTheTextThatThisPrintlnStatementPrintsOut;
-    let crossOutTheLinesThatWillNotExecute:crossedOutLines;
+    // types:
+    // AstNode: a java ast node
+    // Line: a java ast node, but we want to highlight the line rather than the node
+    // VariableBank: the bank of all local variables
+    // Variable: a value that will be added to the variable bank, of form {name:string, type:string, value:*}.
 
-    let AST;
+    // FIXME get this out of here once simulator can pass input parameters
+    let ast;
     [no_step]
-    AST = state.AST;
+    ast = state.ast;
 
-    [prompt]
-    "First, look at the structure of the code. The structure tells us what kind of problem we are looking at.";
-    theseAreTheIfElseBlocksForThisProblem = helper.getIfElseBlocks(AST);
-
-    [prompt]
-    "Next, look at the method call.";
-    theseAreTheParameters = helper.getParameters(AST, state);
-    [interactive("add_variable")] addTheParametersToTheVariableBank = helper.addToTheVariableBank(theseAreTheParameters, AST, state);
-
-    [prompt]
-    "Now walk through the code line-by-line, keeping track of variable values in the variable bank.";
     [no_step]
-    while (helper.areThereMoreCodeBlocks(AST)) {
-        [interactive("next_line")] thisIsTheNextLineThatWillExecute = helper.getNextCodeBlock(AST);
+    state.vars = helper.copy_args(state.args);
+
+    let variables: VariableBank;
+    [no_step]
+    variables = helper.create_new_variable_bank();
+
+    [prompt]
+    "Welcome to for loop practice";
+
+    [no_step]
+    {
+        [prompt]
+        "First, look at the method call.";
+
+        let these_are_the_function_parameters: Parameter;
+        these_are_the_function_parameters = helper.get_array_parameter(state.args);
+
         [no_step]
-        if (helper.thisIsAVariableDeclarationStatement(AST)) {
-            let thisLineDeclaresANewVariable:assignment;
-            thisLineDeclaresANewVariable = helper.getDeclaredVariable(AST);
-            [interactive("add_variable")] addTheNewVariableToTheVariableBank = helper.addToTheVariableBank(thisLineDeclaresANewVariable, AST, state);
+        if (state.vars.length > 0) {
+            let add_the_parameters_to_the_variable_bank: Variable;
+            [interactive("add_variable")]
+            add_the_parameters_to_the_variable_bank = helper.add_other_parameters_to_the_variable_bank(variables, state.vars);
         }
-        else [no_step] if (helper.thisIsAnIfElseStatement(AST)) {
-            [prompt]
-            "We're at the beginning of a new if/else block. Let's find the first branch that evaluates to true.";
+
+        [prompt]
+        "Now let’s walk through the code line-by-line while keeping track of variables.";
+    }
+
+    [no_step]
+    while(helper.check_for_if(ast)) {
+
+        let this_is_the_next_line_that_will_execute: Line;
+        [interactive("next_line")] this_is_the_next_line_that_will_execute = helper.get_next_line(ast.body, this_is_the_next_line_that_will_execute);
+
+        [no_step]
+        let it_defines_a_new_instance_variable_which_we_will_add_to_the_variable_bank: Variable;
+        [interactive("add_variable")]
+        it_defines_a_new_instance_variable_which_we_will_add_to_the_variable_bank = helper.get_instance_variable(variables, ast);
+    }
+
+    [no_step] do {
+
+        let this_is_the_next_line_that_will_execute: Line;
+        [no_step]
+        this_is_the_next_line_that_will_execute = null;
+        let condition_outcome;
+        [no_step]
+        condition_outcome = null;
+        let parent;
+        [no_step]
+        parent = ast;
+
+        //[interactive("next_line")] this_is_the_next_line_that_will_execute = helper.get_next_line(ast.body, this_is_the_next_line_that_will_execute);
+
+        [no_step] do {
+            [interactive("next_line")] this_is_the_next_line_that_will_execute = helper.get_the_next_line_in_this_block_to_execute(parent, this_is_the_next_line_that_will_execute, condition_outcome);
+
             [no_step]
-            thisIsTheNextIfElseBranchThatWillExecute = helper.getNextIfElseStatement(AST);
+            if (helper.is_if(this_is_the_next_line_that_will_execute)) {
+                let this_is_the_conditional_of_an_if_statement: AstNode;
+                this_is_the_conditional_of_an_if_statement = this_is_the_next_line_that_will_execute.condition;
 
-            [interactive("conditional")]
-            if (helper.doesThisConditionalEvaluateToTrue(thisIsTheNextIfElseBranchThatWillExecute, state)) {
-                [no_step]
-                if (helper.isThereAnotherIfElseStatement(AST)) {
+                [interactive("conditional")]
+                if (helper.does_this_conditional_evaluate_to_true(variables, this_is_the_conditional_of_an_if_statement)) {
                     [prompt]
-                    "Since the conditional evaluates to true, we don't need to go into any of the other branches.";
-                    [interactive("cross_out")] crossOutTheLinesThatWillNotExecute = helper.crossOutOtherBranches(thisIsTheNextIfElseBranchThatWillExecute, crossOutTheLinesThatWillNotExecute);
-                }
-                [no_step]
-                do {
-                    [interactive("next_line")] thisIsTheNextLineThatWillExecute = helper.getNextStatement(thisIsTheNextIfElseBranchThatWillExecute["then_branch"]);
-                    thisLineUpdatesAVariableValue = helper.executeUpdateVariableStatement(thisIsTheNextIfElseBranchThatWillExecute["then_branch"], AST, state);
-                    let updateTheVariableInTheVariableBank:variableBank;
-                    [interactive("update_variable")] updateTheVariableInTheVariableBank = helper.addToTheVariableBank(thisLineUpdatesAVariableValue, AST, state);
-                }
-                while (helper.isThereAnotherStatementToExecute(thisIsTheNextIfElseBranchThatWillExecute["then_branch"]));
-            }
-            else {
-                [prompt]
-                "Since the conditional evaluates to false, we don't need to go into this branch.";
-                [interactive("cross_out")] crossOutTheLinesThatWillNotExecute = helper.crossOut(thisIsTheNextIfElseBranchThatWillExecute["then_branch"], crossOutTheLinesThatWillNotExecute);
-                [no_step]
-                while (helper.isThereAnotherIfElseStatement(AST)) {
+                    "Since it’s true we move on to the lines inside the if statement.";
                     [no_step]
-                    thisIsTheNextIfElseBranchThatWillExecute = helper.getNextIfElseStatement(AST);
+                    parent = this_is_the_next_line_that_will_execute;
                     [no_step]
-                    if (helper.doesThisStatementHaveAConditional(thisIsTheNextIfElseBranchThatWillExecute)) {
-                        [interactive("next_line")] thisIsTheNextLineThatWillExecute = helper.getElseIfStatementLineNum(thisIsTheNextIfElseBranchThatWillExecute);
-
-                        [interactive("conditional")]
-                        if (helper.doesThisConditionalEvaluateToTrue(thisIsTheNextIfElseBranchThatWillExecute, state)) {
-                            [no_step]
-                            if (helper.isThereAnotherIfElseStatement(AST)) {
-                                [prompt]
-                                "Since the conditional evaluates to true, we don't need to go into any of the other branches.";
-                                [interactive("cross_out")] crossOutTheLinesThatWillNotExecute = helper.crossOutOtherBranches(thisIsTheNextIfElseBranchThatWillExecute, crossOutTheLinesThatWillNotExecute);
-                            }
-                            [no_step]
-                            do {
-                                [interactive("next_line")] thisIsTheNextLineThatWillExecute = helper.getNextStatement(thisIsTheNextIfElseBranchThatWillExecute["then_branch"]);
-                                thisLineUpdatesAVariableValue = helper.executeUpdateVariableStatement(thisIsTheNextIfElseBranchThatWillExecute["then_branch"], AST, state);
-                                let updateTheVariableInTheVariableBank:variableBank;
-                                [interactive("update_variable")] updateTheVariableInTheVariableBank = helper.addToTheVariableBank(thisLineUpdatesAVariableValue, AST, state);
-                            }
-                            while (helper.isThereAnotherStatementToExecute(thisIsTheNextIfElseBranchThatWillExecute["then_branch"]));
-
-                            break;
-                        }
-                        else {
-                            [prompt]
-                            "Since the conditional evaluates to false, we don't need to go into this branch.";
-                            [interactive("cross_out")] crossOutTheLinesThatWillNotExecute = helper.crossOut(thisIsTheNextIfElseBranchThatWillExecute["then_branch"], crossOutTheLinesThatWillNotExecute);
-                        }
-                    }
-                    else {
-                        [interactive("next_line")] thisIsTheNextLineThatWillExecute = helper.getElseStatementLineNum(thisIsTheNextIfElseBranchThatWillExecute);
-                        [prompt]
-                        "We go into the else branch";
+                    this_is_the_next_line_that_will_execute = null;
+                    [no_step]
+                    condition_outcome = true;
+                } else {
+                    [prompt]
+                    "Since it’s not true we will be ignoring all of the lines in the if statement.";
+                    // assume no else if
+                    [no_step]
+                    if (helper.has_else(this_is_the_next_line_that_will_execute)) {
                         [no_step]
-                        do {
-                            [interactive("next_line")] thisIsTheNextLineThatWillExecute = helper.getNextStatement(thisIsTheNextIfElseBranchThatWillExecute);
-                            thisLineUpdatesAVariableValue = helper.executeUpdateVariableStatement(thisIsTheNextIfElseBranchThatWillExecute, AST, state);
-                            let updateTheVariableInTheVariableBank:variableBank;
-                            [interactive("update_variable")] updateTheVariableInTheVariableBank = helper.addToTheVariableBank(thisLineUpdatesAVariableValue, AST, state);
-                        }
-                        while (helper.isThereAnotherStatementToExecute(thisIsTheNextIfElseBranchThatWillExecute));
+                        parent = this_is_the_next_line_that_will_execute;
+                        [no_step]
+                        this_is_the_next_line_that_will_execute = null;
+                        [no_step]
+                        condition_outcome = false;
+                    } else {
                         break;
                     }
                 }
-            }
-        }
-        else [no_step] if (helper.thisIsAPrintlnStatement(AST)) {
-            theProblemSolutionIsTheTextThatThisPrintlnStatementPrintsOut = helper.getPrintlnOutput(AST, state);
-            [prompt]
-            "Enter the solution in the answer box!";
-        }
+            } else {
+                [prompt]
+                "This line updates the value of a variable.";
 
-    }
+                let update_the_variable_in_the_variable_bank: Variable;
+                [interactive("update_variable")]
+                update_the_variable_in_the_variable_bank = helper.assign_the_new_value_to_the_variable(variables, this_is_the_next_line_that_will_execute);
+                //this_is_the_next_line_that_will_execute = helper.get_the_next_line_in_this_block_to_execute(parent, this_is_the_next_line_that_will_execute, condition_outcome);
+            }
+
+        //let hack;
+        //[no_step]
+        //hack = helper.increment_the_line_number();
+        } while (helper.is_there_another_line_to_execute(parent, this_is_the_next_line_that_will_execute, condition_outcome));
+
+    } while (helper.is_this_the_last_line(ast));
+
+    [prompt]
+    "Write the final values of the variables to be returned in the solution box.";
+
 }

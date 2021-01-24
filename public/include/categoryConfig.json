@@ -127,7 +127,7 @@
     "title": "If/Else Mystery 1",
     "examProblemDatabaseId": "71",
     "content": {
-      "text": "def ifElseInvestigation(a, b):\n\tc = 2\n\tif a + c < b:\n\t\tc = c + 8\n\telse:\n\t\tb = b + 10\n\tif a + c < b:\n\t\tc = c + 8\n\tElse:\n\t\tb = b + 10\n\treturn (b, c)",
+      "text": "def ifElseInvestigation(a, b):\n\tc = 2\n\tif a + c < b:\n\t\tc = c + 8\n\telse:\n\t\tb = b + 10\n\tif a + c < b:\n\t\tc = c + 8\n\telse:\n\t\tb = b + 10\n\treturn (b, c)",
       "variants": [{
         "id": "8fd7eabe-8b2a-4344-bd31-13e713c04285",
         "arguments": {"b": 15, "a": 4}
@@ -147,7 +147,7 @@
     "title": "If/Else Mystery 2",
     "examProblemDatabaseId": "73",
     "content": {
-      "text": "def ifElseInvestigation(a, b):\n\tif a < b:\n\t\ta++\n\tif a < b:\n\t\ta++\n\telse:\n\t\tb++\n\tif a >= b:\n\t\tb = b - 5\n\treturn (a, b)",
+      "text": "def ifElseInvestigation(a, b):\n\tif a < b:\n\t\ta += 1\n\tif a < b:\n\t\ta += 1\n\telse:\n\t\tb += 1\n\tif a >= b:\n\t\tb = b - 5\n\treturn (a, b)",
       "variants": [{
         "id": "a986158b-a63e-49fa-a1ef-cdfd40acb112",
         "arguments": {"b": 8, "a": 1}
@@ -167,7 +167,7 @@
     "title": "If/Else Mystery 3",
     "examProblemDatabaseId": "75",
     "content": {
-      "text": "def ifElseInvestigation(a, b):\n\tif a == b:\n\t\tb--\n\telse if a < b:\n\t\ta++\n\telse: \n\t\tb = b + 5\n\tif a == b:\n\t\ta = a + 2\nreturn (14, 14)",
+      "text": "def ifElseInvestigation(a, b):\n\tif a == b:\n\t\tb -= 1\n\telse if a < b:\n\t\ta+= 1\n\telse: \n\t\tb = b + 5\n\tif a == b:\n\t\ta = a + 2\nreturn (14, 14)",
       "variants": [{
         "id": "f833048f-b4bf-4ddb-8d2a-f3d9cf775285",
         "arguments": {"b": 14, "a": 14}
@@ -187,7 +187,7 @@
     "title": "If/Else Mystery 4",
     "examProblemDatabaseId": "77",
     "content": {
-      "text": "def ifElseInvestigation(a, b):\n\tif a < b:\n\t\ta = a * 2\n\tif a > b:\n\t\ta = a - 10\n\telse:\n\t\tb++\n\treturn (a, b)",
+      "text": "def ifElseInvestigation(a, b):\n\tif a < b:\n\t\ta = a * 2\n\tif a > b:\n\t\ta = a - 10\n\telse:\n\t\tb+= 1\n\treturn (a, b)",
       "variants": [{
         "id": "f739f0d3-487b-42ef-b7e5-d2dd87a62d8a",
         "arguments": {"b": 3, "a": 10}
@@ -207,7 +207,7 @@
     "title": "If/Else Mystery 5",
     "examProblemDatabaseId": "83",
     "content": {
-      "text": "def ifElseInvestigation(a, b, c):\n\tif a < b and a < c:\n\t\ta = a + c\n\t\tc++\n\telse if a >= b:\n\t\ta = a - b\n\t\tb--\n\tif a >= b and a >= c:\n\t\ta++\n\t\tc++\n\treturn (a, b, c)",
+      "text": "def ifElseInvestigation(a, b, c):\n\tif a < b && a < c:\n\t\ta = a + c\n\t\tc+= 1\n\telif a >= b:\n\t\ta = a - b\n\t\tb-= 1\n\tif a >= b && a >= c:\n\t\ta+= 1\n\t\tc+= 1\n\treturn (a, b, c)",
       "variants": [{
         "id": "2d350f7e-6ffa-463b-9c6a-9b94bd648d97",
         "arguments": {"c": 3, "b": 10, "a": 2}
@@ -227,7 +227,7 @@
     "title": "If/Else Mystery 6",
     "examProblemDatabaseId": "88",
     "content": {
-      "text": "def ifElseInvestigation(x, y):\n\tz = 4\n\tif z <= x:\n\t\tz = x + 1\n\telse:\n\t\tz = z + 9\n\tif z <= y:\n\t\ty++\n\treturn (z, y)",
+      "text": "def ifElseInvestigation(x, y):\n\tz = 4\n\tif z <= x:\n\t\tz = x + 1\n\telse:\n\t\tz = z + 9\n\tif z <= y:\n\t\ty+= 1\n\treturn (z, y)",
       "variants": [{
         "id": "34e2566a-4f21-4be1-9267-b7a0e501833f",
         "arguments": {"y": 20, "x": 3}
@@ -247,7 +247,7 @@
     "title": "If/Else Mystery 7",
     "examProblemDatabaseId": "90",
     "content": {
-      "text": "def ifElseInvestigation(a, b):\n\tif a * 2 < b:\n\t\ta = a * 3\n\tif b < a:\n\t\tb++\n\telse:\n\t\ta--\n\treturn (a, b)",
+      "text": "def ifElseInvestigation(a, b):\n\tif a * 2 < b:\n\t\ta = a * 3\n\tif b < a:\n\t\tb+= 1\n\telse:\n\t\ta-= 1\n\treturn (a, b)",
       "variants": [{
         "id": "2e8e875b-a48e-4c46-bcbc-32de9cf253a9",
         "arguments": {"b": 2, "a": 10}
@@ -267,7 +267,7 @@
     "title": "If/Else Mystery 8",
     "examProblemDatabaseId": "92",
     "content": {
-      "text": "def ifElseInvestigation(x, y):\n\tif x == y:\n\t\tx = x + 11\n\telse if x > 2 * y:\n\t\tx = 0\n\tif x == 0 and y > x:\n\t\tx = x + 2\n\t\ty = y + 2\n\treturn (x, y)",
+      "text": "def ifElseInvestigation(x, y):\n\tif x == y:\n\t\tx = x + 11\n\telif x > 2 * y:\n\t\tx = 0\n\tif x == 0 && y > x:\n\t\tx = x + 2\n\t\ty = y + 2\n\treturn (x, y)",
       "variants": [{
         "id": "09b242f8-a03d-491d-b737-c922359cd8ba",
         "arguments": {"y": 5, "x": 5}
@@ -284,7 +284,7 @@
     "title": "If/Else Mystery 9",
     "examProblemDatabaseId": "94",
     "content": {
-      "text": "def ifElseInvestigation(a, b):\n\tif a %2 != 0:\n\t\ta = a * 2\n\tif a < 10:\n\t\tb++\n\telse if a < 10:\n\t\ta--\n\t\tb--\n\treturn (a, b)",
+      "text": "def ifElseInvestigation(a, b):\n\tif a %2 != 0:\n\t\ta = a * 2\n\tif a < 10:\n\t\tb+= 1\n\telse if a < 10:\n\t\ta-= 1\n\t\tb-= 1\n\treturn (a, b)",
       "variants": [{
         "id": "5395fdde-da93-4a5c-bfdc-7daab5ce27fe",
         "arguments": {"b": 12, "a": 12}
@@ -304,7 +304,7 @@
     "title": "If/Else Mystery 10",
     "examProblemDatabaseId": "96",
     "content": {
-      "text": "def ifElseInvestigation(x, y):\n\tint z = 0\n\tif x >= y:\n\t\tx = x / 2\n\t\tz++\n\tif x > z and y <= z:\n\t\tz++\n\telse if x > z:\n\t\ty = y - 5\n\treturn (x, y, z)",
+      "text": "def ifElseInvestigation(x, y):\n\tint z = 0\n\tif x >= y:\n\t\tx = x / 2\n\t\tz+= 1\n\tif x > z and y <= z:\n\t\tz+= 1\n\telse if x > z:\n\t\ty = y - 5\n\treturn (x, y, z)",
       "variants": [{
         "id": "217efa62-9c15-40e6-954d-910691f6b44a",
         "arguments": {"y": 1, "x": 3}
@@ -329,7 +329,7 @@
     "id": "Unique1",
     "title": "While Loop Investigation 1",
     "content": {
-      "text": "def whileLoopInvestigation(i):\n\tfact = 1\n\twhile i  > 0:\n\t\tfact = fact * i\n\t\ti--\n\treturn fact",
+      "text": "def whileLoopInvestigation(i):\n\tfact = 1\n\twhile i  > 0:\n\t\tfact = fact * i\n\t\ti-= 1\n\treturn fact",
       "variants": [{
         "id": "Unique2",
         "arguments": {"i": 6}
@@ -339,7 +339,7 @@
     "id": "Unique6",
     "title": "While Loop Investigation 2",
     "content": {
-      "text": "def whileLoopInvestigation(arr):\n\ti = 0\n\tsum = 0\n\twhile i < len(arr):\n\t\tsum = sum + arr[i]\n\t\ti++\n\treturn sum",
+      "text": "def whileLoopInvestigation(arr):\n\ti = 0\n\tsum = 0\n\twhile i < len(arr):\n\t\tsum = sum + arr[i]\n\t\ti+= 1\n\treturn sum",
       "variants": [{
         "id": "Unique7",
         "arguments": {"arr": [2, 4, 6, 8, 10]}
@@ -352,7 +352,7 @@
     "id": "Unique11",
     "title": "While Loop Investigation 3",
     "content": {
-      "text": "def whileLoopInvestigation(num):\n\tdivByTwo = 0\n\twhile num != 1:\n\t\tnum = num - 2\n\t\tdivByTwo++\n\treturn divByTwo",
+      "text": "def whileLoopInvestigation(num):\n\tdivByTwo = 0\n\twhile num != 1:\n\t\tnum = num - 2\n\t\tdivByTwo+= 1\n\treturn divByTwo",
       "variants": [{
         "id": "Unique12",
         "arguments": {"num": 12}
@@ -391,7 +391,7 @@
     "id": "Unique26",
     "title": "While Loop Investigation 6",
     "content": {
-      "text": "def whileLoopInvestigation(a, b):\n\tpower = 0\n\twhile b != 1:\n\t\tb = b / a\n\t\tpower++\n\treturn power",
+      "text": "def whileLoopInvestigation(a, b):\n\tpower = 0\n\twhile b != 1:\n\t\tb = b / a\n\t\tpower+= 1\n\treturn power",
       "variants": [{
         "id": "Unique27",
         "arguments": {"b": 16807, "a": 7}
@@ -441,7 +441,7 @@
     "title": "While Loop Investigation 10",
     "examProblemDatabaseId": "96",
     "content": {
-      "text": "def whileLoopInvestigation(a, b):\n\trollSum = 0\n\twhile a < b:\n\t\trollSum = rollSum + a\n\t\ta++\n\treturn rollSum",
+      "text": "def whileLoopInvestigation(a, b):\n\trollSum = 0\n\twhile a < b:\n\t\trollSum = rollSum + a\n\t\ta+= 1\n\treturn rollSum",
       "variants": [{
         "id": "Unique46",
         "arguments": {"b": 13, "a": 8}
@@ -510,7 +510,7 @@
     "id": "cdc108de-6317-11e5-bdde-c326ba197c28",
     "title": "If/Else Mystery 1",
     "content": {
-      "text": "public static void mystery1(int x, int y) {\nint z = 4;\n\nif (z <= x) {\nz = x + 1;\n} else {\nz = z + 9;\n}\n\nif (z <= y) {\ny++;\n}\nSystem.out.println(z + \" \" + y);\n}",
+      "text": "public static void mystery1(int x, int y) {\nint z = 4;\n\nif (z <= x) {\nz = x + 1;\n} else {\nz = z + 9;\n}\n\nif (z <= y) {\ny+= 1;\n}\nSystem.out.println(z + \" \" + y);\n}",
       "variants": [{
         "id": "f753c3a8-6317-11e5-9a1e-230673f347a1",
         "arguments": {"x": 3, "y": 20}
@@ -551,7 +551,7 @@
     "id": "30791a68-72d9-11e5-bfd1-a3bf6874baec",
     "title": "If/Else Mystery 3",
     "content": {
-      "text": "public static void mystery3(int a, int b) {\n\nif (a < b) {\na = a * 2;\n}\n\nif (a > b) {\na = a - 10;\n} else {\nb++;\n}\nSystem.out.println(a + \" \" + b);\n}",
+      "text": "public static void mystery3(int a, int b) {\n\nif (a < b) {\na = a * 2;\n}\n\nif (a > b) {\na = a - 10;\n} else {\nb+= 1;\n}\nSystem.out.println(a + \" \" + b);\n}",
       "variants": [{
         "id": "42f412a6-72d9-11e5-83ca-3766e6ff93d6",
         "arguments": {"a": 10, "b": 3}
@@ -577,7 +577,7 @@
       "id": "3609bb36-8684-11e5-98ff-4f1b87c94154",
       "title": "Array Mystery 1",
       "content": {
-        "text": "public static void arrayMystery1(int[] list) {\nfor (int i = 0; i < list.length; i++) {\nlist[i] = list[i] + (list[i] / list[0]);\n}\n}",
+        "text": "public static void arrayMystery1(int[] list) {\nfor (int i = 0; i < list.length; i+= 1) {\nlist[i] = list[i] + (list[i] / list[0]);\n}\n}",
         "variants": [{
           "id": "36cf42fc-8684-11e5-a319-e36ea16ec9a6",
           "arguments": {"list": [2, 18, 6, -4, 5, 1]}
@@ -587,7 +587,7 @@
       "id": "035960aa-8a63-11e5-9340-f781aa6d38e2",
       "title": "Array Mystery 2",
       "content": {
-        "text": "public static void arrayMystery2(int[] a) {\nfor (int i = 0; i < a.length - 1; i++) {\nif (a[i] < a[i + 1]) {\na[i] = a[i + 1];\n}\n}\n}",
+        "text": "public static void arrayMystery2(int[] a) {\nfor (int i = 0; i < a.length - 1; i+= 1) {\nif (a[i] < a[i + 1]) {\na[i] = a[i + 1];\n}\n}\n}",
         "variants": [{
           "id": "03dabef2-8a63-11e5-8a9e-bf26cd5a3522",
           "arguments": {"a": [2, 4]}
@@ -609,7 +609,7 @@
       "id": "6f24fb2e-8684-11e5-82ba-53c72563698d",
       "title": "Array Mystery 3",
       "content": {
-        "text": "public static void arrayMystery3(int[] a, int x, int y) {\nfor (int i = 0; i < a.length; i++) {\nif (y < x) {\ny = y + 1;\na[y] = 17;\n} else {\na[x] = 42;\n}\n}\n}",
+        "text": "public static void arrayMystery3(int[] a, int x, int y) {\nfor (int i = 0; i < a.length; i+= 1) {\nif (y < x) {\ny = y + 1;\na[y] = 17;\n} else {\na[x] = 42;\n}\n}\n}",
         "variants": [{
           "id": "3a413e30-8685-11e5-89d5-030836a5bff0",
           "arguments": {"a": [0, 0, 0, 0], "x": 3, "y": 1}
@@ -619,7 +619,7 @@
       "id": "26cedada-8ccd-11e5-a028-736077ebbd00",
       "title": "Array Mystery 4",
       "content": {
-        "text": "public static void arrayMystery4(int[] data) {\nfor(int index = data.length - 1; index > 0; index--) {\ndata[index] = data[index] - data[index - 1];\n}\n}",
+        "text": "public static void arrayMystery4(int[] data) {\nfor(int index = data.length - 1; index > 0; index-= 1) {\ndata[index] = data[index] - data[index - 1];\n}\n}",
         "variants": [{
           "id": "2702d4ca-8ccd-11e5-b820-3325598c0e6e",
           "arguments": {"data": [1, 3, 6, 10]}

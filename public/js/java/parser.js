@@ -439,16 +439,24 @@ var java_parsing = function() {
             match_symbol(":");
             var thenb = match_block(indent_level + 1);
             var elseb = undefined;
+            // this for loop matches the right number of tabs before the else, so that the peek gives us an else
+            for (let i = 0; i < indent_level; i++) {
+                if (peek_symbol("\t")) match_symbol("\t");
+            }
             if (!lex.iseof() && peek_keyword("else")) {
+                // console.log("inside else");
                 match_keyword("else");
                 if (peek_symbol(":")) {
                     match_symbol(":");
-                    elseb = match_block();
+                    elseb = match_block(indent_level + 1);
                 } else {
                     // HACK assume another if here, so match the block. this is probably not what we want eventually.
                     elseb = match_statement();
                 }
-            } // TODO: elif keyword?
+            } else { // did not find an else keyword; elif would need to be BEOFRE this else
+                lex.home(); // needs to un-match the tabs if there was not an else
+            }// TODO: elif keyword?
+            // console.log("finished if/else")
             return {
                 id: new_id(),
                 location: location(start),

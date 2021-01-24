@@ -161,8 +161,11 @@ function TplHelper() {
     this.get_the_next_line_in_this_block_to_execute = function(parent, current_statement, condition) {
         switch(parent.tag) {
             case "method":
-                if (current_statement) return get_next_statement(parent.body, current_statement);
-                return parent.body[0];
+                if (current_statement) {
+                    lineNum++;
+                    return get_next_statement(parent.body, current_statement);
+                }
+                return parent.body[lineNum++];
             case "for":
                 if (parent.body.length === 0) throw new Error ("Empty loop body!");
                 if (current_statement) return get_next_statement(parent.body, current_statement);
@@ -248,7 +251,14 @@ function TplHelper() {
             return false;
         }
         return true;
-    }
+    };
+
+    this.check_for_if = function(ast) {
+        if(ast.body[lineNum].tag === 'if') {
+            return false;
+        }
+        return true;
+    };
 
     this.get_instance_variables = function(variable_bank, ast) {
         // assume first two statements are instance varibale declarations
@@ -381,6 +391,7 @@ function TplHelper() {
     };
 
     this.assign_the_new_value_to_the_variable = function(variable_bank, stmt) {
+        console.log('Assigning value for: ', variable_bank, stmt);
         var result = this.execute_statement(variable_bank, stmt);
         var variable = {};
         variable.name = stmt.expression.args[0].value;
@@ -392,6 +403,16 @@ function TplHelper() {
         return stmt.tag === "expression" && stmt.expression.tag === "binop" &&
                 stmt.expression.operator === "=" && stmt.expression.args[0].tag === "index";
     };
+
+    this.is_this_the_last_line = function(ast) {
+        console.log("Full ast is ", ast.body);
+        console.log("Line is " + (lineNum+1) + " of " + ast.body.length);
+        return lineNum !== ast.body.length - 1;
+    }; // TODO: factor out
+
+    this.increment_the_line_number = function() {
+        lineNum++;
+    }; // TODO: factor out
 
     this.this_is_a_return_statement = function(ast) {
         if (this.current_code_block_index === -1) this.current_code_block_index = ast.body.length - 1; // TODO HACK for when current_code_block_index is not being used
@@ -408,7 +429,11 @@ function TplHelper() {
     this.get_return_statement = function(ast) {
         if (!this.this_is_a_return_statement(ast)) throw new Error("could not find return!");
         return ast.body[this.current_code_block_index];
-    }
+    };
+
+    this.is_this_a_return_statement = function(stmt) {
+        return (stmt.tag === "expression" && stmt.expression.hasOwnProperty("tag") && stmt.expression.tag === "return");
+    };
 
     this.get_return_output = function(stmt, variable_bank) {
         console.log(stmt);
