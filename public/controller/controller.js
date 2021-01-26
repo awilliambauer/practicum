@@ -14,7 +14,8 @@ var controller = (function() {
     function reset() {
         // HACK, ugly. This global in html_generator needs to get
         // reset to one when loading a new problem.
-        LINENUM = 1;
+        // LINENUM = 1;
+        // TODO: remove references to this, it's deprecated from if_else structure
     }
 
     function initialize(problemConfig, simulatorInterface_, initialState, task_logger, fading) {
