@@ -229,6 +229,30 @@ var csed = (function() {
         }
     }
 
+    function setGivenFadingLevel(selection) {
+        if (selection === "guided") {
+          fading_level = 0;
+        } else if (selection === "independent") {
+          fading_level = 1;
+        }
+    }
+
+    function modalFadingLevel() {
+        // Get Modal
+        var modal = document.getElementById("fading-level-modal");
+        modal.style.display = "block";
+
+        // Get the button that closes the modal
+        var doneBtn = document.getElementById("doneBtn");
+
+        // When the user clicks the button, open the modal
+        doneBtn.onclick = function () {
+            let selection = d3.select('input[name="difficulty-level"]:checked').node().value;
+            setGivenFadingLevel(selection);
+            modal.style.display = "none";
+        };
+    }
+
     function getFadingLevel(condition, category) {
         var forceFading = getQueryVariable("fading");
         if (forceFading && $.isNumeric(forceFading)) {
@@ -293,7 +317,7 @@ var csed = (function() {
 
         // reset any global state in the category js runner
         // if (!csed.hasOwnProperty(problemConfig.category)) {
-        //     throw new Error("unknown category " + problemConfig.category + "!");
+        //     throw Error("unknown category " + problemConfig.category + "!");
         // }
 
         var problemUI = csed.controller;
@@ -639,7 +663,7 @@ $(document).ready(function() {
 
             cssmenu.find('li ul').parent().addClass('has-sub');
 
-            multiTg = function() {
+            let multiTg = function() {
                 cssmenu.find(".has-sub").prepend('<span class="submenu-button"></span>');
                 cssmenu.find('.submenu-button').on('click', function() {
                     $(this).toggleClass('submenu-opened');
@@ -657,7 +681,7 @@ $(document).ready(function() {
 
             if (settings.sticky === true) cssmenu.css('position', 'fixed');
 
-            resizeFix = function() {
+            let resizeFix = function() {
                 if ($( window ).width() > 768) {
                     cssmenu.find('ul').show();
                 }
