@@ -238,7 +238,7 @@ var csed = (function() {
         console.log("Fading level in set is: ", fading_level);
     }
 
-    function modalFadingLevel() {
+    function modalFadingLevel(problemConfig, callback_obj, initial_state, problemUI) {
         // Get Modal
         var modal = document.getElementById("fading-level-modal");
         modal.style.display = "block";
@@ -251,6 +251,7 @@ var csed = (function() {
           let selection = d3.select('input[name="difficulty-level"]:checked').node().value;
           setGivenFadingLevel(selection);
           modal.style.display = "none";
+          problemUI.initialize(problemConfig, new CallbackObject(), initial_state, task_logger, fading_level);
         };
         
     }
@@ -346,11 +347,11 @@ var csed = (function() {
             // calculate what fading level the user should see for this problem, based on their
             // experimental condition and the number of problems they have completed
             console.log("The fading level before is: ", fading_level);
-            modalFadingLevel();
+            modalFadingLevel(problemConfig, new CallbackObject(), initial_state, problemUI);
             
             // This problemUI initialize call probably needs to happen after the main_sim init call,
             // which is handled by promises/then() with fetch.
-            problemUI.initialize(problemConfig, new CallbackObject(), initial_state, task_logger, fading_level);
+            
             console.log("The fading level is: ", fading_level);
         });
     }
