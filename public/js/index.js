@@ -32,7 +32,7 @@ var csed = (function() {
     var numProblemsByCategory;
     var problemIdsByCategory;
 
-    var fading_level = 3;
+    var fading_level = 1;
 
     var ENABLE_TELEMETRY_LOGGING = false;
 
@@ -235,6 +235,7 @@ var csed = (function() {
         } else if (selection === "independent") {
           fading_level = 1;
         }
+        console.log("Fading level in set is: ", fading_level);
     }
 
     function modalFadingLevel() {
@@ -245,12 +246,13 @@ var csed = (function() {
         // Get the button that closes the modal
         var doneBtn = document.getElementById("doneBtn");
 
-        // When the user clicks the button, open the modal
+        // When user clicks button, set the fading level and close the modal
         doneBtn.onclick = function () {
-            let selection = d3.select('input[name="difficulty-level"]:checked').node().value;
-            setGivenFadingLevel(selection);
-            modal.style.display = "none";
+          let selection = d3.select('input[name="difficulty-level"]:checked').node().value;
+          setGivenFadingLevel(selection);
+          modal.style.display = "none";
         };
+        
     }
 
     function getFadingLevel(condition, category) {
@@ -324,7 +326,8 @@ var csed = (function() {
         problemUI.reset();
 
         // Load in the template for the problem
-
+        
+        
         d3.html(problemUI.template_url, function(error, problemHtml){
             if (error) console.error(error);
 
@@ -342,14 +345,13 @@ var csed = (function() {
 
             // calculate what fading level the user should see for this problem, based on their
             // experimental condition and the number of problems they have completed
-            setFadingLevel();
-
-            if (fading_level === 3) {
-                fading_level = getFadingLevel(experimental_condition, category);
-            }
+            console.log("The fading level before is: ", fading_level);
+            modalFadingLevel();
+            
             // This problemUI initialize call probably needs to happen after the main_sim init call,
             // which is handled by promises/then() with fetch.
             problemUI.initialize(problemConfig, new CallbackObject(), initial_state, task_logger, fading_level);
+            console.log("The fading level is: ", fading_level);
         });
     }
 
