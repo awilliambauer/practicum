@@ -208,9 +208,9 @@ var csed = (function() {
     }
 
     function setFadingLevel(selection) {
-        if (selection === "guided") {
+        if (selection === "Guided") {
           fading_level = 0;
-        } else if (selection === "independent") {
+        } else if (selection === "Independent") {
           fading_level = 1;
         }
         console.log("Fading level in set is: ", fading_level);
@@ -226,10 +226,11 @@ var csed = (function() {
 
         // When user clicks button, set the fading level and close the modal
         doneBtn.onclick = function () {
-          let selection = d3.select('input[name="difficulty-level"]:checked').node().value;
-          setFadingLevel(selection);
-          modal.style.display = "none";
-          problemUI.initialize(problemConfig, new CallbackObject(), initial_state, task_logger, fading_level);
+            let selection = d3.select('input[name="difficulty-level"]:checked').node().value;
+            setFadingLevel(selection);
+            modal.style.display = "none";
+            d3.select("#difficultyLevel").append("span").html(`Difficulty level: ${selection}`);
+            problemUI.initialize(problemConfig, new CallbackObject(), initial_state, task_logger, fading_level);
         };
         
     }
@@ -322,15 +323,13 @@ var csed = (function() {
             var initial_state = problemUI.create_initial_state(problemConfig, variant);
             main_simulator.initialize(category, {state:initial_state});
 
-            // calculate what fading level the user should see for this problem, based on their
-            // experimental condition and the number of problems they have completed
-            console.log("The fading level before is: ", fading_level);
+            // The modal will determine the fading level and then call problemUI.initialize() 
+            // once the Done button is pressed. That's why it takes in all of 
+            // problemUI.initialize()'s arguments.
             modalFadingLevel(problemConfig, new CallbackObject(), initial_state, problemUI);
             
             // This problemUI initialize call probably needs to happen after the main_sim init call,
             // which is handled by promises/then() with fetch.
-            
-            console.log("The fading level is: ", fading_level);
         });
     }
 
