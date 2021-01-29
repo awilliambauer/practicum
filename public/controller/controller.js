@@ -719,13 +719,28 @@ var controller = (function() {
             else {
                 var input = d3.select(this).select(".bank_variable_value").select(".varValue");
                 if (input.node() !== null) {
-                    userValue = parseInt(d3.select(this).select(".bank_variable_value").select(".varValue").property("value"));
+                    var typeString = correctAnswer[0].type === "string";
+                    if(typeString) {
+                        userValue = d3.select(this).select(".bank_variable_value").select(".varValue").property("value");
+                    }
+                    else {
+                        userValue = parseInt(d3.select(this).select(".bank_variable_value").select(".varValue").property("value"));
+                    }
                     if (Array.isArray(correctAnswer)) {
-                        correctValue = parseInt(correctAnswer.find(function(v) {
-                            return v.name === d3.select(this).select(".bank_variable_label").select(".bank_variable").html();
-                        }, this).value);
+                        if(typeString) {
+                            var stringArray = correctAnswer.find(function(v) {
+                                return v.name === d3.select(this).select(".bank_variable_label").select(".bank_variable").html();
+                            }, this).value;
+                            correctValue = "";
+                            stringArray.forEach(letter => correctValue = correctValue + letter.value);
+                        }
+                        else {
+                            correctValue = correctAnswer.find(function (v) {
+                                return v.name === parseInt(d3.select(this).select(".bank_variable_label").select(".bank_variable").html());
+                            }, this).value;
+                        }
                     } else {
-                        correctValue = parseInt(correctAnswer.value);
+                        correctValue = correctAnswer.value;
                     }
                     correctVariable[correctAnswer.name] = correctValue;
                     userVariable[correctAnswer.name] = userValue;
