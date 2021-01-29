@@ -61,6 +61,11 @@ lightest green: #E5FCC2
     vertical-align: middle;
 }
 
+.problem #newVariant {
+    font-size: 18px;
+    vertical-align: middle;
+}
+
 .problem #newProblemContainer {
     padding-top: 30px;
     text-align: center;
