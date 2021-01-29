@@ -207,29 +207,7 @@ var csed = (function() {
         Logging.save_user_data(server_savedata);
     }
 
-    function setFadingLevel() {
-        var forceFading = getQueryVariable("fading");
-        if (forceFading && $.isNumeric(forceFading)) {
-            return parseInt(forceFading);
-        }
-
-        var selection = $('#fading-level').find(":selected").val();
-
-        if (selection === 'no-choice') {
-            fading_level = 3;
-        }
-        else if (selection === 'easy') {
-            fading_level = 0;
-        }
-        else if (selection === 'medium') {
-            fading_level = 1;
-        }
-        else if (selection === 'hard') {
-            fading_level = 2;
-        }
-    }
-
-    function setGivenFadingLevel(selection) {
+    function setFadingLevel(selection) {
         if (selection === "guided") {
           fading_level = 0;
         } else if (selection === "independent") {
@@ -249,7 +227,7 @@ var csed = (function() {
         // When user clicks button, set the fading level and close the modal
         doneBtn.onclick = function () {
           let selection = d3.select('input[name="difficulty-level"]:checked').node().value;
-          setGivenFadingLevel(selection);
+          setFadingLevel(selection);
           modal.style.display = "none";
           problemUI.initialize(problemConfig, new CallbackObject(), initial_state, task_logger, fading_level);
         };
