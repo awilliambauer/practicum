@@ -70,6 +70,11 @@ function TplHelper() {
         return variable;
     };
 
+    this.add_the_loop_array_to_the_variable_bank = function(bank, variable) {
+        bank[variable.name] = {type: 'array', value: this.copy(variable.value)};
+        return variable;
+    }
+
     this.add_number_to_the_variable_bank = function(bank, number) {
         bank["number"] = {type: 'int', value: number};
     };

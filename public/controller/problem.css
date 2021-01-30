@@ -7,7 +7,10 @@ med green-blue: #45ADA8
 light green: #9DE0AD
 lightest green: #E5FCC2
 */
-
+.problem #difficultyLevel {
+    font-size: 20px;
+    padding-left: 100px;
+}
 
 .problem #ProblemHeader {
     text-align: center;
@@ -54,6 +57,11 @@ lightest green: #E5FCC2
 }
 
 .problem #newProblem {
+    font-size: 18px;
+    vertical-align: middle;
+}
+
+.problem #newVariant {
     font-size: 18px;
     vertical-align: middle;
 }

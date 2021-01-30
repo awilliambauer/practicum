@@ -32,7 +32,7 @@ var csed = (function() {
     var numProblemsByCategory;
     var problemIdsByCategory;
 
-    var fading_level = 3;
+    var fading_level = 1;
 
     var ENABLE_TELEMETRY_LOGGING = false;
 
@@ -207,26 +207,32 @@ var csed = (function() {
         Logging.save_user_data(server_savedata);
     }
 
-    function setFadingLevel() {
-        var forceFading = getQueryVariable("fading");
-        if (forceFading && $.isNumeric(forceFading)) {
-            return parseInt(forceFading);
+    function setFadingLevel(selection) {
+        if (selection === "Guided") {
+          fading_level = 0;
+        } else if (selection === "Independent") {
+          fading_level = 1;
         }
+        console.log("Fading level in set is: ", fading_level);
+    }
 
-        var selection = $('#fading-level').find(":selected").val();
+    function modalFadingLevel(problemConfig, callback_obj, initial_state, problemUI) {
+        // Get Modal
+        var modal = document.getElementById("fading-level-modal");
+        modal.style.display = "block";
 
-        if (selection === 'no-choice') {
-            fading_level = 3;
-        }
-        else if (selection === 'easy') {
-            fading_level = 0;
-        }
-        else if (selection === 'medium') {
-            fading_level = 1;
-        }
-        else if (selection === 'hard') {
-            fading_level = 2;
-        }
+        // Get the button that closes the modal
+        var doneBtn = document.getElementById("doneBtn");
+
+        // When user clicks button, set the fading level and close the modal
+        doneBtn.onclick = function () {
+            let selection = d3.select('input[name="difficulty-level"]:checked').node().value;
+            setFadingLevel(selection);
+            modal.style.display = "none";
+            d3.select("#difficultyLevel").append("span").html(`Difficulty level: ${selection}`);
+            problemUI.initialize(problemConfig, new CallbackObject(), initial_state, task_logger, fading_level);
+        };
+        
     }
 
     function getFadingLevel(condition, category) {
@@ -293,14 +299,15 @@ var csed = (function() {
 
         // reset any global state in the category js runner
         // if (!csed.hasOwnProperty(problemConfig.category)) {
-        //     throw new Error("unknown category " + problemConfig.category + "!");
+        //     throw Error("unknown category " + problemConfig.category + "!");
         // }
 
         var problemUI = csed.controller;
         problemUI.reset();
 
         // Load in the template for the problem
-
+        
+        
         d3.html(problemUI.template_url, function(error, problemHtml){
             if (error) console.error(error);
 
@@ -316,16 +323,13 @@ var csed = (function() {
             var initial_state = problemUI.create_initial_state(problemConfig, variant);
             main_simulator.initialize(category, {state:initial_state});
 
-            // calculate what fading level the user should see for this problem, based on their
-            // experimental condition and the number of problems they have completed
-            setFadingLevel();
-
-            if (fading_level === 3) {
-                fading_level = getFadingLevel(experimental_condition, category);
-            }
+            // The modal will determine the fading level and then call problemUI.initialize() 
+            // once the Done button is pressed. That's why it takes in all of 
+            // problemUI.initialize()'s arguments.
+            modalFadingLevel(problemConfig, new CallbackObject(), initial_state, problemUI);
+            
             // This problemUI initialize call probably needs to happen after the main_sim init call,
             // which is handled by promises/then() with fetch.
-            problemUI.initialize(problemConfig, new CallbackObject(), initial_state, task_logger, fading_level);
         });
     }
 
@@ -639,7 +643,7 @@ $(document).ready(function() {
 
             cssmenu.find('li ul').parent().addClass('has-sub');
 
-            multiTg = function() {
+            let multiTg = function() {
                 cssmenu.find(".has-sub").prepend('<span class="submenu-button"></span>');
                 cssmenu.find('.submenu-button').on('click', function() {
                     $(this).toggleClass('submenu-opened');
@@ -657,7 +661,7 @@ $(document).ready(function() {
 
             if (settings.sticky === true) cssmenu.css('position', 'fixed');
 
-            resizeFix = function() {
+            let resizeFix = function() {
                 if ($( window ).width() > 768) {
                     cssmenu.find('ul').show();
                 }
