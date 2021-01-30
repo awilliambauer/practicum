@@ -193,6 +193,10 @@ function TplHelper() {
         return stmt.tag === "if";
     };
 
+    this.has_else_if = function(stmt) {
+        return false;
+    };
+
     this.has_else = function(stmt) {
         return stmt.hasOwnProperty("else_branch") && stmt.else_branch.length > 0;
     };
