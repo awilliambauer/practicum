@@ -694,7 +694,7 @@ var controller = (function() {
             if (d3.select(this).select(".bank_variable_array").node() != null) {
                 var arrayTable = d3.select(this).select(".bank_variable_array");
                 if (correctAnswer.hasOwnProperty("index")) {
-                    userValue = parseInt(arrayTable.select(".arrayVarValue").property("value"));
+                    userValue = parseInt(arrayTable.select(".bank_variable_array_value").property("value"));
                     correctValue = parseInt(correctAnswer.value[correctAnswer.index.value].value);
                     correctVariable[correctAnswer.name] = correctValue;
                     userVariable[correctAnswer.name] = userValue;
@@ -734,7 +734,6 @@ var controller = (function() {
                     }
                     if (Array.isArray(correctAnswer)) {
                         typeString = correctAnswer[0].type === "string";
-                        console.log("The typestring value is: ", typeString);
                         if(typeString) {
                             var stringArray = correctAnswer.find(function(v) {
                                 return v.name === d3.select(this).select(".bank_variable_label").select(".bank_variable").html();
@@ -752,8 +751,6 @@ var controller = (function() {
                     }
                     correctVariable[correctAnswer.name] = correctValue;
                     userVariable[correctAnswer.name] = userValue;
-                    console.log("Correct Value: ", correctValue);
-                    console.log("User Value: ", userValue);
                     if (userValue !== correctValue) {
                         correct = false;
                     }
