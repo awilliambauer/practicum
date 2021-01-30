@@ -720,7 +720,12 @@ var controller = (function() {
                 var input = d3.select(this).select(".bank_variable_value").select(".varValue");
                 if (input.node() !== null) {
                     console.log("The correct answer is: ", correctAnswer);
-                    var typeString = correctAnswer.type === "string";
+                    var typeString;
+                    if (Array.isArray(correctAnswer)) {
+                        typeString = correctAnswer[0].type === "string";
+                    } else {
+                        typeString = correctAnswer.type === "string";
+                    }
                     if(typeString) {
                         userValue = d3.select(this).select(".bank_variable_value").select(".varValue").property("value");
                     }
@@ -728,6 +733,8 @@ var controller = (function() {
                         userValue = parseInt(d3.select(this).select(".bank_variable_value").select(".varValue").property("value"));
                     }
                     if (Array.isArray(correctAnswer)) {
+                        typeString = correctAnswer[0].type === "string";
+                        console.log("The typestring value is: ", typeString);
                         if(typeString) {
                             var stringArray = correctAnswer.find(function(v) {
                                 return v.name === d3.select(this).select(".bank_variable_label").select(".bank_variable").html();
@@ -745,6 +752,8 @@ var controller = (function() {
                     }
                     correctVariable[correctAnswer.name] = correctValue;
                     userVariable[correctAnswer.name] = userValue;
+                    console.log("Correct Value: ", correctValue);
+                    console.log("User Value: ", userValue);
                     if (userValue !== correctValue) {
                         correct = false;
                     }
