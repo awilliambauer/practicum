@@ -695,7 +695,13 @@ var controller = (function() {
                 var arrayTable = d3.select(this).select(".bank_variable_array");
                 if (correctAnswer.hasOwnProperty("index")) {
                     userValue = parseInt(arrayTable.select(".bank_variable_array_value").property("value"));
-                    correctValue = parseInt(correctAnswer.value[correctAnswer.index.value].value);
+                    console.log("Correct answer is: ", correctAnswer);
+                    console.log("The userValue is: ", userValue);
+                    if (correctAnswer.type === "string") {
+                        correctValue = correctAnswer.value[correctAnswer.index].value;
+                    } else {
+                        correctValue = parseInt(correctAnswer.value[correctAnswer.index].value);
+                    }
                     correctVariable[correctAnswer.name] = correctValue;
                     userVariable[correctAnswer.name] = userValue;
                     if (userValue !== correctValue) {
@@ -743,8 +749,9 @@ var controller = (function() {
                         }
                         else {
                             correctValue = correctAnswer.find(function (v) {
-                                return v.name === parseInt(d3.select(this).select(".bank_variable_label").select(".bank_variable").html());
+                                return v.name === d3.select(this).select(".bank_variable_label").select(".bank_variable").html();
                             }, this).value;
+                            console.log("The correct value in the later part is: ", correctValue);
                         }
                     } else {
                         correctValue = correctAnswer.value;
