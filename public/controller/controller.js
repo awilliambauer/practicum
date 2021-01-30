@@ -706,7 +706,7 @@ var controller = (function() {
                     correctVariable[correctAnswer.name] = [];
                     userVariable[correctAnswer.name] = [];
                     arrayTable.selectAll(".arrayVarValue").each(function(d, i) {
-                        correctValue = parseInt(correctAnswer.value[i].value);
+                        correctValue = parseInt(correctAnswer[0].value[i].value);
                         correctVariable[correctAnswer.name].push(correctValue);
                         userValue = parseInt(this.value);
                         userVariable[correctAnswer.name].push(userValue);
@@ -719,7 +719,8 @@ var controller = (function() {
             else {
                 var input = d3.select(this).select(".bank_variable_value").select(".varValue");
                 if (input.node() !== null) {
-                    var typeString = correctAnswer[0].type === "string";
+                    console.log("The correct answer is: ", correctAnswer);
+                    var typeString = correctAnswer.type === "string";
                     if(typeString) {
                         userValue = d3.select(this).select(".bank_variable_value").select(".varValue").property("value");
                     }
