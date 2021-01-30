@@ -184,18 +184,22 @@ var java_formatter = function() {
                 node.then_branch.forEach(function(s) {
                     elem.append(to_dom(s, options, indent_level + 1));
                 });
+                if (node.elif_branch) {
+                    line = newline(elem);
+                    line.append(indent(indent_level) + keyword("elif") + ' ');
+                    line.append(to_dom(node.elif_condition, options, indent_level));
+                    line.append(':');
+                    node.elif_branch.forEach(function(s) {
+                        elem.append(to_dom(s, options, indent_level + 1));
+                    });
+                }
                 if (node.else_branch) {
                     line = newline(elem);
                     line.append(indent(indent_level) + keyword("else"));
-                    if (node.else_branch.tag === 'if') { // TODO: python doesn't use else if
-                        // HACK pass in the previous line (with the }) as the flag so it's one line
-                        elem.append(to_dom(node.else_branch, options, indent_level, line));
-                    } else {
-                        line.append(':');
-                        node.else_branch.forEach(function(s) {
-                            elem.append(to_dom(s, options, indent_level + 1));
-                        });
-                    }
+                    line.append(':');
+                    node.else_branch.forEach(function(s) {
+                        elem.append(to_dom(s, options, indent_level + 1));
+                    });
                 }
                 if (!special_flag) {
                     // line = newline(elem);
