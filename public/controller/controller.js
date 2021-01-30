@@ -698,7 +698,7 @@ var controller = (function() {
                     console.log("Correct answer is: ", correctAnswer);
                     console.log("The userValue is: ", userValue);
                     if (correctAnswer.type === "string") {
-                        correctValue = correctAnswer.value[correctAnswer.index].value;
+                        correctValue = correctAnswer.value[correctAnswer.index].value; // FIXME: The index here is 6 for some reason, and that's causing issues cause it's undefined. Same for 2 lines below.
                     } else {
                         correctValue = parseInt(correctAnswer.value[correctAnswer.index].value);
                     }
