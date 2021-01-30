@@ -18,7 +18,7 @@ function TPLAlgorithm() {
     variables = helper.create_new_variable_bank();
 
     [prompt]
-    "Welcome to for loop practice";
+    "Welcome to if/else practice.";
 
     [no_step]
     {
@@ -63,20 +63,20 @@ function TPLAlgorithm() {
         [no_step]
         parent = ast;
 
-        //[interactive("next_line")] this_is_the_next_line_that_will_execute = helper.get_next_line(ast.body, this_is_the_next_line_that_will_execute);
-
         [no_step] do {
             [interactive("next_line")] this_is_the_next_line_that_will_execute = helper.get_the_next_line_in_this_block_to_execute(parent, this_is_the_next_line_that_will_execute, condition_outcome);
 
             [no_step]
             if (helper.is_if(this_is_the_next_line_that_will_execute)) {
+                [prompt]
+                "It’s an if statement which means we need to determine whether the conditional part of the if statement is true or false.";
                 let this_is_the_conditional_of_an_if_statement: AstNode;
                 this_is_the_conditional_of_an_if_statement = this_is_the_next_line_that_will_execute.condition;
 
                 [interactive("conditional")]
                 if (helper.does_this_conditional_evaluate_to_true(variables, this_is_the_conditional_of_an_if_statement)) {
                     [prompt]
-                    "Since it’s true we move on to the lines inside the if statement.";
+                    "Since it’s true we move on to the lines inside of this clause.";
                     [no_step]
                     parent = this_is_the_next_line_that_will_execute;
                     [no_step]
@@ -85,10 +85,24 @@ function TPLAlgorithm() {
                     condition_outcome = true;
                 } else {
                     [prompt]
-                    "Since it’s not true we will be ignoring all of the lines in the if statement.";
-                    // assume no else if
+                    "Since it’s false we will be ignoring all of the lines in of this clause.";
+                    [no_step]
+                    if (helper.has_else_if(this_is_the_next_line_that_will_execute)) {
+                        [prompt]
+                        "Since all previous if and else if statements were false we now evaluate this else if case.";
+                        [prompt]
+                        "Just like with if statements we need to decide whether the conditional part of the else if statement is true or false.";
+                        [no_step]
+                        parent = this_is_the_next_line_that_will_execute;
+                        [no_step]
+                        this_is_the_next_line_that_will_execute = null;
+                        [no_step]
+                        condition_outcome = false;
+                    }
                     [no_step]
                     if (helper.has_else(this_is_the_next_line_that_will_execute)) {
+                        [prompt]
+                        "Since all previous if and else if statements were false we automatically move into the else case.";
                         [no_step]
                         parent = this_is_the_next_line_that_will_execute;
                         [no_step]
@@ -96,6 +110,7 @@ function TPLAlgorithm() {
                         [no_step]
                         condition_outcome = false;
                     } else {
+                        // TODO: prompt for no if/elif?
                         break;
                     }
                 }
@@ -109,14 +124,18 @@ function TPLAlgorithm() {
                 //this_is_the_next_line_that_will_execute = helper.get_the_next_line_in_this_block_to_execute(parent, this_is_the_next_line_that_will_execute, condition_outcome);
             }
 
-        //let hack;
-        //[no_step]
-        //hack = helper.increment_the_line_number();
         } while (helper.is_there_another_line_to_execute(parent, this_is_the_next_line_that_will_execute, condition_outcome));
-
+        [prompt]
+        "Now we can move back out of our clause to the main part of the function and skip any else if or else statements that come later.";
     } while (helper.is_this_the_last_line(ast));
 
-    [prompt]
-    "Write the final values of the variables to be returned in the solution box.";
+    [no_step] if (helper.this_is_a_return_statement(ast)) {
+        let this_is_the_next_line_that_will_execute: Line;
+        [interactive("next_line")] this_is_the_next_line_that_will_execute = helper.get_return_statement(ast);
 
+        let the_return_value_of_the_function_is_determined_here;
+        the_return_value_of_the_function_is_determined_here = helper.get_return_output(this_is_the_next_line_that_will_execute, variables); // TODO: better text, highlight
+        [prompt]
+        "The print statement below prints out the value(s) that the function returned. Enter that solution in the answer box!";
+    }
 }
