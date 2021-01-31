@@ -115,7 +115,7 @@ var java_parsing = function() {
             // "class":1, "public":1, "static":1,
             // "void":1, "int":1,
             "def":1, "return":1,
-            "for":1, "in":1, "if":1, "else":1, "elif":1
+            "for":1, "in":1, "if":1, "else":1, "elif":1, "while":1
         };
 
         var symbols = {
@@ -367,6 +367,7 @@ var java_parsing = function() {
             switch (next.value) {
                 case "for": return match_forloop(indent_level);
                 case "if": return match_ifelse(indent_level);
+                case "while": return match_whileloop(indent_level);
                 case "return": {console.log("return"); return match_return_statement();}
                 default: return match_simple_statement(false);
             }
@@ -405,6 +406,26 @@ var java_parsing = function() {
                 match_symbol(";");
             }
             return result;
+        }
+
+        function match_whileloop(indent_level) {
+            var start = lex.position();
+            match_keyword("while");
+            var cond = match_expression(0);
+            // match_symbol("(");
+            // var init = match_simple_statement(true);
+            // var cond = match_expression(0);
+            // match_symbol(";");
+            // match_symbol(")");
+            match_symbol(":");
+            var body = match_block(indent_level + 1);
+            return {
+                id: new_id(),
+                location: location(start),
+                tag:'while',
+                condition: cond,
+                body: body
+            };
         }
 
         function match_forloop(indent_level) {

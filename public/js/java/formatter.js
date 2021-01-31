@@ -169,6 +169,23 @@ var java_formatter = function() {
                 // newline(elem).append(indent(indent_level));
                 break;
 
+            case 'while':
+                elem.addClass("while");
+                if (special_flag) {
+                    // HACK pass in the previous line (with the }) as the flag so it's one line
+                    line = special_flag;
+                } else {
+                    line = newline(elem);
+                    line.append(indent(indent_level));
+                }
+                line.append(keyword("while") + ' ');
+                line.append(to_dom(node.condition, options, indent_level));
+                line.append(":");
+                node.body.forEach(function(s) {
+                    elem.append(to_dom(s, options, indent_level + 1));
+                });
+                break;
+
             case 'if':
                 elem.addClass("if");
                 if (special_flag) {

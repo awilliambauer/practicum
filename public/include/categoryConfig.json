@@ -329,7 +329,7 @@
     "id": "Unique1",
     "title": "While Loop Investigation 1",
     "content": {
-      "text": "def whileLoopInvestigation(i):\n\tfact = 1\n\twhile i  > 0:\n\t\tfact = fact * i\n\t\ti-= 1\n\treturn fact",
+      "text": "def whileLoopInvestigation(i):\n\tfact = 1\n\twhile i  > 0:\n\t\tfact = fact * i\n\t\ti-= 1\n\treturn (fact)",
       "variants": [{
         "id": "Unique2",
         "arguments": {"i": 6}
@@ -339,7 +339,7 @@
     "id": "Unique6",
     "title": "While Loop Investigation 2",
     "content": {
-      "text": "def whileLoopInvestigation(arr):\n\ti = 0\n\tsum = 0\n\twhile i < len(arr):\n\t\tsum = sum + arr[i]\n\t\ti+= 1\n\treturn sum",
+      "text": "def whileLoopInvestigation(arr):\n\t i = 0\n\t sum = 0\n\twhile (i < len(arr)):\n\t\t sum = sum + arr[i]\n\t\t i = i + 1\n\t return (sum)",
       "variants": [{
         "id": "Unique7",
         "arguments": {"arr": [2, 4, 6, 8, 10]}
@@ -352,7 +352,7 @@
     "id": "Unique11",
     "title": "While Loop Investigation 3",
     "content": {
-      "text": "def whileLoopInvestigation(num):\n\tdivByTwo = 0\n\twhile num != 1:\n\t\tnum = num - 2\n\t\tdivByTwo+= 1\n\treturn divByTwo",
+      "text": "def whileLoopInvestigation(num):\n\tdivByTwo = 0\n\twhile num >= 1:\n\t\tnum = num - 2\n\t\tdivByTwo+= 1\n\treturn (divByTwo)",
       "variants": [{
         "id": "Unique12",
         "arguments": {"num": 12}
@@ -365,7 +365,7 @@
     "id": "Unique16",
     "title": "While Loop Investigation 4",
     "content": {
-      "text": "def whileLoopInvestigation(arr):\n\ti = 0\n\twhile i < len(arr):\n\t\tarr[i] = arr[i] * -1\n\treturn arr",
+      "text": "def whileLoopInvestigation(arr):\n\ti = 0\n\twhile i < len(arr):\n\t\tarr[i] = arr[i] * -1 \n\t\ti = i + 1 \n\treturn (arr)",
       "variants": [{
         "id": "Unique17",
         "arguments": {"arr": [6, 0, -4, -11, 20]}
@@ -378,7 +378,7 @@
     "id": "Unique21",
     "title": "While Loop Investigation 5",
     "content": {
-      "text": "def whileLoopInvestigation(arr):\n\ttoAdd = 13\n\ti = 0\n\twhile i < len(arr):\n\t\tarr[i] = arr[i] + toAdd\n\treturn arr",
+      "text": "def whileLoopInvestigation(arr):\n\ttoAdd = 13\n\ti = 0\n\twhile i < len(arr):\n\t\tarr[i] = arr[i] + toAdd \n\t\ti = i + 1\n\treturn (arr)",
       "variants": [{
         "id": "Unique22",
         "arguments": {"arr": [22, 36, 55, 91, 107]}
@@ -391,7 +391,7 @@
     "id": "Unique26",
     "title": "While Loop Investigation 6",
     "content": {
-      "text": "def whileLoopInvestigation(a, b):\n\tpower = 0\n\twhile b != 1:\n\t\tb = b / a\n\t\tpower+= 1\n\treturn power",
+      "text": "def whileLoopInvestigation(a, b):\n\tpower = 0\n\twhile b >= 1:\n\t\tb = b / a\n\t\tpower+= 1\n\treturn (power)",
       "variants": [{
         "id": "Unique27",
         "arguments": {"b": 16807, "a": 7}
@@ -404,7 +404,7 @@
     "id": "Unique31",
     "title": "While Loop Investigation 7",
     "content": {
-      "text": "def whileLoopInvestigation(num):\n\tpower = 1\n\ti = 0\n\twhile i < 5:\n\t\tpower = power * num\n\treturn num\n",
+      "text": "def whileLoopInvestigation(num):\n\tpower = 1\n\ti = 0\n\twhile i < 5:\n\t\tpower = power * num \n\t\ti = i + 1 \n\treturn (num)\n",
       "variants": [{
         "id": "Unique32",
         "arguments": {"num": 3}
@@ -414,7 +414,7 @@
     "id": "Unique36",
     "title": "While Loop Investigation 8",
     "content": {
-      "text": "def whileLoopInvestigation(a, b):\n\twhile a < 1000:\n\t\ta = a * b\n\treturn a",
+      "text": "def whileLoopInvestigation(a, b):\n\twhile a < 1000:\n\t\ta = a * b\n\treturn (a)",
       "variants": [{
         "id": "Unique37",
         "arguments": {"b": 3, "a": 8}
@@ -427,7 +427,7 @@
     "id": "Unique40",
     "title": "While Loop Investigation 9",
     "content": {
-      "text": "def whileLoopInvestigation(arr):\n\ti = 0\n\tsum = 0\n\twhile i < len(arr):\n\t\tif arr[i] % 2 == 1:\n\t\t\tsum = sum + arr[i]\n\treturn sum",
+      "text": "def whileLoopInvestigation(arr):\n\ti = 0\n\tsum = 0\n\twhile i < len(arr) - 1: \n\t\ti = i + 1 \n\t\tif arr[i] % 2 == 1:\n\t\t\tsum = sum + arr[i]  \n\treturn (sum)",
       "variants": [{
         "id": "Unique41",
         "arguments": {"arr": [1, 1, 2, 3, 5]}
@@ -441,7 +441,7 @@
     "title": "While Loop Investigation 10",
     "examProblemDatabaseId": "96",
     "content": {
-      "text": "def whileLoopInvestigation(a, b):\n\trollSum = 0\n\twhile a < b:\n\t\trollSum = rollSum + a\n\t\ta+= 1\n\treturn rollSum",
+      "text": "def whileLoopInvestigation(a, b):\n\trollSum = 0\n\twhile a < b:\n\t\trollSum = rollSum + a\n\t\ta+= 1\n\treturn (rollSum) ",
       "variants": [{
         "id": "Unique46",
         "arguments": {"b": 13, "a": 8}

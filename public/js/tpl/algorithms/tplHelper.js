@@ -175,6 +175,10 @@ function TplHelper() {
                 if (parent.body.length === 0) throw new Error ("Empty loop body!");
                 if (current_statement) return get_next_statement(parent.body, current_statement);
                 return parent.body[0];
+            case "while":
+                if (parent.body.length === 0) throw new Error ("Empty loop body!");
+                if (current_statement) return get_next_statement(parent.body, current_statement);
+                return parent.body[0];
             case "if":
                 if (condition) {
                     if (parent.then_branch.length === 0) throw new Error("Empty then branch");
@@ -233,7 +237,14 @@ function TplHelper() {
     this.get_loop = function(ast) {
         // assume loop is the top node
         var loop = ast.body[lineNum];
-        if (!loop || loop.tag !== 'for') throw new Error("can't find the for loop!");
+        if (!loop || loop.tag !== 'for') throw new Error("can't find the for or while loop!");
+        return loop;
+    };
+
+    this.get_while_loop = function(ast) {
+        // assume loop is the top node
+        var loop = ast.body[lineNum];
+        if (!loop || loop.tag !== 'while') throw new Error("can't find the for or while loop!");
         return loop;
     };
 
@@ -249,7 +260,7 @@ function TplHelper() {
     };
 
     this.check_if_loop = function(ast) {
-        if (ast.body[this.current_code_block_index] === 'for') {
+        if (ast.body[this.current_code_block_index] === 'for' || ast.body[this.current_code_block_index] === 'while') {
             return true;
         }
         return false;
@@ -257,6 +268,13 @@ function TplHelper() {
 
     this.check_for_loop = function(ast) {
         if(ast.body[lineNum].tag === 'for') {
+            return false;
+        }
+        return true;
+    };
+
+    this.check_while_loop = function(ast) {
+        if(ast.body[lineNum].tag === 'while') {
             return false;
         }
         return true;

@@ -1,133 +1,145 @@
 function TPLAlgorithm() {
-    let weWillPlaceTheResultOfThisOperationHere;
+    // types:
+    // AstNode: a java ast node
+    // Line: a java ast node, but we want to highlight the line rather than the node
+    // VariableBank: the bank of all local variables
+    // Variable: a value that will be added to the variable bank, of form {name:string, type:string, value:*}.
+
+    // FIXME get this out of here once simulator can pass input parameters
+    let ast;
+    [no_step]
+    ast = state.ast;
+
+    [no_step]
+    state.vars = helper.copy_args(state.args);
+
+    let variables: VariableBank;
+    [no_step]
+    variables = helper.create_new_variable_bank();
 
     [prompt]
-    "To solve an expression problem, start by<br>evaluating all the Multiplicative operators<br>(* / %) from left to right. Then evaluate the<br>Additive operators (+ -) from left to right. Do this for all operators inside parentheses first.";
+    "Welcome to while loop practice.";
 
-    [interactive("question")]
-    while(helper.isThereAtLeastOneMultiplicationDivisionOrModOperatorInsideParentheses(state)) {
-        let thisIsTheFirstMultiplicationDivisionOrModOperatorFromTheLeftInsideParentheses;
-        [interactive("click")] thisIsTheFirstMultiplicationDivisionOrModOperatorFromTheLeftInsideParentheses = helper.getFirstMultiplicationDivisionOrModOperatorFromLeftInsideParentheses(state);
-        let thisIsTheLeftOperand;
-        [interactive("click")] thisIsTheLeftOperand = helper.getLeftOperand(state, thisIsTheFirstMultiplicationDivisionOrModOperatorFromTheLeftInsideParentheses);
-        let thisIsTheRightOperand;
-        [interactive("click")] thisIsTheRightOperand = helper.getRightOperand(state, thisIsTheFirstMultiplicationDivisionOrModOperatorFromTheLeftInsideParentheses);
+    [no_step]
+    {
+        [prompt]
+        "First, look at the method call.";
+
+        let these_are_the_function_parameters: Parameter;
+        these_are_the_function_parameters = helper.get_array_parameter(state.args);
+
         [no_step]
-        if (helper.isCurrentOperatorMod(thisIsTheFirstMultiplicationDivisionOrModOperatorFromTheLeftInsideParentheses)) {
-            let thisIsTheResultOfTheModOperation;
-            [interactive("enter"); add_to_prompt("<br>(divide and take the remainder to get the mod)")]
-            thisIsTheResultOfTheModOperation = helper.whatIsTheResultOfThisModulus(thisIsTheLeftOperand, thisIsTheRightOperand, state, thisIsTheFirstMultiplicationDivisionOrModOperatorFromTheLeftInsideParentheses);
-        } else
-        [no_step]
-        if (helper.isCurrentOperationIntDiv(state, thisIsTheFirstMultiplicationDivisionOrModOperatorFromTheLeftInsideParentheses)) {
-            let thisIsTheResultOfTheDivisionOperation;
-            [interactive("enter"); add_to_prompt("<br>(since both of the operands are ints,<br>round the answer down to make it an int)")]
-            thisIsTheResultOfTheDivisionOperation = helper.whatIsTheResultOfThisDivision(thisIsTheLeftOperand, thisIsTheRightOperand, state, thisIsTheFirstMultiplicationDivisionOrModOperatorFromTheLeftInsideParentheses);
-        } else
-        [no_step]
-        if (helper.isCurrentOperationDiv(thisIsTheFirstMultiplicationDivisionOrModOperatorFromTheLeftInsideParentheses)) {
-            let thisIsTheResultofTheDivisionOperation;
-            [interactive("enter")]
-            thisIsTheResultofTheDivisionOperation = helper.whatIsTheResultOfThisDivision(thisIsTheLeftOperand, thisIsTheRightOperand, state, thisIsTheFirstMultiplicationDivisionOrModOperatorFromTheLeftInsideParentheses);
-        } else
-        [no_step]
-        if (helper.isCurrentOperationMult(thisIsTheFirstMultiplicationDivisionOrModOperatorFromTheLeftInsideParentheses)) {
-            let thisIsTheResultOfTheMultiplicationOperation;
-            [interactive("enter")]
-            thisIsTheResultOfTheMultiplicationOperation = helper.whatIsTheResultOfThisMultiplication(thisIsTheLeftOperand, thisIsTheRightOperand, state, thisIsTheFirstMultiplicationDivisionOrModOperatorFromTheLeftInsideParentheses);
+        if (state.vars.length > 0) {
+            let add_the_parameters_to_the_variable_bank: Variable;
+            [interactive("add_variable")]
+            add_the_parameters_to_the_variable_bank = helper.add_other_parameters_to_the_variable_bank(variables, state.vars);
         }
+
+        [prompt]
+        "Now let’s walk through the code line-by-line while keeping track of variables.";
     }
 
-    [interactive("question")]
-    while(helper.isThereAtLeastOneAdditionOrSubtractionOperatorInsideParentheses(state)) {
-        let thisIsTheFirstAdditionOrSubtractionOperatorFromTheLeftInsideParentheses;
-        [interactive("click")] thisIsTheFirstAdditionOrSubtractionOperatorFromTheLeftInsideParentheses = helper.getFirstAdditionOrSubtractionOperatorFromLeftInsideParentheses(state);
-        let thisIsTheLeftOperand;
-        [interactive("click")] thisIsTheLeftOperand = helper.getLeftOperand(state, thisIsTheFirstAdditionOrSubtractionOperatorFromTheLeftInsideParentheses);
-        let thisIsTheRightOperand;
-        [interactive("click")] thisIsTheRightOperand = helper.getRightOperand(state, thisIsTheFirstAdditionOrSubtractionOperatorFromTheLeftInsideParentheses);
+    [no_step]
+    while(helper.check_while_loop(ast)) {
+
+        let this_is_the_next_line_that_will_execute: Line;
+        [interactive("next_line")] this_is_the_next_line_that_will_execute = helper.get_next_line(ast.body, this_is_the_next_line_that_will_execute);
+
         [no_step]
-        if (helper.isCurrentOperationConcat(state, thisIsTheFirstAdditionOrSubtractionOperatorFromTheLeftInsideParentheses)) {
-            let thisIsTheResultOfTheAdditionOperation;
-            [interactive("enter"); add_to_prompt("<br>(since one of the operands is a string, concatenate the two operands to make the answer a string)")]
-            thisIsTheResultOfTheAdditionOperation = helper.whatIsTheResultOfThisAddition(thisIsTheLeftOperand, thisIsTheRightOperand, state, thisIsTheFirstAdditionOrSubtractionOperatorFromTheLeftInsideParentheses);
-        } else
-        [no_step]
-        if (helper.isCurrentOperationAdd(thisIsTheFirstAdditionOrSubtractionOperatorFromTheLeftInsideParentheses)) {
-            let thisIsTheResultOfTheAdditionOperation;
-            [interactive("enter")]
-            thisIsTheResultOfTheAdditionOperation = helper.whatIsTheResultOfThisAddition(thisIsTheLeftOperand, thisIsTheRightOperand, state, thisIsTheFirstAdditionOrSubtractionOperatorFromTheLeftInsideParentheses);
-        } else
-        [no_step]
-        if (helper.isCurrentOperationSub(thisIsTheFirstAdditionOrSubtractionOperatorFromTheLeftInsideParentheses)) {
-            let thisIsTheResultOfTheSubtractionOperation;
-            [interactive("enter")]
-            thisIsTheResultOfTheSubtractionOperation = helper.whatIsTheResultOfThisSubtraction(thisIsTheLeftOperand, thisIsTheRightOperand, state, thisIsTheFirstAdditionOrSubtractionOperatorFromTheLeftInsideParentheses);
-        }
+        let it_defines_a_new_instance_variable_which_we_will_add_to_the_variable_bank: Variable;
+        [interactive("add_variable")]
+        it_defines_a_new_instance_variable_which_we_will_add_to_the_variable_bank = helper.get_instance_variable(variables, ast);
     }
 
-    [interactive("question")]
-    while(helper.isThereAtLeastOneMultiplicationDivisionOrModOperator(state)) {
-        let thisIsTheFirstMultiplicationDivisionOrModOperatorFromTheLeft;
-        [interactive("click")] thisIsTheFirstMultiplicationDivisionOrModOperatorFromTheLeft = helper.getFirstMultiplicationDivisionOrModOperatorFromLeft(state);
-        let thisIsTheLeftOperand;
-        [interactive("click")] thisIsTheLeftOperand = helper.getLeftOperand(state, thisIsTheFirstMultiplicationDivisionOrModOperatorFromTheLeft);
-        let thisIsTheRightOperand;
-        [interactive("click")] thisIsTheRightOperand = helper.getRightOperand(state, thisIsTheFirstMultiplicationDivisionOrModOperatorFromTheLeft);
-        [no_step]
-        if (helper.isCurrentOperatorMod(thisIsTheFirstMultiplicationDivisionOrModOperatorFromTheLeft)) {
-            let thisIsTheResultOfTheModOperation;
-            [interactive("enter"); add_to_prompt("<br>(divide and take the remainder to get the mod)")]
-            thisIsTheResultOfTheModOperation = helper.whatIsTheResultOfThisModulus(thisIsTheLeftOperand, thisIsTheRightOperand, state, thisIsTheFirstMultiplicationDivisionOrModOperatorFromTheLeft);
-        } else
-        [no_step]
-        if (helper.isCurrentOperationIntDiv(state, thisIsTheFirstMultiplicationDivisionOrModOperatorFromTheLeft)) {
-            let thisIsTheResultOfTheDivisionOperation;
-            [interactive("enter"); add_to_prompt("<br>(since both of the operands are ints,<br>round the answer down to make it an int)")]
-            thisIsTheResultOfTheDivisionOperation = helper.whatIsTheResultOfThisDivision(thisIsTheLeftOperand, thisIsTheRightOperand, state, thisIsTheFirstMultiplicationDivisionOrModOperatorFromTheLeft);
-        } else
-        [no_step]
-        if (helper.isCurrentOperationDiv(thisIsTheFirstMultiplicationDivisionOrModOperatorFromTheLeft)) {
-            let thisIsTheResultofTheDivisionOperation;
-            [interactive("enter")]
-            thisIsTheResultofTheDivisionOperation = helper.whatIsTheResultOfThisDivision(thisIsTheLeftOperand, thisIsTheRightOperand, state, thisIsTheFirstMultiplicationDivisionOrModOperatorFromTheLeft);
-        } else
-        [no_step]
-        if (helper.isCurrentOperationMult(thisIsTheFirstMultiplicationDivisionOrModOperatorFromTheLeft)) {
-            let thisIsTheResultOfTheMultiplicationOperation;
-            [interactive("enter")]
-            thisIsTheResultOfTheMultiplicationOperation = helper.whatIsTheResultOfThisMultiplication(thisIsTheLeftOperand, thisIsTheRightOperand, state, thisIsTheFirstMultiplicationDivisionOrModOperatorFromTheLeft);
-        }
-    }
+    let this_is_the_next_line_that_will_execute: Line;
+    [interactive("next_line")] this_is_the_next_line_that_will_execute = helper.get_while_loop(ast);
 
-    [interactive("question")]
-    while(helper.isThereAtLeastOneAdditionOrSubtractionOperator(state)) {
-        let thisIsTheFirstAdditionOrSubtractionOperatorFromTheLeft;
-        [interactive("click")] thisIsTheFirstAdditionOrSubtractionOperatorFromTheLeft = helper.getFirstAdditionOrSubtractionOperatorFromLeft(state);
-        let thisIsTheLeftOperand;
-        [interactive("click")] thisIsTheLeftOperand = helper.getLeftOperand(state, thisIsTheFirstAdditionOrSubtractionOperatorFromTheLeft);
-        let thisIsTheRightOperand;
-        [interactive("click")] thisIsTheRightOperand = helper.getRightOperand(state, thisIsTheFirstAdditionOrSubtractionOperatorFromTheLeft);
-        [no_step]
-        if (helper.isCurrentOperationConcat(state, thisIsTheFirstAdditionOrSubtractionOperatorFromTheLeft)) {
-            let thisIsTheResultOfTheAdditionOperation;
-            [interactive("enter"); add_to_prompt("<br>(since one of the operands is a string, concatenate the two operands to make the answer a string)")]
-            thisIsTheResultOfTheAdditionOperation = helper.whatIsTheResultOfThisAddition(thisIsTheLeftOperand, thisIsTheRightOperand, state, thisIsTheFirstAdditionOrSubtractionOperatorFromTheLeft);
-        } else
-        [no_step]
-        if (helper.isCurrentOperationAdd(thisIsTheFirstAdditionOrSubtractionOperatorFromTheLeft)) {
-            let thisIsTheResultOfTheAdditionOperation;
-            [interactive("enter")]
-            thisIsTheResultOfTheAdditionOperation = helper.whatIsTheResultOfThisAddition(thisIsTheLeftOperand, thisIsTheRightOperand, state, thisIsTheFirstAdditionOrSubtractionOperatorFromTheLeft);
-        } else
-        [no_step]
-        if (helper.isCurrentOperationSub(thisIsTheFirstAdditionOrSubtractionOperatorFromTheLeft)) {
-            let thisIsTheResultOfTheSubtractionOperation;
-            [interactive("enter")]
-            thisIsTheResultOfTheSubtractionOperation = helper.whatIsTheResultOfThisSubtraction(thisIsTheLeftOperand, thisIsTheRightOperand, state, thisIsTheFirstAdditionOrSubtractionOperatorFromTheLeft);
-        }
-    }
-
+    // FIXME get this out of here once simulator handles refs correctly
+    let loop;
+    [no_step]
+    loop = helper.get_while_loop(ast);
     [prompt]
-    "This is the answer!";
+    "We're at the beginning of a new while-loop block. Look at the loop header.";
+
+    [no_step]
+    let lets_visualize_our_sequence_with_an_array: Variable;
+
+    [no_step]
+    {
+        let this_is_the_loop_initialization: AstNode;
+        let this_is_the_conditional_of_a_while_statement: AstNode;
+        this_is_the_conditional_of_a_while_statement = loop.condition;
+
+        [prompt]
+        "A while loop will execute until the while loop condition is false.";
+
+        [interactive("conditional")]
+        while (helper.does_this_conditional_evaluate_to_true(variables, this_is_the_conditional_of_a_while_statement)) {
+            [no_step]
+            this_is_the_next_line_that_will_execute = null;
+            let condition_outcome;
+            [no_step]
+            condition_outcome = null;
+            let parent;
+            [no_step]
+            parent = loop;
+
+            [no_step]
+            do {
+                [interactive("next_line")] this_is_the_next_line_that_will_execute = helper.get_the_next_line_in_this_block_to_execute(parent, this_is_the_next_line_that_will_execute, condition_outcome);
+
+                [no_step]
+                if (helper.is_if(this_is_the_next_line_that_will_execute)) {
+                    let this_is_the_conditional_of_an_if_statement: AstNode;
+                    this_is_the_conditional_of_an_if_statement = this_is_the_next_line_that_will_execute.condition;
+
+                    [interactive("conditional")]
+                    if (helper.does_this_conditional_evaluate_to_true(variables, this_is_the_conditional_of_an_if_statement)) {
+                        [prompt]
+                        "Since it’s true we move on to the lines inside the if statement.";
+                        [no_step]
+                        parent = this_is_the_next_line_that_will_execute;
+                        [no_step]
+                        this_is_the_next_line_that_will_execute = null;
+                        [no_step]
+                        condition_outcome = true;
+                    } else {
+                        [prompt]
+                        "Since it’s not true we will be ignoring all of the lines in the if statement.";
+                        [no_step]
+                        if (helper.has_else(this_is_the_next_line_that_will_execute)) {
+                            [no_step]
+                            parent = this_is_the_next_line_that_will_execute;
+                            [no_step]
+                            this_is_the_next_line_that_will_execute = null;
+                            [no_step]
+                            condition_outcome = false;
+                        }
+                    }
+                } else {
+                    [prompt]
+                    "This line updates the value of a variable.";
+                    let update_the_variable_in_the_variable_bank: Variable;
+                    [interactive("update_variable")]
+                    update_the_variable_in_the_variable_bank = helper.assign_the_new_value_to_the_variable(variables, this_is_the_next_line_that_will_execute);
+                }
+
+            } while (helper.is_there_another_line_to_execute(parent, this_is_the_next_line_that_will_execute, condition_outcome));
+
+            [prompt]
+            "We have reached the end of the while loop.";
+            [no_step]
+            this_is_the_next_line_that_will_execute = helper.get_while_loop(ast);
+        }
+    }
+
+    [no_step] if (helper.this_is_a_return_statement(ast)) {
+        let this_is_the_next_line_that_will_execute: Line;
+        [interactive("next_line")] this_is_the_next_line_that_will_execute = helper.get_return_statement(ast);
+
+        let the_return_value_of_the_function_is_determined_here;
+        the_return_value_of_the_function_is_determined_here = helper.get_return_output(this_is_the_next_line_that_will_execute, variables); // TODO: better text, highlight
+        [prompt]
+        "The print statement below prints out the value(s) that the function returned. Enter that solution in the answer box!";
+    }
 }
