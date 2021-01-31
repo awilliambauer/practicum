@@ -698,7 +698,10 @@ var controller = (function() {
                     console.log("Correct answer is: ", correctAnswer);
                     console.log("The userValue is: ", userValue);
                     if (correctAnswer.type === "string") {
-                        correctValue = correctAnswer.value[correctAnswer.index].value; // FIXME: The index here is 6 for some reason, and that's causing issues cause it's undefined. Same for 2 lines below.
+                        // FIXME: The index here is 6 for some reason, and that's causing issues cause it's undefined. Same for 3 lines below.
+                        // Is index supposed to be the size of the array? That would be the only time it would make sense that it would have a value of 6
+                        // Is correctValue supposed to be the whole thing in the array or each individual item?
+                        correctValue = correctAnswer.value[correctAnswer.index].value; 
                     } else {
                         correctValue = parseInt(correctAnswer.value[correctAnswer.index].value);
                     }
