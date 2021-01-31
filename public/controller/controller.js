@@ -416,7 +416,7 @@ var controller = (function() {
 
         //remove the scratch area
         var scratch = d3.select('#scratch_area').classed('hidden', true);
-        $('#scratch-list').empty();
+        $('#scratch_list').empty();
     }
 
     function createScratchArea(lines) {
@@ -425,7 +425,7 @@ var controller = (function() {
         // TODO this should probably be d3 except d3 crashes with some unhelpful error when appending the result of java_formatter.format(...) that I don't have time to debug
 
         // create a ul with an li for each step of the scratch work
-        var ul = $('#scratch-list');
+        var ul = $('#scratch_list');
         ul.empty();
 
         lines.forEach(function(line, index) {
@@ -1045,7 +1045,7 @@ var controller = (function() {
             correct = true;
         }
 
-        $("#input-box").on("animationend", function () {$("#input-box").attr("class", "");});
+        $("#inputBox").on("animationend", function () {$("#inputBox").attr("class", "");});
         if (correct) {
             d3.select("#inputBox").attr("class", "correct");
             d3.select("#correctHeader").classed("hidden", false);
