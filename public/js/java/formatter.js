@@ -201,12 +201,20 @@ var java_formatter = function() {
                 node.then_branch.forEach(function(s) {
                     elem.append(to_dom(s, options, indent_level + 1));
                 });
-                if (node.elif_branch) {
-                    line = newline(elem);
-                    line.append(indent(indent_level) + keyword("elif") + ' ');
-                    line.append(to_dom(node.elif_condition, options, indent_level));
-                    line.append(':');
-                    node.elif_branch.forEach(function(s) {
+                while (node.else_is_elif) {
+                    node = node.else_branch;
+                    elem.addClass("if");
+                    if (special_flag) {
+                        // HACK pass in the previous line (with the }) as the flag so it's one line
+                        line = special_flag;
+                    } else {
+                        line = newline(elem);
+                        line.append(indent(indent_level));
+                    }
+                    line.append(keyword("elif") + ' ');
+                    line.append(to_dom(node.condition, options, indent_level));
+                    line.append(":");
+                    node.then_branch.forEach(function(s) {
                         elem.append(to_dom(s, options, indent_level + 1));
                     });
                 }

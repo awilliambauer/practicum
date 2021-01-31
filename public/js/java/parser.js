@@ -451,36 +451,28 @@ var java_parsing = function() {
             };
         }
 
-        function match_ifelse(indent_level) {
+        function match_ifelse(indent_level, is_elif=false) {
             var start = lex.position();
-            match_keyword("if");
+            if (!is_elif) match_keyword("if");
+            else match_keyword("elif");
             // match_symbol("(");
             var cond = match_expression(0);
+            var has_elif = false;
+            var elseb = undefined;
             // match_symbol(")");
             match_symbol(":");
             var thenb = match_block(indent_level + 1);
-            var elifb = undefined;
-            var elseb = undefined;
-            // this for loop matches the right number of tabs before the elif, so that the peek gives us an elif
-            for (let i = 0; i < indent_level; i++) {
-                if (peek_symbol("\t")) match_symbol("\t");
-            }
+            // this for loop matches the right number of tabs before the elif/else, so that the peek gives us that token
+            for (let i = 0; i < indent_level; i++) if (peek_symbol("\t")) match_symbol("\t");
             if (!lex.iseof() && peek_keyword("elif")) {
-                match_keyword("elif");
-                var elif_cond = match_expression(0);
-                match_symbol(":");
-                elifb = match_block(indent_level + 1);
-                // move the cursor for the potential else
-                for (let i = 0; i < indent_level; i++) {
-                    if (peek_symbol("\t")) match_symbol("\t");
-                }
-            }
-            if (!lex.iseof() && peek_keyword("else")) {
+                has_elif = true;
+                elseb = match_ifelse(indent_level, true);
+            } else if (!lex.iseof() && peek_keyword("else")) {
                 match_keyword("else");
                 match_symbol(":");
                 elseb = match_block(indent_level + 1);
-            } else { // did not find an else keyword
-                lex.home(); // needs to un-match the tabs if there was not an else
+            } else { // did not find an elif/else keyword
+                lex.home(); // needs to un-match the tabs if there was not an elif/else
             }
 
             return {
@@ -489,9 +481,8 @@ var java_parsing = function() {
                 tag: 'if',
                 condition: cond,
                 then_branch: thenb,
-                elif_condition: elif_cond,
-                elif_branch: elifb, // TODO: only allowing one elif branch
-                else_branch: elseb,
+                else_is_elif: has_elif,
+                else_branch: elseb
             };
         }
 

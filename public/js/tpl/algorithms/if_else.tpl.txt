@@ -87,17 +87,45 @@ function TPLAlgorithm() {
                     [prompt]
                     "Since it’s false we will be ignoring all of the lines in this clause.";
                     [no_step]
-                    if (helper.has_else_if(this_is_the_next_line_that_will_execute, ast)) {
+                    if (helper.has_else_if(this_is_the_next_line_that_will_execute)) {
                         [prompt]
                         "Since the if statement was false we now evaluate this else if case.";
+                        [interactive("next_line")] this_is_the_next_line_that_will_execute = helper.get_elif(this_is_the_next_line_that_will_execute);
                         [prompt]
                         "Just like with if statements we need to decide whether the conditional part of the else if statement is true or false.";
-                        [no_step]
-                        parent = this_is_the_next_line_that_will_execute;
-                        [no_step]
-                        this_is_the_next_line_that_will_execute = null;
-                        [no_step]
-                        condition_outcome = false;
+                        let this_is_the_conditional_of_an_elif_statement: AstNode;
+                        this_is_the_conditional_of_an_elif_statement = this_is_the_next_line_that_will_execute.condition;
+
+                        [interactive("conditional")]
+                        if (helper.does_this_conditional_evaluate_to_true(variables, this_is_the_conditional_of_an_elif_statement)) {
+                            [prompt]
+                            "Since it’s true we move on to the lines inside of this clause.";
+                            [no_step]
+                            parent = this_is_the_next_line_that_will_execute;
+                            [no_step]
+                            this_is_the_next_line_that_will_execute = null;
+                            [no_step]
+                            condition_outcome = true;
+                        } else {
+                            [prompt]
+                            "Since it’s false we will be ignoring all of the lines in this clause.";
+
+                            // TODO: add capability for more elifs
+
+                            [no_step]
+                            if (helper.has_else(this_is_the_next_line_that_will_execute)) {
+                                [prompt]
+                                "Since all previous if and else if statements were false we automatically move into the else case.";
+                                [no_step]
+                                parent = this_is_the_next_line_that_will_execute;
+                                [no_step]
+                                this_is_the_next_line_that_will_execute = null;
+                                [no_step]
+                                condition_outcome = false;
+                            } else {
+                                break;
+                            }
+                        }
                     } else {
                         [no_step]
                         if (helper.has_else(this_is_the_next_line_that_will_execute)) {

@@ -202,8 +202,12 @@ function TplHelper() {
         return stmt.tag === "if";
     };
 
-    this.has_else_if = function(stmt, ast) {
-        return stmt.hasOwnProperty("elif_branch") && stmt.elif_branch.length > 0;
+    this.has_else_if = function(stmt) {
+        return stmt.else_is_elif;
+    };
+
+    this.get_elif = function(stmt) {
+        return stmt.else_branch;
     };
 
     this.has_else = function(stmt) {
