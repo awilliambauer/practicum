@@ -234,7 +234,10 @@ var java_formatter = function() {
 
             case 'binop':
                 elem.append(to_dom(node.args[0], options, indent_level));
-                elem.append(" " + node.operator + " ");
+                let operator = node.operator;
+                if (operator === "&&") operator = keyword("and");
+                if (operator === "||") operator = keyword("or");
+                elem.append(" " + operator + " ");
                 elem.append(to_dom(node.args[1], options, indent_level));
                 break;
 
