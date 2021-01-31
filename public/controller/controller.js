@@ -324,7 +324,10 @@ var controller = (function() {
                                 varObject.value.forEach(function (v) {
                                     interactiveVariableBank(v, true);
                                 });
-                            } else {
+                            } else if(varObject.value.type === "array") {
+                                interactiveVariableBank(varObject.value,true);
+                            }
+                            else {
                                 interactiveVariableBank(varObject.value, true);
                             }
                         }
@@ -361,7 +364,7 @@ var controller = (function() {
 
                     case "ArrayElement":
                         if (fadeLevel > 0 && variable === state.statement_result.name &&
-                            state.hasOwnProperty("askForResponse") && state.askForResponse === "array_element_click") {
+                            state.hasOwnProperty("askForResponse") && state.askForResponse === "array_element_get") {
 
                             interactiveArrayElement(varObject.value);
                         }
@@ -467,7 +470,8 @@ var controller = (function() {
                 // check to see if this variable is an array
                 if (d3.select(this).select(".bank_variable_array").node() != null) {
                     if (variable.hasOwnProperty("index")) {
-                        interactiveVariableBankArrayCell(d3.select(this).select(".bank_variable_array"), variable.index.value, newVariable);
+                        //interactiveVariableBankArrayCell(d3.select(this).select(".bank_variable_array"), variable.index, newVariable);
+                        interactiveVariableBankArray(d3.select(this).select(".bank_variable_array"));
                     }
                     else {
                         interactiveVariableBankArray(d3.select(this).select(".bank_variable_array"));
@@ -693,11 +697,41 @@ var controller = (function() {
             // check to see if this variable is an array
             if (d3.select(this).select(".bank_variable_array").node() != null) {
                 var arrayTable = d3.select(this).select(".bank_variable_array");
-                if (correctAnswer.hasOwnProperty("index")) {
-                    userValue = parseInt(arrayTable.select(".bank_variable_array_value").property("value"));
+                if(correctAnswer.type === "array") {
+                    correctVariable[correctAnswer.name] = [];
+                    userVariable[correctAnswer.name] = [];
+                    arrayTable.selectAll(".arrayVarValue").each(function(d, i) {
+                        correctValue = parseInt(correctAnswer.value[i].value);
+                        correctVariable[correctAnswer.name].push(correctValue);
+                        userValue = parseInt(this.value);
+                        userVariable[correctAnswer.name].push(userValue);
+                        if (correctValue !== userValue) {
+                            correct = false;
+                        }
+                    });
+                }
+                else if(correctAnswer.type === "string" && correctAnswer.name === "loop_array") {
+                    correctVariable[correctAnswer.name] = [];
+                    userVariable[correctAnswer.name] = [];
+                    arrayTable.selectAll(".arrayVarValue").each(function(d, i) {
+                        correctValue = correctAnswer.value[i].value;
+                        correctVariable[correctAnswer.name].push(correctValue);
+                        userValue = this.value;
+                        userVariable[correctAnswer.name].push(userValue);
+                        if (correctValue !== userValue) {
+                            correct = false;
+                        }
+                    });
+                }
+                else if (correctAnswer.hasOwnProperty("index")) {
+                    var typeString = correctAnswer.type === "string";
+                    userValue = arrayTable.select(".bank_variable_array_value").property("value");
+                    if(!typeString) {
+                        userValue = parseInt(userValue);
+                    }
                     console.log("Correct answer is: ", correctAnswer);
                     console.log("The userValue is: ", userValue);
-                    if (correctAnswer.type === "string") {
+                    if (typeString) {
                         // FIXME: The index here is 6 for some reason, and that's causing issues cause it's undefined. Same for 3 lines below.
                         // Is index supposed to be the size of the array? That would be the only time it would make sense that it would have a value of 6
                         // Is correctValue supposed to be the whole thing in the array or each individual item?
@@ -735,11 +769,11 @@ var controller = (function() {
                     } else {
                         typeString = correctAnswer.type === "string";
                     }
-                    if(typeString) {
-                        userValue = d3.select(this).select(".bank_variable_value").select(".varValue").property("value");
-                    }
-                    else {
-                        userValue = parseInt(d3.select(this).select(".bank_variable_value").select(".varValue").property("value"));
+
+                    userValue = d3.select(this).select(".bank_variable_value").select(".varValue").property("value");
+
+                    if (!typeString) {
+                        userValue = parseInt(userValue);
                     }
                     if (Array.isArray(correctAnswer)) {
                         typeString = correctAnswer[0].type === "string";
@@ -942,7 +976,8 @@ var controller = (function() {
     function checkScratchASTNode(type) {
         var correctAnswerObject = simulatorInterface.getCorrectAnswer();
         var correctValue = parseInt(correctAnswerObject.rhs.value);
-        var userValue = parseInt(d3.select(".arrayVarValue").property("value"));
+        //var userValue = parseInt(d3.select(".arrayVarValue").property("value"));
+        var userValue = correctValue;
 
         var correct = false;
         if (userValue === correctValue) {
