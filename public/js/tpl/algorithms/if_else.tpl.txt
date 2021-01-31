@@ -85,11 +85,11 @@ function TPLAlgorithm() {
                     condition_outcome = true;
                 } else {
                     [prompt]
-                    "Since it’s false we will be ignoring all of the lines in of this clause.";
+                    "Since it’s false we will be ignoring all of the lines in this clause.";
                     [no_step]
-                    if (helper.has_else_if(this_is_the_next_line_that_will_execute)) {
+                    if (helper.has_else_if(this_is_the_next_line_that_will_execute, ast)) {
                         [prompt]
-                        "Since all previous if and else if statements were false we now evaluate this else if case.";
+                        "Since the if statement was false we now evaluate this else if case.";
                         [prompt]
                         "Just like with if statements we need to decide whether the conditional part of the else if statement is true or false.";
                         [no_step]
@@ -98,20 +98,20 @@ function TPLAlgorithm() {
                         this_is_the_next_line_that_will_execute = null;
                         [no_step]
                         condition_outcome = false;
-                    }
-                    [no_step]
-                    if (helper.has_else(this_is_the_next_line_that_will_execute)) {
-                        [prompt]
-                        "Since all previous if and else if statements were false we automatically move into the else case.";
-                        [no_step]
-                        parent = this_is_the_next_line_that_will_execute;
-                        [no_step]
-                        this_is_the_next_line_that_will_execute = null;
-                        [no_step]
-                        condition_outcome = false;
                     } else {
-                        // TODO: prompt for no if/elif?
-                        break;
+                        [no_step]
+                        if (helper.has_else(this_is_the_next_line_that_will_execute)) {
+                            [prompt]
+                            "Since all previous if and else if statements were false we automatically move into the else case.";
+                            [no_step]
+                            parent = this_is_the_next_line_that_will_execute;
+                            [no_step]
+                            this_is_the_next_line_that_will_execute = null;
+                            [no_step]
+                            condition_outcome = false;
+                        } else {
+                            break;
+                        }
                     }
                 }
             } else {
@@ -122,11 +122,11 @@ function TPLAlgorithm() {
                 [interactive("update_variable")]
                 update_the_variable_in_the_variable_bank = helper.assign_the_new_value_to_the_variable(variables, this_is_the_next_line_that_will_execute);
                 //this_is_the_next_line_that_will_execute = helper.get_the_next_line_in_this_block_to_execute(parent, this_is_the_next_line_that_will_execute, condition_outcome);
+                [prompt]
+                "Now we can move back out of our clause to the main part of the function and skip any else if or else statements that come later.";
             }
 
         } while (helper.is_there_another_line_to_execute(parent, this_is_the_next_line_that_will_execute, condition_outcome));
-        [prompt]
-        "Now we can move back out of our clause to the main part of the function and skip any else if or else statements that come later.";
     } while (helper.is_this_the_last_line(ast));
 
     [no_step] if (helper.this_is_a_return_statement(ast)) {

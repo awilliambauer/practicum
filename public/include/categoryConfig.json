@@ -130,16 +130,16 @@
       "text": "def ifElseInvestigation(a, b):\n\tc = 2\n\tif a + c < b:\n\t\tc = c + 8\n\telse:\n\t\tb = b + 10\n\tif a + c < b:\n\t\tc = c + 8\n\telse:\n\t\tb = b + 10\n\treturn (b, c)",
       "variants": [{
         "id": "8fd7eabe-8b2a-4344-bd31-13e713c04285",
-        "arguments": {"b": 15, "a": 4}
+        "arguments": {"a": 4, "b": 15}
       },{
         "id": "832bb427-171d-480e-90f4-46944cec4312",
-        "arguments": {"b": 17, "a": 7}
+        "arguments": {"a": 7, "b": 17}
       },{
         "id": "468b435f-ddf3-406e-9edd-5e4a1fc467be",
-        "arguments": {"b": 5, "a": 12}
+        "arguments": {"a": 12, "b": 5}
       },{
         "id": "c736c2fe-72f8-4cb0-ba54-c7f5bebb6448",
-        "arguments": {"b": 8, "a": 16}
+        "arguments": {"a": 16, "b": 8}
       }]
     }
   },{
@@ -150,16 +150,16 @@
       "text": "def ifElseInvestigation(a, b):\n\tif a < b:\n\t\ta += 1\n\tif a < b:\n\t\ta += 1\n\telse:\n\t\tb += 1\n\tif a >= b:\n\t\tb = b - 5\n\treturn (a, b)",
       "variants": [{
         "id": "a986158b-a63e-49fa-a1ef-cdfd40acb112",
-        "arguments": {"b": 8, "a": 1}
+        "arguments": {"a": 1, "b": 8}
       },{
         "id": "9a3d5f3b-eaf3-40e4-b7ea-ae171ebc0ce7",
-        "arguments": {"b": 5, "a": 3}
+        "arguments": {"a": 3, "b": 5}
       },{
         "id": "be2ac0fa-33a5-494f-a99f-a5721725c040",
-        "arguments": {"b": 5, "a": 4}
+        "arguments": {"a": 4, "b": 5}
       },{
         "id": "47ffeb76-a1b6-4f17-9546-ddcd9f45b0e1",
-        "arguments": {"b": 6, "a": 8}
+        "arguments": {"a": 8, "b": 6}
       }]
     }
   },{
@@ -167,19 +167,19 @@
     "title": "If/Else Mystery 3",
     "examProblemDatabaseId": "75",
     "content": {
-      "text": "def ifElseInvestigation(a, b):\n\tif a == b:\n\t\tb -= 1\n\telse if a < b:\n\t\ta+= 1\n\telse: \n\t\tb = b + 5\n\tif a == b:\n\t\ta = a + 2\nreturn (14, 14)",
+      "text": "def ifElseInvestigation(a, b):\n\tif a == b:\n\t\tb = b - 1\n\telif a < b:\n\t\ta = a + 1\n\telse: \n\t\tb = b + 5\n\tif a == b:\n\t\ta = a + 2\n\treturn (a, b)",
       "variants": [{
         "id": "f833048f-b4bf-4ddb-8d2a-f3d9cf775285",
-        "arguments": {"b": 14, "a": 14}
+        "arguments": {"a": 14, "b": 14}
       },{
         "id": "ebda4ae2-fb41-42d2-b74d-084cced4ba48",
-        "arguments": {"b": 5, "a": 4}
+        "arguments": {"a": 4, "b": 5}
       },{
         "id": "cd4f7c41-b802-4204-bbe8-d2e2fc562a9f",
-        "arguments": {"b": 5, "a": 10}
+        "arguments": {"a": 10, "b": 5}
       },{
         "id": "121dd451-6589-4313-9389-52ceee8395cd",
-        "arguments": {"b": 8, "a": 2}
+        "arguments": {"a": 2, "b": 8}
       }]
     }
   },{
@@ -190,16 +190,16 @@
       "text": "def ifElseInvestigation(a, b):\n\tif a < b:\n\t\ta = a * 2\n\tif a > b:\n\t\ta = a - 10\n\telse:\n\t\tb+= 1\n\treturn (a, b)",
       "variants": [{
         "id": "f739f0d3-487b-42ef-b7e5-d2dd87a62d8a",
-        "arguments": {"b": 3, "a": 10}
+        "arguments": {"a": 10, "b": 3}
       },{
         "id": "79d53dec-943e-4388-b3cd-04d24d6c129f",
-        "arguments": {"b": 6, "a": 6}
+        "arguments": {"a": 6, "b": 6}
       },{
         "id": "95e0b993-3c4d-4a97-a248-953b465c37cd",
-        "arguments": {"b": 4, "a": 3}
+        "arguments": {"a": 3, "b": 4}
       },{
         "id": "5f14ec51-6bb0-42d2-ad9b-6c743f7aafd3",
-        "arguments": {"b": 20, "a": 4}
+        "arguments": {"a": 4, "b": 20}
       }]
     }
   },{
@@ -210,16 +210,16 @@
       "text": "def ifElseInvestigation(a, b, c):\n\tif a < b && a < c:\n\t\ta = a + c\n\t\tc+= 1\n\telif a >= b:\n\t\ta = a - b\n\t\tb-= 1\n\tif a >= b && a >= c:\n\t\ta+= 1\n\t\tc+= 1\n\treturn (a, b, c)",
       "variants": [{
         "id": "2d350f7e-6ffa-463b-9c6a-9b94bd648d97",
-        "arguments": {"c": 3, "b": 10, "a": 2}
+        "arguments": {"a": 2, "b": 10, "c": 3}
       },{
         "id": "c5837dcb-005b-4302-a383-93b03ce12e22",
-        "arguments": {"c": 1, "b": 6, "a": 8}
+        "arguments": {"a": 8, "b": 6, "c": 1}
       },{
         "id": "164d5046-8dd7-49ce-b300-f03c64d7f7dc",
-        "arguments": {"c": 7, "b": 6, "a": 4}
+        "arguments": {"a": 4, "b": 6, "c": 7}
       },{
         "id": "0c2dfa58-144c-4a5b-b548-4d4eb755cf9c",
-        "arguments": {"c":5, "b": 5, "a": 20}
+        "arguments": {"a": 20, "b": 5, "c": 5}
       }]
     }
   },{
@@ -230,16 +230,16 @@
       "text": "def ifElseInvestigation(x, y):\n\tz = 4\n\tif z <= x:\n\t\tz = x + 1\n\telse:\n\t\tz = z + 9\n\tif z <= y:\n\t\ty+= 1\n\treturn (z, y)",
       "variants": [{
         "id": "34e2566a-4f21-4be1-9267-b7a0e501833f",
-        "arguments": {"y": 20, "x": 3}
+        "arguments": {"x": 3, "y": 20}
       },{
         "id": "5e79d83b-1884-48e4-aea2-1dae1542532e",
-        "arguments": {"y": 5, "x": 4}
+        "arguments": {"x": 4, "y": 5}
       },{
         "id": "509cf0d7-d241-4bda-89ef-cf7be6765385",
-        "arguments": {"y": 5, "x": 5}
+        "arguments": {"x": 5, "y": 5}
       },{
         "id": "a8b369bf-cb91-41e4-9d62-5035da9bdf50",
-        "arguments": {"y": 10, "x": 6}
+        "arguments": {"x": 6, "y": 10}
       }]
     }
   },{
@@ -250,16 +250,16 @@
       "text": "def ifElseInvestigation(a, b):\n\tif a * 2 < b:\n\t\ta = a * 3\n\tif b < a:\n\t\tb+= 1\n\telse:\n\t\ta-= 1\n\treturn (a, b)",
       "variants": [{
         "id": "2e8e875b-a48e-4c46-bcbc-32de9cf253a9",
-        "arguments": {"b": 2, "a": 10}
+        "arguments": {"a": 10, "b": 2}
       },{
         "id": "c517fd6b-8631-4d73-a76b-da7685d0bb0a",
-        "arguments": {"b": 8, "a": 3}
+        "arguments": {"a": 3, "b": 8}
       },{
         "id": "9a2e7222-f4f1-4bfa-9973-63ff99affd7b",
-        "arguments": {"b": 4, "a": 4}
+        "arguments": {"a": 4, "b": 4}
       },{
         "id": "6c8be38a-af45-4e1d-8032-a72ae5e7cbe0",
-        "arguments": {"b": 30, "a": 10}
+        "arguments": {"a": 10, "b": 30}
       }]
     }
   },{
@@ -270,13 +270,13 @@
       "text": "def ifElseInvestigation(x, y):\n\tif x == y:\n\t\tx = x + 11\n\telif x > 2 * y:\n\t\tx = 0\n\tif x == 0 && y > x:\n\t\tx = x + 2\n\t\ty = y + 2\n\treturn (x, y)",
       "variants": [{
         "id": "09b242f8-a03d-491d-b737-c922359cd8ba",
-        "arguments": {"y": 5, "x": 5}
+        "arguments": {"x": 5, "y": 5}
       },{
         "id": "1e658162-826f-4379-bf61-6e825098c828",
-        "arguments": {"y": 4, "x": 18}
+        "arguments": {"x": 18, "y": 4}
       },{
         "id": "98c73002-32dd-43d3-abb1-a3ffec1e5dc7",
-        "arguments": {"y": 6, "x": 3}
+        "arguments": {"x": 3, "y": 6}
       }]
     }
   },{
@@ -284,19 +284,19 @@
     "title": "If/Else Mystery 9",
     "examProblemDatabaseId": "94",
     "content": {
-      "text": "def ifElseInvestigation(a, b):\n\tif a %2 != 0:\n\t\ta = a * 2\n\tif a < 10:\n\t\tb+= 1\n\telse if a < 10:\n\t\ta-= 1\n\t\tb-= 1\n\treturn (a, b)",
+      "text": "def ifElseInvestigation(a, b):\n\tif a %2 != 0:\n\t\ta = a * 2\n\tif a < 10:\n\t\tb+= 1\n\telif a < 10:\n\t\ta-= 1\n\t\tb-= 1\n\treturn (a, b)",
       "variants": [{
         "id": "5395fdde-da93-4a5c-bfdc-7daab5ce27fe",
-        "arguments": {"b": 12, "a": 12}
+        "arguments": {"a": 12, "b": 12}
       },{
         "id": "41d87e4b-8d03-4fd1-81cf-ceb30fb04845",
-        "arguments": {"b": 4, "a": 7}
+        "arguments": {"a": 7, "b": 4}
       },{
         "id": "7b81969b-2809-4c37-8770-30985b8c41c9",
-        "arguments": {"b": 8, "a": 5}
+        "arguments": {"a": 5, "b": 8}
       },{
         "id": "8a66180d-0248-46b4-a278-674572483776",
-        "arguments": {"b": 42, "a": 3}
+        "arguments": {"a": 3, "b": 42}
       }]
     }
   },{
@@ -304,19 +304,19 @@
     "title": "If/Else Mystery 10",
     "examProblemDatabaseId": "96",
     "content": {
-      "text": "def ifElseInvestigation(x, y):\n\tint z = 0\n\tif x >= y:\n\t\tx = x / 2\n\t\tz+= 1\n\tif x > z and y <= z:\n\t\tz+= 1\n\telse if x > z:\n\t\ty = y - 5\n\treturn (x, y, z)",
+      "text": "def ifElseInvestigation(x, y):\n\tz = 0\n\tif x >= y:\n\t\tx = x / 2\n\t\tz+= 1\n\tif x > z && y <= z:\n\t\tz+= 1\n\telif x > z:\n\t\ty = y - 5\n\treturn (x, y, z)",
       "variants": [{
         "id": "217efa62-9c15-40e6-954d-910691f6b44a",
-        "arguments": {"y": 1, "x": 3}
+        "arguments": {"x": 3, "y": 1}
       },{
         "id": "ff6347d1-bb82-4f4b-a97c-1e5c0b665db1",
-        "arguments": {"y": 100, "x": -10}
+        "arguments": {"x": -10, "y": 100}
       },{
         "id": "8f54610a-34ed-448d-a425-0f652398fcc6",
-        "arguments": {"y": 4, "x": 18}
+        "arguments": {"x": 18, "y": 4}
       },{
         "id": "4d00077f-fea0-406a-8cf7-08d3f7c136c1",
-        "arguments": {"y": 5, "x": -12}
+        "arguments": {"x": -12, "y": 5}
       }]
     }
   }]
