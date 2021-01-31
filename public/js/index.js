@@ -222,8 +222,10 @@ var csed = (function() {
         // Get Modal
         var modal = document.getElementById("fading-level-modal");
         modal.style.display = "block";
+
         // Prevents keypresses while modal is open
-        navigator.keyboard.lock();
+        $(document).off("keydown");
+
         // Get the button that closes the modal
         var doneBtn = document.getElementById("doneBtn");
 
@@ -234,9 +236,7 @@ var csed = (function() {
             setFadingLevel(selection);
             modal.style.display = "none";
             d3.select("#difficultyLevel").append("span").html(`Difficulty level: ${selection}`);
-            // Unlocks the keybaord once selection is made
-            navigator.keyboard.unlock();
-            problemUI.initialize(problemConfig, new CallbackObject(), initial_state, task_logger, fading_level);
+            problemUI.initialize(problemConfig, callback_obj, initial_state, task_logger, fading_level);
         };
         
     }
