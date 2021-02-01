@@ -1047,7 +1047,8 @@ var controller = (function() {
 
         $("#inputBox").on("animationend", function () {$("#inputBox").attr("class", "");});
         if (correct) {
-            d3.select("#inputBox").attr("class", "correct");
+            d3.select("#inputBox").attr("class", "correct").attr("disabled", "disabled");
+            d3.select("#submitButton").attr("disabled", "disabled");
             d3.select("#correctHeader").classed("hidden", false);
             d3.select("#incorrectHeader").classed("hidden", true);
             if (config.content.variants && config.content.variants.some(function (v) { return !v.started; })) {
