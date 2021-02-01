@@ -136,8 +136,26 @@ function TPLAlgorithm() {
         }
     }
 
+    let iterations: Boolean;
+    [no_step]
+    iterations = false;
+
     [interactive("conditional")]
     while (helper.is_there_another_item_in_the_loop_sequence(variables)) {
+
+        [no_step]
+        if (iterations) {
+            let now_we_need_to_update_the_loop_variable: AstNode;
+            now_we_need_to_update_the_loop_variable = loop.increment;
+
+            let update_the_value_of_the_loop_variable_in_the_variable_bank: Variable;
+            [interactive("update_variable")]
+            update_the_value_of_the_loop_variable_in_the_variable_bank = helper.execute_the_loop_increment(variables, loop.variable);
+
+            let this_is_the_next_index_for_the_loop_array: ArrayElement;
+            [interactive("array_element_get")]
+            this_is_the_next_index_for_the_loop_array = helper.loop_array_index(variables, lets_visualize_our_sequence_with_an_array);
+        }
 
         [no_step]
         this_is_the_next_line_that_will_execute = null;
@@ -198,18 +216,7 @@ function TPLAlgorithm() {
         this_is_the_next_line_that_will_execute = helper.get_loop(ast);
 
         [no_step]
-        {
-            let now_we_go_back_to_the_start_and_update_the_loop_variable: AstNode;
-            now_we_go_back_to_the_start_and_update_the_loop_variable = loop.increment;
-
-            let update_the_value_of_the_loop_variable_in_the_variable_bank: Variable;
-            [interactive("update_variable")]
-            update_the_value_of_the_loop_variable_in_the_variable_bank = helper.execute_the_loop_increment(variables, loop.variable);
-
-            let this_is_the_next_index_for_the_loop_array: ArrayElement;
-            [interactive("array_element_get")]
-            this_is_the_next_index_for_the_loop_array = helper.loop_array_index(variables, lets_visualize_our_sequence_with_an_array);
-        }
+        iterations = true;
     }
 
     [no_step] if (helper.this_is_a_return_statement(ast)) {
