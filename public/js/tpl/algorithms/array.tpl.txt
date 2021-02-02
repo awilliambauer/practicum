@@ -85,11 +85,23 @@ function TPLAlgorithm() {
             [prompt]
             "When range is called with some integer parameters in Python, it makes a sequence of numbers to match the range call.";
 
-            [prompt]
-            "You can pass 1 to 3 numbers to range. If there’s only one number then the sequence goes from 0 to one less than that number because Python starts indexing at 0.";
-
-            [prompt]
-            "Two numbers in the range call sets a specific start and end for the sequence, and a third number is the step which tells Python how quickly to move through the sequence. Normally the step is 1.";
+            [no_step]
+            if (state.vars.length == 1) {
+                [prompt]
+                "Our range call has just one number which is the number of times the loop will iterate. Python indexes at 0 so the sequence goes from 0 to end - 1.";
+            }
+            [no_step]
+            if (state.vars.length == 2) {
+                [prompt]
+                "Our range call has two numbers which are the start and end numbers for the sequence. The sequence goes from start to end - 1.";
+            }
+            [no_step]
+            if (state.vars.length == 3) {
+                [prompt]
+                "Our range has three numbers. The first two are the start and end numbers for the sequence, it will start at start and stop just before it reaches end.";
+                [prompt]
+                "The third number is the step, it’s how much the sequence increases by. Step is usually 1 but in this case we will move through the range more quickly.";
+            }
 
             [prompt]
             "First let’s set our loop variable i to the first element of the array.";
