@@ -467,7 +467,6 @@ function TplHelper() {
     };
 
     this.get_return_output = function(stmt, variable_bank) {
-        console.log(stmt);
         var return_args = stmt.expression.args.value;
 
         var return_vals = [];
@@ -490,11 +489,11 @@ function TplHelper() {
     };
 
     this.create_print_string = function(vals, string) {
-        console.log(vals.length);
         for (let i = 0; i < vals.length; i++) {
-            console.log(vals[i].hasOwnProperty("tag"));
+            if (vals[i].hasOwnProperty)
             if (!vals[i].hasOwnProperty("tag") || vals[i]["tag"] === "identifier" || vals[i]["tag"] === "literal") {
-                string += vals[i]["value"];
+                if (!(vals[i]["type"] === "array")) string += vals[i]["value"];
+                else string += this.create_print_string(vals[i]["value"], string);
             } else if (vals[i].tag === "binop") {
                 string += this.create_print_string(vals[i].args, string); // TODO: what does this do?
             }
