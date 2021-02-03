@@ -323,7 +323,7 @@
 }, {
   "name": "default-expressions",
   "category": "expressions",
-  "title": "While Loop Mystery",
+  "title": "While Loop Investigation",
   "description": "Practice while loops",
   "problems": [{
     "id": "Unique1",
