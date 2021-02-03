@@ -128,6 +128,7 @@ lightest green: #E5FCC2
     margin: 0 auto;
     padding-left: 20px;
     padding-right: 20px;
+    font-weight: bold;
 }
 
 .problem #problem_content {
