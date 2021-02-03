@@ -1029,7 +1029,7 @@ var controller = (function() {
         userSolution = userSolution.replace(/]/g,'');
         userSolution = userSolution.replace(/\(/g,'');
         userSolution = userSolution.replace(/\)/g,'');
-
+        console.log("The user solution state is: ", userSolution);
         // create string of raw array values from correct solution
         var solutionState = simulatorInterface.getFinalState();
         console.log(solutionState);
@@ -1039,7 +1039,7 @@ var controller = (function() {
         //     correctSolution = correctSolution + correctSolutionArray[i] + ",";
         // }
         // correctSolution = correctSolution.substring(0, correctSolution.length-1);
-
+        console.log("The correct solution is: ", correctSolution);
         var correct = false;
         if (String(userSolution) === String(correctSolution)) {
             correct = true;
