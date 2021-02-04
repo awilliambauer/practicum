@@ -5,114 +5,114 @@
   "title": "For Loop Investigation",
   "description": "Practice for loops",
   "problems": [{
-    "id": "3939090f-1edc-4fcf-854a-2d87b9fda251",
+    "id": "1",
     "title": "For Loop Investigation 1",
     "content": {
       "text": "def forLoopInvestigation(start, end, step):\n\ta = 4\n\tb = 21\n\tfor i in range(start, end, step):\n\t\ta = a + 6\n\t\tif (a > b):\n\t\t\tb = b + 8\n\treturn (a, b)",
       "variants": [{
-        "id": "58cb27dd-8ea3-4e48-9bb6-92705224801f",
+        "id": "2",
         "arguments": {"start": 0, "end": 6, "step": 1}
       }]
     }
   }, {
-    "id": "a30abcb4-327b-4f91-83f5-dd534e98f56a",
+    "id": "3",
     "title": "For Loop Investigation 2",
     "content": {
       "text": "def forLoopInvestigation(arr):\n\ta = 0\n\tfor i in arr:\n\t\tif (i % 5 == 0):\n\t\t\ta = a + 1\n\treturn (a)",
       "variants": [{
-        "id": "2d525b55-2ea0-414f-b3e2-67fb53421dfc",
+        "id": "4",
         "arguments": {"arr": [5, 11, 15, 19, 25]}
       },{
-        "id": "1a698d19-0166-4962-a1ff-8f5277fd02b7",
+        "id": "5",
         "arguments": {"arr": [6, 10, 14, 0, 22]}
       }]
     }
   }, {
-    "id": "de34255c-a634-4bdf-92f9-dd71bff9f76a",
+    "id": "6",
     "title": "For Loop Investigation 3",
     "content": {
       "text": "def forLoopInvestigation(word):\n\tb = 1\n\tfor i in word:\n\t\tif (i == \"a\"):\n\t\t\tb = b * 3\n\treturn (b)",
       "variants": [{
-        "id": "33b4551b-8768-4136-81de-2a9481b6e717",
+        "id": "7",
         "arguments": {"word": "banana"}
       },{
-        "id": "7314e514-8bf2-11e5-9681-9b12b415583c",
+        "id": "8",
         "arguments": {"word": "aardvark"}
       }]
     }
   }, {
-    "id": "fe17370d-dbaa-4118-9309-8ef1165881cd",
+    "id": "9",
     "title": "For Loop Investigation 4",
     "content": {
       "text": "def forLoopInvestigation(start, end, step):\n\ta = 3\n\tb = 0\n\tfor i in range(start, end, step):\n\t\tif (i > b):\n\t\t\tb = b + a\n\t\t\ta = a + 1\n\treturn (a,b)",
       "variants": [{
-        "id": "095078ef-7929-4aad-8162-bc9b7d4ae42a",
+        "id": "10",
         "arguments": {"start": 0, "end": 9, "step": 2}
       }]
     }
   }, {
-    "id": "2f82d86e-8bf8-11e5-98ee-479dfac69b62",
+    "id": "11",
     "title": "For Loop Investigation 5",
     "content": {
       "text": "def forLoopInvestigation(start, end):\n\ta = 5\n\tb = 2\n\tfor i in range(start, end):\n\t\ta = a + 1\n\t\tif (a > b):\n\t\t\tb = b + a\n\treturn (a,b)",
       "variants": [{
-        "id": "2fb966ae-8bf8-11e5-9242-77f4f7bfb078",
+        "id": "12",
         "arguments": {"start": 7, "end": 12}
       },{
-        "id": "30077e16-8bf8-11e5-bb98-bb65b9913aac",
+        "id": "13",
         "arguments": {"start": 18, "end": 24}
       }]
     }
   }, {
-    "id": "2762ba3c-73e6-4792-a76f-a9496ab7894e",
+    "id": "14",
     "title": "For Loop Investigation 6",
     "content": {
       "text": "def forLoopInvestigation(end):\n\ta = -2\n\tfor i in range(end):\n\t\ta = a + i\n\treturn (a)",
       "variants": [{
-        "id": "77900298-25a3-4899-b7f5-9a6f3e41ff5a",
+        "id": "15",
         "arguments": {"end": 5}
       }]
     }
   }, {
-    "id": "59b3c734-6b0e-48b4-9578-d91bb9b96a1c",
+    "id": "16",
     "title": "For Loop Investigation 7",
     "content": {
       "text": "def forLoopInvestigation(arr):\n\ta = 5\n\tfor i in arr:\n\t\ta = a - 3\n\t\tif (i < 0):\n\t\t\ta = a + 3\n\treturn (a)",
       "variants": [{
-        "id": "c50d5ab5-3b62-4c0d-9092-d1f42a3419d7",
+        "id": "17",
         "arguments": {"arr": [-3, 200, 56, -0.2, -19, 88]}
       },{
-        "id": "2c6be31e-f94d-4b20-b041-b93d7233bfc2",
+        "id": "18",
         "arguments": {"arr": [82, -66, -0.01, 102, 5]}
       }]
     }
   }, {
-    "id": "1fe899d4-24fa-11eb-adc1-0242ac120002",
+    "id": "19",
     "title": "For Loop Investigation 8",
     "content": {
       "text": "def forLoopInvestigation(start, end):\n\tb = 0\n\tfor i in range(start, end):\n\t\tif (i % 2 == 0):\n\t\t\tb = b + i\n\treturn (b)",
       "variants": [{
-        "id": "1fe89bfa-24fa-11eb-adc1-0242ac120002\n",
+        "id": "20",
         "arguments": {"start": -2, "end": 3}
       }]
     }
   }, {
-    "id": "1fe89fce-24fa-11eb-adc1-0242ac120002\n",
+    "id": "21",
     "title": "For Loop Investigation 9",
     "content": {
       "text": "def forLoopInvestigation(start, end, step):\n\ta = 10\n\tb = 0\n\tfor i in range(start, end, step):\n\t\tif (a > i): \n\t\t\ta = a - 2\n\t\t\tb = b + 1\n\treturn (a,b)",
       "variants": [{
-        "id": "1fe8a19a-24fa-11eb-adc1-0242ac120002\n",
+        "id": "22",
         "arguments": {"start": 10, "end": 1, "step": -2}
       }]
     }
   }, {
-    "id": "1fe8a276-24fa-11eb-adc1-0242ac120002\n",
+    "id": "23",
     "title": "For Loop Investigation 10",
     "content": {
       "text": "def forLoopInvestigation(word):\n\tx = 0\n\tfor i in word:\n\t\tif i == \"s\":\n\t\t\tx = x + 7\n\t\tif i == \"i\":\n\t\t\tx = x - 3\n\treturn (x)",
       "variants": [{
-        "id": "39989b68-24fa-11eb-adc1-0242ac120002\n",
+        "id": "24",
         "arguments": {"word": "Mississippi"}
       }]
     }
@@ -123,199 +123,199 @@
   "title": "If Else Mystery",
   "description": "Practice conditionals and if/else structures",
   "problems": [{
-    "id": "d45fb259-338b-4884-bd84-29e33fd9f656",
+    "id": "25",
     "title": "If/Else Mystery 1",
     "examProblemDatabaseId": "71",
     "content": {
       "text": "def ifElseInvestigation(a, b):\n\tc = 2\n\tif a + c < b:\n\t\tc = c + 8\n\telse:\n\t\tb = b + 10\n\tif a + c < b:\n\t\tc = c + 8\n\telse:\n\t\tb = b + 10\n\treturn (b, c)",
       "variants": [{
-        "id": "8fd7eabe-8b2a-4344-bd31-13e713c04285",
+        "id": "26",
         "arguments": {"a": 4, "b": 15}
       },{
-        "id": "832bb427-171d-480e-90f4-46944cec4312",
+        "id": "27",
         "arguments": {"a": 7, "b": 17}
       },{
-        "id": "468b435f-ddf3-406e-9edd-5e4a1fc467be",
+        "id": "28",
         "arguments": {"a": 12, "b": 5}
       },{
-        "id": "c736c2fe-72f8-4cb0-ba54-c7f5bebb6448",
+        "id": "29",
         "arguments": {"a": 16, "b": 8}
       }]
     }
   },{
-    "id": "eb197686-7684-4fd1-9842-75494fae6fbf",
+    "id": "30",
     "title": "If/Else Mystery 2",
     "examProblemDatabaseId": "73",
     "content": {
       "text": "def ifElseInvestigation(a, b):\n\tif a < b:\n\t\ta += 1\n\tif a < b:\n\t\ta += 1\n\telse:\n\t\tb += 1\n\tif a >= b:\n\t\tb = b - 5\n\treturn (a, b)",
       "variants": [{
-        "id": "a986158b-a63e-49fa-a1ef-cdfd40acb112",
+        "id": "31",
         "arguments": {"a": 1, "b": 8}
       },{
-        "id": "9a3d5f3b-eaf3-40e4-b7ea-ae171ebc0ce7",
+        "id": "32",
         "arguments": {"a": 3, "b": 5}
       },{
-        "id": "be2ac0fa-33a5-494f-a99f-a5721725c040",
+        "id": "33",
         "arguments": {"a": 4, "b": 5}
       },{
-        "id": "47ffeb76-a1b6-4f17-9546-ddcd9f45b0e1",
+        "id": "34",
         "arguments": {"a": 8, "b": 6}
       }]
     }
   },{
-    "id": "c7b22f72-b6da-4ec4-a1d3-4923ed3b6a2c",
+    "id": "35",
     "title": "If/Else Mystery 3",
     "examProblemDatabaseId": "75",
     "content": {
       "text": "def ifElseInvestigation(a, b):\n\tif a == b:\n\t\tb = b - 1\n\telif a < b:\n\t\ta = a + 1\n\telse: \n\t\tb = b + 5\n\tif a == b:\n\t\ta = a + 2\n\treturn (a, b)",
       "variants": [{
-        "id": "f833048f-b4bf-4ddb-8d2a-f3d9cf775285",
+        "id": "36",
         "arguments": {"a": 14, "b": 14}
       },{
-        "id": "ebda4ae2-fb41-42d2-b74d-084cced4ba48",
+        "id": "37",
         "arguments": {"a": 4, "b": 5}
       },{
-        "id": "cd4f7c41-b802-4204-bbe8-d2e2fc562a9f",
+        "id": "38",
         "arguments": {"a": 10, "b": 5}
       },{
-        "id": "121dd451-6589-4313-9389-52ceee8395cd",
+        "id": "39",
         "arguments": {"a": 2, "b": 8}
       }]
     }
   },{
-    "id": "33b4a638-de31-46a2-bdbd-afd7448e6e1f",
+    "id": "40",
     "title": "If/Else Mystery 4",
     "examProblemDatabaseId": "77",
     "content": {
       "text": "def ifElseInvestigation(a, b):\n\tif a < b:\n\t\ta = a * 2\n\tif a > b:\n\t\ta = a - 10\n\telse:\n\t\tb+= 1\n\treturn (a, b)",
       "variants": [{
-        "id": "f739f0d3-487b-42ef-b7e5-d2dd87a62d8a",
+        "id": "41",
         "arguments": {"a": 10, "b": 3}
       },{
-        "id": "79d53dec-943e-4388-b3cd-04d24d6c129f",
+        "id": "42",
         "arguments": {"a": 6, "b": 6}
       },{
-        "id": "95e0b993-3c4d-4a97-a248-953b465c37cd",
+        "id": "43",
         "arguments": {"a": 3, "b": 4}
       },{
-        "id": "5f14ec51-6bb0-42d2-ad9b-6c743f7aafd3",
+        "id": "44",
         "arguments": {"a": 4, "b": 20}
       }]
     }
   },{
-    "id": "3cb1da07-26ac-4d1a-9ef5-1676ba30b6d7",
+    "id": "45",
     "title": "If/Else Mystery 5",
     "examProblemDatabaseId": "83",
     "content": {
       "text": "def ifElseInvestigation(a, b, c):\n\tif a < b && a < c:\n\t\ta = a + c\n\t\tc+= 1\n\telif a >= b:\n\t\ta = a - b\n\t\tb-= 1\n\tif a >= b && a >= c:\n\t\ta+= 1\n\t\tc+= 1\n\treturn (a, b, c)",
       "variants": [{
-        "id": "2d350f7e-6ffa-463b-9c6a-9b94bd648d97",
+        "id": "46",
         "arguments": {"a": 2, "b": 10, "c": 3}
       },{
-        "id": "c5837dcb-005b-4302-a383-93b03ce12e22",
+        "id": "47",
         "arguments": {"a": 8, "b": 6, "c": 1}
       },{
-        "id": "164d5046-8dd7-49ce-b300-f03c64d7f7dc",
+        "id": "48",
         "arguments": {"a": 4, "b": 6, "c": 7}
       },{
-        "id": "0c2dfa58-144c-4a5b-b548-4d4eb755cf9c",
+        "id": "49",
         "arguments": {"a": 20, "b": 5, "c": 5}
       }]
     }
   },{
-    "id": "a4792906-f4cd-4f40-bfa8-950308fa69d1",
+    "id": "50",
     "title": "If/Else Mystery 6",
     "examProblemDatabaseId": "88",
     "content": {
       "text": "def ifElseInvestigation(x, y):\n\tz = 4\n\tif z <= x:\n\t\tz = x + 1\n\telse:\n\t\tz = z + 9\n\tif z <= y:\n\t\ty+= 1\n\treturn (z, y)",
       "variants": [{
-        "id": "34e2566a-4f21-4be1-9267-b7a0e501833f",
+        "id": "51",
         "arguments": {"x": 3, "y": 20}
       },{
-        "id": "5e79d83b-1884-48e4-aea2-1dae1542532e",
+        "id": "52",
         "arguments": {"x": 4, "y": 5}
       },{
-        "id": "509cf0d7-d241-4bda-89ef-cf7be6765385",
+        "id": "53",
         "arguments": {"x": 5, "y": 5}
       },{
-        "id": "a8b369bf-cb91-41e4-9d62-5035da9bdf50",
+        "id": "54",
         "arguments": {"x": 6, "y": 10}
       }]
     }
   },{
-    "id": "a04108c5-6707-442c-9806-f5142257c17a",
+    "id": "55",
     "title": "If/Else Mystery 7",
     "examProblemDatabaseId": "90",
     "content": {
       "text": "def ifElseInvestigation(a, b):\n\tif a * 2 < b:\n\t\ta = a * 3\n\tif b < a:\n\t\tb+= 1\n\telse:\n\t\ta-= 1\n\treturn (a, b)",
       "variants": [{
-        "id": "2e8e875b-a48e-4c46-bcbc-32de9cf253a9",
+        "id": "56",
         "arguments": {"a": 10, "b": 2}
       },{
-        "id": "c517fd6b-8631-4d73-a76b-da7685d0bb0a",
+        "id": "57",
         "arguments": {"a": 3, "b": 8}
       },{
-        "id": "9a2e7222-f4f1-4bfa-9973-63ff99affd7b",
+        "id": "58",
         "arguments": {"a": 4, "b": 4}
       },{
-        "id": "6c8be38a-af45-4e1d-8032-a72ae5e7cbe0",
+        "id": "59",
         "arguments": {"a": 10, "b": 30}
       }]
     }
   },{
-    "id": "847f61b4-a8a5-4ddb-af91-ac7eae46d6ae",
+    "id": "60",
     "title": "If/Else Mystery 8",
     "examProblemDatabaseId": "92",
     "content": {
       "text": "def ifElseInvestigation(x, y):\n\tif x == y:\n\t\tx = x + 11\n\telif x > 2 * y:\n\t\tx = 0\n\tif x == 0 && y > x:\n\t\tx = x + 2\n\t\ty = y + 2\n\treturn (x, y)",
       "variants": [{
-        "id": "09b242f8-a03d-491d-b737-c922359cd8ba",
+        "id": "61",
         "arguments": {"x": 5, "y": 5}
       },{
-        "id": "1e658162-826f-4379-bf61-6e825098c828",
+        "id": "62",
         "arguments": {"x": 18, "y": 4}
       },{
-        "id": "98c73002-32dd-43d3-abb1-a3ffec1e5dc7",
+        "id": "63",
         "arguments": {"x": 3, "y": 6}
       }]
     }
   },{
-    "id": "aa5d4382-42fd-4631-8b08-3487af864963",
+    "id": "64",
     "title": "If/Else Mystery 9",
     "examProblemDatabaseId": "94",
     "content": {
       "text": "def ifElseInvestigation(a, b):\n\tif a %2 != 0:\n\t\ta = a * 2\n\tif a < 10:\n\t\tb+= 1\n\telif a < 10:\n\t\ta-= 1\n\t\tb-= 1\n\treturn (a, b)",
       "variants": [{
-        "id": "5395fdde-da93-4a5c-bfdc-7daab5ce27fe",
+        "id": "65",
         "arguments": {"a": 12, "b": 12}
       },{
-        "id": "41d87e4b-8d03-4fd1-81cf-ceb30fb04845",
+        "id": "66",
         "arguments": {"a": 7, "b": 4}
       },{
-        "id": "7b81969b-2809-4c37-8770-30985b8c41c9",
+        "id": "67",
         "arguments": {"a": 5, "b": 8}
       },{
-        "id": "8a66180d-0248-46b4-a278-674572483776",
+        "id": "68",
         "arguments": {"a": 3, "b": 42}
       }]
     }
   },{
-    "id": "dd2c0dd3-b8c8-442d-9be3-136ca45cfe40",
+    "id": "69",
     "title": "If/Else Mystery 10",
     "examProblemDatabaseId": "96",
     "content": {
       "text": "def ifElseInvestigation(x, y):\n\tz = 0\n\tif x >= y:\n\t\tx = x / 2\n\t\tz+= 1\n\tif x > z && y <= z:\n\t\tz+= 1\n\telif x > z:\n\t\ty = y - 5\n\treturn (x, y, z)",
       "variants": [{
-        "id": "217efa62-9c15-40e6-954d-910691f6b44a",
+        "id": "70",
         "arguments": {"x": 3, "y": 1}
       },{
-        "id": "ff6347d1-bb82-4f4b-a97c-1e5c0b665db1",
+        "id": "71",
         "arguments": {"x": -10, "y": 100}
       },{
-        "id": "8f54610a-34ed-448d-a425-0f652398fcc6",
+        "id": "72",
         "arguments": {"x": 18, "y": 4}
       },{
-        "id": "4d00077f-fea0-406a-8cf7-08d3f7c136c1",
+        "id": "73",
         "arguments": {"x": -12, "y": 5}
       }]
     }
@@ -326,127 +326,127 @@
   "title": "While Loop Investigation",
   "description": "Practice while loops",
   "problems": [{
-    "id": "Unique1",
+    "id": "74",
     "title": "While Loop Investigation 1",
     "content": {
       "text": "def whileLoopInvestigation(i):\n\tfact = 1\n\twhile i  > 0:\n\t\tfact = fact * i\n\t\ti-= 1\n\treturn (fact)",
       "variants": [{
-        "id": "Unique2",
+        "id": "75",
         "arguments": {"i": 6}
       }]
     }
   },{
-    "id": "Unique6",
+    "id": "76",
     "title": "While Loop Investigation 2",
     "content": {
       "text": "def whileLoopInvestigation(arr):\n\t i = 0\n\t sum = 0\n\twhile (i < len(arr)):\n\t\t sum = sum + arr[i]\n\t\t i = i + 1\n\t return (sum)",
       "variants": [{
-        "id": "Unique7",
+        "id": "77",
         "arguments": {"arr": [2, 4, 6, 8, 10]}
       },{
-        "id": "Unique8",
+        "id": "78",
         "arguments": {"arr": [-3, 0, 5, 8, 12]}
       }]
     }
   },{
-    "id": "Unique11",
+    "id": "79",
     "title": "While Loop Investigation 3",
     "content": {
       "text": "def whileLoopInvestigation(num):\n\tdivByTwo = 0\n\twhile num >= 1:\n\t\tnum = num - 2\n\t\tdivByTwo+= 1\n\treturn (divByTwo)",
       "variants": [{
-        "id": "Unique12",
+        "id": "80",
         "arguments": {"num": 12}
       },{
-        "id": "Unique13",
+        "id": "81",
         "arguments": {"num": 14}
       }]
     }
   },{
-    "id": "Unique16",
+    "id": "82",
     "title": "While Loop Investigation 4",
     "content": {
       "text": "def whileLoopInvestigation(arr):\n\ti = 0\n\twhile i < len(arr):\n\t\tarr[i] = arr[i] * -1 \n\t\ti = i + 1 \n\treturn (arr)",
       "variants": [{
-        "id": "Unique17",
+        "id": "83",
         "arguments": {"arr": [6, 0, -4, -11, 20]}
       },{
-        "id": "Unique18",
+        "id": "84",
         "arguments": {"arr": [-12, 300, 42, -6, 11]}
       }]
     }
   },{
-    "id": "Unique21",
+    "id": "85",
     "title": "While Loop Investigation 5",
     "content": {
       "text": "def whileLoopInvestigation(arr):\n\ttoAdd = 13\n\ti = 0\n\twhile i < len(arr):\n\t\tarr[i] = arr[i] + toAdd \n\t\ti = i + 1\n\treturn (arr)",
       "variants": [{
-        "id": "Unique22",
+        "id": "86",
         "arguments": {"arr": [22, 36, 55, 91, 107]}
       },{
-        "id": "Unique23",
+        "id": "87",
         "arguments": {"arr": [14, 55, 114, 303, 600]}
       }]
     }
   },{
-    "id": "Unique26",
+    "id": "88",
     "title": "While Loop Investigation 6",
     "content": {
       "text": "def whileLoopInvestigation(a, b):\n\tpower = 0\n\twhile b >= 1:\n\t\tb = b / a\n\t\tpower+= 1\n\treturn (power)",
       "variants": [{
-        "id": "Unique27",
+        "id": "89",
         "arguments": {"b": 16807, "a": 7}
       },{
-        "id": "Unique28",
+        "id": "90",
         "arguments": {"b": 14641, "x": 11}
       }]
     }
   },{
-    "id": "Unique31",
+    "id": "91",
     "title": "While Loop Investigation 7",
     "content": {
       "text": "def whileLoopInvestigation(num):\n\tpower = 1\n\ti = 0\n\twhile i < 5:\n\t\tpower = power * num \n\t\ti = i + 1 \n\treturn (num)\n",
       "variants": [{
-        "id": "Unique32",
+        "id": "92",
         "arguments": {"num": 3}
       }]
     }
   },{
-    "id": "Unique36",
+    "id": "93",
     "title": "While Loop Investigation 8",
     "content": {
       "text": "def whileLoopInvestigation(a, b):\n\twhile a < 1000:\n\t\ta = a * b\n\treturn (a)",
       "variants": [{
-        "id": "Unique37",
+        "id": "94",
         "arguments": {"b": 3, "a": 8}
       },{
-        "id": "Unique38",
+        "id": "95",
         "arguments": {"b": 5, "a": 6}
       }]
     }
   },{
-    "id": "Unique40",
+    "id": "96",
     "title": "While Loop Investigation 9",
     "content": {
       "text": "def whileLoopInvestigation(arr):\n\ti = 0\n\tsum = 0\n\twhile i < len(arr) - 1: \n\t\ti = i + 1 \n\t\tif arr[i] % 2 == 1:\n\t\t\tsum = sum + arr[i]  \n\treturn (sum)",
       "variants": [{
-        "id": "Unique41",
+        "id": "97",
         "arguments": {"arr": [1, 1, 2, 3, 5]}
       },{
-        "id": "Unique42",
+        "id": "98",
         "arguments": {"arr": [1, 1, 2, 5, 14]}
       }]
     }
   },{
-    "id": "Unique45",
+    "id": "99",
     "title": "While Loop Investigation 10",
     "examProblemDatabaseId": "96",
     "content": {
       "text": "def whileLoopInvestigation(a, b):\n\trollSum = 0\n\twhile a < b:\n\t\trollSum = rollSum + a\n\t\ta+= 1\n\treturn (rollSum) ",
       "variants": [{
-        "id": "Unique46",
+        "id": "100",
         "arguments": {"b": 13, "a": 8}
       },{
-        "id": "Unique47",
+        "id": "101",
         "arguments": {"b": 17, "a": 12}
       }]
     }
