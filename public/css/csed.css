@@ -71,7 +71,12 @@ a:hover.btn-primary, a:active.btn-primary, a:focus.btn-primary {
 }
 
 .problem-visited {
-    color: #337ab7 !important;
+    color: #70782B !important;
+    font-weight: normal !important;
+}
+
+.problem-item {
+    font-weight: bold;
 }
 
 #methodCall {

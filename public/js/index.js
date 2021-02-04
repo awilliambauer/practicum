@@ -174,10 +174,10 @@ var csed = (function() {
                     }
                 }
                 if (foundProblem) {
-                    return "uuid_" + problem.id + " list-group-item problem-visited";
+                    return "uuid_" + problem.id + " list-group-item problem-visited problem-item";
                 }
                 else {
-                    return "uuid_" + problem.id + " list-group-item";
+                    return "uuid_" + problem.id + " list-group-item problem-item";
                 }
             })
             .text(function(problemConfig) { return problemConfig.title; })
@@ -394,10 +394,10 @@ var csed = (function() {
                     }
                 }
                 if (foundProblem) {
-                    return "uuid_" + problem.id + " problem-visited";
+                    return "uuid_" + problem.id + " problem-visited problem-item";
                 }
                 else {
-                    return "uuid_" + problem.id;
+                    return "uuid_" + problem.id + " problem-item";
                 }
             })
             .on("click", onProblemStartCallback)
