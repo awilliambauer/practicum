@@ -710,6 +710,19 @@ var controller = (function() {
                         }
                     });
                 }
+                else if(correctAnswer[0].type === "array") {
+                    correctVariable[correctAnswer[0].name] = [];
+                    userVariable[correctAnswer[0].name] = [];
+                    arrayTable.selectAll(".arrayVarValue").each(function(d, i) {
+                        correctValue = parseInt(correctAnswer[0].value[i].value);
+                        correctVariable[correctAnswer[0].name].push(correctValue);
+                        userValue = parseInt(this.value);
+                        userVariable[correctAnswer[0].name].push(userValue);
+                        if (correctValue !== userValue) {
+                            correct = false;
+                        }
+                    });
+                }
                 else if(correctAnswer.type === "string" && correctAnswer.name === "loop_array") {
                     correctVariable[correctAnswer.name] = [];
                     userVariable[correctAnswer.name] = [];
