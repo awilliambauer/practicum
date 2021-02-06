@@ -711,7 +711,7 @@ var controller = (function() {
                     });
                 }
                 else if(correctAnswer[0] !== undefined) {
-                    if (correctAnswer.type === "array") {
+                    if (correctAnswer[0].type === "array") {
                         correctVariable[correctAnswer[0].name] = [];
                         userVariable[correctAnswer[0].name] = [];
                         arrayTable.selectAll(".arrayVarValue").each(function (d, i) {
