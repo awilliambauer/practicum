@@ -98,7 +98,7 @@ function TplHelper() {
     this.add_other_parameters_to_the_variable_bank = function(bank, variables) {
         var ret = [];
         variables.forEach(function (v) {
-            bank[v.name] = {type: v.type, value: v.value};
+            bank[v.name] = {type: v.type, value: JSON.parse(JSON.stringify(v.value))};
             ret.push(v);
         });
         return ret;
@@ -412,6 +412,11 @@ function TplHelper() {
         return replace_expr_with_literal(java_ast.find_by_id(origExpr.id, new_line), value);
     };
 
+    this.is_this_an_array_element_assignment = function(stmt) {
+        return (stmt.tag === "declaration" && stmt.expression.args[0].hasOwnProperty("tag") &&
+                stmt.expressions.args[0].tag === "index")
+    };
+
     this.assign_the_new_value_to_the_array_element = function(array, index, value) {
         array.value[index.value] = value;
         return {
@@ -431,8 +436,8 @@ function TplHelper() {
     };
 
     this.does_this_line_update_array = function(stmt) {
-        return stmt.tag === "expression" && stmt.expression.tag === "binop" &&
-                stmt.expression.operator === "=" && stmt.expression.args[0].tag === "index";
+        return stmt.tag === "declaration" && stmt.hasOwnProperty("expression") && stmt.expression.tag === "binop" &&
+               stmt.expression.args[0].tag === "index";
     };
 
     this.is_this_the_last_line = function(ast) {
