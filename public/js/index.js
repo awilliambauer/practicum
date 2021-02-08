@@ -107,7 +107,7 @@ var csed = (function() {
     }
 
     // Updates log file with given email and timestamp
-    function updateLogFile(email, timestamp) {
+    function updateLogFile(email) {
         var xhr = new XMLHttpRequest();
             xhr.open("POST", '/log', true);
             xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -117,18 +117,16 @@ var csed = (function() {
                     console.log("SUCCESS");
                 }
             }
-            xhr.send("email=awb@carleton.edu");
+            xhr.send(`email=${email}`);
             return new Promise(function(resolve) { resolve(); } );
     }
 
     function logEmail() {
         let email;
-        let timestamp;
         if (!isVisited) {
         email = prompt("Please enter your Carleton email");
-        timestamp = Date(Date.now()).toString();
         isVisited = true;
-        updateLogFile(email, timestamp);
+        updateLogFile(email);
         }
     }
 
