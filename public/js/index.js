@@ -1,6 +1,7 @@
 
 // from https://css-tricks.com/snippets/javascript/get-url-variables/
 // doesn't handle every valid query string, but should work for our purposes
+
 function getQueryVariable(variable)
 {
     var query = window.location.search.substring(1);
@@ -31,6 +32,8 @@ var csed = (function() {
     var server_savedata;
     var numProblemsByCategory;
     var problemIdsByCategory;
+
+    let isVisited = false;
 
     var fading_level = 1;
 
@@ -113,10 +116,35 @@ var csed = (function() {
         return getProblemToLoad(categoryConfig) !== null;
     }
 
+    // Updates log file with given email and timestamp
+    function updateLogFile(email) {
+        var xhr = new XMLHttpRequest();
+            xhr.open("POST", '/log', true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = function() { // Call a function when the state changes.
+                if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                    // Request finished. Do processing here.
+                    console.log("SUCCESS");
+                }
+            }
+            xhr.send(`email=${email}`);
+            return new Promise(function(resolve) { resolve(); } );
+    }
+
+    function logEmail() {
+        let email;
+        if (!isVisited) {
+        email = prompt("Please enter your Carleton email");
+        isVisited = true;
+        updateLogFile(email);
+        }
+    }
+
     function showHome() {
         d3.select("#main-page").classed("hidden", false);
         d3.select("#problem-container").classed("hidden", true);
         d3.select("#problem-container .problem").remove();
+        logEmail();
     }
 
     function findProblem(categoryConfig, requestedCategory, requestedProblemId)  {
