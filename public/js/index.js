@@ -108,7 +108,17 @@ var csed = (function() {
 
     // Updates log file with given email and timestamp
     function updateLogFile(email, timestamp) {
-        
+        var xhr = new XMLHttpRequest();
+            xhr.open("POST", '/log', true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = function() { // Call a function when the state changes.
+                if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                    // Request finished. Do processing here.
+                    console.log("SUCCESS");
+                }
+            }
+            xhr.send("email=awb@carleton.edu");
+            return new Promise(function(resolve) { resolve(); } );
     }
 
     function logEmail() {
