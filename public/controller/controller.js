@@ -364,7 +364,8 @@ var controller = (function() {
 
                     case "ArrayElement":
                         if (fadeLevel > 0 && variable === state.statement_result.name &&
-                            state.hasOwnProperty("askForResponse") && state.askForResponse === "array_element_get") {
+                            state.hasOwnProperty("askForResponse") &&
+                            (state.askForResponse === "array_element_get" || state.askForResponse === "array_element_click")) {
 
                             interactiveArrayElement(varObject.value);
                         }
@@ -470,8 +471,8 @@ var controller = (function() {
                 // check to see if this variable is an array
                 if (d3.select(this).select(".bank_variable_array").node() != null) {
                     if (variable.hasOwnProperty("index")) {
-                        //interactiveVariableBankArrayCell(d3.select(this).select(".bank_variable_array"), variable.index, newVariable);
-                        interactiveVariableBankArray(d3.select(this).select(".bank_variable_array"));
+                        interactiveVariableBankArrayCell(d3.select(this).select(".bank_variable_array"), variable.index.value, newVariable);
+                        //interactiveVariableBankArray(d3.select(this).select(".bank_variable_array"));
                     }
                     else {
                         interactiveVariableBankArray(d3.select(this).select(".bank_variable_array"));
@@ -712,6 +713,7 @@ var controller = (function() {
                 }
                 else if(correctAnswer[0] !== undefined) {
                     if (correctAnswer[0].type === "array") {
+                        console.log("Checking array answer: ", correctVariable, userVariable, correctAnswer)
                         correctVariable[correctAnswer[0].name] = [];
                         userVariable[correctAnswer[0].name] = [];
                         arrayTable.selectAll(".arrayVarValue").each(function (d, i) {
@@ -740,14 +742,14 @@ var controller = (function() {
                 }
                 else if (correctAnswer.hasOwnProperty("index")) {
                     var typeString = correctAnswer.type === "string";
-                    userValue = arrayTable.select(".bank_variable_array_value").property("value");
+                    userValue = arrayTable.select(".arrayVarValue").property("value");
                     if(!typeString) {
                         userValue = parseInt(userValue);
                     }
                     if (typeString) {
-                        correctValue = correctAnswer.value[correctAnswer.index].value; 
+                        correctValue = correctAnswer.value[correctAnswer.index.value].value;
                     } else {
-                        correctValue = parseInt(correctAnswer.value[correctAnswer.index].value);
+                        correctValue = parseInt(correctAnswer.value[correctAnswer.index.value].value);
                     }
                     correctVariable[correctAnswer.name] = correctValue;
                     userVariable[correctAnswer.name] = userValue;
