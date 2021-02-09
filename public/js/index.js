@@ -33,7 +33,8 @@ var csed = (function() {
     var numProblemsByCategory;
     var problemIdsByCategory;
 
-    let isVisited = false;
+    // Check if user has already visited the page
+    let isVisited = localStorage.getItem("isVisited") ? JSON.parse(localStorage.getItem("isVisited")) : false;
 
     var fading_level = 1;
 
@@ -128,8 +129,14 @@ var csed = (function() {
         if (!isVisited) {
         email = prompt("Please enter your Carleton email");
         isVisited = true;
-        updateLogFile(email);
+        let payload = {
+            "email": email
         }
+        localStorage.setItem("isVisited", JSON.stringify(payload));
+        } else {
+            email = isVisited.email;
+        }
+        updateLogFile(email);
     }
 
     function showHome() {
