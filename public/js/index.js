@@ -86,6 +86,9 @@ var csed = (function() {
                 if_else: [],
                 array: []
             }
+            return new Promise(function (resolve) {
+              resolve();
+            });
         }
     }
 
