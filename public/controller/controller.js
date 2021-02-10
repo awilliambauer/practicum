@@ -23,6 +23,8 @@ var controller = (function() {
         // add problem AST
         $("#problem_space > pre").html(java_formatter.format(initialState.ast, {args:initialState.args}));
 
+        // Set problem opacity to 0.5 to make the Next button more obvious
+        $("#problem_space > pre").css("opacity", 0.3);
         logger = task_logger;
         simulatorInterface = simulatorInterface_;
 
@@ -96,6 +98,8 @@ var controller = (function() {
     }
 
     function step() {
+        // Reset problem opacity to 1
+        $("#problem_space > pre").css("opacity", 1);
         // log that the "next" button was clicked
         Logging.log_task_event(logger, {
             type: Logging.ID.NextButton,
