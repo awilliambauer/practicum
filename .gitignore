@@ -5,3 +5,5 @@ public/.htaccess
 node_modules/
 *~
 *.icloud
+logfile
+.vscode

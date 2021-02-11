@@ -1,123 +1,5 @@
 
 [{
-  "name": "default-array",
-  "category": "array",
-  "title": "For Loop Investigation",
-  "description": "Practice for loops",
-  "problems": [{
-    "id": "1",
-    "title": "For Loop Investigation 1",
-    "content": {
-      "text": "def forLoopInvestigation(start, end, step):\n\ta = 4\n\tb = 21\n\tfor i in range(start, end, step):\n\t\ta = a + 6\n\t\tif (a > b):\n\t\t\tb = b + 8\n\treturn (a, b)",
-      "variants": [{
-        "id": "2",
-        "arguments": {"start": 0, "end": 6, "step": 1}
-      }]
-    }
-  }, {
-    "id": "3",
-    "title": "For Loop Investigation 2",
-    "content": {
-      "text": "def forLoopInvestigation(arr):\n\ta = 0\n\tfor i in arr:\n\t\tif (i % 5 == 0):\n\t\t\ta = a + 1\n\treturn (a)",
-      "variants": [{
-        "id": "4",
-        "arguments": {"arr": [5, 11, 15, 19, 25]}
-      },{
-        "id": "5",
-        "arguments": {"arr": [6, 10, 14, 0, 22]}
-      }]
-    }
-  }, {
-    "id": "6",
-    "title": "For Loop Investigation 3",
-    "content": {
-      "text": "def forLoopInvestigation(word):\n\tb = 1\n\tfor i in word:\n\t\tif (i == \"a\"):\n\t\t\tb = b * 3\n\treturn (b)",
-      "variants": [{
-        "id": "7",
-        "arguments": {"word": "banana"}
-      },{
-        "id": "8",
-        "arguments": {"word": "aardvark"}
-      }]
-    }
-  }, {
-    "id": "9",
-    "title": "For Loop Investigation 4",
-    "content": {
-      "text": "def forLoopInvestigation(start, end, step):\n\ta = 3\n\tb = 0\n\tfor i in range(start, end, step):\n\t\tif (i > b):\n\t\t\tb = b + a\n\t\t\ta = a + 1\n\treturn (a,b)",
-      "variants": [{
-        "id": "10",
-        "arguments": {"start": 0, "end": 9, "step": 2}
-      }]
-    }
-  }, {
-    "id": "11",
-    "title": "For Loop Investigation 5",
-    "content": {
-      "text": "def forLoopInvestigation(start, end):\n\ta = 5\n\tb = 2\n\tfor i in range(start, end):\n\t\ta = a + 1\n\t\tif (a > b):\n\t\t\tb = b + a\n\treturn (a,b)",
-      "variants": [{
-        "id": "12",
-        "arguments": {"start": 7, "end": 12}
-      },{
-        "id": "13",
-        "arguments": {"start": 18, "end": 24}
-      }]
-    }
-  }, {
-    "id": "14",
-    "title": "For Loop Investigation 6",
-    "content": {
-      "text": "def forLoopInvestigation(end):\n\ta = -2\n\tfor i in range(end):\n\t\ta = a + i\n\treturn (a)",
-      "variants": [{
-        "id": "15",
-        "arguments": {"end": 5}
-      }]
-    }
-  }, {
-    "id": "16",
-    "title": "For Loop Investigation 7",
-    "content": {
-      "text": "def forLoopInvestigation(arr):\n\ta = 5\n\tfor i in arr:\n\t\ta = a - 3\n\t\tif (i < 0):\n\t\t\ta = a + 3\n\treturn (a)",
-      "variants": [{
-        "id": "17",
-        "arguments": {"arr": [-3, 200, 56, -0.2, -19, 88]}
-      },{
-        "id": "18",
-        "arguments": {"arr": [82, -66, -0.01, 102, 5]}
-      }]
-    }
-  }, {
-    "id": "19",
-    "title": "For Loop Investigation 8",
-    "content": {
-      "text": "def forLoopInvestigation(start, end):\n\tb = 0\n\tfor i in range(start, end):\n\t\tif (i % 2 == 0):\n\t\t\tb = b + i\n\treturn (b)",
-      "variants": [{
-        "id": "20",
-        "arguments": {"start": -2, "end": 3}
-      }]
-    }
-  }, {
-    "id": "21",
-    "title": "For Loop Investigation 9",
-    "content": {
-      "text": "def forLoopInvestigation(start, end, step):\n\ta = 10\n\tb = 0\n\tfor i in range(start, end, step):\n\t\tif (a > i): \n\t\t\ta = a - 2\n\t\t\tb = b + 1\n\treturn (a,b)",
-      "variants": [{
-        "id": "22",
-        "arguments": {"start": 10, "end": 1, "step": -2}
-      }]
-    }
-  }, {
-    "id": "23",
-    "title": "For Loop Investigation 10",
-    "content": {
-      "text": "def forLoopInvestigation(word):\n\tx = 0\n\tfor i in word:\n\t\tif i == \"s\":\n\t\t\tx = x + 7\n\t\tif i == \"i\":\n\t\t\tx = x - 3\n\treturn (x)",
-      "variants": [{
-        "id": "24",
-        "arguments": {"word": "Mississippi"}
-      }]
-    }
-  }]
-}, {
   "name": "default-if_else",
   "category": "if_else",
   "title": "If Else Mystery",
@@ -627,6 +509,124 @@
       }
     }
   ]
+}, {
+  "name": "default-array",
+  "category": "array",
+  "title": "For Loop Investigation",
+  "description": "Practice for loops",
+  "problems": [{
+    "id": "1",
+    "title": "For Loop Investigation 1",
+    "content": {
+      "text": "def forLoopInvestigation(start, end, step):\n\ta = 4\n\tb = 21\n\tfor i in range(start, end, step):\n\t\ta = a + 6\n\t\tif (a > b):\n\t\t\tb = b + 8\n\treturn (a, b)",
+      "variants": [{
+        "id": "2",
+        "arguments": {"start": 0, "end": 6, "step": 1}
+      }]
+    }
+  }, {
+    "id": "3",
+    "title": "For Loop Investigation 2",
+    "content": {
+      "text": "def forLoopInvestigation(arr):\n\ta = 0\n\tfor i in arr:\n\t\tif (i % 5 == 0):\n\t\t\ta = a + 1\n\treturn (a)",
+      "variants": [{
+        "id": "4",
+        "arguments": {"arr": [5, 11, 15, 19, 25]}
+      },{
+        "id": "5",
+        "arguments": {"arr": [6, 10, 14, 0, 22]}
+      }]
+    }
+  }, {
+    "id": "6",
+    "title": "For Loop Investigation 3",
+    "content": {
+      "text": "def forLoopInvestigation(word):\n\tb = 1\n\tfor i in word:\n\t\tif (i == \"a\"):\n\t\t\tb = b * 3\n\treturn (b)",
+      "variants": [{
+        "id": "7",
+        "arguments": {"word": "banana"}
+      },{
+        "id": "8",
+        "arguments": {"word": "aardvark"}
+      }]
+    }
+  }, {
+    "id": "9",
+    "title": "For Loop Investigation 4",
+    "content": {
+      "text": "def forLoopInvestigation(start, end, step):\n\ta = 3\n\tb = 0\n\tfor i in range(start, end, step):\n\t\tif (i > b):\n\t\t\tb = b + a\n\t\t\ta = a + 1\n\treturn (a,b)",
+      "variants": [{
+        "id": "10",
+        "arguments": {"start": 0, "end": 9, "step": 2}
+      }]
+    }
+  }, {
+    "id": "11",
+    "title": "For Loop Investigation 5",
+    "content": {
+      "text": "def forLoopInvestigation(start, end):\n\ta = 5\n\tb = 2\n\tfor i in range(start, end):\n\t\ta = a + 1\n\t\tif (a > b):\n\t\t\tb = b + a\n\treturn (a,b)",
+      "variants": [{
+        "id": "12",
+        "arguments": {"start": 7, "end": 12}
+      },{
+        "id": "13",
+        "arguments": {"start": 18, "end": 24}
+      }]
+    }
+  }, {
+    "id": "14",
+    "title": "For Loop Investigation 6",
+    "content": {
+      "text": "def forLoopInvestigation(end):\n\ta = -2\n\tfor i in range(end):\n\t\ta = a + i\n\treturn (a)",
+      "variants": [{
+        "id": "15",
+        "arguments": {"end": 5}
+      }]
+    }
+  }, {
+    "id": "16",
+    "title": "For Loop Investigation 7",
+    "content": {
+      "text": "def forLoopInvestigation(arr):\n\ta = 5\n\tfor i in arr:\n\t\ta = a - 3\n\t\tif (i < 0):\n\t\t\ta = a + 3\n\treturn (a)",
+      "variants": [{
+        "id": "17",
+        "arguments": {"arr": [-3, 200, 56, -0.2, -19, 88]}
+      },{
+        "id": "18",
+        "arguments": {"arr": [82, -66, -0.01, 102, 5]}
+      }]
+    }
+  }, {
+    "id": "19",
+    "title": "For Loop Investigation 8",
+    "content": {
+      "text": "def forLoopInvestigation(start, end):\n\tb = 0\n\tfor i in range(start, end):\n\t\tif (i % 2 == 0):\n\t\t\tb = b + i\n\treturn (b)",
+      "variants": [{
+        "id": "20",
+        "arguments": {"start": -2, "end": 3}
+      }]
+    }
+  }, {
+    "id": "21",
+    "title": "For Loop Investigation 9",
+    "content": {
+      "text": "def forLoopInvestigation(start, end, step):\n\ta = 10\n\tb = 0\n\tfor i in range(start, end, step):\n\t\tif (a > i): \n\t\t\ta = a - 2\n\t\t\tb = b + 1\n\treturn (a,b)",
+      "variants": [{
+        "id": "22",
+        "arguments": {"start": 10, "end": 1, "step": -2}
+      }]
+    }
+  }, {
+    "id": "23",
+    "title": "For Loop Investigation 10",
+    "content": {
+      "text": "def forLoopInvestigation(word):\n\tx = 0\n\tfor i in word:\n\t\tif i == \"s\":\n\t\t\tx = x + 7\n\t\tif i == \"i\":\n\t\t\tx = x - 3\n\treturn (x)",
+      "variants": [{
+        "id": "24",
+        "arguments": {"word": "Mississippi"}
+      }]
+    }
+  }]
 }]
 
 
