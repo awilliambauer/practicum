@@ -52,11 +52,17 @@ var controller = (function() {
         // move to the next step if they hit enter or click next
         $("#nextstep").click(step);
         $(document).off("keydown");
-        $(document).keydown(function(e) {
-            if (e.keyCode === 13) {
-                e.preventDefault(); // stop enter from also clicking next button (if button has focus)
-                step();
-                return false; // stop enter from also clicking next button (if button has focus)
+        //old bad enter button thing
+        // $(document).keydown(function(e) {
+        //     if (e.keyCode === 13) {
+        //         e.preventDefault(); // stop enter from also clicking next button (if button has focus)
+        //         step();
+        //         return false; // stop enter from also clicking next button (if button has focus)
+        //     }
+        // });
+        $(document).keydown(function(e){
+            if (e.which == 13){
+                $("#nextstep").click();
             }
         });
 
@@ -161,13 +167,17 @@ var controller = (function() {
         // check for disabling buttons and keybresses
         var needToHideNextButton = waitingForResponse && (responseType === 'next_line' || responseType === 'array_element_click');
         if (needToHideNextButton) {
-            // hide Next button while they click things
+            // hide and disable Next button while they click things
             $("#next-container").addClass("hidden");
-            // // Prevents keypresses while clicking
-            // $(document).off("keydown");
+            // $("#nextstep").prop('disabled', "disabled");
+            // disable button so can't click enter
+            // $("#next-container").prop('disabled', true);
+            d3.select("#nextstep").attr("disabled", "disabled");
         } else {
-            // add Next button back once they have clicked the thing
+            // add and enable Next button back once they have clicked the thing
             $("#next-container").removeClass("hidden");
+            // $("#nextstep").prop('disabled', "");
+            d3.select("#nextstep").attr("disabled", "");
         }
 
         // update the UI
