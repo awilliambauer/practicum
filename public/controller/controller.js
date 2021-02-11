@@ -24,7 +24,15 @@ var controller = (function() {
         $("#problem_space > pre").html(java_formatter.format(initialState.ast, {args:initialState.args}));
 
         // Set problem opacity to 0.5 to make the Next button more obvious
-        $("#problem_space > pre").css("opacity", 0.3);
+        // $("#problem_space > pre").css("opacity", 0.1);
+        // Make the prompt text bold
+        $("#promptText").css("font-weight", 'bold');
+        // Hide the problem so they have to click Next
+        $("#problem_space > pre").addClass("hidden");
+        // Give a little bit of space above the prompt
+        $("#problem_space").css("padding-top", "15px");
+
+
         logger = task_logger;
         simulatorInterface = simulatorInterface_;
 
@@ -98,8 +106,12 @@ var controller = (function() {
     }
 
     function step() {
-        // Reset problem opacity to 1
-        $("#problem_space > pre").css("opacity", 1);
+        // Reset problem to the defaults (from the first forced Next click changes)
+        // $("#problem_space > pre").css("opacity", 1);
+        $("#promptText").css("font-weight", 'normal');
+        $("#problem_space > pre").removeClass("hidden");
+        $("#problem_space").css("padding-top", "0px");
+
         // log that the "next" button was clicked
         Logging.log_task_event(logger, {
             type: Logging.ID.NextButton,
