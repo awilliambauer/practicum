@@ -158,10 +158,23 @@ var controller = (function() {
             responseType = state.askForResponse;
         }
 
+        // check for disabling buttons and keybresses
+        var needToHideNextButton = waitingForResponse && (responseType === 'next_line' || responseType === 'array_element_click');
+        if (needToHideNextButton) {
+            // hide Next button while they click things
+            $("#next-container").addClass("hidden");
+            // // Prevents keypresses while clicking
+            // $(document).off("keydown");
+        } else {
+            // add Next button back once they have clicked the thing
+            $("#next-container").removeClass("hidden");
+        }
+
         // update the UI
         addPrompt();
         addVariableBank();
         addHighlighting();
+
     }
 
     // Extracts prompt from state and creates HTML
