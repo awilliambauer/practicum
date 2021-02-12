@@ -391,7 +391,14 @@ var controller = (function() {
                         break;
 
                     case "AstNode":
-                        highlightASTNode(varObject.value);
+                        if(variable === "this_is_the_conditional_of_an_if_statement" || variable === "this_is_the_conditional_of_a_while_statement") {
+                            if(state.variables.in_scope["this_is_the_next_line_that_will_execute"].value.location.start.line
+                                === varObject.value.location.start.line) {
+                                highlightASTNode(varObject.value);
+                            }
+                        } else {
+                            highlightASTNode(varObject.value);
+                        }
                         break;
 
                     case "ScratchAstNode":
@@ -427,7 +434,7 @@ var controller = (function() {
         $(".block_highlight").removeClass("block_highlight");
         $(".node_highlight").removeClass("node_highlight");
         $(".scratch_node_highlight").removeClass("scratch_node_highlight");
-        $(".line_highlight").removeClass("line_highlight");
+        $(".line_highlight").removeClass("line_highlight").addClass("prev_line_highlight");
         $(".text_highlight").removeClass("text_highlight");
         $(".array_element_highlight").removeClass("array_element_highlight");
 
