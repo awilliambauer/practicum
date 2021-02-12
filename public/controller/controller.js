@@ -168,7 +168,13 @@ var controller = (function() {
         if (fadeLevel > 0 && state.hasOwnProperty("askForResponse")) {
             waitingForResponse = true;
             responseType = state.askForResponse;
+        } else {
+            waitingForResponse = false;
+            responseType = null;
         }
+
+        console.log("in step with state", state);
+        console.log(state.hasOwnProperty("askForResponse"));
 
         // check for disabling buttons and keybresses
         if (waitingForResponse && (responseType === 'next_line' || responseType === 'array_element_click')) {
@@ -188,6 +194,7 @@ var controller = (function() {
         // check for when we are interactively asking for a line click
         if (waitingForResponse && responseType === 'next_line') {
             // change the highlight color for the previous line
+            console.log("we should never be here!");
             $(".line_highlight").addClass("prev_line_highlight");
         } else {
             // remove any prev line highlights
@@ -478,7 +485,7 @@ var controller = (function() {
         $(".block_highlight").removeClass("block_highlight");
         $(".node_highlight").removeClass("node_highlight");
         $(".scratch_node_highlight").removeClass("scratch_node_highlight");
-        $(".line_highlight").removeClass("line_highlight").addClass("prev_line_highlight");
+        $(".line_highlight").removeClass("line_highlight");
         $(".text_highlight").removeClass("text_highlight");
         $(".array_element_highlight").removeClass("array_element_highlight");
 
