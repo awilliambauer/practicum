@@ -30,7 +30,7 @@ lightest green: #E5FCC2
 }
 
 .problem input[type="text"].correct {
-    background-color: #339944;
+    background-color: green;
     -webkit-animation-name: correctExpression;
     -webkit-animation-duration: 2s;
     animation-name: correctExpression;
@@ -40,7 +40,7 @@ lightest green: #E5FCC2
 
 @keyframes correctExpression {
     0% {
-        background-color: #339944;
+        background-color: green;
     }
     100% {
         background-color: #FFFFFF;
@@ -49,7 +49,7 @@ lightest green: #E5FCC2
 
 @-webkit-keyframes correctExpression {
     0% {
-        background-color: #339944;
+        background-color: green;
     }
     100% {
         background-color: #FFFFFF;
@@ -78,6 +78,33 @@ lightest green: #E5FCC2
         background-color: red;
     }
 
+    100% {
+        background-color: #FFFFFF;
+    }
+}
+
+.problem input[type="text"].empty {
+    background-color: blue;
+    -webkit-animation-name: emptyExpression;
+    -webkit-animation-duration: 2s;
+    animation-name: emptyExpression;
+    animation-duration: 2s;
+
+}
+
+@keyframes emptyExpression {
+    0% {
+        background-color: blue;
+    }
+    100% {
+        background-color: #FFFFFF;
+    }
+}
+
+@-webkit-keyframes emptyExpression {
+    0% {
+        background-color: blue;
+    }
     100% {
         background-color: #FFFFFF;
     }
@@ -340,7 +367,7 @@ lightest green: #E5FCC2
     background-color: #EEEEEE;
 }
 
-.prev_line_highlight{
+.problem .prev_line_highlight{
     background-color: #bce8f1;
 }
 

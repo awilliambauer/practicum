@@ -1140,11 +1140,11 @@ var controller = (function() {
 
         $("#inputBox").on("animationend", function () {$("#inputBox").attr("class", "");});
         if (correct) {
-            d3.select("#inputBox").attr("class", "correct").attr("disabled", "disabled");
             d3.select("#submitButton").attr("disabled", "disabled");
             d3.select("#incorrectHeader").classed("hidden", true);
             d3.select("#emptySolutionHeader").classed("hidden", true);
             d3.select("#correctHeader").classed("hidden", false);
+            d3.select("#inputBox").attr("class", "correct").attr("disabled", "disabled");
             if (config.content.variants && config.content.variants.some(function (v) { return !v.started; })) {
                 d3.select("#newVariant").classed("hidden", false);
             }
@@ -1155,6 +1155,7 @@ var controller = (function() {
             d3.select("#incorrectHeader").classed("hidden", true);
             d3.select("#correctHeader").classed("hidden", true);
             d3.select("#emptySolutionHeader").classed("hidden", false);
+            d3.select("#inputBox").attr("class", "empty");
         } else {
             d3.select("#correctHeader").classed("hidden", true);
             d3.select("#emptySolutionHeader").classed("hidden", true);
