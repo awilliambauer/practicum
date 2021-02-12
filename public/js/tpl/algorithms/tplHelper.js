@@ -106,11 +106,11 @@ function TplHelper() {
 
     this.execute_the_loop_increment = function(variable_bank, iter_variable) { // TODO: Try putting a special case for strings in this function (check the type of the iterable and see if it's a string type)
         var value;
-        if (this.iterable.index >= this.iterable.value.length - 1) {
+        if (this.iterable.idx >= this.iterable.value.length - 1) {
             value = this.next_loop_variable_value(iter_variable);
-            this.iterable.index++;
+            this.iterable.idx++;
         } else {
-            this.iterable.index++;
+            this.iterable.idx++;
             value = this.next_loop_variable_value(iter_variable);
         }
         var result = this.execute_statement(variable_bank, value);
@@ -122,10 +122,10 @@ function TplHelper() {
 
     this.next_loop_variable_value = function(iter_variable) {
         let value;
-        if (this.iterable.value[this.iterable.index].hasOwnProperty("type") && (this.iterable.value[this.iterable.index].type === "char") || (this.iterable.value[this.iterable.index].type === "string")) {
-            value = java_parsing.parse_statement(iter_variable.value + ' = "' + (this.iterable.value[this.iterable.index]).value + '"');
+        if (this.iterable.value[this.iterable.idx].hasOwnProperty("type") && (this.iterable.value[this.iterable.idx].type === "char") || (this.iterable.value[this.iterable.idx].type === "string")) {
+            value = java_parsing.parse_statement(iter_variable.value + ' = "' + (this.iterable.value[this.iterable.idx]).value + '"');
         } else {
-            value = java_parsing.parse_statement(iter_variable.value + ' = ' + (this.iterable.value[this.iterable.index]).value);
+            value = java_parsing.parse_statement(iter_variable.value + ' = ' + (this.iterable.value[this.iterable.idx]).value);
         }
         return value;
     }
@@ -260,7 +260,7 @@ function TplHelper() {
     };
 
     this.is_there_another_item_in_the_loop_sequence = function(variable_bank) {
-        return (this.iterable.index < this.iterable.value.length);
+        return (this.iterable.idx < this.iterable.value.length);
     };
 
     this.check_if_loop = function(ast) {
@@ -309,7 +309,7 @@ function TplHelper() {
         iterable = sim.evaluate_expression(variable_bank, iterable);
         if ((iterable.type !== 'array') && (iterable.type !== 'string')) throw new Error("for loop iterable isn't an array or string")
         this.iterable = iterable;
-        this.iterable.index = 0; // HACK this is a hack
+        this.iterable.idx = 0; // HACK this is a hack
         this.iterable.name = "loop_array";
     }
 
@@ -388,7 +388,7 @@ function TplHelper() {
     };
 
     this.loop_array_index = function(variable_bank, array) {
-        var val = sim.evaluate_expression(variable_bank, {tag: 'literal', type: 'int', value: this.iterable.index});
+        var val = sim.evaluate_expression(variable_bank, {tag: 'literal', type: 'int', value: this.iterable.idx});
         val["array"] = array;
         return val;
     };

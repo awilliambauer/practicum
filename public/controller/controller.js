@@ -10,6 +10,7 @@ var controller = (function() {
     var waitingForResponse;
     var responseType;
     var numTries;
+    var button;
 
     function reset() {
         // HACK, ugly. This global in html_generator needs to get
@@ -24,7 +25,15 @@ var controller = (function() {
         $("#problem_space > pre").html(java_formatter.format(initialState.ast, {args:initialState.args}));
 
         // Set problem opacity to 0.5 to make the Next button more obvious
-        $("#problem_space > pre").css("opacity", 0.3);
+        // $("#problem_space > pre").css("opacity", 0.1);
+        // Make the prompt text bold
+        $("#promptText").css("font-weight", 'bold');
+        // Hide the problem so they have to click Next
+        $("#problem_space > pre").addClass("hidden");
+        // Give a little bit of space above the prompt
+        $("#problem_space").css("padding-top", "15px");
+
+
         logger = task_logger;
         simulatorInterface = simulatorInterface_;
 
@@ -44,10 +53,21 @@ var controller = (function() {
         // move to the next step if they hit enter or click next
         $("#nextstep").click(step);
         $(document).off("keydown");
-        $(document).keydown(function(e) {
-            if (e.keyCode === 13) {
+        //old bad enter button thing
+        // $(document).keydown(function(e) {
+        //     if (e.keyCode === 13) {
+        //         e.preventDefault(); // stop enter from also clicking next button (if button has focus)
+        //         step();
+        //         return false; // stop enter from also clicking next button (if button has focus)
+        //     }
+        // });
+        // new good enter button thing
+        button = "#nextstep";
+        $(document).keydown(function(e){
+            if (e.which == 13){
                 e.preventDefault(); // stop enter from also clicking next button (if button has focus)
-                step();
+                if ($(button).attr('disabled')) return false; // prevent a disabled button from being clicked
+                $(button).click();
                 return false; // stop enter from also clicking next button (if button has focus)
             }
         });
@@ -98,8 +118,12 @@ var controller = (function() {
     }
 
     function step() {
-        // Reset problem opacity to 1
-        $("#problem_space > pre").css("opacity", 1);
+        // Reset problem to the defaults (from the first forced Next click changes)
+        // $("#problem_space > pre").css("opacity", 1);
+        $("#promptText").css("font-weight", 'normal');
+        $("#problem_space > pre").removeClass("hidden");
+        $("#problem_space").css("padding-top", "0px");
+
         // log that the "next" button was clicked
         Logging.log_task_event(logger, {
             type: Logging.ID.NextButton,
@@ -146,10 +170,35 @@ var controller = (function() {
             responseType = state.askForResponse;
         }
 
+        // check for disabling buttons and keybresses
+        if (waitingForResponse && (responseType === 'next_line' || responseType === 'array_element_click')) {
+            // hide and disable Next button while they click things
+            $("#next-container").addClass("hidden");
+            $("#nextstep").prop('disabled', true);
+            // d3 to do the same disabling, if jQuery breaks for some reason
+            // d3.select("#nextstep").attr("disabled", "disabled");
+        } else {
+            // add and enable Next button back once they have clicked the thing
+            $("#next-container").removeClass("hidden");
+            $("#nextstep").prop('disabled', false);
+            // d3 to do the same enabling, if jQuery breaks for some reason
+            // d3.select("#nextstep").attr("disabled", "");
+        }
+
+        // check for when we are interactively asking for a line click
+        if (waitingForResponse && responseType === 'next_line') {
+            // change the highlight color for the previous line
+            $(".line_highlight").addClass("prev_line_highlight");
+        } else {
+            // remove any prev line highlights
+            $(".prev_line_highlight").removeClass("prev_line_highlight");
+        }
+
         // update the UI
         addPrompt();
         addVariableBank();
         addHighlighting();
+
     }
 
     // Extracts prompt from state and creates HTML
@@ -157,6 +206,13 @@ var controller = (function() {
         if (state.hasOwnProperty("prompt")) {
             var prompt =  state.prompt;
             d3.select("#promptText").node().innerHTML = prompt;
+
+            // when we hit the final prompt, aka finish the problem, we want to change things
+            if (prompt === "The print statement below prints out the value(s) that the function returned. Enter that solution in the answer box!") {
+                $("#next-container").addClass("hidden");
+                $("#nextstep").prop('disabled', true);
+                button = "#submitButton";
+            }
 
             // check if we need to add "yes" and "no" radio buttons to the prompt
             if (state.hasOwnProperty("askForResponse") && state.askForResponse === "conditional") {
@@ -368,7 +424,8 @@ var controller = (function() {
 
                     case "ArrayElement":
                         if (fadeLevel > 0 && variable === state.statement_result.name &&
-                            state.hasOwnProperty("askForResponse") && state.askForResponse === "array_element_get") {
+                            state.hasOwnProperty("askForResponse") &&
+                            (state.askForResponse === "array_element_get" || state.askForResponse === "array_element_click")) {
 
                             interactiveArrayElement(varObject.value);
                         }
@@ -378,7 +435,14 @@ var controller = (function() {
                         break;
 
                     case "AstNode":
-                        highlightASTNode(varObject.value);
+                        if(variable === "this_is_the_conditional_of_an_if_statement" || variable === "this_is_the_conditional_of_a_while_statement") {
+                            if(state.variables.in_scope["this_is_the_next_line_that_will_execute"].value.location.start.line
+                                === varObject.value.location.start.line) {
+                                highlightASTNode(varObject.value);
+                            }
+                        } else {
+                            highlightASTNode(varObject.value);
+                        }
                         break;
 
                     case "ScratchAstNode":
@@ -414,7 +478,7 @@ var controller = (function() {
         $(".block_highlight").removeClass("block_highlight");
         $(".node_highlight").removeClass("node_highlight");
         $(".scratch_node_highlight").removeClass("scratch_node_highlight");
-        $(".line_highlight").removeClass("line_highlight");
+        $(".line_highlight").removeClass("line_highlight").addClass("prev_line_highlight");
         $(".text_highlight").removeClass("text_highlight");
         $(".array_element_highlight").removeClass("array_element_highlight");
 
@@ -474,8 +538,8 @@ var controller = (function() {
                 // check to see if this variable is an array
                 if (d3.select(this).select(".bank_variable_array").node() != null) {
                     if (variable.hasOwnProperty("index")) {
-                        //interactiveVariableBankArrayCell(d3.select(this).select(".bank_variable_array"), variable.index, newVariable);
-                        interactiveVariableBankArray(d3.select(this).select(".bank_variable_array"));
+                        interactiveVariableBankArrayCell(d3.select(this).select(".bank_variable_array"), variable.index.value, newVariable);
+                        //interactiveVariableBankArray(d3.select(this).select(".bank_variable_array"));
                     }
                     else {
                         interactiveVariableBankArray(d3.select(this).select(".bank_variable_array"));
@@ -716,6 +780,7 @@ var controller = (function() {
                 }
                 else if(correctAnswer[0] !== undefined) {
                     if (correctAnswer[0].type === "array") {
+                        console.log("Checking array answer: ", correctVariable, userVariable, correctAnswer)
                         correctVariable[correctAnswer[0].name] = [];
                         userVariable[correctAnswer[0].name] = [];
                         arrayTable.selectAll(".arrayVarValue").each(function (d, i) {
@@ -744,14 +809,14 @@ var controller = (function() {
                 }
                 else if (correctAnswer.hasOwnProperty("index")) {
                     var typeString = correctAnswer.type === "string";
-                    userValue = arrayTable.select(".bank_variable_array_value").property("value");
+                    userValue = arrayTable.select(".arrayVarValue").property("value");
                     if(!typeString) {
                         userValue = parseInt(userValue);
                     }
                     if (typeString) {
-                        correctValue = correctAnswer.value[correctAnswer.index].value; 
+                        correctValue = correctAnswer.value[correctAnswer.index.value].value;
                     } else {
-                        correctValue = parseInt(correctAnswer.value[correctAnswer.index].value);
+                        correctValue = parseInt(correctAnswer.value[correctAnswer.index.value].value);
                     }
                     correctVariable[correctAnswer.name] = correctValue;
                     userVariable[correctAnswer.name] = userValue;
