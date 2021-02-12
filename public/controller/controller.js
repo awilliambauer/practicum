@@ -60,9 +60,13 @@ var controller = (function() {
         //         return false; // stop enter from also clicking next button (if button has focus)
         //     }
         // });
+        // new good enter button thing
         $(document).keydown(function(e){
             if (e.which == 13){
+                e.preventDefault(); // stop enter from also clicking next button (if button has focus)
+                if ($("#nextstep").attr('disabled')) return false; // prevent a disabled button from being clicked
                 $("#nextstep").click();
+                return false; // stop enter from also clicking next button (if button has focus)
             }
         });
 
@@ -169,15 +173,15 @@ var controller = (function() {
         if (needToHideNextButton) {
             // hide and disable Next button while they click things
             $("#next-container").addClass("hidden");
-            // $("#nextstep").prop('disabled', "disabled");
-            // disable button so can't click enter
-            // $("#next-container").prop('disabled', true);
-            d3.select("#nextstep").attr("disabled", "disabled");
+            $("#nextstep").prop('disabled', true);
+            // d3 to do the same disabling, if jQuery breaks for some reason
+            // d3.select("#nextstep").attr("disabled", "disabled");
         } else {
             // add and enable Next button back once they have clicked the thing
             $("#next-container").removeClass("hidden");
-            // $("#nextstep").prop('disabled', "");
-            d3.select("#nextstep").attr("disabled", "");
+            $("#nextstep").prop('disabled', false);
+            // d3 to do the same enabling, if jQuery breaks for some reason
+            // d3.select("#nextstep").attr("disabled", "");
         }
 
         // update the UI
