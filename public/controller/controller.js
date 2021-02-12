@@ -52,10 +52,20 @@ var controller = (function() {
         // move to the next step if they hit enter or click next
         $("#nextstep").click(step);
         $(document).off("keydown");
-        $(document).keydown(function(e) {
-            if (e.keyCode === 13) {
+        //old bad enter button thing
+        // $(document).keydown(function(e) {
+        //     if (e.keyCode === 13) {
+        //         e.preventDefault(); // stop enter from also clicking next button (if button has focus)
+        //         step();
+        //         return false; // stop enter from also clicking next button (if button has focus)
+        //     }
+        // });
+        // new good enter button thing
+        $(document).keydown(function(e){
+            if (e.which == 13){
                 e.preventDefault(); // stop enter from also clicking next button (if button has focus)
-                step();
+                if ($("#nextstep").attr('disabled')) return false; // prevent a disabled button from being clicked
+                $("#nextstep").click();
                 return false; // stop enter from also clicking next button (if button has focus)
             }
         });
@@ -158,15 +168,39 @@ var controller = (function() {
             responseType = state.askForResponse;
         }
 
+        // check for disabling buttons and keybresses
+        var needToHideNextButton = waitingForResponse && (responseType === 'next_line' || responseType === 'array_element_click');
+        if (needToHideNextButton) {
+            // hide and disable Next button while they click things
+            $("#next-container").addClass("hidden");
+            $("#nextstep").prop('disabled', true);
+            // d3 to do the same disabling, if jQuery breaks for some reason
+            // d3.select("#nextstep").attr("disabled", "disabled");
+        } else {
+            // add and enable Next button back once they have clicked the thing
+            $("#next-container").removeClass("hidden");
+            $("#nextstep").prop('disabled', false);
+            // d3 to do the same enabling, if jQuery breaks for some reason
+            // d3.select("#nextstep").attr("disabled", "");
+        }
+
+        if (waitingForResponse && responseType === 'next_line') {
+            $(".line_highlight").addClass("prev_line_highlight");
+        } else {
+            $(".prev_line_highlight").removeClass("prev_line_highlight");
+        }
+
         // update the UI
         addPrompt();
         addVariableBank();
         addHighlighting();
+
     }
 
     // Extracts prompt from state and creates HTML
     function addPrompt() {
         if (state.hasOwnProperty("prompt")) {
+            console.log("the state!", state);
             var prompt =  state.prompt;
             d3.select("#promptText").node().innerHTML = prompt;
 

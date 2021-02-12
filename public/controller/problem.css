@@ -340,6 +340,10 @@ lightest green: #E5FCC2
     background-color: #EEEEEE;
 }
 
+.problem .prev_line_highlight{
+    background-color: #bce8f1;
+}
+
 .problem .line_highlight{
     background-color: #8fcdca;
 }
