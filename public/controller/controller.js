@@ -10,6 +10,7 @@ var controller = (function() {
     var waitingForResponse;
     var responseType;
     var numTries;
+    var button;
 
     function reset() {
         // HACK, ugly. This global in html_generator needs to get
@@ -61,11 +62,12 @@ var controller = (function() {
         //     }
         // });
         // new good enter button thing
+        button = "#nextstep";
         $(document).keydown(function(e){
             if (e.which == 13){
                 e.preventDefault(); // stop enter from also clicking next button (if button has focus)
-                if ($("#nextstep").attr('disabled')) return false; // prevent a disabled button from being clicked
-                $("#nextstep").click();
+                if ($(button).attr('disabled')) return false; // prevent a disabled button from being clicked
+                $(button).click();
                 return false; // stop enter from also clicking next button (if button has focus)
             }
         });
@@ -169,8 +171,7 @@ var controller = (function() {
         }
 
         // check for disabling buttons and keybresses
-        var needToHideNextButton = waitingForResponse && (responseType === 'next_line' || responseType === 'array_element_click');
-        if (needToHideNextButton) {
+        if (waitingForResponse && (responseType === 'next_line' || responseType === 'array_element_click')) {
             // hide and disable Next button while they click things
             $("#next-container").addClass("hidden");
             $("#nextstep").prop('disabled', true);
@@ -184,9 +185,12 @@ var controller = (function() {
             // d3.select("#nextstep").attr("disabled", "");
         }
 
+        // check for when we are interactively asking for a line click
         if (waitingForResponse && responseType === 'next_line') {
+            // change the highlight color for the previous line
             $(".line_highlight").addClass("prev_line_highlight");
         } else {
+            // remove any prev line highlights
             $(".prev_line_highlight").removeClass("prev_line_highlight");
         }
 
@@ -200,9 +204,15 @@ var controller = (function() {
     // Extracts prompt from state and creates HTML
     function addPrompt() {
         if (state.hasOwnProperty("prompt")) {
-            console.log("the state!", state);
             var prompt =  state.prompt;
             d3.select("#promptText").node().innerHTML = prompt;
+
+            // when we hit the final prompt, aka finish the problem, we want to change things
+            if (prompt === "The print statement below prints out the value(s) that the function returned. Enter that solution in the answer box!") {
+                $("#next-container").addClass("hidden");
+                $("#nextstep").prop('disabled', true);
+                button = "#submitButton";
+            }
 
             // check if we need to add "yes" and "no" radio buttons to the prompt
             if (state.hasOwnProperty("askForResponse") && state.askForResponse === "conditional") {
