@@ -184,6 +184,12 @@ var controller = (function() {
             // d3.select("#nextstep").attr("disabled", "");
         }
 
+        if (waitingForResponse && responseType === 'next_line') {
+            $(".line_highlight").addClass("prev_line_highlight");
+        } else {
+            $(".prev_line_highlight").removeClass("prev_line_highlight");
+        }
+
         // update the UI
         addPrompt();
         addVariableBank();
@@ -194,6 +200,7 @@ var controller = (function() {
     // Extracts prompt from state and creates HTML
     function addPrompt() {
         if (state.hasOwnProperty("prompt")) {
+            console.log("the state!", state);
             var prompt =  state.prompt;
             d3.select("#promptText").node().innerHTML = prompt;
 
