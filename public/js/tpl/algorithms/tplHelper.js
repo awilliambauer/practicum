@@ -6,6 +6,7 @@ function TplHelper() {
     this.current_code_block_index = -1;
 
     this.iterable = undefined;
+    this.iterable2 = undefined;
 
     this.copy_args = function(o) {
         var args = [];
@@ -104,14 +105,15 @@ function TplHelper() {
         return ret;
     };
 
-    this.execute_the_loop_increment = function(variable_bank, iter_variable) { // TODO: Try putting a special case for strings in this function (check the type of the iterable and see if it's a string type)
+    this.execute_the_loop_increment = function(variable_bank, iter_variable, is_inner) {
         var value;
-        if (this.iterable.idx >= this.iterable.value.length - 1) {
-            value = this.next_loop_variable_value(iter_variable);
-            this.iterable.idx++;
+        var cur_iterable = !is_inner ? this.iterable : this.iterable2;
+        if (cur_iterable.idx >= cur_iterable.value.length - 1) {
+            value = this.next_loop_variable_value(iter_variable, is_inner);
+            cur_iterable.idx++;
         } else {
-            this.iterable.idx++;
-            value = this.next_loop_variable_value(iter_variable);
+            cur_iterable.idx++;
+            value = this.next_loop_variable_value(iter_variable, is_inner);
         }
         var result = this.execute_statement(variable_bank, value);
         var variable = {};
@@ -120,12 +122,13 @@ function TplHelper() {
         return variable;
     };
 
-    this.next_loop_variable_value = function(iter_variable) {
+    this.next_loop_variable_value = function(iter_variable, is_inner) {
         let value;
-        if (this.iterable.value[this.iterable.idx].hasOwnProperty("type") && (this.iterable.value[this.iterable.idx].type === "char") || (this.iterable.value[this.iterable.idx].type === "string")) {
-            value = java_parsing.parse_statement(iter_variable.value + ' = "' + (this.iterable.value[this.iterable.idx]).value + '"');
+        let cur_iterable = !is_inner ? this.iterable : this.iterable2;
+        if (cur_iterable.value[cur_iterable.idx].hasOwnProperty("type") && (cur_iterable.value[cur_iterable.idx].type === "char") || (cur_iterable.value[cur_iterable.idx].type === "string")) {
+            value = java_parsing.parse_statement(iter_variable.value + ' = "' + (cur_iterable.value[cur_iterable.idx]).value + '"');
         } else {
-            value = java_parsing.parse_statement(iter_variable.value + ' = ' + (this.iterable.value[this.iterable.idx]).value);
+            value = java_parsing.parse_statement(iter_variable.value + ' = ' + (cur_iterable.value[cur_iterable.idx]).value);
         }
         return value;
     }
@@ -158,8 +161,8 @@ function TplHelper() {
         return ast.body[0];
     }
 
-    this.get_iterable_array = function() {
-        return this.iterable;
+    this.get_iterable_array = function(is_inner) {
+        return !is_inner ? this.iterable : this.iterable2;
     }
 
     //TODO
@@ -202,6 +205,10 @@ function TplHelper() {
         return stmt.tag === "if";
     };
 
+    this.is_for = function(stmt) {
+        return stmt.tag === "for";
+    };
+
     this.has_else_if = function(stmt) {
         return stmt.else_is_elif;
     };
@@ -238,7 +245,7 @@ function TplHelper() {
         };
     };
 
-    this.get_loop = function(ast) {
+    this.get_loop = function(ast) { // TODO: allow getting this at lower levels
         // assume loop is the top node
         var loop = ast.body[lineNum];
         if (!loop || loop.tag !== 'for') throw new Error("can't find the for or while loop!");
@@ -253,14 +260,15 @@ function TplHelper() {
     };
 
     //TODO: find where this is called and change input
-    this.get_loop_init_variable = function(variable_bank, iter_variable, iterable) {
-        this.initialize_loop_iterable(variable_bank, iterable);
+    this.get_loop_init_variable = function(variable_bank, iter_variable, iterable, is_inner) {
+        this.initialize_loop_iterable(variable_bank, iterable, is_inner);
         if (iter_variable.tag !== 'identifier') throw new Error("for loop initializer isn't an int declaration!");
-        return this.create_variable(variable_bank, this.next_loop_variable_value(iter_variable));
+        return this.create_variable(variable_bank, this.next_loop_variable_value(iter_variable, is_inner));
     };
 
-    this.is_there_another_item_in_the_loop_sequence = function(variable_bank) {
-        return (this.iterable.idx < this.iterable.value.length);
+    this.is_there_another_item_in_the_loop_sequence = function(variable_bank, is_inner) {
+        let cur_iterable = !is_inner ? this.iterable : this.iterable2;
+        return (cur_iterable.idx < cur_iterable.value.length);
     };
 
     this.check_if_loop = function(ast) {
@@ -305,12 +313,18 @@ function TplHelper() {
     //     return this.create_variable(variable_bank, initializer);
     // };
 
-    this.initialize_loop_iterable = function(variable_bank, iterable) {
+    this.initialize_loop_iterable = function(variable_bank, iterable, is_inner) {
         iterable = sim.evaluate_expression(variable_bank, iterable);
         if ((iterable.type !== 'array') && (iterable.type !== 'string')) throw new Error("for loop iterable isn't an array or string")
-        this.iterable = iterable;
-        this.iterable.idx = 0; // HACK this is a hack
-        this.iterable.name = "loop_array";
+        if (!is_inner) {
+            this.iterable = iterable;
+            this.iterable.idx = 0;
+            this.iterable.name = "loop sequence"; // TODO: give these more helpful names
+        } else {
+            this.iterable2 = iterable;
+            this.iterable2.idx = 0;
+            this.iterable2.name = "inner loop sequence";
+        }
     }
 
     //TODO: remove this
@@ -387,8 +401,9 @@ function TplHelper() {
         return array;
     };
 
-    this.loop_array_index = function(variable_bank, array) {
-        var val = sim.evaluate_expression(variable_bank, {tag: 'literal', type: 'int', value: this.iterable.idx});
+    this.loop_array_index = function(variable_bank, array, is_inner) {
+        let cur_iterable = !is_inner ? this.iterable : this.iterable2;
+        var val = sim.evaluate_expression(variable_bank, {tag: 'literal', type: 'int', value: cur_iterable.idx});
         val["array"] = array;
         return val;
     };
