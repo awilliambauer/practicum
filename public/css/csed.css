@@ -59,6 +59,7 @@ a:hover.btn-primary, a:active.btn-primary, a:focus.btn-primary {
     background-color:#436166 !important;
     text-decoration: none;
     color:#ffffff !important;
+    cursor: pointer;
 }
 
 /* for the consent form, so scrolling works */
@@ -70,13 +71,65 @@ a:hover.btn-primary, a:active.btn-primary, a:focus.btn-primary {
     overflow-y: auto;
 }
 
-.problem-visited {
-    color: #70782B !important;
-    font-weight: normal !important;
+.list-group-item.problem-item {
+    color: #70782B;
+    font-weight: bold;
+    text-decoration: underline;
 }
 
-.problem-item {
+/*.problem-item:before {*/
+/*    content: "\2610\2003\2610";*/
+/*    display: inline-block;*/
+/*    text-decoration: none;*/
+/*    padding-right: 1rem;*/
+/*    color: black;*/
+/*    font-weight: bolder;*/
+/*}*/
+
+/*.problem-guided-complete:before {*/
+/*    content: "\2611";*/
+/*}*/
+
+.list-group-item.problem-visited {
+    font-weight: normal;
+}
+
+.list-group-item:after {
+    position: absolute;
+    content: "completed on:\2003guided?\2003interactive?";
+    right: 1em;
+    color: darkgray;
     font-weight: bold;
+    font-style: italic;
+}
+
+.list-group-item.problem-item:after {
+    display: inline-block;
+    position: absolute;
+    content: "\2610\2003\2003\2003\2003\2003\2610";
+    right: 3.5em;
+    text-decoration: none;
+    font-style: normal;
+}
+
+.list-group-item.problem-item:hover:after {
+    display: inline-block;
+}
+
+.list-group-item.problem-visited:after {
+    content: "\2610\2003\2003\2003\2003\2003\2610";
+}
+
+.list-group-item.problem-guided-complete:after {
+    content: "\2611\2003\2003\2003\2003\2003\2610";
+}
+
+.list-group-item.problem-interactive-complete:after {
+    content: "\2610\2003\2003\2003\2003\2003\2611";
+}
+
+.list-group-item.problem-guided-complete.problem-interactive-complete:after {
+    content: "\2611\2003\2003\2003\2003\2003\2611";
 }
 
 #methodCall {
