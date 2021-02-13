@@ -177,7 +177,7 @@ var controller = (function() {
         console.log(state.hasOwnProperty("askForResponse"));
 
         // check for disabling buttons and keybresses
-        if (waitingForResponse && (responseType === 'next_line' || responseType === 'array_element_click')) {
+        if (waitingForResponse && (responseType === 'next_line' || responseType === 'array_element_click' || responseType === 'array_element_get')) {
             // hide and disable Next button while they click things
             $("#next-container").addClass("hidden");
             $("#nextstep").prop('disabled', true);
