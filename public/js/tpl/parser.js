@@ -93,7 +93,7 @@ var simulator_parsing = function() {
         // these are all dicts because javascript doesn't have sets, boo
         var keywords = {
             "if":1, "else":1, "do":1, "while":1, "for":1,
-            "function":1, "var":1, "let":1, "of":1, "break":1,
+            "function":1, "var":1, "let":1, "of":1, "break":1, "return":1,
             "true":1, "false":1, "null":1
         };
 
@@ -298,6 +298,7 @@ var simulator_parsing = function() {
                 case "if": stmt = match_ifelse(); break;
                 case "while": stmt = match_while(); break;
                 case "break": stmt = match_break(); break;
+                case "return": stmt = match_return(); break;
                 case "{": stmt = match_standalone_block(); break;
                 default: stmt = match_simple_statement(true); break;
             }
@@ -364,6 +365,17 @@ var simulator_parsing = function() {
                 id: new_id(),
                 location: location(start),
                 tag: "break"
+            };
+        }
+
+        function match_return() {
+            var start = lex.position();
+            match_keyword("return");
+            match_symbol(";");
+            return {
+                id: new_id(),
+                location: location(start),
+                tag: "return"
             };
         }
 

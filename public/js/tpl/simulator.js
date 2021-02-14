@@ -309,10 +309,16 @@ function simulator(ast, globals) {
                     last(call_stack).to_execute.pop();
                 }
                 break;
+            case "return":
+                console.log("encountered return");
+                while (last(call_stack).marker !== "function") call_stack.pop();
+                last(call_stack).to_execute = [];
+                return null;
             default:
                 throw new Error("node tag not recognized " + JSON.stringify(stmt));
         }
 
+        // console.log("This is the current call stack: ", copy(call_stack));
         var cs = copy(call_stack);
         return {
             // the problem state
