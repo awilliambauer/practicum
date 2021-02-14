@@ -98,7 +98,7 @@ a:hover.btn-primary, a:active.btn-primary, a:focus.btn-primary {
     position: absolute;
     content: "completed on:\2003guided?\2003interactive?";
     right: 1em;
-    color: darkgray;
+    color: #737373;
     font-weight: bold;
     font-style: italic;
 }
@@ -106,8 +106,10 @@ a:hover.btn-primary, a:active.btn-primary, a:focus.btn-primary {
 .list-group-item.problem-item:after {
     display: inline-block;
     position: absolute;
-    content: "\2610\2003\2003\2003\2003\2003\2610";
-    right: 3.5em;
+    content: "\2610\2003\2003\2610";
+    right: 1.4em;
+    top: 0;
+    font-size: 30px;
     text-decoration: none;
     font-style: normal;
 }
@@ -117,19 +119,19 @@ a:hover.btn-primary, a:active.btn-primary, a:focus.btn-primary {
 }
 
 .list-group-item.problem-visited:after {
-    content: "\2610\2003\2003\2003\2003\2003\2610";
+    content: "\2610\2003\2003\2610";
 }
 
 .list-group-item.problem-guided-complete:after {
-    content: "\2611\2003\2003\2003\2003\2003\2610";
+    content: "\2611\2003\2003\2610";
 }
 
 .list-group-item.problem-interactive-complete:after {
-    content: "\2610\2003\2003\2003\2003\2003\2611";
+    content: "\2610\2003\2003\2611";
 }
 
 .list-group-item.problem-guided-complete.problem-interactive-complete:after {
-    content: "\2611\2003\2003\2003\2003\2003\2611";
+    content: "\2611\2003\2003\2611";
 }
 
 #methodCall {
