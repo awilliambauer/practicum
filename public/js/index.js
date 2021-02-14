@@ -132,6 +132,8 @@ var csed = (function() {
                 }
             });
         }
+        // Only initialize the results of the problems if they haven't been 
+        // already initialized. Otherwise you will overwrite it.
         if (localStorage.getItem("init") == null) {
             localStorage.setItem("init", "true");
             let all_problems = enabledConfig.map(d => {
@@ -184,6 +186,8 @@ var csed = (function() {
             .enter()
             .append("a")
             .attr("class", function(problem) {
+                let results = JSON.parse(localStorage.getItem("problem_results"));
+                let c = "";
                 var foundProblem = false;
                 for (var category in problemIdsByCategory) {
                     if (problemIdsByCategory[category].indexOf(problem.id) !== -1) {
@@ -191,11 +195,22 @@ var csed = (function() {
                     }
                 }
                 if (foundProblem) {
-                    return "uuid_" + problem.id + " list-group-item problem-visited problem-item";
+                    c += "uuid_" + problem.id + " list-group-item problem-visited problem-item";
                 }
                 else {
-                    return "uuid_" + problem.id + " list-group-item problem-item";
+                    c += "uuid_" + problem.id + " list-group-item problem-item";
                 }
+                results.forEach(result => {
+                    if (result.problem.id === problem.id) {
+                        if (result.guided) {
+                            c += " problem-guided-complete";
+                        }
+                        if (result.independent) {
+                            c += " problem-interactive-complete";
+                        }
+                    }
+                })
+                return c;
             })
             .text(function(problemConfig) { return problemConfig.title; })
             .on("click", onProblemStartCallback)

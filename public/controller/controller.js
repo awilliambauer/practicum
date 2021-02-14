@@ -1182,14 +1182,21 @@ var controller = (function() {
             independent = true;
         }
         let problem_results = JSON.parse(localStorage.getItem("problem_results"));
-        console.log(problem_results);
         problem_results = problem_results.map(problem => {
             if (problem.problem.title === problemTitle) {
+                let problem_id = "uuid_" + problem.problem.id;
+                let curr_class = d3
+                  .select(`.${problem_id}.list-group-item`)
+                  .attr("class");
+                
                 if (guided) {
                     problem.guided = guided;
+                    curr_class += " problem-guided-complete";
                 } else if (independent) {
                     problem.independent = independent;
+                    curr_class += " problem-interactive-complete";
                 }
+                d3.select(`.${problem_id}.list-group-item`).attr("class", curr_class);
             }
             return problem;
         })
