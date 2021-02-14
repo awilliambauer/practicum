@@ -1151,6 +1151,7 @@ var controller = (function() {
             if (config.nextProblem) {
                 d3.select("#newProblem").classed("hidden", false);
             }
+            updateCompletedList();
         } else if (emptySolution) {
             d3.select("#incorrectHeader").classed("hidden", true);
             d3.select("#correctHeader").classed("hidden", true);
@@ -1168,6 +1169,31 @@ var controller = (function() {
             type: Logging.ID.CheckSolutionButton,
             detail: {correct:correct},
         });
+    }
+
+    function updateCompletedList() {
+        let difficulty = d3.select("#difficultyLevel > span").html();
+        let problemTitle = d3.select("#PageHeader").html();
+        let guided = false;
+        let independent = false;
+        if (difficulty === "Difficulty level: Guided") {
+            guided = true;
+        } else {
+            independent = true;
+        }
+        let problem_results = JSON.parse(localStorage.getItem("problem_results"));
+        console.log(problem_results);
+        problem_results = problem_results.map(problem => {
+            if (problem.problem.title === problemTitle) {
+                if (guided) {
+                    problem.guided = guided;
+                } else if (independent) {
+                    problem.independent = independent;
+                }
+            }
+            return problem;
+        })
+        localStorage.setItem("problem_results", JSON.stringify(problem_results));
     }
 
     return {

@@ -132,6 +132,24 @@ var csed = (function() {
                 }
             });
         }
+        if (localStorage.getItem("init") == null) {
+            localStorage.setItem("init", "true");
+            let all_problems = enabledConfig.map(d => {
+            return d.problems;
+            })
+            all_problems = all_problems.flat();
+            let problem_results = all_problems.map(problem => {
+                let result = {
+                    "problem": problem,
+                    "guided": false,
+                    "independent": false
+                }
+                return result;
+            })
+            localStorage.setItem("problem_results", JSON.stringify(problem_results));
+        }
+        
+
         var problemArea = d3.select("#problems-content-container").selectAll("div")
                 .data(enabledConfig)
                 .enter()
@@ -140,7 +158,6 @@ var csed = (function() {
                 .append("div")
                 .attr("class", "panel panel-default")
             ;
-
         var problemDescriptionArea = problemArea
             .append("div")
             .attr("class", "panel-heading");
