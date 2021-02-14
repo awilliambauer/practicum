@@ -108,13 +108,13 @@ function TplHelper() {
     this.execute_the_loop_increment = function(variable_bank, iter_variable, is_inner) {
         var value;
         var cur_iterable = !is_inner ? this.iterable : this.iterable2;
-        if (cur_iterable.idx >= cur_iterable.value.length - 1) {
-            value = this.next_loop_variable_value(iter_variable, is_inner);
-            cur_iterable.idx++;
-        } else {
-            cur_iterable.idx++;
-            value = this.next_loop_variable_value(iter_variable, is_inner);
-        }
+        // if (cur_iterable.idx >= cur_iterable.value.length - 1) {
+        //     value = this.next_loop_variable_value(iter_variable, is_inner);
+        //     cur_iterable.idx++;
+        // } else {
+        cur_iterable.idx++;
+        value = this.next_loop_variable_value(iter_variable, is_inner);
+        // }
         var result = this.execute_statement(variable_bank, value);
         var variable = {};
         variable.name = iter_variable.value;
@@ -268,7 +268,7 @@ function TplHelper() {
 
     this.is_there_another_item_in_the_loop_sequence = function(variable_bank, is_inner) {
         let cur_iterable = !is_inner ? this.iterable : this.iterable2;
-        return (cur_iterable.idx < cur_iterable.value.length);
+        return (cur_iterable.idx < cur_iterable.value.length - 1); // TODO: can't handle sequences of len:1
     };
 
     this.check_if_loop = function(ast) {
@@ -447,6 +447,9 @@ function TplHelper() {
         var variable = {};
         variable.name = stmt.expression.args[0].value;
         variable.value = result.value;
+        if (variable.name === "k" || variable.name === "l") {
+            console.log("Iteration variable ", variable.name, variable.value);
+        }
         return variable;
     };
 
