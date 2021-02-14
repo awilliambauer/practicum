@@ -37,6 +37,7 @@ var csed = (function() {
     var ENABLE_TELEMETRY_LOGGING = false;
 
     function setupLogging(username) {
+        var enabled_problem_types = ["expressions", "if_else", "array", "nested"];
         if (ENABLE_TELEMETRY_LOGGING) {
             var LOGGING_BASE_URL = window.location.protocol + "//" + window.location.hostname + ":" + LOGGING_PORT;
             //var LOGGING_BASE_URL = "https://dev-olio.cs.washington.edu" + ":" + LOGGING_PORT;
@@ -53,17 +54,25 @@ var csed = (function() {
                         numProblemsByCategory: {
                             expressions: 0,
                             if_else: 0,
-                            array: 0
+                            array: 0,
+                            nested: 0,
                         },
                         problemIdsByCategory: {
                             expressions: [],
                             if_else: [],
-                            array: []
+                            array: [],
+                            nested: []
                         }
                     };
                 }
                 numProblemsByCategory = server_savedata.numProblemsByCategory;
                 problemIdsByCategory = server_savedata.problemIdsByCategory;
+                for (let i = 0; i < enabled_problem_types.length; i++) {
+                    if (!numProblemsByCategory[enabled_problem_types[i]]) numProblemsByCategory[enabled_problem_types[i]] = 0;
+                }
+                for (let i = 0; i < enabled_problem_types.length; i++) {
+                    if (!problemIdsByCategory[enabled_problem_types[i]]) problemIdsByCategory[enabled_problem_types[i]] = [];
+                }
 
                 // for debugging
                 //experimental_condition = 1;
@@ -76,12 +85,20 @@ var csed = (function() {
             numProblemsByCategory = (window.localStorage.numProblemsByCategory && JSON.parse(window.localStorage.numProblemsByCategory)) || {
                 expressions: 0,
                 if_else: 0,
-                array: 0
+                array: 0,
+                nested: 0
+            }
+            for (let i = 0; i < enabled_problem_types.length; i++) {
+                if (!numProblemsByCategory[enabled_problem_types[i]]) numProblemsByCategory[enabled_problem_types[i]] = 0;
             }
             problemIdsByCategory = (window.localStorage.problemIdsByCategory && JSON.parse(window.localStorage.problemIdsByCategory)) || {
                 expressions: [],
                 if_else: [],
-                array: []
+                array: [],
+                nested: []
+            }
+            for (let i = 0; i < enabled_problem_types.length; i++) {
+                if (!problemIdsByCategory[enabled_problem_types[i]]) problemIdsByCategory[enabled_problem_types[i]] = [];
             }
             return new Promise(function(resolve) { resolve(); } );
         }
@@ -555,7 +572,7 @@ var csed = (function() {
                     throw new Error("lab number " + labNo + " not supported");
             }
         } else {
-            enabledCategories = ["default-expressions", "default-if_else", "default-array"];
+            enabledCategories = ["default-expressions", "default-if_else", "default-array", "default-nested"];
         }
     }
 

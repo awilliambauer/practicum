@@ -635,17 +635,17 @@
     "id": "102",
     "title": "Nested For Loop Investigation 1",
     "content": {
-      "text": "def whileLoopInvestigation(i):\n\tfact = 1\n\twhile i  > 0:\n\t\tfact = fact * i\n\t\ti-= 1\n\treturn (fact)",
+      "text": "def nestedForLoopInvestigation(a, b):\n\tc = 0\n\tfor i in range(a):\n\t\tfor j in range(b):\n\t\t\tc = c + 1\n\treturn(c)\n",
       "variants": [{
         "id": "103",
-        "arguments": {"i": 6}
+        "arguments": {"a": 2, "b": 3}
       }]
     }
   },{
     "id": "104",
     "title": "Nested For Loop Investigation 2",
     "content": {
-      "text": "def whileLoopInvestigation(arr):\n\t i = 0\n\t sum = 0\n\twhile (i < len(arr)):\n\t\t sum = sum + arr[i]\n\t\t i = i + 1\n\t return (sum)",
+      "text": "def whileLoopInvestigation(arr):\n\ti = 0\n\tsum = 0\n\twhile (i < len(arr)):\n\t\t sum = sum + arr[i]\n\t\t i = i + 1\n\t return (sum)",
       "variants": [{
         "id": "105",
         "arguments": {"arr": [2, 4, 6, 8, 10]}
