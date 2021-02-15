@@ -62,7 +62,7 @@ function TPLAlgorithm() {
     "We're at the beginning of a new for-loop block. Look at the loop header.";
 
     [no_step]
-    let lets_visualize_our_sequence_with_an_array: Variable;
+    let lets_visualize_our_sequence: Variable;
 
     [no_step]
     {
@@ -77,10 +77,10 @@ function TPLAlgorithm() {
         [no_step]
         if (helper.is_loop_arr_type(loop)) {
             [prompt]
-            "i will be iterating through an array during our for loop, starting with the first element at index 0 and moving to the next element each time the loop starts again.";
+            "The loop variable will be iterating through a sequence during our for loop, starting with the first element at index 0 and moving to the next element each time the loop starts again.";
 
             [prompt]
-            "We need to set the initial value of i to the starting element of the array. ";
+            "We need to set the initial value of the loop variable to the starting element of the sequence.";
         } else {
             [prompt]
             "When range is called with some integer parameters in Python, it makes a sequence of numbers to match the range call.";
@@ -104,47 +104,47 @@ function TPLAlgorithm() {
             }
 
             [prompt]
-            "First let’s set our loop variable i to the first element of the array.";
+            "First let’s set our loop variable to the first element of the sequence.";
         }
 
         [no_step]
         if (helper.is_loop_arr_type(loop)) {
-            let add_the_starting_value_for_i_to_the_variable_bank: Variable;
+            let add_the_starting_value_for_the_loop_variable_to_the_variable_bank: Variable;
             [interactive("add_variable")]
-            add_the_starting_value_for_i_to_the_variable_bank = helper.add_this_to_the_variable_bank(variables, helper.get_loop_init_variable(variables, this_is_the_loop_variable, this_is_the_loop_iterable, false));
+            add_the_starting_value_for_the_loop_variable_to_the_variable_bank = helper.add_this_to_the_variable_bank(variables, helper.get_loop_init_variable(variables, this_is_the_loop_variable, this_is_the_loop_iterable, false));
 
             [prompt]
-            "The for loop will end when i has moved through each element in the array. Now let’s move on into the for loop.";
+            "The for loop will end when the loop variable has moved through each element in the sequence. Now let’s move on into the for loop.";
 
-            lets_visualize_our_sequence_with_an_array = helper.get_iterable_array(false);
+            lets_visualize_our_sequence = helper.get_iterable_array(false);
 
-            let add_the_array_to_the_variable_bank: Variable;
+            let add_the_sequence_to_the_variable_bank: Variable;
             [interactive("add_variable")]
-            add_the_array_to_the_variable_bank = helper.add_the_loop_array_to_the_variable_bank(variables, lets_visualize_our_sequence_with_an_array, false);
+            add_the_sequence_to_the_variable_bank = helper.add_the_loop_array_to_the_variable_bank(variables, lets_visualize_our_sequence, false);
 
-            let this_is_the_first_index_for_the_loop_array: ArrayElement;
+            let this_is_the_first_index_for_the_loop_sequence: ArrayElement;
             [interactive("array_element_get")]
-            this_is_the_first_index_for_the_loop_array = helper.loop_array_index(variables, lets_visualize_our_sequence_with_an_array, false);
+            this_is_the_first_index_for_the_loop_sequence = helper.loop_array_index(variables, lets_visualize_our_sequence, false);
         } else {
-            let add_the_starting_value_for_i_to_the_variable_bank: Variable;
+            let add_the_starting_value_for_the_loop_variable_to_the_variable_bank: Variable;
             [interactive("add_variable")]
-            add_the_starting_value_for_i_to_the_variable_bank = helper.add_this_to_the_variable_bank(variables, helper.get_loop_init_variable(variables, this_is_the_loop_variable, this_is_the_loop_iterable, false));
+            add_the_starting_value_for_the_loop_variable_to_the_variable_bank = helper.add_this_to_the_variable_bank(variables, helper.get_loop_init_variable(variables, this_is_the_loop_variable, this_is_the_loop_iterable, false));
 
-            lets_visualize_our_sequence_with_an_array = helper.get_iterable_array(false);
+            lets_visualize_our_sequence = helper.get_iterable_array(false);
 
-            let add_the_array_to_the_variable_bank: Variable;
+            let add_the_sequence_to_the_variable_bank: Variable;
             [interactive("add_variable")]
-            add_the_array_to_the_variable_bank = helper.add_this_to_the_variable_bank(variables, lets_visualize_our_sequence_with_an_array, false);
+            add_the_sequence_to_the_variable_bank = helper.add_this_to_the_variable_bank(variables, lets_visualize_our_sequence, false);
 
-            let this_is_the_first_index_for_the_loop_array: ArrayElement;
+            let this_is_the_first_index_for_the_loop_sequence: ArrayElement;
             [interactive("array_element_get")]
-            this_is_the_first_index_for_the_loop_array = helper.loop_array_index(variables, lets_visualize_our_sequence_with_an_array, false);
+            this_is_the_first_index_for_the_loop_sequence = helper.loop_array_index(variables, lets_visualize_our_sequence, false);
 
             [prompt]
-            "Every time the for loop starts again, i moves to the next index of the array and takes on the next value.";
+            "Every time the for loop starts again, the loop variable moves to the next index of the sequence and takes on the next value.";
 
             [prompt]
-            "The for loop will end when i has moved through each element in the array. Now let’s move on into the for loop.";
+            "The for loop will end when the loop variable has moved through each element in the sequence. Now let’s move on into the for loop.";
         }
     }
 
@@ -164,9 +164,9 @@ function TPLAlgorithm() {
             [interactive("update_variable")]
             update_the_value_of_the_loop_variable_in_the_variable_bank = helper.execute_the_loop_increment(variables, loop.variable, false);
 
-            let this_is_the_next_index_for_the_loop_array: ArrayElement;
+            let this_is_the_next_index_for_the_loop_sequence: ArrayElement;
             [interactive("array_element_get")]
-            this_is_the_next_index_for_the_loop_array = helper.loop_array_index(variables, lets_visualize_our_sequence_with_an_array, false);
+            this_is_the_next_index_for_the_loop_sequence = helper.loop_array_index(variables, lets_visualize_our_sequence, false);
         }
 
         [no_step]

@@ -645,114 +645,117 @@
     "id": "104",
     "title": "Nested For Loop Investigation 2",
     "content": {
-      "text": "def whileLoopInvestigation(arr):\n\ti = 0\n\tsum = 0\n\twhile (i < len(arr)):\n\t\t sum = sum + arr[i]\n\t\t i = i + 1\n\t return (sum)",
+      "text": "def nestedForLoopInvestigation(arrIn):\n\tarrOut = [2, 3, 4]\n\tfor i in range(len(arrOut)):\n\t\tfor j in range(len(arrIn)):\n\t\t\tarrIn[j] = arrIn[j] * arrOut[i]\n\treturn(arrIn)",
       "variants": [{
         "id": "105",
-        "arguments": {"arr": [2, 4, 6, 8, 10]}
+        "arguments": {"arr": [1, 2, 3]}
       },{
         "id": "106",
-        "arguments": {"arr": [-3, 0, 5, 8, 12]}
+        "arguments": {"arr": [5, 1, 2]}
       }]
     }
   },{
     "id": "107",
     "title": "Nested For Loop Investigation 3",
     "content": {
-      "text": "def whileLoopInvestigation(num):\n\tdivByTwo = 0\n\twhile num >= 1:\n\t\tnum = num - 2\n\t\tdivByTwo+= 1\n\treturn (divByTwo)",
+      "text": "def nestedForLoopInvestigation(word):\n\tvowel = \"aeiou\"\n\tcount = 0\n\tfor i in range(word):\n\t\tfor j in range(vowel):\n\t\t\tif i == j:\n\t\t\t\tcount = count + 1\n\treturn(count)",
       "variants": [{
         "id": "108",
-        "arguments": {"num": 12}
+        "arguments": {"word": "house"}
       },{
         "id": "109",
-        "arguments": {"num": 14}
+        "arguments": {"word": "arid"}
+      },{
+        "id": "110",
+        "arguments": {"word": "drove"}
       }]
     }
   },{
-    "id": "110",
+    "id": "111",
     "title": "Nested For Loop Investigation 4",
     "content": {
-      "text": "def whileLoopInvestigation(arr):\n\ti = 0\n\twhile i < len(arr):\n\t\tarr[i] = arr[i] * -1 \n\t\ti = i + 1 \n\treturn (arr)",
+      "text": "def nestedForLoopInvestigation(arr):\n\tfor i in range(arr[0], arr[1]):\n\t\tfor j in range(len(arr)):\n\t\t\tarr[j] = arr[j] + i\n\treturn(arr)",
       "variants": [{
-        "id": "111",
-        "arguments": {"arr": [6, 0, -4, -11, 20]}
-      },{
         "id": "112",
-        "arguments": {"arr": [-12, 300, 42, -6, 11]}
+        "arguments": {"arr": [2, 4, 7, 12]}
+      },{
+        "id": "113",
+        "arguments": {"arr": [1, 3, 8, 16]}
       }]
     }
   },{
-    "id": "113",
+    "id": "114",
     "title": "Nested For Loop Investigation 5",
     "content": {
-      "text": "def whileLoopInvestigation(arr):\n\ttoAdd = 13\n\ti = 0\n\twhile i < len(arr):\n\t\tarr[i] = arr[i] + toAdd \n\t\ti = i + 1\n\treturn (arr)",
+      "text": "def nestedForLoopInvestigation(dataArr, mean):\n\tfor i in range(2):\n\t\tfor j in range(len(dataArr)):\n\t\t\tif dataArr[j] < mean:\n\t\t\t\tdataArr[j] = dataArr[j] + 2\n\treturn(dataArr)",
       "variants": [{
-        "id": "114",
-        "arguments": {"arr": [22, 36, 55, 91, 107]}
-      },{
         "id": "115",
-        "arguments": {"arr": [14, 55, 114, 303, 600]}
+        "arguments": {"dataArr": [22, 28, 24, 30], "mean": 26}
       }]
     }
   },{
     "id": "116",
     "title": "Nested For Loop Investigation 6",
     "content": {
-      "text": "def whileLoopInvestigation(a, b):\n\tpower = 0\n\twhile b >= 1:\n\t\tb = b / a\n\t\tpower+= 1\n\treturn (power)",
+      "text": "def nestedForLoopInvestigation(noSquares):\n\tnums = [3, 4, 5]\n\tfor i in range(len(noSquares)):\n\t\tfor j in nums:\n\t\t\tif j * j == noSquares[i]:\n\t\t\t\tnoSquares[i] = 0\n\treturn(noSquares)",
       "variants": [{
         "id": "117",
-        "arguments": {"b": 16807, "a": 7}
+        "arguments": {"noSquares": [9, 64, 81, 25]}
       },{
         "id": "118",
-        "arguments": {"b": 14641, "x": 11}
+        "arguments": {"noSquares": [71, 9, 64, 22]}
       }]
     }
   },{
     "id": "119",
     "title": "Nested For Loop Investigation 7",
     "content": {
-      "text": "def whileLoopInvestigation(num):\n\tpower = 1\n\ti = 0\n\twhile i < 5:\n\t\tpower = power * num \n\t\ti = i + 1 \n\treturn (num)\n",
+      "text": "def nestedForLoopInvestigation(arr):\n\tfor i in arr:\n\t\tfor j in range(len(arr)):\n\t\t\tif i < 0:\n\t\t\t\tarr[j] = arr[j] + 3\n\treturn(arr)",
       "variants": [{
         "id": "120",
-        "arguments": {"num": 3}
+        "arguments": {"arr": [-5, -8, -1]}
+      },{
+        "id": "121",
+        "arguments": {"arr": [-11, -16, -9]}
       }]
     }
   },{
-    "id": "121",
+    "id": "122",
     "title": "Nested For Loop Investigation 8",
     "content": {
-      "text": "def whileLoopInvestigation(a, b):\n\twhile a < 1000:\n\t\ta = a * b\n\treturn (a)",
+      "text": "def nestedForLoopInvestigation(arr):\n\tcheckArr = [2, 3, 4, 6]\n\tcount = 0\n\tfor i in arr:\n\t\tfor j in checkArr:\n\t\t\tif i * j == 12:\n\t\t\t\tcount = count + 1\n\treturn(count)",
       "variants": [{
-        "id": "122",
-        "arguments": {"b": 3, "a": 8}
-      },{
         "id": "123",
-        "arguments": {"b": 5, "a": 6}
+        "arguments": {"arr": [5, 2, 7, 3]}
+      },{
+        "id": "124",
+        "arguments": {"arr": [4, 1, 9, 2]}
       }]
     }
   },{
-    "id": "124",
+    "id": "125",
     "title": "Nested For Loop Investigation 9",
     "content": {
-      "text": "def whileLoopInvestigation(arr):\n\ti = 0\n\tsum = 0\n\twhile i < len(arr) - 1: \n\t\ti = i + 1 \n\t\tif arr[i] % 2 == 1:\n\t\t\tsum = sum + arr[i]  \n\treturn (sum)",
+      "text": "def nestedForLoopInvestigation(arr):\n\tcount = 0\n\tfor i in range(3):\n\t\tfor j in range(len(arr)):\n\t\t\tif arr[j] < 50:\n\t\t\t\tarr[j] = arr[j] + 10\n\t\t\telse:\n\t\t\t\tcount = count + 1\n\treturn(count)",
       "variants": [{
-        "id": "125",
-        "arguments": {"arr": [1, 1, 2, 3, 5]}
-      },{
         "id": "126",
-        "arguments": {"arr": [1, 1, 2, 5, 14]}
+        "arguments": {"arr": [22, 97, 31]}
+      },{
+        "id": "127",
+        "arguments": {"arr": [44, 62, 19]}
       }]
     }
   },{
-    "id": "127",
+    "id": "128",
     "title": "Nested For Loop Investigation 10",
     "content": {
-      "text": "def whileLoopInvestigation(a, b):\n\trollSum = 0\n\twhile a < b:\n\t\trollSum = rollSum + a\n\t\ta+= 1\n\treturn (rollSum) ",
+      "text": "def nestedForLoopInvestigation(a, b):\n\tc = 0\n\tfor i in range(3):\n\t\tfor j in range(2):\n\t\t\tif a < 3 * b:\n\t\t\t\tc = c + a * 2\n\t\t\t\ta = a + 20\n\t\t\telse:\n\t\t\t\t b = b + 10\n\treturn(a, b, c)",
       "variants": [{
-        "id": "128",
-        "arguments": {"b": 13, "a": 8}
-      },{
         "id": "129",
-        "arguments": {"b": 17, "a": 12}
+        "arguments": {"b": 12, "a": 41}
+      },{
+        "id": "130",
+        "arguments": {"b": 9, "a": 37}
       }]
     }
   }]
