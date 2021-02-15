@@ -658,16 +658,16 @@
     "id": "107",
     "title": "Nested For Loop Investigation 3",
     "content": {
-      "text": "def nestedForLoopInvestigation(word):\n\tvowel = \"aeiou\"\n\tcount = 0\n\tfor i in range(word):\n\t\tfor j in range(vowel):\n\t\t\tif i == j:\n\t\t\t\tcount = count + 1\n\treturn(count)",
+      "text": "def nestedForLoopInvestigation(word, vowel):\n\tcount = 0\n\tfor i in word:\n\t\tfor j in vowel:\n\t\t\tif i == j:\n\t\t\t\tcount = count + 1\n\treturn(count)",
       "variants": [{
         "id": "108",
-        "arguments": {"word": "house"}
+        "arguments": {"word": "house", "vowel": "aeiou"}
       },{
         "id": "109",
-        "arguments": {"word": "arid"}
+        "arguments": {"word": "arid", "vowel": "aeiou"}
       },{
         "id": "110",
-        "arguments": {"word": "drove"}
+        "arguments": {"word": "drove", "vowel": "aeiou"}
       }]
     }
   },{
@@ -700,10 +700,10 @@
       "text": "def nestedForLoopInvestigation(noSquares, nums):\n\tfor i in range(len(noSquares)):\n\t\tfor j in nums:\n\t\t\tif j * j == noSquares[i]:\n\t\t\t\tnoSquares[i] = 0\n\treturn(noSquares)",
       "variants": [{
         "id": "117",
-        "arguments": {"noSquares": [9, 64, 81, 25], "nums": [3, 4, 5]}
+        "arguments": {"noSquares": [9, 65, 81, 25], "nums": [3, 4, 5]}
       },{
         "id": "118",
-        "arguments": {"noSquares": [71, 9, 64, 22], "nums": [3, 4, 5]}
+        "arguments": {"noSquares": [71, 9, 47, 22], "nums": [3, 4, 5]}
       }]
     }
   },{
@@ -723,13 +723,13 @@
     "id": "122",
     "title": "Nested For Loop Investigation 8",
     "content": {
-      "text": "def nestedForLoopInvestigation(arr, checkArr):\n\tcount = 0\n\tfor i in arr:\n\t\tfor j in checkArr:\n\t\t\tif i * j == 12:\n\t\t\t\tcount = count + 1\n\treturn(count)",
+      "text": "def nestedForLoopInvestigation(arr, factors):\n\tcount = 0\n\tfor i in arr:\n\t\tfor j in factors:\n\t\t\tif i * j == 12:\n\t\t\t\tcount = count + 1\n\treturn(count)",
       "variants": [{
         "id": "123",
-        "arguments": {"arr": [5, 2, 7, 3], "checkArr": [2, 3, 4, 6]}
+        "arguments": {"arr": [5, 2, 7, 4], "factors": [2, 3, 4, 6]}
       },{
         "id": "124",
-        "arguments": {"arr": [4, 1, 9, 2], "checkArr": [2, 3, 4, 6]}
+        "arguments": {"arr": [4, 1, 9, 2], "factors": [2, 3, 4, 6]}
       }]
     }
   },{
