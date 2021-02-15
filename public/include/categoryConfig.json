@@ -645,13 +645,13 @@
     "id": "104",
     "title": "Nested For Loop Investigation 2",
     "content": {
-      "text": "def nestedForLoopInvestigation(arrIn):\n\tarrOut = [2, 3, 4]\n\tfor i in range(len(arrOut)):\n\t\tfor j in range(len(arrIn)):\n\t\t\tarrIn[j] = arrIn[j] * arrOut[i]\n\treturn(arrIn)",
+      "text": "def nestedForLoopInvestigation(arrIn, arrOut):\n\tfor i in range(len(arrOut)):\n\t\tfor j in range(len(arrIn)):\n\t\t\tarrIn[j] = arrIn[j] * arrOut[i]\n\treturn(arrIn)",
       "variants": [{
         "id": "105",
-        "arguments": {"arr": [1, 2, 3]}
+        "arguments": {"arrIn": [1, 2, 3], "arrOut": [2, 3, 4]}
       },{
         "id": "106",
-        "arguments": {"arr": [5, 1, 2]}
+        "arguments": {"arrIn": [5, 1, 2], "arrOut": [2, 3, 4]}
       }]
     }
   },{
@@ -697,13 +697,13 @@
     "id": "116",
     "title": "Nested For Loop Investigation 6",
     "content": {
-      "text": "def nestedForLoopInvestigation(noSquares):\n\tnums = [3, 4, 5]\n\tfor i in range(len(noSquares)):\n\t\tfor j in nums:\n\t\t\tif j * j == noSquares[i]:\n\t\t\t\tnoSquares[i] = 0\n\treturn(noSquares)",
+      "text": "def nestedForLoopInvestigation(noSquares, nums):\n\tfor i in range(len(noSquares)):\n\t\tfor j in nums:\n\t\t\tif j * j == noSquares[i]:\n\t\t\t\tnoSquares[i] = 0\n\treturn(noSquares)",
       "variants": [{
         "id": "117",
-        "arguments": {"noSquares": [9, 64, 81, 25]}
+        "arguments": {"noSquares": [9, 64, 81, 25], "nums": [3, 4, 5]}
       },{
         "id": "118",
-        "arguments": {"noSquares": [71, 9, 64, 22]}
+        "arguments": {"noSquares": [71, 9, 64, 22], "nums": [3, 4, 5]}
       }]
     }
   },{
@@ -723,13 +723,13 @@
     "id": "122",
     "title": "Nested For Loop Investigation 8",
     "content": {
-      "text": "def nestedForLoopInvestigation(arr):\n\tcheckArr = [2, 3, 4, 6]\n\tcount = 0\n\tfor i in arr:\n\t\tfor j in checkArr:\n\t\t\tif i * j == 12:\n\t\t\t\tcount = count + 1\n\treturn(count)",
+      "text": "def nestedForLoopInvestigation(arr, checkArr):\n\tcount = 0\n\tfor i in arr:\n\t\tfor j in checkArr:\n\t\t\tif i * j == 12:\n\t\t\t\tcount = count + 1\n\treturn(count)",
       "variants": [{
         "id": "123",
-        "arguments": {"arr": [5, 2, 7, 3]}
+        "arguments": {"arr": [5, 2, 7, 3], "checkArr": [2, 3, 4, 6]}
       },{
         "id": "124",
-        "arguments": {"arr": [4, 1, 9, 2]}
+        "arguments": {"arr": [4, 1, 9, 2], "checkArr": [2, 3, 4, 6]}
       }]
     }
   },{
