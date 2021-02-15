@@ -538,6 +538,9 @@ var java_parsing = function() {
                             return {id:new_id(), location:location(start), tag:'literal', type:(peek_type===TokenType.INT_LITERAL?'int':'double'), value:t.value*-1};
                         }
                         throw_error(t.position, "only integers can be negative");
+                    } else if (t.value === '[') {
+                        let arr = match_delimited_list(function(){return match_expression(0);}, ',', true, "[]");
+                        return {id:new_id(), location:location(start), tag:'literal', type:'array', value:arr};
                     } else { // TODO: add lists here
                         console.log(t);
                         throw_error(t.position, "( is the only symbol that can prefix an expression");
@@ -604,12 +607,12 @@ var java_parsing = function() {
         }
 
         /// match a list of items delimited by a symbol (e.g., comma or semicolon)
-        function match_delimited_list(matchfn, delimiter, do_skip_open_parn) {
+        function match_delimited_list(matchfn, delimiter, do_skip_open_parn, brackets="()") {
             var arr = [];
             if (!do_skip_open_parn) {
-                match_symbol("(");
+                match_symbol(brackets[0]);
             }
-            if (!peek_symbol(")")) {
+            if (!peek_symbol(brackets[1])) {
                 while (true) {
                     arr.push(matchfn());
                     if (peek_symbol(delimiter)) {
@@ -619,7 +622,7 @@ var java_parsing = function() {
                     }
                 }
             }
-            match_symbol(")");
+            match_symbol(brackets[1]);
             return arr;
         }
 

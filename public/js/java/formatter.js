@@ -102,7 +102,7 @@ var java_formatter = function() {
                             line.append('[');
                             if (arg.length > 0) firstIter = true;
                             for (let item of arg) {
-                                if (!firstIter) line.append(',')
+                                if (!firstIter) line.append(', ')
                                 firstIter = false;
                                 line.append(item);
                             }
@@ -283,9 +283,22 @@ var java_formatter = function() {
                 elem.text(node.value);
                 break;
 
+            // case undefined: // TODO: sometimes literals are unmarked
+            //     if (!node.hasOwnProperty('type')) throw new Error("unknown ast tag " + node.tag);
             case 'literal':
-                elem.addClass("java-literal");
-                elem.text(typeof node.value === 'number' ? node.value : '"' + node.value + '"');
+                elem.addClass("java-literal")
+                if (node.type === 'array') {
+                    elem.append('[')
+                    if (node.value.length > 0) firstIter = true;
+                    for (let item of node.value) {
+                        if (!firstIter) elem.append(', ');
+                        firstIter = false;
+                        elem.append(to_dom(item, options, indent_level));
+                    }
+                    elem.append(']');
+                    break;
+                }
+                elem.text(typeof node.value === 'number' ? node.value : "'" + node.value + "'");
                 break;
 
             case 'paren_expr':
