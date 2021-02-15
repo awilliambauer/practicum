@@ -66,6 +66,14 @@ function TPLAlgorithm() {
         [no_step] do {
             [interactive("next_line")] this_is_the_next_line_that_will_execute = helper.get_the_next_line_in_this_block_to_execute(parent, this_is_the_next_line_that_will_execute, condition_outcome);
 
+            [no_step] if (helper.is_this_a_return_statement(this_is_the_next_line_that_will_execute)) {
+                let the_return_value_of_the_function_is_determined_here;
+                the_return_value_of_the_function_is_determined_here = helper.get_return_output(this_is_the_next_line_that_will_execute, variables); // TODO: better text, highlight
+                [prompt]
+                "The print statement below prints out the value(s) that the function returned. Enter that solution in the answer box!";
+                return;
+            }
+
             [no_step]
             if (helper.is_if(this_is_the_next_line_that_will_execute)) {
                 [prompt]
@@ -150,8 +158,11 @@ function TPLAlgorithm() {
                 [interactive("update_variable")]
                 update_the_variable_in_the_variable_bank = helper.assign_the_new_value_to_the_variable(variables, this_is_the_next_line_that_will_execute);
                 //this_is_the_next_line_that_will_execute = helper.get_the_next_line_in_this_block_to_execute(parent, this_is_the_next_line_that_will_execute, condition_outcome);
-                [prompt]
-                "Now we can move back out of our clause to the main part of the function and skip any else if or else statements that come later.";
+                [no_step]
+                if (helper.is_there_another_line_to_execute(parent, this_is_the_next_line_that_will_execute, condition_outcome) == false) {
+                    [prompt]
+                    "Now we can move back out of our clause to the main part of the function and skip any else if or else statements that come later.";
+                }
             }
 
         } while (helper.is_there_another_line_to_execute(parent, this_is_the_next_line_that_will_execute, condition_outcome));

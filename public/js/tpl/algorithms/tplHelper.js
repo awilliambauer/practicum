@@ -447,9 +447,6 @@ function TplHelper() {
         var variable = {};
         variable.name = stmt.expression.args[0].value;
         variable.value = result.value;
-        if (variable.name === "k" || variable.name === "l") {
-            console.log("Iteration variable ", variable.name, variable.value);
-        }
         return variable;
     };
 
