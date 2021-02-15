@@ -182,6 +182,14 @@ function TPLAlgorithm() {
         do {
             [interactive("next_line")] this_is_the_next_line_that_will_execute = helper.get_the_next_line_in_this_block_to_execute(parent, this_is_the_next_line_that_will_execute, condition_outcome);
 
+            [no_step] if (helper.is_this_a_return_statement(this_is_the_next_line_that_will_execute)) {
+                let the_return_value_of_the_function_is_determined_here;
+                the_return_value_of_the_function_is_determined_here = helper.get_return_output(this_is_the_next_line_that_will_execute, variables); // TODO: better text, highlight
+                [prompt]
+                "The print statement below prints out the value(s) that the function returned. Enter that solution in the answer box!";
+                return;
+            }
+
             [no_step]
             if (helper.is_if(this_is_the_next_line_that_will_execute)) {
                 let this_is_the_conditional_of_an_if_statement: AstNode;
