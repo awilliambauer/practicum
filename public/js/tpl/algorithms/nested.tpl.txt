@@ -300,7 +300,7 @@ function TPLAlgorithm() {
 
                         let this_is_the_next_index_for_the_inner_loop_array: ArrayElement;
                         [interactive("array_element_get")]
-                        this_is_the_next_index_for_the_inner_loop_array = helper.loop_array_index(variables, lets_visualize_our_sequence_with_an_array, true);
+                        this_is_the_next_index_for_the_inner_loop_array = helper.loop_array_index(variables, lets_visualize_our_inner_sequence_with_an_array, true);
                     }
 
                     [no_step]
