@@ -108,8 +108,22 @@ var controller = (function() {
         for (var variable in args) {
             var arrayString;
             if (Array.isArray(args[variable])) {
-                arrayString = "{" + args[variable] + "}";
-            } else {
+                arrayString = "[";
+                var firstIter = false;
+                if (args[variable].length > 0) firstIter = true;
+                for (let item of args[variable]) {
+                    if (!firstIter) {
+                        arrayString = arrayString + ',';
+                        arrayString = arrayString + ' ';
+                    }
+                    firstIter = false;
+                    arrayString = arrayString + item;
+                }
+                arrayString = arrayString + "]";
+            } else if (typeof args[variable] === "string") {
+                arrayString = "\"" + args[variable] + "\"";
+            }
+            else {
                 arrayString = args[variable];
             }
             callVals.push(arrayString);
@@ -326,6 +340,8 @@ var controller = (function() {
                   let word = variableBankObject[variable].value
                     .map((item) => item.value)
                     .join("");
+
+                  word = "\"" + word + "\"";
 
                   listCell2
                     .append("span")

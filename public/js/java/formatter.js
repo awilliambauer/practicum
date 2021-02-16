@@ -107,7 +107,12 @@ var java_formatter = function() {
                                 line.append(item);
                             }
                             line.append(']');
-                        } else line.append(arg);
+                        }
+                        else if (typeof arg === "string") {
+                            line.append("\"");
+                            line.append(arg);
+                            line.append("\"");
+                        }else line.append(arg);
                     });
                     line.append('))');
                 }
