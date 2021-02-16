@@ -37,7 +37,7 @@ var csed = (function() {
     var ENABLE_TELEMETRY_LOGGING = false;
 
     function setupLogging(username) {
-        var enabled_problem_types = ["expressions", "if_else", "array", "nested"];
+        var enabled_problem_types = ["while", "if_else", "array", "nested"];
         if (ENABLE_TELEMETRY_LOGGING) {
             var LOGGING_BASE_URL = window.location.protocol + "//" + window.location.hostname + ":" + LOGGING_PORT;
             //var LOGGING_BASE_URL = "https://dev-olio.cs.washington.edu" + ":" + LOGGING_PORT;
@@ -572,7 +572,7 @@ var csed = (function() {
                     throw new Error("lab number " + labNo + " not supported");
             }
         } else {
-            enabledCategories = ["default-expressions", "default-if_else", "default-array", "default-nested"];
+            enabledCategories = ["default-while", "default-if_else", "default-array", "default-nested"];
         }
     }
 
