@@ -20,7 +20,7 @@ var java_simulator = function() {
                 return evaluate_expression(context, expr.value);
                 break;
             case 'binop':
-                console.log("The binary operation at this point is: ", expr);
+                
                 arg1 = evaluate_expression(context, expr.args[0]);
                 arg2 = evaluate_expression(context, expr.args[1]);
                 arg1v = arg1.value;
@@ -76,10 +76,10 @@ var java_simulator = function() {
             //         default: throw new Error("Unknown postfix operator " + expr.operator);
             //     }
             case 'literal':
-                console.log("The expression for the literal is: ", expr);
+                
                 return {type: expr.type, value: expr.value};
             case 'identifier':
-                console.log("The expression for the identifier is: ", expr);
+                
                 r = context[expr.value];
                 if (!r) throw new Error("unknown identifier " + expr.value);
                 return r;
@@ -148,7 +148,7 @@ var java_simulator = function() {
         switch (stmt.tag) {
             case 'expression':
             case 'declaration':
-                console.log("Execute Statement that is a declaration: ", stmt);
+                
                 return this.evaluate_expression(context, stmt.expression);
             default: throw new Error("unknown statement type " + stmt.tag);
         }

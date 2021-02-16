@@ -533,6 +533,7 @@ var simulator_parsing = function() {
                         case "null": return create('literal', null);
                         default: throw_error(t.position, "Keyword " + t.value + " cannot be used as an expression.");
                     }
+                    break;
                 case TokenType.SYMBOL:
                     switch (t.value) {
                         case '(':
@@ -541,6 +542,7 @@ var simulator_parsing = function() {
                             return e;
                         default: throw_error(t.position, "Symbol " + t.value + " cannot be used as an expression.");
                     }
+                    break;
                 default: throw_error(t.position, "Expected expression");
             }
         }

@@ -187,8 +187,8 @@ var controller = (function() {
             responseType = null;
         }
 
-        console.log("in step with state", state);
-        console.log(state.hasOwnProperty("askForResponse"));
+        
+        
 
         // check for disabling buttons and keybresses
         if (waitingForResponse && (responseType === 'next_line' || responseType === 'array_element_click' || responseType === 'array_element_get')) {
@@ -208,7 +208,7 @@ var controller = (function() {
         // check for when we are interactively asking for a line click
         if (waitingForResponse && responseType === 'next_line') {
             // change the highlight color for the previous line
-            console.log("we should never be here!");
+            
             $(".line_highlight").addClass("prev_line_highlight");
         } else {
             // remove any prev line highlights
@@ -806,7 +806,7 @@ var controller = (function() {
                 }
                 else if(correctAnswer[0] !== undefined) {
                     if (correctAnswer[0].type === "array") {
-                        console.log("Checking array answer: ", correctVariable, userVariable, correctAnswer)
+                        
                         correctVariable[correctAnswer[0].name] = [];
                         userVariable[correctAnswer[0].name] = [];
                         arrayTable.selectAll(".arrayVarValue").each(function (d, i) {
@@ -868,7 +868,7 @@ var controller = (function() {
             else {
                 var input = d3.select(this).select(".bank_variable_value").select(".varValue");
                 if (input.node() !== null) {
-                    console.log("The correct answer is: ", correctAnswer);
+                    
                     var typeString;
                     if (Array.isArray(correctAnswer)) {
                         typeString = correctAnswer[0].type === "string";
@@ -895,7 +895,7 @@ var controller = (function() {
                             correctValue = correctAnswer.find(function (v) {
                                 return v.name === d3.select(this).select(".bank_variable_label").select(".bank_variable").html();
                             }, this).value;
-                            console.log("The correct value in the later part is: ", correctValue);
+                            
                         }
                     } else if (typeString) {
                         correctValue = correctAnswer.value.replace(/^['"]+|['"]+$/g,"");
@@ -1144,10 +1144,10 @@ var controller = (function() {
         userSolution = userSolution.replace(/\(/g,'');
         userSolution = userSolution.replace(/\)/g,'');
         userSolution = userSolution.split(',').map(substr => substr.replace(/^['"]+|['"]+$/g,"")).join(',');
-        console.log("The user solution state is: ", userSolution);
+        
         // create string of raw array values from correct solution
         var solutionState = simulatorInterface.getFinalState();
-        console.log(solutionState);
+        
         var correctSolution = solutionState.variables.in_scope.the_return_value_of_the_function_is_determined_here.value;
         correctSolution = correctSolution.split(',').map(substr => substr.replace(/^['"]+|['"]+$/g,"")).join(',');
         // var correctSolution = "";
@@ -1155,7 +1155,7 @@ var controller = (function() {
         //     correctSolution = correctSolution + correctSolutionArray[i] + ",";
         // }
         // correctSolution = correctSolution.substring(0, correctSolution.length-1);
-        console.log("The correct solution is: ", correctSolution);
+        
         var correct = false;
         if (String(userSolution) === String(correctSolution)) {
             correct = true;

@@ -15,10 +15,10 @@ var java_parsing = function() {
     /// pos can either be a token or a character stream position object
     /// msg is a string containing a human-readable description of the type of error.
     function throw_error(pos, msg) {
-        console.log(pos);
-        console.log(msg);
+        
+        
         var str = sprintf("ERROR @ {0}:{1}: {2}", pos.line + 1, pos.col + 1, msg);
-        console.log(str);
+        
         throw new Error(str);
     }
 
@@ -71,7 +71,7 @@ var java_parsing = function() {
         self.home = function() {
             bufidx -= col;
             col = 0;
-            console.log(str.charAt(bufidx) === "\t");
+            
         }
 
         return self;
@@ -221,14 +221,14 @@ var java_parsing = function() {
                 cs.next();
 
                 token = Token.string(str);
-                console.log("Value at Lexer.get_next(string) is ", token);
+                
             } else {
-                console.log(`The character that's throwing a problem is ${c}`);
+                
                 throw_error(pos, sprintf("Unexpected character '{0}'", c));
             }
 
             skip_whitespace();
-            console.log("Value at Lexer.get_next() is ", token);
+            
 
             token.position = pos;
             return token;
@@ -239,14 +239,14 @@ var java_parsing = function() {
                 current_token = get_next();
                 is_peeked = true;
             }
-            console.log("Value at Lexer.peek() is ", current_token);
+            
             return current_token;
         }
         self.peek = peek;
 
         function next() {
             var token = peek();
-            console.log("Value at Lexer.next() is ", token);
+            
             is_peeked = false;
             last_position = cs.position();
             return token;
@@ -346,10 +346,10 @@ var java_parsing = function() {
                 if (lex.iseof()) return stmts;
                 for (let i = 0; i < indent_level; i++) {
                     // first line after block must have less indentation
-                    if (indent_level === 1) console.log(j + " " + i);
+                    // if (indent_level === 1) 
                     if (!peek_symbol("\t")) {
                         lex.home();
-                        if (indent_level === 1) console.log(lex.peek());
+                        // if (indent_level === 1) 
                         return stmts;
                     }
                     match_symbol("\t")
@@ -526,7 +526,7 @@ var java_parsing = function() {
         /// rbp means "right bind power". Top-level expressions should be parsed with match_expression(0).
         function match_expression(rbp) {
             var left = match_prefix();
-            console.log("the left of the prefix is: ", left);
+            
             while (!lex.iseof() && rbp < binop_bind_power(lex.peek())) {
                 left = match_infix(left);
             }
@@ -537,7 +537,7 @@ var java_parsing = function() {
         function match_prefix() {
             var start = lex.position();
             var t = lex.next();
-            console.log("The token at this point is: ", t);
+            
             switch (t.type) {
                 // literals
                 case TokenType.INT_LITERAL:
@@ -564,7 +564,7 @@ var java_parsing = function() {
                         let arr = match_delimited_list(function(){return match_expression(0);}, ',', true, "[]");
                         return {id:new_id(), location:location(start), tag:'literal', type:'array', value:arr};
                     } else { // TODO: add lists here
-                        console.log(t);
+                        
                         throw_error(t.position, "( is the only symbol that can prefix an expression");
                         break;
                     }
@@ -761,16 +761,16 @@ var java_parsing = function() {
 
 if (typeof module !== 'undefined' && typeof process !== 'undefined') {
     if (process.argv.length <= 2) {
-        console.log("Usage: node parser.js <filename>\nWill print a json AST to stdout.");
+        
     } else {
         var filename = process.argv[2];
         var fs = require('fs');
         fs.readFile(filename, 'utf8', function (err,data) {
             if (err) {
-                console.log(err);
+                
             } else {
                 var ast = java_parsing.parse_program(data);
-                console.log(JSON.stringify(ast));
+                
             }
         });
     }

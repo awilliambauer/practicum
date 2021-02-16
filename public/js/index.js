@@ -262,9 +262,9 @@ var csed = (function() {
         } else if (selection === "Independent") {
             
           fading_level = 1;
-          console.log("We have set the fading level to: ", fading_level);
+          
         }
-        console.log("Fading level in set is: ", fading_level);
+        
     }
 
     function modalFadingLevel(problemConfig, callback_obj, initial_state, problemUI) {
@@ -281,7 +281,7 @@ var csed = (function() {
         // When user clicks button, set the fading level and close the modal
         doneBtn.onclick = function () {
             let selection = d3.select('input[name="difficulty-level"]:checked').node().value;
-            console.log("The selection is: ", selection);
+            
             setFadingLevel(selection);
             modal.style.display = "none";
             d3.select("#difficultyLevel").append("span").html(`Difficulty level: ${selection}`);
@@ -512,7 +512,7 @@ var csed = (function() {
     // }
     //
     // function sendConsentFormResponse(data) {
-    //     console.log("Sending consent data: " + data);
+    //     
     //
     //     Logging.log_event_with_promise({
     //         type: Logging.ID.Consent,

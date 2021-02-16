@@ -188,7 +188,7 @@ function simulator(ast, globals) {
                 if (!fn) throw new Error("no such function " + expr.object.name);
                 var fn_this = objs[objs.length - 2];
                 var args = expr.args.map(function (arg) { return evaluate(arg, state)});
-                console.log("The arguments in simulator.js at line 191 are: ", args);
+                
                 var ret = fn.apply(fn_this, args);
                 sr_info.name = expr.object.name;
                 sr_info.result = ret;
@@ -310,7 +310,7 @@ function simulator(ast, globals) {
                 }
                 break;
             case "return":
-                console.log("encountered return");
+                
                 while (last(call_stack).marker !== "function") call_stack.pop();
                 last(call_stack).to_execute = [];
                 return null;
@@ -318,7 +318,7 @@ function simulator(ast, globals) {
                 throw new Error("node tag not recognized " + JSON.stringify(stmt));
         }
 
-        // console.log("This is the current call stack: ", copy(call_stack));
+        // 
         var cs = copy(call_stack);
         return {
             // the problem state

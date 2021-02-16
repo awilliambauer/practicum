@@ -362,7 +362,7 @@ function TplHelper() {
     }
 
     this.does_this_conditional_evaluate_to_true = function(variable_bank, condition_stmt) {
-        console.log("Value at conditional: ", condition_stmt);
+        
         var e = sim.evaluate_expression(variable_bank, condition_stmt);
         if (e.type !== 'bool') throw new Error("Condition is not of type boolean!");
         return e.value;
@@ -461,7 +461,7 @@ function TplHelper() {
     };
 
     this.assign_the_new_value_to_the_variable = function(variable_bank, stmt) {
-        console.log('Assigning value for: ', variable_bank, stmt);
+        
         var result = this.execute_statement(variable_bank, stmt);
         var variable = {};
         variable.name = stmt.expression.args[0].value;
@@ -475,8 +475,8 @@ function TplHelper() {
     };
 
     this.is_this_the_last_line = function(ast) {
-        console.log("Full ast is ", ast.body);
-        console.log("Line is " + (lineNum+1) + " of " + ast.body.length);
+        
+        
         return lineNum !== ast.body.length - 1;
     }; // TODO: factor out
 
@@ -516,7 +516,7 @@ function TplHelper() {
         return this.create_print_string(return_vals, "")
         // var return_output = this.create_return_output(return_args, "");
         //
-        // console.log(return_args);
+        // 
         //
         // for (var variable_name in state.vars) {
         //     while (return_output.indexOf(variable_name) !== -1) {
@@ -524,12 +524,12 @@ function TplHelper() {
         //     }
         // }
         //
-        // console.log(return_output);
+        // 
     };
 
     this.create_print_string = function(vals, string) {
         for (let i = 0; i < vals.length; i++) {
-            if (vals[i].hasOwnProperty)
+            // if (vals[i].hasOwnProperty)
             if (!vals[i].hasOwnProperty("tag") || vals[i]["tag"] === "identifier" || vals[i]["tag"] === "literal") {
                 if (!(vals[i]["type"] === "array")) string += vals[i]["value"];
                 else string += this.create_print_string(vals[i]["value"], string);
