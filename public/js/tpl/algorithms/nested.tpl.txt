@@ -157,6 +157,8 @@ function TPLAlgorithm() {
                 let the_return_value_of_the_function_is_determined_here;
                 the_return_value_of_the_function_is_determined_here = helper.get_return_output(this_is_the_next_line_that_will_execute, variables); // TODO: better text, highlight
                 [prompt]
+                "The function ends as soon as we hit a return statement regardless of any more for loop iterations or anything else happening in the problem.";
+                [prompt]
                 "The print statement below prints out the value(s) that the function returned. Enter that solution in the answer box!";
                 return;
             }
@@ -269,6 +271,8 @@ function TPLAlgorithm() {
                         [no_step] if (helper.is_this_a_return_statement(this_is_the_next_line_that_will_execute)) {
                             let the_return_value_of_the_function_is_determined_here;
                             the_return_value_of_the_function_is_determined_here = helper.get_return_output(this_is_the_next_line_that_will_execute, variables); // TODO: better text, highlight
+                            [prompt]
+                            "The function ends as soon as we hit a return statement regardless of any more for loop iterations or anything else happening in the problem.";
                             [prompt]
                             "The print statement below prints out the value(s) that the function returned. Enter that solution in the answer box!";
                             return;
