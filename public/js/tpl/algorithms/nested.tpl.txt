@@ -80,19 +80,12 @@ function TPLAlgorithm() {
         [prompt]
         "The loop variable will be iterating through a loop sequence that Python generates from the for call.";
 
-        [prompt]
-        "First we set the initial value of our loop variable to the starting element of the sequence.";
-
         [no_step]
         if (helper.is_loop_arr_type(loop)) {
-            let add_the_starting_value_for_the_loop_variable_to_the_variable_bank: Variable;
-            [interactive("add_variable")]
-            add_the_starting_value_for_the_loop_variable_to_the_variable_bank = helper.add_this_to_the_variable_bank(variables, helper.get_loop_init_variable(variables, this_is_the_loop_variable, this_is_the_loop_iterable, false));
-
             [prompt]
             "The for loop will end when the loop variable has moved through each element in the sequence. Now let’s move on into the for loop.";
 
-            lets_visualize_our_sequence = helper.get_iterable_array(false);
+            lets_visualize_our_sequence = helper.get_iterable_array(variables, this_is_the_loop_iterable, false);
 
             let add_the_sequence_to_the_variable_bank: Variable;
             [interactive("add_variable")]
@@ -100,13 +93,9 @@ function TPLAlgorithm() {
 
             let this_is_the_first_index_for_the_loop_sequence: ArrayElement;
             [interactive("array_element_get")]
-            this_is_the_first_index_for_the_loop_sequence = helper.loop_array_index(variables, lets_visualize_our_sequence, false);
+            this_is_the_first_index_for_the_loop_sequence = helper.loop_array_index(variables, lets_visualize_our_sequence, false, true);
         } else {
-            let add_the_starting_value_for_the_loop_variable_to_the_variable_bank: Variable;
-            [interactive("add_variable")]
-            add_the_starting_value_for_the_loop_variable_to_the_variable_bank = helper.add_this_to_the_variable_bank(variables, helper.get_loop_init_variable(variables, this_is_the_loop_variable, this_is_the_loop_iterable, false));
-
-            lets_visualize_our_sequence = helper.get_iterable_array(false);
+            lets_visualize_our_sequence = helper.get_iterable_array(variables, this_is_the_loop_iterable, false);
 
             let add_the_sequence_to_the_variable_bank: Variable;
             [interactive("add_variable")]
@@ -114,11 +103,20 @@ function TPLAlgorithm() {
 
             let this_is_the_first_index_for_the_loop_sequence: ArrayElement;
             [interactive("array_element_get")]
-            this_is_the_first_index_for_the_loop_sequence = helper.loop_array_index(variables, lets_visualize_our_sequence, false);
+            this_is_the_first_index_for_the_loop_sequence = helper.loop_array_index(variables, lets_visualize_our_sequence, false, true);
 
             [prompt]
-            "The for loop will end when the loop variable has moved through each element in the sequence. Now let’s move on into the for loop.";
+            "The for loop will end when the loop variable has moved through each element in the sequence.";
         }
+        [prompt]
+        "Let's set the value of our loop variable to the first element of the outer sequence.";
+
+        let add_the_starting_value_for_the_loop_variable_to_the_variable_bank: Variable;
+        [interactive("add_variable")]
+        add_the_starting_value_for_the_loop_variable_to_the_variable_bank = helper.add_this_to_the_variable_bank(variables, helper.get_loop_init_variable(variables, this_is_the_loop_variable, this_is_the_loop_iterable, false));
+
+        [prompt]
+        "Now let’s move on into the for loop.";
     }
 
     let iterations: Boolean;
@@ -133,13 +131,13 @@ function TPLAlgorithm() {
             let now_we_need_to_update_the_loop_variable: AstNode;
             now_we_need_to_update_the_loop_variable = loop.increment;
 
+            let this_is_the_next_index_for_the_loop_sequence: ArrayElement;
+            [interactive("array_element_get")]
+            this_is_the_next_index_for_the_loop_sequence = helper.loop_array_index(variables, lets_visualize_our_sequence, false, false);
+
             let update_the_value_of_the_loop_variable_in_the_variable_bank: Variable;
             [interactive("update_variable")]
             update_the_value_of_the_loop_variable_in_the_variable_bank = helper.execute_the_loop_increment(variables, loop.variable, false);
-
-            let this_is_the_next_index_for_the_loop_sequence: ArrayElement;
-            [interactive("array_element_get")]
-            this_is_the_next_index_for_the_loop_sequence = helper.loop_array_index(variables, lets_visualize_our_sequence, false);
         }
 
         [no_step]
@@ -184,19 +182,12 @@ function TPLAlgorithm() {
                 [prompt]
                 "Again the loop variable starts at index 0 and will be moving through the sequence Python generates.";
 
-                [prompt]
-                "We need to set the initial value of our loop variable to the starting element of the sequence.";
-
                 [no_step]
                 if (helper.is_loop_arr_type(inner_loop)) {
-                    let add_the_starting_value_for_the_loop_variable_to_the_variable_bank: Variable;
-                    [interactive("add_variable")]
-                    add_the_starting_value_for_the_loop_variable_to_the_variable_bank = helper.add_this_to_the_variable_bank(variables, helper.get_loop_init_variable(variables, this_is_the_inner_loop_variable, this_is_the_inner_loop_iterable, true));
-
                     [prompt]
                     "The for loop will end when the loop variable has moved through each element in the sequence. Now let’s move on into the for loop.";
 
-                    lets_visualize_our_inner_sequence = helper.get_iterable_array(true);
+                    lets_visualize_our_inner_sequence = helper.get_iterable_array(variables, this_is_the_inner_loop_iterable, true);
 
                     let add_the_inner_sequence_to_the_variable_bank: Variable;
                     [interactive("add_variable")]
@@ -204,13 +195,9 @@ function TPLAlgorithm() {
 
                     let this_is_the_first_index_for_the_inner_loop_sequence: ArrayElement;
                     [interactive("array_element_get")]
-                    this_is_the_first_index_for_the_inner_loop_sequence = helper.loop_array_index(variables, lets_visualize_our_inner_sequence, true);
+                    this_is_the_first_index_for_the_inner_loop_sequence = helper.loop_array_index(variables, lets_visualize_our_inner_sequence, true, true);
                 } else {
-                    let add_the_starting_value_for_the_loop_variable_to_the_variable_bank: Variable;
-                    [interactive("add_variable")]
-                    add_the_starting_value_for_the_loop_variable_to_the_variable_bank = helper.add_this_to_the_variable_bank(variables, helper.get_loop_init_variable(variables, this_is_the_inner_loop_variable, this_is_the_inner_loop_iterable, true));
-
-                    lets_visualize_our_inner_sequence = helper.get_iterable_array(true);
+                    lets_visualize_our_inner_sequence = helper.get_iterable_array(variables, this_is_the_inner_loop_iterable, true);
 
                     let add_the_inner_sequence_to_the_variable_bank: Variable;
                     [interactive("add_variable")]
@@ -218,11 +205,20 @@ function TPLAlgorithm() {
 
                     let this_is_the_first_index_for_the_inner_loop_sequence: ArrayElement;
                     [interactive("array_element_get")]
-                    this_is_the_first_index_for_the_inner_loop_sequence = helper.loop_array_index(variables, lets_visualize_our_inner_sequence, true);
+                    this_is_the_first_index_for_the_inner_loop_sequence = helper.loop_array_index(variables, lets_visualize_our_inner_sequence, true, true);
 
                     [prompt]
-                    "The for loop will end when the loop variable has moved through each element in the sequence. Now let’s move on into the for loop.";
+                    "The for loop will end when the loop variable has moved through each element in the sequence.";
                 }
+                [prompt]
+                "Let’s set our loop variable to the first element of the inner sequence.";
+
+                let add_the_starting_value_for_the_loop_variable_to_the_variable_bank: Variable;
+                [interactive("add_variable")]
+                add_the_starting_value_for_the_loop_variable_to_the_variable_bank = helper.add_this_to_the_variable_bank(variables, helper.get_loop_init_variable(variables, this_is_the_inner_loop_variable, this_is_the_inner_loop_iterable, true));
+
+                [prompt]
+                "Now let’s move on into the for loop.";
 
                 let inner_iterations: Boolean;
                 [no_step]
@@ -236,13 +232,13 @@ function TPLAlgorithm() {
                         let now_we_need_to_update_the_inner_loop_variable: AstNode;
                         now_we_need_to_update_the_inner_loop_variable = inner_loop.increment;
 
+                        let this_is_the_next_index_for_the_inner_loop_sequence: ArrayElement;
+                        [interactive("array_element_get")]
+                        this_is_the_next_index_for_the_inner_loop_sequence = helper.loop_array_index(variables, lets_visualize_our_inner_sequence, true, false);
+
                         let update_the_value_of_the_inner_loop_variable_in_the_variable_bank: Variable;
                         [interactive("update_variable")]
                         update_the_value_of_the_inner_loop_variable_in_the_variable_bank = helper.execute_the_loop_increment(variables, inner_loop.variable, true);
-
-                        let this_is_the_next_index_for_the_inner_loop_sequence: ArrayElement;
-                        [interactive("array_element_get")]
-                        this_is_the_next_index_for_the_inner_loop_sequence = helper.loop_array_index(variables, lets_visualize_our_inner_sequence, true);
                     }
 
                     [no_step]

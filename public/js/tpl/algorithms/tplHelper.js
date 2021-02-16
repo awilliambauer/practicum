@@ -161,7 +161,8 @@ function TplHelper() {
         return ast.body[0];
     }
 
-    this.get_iterable_array = function(is_inner) {
+    this.get_iterable_array = function(variable_bank, iterable, is_inner) {
+        this.initialize_loop_iterable(variable_bank, iterable, is_inner);
         return !is_inner ? this.iterable : this.iterable2;
     }
 
@@ -261,7 +262,7 @@ function TplHelper() {
 
     //TODO: find where this is called and change input
     this.get_loop_init_variable = function(variable_bank, iter_variable, iterable, is_inner) {
-        this.initialize_loop_iterable(variable_bank, iterable, is_inner);
+        //this.initialize_loop_iterable(variable_bank, iterable, is_inner);
         if (iter_variable.tag !== 'identifier') throw new Error("for loop initializer isn't an int declaration!");
         return this.create_variable(variable_bank, this.next_loop_variable_value(iter_variable, is_inner));
     };
@@ -405,9 +406,15 @@ function TplHelper() {
         return array;
     };
 
-    this.loop_array_index = function(variable_bank, array, is_inner) {
+    this.loop_array_index = function(variable_bank, array, is_inner, first) {
         let cur_iterable = !is_inner ? this.iterable : this.iterable2;
-        var val = sim.evaluate_expression(variable_bank, {tag: 'literal', type: 'int', value: cur_iterable.idx});
+        var val;
+        if(first) {
+            val = sim.evaluate_expression(variable_bank, {tag: 'literal', type: 'int', value: cur_iterable.idx});
+        }
+        else {
+            val = sim.evaluate_expression(variable_bank, {tag: 'literal', type: 'int', value: cur_iterable.idx + 1});
+        }
         val["array"] = array;
         return val;
     };
