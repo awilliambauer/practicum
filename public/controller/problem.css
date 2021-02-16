@@ -319,7 +319,7 @@ lightest green: #E5FCC2
 }
 
 .problem .array_label {
-    padding-top: 22px;
+    /* padding-top: 22px; */
     padding-right: 10px;
     text-align: right;
     display: flex;
@@ -335,7 +335,7 @@ lightest green: #E5FCC2
     padding-bottom: 0px;
     font-size: 11pt;
     width: 40px;
-    height:27px;
+    /* height:27px; */
 }
 
 .problem .bank_variable_array_value {

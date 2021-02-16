@@ -202,8 +202,8 @@
     }
   }]
 }, {
-  "name": "default-expressions",
-  "category": "expressions",
+  "name": "default-whileLoop",
+  "category": "whileLoop",
   "title": "While Loop Investigation",
   "description": "Practice while loops",
   "problems": [{
@@ -509,8 +509,8 @@
     }
   ]
 }, {
-  "name": "default-array",
-  "category": "array",
+  "name": "default-forLoop",
+  "category": "forLoop",
   "title": "For Loop Investigation",
   "description": "Practice for loops",
   "problems": [{
