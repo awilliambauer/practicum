@@ -472,7 +472,8 @@ var controller = (function() {
                         break;
 
                     case "AstNode":
-                        if(variable === "this_is_the_conditional_of_an_if_statement" || variable === "this_is_the_conditional_of_a_while_statement") {
+                        if(variable === "this_is_the_conditional_of_an_if_statement" || variable === "this_is_the_conditional_of_a_while_statement"
+                            || variable === "this_is_the_inner_loop_iterable" || variable === "this_is_the_inner_loop_variable") {
                             if(state.variables.in_scope["this_is_the_next_line_that_will_execute"].value.location.start.line
                                 === varObject.value.location.start.line) {
                                 highlightASTNode(varObject.value);
