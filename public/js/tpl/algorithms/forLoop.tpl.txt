@@ -183,6 +183,8 @@ function TPLAlgorithm() {
                 let the_return_value_of_the_function_is_determined_here;
                 the_return_value_of_the_function_is_determined_here = helper.get_return_output(this_is_the_next_line_that_will_execute, variables); // TODO: better text, highlight
                 [prompt]
+                "The function ends as soon as we hit a return statement regardless of any more for loop iterations or anything else happening in the problem.";
+                [prompt]
                 "The print statement below prints out the value(s) that the function returned. Enter that solution in the answer box!";
                 return;
             }
@@ -236,6 +238,13 @@ function TPLAlgorithm() {
                 update_the_variable_in_the_variable_bank = helper.assign_the_new_value_to_the_variable(variables, this_is_the_next_line_that_will_execute);
             }
 
+            [no_step]
+            if ((parent.id != loop.id) && (helper.is_there_another_line_to_execute(parent, this_is_the_next_line_that_will_execute, condition_outcome) == false)) {
+                [no_step]
+                this_is_the_next_line_that_will_execute = parent;
+                [no_step]
+                parent = loop;
+            }
         } while (helper.is_there_another_line_to_execute(parent, this_is_the_next_line_that_will_execute, condition_outcome));
 
         [no_step] if (helper.is_break(this_is_the_next_line_that_will_execute)) {
