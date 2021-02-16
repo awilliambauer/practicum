@@ -280,7 +280,7 @@ var controller = (function() {
     function addVariableBank() {
         // clear the variable bank so we can re-draw it
         d3.select("#variable_list_table").node().innerHTML = "";
-
+        d3.select("#variable_array_table").node().innerHTML = "";
         // grab the variable bank object out fo the in_scope variable list
         var variableBankObject;
         for (var v in state.variables.in_scope) {
@@ -294,15 +294,22 @@ var controller = (function() {
 
             // add all of the currently defined variables to the variable bank
             for (var variable in variableBankObject) {
-                var listRow = d3.select("#variable_list_table").append("tr").attr("class", "variable_list_table_row");
-                var listCell1 = listRow.append("td");
-                var listCell2 = listRow.append("td");
+                var listRow;
+                var listCell1;
+                var listCell2;
+                if (!(variableBankObject[variable].hasOwnProperty("type") && variableBankObject[variable].type === "array")) {
+                    listRow = d3.select("#variable_list_table").append("tr").attr("class", "variable_list_table_row");
+                    listCell1 = listRow.append("td");
+                    listCell2 = listRow.append("td");
+                }
 
                 if (variableBankObject[variable].hasOwnProperty("type") && variableBankObject[variable].type === "array") {
+                    listRow = d3.select("#variable_array_table").append("tr").attr("class", "variable_list_table_row");
+                    listCell1 = listRow.append("td");
+                    listCell2 = listRow.append("td");
                     listCell1.attr("class", "array_label");
                     listCell1.append("span").attr("class", "bank_variable").text(variable);
                     listCell1.append("span").text(" :");
-
                     var arrayTable = listCell2.append("table").attr("class", "bank_variable_array");
                     var indexRow = arrayTable.append("tr");
                     for (var i in variableBankObject[variable].value) {
@@ -359,6 +366,10 @@ var controller = (function() {
                     .attr("class", "bank_variable_value")
                     .text(variableBankObject[variable].value);
                 }
+            }
+            console.log(variableBankObject);
+            if (variableBankObject.hasOwnProperty("loop sequence")) {
+                d3.selectAll(".array_label").attr("class", "array_label has_sequence");
             }
         }
     }
@@ -542,6 +553,7 @@ var controller = (function() {
     // highlights the (single) variable passed in as a paramenter. cannot handle multiple variables at once
     function highlightVariableBank(variable) {
         d3.selectAll(".variable_list_table_row").each(function(d,i) {
+            console.log(d3.select(this).select(".bank_variable").node());
             var varName = d3.select(this).select(".bank_variable").node().innerHTML;
             if (varName === variable.name) {
                 d3.select(this)

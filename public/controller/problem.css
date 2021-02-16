@@ -282,6 +282,12 @@ lightest green: #E5FCC2
     padding-left: 0px;
 }
 
+.problem #variable_bank #variable_array_table {
+    list-style-type: none;
+    font-size: 15pt;
+    padding-left: 0px;
+}
+
 .problem #variable_bank {
     border: 5px solid #547980;
     border-radius: 10px;
@@ -707,6 +713,10 @@ the dynamic styling works correctly.
 
 .problem .hidden {
     visibility: hidden;
+}
+
+.problem .has_sequence {
+    width: 150px;
 }
 
 /* DON'T PUT STUFF BELOW THIS COMMENT!! PLACE ADDITIONAL CODE ABOVE
