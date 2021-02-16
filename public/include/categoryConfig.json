@@ -658,16 +658,16 @@
     "id": "107",
     "title": "Nested For Loop Investigation 3",
     "content": {
-      "text": "def nestedForLoopInvestigation(word, vowel):\n\tcount = 0\n\tfor i in word:\n\t\tfor j in vowel:\n\t\t\tif i == j:\n\t\t\t\tcount = count + 1\n\treturn(count)",
+      "text": "def nestedForLoopInvestigation(word):\n\tvowel = \"aeiou\"\n\tcount = 0\n\tfor i in word:\n\t\tfor j in vowel:\n\t\t\tif i == j:\n\t\t\t\tcount = count + 1\n\treturn(count)",
       "variants": [{
         "id": "108",
-        "arguments": {"word": "house", "vowel": "aeiou"}
+        "arguments": {"word": "house"}
       },{
         "id": "109",
-        "arguments": {"word": "arid", "vowel": "aeiou"}
+        "arguments": {"word": "arid"}
       },{
         "id": "110",
-        "arguments": {"word": "drove", "vowel": "aeiou"}
+        "arguments": {"word": "drove"}
       }]
     }
   },{
