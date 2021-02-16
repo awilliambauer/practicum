@@ -109,9 +109,9 @@ var java_formatter = function() {
                             line.append(']');
                         }
                         else if (typeof arg === "string") {
-                            line.append("\"");
+                            line.append("\'");
                             line.append(arg);
-                            line.append("\"");
+                            line.append("\'");
                         }else line.append(arg);
                     });
                     line.append('))');

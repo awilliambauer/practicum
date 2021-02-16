@@ -121,7 +121,7 @@ var controller = (function() {
                 }
                 arrayString = arrayString + "]";
             } else if (typeof args[variable] === "string") {
-                arrayString = "\"" + args[variable] + "\"";
+                arrayString = "\'" + args[variable] + "\'";
             }
             else {
                 arrayString = args[variable];
@@ -298,7 +298,7 @@ var controller = (function() {
                 var listCell1 = listRow.append("td");
                 var listCell2 = listRow.append("td");
 
-                if (variableBankObject[variable].hasOwnProperty("type") && variableBankObject[variable].type == "array") {
+                if (variableBankObject[variable].hasOwnProperty("type") && variableBankObject[variable].type === "array") {
                     listCell1.attr("class", "array_label");
                     listCell1.append("span").attr("class", "bank_variable").text(variable);
                     listCell1.append("span").text(" :");
@@ -316,19 +316,17 @@ var controller = (function() {
 
                     var valueRow = arrayTable.append("tr");
                     for (var j in variableBankObject[variable].value) {
+                        let val = variableBankObject[variable].value[j].value
                         valueRow
                             .append("td")
                             .attr("class", "bank_variable_array_value")
                             .attr("id", "array-elem-" + j.toString())
-                            .text(variableBankObject[variable].value[j].value)
+                            .text(typeof val === "string" ? "\'" + val.toString() + "\'" : val.toString())
                         ;
                     }
                 }
-                else if (
-                  variableBankObject[variable].hasOwnProperty("type") &&
-                  variableBankObject[variable].type == "string" &&
-                  Array.isArray(variableBankObject[variable].value)
-                ) {
+                else if (variableBankObject[variable].hasOwnProperty("type") &&
+                        (variableBankObject[variable].type === "string" || variableBankObject[variable].type === "char")) {
                   listCell1.attr("class", "bank_variable_label");
                   listCell1
                     .append("span")
@@ -337,11 +335,11 @@ var controller = (function() {
                   listCell1.append("span").text(" :");
 
                   listCell2.attr("style", "text-align: left;");
-                  let word = variableBankObject[variable].value
-                    .map((item) => item.value)
-                    .join("");
-
-                  word = "\"" + word + "\"";
+                  let word = variableBankObject[variable].value;
+                  if (Array.isArray(word)) {
+                    word = word.map((item) => item.value).join("");
+                  }
+                  word = "\'" + word + "\'";
 
                   listCell2
                     .append("span")
@@ -822,13 +820,13 @@ var controller = (function() {
                         });
                     }
                 }
-                else if(correctAnswer.type === "string" && correctAnswer.name === "loop_array") {
+                else if(correctAnswer.type === "string" && correctAnswer.name.includes("loop sequence")) {
                     correctVariable[correctAnswer.name] = [];
                     userVariable[correctAnswer.name] = [];
                     arrayTable.selectAll(".arrayVarValue").each(function(d, i) {
-                        correctValue = correctAnswer.value[i].value;
+                        correctValue = correctAnswer.value[i].value.replace(/^['"]+|['"]+$/g,""); // trim quotations
                         correctVariable[correctAnswer.name].push(correctValue);
-                        userValue = this.value;
+                        userValue = this.value.replace(/^['"]+|['"]+$/g,"");
                         userVariable[correctAnswer.name].push(userValue);
                         if (correctValue !== userValue) {
                             correct = false;
@@ -842,7 +840,8 @@ var controller = (function() {
                         userValue = parseInt(userValue);
                     }
                     if (typeString) {
-                        correctValue = correctAnswer.value[correctAnswer.index.value].value;
+                        correctValue = correctAnswer.value[correctAnswer.index.value].value.replace(/^['"]+|['"]+$/g,"");
+                        userValue = userValue.replace(/^['"]+|['"]+$/g,"");
                     } else {
                         correctValue = parseInt(correctAnswer.value[correctAnswer.index.value].value);
                     }
@@ -881,22 +880,25 @@ var controller = (function() {
 
                     if (!typeString) {
                         userValue = parseInt(userValue);
+                    } else {
+                        userValue = userValue.replace(/^['"]+|['"]+$/g,"");
                     }
                     if (Array.isArray(correctAnswer)) {
-                        typeString = correctAnswer[0].type === "string";
-                        if(typeString) {
-                            var stringArray = correctAnswer.find(function(v) {
+                        if (typeString) {
+                            var stringArray = correctAnswer.find(function (v) {
                                 return v.name === d3.select(this).select(".bank_variable_label").select(".bank_variable").html();
                             }, this).value;
                             correctValue = "";
                             stringArray.forEach(letter => correctValue = correctValue + letter.value);
-                        }
-                        else {
+                            correctValue = correctValue.replace(/^['"]+|['"]+$/g,"");
+                        } else {
                             correctValue = correctAnswer.find(function (v) {
                                 return v.name === d3.select(this).select(".bank_variable_label").select(".bank_variable").html();
                             }, this).value;
                             console.log("The correct value in the later part is: ", correctValue);
                         }
+                    } else if (typeString) {
+                        correctValue = correctAnswer.value.replace(/^['"]+|['"]+$/g,"");
                     } else {
                         correctValue = correctAnswer.value;
                     }
