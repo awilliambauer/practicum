@@ -236,6 +236,13 @@ function TPLAlgorithm() {
                 update_the_variable_in_the_variable_bank = helper.assign_the_new_value_to_the_variable(variables, this_is_the_next_line_that_will_execute);
             }
 
+            [no_step]
+            if ((parent.id != loop.id) && (helper.is_there_another_line_to_execute(parent, this_is_the_next_line_that_will_execute, condition_outcome) == false)) {
+                [no_step]
+                this_is_the_next_line_that_will_execute = parent;
+                [no_step]
+                parent = loop;
+            }
         } while (helper.is_there_another_line_to_execute(parent, this_is_the_next_line_that_will_execute, condition_outcome));
 
         [no_step] if (helper.is_break(this_is_the_next_line_that_will_execute)) {

@@ -323,6 +323,13 @@ function TPLAlgorithm() {
                             update_the_variable_in_the_variable_bank = helper.assign_the_new_value_to_the_variable(variables, this_is_the_next_line_that_will_execute);
                         }
 
+                        [no_step]
+                        if ((inner_parent.id != inner_loop.id) && (helper.is_there_another_line_to_execute(inner_parent, this_is_the_next_line_that_will_execute, inner_condition_outcome) == false)) {
+                            [no_step]
+                            this_is_the_next_line_that_will_execute = inner_parent;
+                            [no_step]
+                            inner_parent = inner_loop;
+                        }
                     } while (helper.is_there_another_line_to_execute(inner_parent, this_is_the_next_line_that_will_execute, inner_condition_outcome));
 
                     [no_step] if (helper.is_break(this_is_the_next_line_that_will_execute)) {
@@ -383,6 +390,14 @@ function TPLAlgorithm() {
                     let update_the_variable_in_the_variable_bank: Variable;
                     [interactive("update_variable")]
                     update_the_variable_in_the_variable_bank = helper.assign_the_new_value_to_the_variable(variables, this_is_the_next_line_that_will_execute);
+                }
+
+                [no_step]
+                if ((parent.id != loop.id) && (helper.is_there_another_line_to_execute(parent, this_is_the_next_line_that_will_execute, condition_outcome) == false)) {
+                    [no_step]
+                    this_is_the_next_line_that_will_execute = parent;
+                    [no_step]
+                    parent = loop;
                 }
 
             }
