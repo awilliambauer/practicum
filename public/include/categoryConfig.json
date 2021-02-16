@@ -517,7 +517,7 @@
     "id": "1",
     "title": "For Loop Investigation 1",
     "content": {
-      "text": "def for_loop_investigation(start, end, step):\n\ta = 4\n\tb = 21\n\tfor i in range(start, end, step):\n\t\ta = a + 6\n\t\tif (a > b):\n\t\t\tb = b + 8\n\treturn (a, b)",
+      "text": "def for_loop_investigation(start, end, step):\n\ta = 4\n\tb = 21\n\tfor i in range(start, end, step):\n\t\ta = a + 6\n\t\tif a > b:\n\t\t\tb = b + 8\n\treturn (a, b)",
       "variants": [{
         "id": "2",
         "arguments": {"start": 0, "end": 6, "step": 1}
@@ -527,7 +527,7 @@
     "id": "3",
     "title": "For Loop Investigation 2",
     "content": {
-      "text": "def for_loop_investigation(lst):\n\ta = 0\n\tfor i in lst:\n\t\tif (i % 5 == 0):\n\t\t\ta = a + 1\n\treturn (a)",
+      "text": "def for_loop_investigation(lst):\n\ta = 0\n\tfor i in lst:\n\t\tif i % 5 == 0:\n\t\t\ta = a + 1\n\treturn (a)",
       "variants": [{
         "id": "4",
         "arguments": {"lst": [5, 11, 15, 19, 25]}
@@ -540,7 +540,7 @@
     "id": "6",
     "title": "For Loop Investigation 3",
     "content": {
-      "text": "def for_loop_investigation(word):\n\tb = 1\n\tfor i in word:\n\t\tif (i == \"a\"):\n\t\t\tb = b * 3\n\treturn (b)",
+      "text": "def for_loop_investigation(word):\n\tb = 1\n\tfor i in word:\n\t\tif i == \"a\":\n\t\t\tb = b * 3\n\treturn (b)",
       "variants": [{
         "id": "7",
         "arguments": {"word": "banana"}
@@ -553,7 +553,7 @@
     "id": "9",
     "title": "For Loop Investigation 4",
     "content": {
-      "text": "def for_loop_investigation(start, end, step):\n\ta = 3\n\tb = 0\n\tfor i in range(start, end, step):\n\t\tif (i > b):\n\t\t\tb = b + a\n\t\t\ta = a + 1\n\treturn (a,b)",
+      "text": "def for_loop_investigation(start, end, step):\n\ta = 3\n\tb = 0\n\tfor i in range(start, end, step):\n\t\tif i > b:\n\t\t\tb = b + a\n\t\t\ta = a + 1\n\treturn (a,b)",
       "variants": [{
         "id": "10",
         "arguments": {"start": 0, "end": 9, "step": 2}
@@ -563,7 +563,7 @@
     "id": "11",
     "title": "For Loop Investigation 5",
     "content": {
-      "text": "def for_loop_investigation(start, end):\n\ta = 5\n\tb = 2\n\tfor i in range(start, end):\n\t\ta = a + 1\n\t\tif (a > b):\n\t\t\tb = b + a\n\treturn (a,b)",
+      "text": "def for_loop_investigation(start, end):\n\ta = 5\n\tb = 2\n\tfor i in range(start, end):\n\t\ta = a + 1\n\t\tif a > b:\n\t\t\tb = b + a\n\treturn (a,b)",
       "variants": [{
         "id": "12",
         "arguments": {"start": 7, "end": 12}
@@ -586,7 +586,7 @@
     "id": "16",
     "title": "For Loop Investigation 7",
     "content": {
-      "text": "def for_loop_investigation(lst):\n\ta = 5\n\tfor i in lst:\n\t\ta = a - 3\n\t\tif (i < 0):\n\t\t\ta = a + 3\n\t\tif -1 < i && i < 1:\n\t\t\treturn(a)\n\treturn (a)",
+      "text": "def for_loop_investigation(lst):\n\ta = 5\n\tfor i in lst:\n\t\ta = a - 3\n\t\tif i < 0:\n\t\t\ta = a + 3\n\t\tif -1 < i && i < 1:\n\t\t\treturn(a)\n\treturn (a)",
       "variants": [{
         "id": "17",
         "arguments": {"lst": [-3, 200, 56, -0.2, -19, 88]}
@@ -599,7 +599,7 @@
     "id": "19",
     "title": "For Loop Investigation 8",
     "content": {
-      "text": "def for_loop_investigation(start, end):\n\tb = 0\n\tfor i in range(start, end):\n\t\tif (i % 2 == 0):\n\t\t\tb = b + i\n\treturn (b)",
+      "text": "def for_loop_investigation(start, end):\n\tb = 0\n\tfor i in range(start, end):\n\t\tif i % 2 == 0:\n\t\t\tb = b + i\n\treturn (b)",
       "variants": [{
         "id": "20",
         "arguments": {"start": -2, "end": 3}
@@ -609,7 +609,7 @@
     "id": "21",
     "title": "For Loop Investigation 9",
     "content": {
-      "text": "def for_loop_investigation(start, end, step):\n\ta = 10\n\tb = 0\n\tfor i in range(start, end, step):\n\t\tif (a > i): \n\t\t\ta = a - 2\n\t\t\tb = b + 1\n\treturn (a,b)",
+      "text": "def for_loop_investigation(start, end, step):\n\ta = 10\n\tb = 0\n\tfor i in range(start, end, step):\n\t\tif a > i: \n\t\t\ta = a - 2\n\t\t\tb = b + 1\n\treturn (a,b)",
       "variants": [{
         "id": "22",
         "arguments": {"start": 10, "end": 1, "step": -2}
