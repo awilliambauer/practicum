@@ -422,10 +422,10 @@ var controller = (function() {
                                 varObject.value.forEach(function (v) {
                                     highlightVariableBank(v);
                                 });
-                            } else if (varObject.value.type === "array") {
-                                varObject.value.value.forEach(function (v) {
-                                    highlightVariableBank(v);
-                                });
+                            } else if (varObject.value.type === "array" || varObject.value.type === "string") {
+                                if(variable !== "lets_visualize_our_sequence" && variable !== "lets_visualize_our_inner_sequence") {
+                                    highlightVariableBank(varObject.value);
+                                }
                             }
                             else {
                                 highlightVariableBank(varObject.value);
