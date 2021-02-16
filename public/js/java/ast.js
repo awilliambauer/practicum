@@ -41,6 +41,8 @@ var java_ast = function() {
             case 'reference':
                 return [node.object];
 
+            case 'break':
+            case 'continue':
             case 'parameter':
             case 'identifier':
             case 'literal':

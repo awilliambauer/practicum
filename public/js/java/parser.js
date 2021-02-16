@@ -114,7 +114,7 @@ var java_parsing = function() {
         var keywords = {
             // "class":1, "public":1, "static":1,
             // "void":1, "int":1,
-            "def":1, "return":1,
+            "def":1, "return":1, "break":1, "continue":1,
             "for":1, "in":1, "if":1, "else":1, "elif":1, "while":1
         };
 
@@ -368,7 +368,9 @@ var java_parsing = function() {
                 case "for": return match_forloop(indent_level);
                 case "if": return match_ifelse(indent_level);
                 case "while": return match_whileloop(indent_level);
-                case "return": {console.log("return"); return match_return_statement();}
+                case "return": return match_return_statement();
+                case "break": return match_break();
+                case "continue": return match_continue();
                 default: return match_simple_statement(false);
             }
         }
@@ -387,6 +389,26 @@ var java_parsing = function() {
                     tag: "return",
                     args: {type: "array", value: values}
                 }
+            };
+        }
+
+        function match_break() {
+            var start = lex.position();
+            match_keyword("break");
+            return {
+                id: new_id(),
+                location: location(start),
+                tag: "break"
+            };
+        }
+
+        function match_continue() {
+            var start = lex.position();
+            match_keyword("continue");
+            return {
+                id: new_id(),
+                location: location(start),
+                tag: "continue"
             };
         }
 
