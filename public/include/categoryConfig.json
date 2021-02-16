@@ -8,7 +8,7 @@
     "title": "If/Else Mystery 1",
     "examProblemDatabaseId": "71",
     "content": {
-      "text": "def ifElseInvestigation(a, b):\n\tc = 2\n\tif a + c < b:\n\t\tc = c + 8\n\telse:\n\t\tb = b + 10\n\tif a + c < b:\n\t\tc = c + 8\n\telse:\n\t\tb = b + 10\n\treturn (b, c)",
+      "text": "def if_else_investigation(a, b):\n\tc = 2\n\tif a + c < b:\n\t\tc = c + 8\n\telse:\n\t\tb = b + 10\n\tif a + c < b:\n\t\tc = c + 8\n\telse:\n\t\tb = b + 10\n\treturn (b, c)",
       "variants": [{
         "id": "26",
         "arguments": {"a": 4, "b": 15}
@@ -28,7 +28,7 @@
     "title": "If/Else Mystery 2",
     "examProblemDatabaseId": "73",
     "content": {
-      "text": "def ifElseInvestigation(a, b):\n\tif a < b:\n\t\ta += 1\n\tif a < b:\n\t\ta += 1\n\telse:\n\t\tb += 1\n\tif a >= b:\n\t\tb = b - 5\n\treturn (a, b)",
+      "text": "def if_else_investigation(a, b):\n\tif a < b:\n\t\ta += 1\n\tif a < b:\n\t\ta += 1\n\telse:\n\t\tb += 1\n\tif a >= b:\n\t\tb = b - 5\n\treturn (a, b)",
       "variants": [{
         "id": "31",
         "arguments": {"a": 1, "b": 8}
@@ -48,7 +48,7 @@
     "title": "If/Else Mystery 3",
     "examProblemDatabaseId": "75",
     "content": {
-      "text": "def ifElseInvestigation(a, b):\n\tif a == b:\n\t\tb = b - 1\n\telif a < b:\n\t\ta = a + 1\n\telse: \n\t\tb = b + 5\n\tif a == b:\n\t\ta = a + 2\n\treturn (a, b)",
+      "text": "def if_else_investigation(a, b):\n\tif a == b:\n\t\tb = b - 1\n\telif a < b:\n\t\ta = a + 1\n\telse: \n\t\tb = b + 5\n\tif a == b:\n\t\ta = a + 2\n\treturn (a, b)",
       "variants": [{
         "id": "36",
         "arguments": {"a": 14, "b": 14}
@@ -68,7 +68,7 @@
     "title": "If/Else Mystery 4",
     "examProblemDatabaseId": "77",
     "content": {
-      "text": "def ifElseInvestigation(a, b):\n\tif a < b:\n\t\ta = a * 2\n\tif a > b:\n\t\ta = a - 10\n\telse:\n\t\tb+= 1\n\treturn (a, b)",
+      "text": "def if_else_investigation(a, b):\n\tif a < b:\n\t\ta = a * 2\n\tif a > b:\n\t\ta = a - 10\n\telse:\n\t\tb+= 1\n\treturn (a, b)",
       "variants": [{
         "id": "41",
         "arguments": {"a": 10, "b": 3}
@@ -88,7 +88,7 @@
     "title": "If/Else Mystery 5",
     "examProblemDatabaseId": "83",
     "content": {
-      "text": "def ifElseInvestigation(a, b, c):\n\tif a < b && a < c:\n\t\ta = a + c\n\t\tc+= 1\n\telif a >= b:\n\t\ta = a - b\n\t\tb-= 1\n\tif a >= b && a >= c:\n\t\ta+= 1\n\t\tc+= 1\n\treturn (a, b, c)",
+      "text": "def if_else_investigation(a, b, c):\n\tif a < b && a < c:\n\t\ta = a + c\n\t\tc+= 1\n\telif a >= b:\n\t\ta = a - b\n\t\tb-= 1\n\tif a >= b && a >= c:\n\t\ta+= 1\n\t\tc+= 1\n\treturn (a, b, c)",
       "variants": [{
         "id": "46",
         "arguments": {"a": 2, "b": 10, "c": 3}
@@ -108,7 +108,7 @@
     "title": "If/Else Mystery 6",
     "examProblemDatabaseId": "88",
     "content": {
-      "text": "def ifElseInvestigation(x, y):\n\tz = 4\n\tif z <= x:\n\t\tz = x + 1\n\telse:\n\t\tz = z + 9\n\tif z <= y:\n\t\ty+= 1\n\treturn (z, y)",
+      "text": "def if_else_investigation(x, y):\n\tz = 4\n\tif z <= x:\n\t\tz = x + 1\n\telse:\n\t\tz = z + 9\n\tif z <= y:\n\t\ty+= 1\n\treturn (z, y)",
       "variants": [{
         "id": "51",
         "arguments": {"x": 3, "y": 20}
@@ -128,7 +128,7 @@
     "title": "If/Else Mystery 7",
     "examProblemDatabaseId": "90",
     "content": {
-      "text": "def ifElseInvestigation(a, b):\n\tif a * 2 < b:\n\t\ta = a * 3\n\tif b < a:\n\t\tb+= 1\n\telse:\n\t\ta-= 1\n\treturn (a, b)",
+      "text": "def if_else_investigation(a, b):\n\tif a * 2 < b:\n\t\ta = a * 3\n\tif b < a:\n\t\tb+= 1\n\telse:\n\t\ta-= 1\n\treturn (a, b)",
       "variants": [{
         "id": "56",
         "arguments": {"a": 10, "b": 2}
@@ -148,7 +148,7 @@
     "title": "If/Else Mystery 8",
     "examProblemDatabaseId": "92",
     "content": {
-      "text": "def ifElseInvestigation(x, y):\n\tif x == y:\n\t\tx = x + 11\n\telif x > 2 * y:\n\t\tx = 0\n\tif x == 0 && y > x:\n\t\tx = x + 2\n\t\ty = y + 2\n\treturn (x, y)",
+      "text": "def if_else_investigation(x, y):\n\tif x == y:\n\t\tx = x + 11\n\telif x > 2 * y:\n\t\tx = 0\n\tif x == 0 && y > x:\n\t\tx = x + 2\n\t\ty = y + 2\n\treturn (x, y)",
       "variants": [{
         "id": "61",
         "arguments": {"x": 5, "y": 5}
@@ -165,7 +165,7 @@
     "title": "If/Else Mystery 9",
     "examProblemDatabaseId": "94",
     "content": {
-      "text": "def ifElseInvestigation(a, b):\n\tif a %2 != 0:\n\t\ta = a * 2\n\tif a < 10:\n\t\tb+= 1\n\telif a < 10:\n\t\ta-= 1\n\t\tb-= 1\n\treturn (a, b)",
+      "text": "def if_else_investigation(a, b):\n\tif a %2 != 0:\n\t\ta = a * 2\n\tif a < 10:\n\t\tb+= 1\n\telif a < 10:\n\t\ta-= 1\n\t\tb-= 1\n\treturn (a, b)",
       "variants": [{
         "id": "65",
         "arguments": {"a": 12, "b": 12}
@@ -185,7 +185,7 @@
     "title": "If/Else Mystery 10",
     "examProblemDatabaseId": "96",
     "content": {
-      "text": "def ifElseInvestigation(x, y):\n\tz = 0\n\tif x >= y:\n\t\tx = x / 2\n\t\tz+= 1\n\tif x > z && y <= z:\n\t\tz+= 1\n\telif x > z:\n\t\ty = y - 5\n\treturn (x, y, z)",
+      "text": "def if_else_investigation(x, y):\n\tz = 0\n\tif x >= y:\n\t\tx = x / 2\n\t\tz+= 1\n\tif x > z && y <= z:\n\t\tz+= 1\n\telif x > z:\n\t\ty = y - 5\n\treturn (x, y, z)",
       "variants": [{
         "id": "70",
         "arguments": {"x": 3, "y": 1}
@@ -210,7 +210,7 @@
     "id": "74",
     "title": "While Loop Investigation 1",
     "content": {
-      "text": "def whileLoopInvestigation(i):\n\tfact = 1\n\twhile i  > 0:\n\t\tfact = fact * i\n\t\ti-= 1\n\treturn (fact)",
+      "text": "def while_loop_investigation(i):\n\tfact = 1\n\twhile i  > 0:\n\t\tfact = fact * i\n\t\ti-= 1\n\treturn (fact)",
       "variants": [{
         "id": "75",
         "arguments": {"i": 6}
@@ -220,7 +220,7 @@
     "id": "76",
     "title": "While Loop Investigation 2",
     "content": {
-      "text": "def whileLoopInvestigation(lst):\n\t i = 0\n\t sum = 0\n\twhile (i < len(lst)):\n\t\t sum = sum + lst[i]\n\t\t i = i + 1\n\t return (sum)",
+      "text": "def while_loop_investigation(lst):\n\t i = 0\n\t sum = 0\n\twhile (i < len(lst)):\n\t\t sum = sum + lst[i]\n\t\t i = i + 1\n\t return (sum)",
       "variants": [{
         "id": "77",
         "arguments": {"lst": [2, 4, 6, 8, 10]}
@@ -233,7 +233,7 @@
     "id": "79",
     "title": "While Loop Investigation 3",
     "content": {
-      "text": "def whileLoopInvestigation(num):\n\tdivByTwo = 0\n\twhile num >= 1:\n\t\tnum = num - 2\n\t\tdivByTwo+= 1\n\treturn (divByTwo)",
+      "text": "def while_loop_investigation(num):\n\tdivByTwo = 0\n\twhile num >= 1:\n\t\tnum = num - 2\n\t\tdivByTwo+= 1\n\treturn (divByTwo)",
       "variants": [{
         "id": "80",
         "arguments": {"num": 12}
@@ -246,7 +246,7 @@
     "id": "82",
     "title": "While Loop Investigation 4",
     "content": {
-      "text": "def whileLoopInvestigation(lst):\n\ti = 0\n\twhile i < len(lst):\n\t\tlst[i] = lst[i] * -1 \n\t\ti = i + 1 \n\treturn (lst)",
+      "text": "def while_loop_investigation(lst):\n\ti = 0\n\twhile i < len(lst):\n\t\tlst[i] = lst[i] * -1 \n\t\ti = i + 1 \n\treturn (lst)",
       "variants": [{
         "id": "83",
         "arguments": {"lst": [6, 0, -4, -11, 20]}
@@ -259,7 +259,7 @@
     "id": "85",
     "title": "While Loop Investigation 5",
     "content": {
-      "text": "def whileLoopInvestigation(lst):\n\ttoAdd = 13\n\ti = 0\n\twhile i < len(lst):\n\t\tlst[i] = lst[i] + toAdd \n\t\ti = i + 1\n\treturn (lst)",
+      "text": "def while_loop_investigation(lst):\n\ttoAdd = 13\n\ti = 0\n\twhile i < len(lst):\n\t\tlst[i] = lst[i] + toAdd \n\t\ti = i + 1\n\treturn (lst)",
       "variants": [{
         "id": "86",
         "arguments": {"lst": [22, 36, 55, 91, 107]}
@@ -272,7 +272,7 @@
     "id": "88",
     "title": "While Loop Investigation 6",
     "content": {
-      "text": "def whileLoopInvestigation(a, b):\n\tpower = 0\n\twhile b >= 1:\n\t\tb = b / a\n\t\tpower+= 1\n\treturn (power)",
+      "text": "def while_loop_investigation(a, b):\n\tpower = 0\n\twhile b >= 1:\n\t\tb = b / a\n\t\tpower+= 1\n\treturn (power)",
       "variants": [{
         "id": "89",
         "arguments": {"b": 16807, "a": 7}
@@ -285,7 +285,7 @@
     "id": "91",
     "title": "While Loop Investigation 7",
     "content": {
-      "text": "def whileLoopInvestigation(num):\n\tpower = 1\n\ti = 0\n\twhile i < 5:\n\t\tpower = power * num \n\t\ti = i + 1 \n\treturn (num)\n",
+      "text": "def while_loop_investigation(num):\n\tpower = 1\n\ti = 0\n\twhile i < 5:\n\t\tpower = power * num \n\t\ti = i + 1 \n\treturn (num)\n",
       "variants": [{
         "id": "92",
         "arguments": {"num": 3}
@@ -295,7 +295,7 @@
     "id": "93",
     "title": "While Loop Investigation 8",
     "content": {
-      "text": "def whileLoopInvestigation(a, b):\n\twhile a < 1000:\n\t\ta = a * b\n\treturn (a)",
+      "text": "def while_loop_investigation(a, b):\n\twhile a < 1000:\n\t\ta = a * b\n\treturn (a)",
       "variants": [{
         "id": "94",
         "arguments": {"b": 3, "a": 8}
@@ -308,7 +308,7 @@
     "id": "96",
     "title": "While Loop Investigation 9",
     "content": {
-      "text": "def whileLoopInvestigation(lst):\n\ti = 0\n\tsum = 0\n\twhile i < len(lst) - 1: \n\t\ti = i + 1 \n\t\tif lst[i] % 2 == 1:\n\t\t\tsum = sum + lst[i]  \n\treturn (sum)",
+      "text": "def while_loop_investigation(lst):\n\ti = 0\n\tsum = 0\n\twhile i < len(lst) - 1: \n\t\ti = i + 1 \n\t\tif lst[i] % 2 == 1:\n\t\t\tsum = sum + lst[i]  \n\treturn (sum)",
       "variants": [{
         "id": "97",
         "arguments": {"lst": [1, 1, 2, 3, 5]}
@@ -322,7 +322,7 @@
     "title": "While Loop Investigation 10",
     "examProblemDatabaseId": "96",
     "content": {
-      "text": "def whileLoopInvestigation(a, b):\n\trollSum = 0\n\twhile a < b:\n\t\trollSum = rollSum + a\n\t\ta+= 1\n\treturn (rollSum) ",
+      "text": "def while_loop_investigation(a, b):\n\trollSum = 0\n\twhile a < b:\n\t\trollSum = rollSum + a\n\t\ta+= 1\n\treturn (rollSum) ",
       "variants": [{
         "id": "100",
         "arguments": {"b": 13, "a": 8}
@@ -517,7 +517,7 @@
     "id": "1",
     "title": "For Loop Investigation 1",
     "content": {
-      "text": "def forLoopInvestigation(start, end, step):\n\ta = 4\n\tb = 21\n\tfor i in range(start, end, step):\n\t\ta = a + 6\n\t\tif (a > b):\n\t\t\tb = b + 8\n\treturn (a, b)",
+      "text": "def for_loop_investigation(start, end, step):\n\ta = 4\n\tb = 21\n\tfor i in range(start, end, step):\n\t\ta = a + 6\n\t\tif (a > b):\n\t\t\tb = b + 8\n\treturn (a, b)",
       "variants": [{
         "id": "2",
         "arguments": {"start": 0, "end": 6, "step": 1}
@@ -527,7 +527,7 @@
     "id": "3",
     "title": "For Loop Investigation 2",
     "content": {
-      "text": "def forLoopInvestigation(lst):\n\ta = 0\n\tfor i in lst:\n\t\tif (i % 5 == 0):\n\t\t\ta = a + 1\n\treturn (a)",
+      "text": "def for_loop_investigation(lst):\n\ta = 0\n\tfor i in lst:\n\t\tif (i % 5 == 0):\n\t\t\ta = a + 1\n\treturn (a)",
       "variants": [{
         "id": "4",
         "arguments": {"lst": [5, 11, 15, 19, 25]}
@@ -540,7 +540,7 @@
     "id": "6",
     "title": "For Loop Investigation 3",
     "content": {
-      "text": "def forLoopInvestigation(word):\n\tb = 1\n\tfor i in word:\n\t\tif (i == \"a\"):\n\t\t\tb = b * 3\n\treturn (b)",
+      "text": "def for_loop_investigation(word):\n\tb = 1\n\tfor i in word:\n\t\tif (i == \"a\"):\n\t\t\tb = b * 3\n\treturn (b)",
       "variants": [{
         "id": "7",
         "arguments": {"word": "banana"}
@@ -553,7 +553,7 @@
     "id": "9",
     "title": "For Loop Investigation 4",
     "content": {
-      "text": "def forLoopInvestigation(start, end, step):\n\ta = 3\n\tb = 0\n\tfor i in range(start, end, step):\n\t\tif (i > b):\n\t\t\tb = b + a\n\t\t\ta = a + 1\n\treturn (a,b)",
+      "text": "def for_loop_investigation(start, end, step):\n\ta = 3\n\tb = 0\n\tfor i in range(start, end, step):\n\t\tif (i > b):\n\t\t\tb = b + a\n\t\t\ta = a + 1\n\treturn (a,b)",
       "variants": [{
         "id": "10",
         "arguments": {"start": 0, "end": 9, "step": 2}
@@ -563,7 +563,7 @@
     "id": "11",
     "title": "For Loop Investigation 5",
     "content": {
-      "text": "def forLoopInvestigation(start, end):\n\ta = 5\n\tb = 2\n\tfor i in range(start, end):\n\t\ta = a + 1\n\t\tif (a > b):\n\t\t\tb = b + a\n\treturn (a,b)",
+      "text": "def for_loop_investigation(start, end):\n\ta = 5\n\tb = 2\n\tfor i in range(start, end):\n\t\ta = a + 1\n\t\tif (a > b):\n\t\t\tb = b + a\n\treturn (a,b)",
       "variants": [{
         "id": "12",
         "arguments": {"start": 7, "end": 12}
@@ -576,7 +576,7 @@
     "id": "14",
     "title": "For Loop Investigation 6",
     "content": {
-      "text": "def forLoopInvestigation(end):\n\ta = -2\n\tfor i in range(end):\n\t\ta = a + i\n\treturn (a)",
+      "text": "def for_loop_investigation(end):\n\ta = -2\n\tfor i in range(end):\n\t\ta = a + i\n\treturn (a)",
       "variants": [{
         "id": "15",
         "arguments": {"end": 5}
@@ -586,7 +586,7 @@
     "id": "16",
     "title": "For Loop Investigation 7",
     "content": {
-      "text": "def forLoopInvestigation(lst):\n\ta = 5\n\tfor i in lst:\n\t\ta = a - 3\n\t\tif (i < 0):\n\t\t\ta = a + 3\n\treturn (a)",
+      "text": "def for_loop_investigation(lst):\n\ta = 5\n\tfor i in lst:\n\t\ta = a - 3\n\t\tif (i < 0):\n\t\t\ta = a + 3\n\treturn (a)",
       "variants": [{
         "id": "17",
         "arguments": {"lst": [-3, 200, 56, -0.2, -19, 88]}
@@ -599,7 +599,7 @@
     "id": "19",
     "title": "For Loop Investigation 8",
     "content": {
-      "text": "def forLoopInvestigation(start, end):\n\tb = 0\n\tfor i in range(start, end):\n\t\tif (i % 2 == 0):\n\t\t\tb = b + i\n\treturn (b)",
+      "text": "def for_loop_investigation(start, end):\n\tb = 0\n\tfor i in range(start, end):\n\t\tif (i % 2 == 0):\n\t\t\tb = b + i\n\treturn (b)",
       "variants": [{
         "id": "20",
         "arguments": {"start": -2, "end": 3}
@@ -609,7 +609,7 @@
     "id": "21",
     "title": "For Loop Investigation 9",
     "content": {
-      "text": "def forLoopInvestigation(start, end, step):\n\ta = 10\n\tb = 0\n\tfor i in range(start, end, step):\n\t\tif (a > i): \n\t\t\ta = a - 2\n\t\t\tb = b + 1\n\treturn (a,b)",
+      "text": "def for_loop_investigation(start, end, step):\n\ta = 10\n\tb = 0\n\tfor i in range(start, end, step):\n\t\tif (a > i): \n\t\t\ta = a - 2\n\t\t\tb = b + 1\n\treturn (a,b)",
       "variants": [{
         "id": "22",
         "arguments": {"start": 10, "end": 1, "step": -2}
@@ -619,7 +619,7 @@
     "id": "23",
     "title": "For Loop Investigation 10",
     "content": {
-      "text": "def forLoopInvestigation(word):\n\tx = 0\n\tfor i in word:\n\t\tif i == \"s\":\n\t\t\tx = x + 7\n\t\tif i == \"i\":\n\t\t\tx = x - 3\n\treturn (x)",
+      "text": "def for_loop_investigation(word):\n\tx = 0\n\tfor i in word:\n\t\tif i == \"s\":\n\t\t\tx = x + 7\n\t\tif i == \"i\":\n\t\t\tx = x - 3\n\treturn (x)",
       "variants": [{
         "id": "24",
         "arguments": {"word": "Mississippi"}
@@ -635,7 +635,7 @@
     "id": "102",
     "title": "Nested For Loop Investigation 1",
     "content": {
-      "text": "def nestedForLoopInvestigation(a, b):\n\tc = 0\n\tfor i in range(a):\n\t\tfor j in range(b):\n\t\t\tc = c + 1\n\treturn(c)\n",
+      "text": "def nested_for_loop_investigation(a, b):\n\tc = 0\n\tfor i in range(a):\n\t\tfor j in range(b):\n\t\t\tc = c + 1\n\treturn(c)\n",
       "variants": [{
         "id": "103",
         "arguments": {"a": 2, "b": 3}
@@ -645,7 +645,7 @@
     "id": "104",
     "title": "Nested For Loop Investigation 2",
     "content": {
-      "text": "def nestedForLoopInvestigation(lstIn):\n\tlstOut = [2, 3, 4]\n\tfor i in range(len(lstOut)):\n\t\tfor j in range(len(lstIn)):\n\t\t\tlstIn[j] = lstIn[j] * lstOut[i]\n\treturn(lstIn)",
+      "text": "def nested_for_loop_investigation(lstIn):\n\tlstOut = [2, 3, 4]\n\tfor i in range(len(lstOut)):\n\t\tfor j in range(len(lstIn)):\n\t\t\tlstIn[j] = lstIn[j] * lstOut[i]\n\treturn(lstIn)",
       "variants": [{
         "id": "105",
         "arguments": {"lstIn": [1, 2, 3]}
@@ -658,7 +658,7 @@
     "id": "107",
     "title": "Nested For Loop Investigation 3",
     "content": {
-      "text": "def nestedForLoopInvestigation(word):\n\tvowel = \"aeiou\"\n\tcount = 0\n\tfor i in word:\n\t\tfor j in vowel:\n\t\t\tif i == j:\n\t\t\t\tcount = count + 1\n\treturn(count)",
+      "text": "def nested_for_loop_investigation(word):\n\tvowel = \"aeiou\"\n\tcount = 0\n\tfor i in word:\n\t\tfor j in vowel:\n\t\t\tif i == j:\n\t\t\t\tcount = count + 1\n\treturn(count)",
       "variants": [{
         "id": "108",
         "arguments": {"word": "house"}
@@ -674,7 +674,7 @@
     "id": "111",
     "title": "Nested For Loop Investigation 4",
     "content": {
-      "text": "def nestedForLoopInvestigation(lst):\n\tfor i in range(lst[0], lst[1]):\n\t\tfor j in range(len(lst)):\n\t\t\tlst[j] = lst[j] + i\n\treturn(lst)",
+      "text": "def nested_for_loop_investigation(lst):\n\tfor i in range(lst[0], lst[1]):\n\t\tfor j in range(len(lst)):\n\t\t\tlst[j] = lst[j] + i\n\treturn(lst)",
       "variants": [{
         "id": "112",
         "arguments": {"lst": [2, 4, 7, 12]}
@@ -687,7 +687,7 @@
     "id": "114",
     "title": "Nested For Loop Investigation 5",
     "content": {
-      "text": "def nestedForLoopInvestigation(datalst, mean):\n\tfor i in range(2):\n\t\tfor j in range(len(datalst)):\n\t\t\tif datalst[j] < mean:\n\t\t\t\tdatalst[j] = datalst[j] + 2\n\treturn(datalst)",
+      "text": "def nested_for_loop_investigation(datalst, mean):\n\tfor i in range(2):\n\t\tfor j in range(len(datalst)):\n\t\t\tif datalst[j] < mean:\n\t\t\t\tdatalst[j] = datalst[j] + 2\n\treturn(datalst)",
       "variants": [{
         "id": "115",
         "arguments": {"datalst": [22, 28, 24, 30], "mean": 26}
@@ -697,7 +697,7 @@
     "id": "116",
     "title": "Nested For Loop Investigation 6",
     "content": {
-      "text": "def nestedForLoopInvestigation(noSquares):\n\tnums = [3, 4, 5]\n\tfor i in range(len(noSquares)):\n\t\tfor j in nums:\n\t\t\tif j * j == noSquares[i]:\n\t\t\t\tnoSquares[i] = 0\n\treturn(noSquares)",
+      "text": "def nested_for_loop_investigation(noSquares):\n\tnums = [3, 4, 5]\n\tfor i in range(len(noSquares)):\n\t\tfor j in nums:\n\t\t\tif j * j == noSquares[i]:\n\t\t\t\tnoSquares[i] = 0\n\treturn(noSquares)",
       "variants": [{
         "id": "117",
         "arguments": {"noSquares": [9, 65, 81, 25]}
@@ -710,7 +710,7 @@
     "id": "119",
     "title": "Nested For Loop Investigation 7",
     "content": {
-      "text": "def nestedForLoopInvestigation(lst):\n\tfor i in lst:\n\t\tfor j in range(len(lst)):\n\t\t\tif i < 0:\n\t\t\t\tlst[j] = lst[j] + 3\n\treturn(lst)",
+      "text": "def nested_for_loop_investigation(lst):\n\tfor i in lst:\n\t\tfor j in range(len(lst)):\n\t\t\tif i < 0:\n\t\t\t\tlst[j] = lst[j] + 3\n\treturn(lst)",
       "variants": [{
         "id": "120",
         "arguments": {"lst": [-5, -8, -1]}
@@ -723,7 +723,7 @@
     "id": "122",
     "title": "Nested For Loop Investigation 8",
     "content": {
-      "text": "def nestedForLoopInvestigation(lst):\n\tfactors = [2, 3, 4, 6]\n\tcount = 0\n\tfor i in lst:\n\t\tfor j in factors:\n\t\t\tif i * j == 12:\n\t\t\t\tcount = count + 1\n\treturn(count)",
+      "text": "def nested_for_loop_investigation(lst):\n\tfactors = [2, 3, 4, 6]\n\tcount = 0\n\tfor i in lst:\n\t\tfor j in factors:\n\t\t\tif i * j == 12:\n\t\t\t\tcount = count + 1\n\treturn(count)",
       "variants": [{
         "id": "123",
         "arguments": {"lst": [5, 2, 7, 4]}
@@ -736,7 +736,7 @@
     "id": "125",
     "title": "Nested For Loop Investigation 9",
     "content": {
-      "text": "def nestedForLoopInvestigation(lst):\n\tcount = 0\n\tfor i in range(3):\n\t\tfor j in range(len(lst)):\n\t\t\tif lst[j] < 50:\n\t\t\t\tlst[j] = lst[j] + 10\n\t\t\telse:\n\t\t\t\tcount = count + 1\n\treturn(count)",
+      "text": "def nested_for_loop_investigation(lst):\n\tcount = 0\n\tfor i in range(3):\n\t\tfor j in range(len(lst)):\n\t\t\tif lst[j] < 50:\n\t\t\t\tlst[j] = lst[j] + 10\n\t\t\telse:\n\t\t\t\tcount = count + 1\n\treturn(count)",
       "variants": [{
         "id": "126",
         "arguments": {"lst": [22, 97, 31]}
@@ -749,7 +749,7 @@
     "id": "128",
     "title": "Nested For Loop Investigation 10",
     "content": {
-      "text": "def nestedForLoopInvestigation(a, b):\n\tc = 0\n\tfor i in range(3):\n\t\tfor j in range(2):\n\t\t\tif a < 3 * b:\n\t\t\t\tc = c + a * 2\n\t\t\t\ta = a + 20\n\t\t\telse:\n\t\t\t\t b = b + 10\n\treturn(a, b, c)",
+      "text": "def nested_for_loop_investigation(a, b):\n\tc = 0\n\tfor i in range(3):\n\t\tfor j in range(2):\n\t\t\tif a < 3 * b:\n\t\t\t\tc = c + a * 2\n\t\t\t\ta = a + 20\n\t\t\telse:\n\t\t\t\t b = b + 10\n\treturn(a, b, c)",
       "variants": [{
         "id": "129",
         "arguments": {"b": 12, "a": 41}
