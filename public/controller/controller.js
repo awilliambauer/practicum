@@ -1143,11 +1143,13 @@ var controller = (function() {
         userSolution = userSolution.replace(/]/g,'');
         userSolution = userSolution.replace(/\(/g,'');
         userSolution = userSolution.replace(/\)/g,'');
+        userSolution = userSolution.split(',').map(substr => substr.replace(/^['"]+|['"]+$/g,"")).join(',');
         console.log("The user solution state is: ", userSolution);
         // create string of raw array values from correct solution
         var solutionState = simulatorInterface.getFinalState();
         console.log(solutionState);
         var correctSolution = solutionState.variables.in_scope.the_return_value_of_the_function_is_determined_here.value;
+        correctSolution = correctSolution.split(',').map(substr => substr.replace(/^['"]+|['"]+$/g,"")).join(',');
         // var correctSolution = "";
         // for (var i in correctSolutionArray) {
         //     correctSolution = correctSolution + correctSolutionArray[i] + ",";
