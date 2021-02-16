@@ -210,6 +210,14 @@ function TplHelper() {
         return stmt.tag === "for";
     };
 
+    this.is_break = function(stmt) {
+        return stmt.tag === "break";
+    };
+
+    this.is_continue = function(stmt) {
+        return stmt.tag === "continue";
+    };
+
     this.has_else_if = function(stmt) {
         return stmt.else_is_elif;
     };

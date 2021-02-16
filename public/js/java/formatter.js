@@ -328,6 +328,16 @@ var java_formatter = function() {
                 } else elem.append(to_dom(node.args.value[0], options, indent_level));
                 break;
 
+            case 'break':
+                line = newline(elem);
+                line.append(indent(indent_level) + "break");
+                break;
+
+            case 'continue':
+                line = newline(elem);
+                line.append(indent(indent_level) + "continue");
+                break;
+
             default:
                 throw new Error("unknown ast tag " + node.tag);
                 break;

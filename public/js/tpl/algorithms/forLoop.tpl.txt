@@ -187,6 +187,18 @@ function TPLAlgorithm() {
                 return;
             }
 
+            [no_step] if (helper.is_break(this_is_the_next_line_that_will_execute)) {
+                [prompt]
+                "We have encountered a break statement, so we exit the current loop entirely, skipping the rest of this iteration and all future iterations.";
+                break;
+            }
+
+            [no_step] if (helper.is_continue(this_is_the_next_line_that_will_execute)) {
+                [prompt]
+                "We have encountered a continue statement, so we skip the rest of this iteration and proceed to the next.";
+                break;
+            }
+
             [no_step]
             if (helper.is_if(this_is_the_next_line_that_will_execute)) {
                 let this_is_the_conditional_of_an_if_statement: AstNode;
@@ -225,6 +237,12 @@ function TPLAlgorithm() {
             }
 
         } while (helper.is_there_another_line_to_execute(parent, this_is_the_next_line_that_will_execute, condition_outcome));
+
+        [no_step] if (helper.is_break(this_is_the_next_line_that_will_execute)) {
+            [no_step]
+            this_is_the_next_line_that_will_execute = helper.get_loop(ast);
+            break;
+        }
 
         [prompt]
         "We have reached the end of the for loop.";
