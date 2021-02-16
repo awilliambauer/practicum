@@ -424,7 +424,12 @@ var controller = (function() {
                                 varObject.value.forEach(function (v) {
                                     highlightVariableBank(v);
                                 });
-                            } else {
+                            } else if (varObject.value.type === "array") {
+                                varObject.value.value.forEach(function (v) {
+                                    highlightVariableBank(v);
+                                });
+                            }
+                            else {
                                 highlightVariableBank(varObject.value);
                             }
                         }
