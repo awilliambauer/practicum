@@ -367,7 +367,6 @@ var controller = (function() {
                     .text(variableBankObject[variable].value);
                 }
             }
-            console.log(variableBankObject);
             if (variableBankObject.hasOwnProperty("loop sequence")) {
                 d3.selectAll(".array_label").attr("class", "array_label has_sequence");
             }
@@ -554,7 +553,6 @@ var controller = (function() {
     // highlights the (single) variable passed in as a paramenter. cannot handle multiple variables at once
     function highlightVariableBank(variable) {
         d3.selectAll(".variable_list_table_row").each(function(d,i) {
-            console.log(d3.select(this).select(".bank_variable").node());
             var varName = d3.select(this).select(".bank_variable").node().innerHTML;
             if (varName === variable.name) {
                 d3.select(this)
