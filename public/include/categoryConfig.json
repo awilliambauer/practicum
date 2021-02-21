@@ -233,7 +233,7 @@
     "id": "79",
     "title": "While Loop Investigation 3",
     "content": {
-      "text": "def while_loop_investigation(num):\n\tdivByTwo = 0\n\twhile num >= 1:\n\t\tnum = num - 2\n\t\tdivByTwo+= 1\n\treturn (divByTwo)",
+      "text": "def while_loop_investigation(num):\n\tdiv_by_two = 0\n\twhile num >= 1:\n\t\tnum = num - 2\n\t\tdiv_by_two+= 1\n\treturn (div_by_two)",
       "variants": [{
         "id": "80",
         "arguments": {"num": 12}
@@ -259,7 +259,7 @@
     "id": "85",
     "title": "While Loop Investigation 5",
     "content": {
-      "text": "def while_loop_investigation(lst):\n\ttoAdd = 13\n\ti = 0\n\twhile i < len(lst):\n\t\tlst[i] = lst[i] + toAdd \n\t\ti = i + 1\n\treturn (lst)",
+      "text": "def while_loop_investigation(lst):\n\tto_add = 13\n\ti = 0\n\twhile i < len(lst):\n\t\tlst[i] = lst[i] + to_add \n\t\ti = i + 1\n\treturn (lst)",
       "variants": [{
         "id": "86",
         "arguments": {"lst": [22, 36, 55, 91, 107]}
@@ -322,7 +322,7 @@
     "title": "While Loop Investigation 10",
     "examProblemDatabaseId": "96",
     "content": {
-      "text": "def while_loop_investigation(a, b):\n\trollSum = 0\n\twhile a < b:\n\t\trollSum = rollSum + a\n\t\ta+= 1\n\treturn (rollSum) ",
+      "text": "def while_loop_investigation(a, b):\n\troll_sum = 0\n\twhile a < b:\n\t\troll_sum = roll_sum + a\n\t\ta+= 1\n\treturn (roll_sum) ",
       "variants": [{
         "id": "100",
         "arguments": {"b": 13, "a": 8}
@@ -527,7 +527,7 @@
     "id": "3",
     "title": "For Loop Investigation 2",
     "content": {
-      "text": "def for_loop_investigation(lst):\n\ta = 0\n\tfor i in lst:\n\t\tif i % 5 == 0:\n\t\t\ta = a + 1\n\treturn (a)",
+      "text": "def for_loop_investigation(lst):\n\ta = 0\n\tfor item in lst:\n\t\tif item % 5 == 0:\n\t\t\ta = a + 1\n\treturn (a)",
       "variants": [{
         "id": "4",
         "arguments": {"lst": [5, 11, 15, 19, 25]}
@@ -540,7 +540,7 @@
     "id": "6",
     "title": "For Loop Investigation 3",
     "content": {
-      "text": "def for_loop_investigation(word):\n\tb = 1\n\tfor i in word:\n\t\tif i == \"a\":\n\t\t\tb = b * 3\n\treturn (b)",
+      "text": "def for_loop_investigation(word):\n\tb = 1\n\tfor ch in word:\n\t\tif ch == \"a\":\n\t\t\tb = b * 3\n\treturn (b)",
       "variants": [{
         "id": "7",
         "arguments": {"word": "banana"}
@@ -586,7 +586,7 @@
     "id": "16",
     "title": "For Loop Investigation 7",
     "content": {
-      "text": "def for_loop_investigation(lst):\n\ta = 5\n\tfor i in lst:\n\t\ta = a - 3\n\t\tif i < 0:\n\t\t\ta = a + 3\n\t\tif -1 < i && i < 1:\n\t\t\treturn(a)\n\treturn (a)",
+      "text": "def for_loop_investigation(lst):\n\ta = 5\n\tfor n in lst:\n\t\ta = a - 3\n\t\tif n < 0:\n\t\t\ta = a + 3\n\t\tif -1 < n && n < 1:\n\t\t\treturn(a)\n\treturn (a)",
       "variants": [{
         "id": "17",
         "arguments": {"lst": [-3, 200, 56, -0.2, -19, 88]}
@@ -619,7 +619,7 @@
     "id": "23",
     "title": "For Loop Investigation 10",
     "content": {
-      "text": "def for_loop_investigation(word):\n\tx = 0\n\tfor i in word:\n\t\tif i == \"s\":\n\t\t\tx = x + 7\n\t\tif i == \"i\":\n\t\t\tx = x - 3\n\treturn (x)",
+      "text": "def for_loop_investigation(word):\n\tx = 0\n\tfor letter in word:\n\t\tif letter == \"s\":\n\t\t\tx = x + 7\n\t\tif letter == \"i\":\n\t\t\tx = x - 3\n\treturn (x)",
       "variants": [{
         "id": "24",
         "arguments": {"word": "Mississippi"}
@@ -645,20 +645,20 @@
     "id": "104",
     "title": "Nested For Loop Investigation 2",
     "content": {
-      "text": "def nested_for_loop_investigation(lstIn):\n\tlstOut = [2, 3, 4]\n\tfor i in range(len(lstOut)):\n\t\tfor j in range(len(lstIn)):\n\t\t\tlstIn[j] = lstIn[j] * lstOut[i]\n\treturn(lstIn)",
+      "text": "def nested_for_loop_investigation(lst_in):\n\tlst_out = [2, 3, 4]\n\tfor i in range(len(lst_out)):\n\t\tfor j in range(len(lst_in)):\n\t\t\tlst_in[j] = lst_in[j] * lst_out[i]\n\treturn(lst_in)",
       "variants": [{
         "id": "105",
-        "arguments": {"lstIn": [1, 2, 3]}
+        "arguments": {"lst_in": [1, 2, 3]}
       },{
         "id": "106",
-        "arguments": {"lstIn": [5, 1, 2]}
+        "arguments": {"lst_in": [5, 1, 2]}
       }]
     }
   },{
     "id": "107",
     "title": "Nested For Loop Investigation 3",
     "content": {
-      "text": "def nested_for_loop_investigation(word):\n\tvowel = \"aeiou\"\n\tcount = 0\n\tfor i in word:\n\t\tfor j in vowel:\n\t\t\tif i == j:\n\t\t\t\tcount = count + 1\n\treturn(count)",
+      "text": "def nested_for_loop_investigation(word):\n\tvowels = \"aeiou\"\n\tcount = 0\n\tfor letter in word:\n\t\tfor vowel in vowels:\n\t\t\tif letter == vowel:\n\t\t\t\tcount = count + 1\n\treturn(count)",
       "variants": [{
         "id": "108",
         "arguments": {"word": "house"}
@@ -687,30 +687,30 @@
     "id": "114",
     "title": "Nested For Loop Investigation 5",
     "content": {
-      "text": "def nested_for_loop_investigation(datalst, mean):\n\tfor i in range(2):\n\t\tfor j in range(len(datalst)):\n\t\t\tif datalst[j] < mean:\n\t\t\t\tdatalst[j] = datalst[j] + 2\n\treturn(datalst)",
+      "text": "def nested_for_loop_investigation(data_lst, mean):\n\tfor i in range(2):\n\t\tfor j in range(len(data_lst)):\n\t\t\tif data_lst[j] < mean:\n\t\t\t\tdata_lst[j] = data_lst[j] + 2\n\treturn(data_lst)",
       "variants": [{
         "id": "115",
-        "arguments": {"datalst": [22, 28, 24, 30], "mean": 26}
+        "arguments": {"data_lst": [22, 28, 24, 30], "mean": 26}
       }]
     }
   },{
     "id": "116",
     "title": "Nested For Loop Investigation 6",
     "content": {
-      "text": "def nested_for_loop_investigation(noSquares):\n\tnums = [3, 4, 5]\n\tfor i in range(len(noSquares)):\n\t\tfor j in nums:\n\t\t\tif j * j == noSquares[i]:\n\t\t\t\tnoSquares[i] = 0\n\treturn(noSquares)",
+      "text": "def nested_for_loop_investigation(no_squares):\n\tnums = [3, 4, 5]\n\tfor i in range(len(no_squares)):\n\t\tfor num in nums:\n\t\t\tif num * num == no_squares[i]:\n\t\t\t\tno_squares[i] = 0\n\treturn(no_squares)",
       "variants": [{
         "id": "117",
-        "arguments": {"noSquares": [9, 65, 81, 25]}
+        "arguments": {"no_squares": [9, 65, 81, 25]}
       },{
         "id": "118",
-        "arguments": {"noSquares": [71, 9, 47, 22]}
+        "arguments": {"no_squares": [71, 9, 47, 22]}
       }]
     }
   },{
     "id": "119",
     "title": "Nested For Loop Investigation 7",
     "content": {
-      "text": "def nested_for_loop_investigation(lst):\n\tfor i in lst:\n\t\tfor j in range(len(lst)):\n\t\t\tif i < 0:\n\t\t\t\tlst[j] = lst[j] + 3\n\treturn(lst)",
+      "text": "def nested_for_loop_investigation(lst):\n\tfor num in lst:\n\t\tfor j in range(len(lst)):\n\t\t\tif num < 0:\n\t\t\t\tlst[j] = lst[j] + 3\n\treturn(lst)",
       "variants": [{
         "id": "120",
         "arguments": {"lst": [-5, -8, -1]}
@@ -723,7 +723,7 @@
     "id": "122",
     "title": "Nested For Loop Investigation 8",
     "content": {
-      "text": "def nested_for_loop_investigation(lst):\n\tfactors = [2, 3, 4, 6]\n\tcount = 0\n\tfor i in lst:\n\t\tif i > 12:\n\t\t\treturn(count)\n\t\tfor j in factors:\n\t\t\tif i * j == 12:\n\t\t\t\tcount = count + 1\n\treturn(count)",
+      "text": "def nested_for_loop_investigation(lst):\n\tfactors = [2, 3, 4, 6]\n\tcount = 0\n\tfor item in lst:\n\t\tif item > 12:\n\t\t\treturn(count)\n\t\tfor factor in factors:\n\t\t\tif item * factor == 12:\n\t\t\t\tcount = count + 1\n\treturn(count)",
       "variants": [{
         "id": "123",
         "arguments": {"lst": [5, 2, 7, 24, 4]}
