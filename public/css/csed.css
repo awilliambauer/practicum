@@ -96,7 +96,7 @@ a:hover.btn-primary, a:active.btn-primary, a:focus.btn-primary {
 
 .list-group-item:after {
     position: absolute;
-    content: "completed on:\2003guided?\2003interactive?";
+    content: "completed on:\2003guided?\2003independent?";
     right: 1em;
     color: #737373;
     font-weight: bold;
