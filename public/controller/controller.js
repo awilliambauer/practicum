@@ -229,7 +229,7 @@ var controller = (function() {
             d3.select("#promptText").node().innerHTML = prompt;
 
             // when we hit the final prompt, aka finish the problem, we want to change things
-            if (prompt === "The print statement below prints out the value(s) that the function returned. Enter that solution in the answer box!") {
+            if (prompt === "The print statement below prints out the value(s) that the function returned. Enter that solution in the solution box!") {
                 $("#next-container").addClass("hidden");
                 $("#nextstep").prop('disabled', true);
                 button = "#submitButton";
