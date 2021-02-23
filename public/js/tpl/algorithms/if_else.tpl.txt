@@ -23,7 +23,7 @@ function TPLAlgorithm() {
     [no_step]
     {
         [prompt]
-        "First, look at the method call.";
+        "First, look at the function call.";
 
         let these_are_the_function_parameters: Parameter;
         these_are_the_function_parameters = helper.get_array_parameter(state.args);
@@ -46,9 +46,9 @@ function TPLAlgorithm() {
         [interactive("next_line")] this_is_the_next_line_that_will_execute = helper.get_next_line(ast.body, this_is_the_next_line_that_will_execute);
 
         [no_step]
-        let it_defines_a_new_instance_variable_which_we_will_add_to_the_variable_bank: Variable;
+        let it_defines_a_new_local_variable_which_we_will_add_to_the_variable_bank: Variable;
         [interactive("add_variable")]
-        it_defines_a_new_instance_variable_which_we_will_add_to_the_variable_bank = helper.get_instance_variable(variables, ast);
+        it_defines_a_new_local_variable_which_we_will_add_to_the_variable_bank = helper.get_local_variable(variables, ast);
     }
 
     [no_step] do {
@@ -70,7 +70,7 @@ function TPLAlgorithm() {
                 let the_return_value_of_the_function_is_determined_here;
                 the_return_value_of_the_function_is_determined_here = helper.get_return_output(this_is_the_next_line_that_will_execute, variables); // TODO: better text, highlight
                 [prompt]
-                "The print statement below prints out the value(s) that the function returned. Enter that solution in the answer box!";
+                "The print statement below prints out the value(s) that the function returned. Enter that solution in the solution box!";
                 return;
             }
 
@@ -78,13 +78,13 @@ function TPLAlgorithm() {
             if (helper.is_if(this_is_the_next_line_that_will_execute)) {
                 [prompt]
                 "It’s an if statement which means we need to determine whether the conditional part of the if statement is true or false.";
-                let this_is_the_conditional_of_an_if_statement: AstNode;
-                this_is_the_conditional_of_an_if_statement = this_is_the_next_line_that_will_execute.condition;
+                let this_is_the_conditional_of_the_if_statement: AstNode;
+                this_is_the_conditional_of_the_if_statement = this_is_the_next_line_that_will_execute.condition;
 
                 [interactive("conditional")]
-                if (helper.does_this_conditional_evaluate_to_true(variables, this_is_the_conditional_of_an_if_statement)) {
+                if (helper.does_this_conditional_evaluate_to_true(variables, this_is_the_conditional_of_the_if_statement)) {
                     [prompt]
-                    "Since it’s true we move on to the lines inside of this clause.";
+                    "Since it’s true we move on to the lines inside of this code block.";
                     [no_step]
                     parent = this_is_the_next_line_that_will_execute;
                     [no_step]
@@ -93,21 +93,21 @@ function TPLAlgorithm() {
                     condition_outcome = true;
                 } else {
                     [prompt]
-                    "Since it’s false we will be ignoring all of the lines in this clause.";
+                    "Since it’s false we will be ignoring all of the lines in this code block.";
                     [no_step]
                     if (helper.has_else_if(this_is_the_next_line_that_will_execute)) {
                         [prompt]
-                        "Since the if statement was false we now evaluate this else if case.";
+                        "Since the if statement was false we now evaluate this elif case.";
                         [interactive("next_line")] this_is_the_next_line_that_will_execute = helper.get_elif(this_is_the_next_line_that_will_execute);
                         [prompt]
-                        "Just like with if statements we need to decide whether the conditional part of the else if statement is true or false.";
+                        "Just like with if statements we need to decide whether the conditional part of the elif statement is true or false.";
                         let this_is_the_conditional_of_an_elif_statement: AstNode;
                         this_is_the_conditional_of_an_elif_statement = this_is_the_next_line_that_will_execute.condition;
 
                         [interactive("conditional")]
                         if (helper.does_this_conditional_evaluate_to_true(variables, this_is_the_conditional_of_an_elif_statement)) {
                             [prompt]
-                            "Since it’s true we move on to the lines inside of this clause.";
+                            "Since it’s true we move on to the lines inside of this code block.";
                             [no_step]
                             parent = this_is_the_next_line_that_will_execute;
                             [no_step]
@@ -116,14 +116,14 @@ function TPLAlgorithm() {
                             condition_outcome = true;
                         } else {
                             [prompt]
-                            "Since it’s false we will be ignoring all of the lines in this clause.";
+                            "Since it’s false we will be ignoring all of the lines in this code block.";
 
                             // TODO: add capability for more elifs
 
                             [no_step]
                             if (helper.has_else(this_is_the_next_line_that_will_execute)) {
                                 [prompt]
-                                "Since all previous if and else if statements were false we automatically move into the else case.";
+                                "Since all previous if and elif statements were false we automatically move into the else case.";
                                 [no_step]
                                 parent = this_is_the_next_line_that_will_execute;
                                 [no_step]
@@ -138,7 +138,7 @@ function TPLAlgorithm() {
                         [no_step]
                         if (helper.has_else(this_is_the_next_line_that_will_execute)) {
                             [prompt]
-                            "Since all previous if and else if statements were false we automatically move into the else case.";
+                            "Since all previous if and elif statements were false we automatically move into the else case.";
                             [no_step]
                             parent = this_is_the_next_line_that_will_execute;
                             [no_step]
@@ -161,7 +161,7 @@ function TPLAlgorithm() {
                 [no_step]
                 if (helper.is_there_another_line_to_execute(parent, this_is_the_next_line_that_will_execute, condition_outcome) == false) {
                     [prompt]
-                    "Now we can move back out of our clause to the main part of the function and skip any else if or else statements that come later.";
+                    "Now we can move back out of this code block to the main part of the function and skip any elif or else statements that come later.";
                 }
             }
 
@@ -175,6 +175,6 @@ function TPLAlgorithm() {
         let the_return_value_of_the_function_is_determined_here;
         the_return_value_of_the_function_is_determined_here = helper.get_return_output(this_is_the_next_line_that_will_execute, variables); // TODO: better text, highlight
         [prompt]
-        "The print statement below prints out the value(s) that the function returned. Enter that solution in the answer box!";
+        "The print statement below prints out the value(s) that the function returned. Enter that solution in the solution box!";
     }
 }
