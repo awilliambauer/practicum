@@ -308,7 +308,7 @@ function TplHelper() {
         return true;
     };
 
-    this.get_instance_variables = function(variable_bank, ast) {
+    this.get_local_variables = function(variable_bank, ast) {
         // assume first two statements are instance varibale declarations
         var firstInst = ast.body[0];
         var secInst = ast.body[1];
@@ -341,7 +341,7 @@ function TplHelper() {
     }
 
     //TODO: remove this
-    this.get_instance_variable = function(variable_bank, ast) {
+    this.get_local_variable = function(variable_bank, ast) {
         let variableName = ast["body"][lineNum]["expression"]["args"][0].value;
         let variableValue = ast["body"][lineNum]["expression"]["args"][1].value;
         let variableType = ast["body"][lineNum]["expression"]["args"][1].type;

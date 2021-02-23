@@ -23,7 +23,7 @@ function TPLAlgorithm() {
     [no_step]
     {
         [prompt]
-        "First, look at the method call.";
+        "First, look at the function call.";
 
         let these_are_the_function_parameters: Parameter;
         these_are_the_function_parameters = helper.get_array_parameter(state.args);
@@ -46,9 +46,9 @@ function TPLAlgorithm() {
         [interactive("next_line")] this_is_the_next_line_that_will_execute = helper.get_next_line(ast.body, this_is_the_next_line_that_will_execute);
 
         [no_step]
-        let it_defines_a_new_instance_variable_which_we_will_add_to_the_variable_bank: Variable;
+        let it_defines_a_new_local_variable_which_we_will_add_to_the_variable_bank: Variable;
         [interactive("add_variable")]
-        it_defines_a_new_instance_variable_which_we_will_add_to_the_variable_bank = helper.get_instance_variable(variables, ast);
+        it_defines_a_new_local_variable_which_we_will_add_to_the_variable_bank = helper.get_local_variable(variables, ast);
     }
 
     let this_is_the_next_line_that_will_execute: Line;
@@ -92,7 +92,7 @@ function TPLAlgorithm() {
                     let the_return_value_of_the_function_is_determined_here;
                     the_return_value_of_the_function_is_determined_here = helper.get_return_output(this_is_the_next_line_that_will_execute, variables); // TODO: better text, highlight
                     [prompt]
-                    "The print statement below prints out the value(s) that the function returned. Enter that solution in the answer box!";
+                    "The print statement below prints out the value(s) that the function returned. Enter that solution in the solution box!";
                     return;
                 }
 
@@ -110,11 +110,11 @@ function TPLAlgorithm() {
 
                 [no_step]
                 if (helper.is_if(this_is_the_next_line_that_will_execute)) {
-                    let this_is_the_conditional_of_an_if_statement: AstNode;
-                    this_is_the_conditional_of_an_if_statement = this_is_the_next_line_that_will_execute.condition;
+                    let this_is_the_conditional_of_the_if_statement: AstNode;
+                    this_is_the_conditional_of_the_if_statement = this_is_the_next_line_that_will_execute.condition;
 
                     [interactive("conditional")]
-                    if (helper.does_this_conditional_evaluate_to_true(variables, this_is_the_conditional_of_an_if_statement)) {
+                    if (helper.does_this_conditional_evaluate_to_true(variables, this_is_the_conditional_of_the_if_statement)) {
                         [prompt]
                         "Since it’s true we move on to the lines inside the if statement.";
                         [no_step]
@@ -187,7 +187,7 @@ function TPLAlgorithm() {
             }
 
             [prompt]
-            "We have reached the end of the while loop.";
+            "We have reached the end of this iteration of thewhile loop.";
             [no_step]
             this_is_the_next_line_that_will_execute = helper.get_while_loop(ast);
         }
@@ -200,6 +200,6 @@ function TPLAlgorithm() {
         let the_return_value_of_the_function_is_determined_here;
         the_return_value_of_the_function_is_determined_here = helper.get_return_output(this_is_the_next_line_that_will_execute, variables); // TODO: better text, highlight
         [prompt]
-        "The print statement below prints out the value(s) that the function returned. Enter that solution in the answer box!";
+        "The print statement below prints out the value(s) that the function returned. Enter that solution in the solution box!";
     }
 }
