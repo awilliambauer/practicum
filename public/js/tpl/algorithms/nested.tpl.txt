@@ -21,12 +21,12 @@ function TPLAlgorithm() {
     "Welcome to nested for loop practice.";
 
     [prompt]
-    "These problems assume you are comfortable with for loops already. If not, we recommend trying the for loop investigations problems first.";
+    "These problems assume you are comfortable with for loops already. If not, we recommend trying the for loop investigation problems first.";
 
     [no_step]
     {
         [prompt]
-        "First, look at the method call.";
+        "First, look at the function call.";
 
         let these_are_the_function_parameters: Parameter;
         these_are_the_function_parameters = helper.get_array_parameter(state.args);
@@ -49,9 +49,9 @@ function TPLAlgorithm() {
         [interactive("next_line")] this_is_the_next_line_that_will_execute = helper.get_next_line(ast.body, this_is_the_next_line_that_will_execute);
 
         [no_step]
-        let it_defines_a_new_instance_variable_which_we_will_add_to_the_variable_bank: Variable;
+        let it_defines_a_new_local_variable_which_we_will_add_to_the_variable_bank: Variable;
         [interactive("add_variable")]
-        it_defines_a_new_instance_variable_which_we_will_add_to_the_variable_bank = helper.get_instance_variable(variables, ast);
+        it_defines_a_new_local_variable_which_we_will_add_to_the_variable_bank = helper.get_local_variable(variables, ast);
     }
 
     let this_is_the_next_line_that_will_execute: Line;
@@ -78,7 +78,7 @@ function TPLAlgorithm() {
         this_is_the_loop_variable = loop.variable;
 
         [prompt]
-        "The loop variable will be iterating through a loop sequence that Python generates from the for call.";
+        "The loop variable will be iterating through a loop sequence that range generates from the range call.";
 
         [no_step]
         if (helper.is_loop_arr_type(loop)) {
@@ -159,7 +159,7 @@ function TPLAlgorithm() {
                 [prompt]
                 "The function ends as soon as we hit a return statement regardless of any more for loop iterations or anything else happening in the problem.";
                 [prompt]
-                "The print statement below prints out the value(s) that the function returned. Enter that solution in the answer box!";
+                "The print statement below prints out the value(s) that the function returned. Enter that solution in the solution box!";
                 return;
             }
 
@@ -194,7 +194,7 @@ function TPLAlgorithm() {
                 let lets_visualize_our_inner_sequence: Variable;
 
                 [prompt]
-                "Again the loop variable starts at index 0 and will be moving through the sequence Python generates.";
+                "Again the loop variable starts at index 0 and will be moving through the sequence range generates.";
 
                 [no_step]
                 if (helper.is_loop_arr_type(inner_loop)) {
@@ -274,7 +274,7 @@ function TPLAlgorithm() {
                             [prompt]
                             "The function ends as soon as we hit a return statement regardless of any more for loop iterations or anything else happening in the problem.";
                             [prompt]
-                            "The print statement below prints out the value(s) that the function returned. Enter that solution in the answer box!";
+                            "The print statement below prints out the value(s) that the function returned. Enter that solution in the solution box!";
                             return;
                         }
 
@@ -292,11 +292,11 @@ function TPLAlgorithm() {
 
                         [no_step]
                         if (helper.is_if(this_is_the_next_line_that_will_execute)) {
-                            let this_is_the_conditional_of_an_if_statement: AstNode;
-                            this_is_the_conditional_of_an_if_statement = this_is_the_next_line_that_will_execute.condition;
+                            let this_is_the_conditional_of_the_if_statement: AstNode;
+                            this_is_the_conditional_of_the_if_statement = this_is_the_next_line_that_will_execute.condition;
 
                             [interactive("conditional")]
-                            if (helper.does_this_conditional_evaluate_to_true(variables, this_is_the_conditional_of_an_if_statement)) {
+                            if (helper.does_this_conditional_evaluate_to_true(variables, this_is_the_conditional_of_the_if_statement)) {
                                 [prompt]
                                 "Since it’s true we move on to the lines inside the if statement.";
                                 [no_step]
@@ -343,7 +343,7 @@ function TPLAlgorithm() {
                     }
 
                     [prompt]
-                    "We have reached the end of the inner for loop.";
+                    "We have reached the end of this iteration of the inner for loop.";
 
                     [no_step]
                     this_is_the_next_line_that_will_execute = inner_loop;
@@ -361,11 +361,11 @@ function TPLAlgorithm() {
 
                 [no_step]
                 if (helper.is_if(this_is_the_next_line_that_will_execute)) {
-                    let this_is_the_conditional_of_an_if_statement: AstNode;
-                    this_is_the_conditional_of_an_if_statement = this_is_the_next_line_that_will_execute.condition;
+                    let this_is_the_conditional_of_the_if_statement: AstNode;
+                    this_is_the_conditional_of_the_if_statement = this_is_the_next_line_that_will_execute.condition;
 
                     [interactive("conditional")]
-                    if (helper.does_this_conditional_evaluate_to_true(variables, this_is_the_conditional_of_an_if_statement)) {
+                    if (helper.does_this_conditional_evaluate_to_true(variables, this_is_the_conditional_of_the_if_statement)) {
                         [prompt]
                         "Since it’s true we move on to the lines inside the if statement.";
                         [no_step]
@@ -415,7 +415,7 @@ function TPLAlgorithm() {
         }
 
         [prompt]
-        "We have reached the end of the outer for loop.";
+        "We have reached the end of this iteration of the outer for loop.";
 
         [no_step]
         this_is_the_next_line_that_will_execute = helper.get_loop(ast);
@@ -431,7 +431,7 @@ function TPLAlgorithm() {
         let the_return_value_of_the_function_is_determined_here;
         the_return_value_of_the_function_is_determined_here = helper.get_return_output(this_is_the_next_line_that_will_execute, variables); // TODO: better text, highlight
         [prompt]
-        "The print statement below prints out the value(s) that the function returned. Enter that solution in the answer box!";
+        "The print statement below prints out the value(s) that the function returned. Enter that solution in the solution box!";
     }
 
 }
