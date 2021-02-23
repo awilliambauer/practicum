@@ -124,7 +124,7 @@ function TPLAlgorithm() {
     iterations = false;
 
     [interactive("conditional")]
-    while (helper.is_there_another_item_in_the_loop_sequence(variables, false)) {
+    do {
 
         [no_step]
         if (iterations) {
@@ -239,7 +239,7 @@ function TPLAlgorithm() {
                 inner_iterations = false;
 
                 [interactive("conditional")]
-                while (helper.is_there_another_item_in_the_loop_sequence(variables, true)) {
+                do {
 
                     [no_step]
                     if (inner_iterations) {
@@ -350,7 +350,7 @@ function TPLAlgorithm() {
 
                     [no_step]
                     inner_iterations = true;
-                }
+                } while (helper.is_there_another_item_in_the_loop_sequence(variables, true));
 
             [prompt]
             "The inner for loop has been completed so now we move back to the outer for loop and continue.";
@@ -422,7 +422,7 @@ function TPLAlgorithm() {
 
         [no_step]
         iterations = true;
-    }
+    } while (helper.is_there_another_item_in_the_loop_sequence(variables, false));
 
     [no_step] if (helper.this_is_a_return_statement(ast)) {
         let this_is_the_next_line_that_will_execute: Line;

@@ -149,8 +149,7 @@ function TPLAlgorithm() {
     [no_step]
     iterations = false;
 
-    [interactive("conditional")]
-    while (helper.is_there_another_item_in_the_loop_sequence(variables, false)) {
+    do {
 
         [no_step]
         if (iterations) {
@@ -261,7 +260,8 @@ function TPLAlgorithm() {
 
         [no_step]
         iterations = true;
-    }
+
+    } while (helper.is_there_another_item_in_the_loop_sequence(variables, false));
 
     [no_step] if (helper.this_is_a_return_statement(ast)) {
         let this_is_the_next_line_that_will_execute: Line;
