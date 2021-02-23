@@ -23,7 +23,7 @@ function TPLAlgorithm() {
     [no_step]
     {
         [prompt]
-        "First, look at the method call.";
+        "First, look at the function call.";
 
         let these_are_the_function_parameters: Parameter;
         these_are_the_function_parameters = helper.get_array_parameter(state.args);
@@ -46,9 +46,9 @@ function TPLAlgorithm() {
         [interactive("next_line")] this_is_the_next_line_that_will_execute = helper.get_next_line(ast.body, this_is_the_next_line_that_will_execute);
 
         [no_step]
-        let it_defines_a_new_instance_variable_which_we_will_add_to_the_variable_bank: Variable;
+        let it_defines_a_new_local_variable_which_we_will_add_to_the_variable_bank: Variable;
         [interactive("add_variable")]
-        it_defines_a_new_instance_variable_which_we_will_add_to_the_variable_bank = helper.get_instance_variable(variables, ast);
+        it_defines_a_new_local_variable_which_we_will_add_to_the_variable_bank = helper.get_local_variable(variables, ast);
     }
 
     let this_is_the_next_line_that_will_execute: Line;
@@ -81,7 +81,7 @@ function TPLAlgorithm() {
 
         } else {
             [prompt]
-            "When range is called with some integer parameters in Python, it makes a sequence of numbers to match the range call.";
+            "When range is called with integer parameters in Python, it makes a sequence of numbers to match the range call.";
 
             [no_step]
             if (state.vars.length == 1) {
@@ -96,9 +96,9 @@ function TPLAlgorithm() {
             [no_step]
             if (state.vars.length == 3) {
                 [prompt]
-                "Our range has three numbers. The first two are the start and end numbers for the sequence, it will start at start and stop just before it reaches end.";
+                "Our range call has three numbers. The first two are the start and end numbers for the sequence, it will start at start and stop just before it reaches end.";
                 [prompt]
-                "The third number is the step, it’s how much the sequence increases by. The default for the step is 1, but we have the option to but in any number.";
+                "The third number is the step, which is how much the sequence increases by. The default for the step is 1, but we have the option to put in any number.";
             }
 
         }
@@ -114,9 +114,9 @@ function TPLAlgorithm() {
             [interactive("add_variable")]
             add_the_sequence_to_the_variable_bank = helper.add_the_loop_array_to_the_variable_bank(variables, lets_visualize_our_sequence, false);
 
-            let this_is_the_first_index_for_the_loop_sequence: ArrayElement;
+            let this_is_the_first_value_in_the_loop_sequence: ArrayElement;
             [interactive("array_element_get")]
-            this_is_the_first_index_for_the_loop_sequence = helper.loop_array_index(variables, lets_visualize_our_sequence, false, true);
+            this_is_the_first_value_in_the_loop_sequence = helper.loop_array_index(variables, lets_visualize_our_sequence, false, true);
         } else {
             lets_visualize_our_sequence = helper.get_iterable_array(variables, this_is_the_loop_iterable, false);
 
@@ -124,12 +124,12 @@ function TPLAlgorithm() {
             [interactive("add_variable")]
             add_the_sequence_to_the_variable_bank = helper.add_this_to_the_variable_bank(variables, lets_visualize_our_sequence, false);
 
-            let this_is_the_first_index_for_the_loop_sequence: ArrayElement;
+            let this_is_the_first_value_in_the_loop_sequence: ArrayElement;
             [interactive("array_element_get")]
-            this_is_the_first_index_for_the_loop_sequence = helper.loop_array_index(variables, lets_visualize_our_sequence, false, true);
+            this_is_the_first_value_in_the_loop_sequence = helper.loop_array_index(variables, lets_visualize_our_sequence, false, true);
 
             [prompt]
-            "Every time the for loop starts again, the loop variable moves to the next index of the sequence and takes on the next value.";
+            "Every time the for loop starts again, the loop variable is set to the next value in the sequence.";
 
             [prompt]
             "The for loop will end when the loop variable has moved through each element in the sequence.";
@@ -137,9 +137,9 @@ function TPLAlgorithm() {
         [prompt]
         "Let’s set our loop variable to the first element of the sequence.";
 
-        let add_the_starting_value_for_the_loop_variable_to_the_variable_bank: Variable;
+        let add_the_starting_value_in_the_loop_variable_to_the_variable_bank: Variable;
         [interactive("add_variable")]
-        add_the_starting_value_for_the_loop_variable_to_the_variable_bank = helper.add_this_to_the_variable_bank(variables, helper.get_loop_init_variable(variables, this_is_the_loop_variable, this_is_the_loop_iterable, false));
+        add_the_starting_value_in_the_loop_variable_to_the_variable_bank = helper.add_this_to_the_variable_bank(variables, helper.get_loop_init_variable(variables, this_is_the_loop_variable, this_is_the_loop_iterable, false));
 
         [prompt]
         "Now let’s move on into the for loop.";
@@ -157,9 +157,9 @@ function TPLAlgorithm() {
             let now_we_need_to_update_the_loop_variable: AstNode;
             now_we_need_to_update_the_loop_variable = loop.increment;
 
-            let this_is_the_next_index_for_the_loop_sequence: ArrayElement;
+            let this_is_the_next_value_in_the_loop_sequence: ArrayElement;
             [interactive("array_element_get")]
-            this_is_the_next_index_for_the_loop_sequence = helper.loop_array_index(variables, lets_visualize_our_sequence, false, false);
+            this_is_the_next_value_in_the_loop_sequence = helper.loop_array_index(variables, lets_visualize_our_sequence, false, false);
 
             let update_the_value_of_the_loop_variable_in_the_variable_bank: Variable;
             [interactive("update_variable")]
@@ -185,7 +185,7 @@ function TPLAlgorithm() {
                 [prompt]
                 "The function ends as soon as we hit a return statement regardless of any more for loop iterations or anything else happening in the problem.";
                 [prompt]
-                "The print statement below prints out the value(s) that the function returned. Enter that solution in the answer box!";
+                "The print statement below prints out the value(s) that the function returned. Enter that solution in the solution box!";
                 return;
             }
 
@@ -203,11 +203,11 @@ function TPLAlgorithm() {
 
             [no_step]
             if (helper.is_if(this_is_the_next_line_that_will_execute)) {
-                let this_is_the_conditional_of_an_if_statement: AstNode;
-                this_is_the_conditional_of_an_if_statement = this_is_the_next_line_that_will_execute.condition;
+                let this_is_the_conditional_of_the_if_statement: AstNode;
+                this_is_the_conditional_of_the_if_statement = this_is_the_next_line_that_will_execute.condition;
 
                 [interactive("conditional")]
-                if (helper.does_this_conditional_evaluate_to_true(variables, this_is_the_conditional_of_an_if_statement)) {
+                if (helper.does_this_conditional_evaluate_to_true(variables, this_is_the_conditional_of_the_if_statement)) {
                     [prompt]
                     "Since it’s true we move on to the lines inside the if statement.";
                     [no_step]
@@ -254,7 +254,7 @@ function TPLAlgorithm() {
         }
 
         [prompt]
-        "We have reached the end of the for loop.";
+        "We have reached the end of this iteration of the for loop.";
 
         [no_step]
         this_is_the_next_line_that_will_execute = helper.get_loop(ast);
@@ -270,7 +270,7 @@ function TPLAlgorithm() {
         let the_return_value_of_the_function_is_determined_here;
         the_return_value_of_the_function_is_determined_here = helper.get_return_output(this_is_the_next_line_that_will_execute, variables); // TODO: better text, highlight
         [prompt]
-        "The print statement below prints out the value(s) that the function returned. Enter that solution in the answer box!";
+        "The print statement below prints out the value(s) that the function returned. Enter that solution in the solution box!";
     }
 
 }
