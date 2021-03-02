@@ -24,7 +24,9 @@ var explainer = (function() {
         if (id.indexOf('_') >= 0) {
             // assume underscored
             var s = id.replace(/_/g, ' ');
-            return s.charAt(0).toUpperCase() + s.slice(1);
+            var ret = s.charAt(0).toUpperCase() + s.slice(1);
+            ret = ret + ".";
+            return ret;
         } else {
             // assume camel-case
             var words = id.split(/(?=[A-Z])/);
@@ -72,7 +74,9 @@ var explainer = (function() {
                     prompt = "Is this condition true? ";
                     // if we're calling a helper function in the conditional, use the function name as the prompt
                     if (stmt.condition.hasOwnProperty("object") && stmt.condition.object.hasOwnProperty("name")) {
-                        prompt = format_identifier(stmt.condition.object.name) + "? ";
+                        prompt = format_identifier(stmt.condition.object.name);
+                        prompt = prompt.substring(0,prompt.length-1);
+                        prompt = prompt + "? ";
                     }
                     if (cs.marker === 'then') {
                         prompt += "Yes."
@@ -83,7 +87,9 @@ var explainer = (function() {
                 case "while":
                 case "while:condition":
                 case "dowhile:condition":
-                    var p = format_identifier(sr.name) + "? ";
+                    var p = format_identifier(sr.name);
+                    p = p.substring(0,p.length-1);
+                    p = p + "? ";
                     if (sr.result) {
                         p += "Yes.";
                     } else {
@@ -106,6 +112,7 @@ var explainer = (function() {
             prompt += " " + annotations.add_to_prompt.join(" ");
         }
         if (annotations.hasOwnProperty("question_answer")) {
+            prompt = prompt.substring(0,prompt.length-1);
             prompt += "? " + sr.result;
         }
         //var punc = ".?!";
