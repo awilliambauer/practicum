@@ -39,9 +39,9 @@ var java_simulator = function() {
                     case '!=':
                         return {type: 'bool', value: arg1v !== arg2v};
                     // FIXME these do not short-circuit
-                    case '&&':
+                    case 'and':
                         return {type: 'bool', value: arg1v && arg2v};
-                    case '||':
+                    case 'or':
                         return {type: 'bool', value: arg1v || arg2v};
                     case '+':
                         return {type: 'int', value: arg1v + arg2v};
@@ -65,6 +65,10 @@ var java_simulator = function() {
                     case '-=':
                         arg1.value -= arg2.value;
                         return arg1;
+                    case '&&':
+                        return { type: "bool", value: arg1v && arg2v };
+                    case '||':
+                        return { type: "bool", value: arg1v || arg2v };
                     default:
                         throw new Error("Unknown binary operator " + expr.operator);
                 }
