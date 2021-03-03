@@ -36,8 +36,18 @@ var csed = (function() {
 
     var ENABLE_TELEMETRY_LOGGING = false;
 
+    let problem_types = {
+      problem_types: ["whileLoop", "if_else", "forLoop", "nested"],
+      enabled_categories: [
+        "default-whileLoop",
+        "default-if_else",
+        "default-forLoop",
+        "default-nested",
+      ],
+    };
+    
     function setupLogging(username) {
-        var enabled_problem_types = ["whileLoop", "if_else", "forLoop", "nested"];
+        var enabled_problem_types = problem_types.problem_types;
         if (ENABLE_TELEMETRY_LOGGING) {
             var LOGGING_BASE_URL = window.location.protocol + "//" + window.location.hostname + ":" + LOGGING_PORT;
             //var LOGGING_BASE_URL = "https://dev-olio.cs.washington.edu" + ":" + LOGGING_PORT;
@@ -457,79 +467,6 @@ var csed = (function() {
         return $("#__username").text();
     }
 
-    // function hasRespondedToConsentForm() {
-    //     return server_savedata && server_savedata.hasOwnProperty("consentResponse");
-    // }
-    //
-    // function getConsentFormResponse() {
-    //     return JSON.parse(server_savedata.consentResponse).response.toUpperCase();
-    // }
-    //
-    // function showConsentFormModal() {
-    //     // go modal
-    //     var m = $("#consent-form-modal");
-    //     m.modal({
-    //           keyboard: false,
-    //           backdrop: 'static'
-    //     });
-    //     m.modal("show");
-    // }
-
-    // Fill out the flash-style message and show it, if they've responded:
-    // function updateConsentMessage() {
-    //     if (csed.hasRespondedToConsentForm()) {
-    //         d3.select("#consent-status").text(csed.getConsentFormResponse());
-    //         d3.select("#consent-existed-message").classed("hidden", false);
-    //     }
-    // }
-
-    // function installConsentFormModal() {
-    //     updateConsentMessage();
-    //
-    //     d3.select("#age-input").on("input", function () {
-    //         var age = d3.select("#age-input").property("value");
-    //         // if ($.isNumeric(age) && Math.floor(age) > 17) {
-    //         // GUH. remove the attribute by passing null. Passing false leaves the attribute there,
-    //         //      which leaves the element disabled.
-    //             d3.select("#consent-form-agree").attr("disabled", null);
-    //         // } else {
-    //         //    d3.select("#consent-form-agree").attr("disabled", true);
-    //         // }
-    //     });
-    //     $("#age-input").keypress(function(e){
-    //         if(e.keyCode===13 && !d3.select("#consent-form-agree").attr("disabled")) {
-    //             $('#consent-form-agree').click();
-    //         }
-    //     });
-    // }
-
-    // function sendConsentFormAgree() {
-    //     sendConsentFormResponse($("#__consent-form-agree-data").text());
-    // }
-    //
-    // function sendConsentFormDisagree() {
-    //     sendConsentFormResponse($("#__consent-form-disagree-data").text());
-    // }
-    //
-    // function sendConsentFormResponse(data) {
-    //     
-    //
-    //     Logging.log_event_with_promise({
-    //         type: Logging.ID.Consent,
-    //         detail: data
-    //     }, true).then(function() {
-    //         console.info("successfully logged consent response.");
-    //         consentFormResponseSuccess(data);
-    //     });
-    // }
-
-    // function consentFormResponseSuccess(data) {
-    //     server_savedata.consentResponse = data;
-    //     Logging.save_user_data(server_savedata);
-    //     updateConsentMessage();
-    //     //checkForLabRedirect(); // not part of current experiment
-    // }
-
     function checkForLabRedirect() {
         if (getQueryVariable("lab") === "true" && experimental_condition === 2) {
             var labNo = getQueryVariable("labNo");
@@ -572,7 +509,7 @@ var csed = (function() {
                     throw new Error("lab number " + labNo + " not supported");
             }
         } else {
-            enabledCategories = ["default-whileLoop", "default-if_else", "default-forLoop", "default-nested"];
+            enabledCategories = problem_types.enabled_categories;
         }
     }
 
