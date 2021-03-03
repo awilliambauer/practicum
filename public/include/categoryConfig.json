@@ -108,7 +108,7 @@
     "title": "If/Else Investigation 6",
     "examProblemDatabaseId": "88",
     "content": {
-      "text": "def if_else_investigation(x, y):\n\tz = 4\n\tif z <= x:\n\t\tz = x + 1\n\telse:\n\t\tz = z + 9\n\tif z <= y:\n\t\ty+= 1\n\treturn (z, y)",
+      "text": "def if_else_investigation(x, y):\n\tz = 4\n\tif z <= x || x > 5:\n\t\tz = x + 1\n\telse:\n\t\tz = z + 9\n\tif z <= y:\n\t\ty+= 1\n\treturn (z, y)",
       "variants": [{
         "id": "51",
         "arguments": {"x": 3, "y": 20}
@@ -148,7 +148,7 @@
     "title": "If/Else Investigation 8",
     "examProblemDatabaseId": "92",
     "content": {
-      "text": "def if_else_investigation(x, y):\n\tif x == y:\n\t\tx = x + 11\n\telif x > 2 * y:\n\t\tx = 0\n\tif x == 0 && y > x:\n\t\tx = x + 2\n\t\ty = y + 2\n\treturn (x, y)",
+      "text": "def if_else_investigation(x, y):\n\tif x == y || y < 5:\n\t\tx = x + 11\n\telif x > 2 * y:\n\t\tx = 0\n\tif x == 0 && y > x:\n\t\tx = x + 2\n\t\ty = y + 2\n\treturn (x, y)",
       "variants": [{
         "id": "61",
         "arguments": {"x": 5, "y": 5}
@@ -658,7 +658,7 @@
     "id": "107",
     "title": "Nested For Loop Investigation 3",
     "content": {
-      "text": "def nested_for_loop_investigation(word):\n\tvowels = \"aeiou\"\n\tcount = 0\n\tfor letter in word:\n\t\tfor vowel in vowels:\n\t\t\tif letter == vowel:\n\t\t\t\tcount = count + 1\n\treturn(count)",
+      "text": "def nested_for_loop_investigation(word):\n\tvowels = \"aeiou\"\n\tcount = 0\n\tfor letter in word:\n\t\tfor vowel in vowels:\n\t\t\tif letter == vowel:\n\t\t\t\tcount = count + 1\n\t\t\t\tbreak\n\treturn(count)",
       "variants": [{
         "id": "108",
         "arguments": {"word": "house"}
@@ -697,7 +697,7 @@
     "id": "116",
     "title": "Nested For Loop Investigation 6",
     "content": {
-      "text": "def nested_for_loop_investigation(no_squares):\n\tnums = [3, 4, 5]\n\tfor i in range(len(no_squares)):\n\t\tfor num in nums:\n\t\t\tif num * num == no_squares[i]:\n\t\t\t\tno_squares[i] = 0\n\treturn(no_squares)",
+      "text": "def nested_for_loop_investigation(no_squares):\n\tnums = [3, 4, 5]\n\tfor i in range(len(no_squares)):\n\t\tfor num in nums:\n\t\t\tif num * num == no_squares[i]:\n\t\t\t\tno_squares[i] = 0\n\t\t\t\tbreak\n\treturn(no_squares)",
       "variants": [{
         "id": "117",
         "arguments": {"no_squares": [9, 65, 81, 25]}
@@ -723,7 +723,7 @@
     "id": "122",
     "title": "Nested For Loop Investigation 8",
     "content": {
-      "text": "def nested_for_loop_investigation(lst):\n\tfactors = [2, 3, 4, 6]\n\tcount = 0\n\tfor item in lst:\n\t\tif item > 12:\n\t\t\treturn(count)\n\t\tfor factor in factors:\n\t\t\tif item * factor == 12:\n\t\t\t\tcount = count + 1\n\treturn(count)",
+      "text": "def nested_for_loop_investigation(lst):\n\tfactors = [2, 3, 4, 6]\n\tcount = 0\n\tfor item in lst:\n\t\tif item > 12:\n\t\t\treturn(count)\n\t\tfor factor in factors:\n\t\t\tif item * factor == 12:\n\t\t\t\tcount = count + 1\n\t\t\t\tbreak\n\treturn(count)",
       "variants": [{
         "id": "123",
         "arguments": {"lst": [5, 2, 7, 24, 4]}
