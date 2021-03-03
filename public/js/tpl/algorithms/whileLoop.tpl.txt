@@ -187,7 +187,7 @@ function TPLAlgorithm() {
             }
 
             [prompt]
-            "We have reached the end of this iteration of thewhile loop.";
+            "We have reached the end of this iteration of the while loop.";
             [no_step]
             this_is_the_next_line_that_will_execute = helper.get_while_loop(ast);
         }

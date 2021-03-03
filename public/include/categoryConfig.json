@@ -322,13 +322,13 @@
     "title": "While Loop Investigation 10",
     "examProblemDatabaseId": "96",
     "content": {
-      "text": "def while_loop_investigation(a, b):\n\troll_sum = 0\n\twhile a < b:\n\t\troll_sum = roll_sum + a\n\t\ta+= 1\n\treturn (roll_sum) ",
+      "text": "def whileLoopInvestigation(a, b):\n\twhile a < b:\n\t\ta = a + 1\n\t\tif a % 2 == 0:\n\t\t\tcontinue\n\t\telse:\n\t\t\tb = b - a\n\treturn (a, b)",
       "variants": [{
         "id": "100",
-        "arguments": {"a": 8, "b": 13}
+        "arguments": {"a": 3, "b": 16}
       },{
         "id": "101",
-        "arguments": {"a": 12, "b": 17}
+        "arguments": {"a": 8, "b": 41}
       }]
     }
   }]
