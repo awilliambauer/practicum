@@ -42,7 +42,7 @@ var explainer = (function() {
         var stmt = sim_result.statement;
         var sr = sim_result.statement_result;
         var annotations = sim_result.annotations;
-        var cs = sim_result.call_stack[sim_result.call_stack.length - 1];
+        var cs = sim_result.call_stack_top;
         var prompt = "";
 
         // a non-empty prompt annotation overrides explanation

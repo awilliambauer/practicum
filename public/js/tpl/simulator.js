@@ -319,19 +319,19 @@ function simulator(ast, globals) {
         }
 
         // 
-        var cs = copy(call_stack);
+        var cs = copy(last(call_stack));
         return {
             // the problem state
             state: state,
             // the most-recently executed statement
             statement: stmt,
             // the call stack
-            call_stack: cs,
+            call_stack_top: cs,
             // information about the last statement execution
             statement_result: result,
             // information about current variables
             variables: {
-                in_scope: last(cs).context
+                in_scope: cs.context
             },
             annotations: annotations
         };
