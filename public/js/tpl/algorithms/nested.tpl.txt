@@ -362,8 +362,14 @@ function TPLAlgorithm() {
                     inner_iterations = true;
                 } while (helper.is_there_another_item_in_the_loop_sequence(variables, true));
 
+            [no_step]
+            end_loop = true;
+
             [prompt]
             "The inner for loop has been completed so now we move back to the outer for loop and continue.";
+
+            [no_step]
+            end_loop = false;
 
             //[interactive("next_line")] this_is_the_next_line_that_will_execute = helper.get_the_next_line_in_this_block_to_execute(parent, this_is_the_next_line_that_will_execute, condition_outcome);
 
