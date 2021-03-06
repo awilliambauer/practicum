@@ -495,6 +495,9 @@ var controller = (function() {
                         break;
 
                     case "Line":
+                        if(state.variables.in_scope.hasOwnProperty("end_loop") && state.variables.in_scope.end_loop.value === true) {
+                            break;
+                        }
                         if (fadeLevel > 0 && variable === state.statement_result.name &&
                             state.hasOwnProperty("askForResponse") && state.askForResponse === "next_line") {
 

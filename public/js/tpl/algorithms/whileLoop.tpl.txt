@@ -64,6 +64,10 @@ function TPLAlgorithm() {
     [no_step]
     let lets_visualize_our_sequence_with_an_array: Variable;
 
+    let end_loop: Boolean;
+    [no_step]
+    end_loop = false;
+
     [no_step]
     {
         let this_is_the_loop_initialization: AstNode;
@@ -186,8 +190,15 @@ function TPLAlgorithm() {
                 break;
             }
 
+            [no_step]
+            end_loop = true;
+
             [prompt]
             "We have reached the end of this iteration of the while loop.";
+
+            [no_step]
+            end_loop = false;
+
             [no_step]
             this_is_the_next_line_that_will_execute = helper.get_while_loop(ast);
         }

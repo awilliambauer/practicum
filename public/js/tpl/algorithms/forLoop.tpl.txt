@@ -149,6 +149,10 @@ function TPLAlgorithm() {
     [no_step]
     iterations = false;
 
+    let end_loop: Boolean;
+    [no_step]
+    end_loop = false;
+
     do {
 
         [no_step]
@@ -252,8 +256,14 @@ function TPLAlgorithm() {
             break;
         }
 
+        [no_step]
+        end_loop = true;
+
         [prompt]
         "We have reached the end of this iteration of the for loop.";
+
+        [no_step]
+        end_loop = false;
 
         [no_step]
         this_is_the_next_line_that_will_execute = helper.get_loop(ast);
