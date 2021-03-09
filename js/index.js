@@ -362,17 +362,9 @@ var csed = (function() {
         // remove the old problem from the DOM
         d3.selectAll("#problem-container .problem").remove();
 
-        // reset any global state in the category js runner
-        // if (!csed.hasOwnProperty(problemConfig.category)) {
-        //     throw Error("unknown category " + problemConfig.category + "!");
-        // }
-
         var problemUI = csed.controller;
-        problemUI.reset();
 
         // Load in the template for the problem
-        
-        
         d3.html(problemUI.template_url, function(error, problemHtml){
             if (error) console.error(error);
 
