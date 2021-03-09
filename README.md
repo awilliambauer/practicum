@@ -1,148 +1,95 @@
-# CSED Research Project
+# Practicum
+
+## Table of Contents
+
+- [About](#about)
+- [Getting Started](#getting_started)
+- [Project Components](#components)
+- [Supported Python Features](#features)
+
+## About <a name = "about"></a>
+
+Practicum is a software project that is an interactive, web-based tool which teaches introductory CS topics. It was created to help any student taking the intro class and carefully explains the necessary computer science terms and concepts. One of its strengths is that rather than creating a program for each problem, each type of problem is programmed. This is done by creating a Thought Process Language (TPL). 
+
+The first advantage is that the TPL is able to automatically generate an interactive explanation for any problem within its problem type. The second advantage is that the TPL doesn’t have to be reprogrammed and can be reused. These advantages save time because the programmer only needs to write a problem, and the TPL will handle everything else. 
+
+Overall, Practicum makes it easy for professors to encode their thought process when solving a problem into our system and allow students to walk through it step by step to teach a variety of computer science concepts.
 
 
-### Overview
-Leveraging the Center for Games back-end, this project is for visualizing programming practice problems and how to solve them.
+## Getting Started <a name = "getting_started"></a>
 
-## Setup
+To get a copy of Practicum working on your local machine, run the following code in your terminal:
 
-#### Prerequisites
-1. git
-2. ssh
-3. IDE (I'm using WebStorm: [https://www.jetbrains.com/webstorm/] -- you can get a 1-year trial with a .edu email)
-4. NodeJS, if you want to run the unit tests.
-
-#### Overview of setup procedure
-Alright, you thought this was going to be easy. :P Don't worry, it's not too bad.
-
-This doc walks you through how to checkout the code, running into the walls I ran into while trying to set it up.
-
-1. Ensure your git executable knows how to talk to gitlab.cs.washington.edu
-1. Pick your editor (this doc is written for using WebStorm)
-1. Checkout the code base
-1. Make a simple commit
-1. Setup the web server (apache)
-...
-
-### Ensure your git knows how to talk to gitlab
-Gitlab.cs prefers that we use ssh keys and a shared username to clone the code. Read more below if you want to know more
- about what's going on.
-
-
-1. Pick a local directory for your git repository (your copy of the source code) to live in
-    * Get your terminal open to this directory
-1. Head to the project at [https://gitlab.cs.washington.edu/csedresearch/csedresearch]
-1. Grab the cloning url with ssh selected (as opposed to https), and git clone the repo:
-    * ```% git clone git@gitlab.cs.washington.edu:csedresearch/csedresearch.git```
-1. Now, when you run this command it should prompt you for a password. *You won't ever enter a password for that user, so hit CTL-C to cancel the clone command.*
-1. A simpler command that should yield the same issue is:```% ssh -T git@gitlab.cs.washington.edu```
-1. What we need instead is a public/private pair of keys that will authenticate you instead. First, check to see if you
- have an ssh_key on your development box that you can use:
-    * probably would be stored in ~/.ssh/id_rsa(.pub)
-    * If you don't, what you need to do is generate a public/private keypair, and have git (over ssh) use that instead of password authentication.
-    * Follow the instructions here [https://gitlab.cs.washington.edu/help/ssh/README] to create a keypair
-        * When it prompted me for a keyfile name, I used 'id_rsa'
-        * I haven't figured out how to make everything run smoothly if you don't use the filename 'id_rsa'
-        * When it prompted me for a passphrase, I simply hit enter (It is impossible to retrieve, so I picked an easy one to remember).
-            * github doesn't recommend this: [https://help.github.com/articles/generating-ssh-keys/]
-1. Whew! Now that you have a keypair, give the gitlab server the public half of the keypair
-    * Go to your profile page on gitlab: [https://gitlab.cs.washington.edu/profile]
-    * And get to the part where you add ssh keys to your account: [https://gitlab.cs.washington.edu/profile/keys/new]
-1. The name of my key on gitlab reflects the name of the key file, and the computer it is on. (macbook id_rsa)
-1. In the key section, paste the entire output of
-    *```
-    % cat ~/.ssh/id_rsa.pub
-    % # or whatever you named your public key
 ```
-1. Your ssh client should be configured to pick up ssh keys in the id_rsa(.pub) files automatcally, so try to connect
-   to gitlab again:
-   *``` % ssh -T git@gitlab.cs.washington.edu ```
-1. If it didn't work, you should get prompted for git@gitlab's password again. Some debugging info will come out if you:
-    *``` % ssh -T git@gitlab.cs.washington.edu ```
-    * look for ssh trying to do public key auth using id_rsa, or whatever you named your key.
-1. If it gives you a welcome message with your name, awesome! You got it, dude!
-1. If you want to clone the repo, that's fine. I cloned it, and then deleted it, because I want to use the source control
-   through the IDE.
-
-
-### WebStorm:
-
-1. Download and install WebStorm [https://www.jetbrains.com/webstorm/]
-1. Fire it up. When it asks what project to open, 'Check out a project using version control'
-    * use 'git' not 'GitHub'
-    * repo: git@gitlab.cs.washington.edu:csedresearch/csedresearch.git
-    * parent dir and dir -- wherever you want the code on your file system
-1. Create a new file with your name in it in the 'myfirstcommit' folder.
-1. Write whatever you want in said file.
-1. Use the VCS menu, or right-clicks, or the command line to 'git add' the file you created.
-    * This 'stages' the file to be committed; in git parlance, it adds the file(s) to the index.
-    * You generally don't 'git add' files until you are also ready to 'git commit' the files that you've added
-1. Use the VCS menu, or right-clicks, or the command line to 'git commit' the staged files, (the index).
-    * Include a short description of the purpose of your change
-    * Once you commit on your local repo, this is a point that you can roll back to.
-    * WebStorm won't fill out the author box, but gitlab is smart enough to know who you are from your ssh key
-1. Use the VCS menu, or the command-line, to 'git push' your changes to the upstream 'origin' repository
-    * Your commit doesn't get shared with anyone until you push it back up to gitlab.
-    * (This isn't strictly true, but close enough. Someone can 'git pull' from your local repo if you set it up, but
-      that's outside the scope.)
-1. Assuming no errors, woo hoo! Check out your commit on the gitlab project page.
-
-
-### Web Server!
-
-#### Install it
-1. Now that you have the code, we need to get a webserver set up to serve up the files.
-1. If you are on a Mac, this is likely already done for you.
-    * Since we are building a JS heavy application, we just need the webserver -- no need to track down MySQL/PHP, etc.
-1. On Windows, the easiest thing to do would be to acquire an WAMP stack.
-    * Or you can follow the apache docs for install here: http://httpd.apache.org/docs/2.2/platform/windows.html
-    * WAMP stands for Windows: Apache, MySQL, PHP
-    * Apache is the web server -- it's the program that listens for browsers to connect to it, finds web pages or runs server-side code, and sends the response back
-    * MySQL is a database program, for fast, query-able access to large data sets. We don't need it for this project, but it comes bundled.
-    * PHP is a server-side scripting language. Like MySQL, I don't think we'll need it for this project.
-    * Either of these should work:
-        * http://www.wampserver.com/en/
-        * https://bitnami.com/stack/wamp
-1. Linux -- use your package manage to get apache
-    * maybe on ubuntu: ```% apt-get install apache2```?
-
-#### Test it out
-1. Start your server
-    (Mac: ``` % sudo apachectl start  ```)
-1. Navigate to http://localhost/, and you should see a page
-1. There are a buncha ways that you can hook your webserver up to the code base; I'mma just show you the one I like.
-    * Find the root folder that Apache is serving out of
-        * On a Mac, this is /Library/WebServer/Documents/
-        * On Linux, this is probably /var/www/html/
-        * On Windows, if you're using Bitnami, it's C:/Bitnami/wampstack-5.4.39-0/apache2/htdocs
-    * Make a symbolic link from that directory to the public folder of the project:
-        *```
-% cd /Library/WebServer/Documents
-% sudo ln -s <path_to_project_root>/public csed
+git clone https://github.com/awb-carleton/practicum.git
+cd practicum
 ```
-        * To do this in Windows, open command prompt and enter:
-            *```
-% mklink /J csed <path_to_project_root>/public
+
+If you have your SSH key stored on GitHub, run this code in your terminal instead:
+
 ```
-1. Now navigate your browser to http://localhost/csed, and you should see the landing page! Boom, baby.
-    * It should also say that d3 is working.
+git clone git@github.com:awb-carleton/practicum.git
+cd practicum
+```
 
-#### Troubleshooting
-* If you get a "Forbidden" error and it says you are not allowed to access the directory, make sure that your repo is in a directory whose parent directories all have public read access. (e.g. your Documents folder will generally not work)
+Once you have cloned the repository to your local machine, you can run the code using any HTTP server. The most common way of doing this is using Python's http module. To run the website on localhost, run the following code in your terminal:
 
-## Running the Unit Tests
+```
+python3 -m http.server --directory .
+```
 
-Unit tests uses Google's karma as the test runner. They work on Linux/Mac/Windows.
+This will open the website at http://localhost:8000.
 
-First install NodeJS and npm. Then, in a shell/cmd, in the top directory (the one with `package.json`), run:
 
-    npm install
-    npm install -g karma-cli
-    karma start
+## Prerequisites
 
-This should open a few browser windows. Then, in a different shell,
+All you need to run Practicum is an HTTP server to serve the website. All dependencies have been downloaded locally and can be found in the vendor folder. We recommend using the python HTTP server, so you will need Python installed if you want to use it to serve the website. But besides that, no other dependencies are required.
 
-    karma run
+## Project Components <a name = "components"></a>
 
-to run the tests. They can be run multiple times without closing the browsers.
+The project is broken down into many individual folders. We will go over what each folder contains and any relevant files inside.
+
+### Controller
+
+The controller contains all the code required to run a problem. It contains the HTML and CSS for the problem page as well as the JavaScript that makes it run. All the code related to initializing the problem, checking answers, highlighting lines and sections of the problem, and stepping through the code can be found here.
+
+### CSS
+
+The css folder contains the CSS files for the entire project. The majority of CSS classes live in csed.css.
+
+### Include
+
+The include folder contains the categoryConfig.json file. This is the file that holds all the problems for the system and is where all problems are pulled from. 
+
+### JS
+
+The js folder has the index.js file, which deals with loading all the problems, creating the main home page and populating it with all the data, and initializing problems for when they are clicked on.
+
+The logging.js file deals with logging usage information about the system.
+
+There are two subfolders in the JS folder. The **change later** java folder has all the code for parsing through the Python code. The ast.js file contains code to create the Abstract Syntax Tree, the formatter.js file converts the AST into HTML to display on the problem page, the parser.js file is responsible for parsing through the AST and evaluating the Python code, and the simulator.js file executes statements and handles moving through the code.
+
+The tpl folder is similar, but it contains the code required to interpret the TPLs. It also contains a folder called algorithms which contains the TPLs for each problem type, as well as tplHelper.js, which contains the functions used to create the TPL. tplHelper.js is what allows the TPLs to be parsed be the rest of the system.
+
+### Vendor
+
+The vendor folder contains all the dependencies for the project. This includes all major libraries used in the code such as D3.js, Bootstrap, and JQuery, along with more.
+
+## Supported Python Features <a name = "features"></a>
+
+Practicum is designed such that a TPL can be made for any problem type as long as our system is able to support it. These features are what the Python interpreter of our system currently supports. We currently support the following features:
+
+- for loops
+- while loops
+- if statements along with elif and else
+- nested for loops
+- break
+- continue
+- iteration over strings
+- updating list values
+- range
+- len
+
+Any TPLs and problems can be written that use these features as they are fully supported by the system. Any keywords or functionality not listed here is not supported by our Python interpreter.
+
 

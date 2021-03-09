@@ -1,0 +1,40 @@
+<div class="problem">
+    <h1 id="PageHeader"></h1>
+    <div id="ProblemHeader">
+        <span style='font-weight: bold;'>Problem: </span>
+        <span class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span id="methodCall"></span><span class="caret"></span></a>
+            <ul id="methodCallDropdown" class="dropdown-menu"></ul>
+        </span>
+        <span style='font-weight: bold; padding-left: 30px;'>Solution: </span>
+        <input id='inputBox' name="checkanswer" type="text" autofocus="autofocus" />
+        <button id='submitButton' type="button">Check</button>
+        <div id='correctHeader' class="hidden" style="color:green;">That's the correct answer!</div>
+        <div id='incorrectHeader' class="hidden" style="color:red;">Incorrect answer, try again.</div>
+        <div id='emptySolutionHeader' class="hidden" style="color:blue;">Please enter a solution.</div>
+    </div>
+    
+    <div id="newProblemContainer">
+        <button id='newVariant' type="button" class="hidden">Try with different arguments!</button>
+        <button id='newProblem' type="button" class="hidden">Try another problem!</button>
+    </div>
+    <div id="difficultyLevel"></div>
+    <div id="problem_content">
+        <div id="problem_space"><pre></pre>
+            <div id="prompt">
+                <span id="promptText">Press Enter or click Next to start!</span>
+                <div id="next-container">
+                    <button id="nextstep">Next</button>
+                </div>
+            </div>
+        </div>
+        <div id="workspace">
+            <div id="variable_bank">
+                <h4 id="variable_bank_title">Variable Bank</h4>
+                <table id="variable_list_table"></table>
+                <table id="variable_array_table"></table>
+            </div>
+        </div>
+    </div>
+
+</div>
