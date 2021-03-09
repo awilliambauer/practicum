@@ -12,13 +12,6 @@ var controller = (function() {
     var numTries;
     var button;
 
-    function reset() {
-        // HACK, ugly. This global in html_generator needs to get
-        // reset to one when loading a new problem.
-        // LINENUM = 1;
-        // TODO: remove references to this, it's deprecated from if_else structure
-    }
-
     function initialize(problemConfig, simulatorInterface_, initialState, task_logger, fading) {
 
         // add problem AST
@@ -1246,8 +1239,7 @@ var controller = (function() {
         create_initial_state: make_initial_state,
         template_url: "controller/problemTemplate.html",
         template_id: "problem-template",
-        initialize: initialize,
-        reset: reset
+        initialize: initialize
     };
 
 })();
