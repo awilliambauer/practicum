@@ -77,7 +77,7 @@ The vendor folder contains all the dependencies for the project. This includes a
 
 ## Supported Python Features <a name = "features"></a>
 
-Practicum is designed such that a TPL can be made for any problem type as long as our system is able to support it. We currently support the following features:
+Practicum is designed such that a TPL can be made for any problem type as long as our system is able to support it. These features are what the Python interpreter of our system currently supports. We currently support the following features:
 
 - for loops
 - while loops
@@ -90,6 +90,6 @@ Practicum is designed such that a TPL can be made for any problem type as long a
 - range
 - len
 
-Any TPLs and problems can be written that use these features as they are fully supported by the system.
+Any TPLs and problems can be written that use these features as they are fully supported by the system. Any keywords or functionality not listed here is not supported by our Python interpreter.
 
 
