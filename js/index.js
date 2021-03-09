@@ -318,9 +318,6 @@ var csed = (function() {
             else {
                 return 3;
             }
-        //} else { // condition 1
-        //    return 1; // treatment is fixed fading level
-        //}
     }
 
     function CallbackObject() {
