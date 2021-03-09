@@ -157,6 +157,12 @@ var controller = (function() {
                 case 'array_element_click':
                     checkArrayElement();
                     break;
+                case 'array_element_get':
+                    checkScratchASTNode('array_element_get');
+                    break;
+                case 'evaluate_expression':
+                    checkScratchASTNode('evaluate_expression');
+                    break;
             }
         } else {
             state = simulatorInterface.getNextState(fadeLevel);
@@ -458,6 +464,18 @@ var controller = (function() {
                         }
                         break;
 
+                    case "ScratchAstNode":
+                        if (fadeLevel > 0 && variable === state.statement_result.name &&
+                            state.hasOwnProperty("askForResponse") &&
+                            (state.askForResponse === "array_element_get" || state.askForResponse === "evaluate_expression")) {
+
+                            interactiveScratchASTNode(varObject.value);
+                        }
+                        else {
+                            highlightScratchASTNode(varObject.value);
+                        }
+                        break;
+
                     case "Line":
                         if(state.variables.in_scope.hasOwnProperty("end_loop") && state.variables.in_scope.end_loop.value === true) {
                             break;
@@ -481,6 +499,7 @@ var controller = (function() {
         $(".highlight").removeClass("highlight");
         $(".block_highlight").removeClass("block_highlight");
         $(".node_highlight").removeClass("node_highlight");
+        $(".scratch_node_highlight").removeClass("scratch_node_highlight");
         $(".line_highlight").removeClass("line_highlight");
         $(".text_highlight").removeClass("text_highlight");
         $(".array_element_highlight").removeClass("array_element_highlight");
@@ -662,6 +681,27 @@ var controller = (function() {
             var htmlID = "java-ast-" + node.id;
             $("#" + htmlID).addClass("node_highlight");
         }
+    }
+
+    // highlights this AST node in the *LAST* line of the scratch list
+    function highlightScratchASTNode(node) {
+        var numLines = -1;
+        d3.select("#scratch_list").selectAll("li").each(function () {
+            numLines++;
+        });
+        var htmlID = "scratch-" + numLines.toString() + "-" + node.id;
+        $("#" + htmlID).addClass("scratch_node_highlight");
+    }
+
+    function interactiveScratchASTNode(node) {
+        var numLines = -1;
+        d3.select("#scratch_list").selectAll("li").each(function () {
+            numLines++;
+        });
+        var htmlID = "scratch-" + numLines.toString() + "-" + node.id;
+
+        d3.select("#" + htmlID).node().innerHTML = "";
+        d3.select("#" + htmlID).append("input").attr("class", "arrayVarValue");
     }
 
     // highlights the line of code passed in as a parameter
@@ -1015,6 +1055,31 @@ var controller = (function() {
                 d3.select("#promptText").node().innerHTML = errorMessage + d3.select("#promptText").node().innerHTML;
             }
         }
+    }
+
+    function checkScratchASTNode(type) {
+        var correctAnswerObject = simulatorInterface.getCorrectAnswer();
+        var correctValue = parseInt(correctAnswerObject.rhs.value);
+        //var userValue = parseInt(d3.select(".arrayVarValue").property("value"));
+        var userValue = correctValue;
+
+        var correct = false;
+        if (userValue === correctValue) {
+            correct = true;
+        }
+
+        // log information about this question answer attempt
+        Logging.log_task_event(logger, {
+            type: Logging.ID.QuestionAnswer,
+            detail: {
+                type: type,
+                correctAnswer: correctValue,
+                userAnswer: userValue,
+                correct: correct
+            },
+        });
+
+        respondToAnswer(correct, type, correctValue);
     }
 
     function respondToAnswer(correct, type, correctAnswer) {
