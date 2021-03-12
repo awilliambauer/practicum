@@ -5,7 +5,6 @@ function TPLAlgorithm() {
     // VariableBank: the bank of all local variables
     // Variable: a value that will be added to the variable bank, of form {name:string, type:string, value:*}.
 
-    // FIXME get this out of here once simulator can pass input parameters
     let ast;
     [no_step]
     ast = state.ast;
@@ -68,7 +67,7 @@ function TPLAlgorithm() {
 
             [no_step] if (helper.is_this_a_return_statement(this_is_the_next_line_that_will_execute)) {
                 let the_return_value_of_the_function_is_determined_here;
-                the_return_value_of_the_function_is_determined_here = helper.get_return_output(this_is_the_next_line_that_will_execute, variables); // TODO: better text, highlight
+                the_return_value_of_the_function_is_determined_here = helper.get_return_output(this_is_the_next_line_that_will_execute, variables);
                 [prompt]
                 "The print statement below prints out the value(s) that the function returned. Enter that solution in the solution box!";
                 return;
@@ -118,8 +117,6 @@ function TPLAlgorithm() {
                             [prompt]
                             "Since it’s false we will be ignoring all of the lines in this code block.";
 
-                            // TODO: add capability for more elifs
-
                             [no_step]
                             if (helper.has_else(this_is_the_next_line_that_will_execute)) {
                                 [prompt]
@@ -157,7 +154,6 @@ function TPLAlgorithm() {
                 let update_the_variable_in_the_variable_bank: Variable;
                 [interactive("update_variable")]
                 update_the_variable_in_the_variable_bank = helper.assign_the_new_value_to_the_variable(variables, this_is_the_next_line_that_will_execute);
-                //this_is_the_next_line_that_will_execute = helper.get_the_next_line_in_this_block_to_execute(parent, this_is_the_next_line_that_will_execute, condition_outcome);
                 [no_step]
                 if (helper.is_there_another_line_to_execute(parent, this_is_the_next_line_that_will_execute, condition_outcome) == false) {
                     [prompt]
@@ -173,7 +169,7 @@ function TPLAlgorithm() {
         [interactive("next_line")] this_is_the_next_line_that_will_execute = helper.get_return_statement(ast);
 
         let the_return_value_of_the_function_is_determined_here;
-        the_return_value_of_the_function_is_determined_here = helper.get_return_output(this_is_the_next_line_that_will_execute, variables); // TODO: better text, highlight
+        the_return_value_of_the_function_is_determined_here = helper.get_return_output(this_is_the_next_line_that_will_execute, variables);
         [prompt]
         "The print statement below prints out the value(s) that the function returned. Enter that solution in the solution box!";
     }
