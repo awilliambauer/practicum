@@ -26,51 +26,63 @@ var java_simulator = function() {
                 arg1v = arg1.value;
                 arg2v = arg2.value;
                 switch (expr.operator) {
-                    case '<':
-                        return {type: 'bool', value: arg1v < arg2v};
-                    case '<=':
-                        return {type: 'bool', value: arg1v <= arg2v};
-                    case '>':
-                        return {type: 'bool', value: arg1v > arg2v};
-                    case '>=':
-                        return {type: 'bool', value: arg1v >= arg2v};
-                    case '==':
-                        return {type: 'bool', value: arg1v === arg2v};
-                    case '!=':
-                        return {type: 'bool', value: arg1v !== arg2v};
-                    // FIXME these do not short-circuit
-                    case 'and':
-                        return {type: 'bool', value: arg1v && arg2v};
-                    case 'or':
-                        return {type: 'bool', value: arg1v || arg2v};
-                    case '+':
-                        return {type: 'int', value: arg1v + arg2v};
-                    case '-':
-                        return {type: 'int', value: arg1v - arg2v};
-                    case '*':
-                        return {type: 'int', value: arg1v * arg2v};
-                    case '/':
-                        return {
-                            type: 'int',
-                            value: arg1v / arg2v < 0 ? Math.ceil(arg1v / arg2v) : Math.floor(arg1v / arg2v)
-                        };
-                    case '%':
-                        return {type: 'int', value: arg1v % arg2v};
-                    case '=':
-                        arg1.value = arg2.value;
-                        return arg1;
-                    case '+=':
-                        arg1.value += arg2.value;
-                        return arg1;
-                    case '-=':
-                        arg1.value -= arg2.value;
-                        return arg1;
-                    case '&&':
-                        return { type: "bool", value: arg1v && arg2v };
-                    case '||':
-                        return { type: "bool", value: arg1v || arg2v };
-                    default:
-                        throw new Error("Unknown binary operator " + expr.operator);
+                  case "<":
+                    return { type: "bool", value: arg1v < arg2v };
+                  case "<=":
+                    return { type: "bool", value: arg1v <= arg2v };
+                  case ">":
+                    return { type: "bool", value: arg1v > arg2v };
+                  case ">=":
+                    return { type: "bool", value: arg1v >= arg2v };
+                  case "==":
+                    return { type: "bool", value: arg1v === arg2v };
+                  case "!=":
+                    return { type: "bool", value: arg1v !== arg2v };
+                  // FIXME these do not short-circuit
+                  case "and":
+                    return { type: "bool", value: arg1v && arg2v };
+                  case "or":
+                    return { type: "bool", value: arg1v || arg2v };
+                  case "+":
+                    return { type: "int", value: arg1v + arg2v };
+                  case "-":
+                    return { type: "int", value: arg1v - arg2v };
+                  case "*":
+                    return { type: "int", value: arg1v * arg2v };
+                  case "/":
+                    return {
+                      type: "int",
+                      value:
+                        arg1v / arg2v < 0
+                          ? Math.ceil(arg1v / arg2v)
+                          : Math.floor(arg1v / arg2v),
+                    };
+                  case "%":
+                    return { type: "int", value: arg1v % arg2v };
+                  case "=":
+                    arg1.value = arg2.value;
+                    return arg1;
+                  case "+=":
+                    arg1.value += arg2.value;
+                    return arg1;
+                  case "-=":
+                    arg1.value -= arg2.value;
+                    return arg1;
+                  case "/=":
+                    arg1.value /= arg2.value;
+                    return arg1;
+                  case "*=":
+                    arg1.value *= arg2.value;
+                    return arg1;
+                  case "%=":
+                    arg1.value %= arg2.value;
+                    return arg1;
+                  case "&&":
+                    return { type: "bool", value: arg1v && arg2v };
+                  case "||":
+                    return { type: "bool", value: arg1v || arg2v };
+                  default:
+                    throw new Error("Unknown binary operator " + expr.operator);
                 }
             // case 'postfix':
             //     arg1 = evaluate_expression(context, expr.args[0]);
