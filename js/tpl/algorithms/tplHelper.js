@@ -402,13 +402,13 @@ function TplHelper() {
         return expr;
     }
 
-    this.evaluate_this_expression = function(variable_bank, array, expr) {
+    this.select_the_index = function(variable_bank, array, expr) {
         var val = sim.evaluate_expression(variable_bank, expr);
         val["array"] = array;
         return val;
     };
 
-    this.evaluate_this_expression2 = function(variable_bank, expr) {
+    this.select_the_array = function(variable_bank, expr) {
         var array = sim.evaluate_expression(variable_bank, expr);
         array.name = expr.value;
         return array;

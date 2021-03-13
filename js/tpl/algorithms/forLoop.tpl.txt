@@ -231,12 +231,38 @@ function TPLAlgorithm() {
                     }
                 }
             } else {
-                [prompt]
-                "This line updates the value of a variable.";
+                [no_step]
+                if (helper.does_this_line_update_array(this_is_the_next_line_that_will_execute)) {
+                    [prompt]
+                    "This line updates the value of an element in the array.";
 
-                let update_the_variable_in_the_variable_bank: Variable;
-                [interactive("update_variable")]
-                update_the_variable_in_the_variable_bank = helper.assign_the_new_value_to_the_variable(variables, this_is_the_next_line_that_will_execute);
+                    let the_expression_result_is_assigned_to_this_array_element: AstNode;
+                    [no_step]
+                    the_expression_result_is_assigned_to_this_array_element = this_is_the_next_line_that_will_execute.expression.args[0];
+
+                    let this_is_the_array;
+                    [no_step]
+                    this_is_the_array = helper.select_the_array(variables, the_expression_result_is_assigned_to_this_array_element.object);
+
+                    let this_is_the_index;
+                    [no_step]
+                    this_is_the_index = the_expression_result_is_assigned_to_this_array_element.index;
+
+                    let this_is_the_array_element_that_is_being_updated: ArrayElement;
+                    [interactive("array_element_click")]
+                    this_is_the_array_element_that_is_being_updated = helper.select_the_index(variables, this_is_the_array, this_is_the_index);
+
+                    let update_the_array_element: Variable;
+                    [interactive("update_variable")]
+                    update_the_array_element = helper.assign_the_new_value_to_the_array_element(this_is_the_array, this_is_the_array_element_that_is_being_updated, helper.select_the_array(variables, this_is_the_next_line_that_will_execute.expression.args[1]));
+                } else {
+                    [prompt]
+                    "This line updates the value of a variable.";
+
+                    let update_the_variable_in_the_variable_bank: Variable;
+                    [interactive("update_variable")]
+                    update_the_variable_in_the_variable_bank = helper.assign_the_new_value_to_the_variable(variables, this_is_the_next_line_that_will_execute);
+                }
             }
 
             [no_step]
