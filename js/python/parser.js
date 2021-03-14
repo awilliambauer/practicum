@@ -1,5 +1,5 @@
 
-var java_parsing = function() {
+var python_parsing = function() {
     "use strict";
 
     /// string format function
@@ -769,7 +769,7 @@ if (typeof module !== 'undefined' && typeof process !== 'undefined') {
             if (err) {
                 
             } else {
-                var ast = java_parsing.parse_program(data);
+                var ast = python_parsing.parse_program(data);
                 
             }
         });

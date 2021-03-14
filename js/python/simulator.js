@@ -1,6 +1,6 @@
 
 /** Helper functions to simulator java code (without explanations) */
-var java_simulator = function() {
+var python_simulator = function() {
     "use strict";
     var self = {};
 

@@ -140,7 +140,7 @@ function TPLAlgorithm() {
                     }
                 } else {
                     [no_step]
-                    if (helper.does_this_line_update_array(this_is_the_next_line_that_will_execute)) {
+                    if (helper.does_this_line_update_list(this_is_the_next_line_that_will_execute)) {
                         [prompt]
                         "This line updates the value of an element in the array.";
 
@@ -150,7 +150,7 @@ function TPLAlgorithm() {
 
                         let this_is_the_array;
                         [no_step]
-                        this_is_the_array = helper.select_the_array(variables, the_expression_result_is_assigned_to_this_array_element.object);
+                        this_is_the_array = helper.select_the_list(variables, the_expression_result_is_assigned_to_this_array_element.object);
 
                         let this_is_the_index;
                         [no_step]
@@ -162,7 +162,7 @@ function TPLAlgorithm() {
 
                         let update_the_array_element: Variable;
                         [interactive("update_variable")]
-                        update_the_array_element = helper.assign_the_new_value_to_the_array_element(this_is_the_array, this_is_the_array_element_that_is_being_updated, helper.select_the_array(variables, this_is_the_next_line_that_will_execute.expression.args[1]));
+                        update_the_array_element = helper.assign_the_new_value_to_the_list_element(this_is_the_array, this_is_the_array_element_that_is_being_updated, helper.select_the_list(variables, this_is_the_next_line_that_will_execute.expression.args[1]));
                     } else {
                         [prompt]
                         "This line updates the value of a variable.";
