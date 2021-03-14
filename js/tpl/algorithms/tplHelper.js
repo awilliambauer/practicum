@@ -313,9 +313,9 @@ function TplHelper() {
         return sim.execute_statement(variable_bank, stmt);
     };
 
-    this.select_the_index = function(variable_bank, array, expr) {
+    this.select_the_index = function(variable_bank, list, expr) {
         var val = sim.evaluate_expression(variable_bank, expr);
-        val["array"] = array;
+        val["array"] = list;
         return val;
     };
 
@@ -338,12 +338,12 @@ function TplHelper() {
         return val;
     };
 
-    this.assign_the_new_value_to_the_list_element = function(array, index, value) {
-        array.value[index.value] = value;
+    this.assign_the_new_value_to_the_list_element = function(list, index, value) {
+        list.value[index.value] = value;
         return {
             index: this.copy(index),
-            value: this.copy(array.value),
-            name: array.name
+            value: this.copy(list.value),
+            name: list.name
         };
     };
 
