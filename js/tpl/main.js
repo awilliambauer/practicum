@@ -191,7 +191,7 @@ var main_simulator = (function () {"use strict";
     self.getInteractivePrompt = function(prompt, type) {
         // for now, change "this is" to "click on" for interactive prompts. not sure yet
         // how general this is, so we may need to change this to something less hacky
-        if ((type == "click" || type == "next_line" || type == "array_element_click" || type == "array_element_get") && prompt.indexOf("This is ") != -1) {
+        if ((type == "click" || type == "next_line" || type == "list_element_click" || type == "list_element_get") && prompt.indexOf("This is ") != -1) {
             prompt = "Click on " + prompt.substring(prompt.indexOf("This is ") + 8);
         } else if ((type == "enter" || type == "add_array_index" || type == "evaluate_expression") && prompt.indexOf("This is ") != -1) {
             prompt = "Enter " + prompt.substring(prompt.indexOf("This is ") + 8);

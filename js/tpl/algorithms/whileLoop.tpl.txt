@@ -157,7 +157,7 @@ function TPLAlgorithm() {
                         this_is_the_index = the_expression_result_is_assigned_to_this_array_element.index;
 
                         let this_is_the_array_element_that_is_being_updated: ArrayElement;
-                        [interactive("array_element_click")]
+                        [interactive("list_element_click")]
                         this_is_the_array_element_that_is_being_updated = helper.select_the_index(variables, this_is_the_array, this_is_the_index);
 
                         let update_the_array_element: Variable;

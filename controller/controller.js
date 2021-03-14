@@ -154,11 +154,11 @@ var controller = (function() {
                 case 'conditional':
                     checkConditionalAnswer();
                     break;
-                case 'array_element_click':
+                case 'list_element_click':
                     checkArrayElement();
                     break;
-                case 'array_element_get':
-                    checkScratchASTNode('array_element_get');
+                case 'list_element_get':
+                    checkScratchASTNode('list_element_get');
                     break;
                 case 'evaluate_expression':
                     checkScratchASTNode('evaluate_expression');
@@ -184,7 +184,7 @@ var controller = (function() {
         
 
         // check for disabling buttons and keybresses
-        if (waitingForResponse && (responseType === 'next_line' || responseType === 'array_element_click' || responseType === 'array_element_get')) {
+        if (waitingForResponse && (responseType === 'next_line' || responseType === 'list_element_click' || responseType === 'list_element_get')) {
             // hide and disable Next button while they click things
             $("#next-container").addClass("hidden");
             $("#nextstep").prop('disabled', true);
@@ -443,7 +443,7 @@ var controller = (function() {
                     case "ArrayElement":
                         if (fadeLevel > 0 && variable === state.statement_result.name &&
                             state.hasOwnProperty("askForResponse") &&
-                            (state.askForResponse === "array_element_get" || state.askForResponse === "array_element_click")) {
+                            (state.askForResponse === "list_element_get" || state.askForResponse === "list_element_click")) {
 
                             interactiveArrayElement(varObject.value);
                         }
@@ -467,7 +467,7 @@ var controller = (function() {
                     case "ScratchAstNode":
                         if (fadeLevel > 0 && variable === state.statement_result.name &&
                             state.hasOwnProperty("askForResponse") &&
-                            (state.askForResponse === "array_element_get" || state.askForResponse === "evaluate_expression")) {
+                            (state.askForResponse === "list_element_get" || state.askForResponse === "evaluate_expression")) {
 
                             interactiveScratchASTNode(varObject.value);
                         }
@@ -1037,14 +1037,14 @@ var controller = (function() {
             Logging.log_task_event(logger, {
                 type: Logging.ID.QuestionAnswer,
                 detail: {
-                    type: "array_element_click",
+                    type: "list_element_click",
                     correctAnswer: correctArrayElement,
                     userAnswer: userArrayElement,
                     correct: correct
                 },
             });
 
-            respondToAnswer(correct, "array_element_click", correctArrayElement);
+            respondToAnswer(correct, "list_element_click", correctArrayElement);
         }
         else {
             if (d3.select("#responseMessage").node() !== null) {
