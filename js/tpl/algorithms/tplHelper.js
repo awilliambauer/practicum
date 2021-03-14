@@ -60,10 +60,6 @@ function TplHelper() {
         return ast["body"][this.current_code_block_index]["location"]["start"]["line"];
     };
 
-
-    // HACK FIXME remove this asap
-    this.True = function() { return true; };
-
     this.create_new_variable_bank = function() { return {}; };
 
     this.add_this_to_the_variable_bank = function(bank, variable) {
@@ -78,24 +74,6 @@ function TplHelper() {
 
     this.add_number_to_the_variable_bank = function(bank, number) {
         bank["number"] = {type: 'int', value: number};
-    };
-
-    //TODO check removal
-    this.get_list_indices = function(list) {
-        var indices = [];
-        for (var i = 0; i < list.value.length; i++) {
-            indices.push(i);
-        }
-        return indices;
-    };
-
-    //TODO check removal
-    this.get_array_length = function(array) {
-        return {
-            name: array.name + ".length",
-            type: 'int',
-            value: array.value.length
-        }
     };
 
     this.add_other_parameters_to_the_variable_bank = function(bank, variables) {
@@ -141,20 +119,8 @@ function TplHelper() {
         return null;
     }
 
-    function get_next_instance_variable(body) {
-        lineNum = lineNum + 1;
-        if(lineNum < body.length) {
-            return body[lineNum];
-        }
-        return null;
-    }
-
     this.get_next_line = function(body) {
         return body[lineNum];
-    }
-
-    this.get_first_line = function(ast) {
-        return ast.body[0];
     }
 
     this.get_iterable_sequence = function(variable_bank, iterable, is_inner) {
@@ -226,17 +192,8 @@ function TplHelper() {
         return stmt.hasOwnProperty("else_branch") && stmt.else_branch.length > 0;
     };
 
-    //TODO
-    this.get_loop_end = function(loop) {
-        return loop.location.end.line-1;
-    };
-
     this.copy = function(x) {
         return JSON.parse(JSON.stringify(x));
-    };
-
-    this.create_scratch = function(x) {
-        return [this.copy(x)];
     };
 
     this.create_variable = function(variable_bank, declaration_stmt) {
@@ -303,14 +260,6 @@ function TplHelper() {
         return true;
     };
 
-    this.get_local_variables = function(variable_bank, ast) {
-        // assume first two statements are instance varibale declarations
-        var firstInst = ast.body[0];
-        var secInst = ast.body[1];
-
-
-    };
-
     this.initialize_loop_iterable = function(variable_bank, iterable, is_inner) {
         iterable = sim.evaluate_expression(variable_bank, iterable);
         if ((iterable.type !== 'array') && (iterable.type !== 'string')) throw new Error("for loop iterable isn't an array or string")
@@ -329,7 +278,6 @@ function TplHelper() {
         }
     }
 
-    //TODO: remove this
     this.get_local_variable = function(variable_bank, ast) {
         let variableName = ast["body"][lineNum]["expression"]["args"][0].value;
         let variableValue = ast["body"][lineNum]["expression"]["args"][1].value;
@@ -342,10 +290,6 @@ function TplHelper() {
         });
     };
 
-    this.this_is_a_variable_declaration_statement = function(ast) {
-        return ast["body"][this.current_code_block_index]["tag"] === "declaration";
-    };
-
     this.is_loop_called_without_range = function(loop) {
         return loop.iterable.args === undefined;
     }
@@ -354,13 +298,6 @@ function TplHelper() {
         var e = sim.evaluate_expression(variable_bank, condition_stmt);
         if (e.type !== 'bool') throw new Error("Condition is not of type boolean!");
         return e.value;
-    };
-
-    //TODO chcek removal
-    this.all_array_lookups_in_the_expression = function(scratch_list) {
-        return java_ast.find_all(function(n) {
-            return n.tag === 'index';
-        }, scratch_list[0]);
     };
 
     this.calculate_answer = function(variable_bank) {
@@ -375,21 +312,6 @@ function TplHelper() {
     this.execute_statement = function(variable_bank, stmt) {
         return sim.execute_statement(variable_bank, stmt);
     };
-
-    function replace_expr_with_literal(expr, val) {
-        // clear out old tag-specific data
-        for (var prop in expr) {
-            if (prop !== 'id' && prop !== 'location') {
-                delete expr[prop];
-            }
-        }
-        // replace with literal data
-        expr.tag = 'literal';
-        expr.type = val.type;
-        expr.value = val.value;
-
-        return expr;
-    }
 
     this.select_the_index = function(variable_bank, array, expr) {
         var val = sim.evaluate_expression(variable_bank, expr);
@@ -416,33 +338,6 @@ function TplHelper() {
         return val;
     };
 
-    //TODO check removal
-    this.evaluate_this_expression_and_add_to_scratch = function(variable_bank, scratch_list) {
-        var value = sim.evaluate_expression(variable_bank, last(scratch_list));
-        var new_line = this.copy(last(scratch_list));
-        scratch_list.push(new_line);
-
-        return replace_expr_with_literal(new_line, value);
-    };
-
-    //TODO check removal
-    this.do_the_array_lookup = function(scratch_list, array, index, origExpr) {
-        if (array.type !== 'array') throw new Error("Cannot index into object of type " + array.type);
-        var value = array.value[index.value];
-        if (!value) throw new Error("invalid array index " + index.value + " of " + array.type);
-
-        var new_line = this.copy(last(scratch_list));
-        scratch_list.push(new_line);
-
-        return replace_expr_with_literal(java_ast.find_by_id(origExpr.id, new_line), value);
-    };
-
-    //TODO removal
-    this.is_this_an_array_element_assignment = function(stmt) {
-        return (stmt.tag === "declaration" && stmt.expression.args[0].hasOwnProperty("tag") &&
-                stmt.expressions.args[0].tag === "index")
-    };
-
     this.assign_the_new_value_to_the_list_element = function(array, index, value) {
         array.value[index.value] = value;
         return {
@@ -467,10 +362,6 @@ function TplHelper() {
 
     this.is_this_the_last_line = function(ast) {
         return lineNum !== ast.body.length - 1;
-    }; // TODO: factor out
-
-    this.increment_the_line_number = function() {
-        lineNum++;
     }; // TODO: factor out
 
     this.this_is_a_return_statement = function(ast) {
