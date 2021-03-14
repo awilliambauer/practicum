@@ -150,7 +150,7 @@ function TPLAlgorithm() {
 
                         let this_is_the_array;
                         [no_step]
-                        this_is_the_array = helper.evaluate_this_expression2(variables, the_expression_result_is_assigned_to_this_array_element.object);
+                        this_is_the_array = helper.select_the_array(variables, the_expression_result_is_assigned_to_this_array_element.object);
 
                         let this_is_the_index;
                         [no_step]
@@ -158,11 +158,11 @@ function TPLAlgorithm() {
 
                         let this_is_the_array_element_that_is_being_updated: ArrayElement;
                         [interactive("array_element_click")]
-                        this_is_the_array_element_that_is_being_updated = helper.evaluate_this_expression(variables, this_is_the_array, this_is_the_index);
+                        this_is_the_array_element_that_is_being_updated = helper.select_the_index(variables, this_is_the_array, this_is_the_index);
 
                         let update_the_array_element: Variable;
                         [interactive("update_variable")]
-                        update_the_array_element = helper.assign_the_new_value_to_the_array_element(this_is_the_array, this_is_the_array_element_that_is_being_updated, helper.evaluate_this_expression2(variables, this_is_the_next_line_that_will_execute.expression.args[1]));
+                        update_the_array_element = helper.assign_the_new_value_to_the_array_element(this_is_the_array, this_is_the_array_element_that_is_being_updated, helper.select_the_array(variables, this_is_the_next_line_that_will_execute.expression.args[1]));
                     } else {
                         [prompt]
                         "This line updates the value of a variable.";
