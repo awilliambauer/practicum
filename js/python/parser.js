@@ -59,15 +59,6 @@ var python_parsing = function() {
             return {line:line, col:col};
         };
 
-        // self.last = function() {
-        //     // HACK assume we are not retreating a line
-        //     if (str.charAt(bufidx) === "\n") return undefined;
-        //     bufidx--;
-        //     var c = str.charAt(bufidx);
-        //     col--;
-        //     return c;
-        // }
-
         self.home = function() {
             bufidx -= col;
             col = 0;
@@ -110,10 +101,7 @@ var python_parsing = function() {
         var last_position = cs.position();
         var current_token;
 
-        // these are all dicts because javascript doesn't have sets, boo
         var keywords = {
-            // "class":1, "public":1, "static":1,
-            // "void":1, "int":1,
             "def":1, "return":1, "break":1, "continue":1,
             "for":1, "in":1, "if":1, "else":1, "elif":1, "while":1
         };
@@ -124,14 +112,9 @@ var python_parsing = function() {
             "<":1, ">":1, "<=":1, ">=":1, "==":1, "!=":1,
             "+":1, "-":1, "*":1, "/":1, "!":1, "%":1,
             "+=":1, "-=":1, "*=":1, "/=":1, "%=":1,
-            // "++":1, "--":1,
             "&":1, "|":1, "&&":1, "||":1,
             "\t":1
         };
-
-        // var text_start_chars = {
-        //     ":":1, "*":1, "$":1
-        // };
 
         function iseof() {
             return cs.iseof();
@@ -177,7 +160,6 @@ var python_parsing = function() {
         }
 
         function get_next() {
-            // skip whitespace (will do nothing if eof)
             skip_whitespace();
 
             if (iseof()) {
@@ -190,8 +172,6 @@ var python_parsing = function() {
 
             // check for tokens
             if (c in symbols) {
-                // super hack: also check if next token is in symbols.
-                // this assumes any two-character symbol has a prefix that is also a symbol
                 if ((c + cs.peek()) in symbols) {
                     token = Token.symbol(c + cs.next());
                 } else {
@@ -258,14 +238,6 @@ var python_parsing = function() {
         }
         self.position = position;
 
-        // function rewind(num_steps) {
-        //     // HACK really messy, for indentation only
-        //     for (let i = 0; i < num_steps; i++) {
-        //         (cs.last())
-        //     }
-        // }
-        // self.rewind = rewind
-
         function home() {
             cs.home();
             is_peeked = false;
@@ -289,16 +261,11 @@ var python_parsing = function() {
 
         function match_program() {
             var start = lex.position();
-            // let's assume every program is a class with a single method, with nothing fancy.
-            // match_keyword("public");
-            // match_keyword("class");
-            // match_ident(); // ignore the class name
-            // match_symbol("{");
             match_keyword("def");
             var name = match_ident();
             var params = match_delimited_list(match_parameter, ",");
             match_symbol(":");
-            var body = match_block(1); // HACK assumes only top-level methods
+            var body = match_block(1);
 
             return {
                 id: new_id(),
@@ -312,16 +279,11 @@ var python_parsing = function() {
 
         function match_method() {
             var start = lex.position();
-            // let's assume every program is a class with a single method, with nothing fancy.
-            // match_keyword("public");
-            // match_keyword("class");
-            // match_ident(); // ignore the class name
-            // match_symbol("{");
             match_keyword("def");
             var name = match_ident();
             var params = match_delimited_list(match_parameter, ",");
             match_symbol(":");
-            var body = match_block(1); // HACK assumes only top-level methods
+            var body = match_block(1);
 
             return {
                 id: new_id(),
@@ -340,16 +302,12 @@ var python_parsing = function() {
                 match_symbol("\t");
             }
             stmts.push(match_statement(indent_level));
-            // match_symbol("{");
             let j = 0;
             while (true) {
                 if (lex.iseof()) return stmts;
                 for (let i = 0; i < indent_level; i++) {
-                    // first line after block must have less indentation
-                    // if (indent_level === 1) 
                     if (!peek_symbol("\t")) {
                         lex.home();
-                        // if (indent_level === 1) 
                         return stmts;
                     }
                     match_symbol("\t")
@@ -357,9 +315,6 @@ var python_parsing = function() {
                 stmts.push(match_statement(indent_level));
                 j++;
             }
-
-            // match_symbol("}");
-            // return stmts;
         }
 
         function match_statement(indent_level) {
@@ -434,11 +389,6 @@ var python_parsing = function() {
             var start = lex.position();
             match_keyword("while");
             var cond = match_expression(0);
-            // match_symbol("(");
-            // var init = match_simple_statement(true);
-            // var cond = match_expression(0);
-            // match_symbol(";");
-            // match_symbol(")");
             match_symbol(":");
             var body = match_block(indent_level + 1);
             return {
@@ -453,14 +403,9 @@ var python_parsing = function() {
         function match_forloop(indent_level) {
             var start = lex.position();
             match_keyword("for");
-            var variable = {id:new_id(), location:location(lex.position()), tag:'identifier', value:match_ident()}; // HACK stole this from match_expression
+            var variable = {id:new_id(), location:location(lex.position()), tag:'identifier', value:match_ident()};
             match_keyword("in");
-            // match_symbol("(");
-            // var init = match_simple_statement(true);
-            // var cond = match_expression(0);
-            // match_symbol(";");
-            var iter = match_expression(0); // TODO: need to implement range
-            // match_symbol(")");
+            var iter = match_expression(0);
             match_symbol(":");
             var body = match_block(indent_level + 1);
             return {
@@ -468,7 +413,7 @@ var python_parsing = function() {
                 location: location(start),
                 tag:'for',
                 variable: variable,
-                iterable: iter, // TODO: whatever handles this in the simulator needs updating
+                iterable: iter,
                 body: body
             };
         }
@@ -477,11 +422,9 @@ var python_parsing = function() {
             var start = lex.position();
             if (!is_elif) match_keyword("if");
             else match_keyword("elif");
-            // match_symbol("(");
             var cond = match_expression(0);
             var has_elif = false;
             var elseb = undefined;
-            // match_symbol(")");
             match_symbol(":");
             var thenb = match_block(indent_level + 1);
             // this for loop matches the right number of tabs before the elif/else, so that the peek gives us that token
@@ -510,14 +453,11 @@ var python_parsing = function() {
 
         function match_declaration() {
             var start = lex.position();
-            // var type = match_type();
             var expression = match_expression(0);
-            // assumes that if the first token is a keyword, then there is a type, otherwise there isn't
             return {
                 id: new_id(),
                 location: location(start),
                 tag: "declaration",
-                // type: type,
                 expression: expression
             };
         }
@@ -563,7 +503,7 @@ var python_parsing = function() {
                     } else if (t.value === '[') {
                         let arr = match_delimited_list(function(){return match_expression(0);}, ',', true, "[]");
                         return {id:new_id(), location:location(start), tag:'literal', type:'array', value:arr};
-                    } else { // TODO: add lists here
+                    } else {
                         
                         throw_error(t.position, "( is the only symbol that can prefix an expression");
                         break;
@@ -572,10 +512,6 @@ var python_parsing = function() {
                 default: throw_error(t.position, "Expected expression");
             }
         }
-
-        // var postfix_operators = {
-        //     '++':1, "--":1,
-        // };
 
         // match binary operators
         function match_infix(left) {
@@ -599,10 +535,6 @@ var python_parsing = function() {
                 default:
                     if (t.type !== TokenType.SYMBOL) {
                         throw_error(t.position, "Expected infix operator");
-                    // }
-                    //
-                    // if (t.value in postfix_operators) {
-                    //     return {id:new_id(), location:location(start), tag:"postfix", operator:t.value, args:[left]};
                     } else {
                         // this assumes all operators are left-associative!
                         // if we need to make them right-associative, match the right expr with a lower bind power
@@ -617,7 +549,6 @@ var python_parsing = function() {
             switch (token.value) {
                 case ".": return 100;
                 case "(": case "[": return 90;
-                // case "++": case "--": return 80;
                 case "*": case "/": case "%": return 60;
                 case "+":  case "-": return 50;
                 case "==": case "!=": case "<=": case ">=": case "<": case ">": return 40;
@@ -648,15 +579,13 @@ var python_parsing = function() {
             return arr;
         }
 
-        function match_parameter() { // TODO: If string in parameter, parse as character array. Otherwise 
+        function match_parameter() {
             var start = lex.position();
-            // var type = match_type();
             var name = match_ident();
             return {
                 id: new_id(),
                 location: location(start),
                 tag: 'parameter',
-                // type: type, // TODO: clear references to type
                 name: name
             };
         }
