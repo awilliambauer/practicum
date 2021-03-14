@@ -47,7 +47,7 @@ function TPLAlgorithm() {
         [no_step]
         let it_defines_a_new_local_variable_which_we_will_add_to_the_variable_bank: Variable;
         [interactive("add_variable")]
-        it_defines_a_new_local_variable_which_we_will_add_to_the_variable_bank = helper.get_local_variable(variables, ast);
+        it_defines_a_new_local_variable_which_we_will_add_to_the_variable_bank = helper.add_local_variable(variables, ast);
     }
 
     let this_is_the_next_line_that_will_execute: Line;
