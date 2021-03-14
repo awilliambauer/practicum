@@ -25,7 +25,7 @@ function TPLAlgorithm() {
         "First, look at the function call.";
 
         let these_are_the_function_parameters: Parameter;
-        these_are_the_function_parameters = helper.get_array_parameter(state.args);
+        these_are_the_function_parameters = helper.get_function_parameters(state.args);
 
         [no_step]
         if (state.vars.length > 0) {
@@ -234,7 +234,7 @@ function TPLAlgorithm() {
                 [no_step]
                 if (helper.does_this_line_update_list(this_is_the_next_line_that_will_execute)) {
                     [prompt]
-                    "This line updates the value of an element in the array.";
+                    "This line updates the value of an element in the list.";
 
                     let the_expression_result_is_assigned_to_this_array_element: AstNode;
                     [no_step]

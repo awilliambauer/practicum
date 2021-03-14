@@ -26,8 +26,9 @@ function TplHelper() {
         }
         return args;
     };
+
     // TODO
-    this.get_array_parameter = function(args) {
+    this.get_function_parameters = function(args) {
         // assumes only one array
         for (var key in args) {
             if (Array.isArray(args[key])) {
@@ -320,9 +321,9 @@ function TplHelper() {
     };
 
     this.select_the_list = function(variable_bank, expr) {
-        var array = sim.evaluate_expression(variable_bank, expr);
-        array.name = expr.value;
-        return array;
+        var list = sim.evaluate_expression(variable_bank, expr);
+        list.name = expr.value;
+        return list;
     };
 
     this.loop_sequence_index = function(variable_bank, sequence, is_inner, first) {
@@ -409,7 +410,7 @@ function TplHelper() {
 }
 
 /**
- * Creates an initial state for array given a problem configuration.
+ * Creates an initial state for a problem configuration.
  * @param problem: the problem configuration.
  * @param argumentIndex: which argument set is being used (i.e.,the parameters to the problem).
  */
