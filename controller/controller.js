@@ -587,30 +587,35 @@ var controller = (function() {
         });
     }
 
-    function interactiveArrayElement(arrayElement) {
-        d3.selectAll(".bank_variable_array_value").each(function () {
-            d3.select(this)
+    function interactiveArrayElement(arrayElement) {    
+        d3.selectAll(".variable_list_table_row").each(function () {
+          var varName = d3.select(this).select(".bank_variable").node()
+            .innerHTML;
+          if (varName === arrayElement.array.name) {
+            d3.select(this).selectAll(".bank_variable_array_value").each(function () {
+              d3.select(this)
                 .classed("clickable", true)
                 .attr("tabindex", 0)
-                .on("click", function() {
-                    d3.select(this).classed("array_element_highlight", true);
-                    d3.selectAll(".clickable").each(function() {
-                        d3.select(this)
-                            .classed("clickable", false)
-                            .attr("tabindex", null)
-                            .on("click", null)
-                            .on("keydown", null)
-                        ;
-                    });
-                    step();
+                .on("click", function () {
+                  d3.select(this).classed("array_element_highlight", true);
+                  d3.selectAll(".clickable").each(function () {
+                    d3.select(this)
+                      .classed("clickable", false)
+                      .attr("tabindex", null)
+                      .on("click", null)
+                      .on("keydown", null);
+                  });
+                  step();
                 })
-                .on("keydown", function() {
-                    if (d3.event.keyCode === 32) {
-                        this.click();
-                    }
-                })
-            ;
+                .on("keydown", function () {
+                  if (d3.event.keyCode === 32) {
+                    this.click();
+                  }
+                });
+            });
+          }
         });
+        
     }
 
     function highlightASTNode(node) {
