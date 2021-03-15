@@ -6,6 +6,7 @@
 - [Getting Started](#getting_started)
 - [Project Components](#components)
 - [Supported Python Features](#features)
+- [Future Work](#future)
 
 ## About <a name = "about"></a>
 
@@ -98,4 +99,23 @@ Practicum is designed such that a TPL can be made for any problem type as long a
 
 Any TPLs and problems can be written that use these features as they are fully supported by the system. Any keywords or functionality not listed here is not supported by our Python interpreter.
 
+## Future Work in Practicum <a name = "future"></a>
 
+Practicum is a project that has already gone through multiple iterations and many authors, and we expect that it will continue with more authors and more people expanding on this work.
+We have made many new and exciting features available in Practicum, but there are also many things we did not have the time to implement.
+Here is a list of some of the features we believe Practicum could benefit from the addition of:
+
+- Stepping backwards through a piece of code
+- Using the browser back button as intended
+- Expanded problem types
+    * Functions
+    * Recursion
+    * Debugging
+    * More diverse nested loops (while-while or while-for)
+- Sandbox mode where users input problem code
+- Improving the TPL programming language to allow for procedures
+    * This is important as a prerequisite for Sandbox mode and Recursive problems
+- Improve the accessibility of Practicum
+    * Only works on desktop, not mobile
+    * Is not disability-friendly
+- Save user progress within a particular problem 
