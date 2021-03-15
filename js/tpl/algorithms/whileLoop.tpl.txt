@@ -47,7 +47,7 @@ function TPLAlgorithm() {
         [no_step]
         let it_defines_a_new_local_variable_which_we_will_add_to_the_variable_bank: Variable;
         [interactive("add_variable")]
-        it_defines_a_new_local_variable_which_we_will_add_to_the_variable_bank = helper.get_local_variable(variables, ast);
+        it_defines_a_new_local_variable_which_we_will_add_to_the_variable_bank = helper.add_local_variable(variables, ast);
     }
 
     let this_is_the_next_line_that_will_execute: Line;
@@ -157,7 +157,7 @@ function TPLAlgorithm() {
                         this_is_the_index = the_expression_result_is_assigned_to_this_array_element.index;
 
                         let this_is_the_array_element_that_is_being_updated: ArrayElement;
-                        [interactive("array_element_click")]
+                        [interactive("list_element_click")]
                         this_is_the_array_element_that_is_being_updated = helper.select_the_index(variables, this_is_the_array, this_is_the_index);
 
                         let update_the_array_element: Variable;

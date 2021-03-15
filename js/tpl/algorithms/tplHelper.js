@@ -279,7 +279,7 @@ function TplHelper() {
         }
     }
 
-    this.get_local_variable = function(variable_bank, ast) {
+    this.add_local_variable = function(variable_bank, ast) {
         let variableName = ast["body"][lineNum]["expression"]["args"][0].value;
         let variableValue = ast["body"][lineNum]["expression"]["args"][1].value;
         let variableType = ast["body"][lineNum]["expression"]["args"][1].type;

@@ -13,8 +13,6 @@ var python_simulator = function() {
 
         var arg1, arg2, obj, idx, arg1v, arg2v, r, args;
 
-        // HACK this only works for integers and booleans kinda!
-        // FIXME add type checking and make it behave correctly for overloaded operators.
         switch (expr.tag) {
             case 'paren_expr':
                 return evaluate_expression(context, expr.value);
@@ -38,7 +36,6 @@ var python_simulator = function() {
                     return { type: "bool", value: arg1v === arg2v };
                   case "!=":
                     return { type: "bool", value: arg1v !== arg2v };
-                  // FIXME these do not short-circuit
                   case "and":
                     return { type: "bool", value: arg1v && arg2v };
                   case "or":
@@ -84,13 +81,7 @@ var python_simulator = function() {
                   default:
                     throw new Error("Unknown binary operator " + expr.operator);
                 }
-            // case 'postfix':
-            //     arg1 = evaluate_expression(context, expr.args[0]);
-            //     switch (expr.operator) {
-            //         case '++': arg1.value++; return arg1;
-            //         case '--': arg1.value--; return arg1;
-            //         default: throw new Error("Unknown postfix operator " + expr.operator);
-            //     }
+
             case 'literal':
                 
                 return {type: expr.type, value: expr.value};
@@ -108,14 +99,13 @@ var python_simulator = function() {
                 return r;
             case 'reference':
                 obj = evaluate_expression(context, expr.object);
-                // HACK hooray for hacky array lengths
-                if (obj.type === 'array' && expr.name === 'length') { // FIXME: get rid of this
+                if (obj.type === 'array' && expr.name === 'length') {
                     return {type: 'int', value: obj.value.length};
                 } else {
                     throw new Error("Unable to evaluate reference.");
                 }
             case 'call':
-                obj = expr.object; // HACK ignore defined functions
+                obj = expr.object;
                 args = [];
                 for (let arg of expr.args) {
                     args.push(evaluate_expression(context, arg));

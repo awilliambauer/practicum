@@ -46,14 +46,9 @@ var java_formatter = function() {
          * So no manual newlines are required!
          *
          * Because it uses spans for new lines, all elements must be an integer number of lines,
-         * e.g., you cannot have one element take 1.5 lines and a follwing element take 1.5 lines,
+         * e.g., you cannot have one element take 1.5 lines and a following element take 1.5 lines,
          * where they share the middle line. Elements, can, of course, take 0 lines, such as expressions.
          */
-
-        // HACK special_flag is a boolean used to indicate things like "don't put a semi/newline on this statement"
-        // or "don't put a newline before this if". It's very hacky.
-
-        // console.log(node);
 
         var prefix = options.id_prefix || 'java-ast-';
 
@@ -88,9 +83,7 @@ var java_formatter = function() {
                 node.body.forEach(function(s) {
                     elem.append(to_dom(s, options, 1));
                 });
-                // newline(elem).append(indent(0));
                 if (special_flag) {
-                    // HACK: TAKEN FROM tplHelper.js
                     line = newline(newline(elem));
                     line.html('print(' + method(node.name) + '(');
                     firstIter = true;
@@ -128,15 +121,10 @@ var java_formatter = function() {
                 }
                 elem = newline(elem);
                 elem.append(indent(indent_level));
-                // elem.append(keyword(node.type) + " ");
                 elem.append(to_dom(node.expression, options, indent_level));
-                // if (!special_flag) {
-                //     elem.append(";");
-                // }
                 break;
 
             case 'expression':
-                // add some space if top-level (could replace this with something fancier)
                 if (!special_flag) {
                     elem = newline(elem);
                     elem.append(indent(indent_level));
@@ -144,25 +132,16 @@ var java_formatter = function() {
                 var expression = to_dom(node.expression, options, indent_level);
                 var children = expression.children();
                 elem.append(to_dom(node.expression, options, indent_level));
-                // if (!special_flag) {
-                //     elem.append(";");
-                // }
                 break;
 
             case 'for':
                 line = newline(elem);
                 line.append(indent(indent_level) + keyword('for') + ' ');
-                // statements inside of for loop header should not be indented/have newlines
                 var init = $('<span>');
                 init.attr('id', 'init');
                 init.append(to_dom(node.variable, options, indent_level, true));
                 line.append(init);
                 line.append(' ' + keyword('in') + ' ');
-                // var cond = $('<span>');
-                // cond.attr('id', 'test');
-                // cond.append(to_dom(node.condition, options, indent_level, true));
-                // line.append(cond);
-                // line.append('; ');
                 var update = $('<span>');
                 update.attr('id', 'update');
                 update.append(to_dom(node.iterable, options, indent_level, true));
@@ -171,13 +150,11 @@ var java_formatter = function() {
                 node.body.forEach(function(s) {
                     elem.append(to_dom(s, options, indent_level + 1));
                 });
-                // newline(elem).append(indent(indent_level));
                 break;
 
             case 'while':
                 elem.addClass("while");
                 if (special_flag) {
-                    // HACK pass in the previous line (with the }) as the flag so it's one line
                     line = special_flag;
                 } else {
                     line = newline(elem);
@@ -194,7 +171,6 @@ var java_formatter = function() {
             case 'if':
                 elem.addClass("if");
                 if (special_flag) {
-                    // HACK pass in the previous line (with the }) as the flag so it's one line
                     line = special_flag;
                 } else {
                     line = newline(elem);
@@ -210,7 +186,6 @@ var java_formatter = function() {
                     node = node.else_branch;
                     elem.addClass("if");
                     if (special_flag) {
-                        // HACK pass in the previous line (with the }) as the flag so it's one line
                         line = special_flag;
                     } else {
                         line = newline(elem);
@@ -231,10 +206,6 @@ var java_formatter = function() {
                         elem.append(to_dom(s, options, indent_level + 1));
                     });
                 }
-                if (!special_flag) {
-                    // line = newline(elem);
-                    // line.append(indent(indent_level) );
-                }
                 break;
 
             case 'binop':
@@ -254,12 +225,6 @@ var java_formatter = function() {
             case 'call':
                 elem.append(to_dom(node.object, options, indent_level));
                 elem.append('(');
-                // HACK this totally assumes function calls have only one argument,
-                // which happens to be true for array and if/else mysteries.
-                // node.args.forEach(function(arg){
-                //     elem.append(to_dom(arg, options, indent_level));
-                //     elem.append(', ');
-                // });
                 firstIter = true;
                 node.args.forEach(function(arg) {
                     if (!firstIter) {
@@ -288,8 +253,6 @@ var java_formatter = function() {
                 elem.text(node.value);
                 break;
 
-            // case undefined: // TODO: sometimes literals are unmarked
-            //     if (!node.hasOwnProperty('type')) throw new Error("unknown ast tag " + node.tag);
             case 'literal':
                 elem.addClass("java-literal")
                 if (node.type === 'array') {

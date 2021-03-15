@@ -3,10 +3,6 @@ var java_ast = function() {
     "use strict";
     var self = {};
 
-    // things to write helpers for:
-    // - find node at particular id
-    // - visit all nodes/statements/expressions
-
     /// Returns an array of all direct child nodes of this node.
     /// Useful for functions that need to recursively explore all nodes.
     function children_of(node) {
@@ -19,7 +15,6 @@ var java_ast = function() {
                 return [node.expression];
 
             case 'for':
-                // return [node.initializer, node.condition, node.increment].concat(node.body);
                 return [node.variable, node.iterable].concat(node.body); // TODO: structure has changed
 
             case 'if':

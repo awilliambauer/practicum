@@ -9,12 +9,11 @@
 
 ## About <a name = "about"></a>
 
-Practicum is a software project that is an interactive, web-based tool which teaches introductory CS topics. It was created to help any student taking the intro class and carefully explains the necessary computer science terms and concepts. One of its strengths is that rather than creating a program for each problem, each type of problem is programmed. This is done by creating a Thought Process Language (TPL). 
+Practicum is an interactive, web-based tool that teaches introductory CS topics. Its purpose is to provide a quick and easy way to practice basic computer science concepts, such as if statements and for loops. Practicum's goal is to supplement classroom learning or provide a refresher to students who have not coded in a while, not teach these concepts on its own. 
 
-The first advantage is that the TPL is able to automatically generate an interactive explanation for any problem within its problem type. The second advantage is that the TPL doesn’t have to be reprogrammed and can be reused. These advantages save time because the programmer only needs to write a problem, and the TPL will handle everything else. 
+Practicum's strength comes from the Thought Process Language (TPL) framework which automatically generates a guide that walks the user through any problem provided to the system. This sets Practicum apart by allowing it to generate instructive material procedurally rather than needing to manually write and input all of the prompts that a user will see. Practicum is easy to expand as it will do the bulk of the work in creating more instructional material. It also makes the process of encoding problem-solving strategies relatively simple and efficient.
 
-Overall, Practicum makes it easy for professors to encode their thought process when solving a problem into our system and allow students to walk through it step by step to teach a variety of computer science concepts.
-
+Practicum allows students to take a guided walk through problems that highlight challenging new CS concepts to better understand how these concepts work in a practical setting. Our hope is that this will reinforce their classroom learning and leave them better prepared to apply this new material in their own code.
 
 ## Getting Started <a name = "getting_started"></a>
 

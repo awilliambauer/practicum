@@ -47,7 +47,7 @@ function TPLAlgorithm() {
         [no_step]
         let it_defines_a_new_local_variable_which_we_will_add_to_the_variable_bank: Variable;
         [interactive("add_variable")]
-        it_defines_a_new_local_variable_which_we_will_add_to_the_variable_bank = helper.get_local_variable(variables, ast);
+        it_defines_a_new_local_variable_which_we_will_add_to_the_variable_bank = helper.add_local_variable(variables, ast);
     }
 
     let this_is_the_next_line_that_will_execute: Line;
@@ -113,7 +113,7 @@ function TPLAlgorithm() {
             add_the_sequence_to_the_variable_bank = helper.add_the_loop_sequence_to_the_variable_bank(variables, lets_visualize_our_sequence, false);
 
             let this_is_the_first_value_in_the_loop_sequence: ArrayElement;
-            [interactive("array_element_click")]
+            [interactive("list_element_click")]
             this_is_the_first_value_in_the_loop_sequence = helper.loop_sequence_index(variables, lets_visualize_our_sequence, false, true);
         } else {
             lets_visualize_our_sequence = helper.get_iterable_sequence(variables, this_is_the_loop_iterable, false);
@@ -123,7 +123,7 @@ function TPLAlgorithm() {
             add_the_sequence_to_the_variable_bank = helper.add_this_to_the_variable_bank(variables, lets_visualize_our_sequence, false);
 
             let this_is_the_first_value_in_the_loop_sequence: ArrayElement;
-            [interactive("array_element_click")]
+            [interactive("list_element_click")]
             this_is_the_first_value_in_the_loop_sequence = helper.loop_sequence_index(variables, lets_visualize_our_sequence, false, true);
 
             [prompt]
@@ -159,7 +159,7 @@ function TPLAlgorithm() {
             now_we_need_to_update_the_loop_variable = loop.increment;
 
             let this_is_the_next_value_in_the_loop_sequence: ArrayElement;
-            [interactive("array_element_click")]
+            [interactive("list_element_click")]
             this_is_the_next_value_in_the_loop_sequence = helper.loop_sequence_index(variables, lets_visualize_our_sequence, false, false);
 
             let update_the_value_of_the_loop_variable_in_the_variable_bank: Variable;
@@ -249,7 +249,7 @@ function TPLAlgorithm() {
                     this_is_the_index = the_expression_result_is_assigned_to_this_array_element.index;
 
                     let this_is_the_array_element_that_is_being_updated: ArrayElement;
-                    [interactive("array_element_click")]
+                    [interactive("list_element_click")]
                     this_is_the_array_element_that_is_being_updated = helper.select_the_index(variables, this_is_the_array, this_is_the_index);
 
                     let update_the_array_element: Variable;
