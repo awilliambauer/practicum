@@ -39,6 +39,13 @@ python3 -m http.server --directory .
 
 This will open the website at http://localhost:8000.
 
+### Working with the Code
+
+Check out the [_documentation/](https://github.com/awb-carleton/practicum/tree/master/_documentation) folder for help getting started working with the code.
+
+"How to implement a new problem type" ([how2tpl.pdf](https://github.com/awb-carleton/practicum/tree/master/_documentation/how2tpl.pdf) | [Drive](https://docs.google.com/document/d/1eg8Tox9nYs7trHIMKeAPPXxesR0sKyPjBCj5IUvd2pQ/edit?usp=sharing)) explains the process for creating a TPL file in order to implement a new problem type. It is the ideal first stop for those looking to expand Practicum either on a small scale (e.g., for a particular classroom), or on a larger scale (e.g., a comps group).
+
+"How the TPL connects to the front-end" ([tpl2front-end.pdf](https://github.com/awb-carleton/practicum/tree/master/_documentation/tpl2front-end.pdf) | [Drive](https://docs.google.com/document/d/1egbUw6Iy0888BOBr29NdAMZ4O1p3XycoqHWDFYtrAd8/edit?usp=sharing)) explains in prose how the TPL connects to the front end and its visualizations in additional detail.
 
 ## Prerequisites
 
