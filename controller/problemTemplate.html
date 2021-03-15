@@ -6,9 +6,11 @@
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span id="methodCall"></span><span class="caret"></span></a>
             <ul id="methodCallDropdown" class="dropdown-menu"></ul>
         </span>
-        <span style='font-weight: bold; padding-left: 30px;'>Solution: </span>
-        <input id='inputBox' name="checkanswer" type="text" autofocus="autofocus" />
-        <button id='submitButton' type="button">Check</button>
+        <div style="padding-left: 30px; display: inline-block">
+            <span style='font-weight: bold;'>Solution: </span>
+            <input id='inputBox' name="checkanswer" type="text" autofocus="autofocus" />
+            <button id='submitButton' type="button">Check</button>
+        </div>
         <div id='correctHeader' class="hidden" style="color:green;">That's the correct answer!</div>
         <div id='incorrectHeader' class="hidden" style="color:red;">Incorrect answer, try again.</div>
         <div id='emptySolutionHeader' class="hidden" style="color:blue;">Please enter a solution.</div>
