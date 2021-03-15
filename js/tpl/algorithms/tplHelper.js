@@ -27,7 +27,6 @@ function TplHelper() {
         return args;
     };
 
-    // TODO
     this.get_function_parameters = function(args) {
         // assumes only one array
         for (var key in args) {
@@ -129,7 +128,6 @@ function TplHelper() {
         return !is_inner ? this.iterable : this.iterable2;
     }
 
-    //TODO
     this.get_the_next_line_in_this_block_to_execute = function(parent, current_statement, condition) {
         switch(parent.tag) {
             case "method":
@@ -208,7 +206,7 @@ function TplHelper() {
         };
     };
 
-    this.get_loop = function(ast) { // TODO: allow getting this at lower levels
+    this.get_loop = function(ast) {
         // assume loop is the top node
         var loop = ast.body[lineNum];
         if (!loop || loop.tag !== 'for') throw new Error("can't find the for or while loop!");
@@ -222,7 +220,6 @@ function TplHelper() {
         return loop;
     };
 
-    //TODO: find where this is called and change input
     this.get_loop_init_variable = function(variable_bank, iter_variable, iterable, is_inner) {
         if (iter_variable.tag !== 'identifier') throw new Error("for loop initializer isn't an int declaration!");
         return this.create_variable(variable_bank, this.next_loop_variable_value(iter_variable, is_inner));
@@ -271,7 +268,7 @@ function TplHelper() {
         if (!is_inner) {
             this.iterable = iterable;
             this.iterable.idx = 0;
-            this.iterable.name = "loop sequence"; // TODO: give these more helpful names
+            this.iterable.name = "loop sequence"; // TODO: rework naming convention for arbitrary number of loops?
         } else {
             this.iterable2 = iterable;
             this.iterable2.idx = 0;
@@ -363,7 +360,7 @@ function TplHelper() {
 
     this.is_this_the_last_line = function(ast) {
         return lineNum !== ast.body.length - 1;
-    }; // TODO: factor out
+    }; // TODO: factor out when lineNum is deprecated
 
     this.this_is_a_return_statement = function(ast) {
         if (this.current_code_block_index === -1) this.current_code_block_index = ast.body.length - 1; // TODO HACK for when current_code_block_index is not being used
@@ -401,7 +398,7 @@ function TplHelper() {
                 if (!(vals[i]["type"] === "array")) string += vals[i]["value"];
                 else string += this.create_print_string(vals[i]["value"], string);
             } else if (vals[i].tag === "binop") {
-                string += this.create_print_string(vals[i].args, string); // TODO: what does this do?
+                string += this.create_print_string(vals[i].args, string);
             }
             if (i + 1 < vals.length) string += ",";
         }

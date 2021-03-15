@@ -6,7 +6,6 @@ var main_simulator = (function () {"use strict";
     var numTries;
     var fadeLevel;
 
-    // FIXME move to problem file js interface
     self.getHelper = function() {
         return new TplHelper();
     };
@@ -91,7 +90,6 @@ var main_simulator = (function () {"use strict";
 
                 if (states[currentState + 1].annotations.interactive[0] === "update_variable") {
                     returnState.state = self.copy(states[currentState].state);
-                    // FIXME HACK -- array mystyery stores variables in an TPA variable with type VariableBank (not general)
                     for (var v in states[currentState].variables.in_scope) {
                         if (states[currentState].variables.in_scope[v].hasOwnProperty("type") &&
                             states[currentState].variables.in_scope[v].type === "VariableBank") {

@@ -258,7 +258,6 @@ function simulator(ast, globals) {
                 push_stack_state(stmt.body, 'block');
                 break;
             case "if":
-                // TODO format condition expressions in prompts
                 if (evaluate(stmt.condition, state, result)) {
                     push_stack_state(stmt.then_branch, 'then');
                 } else if (stmt.else_branch !== null) {
@@ -275,7 +274,6 @@ function simulator(ast, globals) {
                 break;
             case "foreach:increment":
                 push_stack_state(stmt.parent.body);
-                // TODO foreach should use a declaration with a type
                 add_to_context(stmt.parent.variable, stmt.element, stmt.parent.type);
                 break;
             case "dowhile":
