@@ -11,7 +11,7 @@ var main_simulator = (function () {"use strict";
     };
 
     self.parse = function(algoName) {
-        return fetch("js/tpl/algorithms/" + algoName + ".tpl.txt").then(function(response) {
+        return fetch("js/tpl/algorithms/" + algoName + ".tpl").then(function(response) {
             if (response.status === 200) {
                 return response.text().then(function(source) {
                     return simulator_parsing.browser_parse(source);
@@ -32,7 +32,7 @@ var main_simulator = (function () {"use strict";
             helper: self.getHelper()
         };
 
-        d3.text("js/tpl/algorithms/" + algo + ".tpl.txt", function(error, algoText) {
+        d3.text("js/tpl/algorithms/" + algo + ".tpl", function(error, algoText) {
             if (error) return console.error(error);
             var ast = simulator_parsing.browser_parse(algoText);
             var sim = simulator(ast, globals);
