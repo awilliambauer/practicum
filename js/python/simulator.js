@@ -1,5 +1,5 @@
 
-/** Helper functions to simulator java code (without explanations) */
+/** Helper functions to simulate python code (without explanations) */
 var python_simulator = function() {
     "use strict";
     var self = {};

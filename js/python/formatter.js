@@ -1,4 +1,4 @@
-var java_formatter = function() {
+var python_formatter = function() {
     "use strict";
     var self = {};
 

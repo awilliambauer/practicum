@@ -14,7 +14,7 @@ var controller = (function() {
 
     function initialize(problemConfig, simulatorInterface_, initialState, task_logger, fading) {
 
-        $("#problem_space > pre").html(java_formatter.format(initialState.ast, {args:initialState.args}));
+        $("#problem_space > pre").html(python_formatter.format(initialState.ast, {args:initialState.args}));
 
         $("#promptText").css("font-weight", 'bold');
         $("#problem_space > pre").addClass("hidden");
