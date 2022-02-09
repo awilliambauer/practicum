@@ -8,6 +8,7 @@
     "title": "If/Else Investigation 1",
     "examProblemDatabaseId": "71",
     "content": {
+      "src": "if_else_1.py",
       "text": "def if_else_investigation(a, b):\n\tc = 2\n\tif a + c < b:\n\t\tc = c + 8\n\telse:\n\t\tb = b + 10\n\tif a + c < b:\n\t\tc = c + 8\n\telse:\n\t\tb = b + 10\n\treturn (b, c)",
       "variants": [{
         "id": "26",
@@ -28,6 +29,7 @@
     "title": "If/Else Investigation 2",
     "examProblemDatabaseId": "73",
     "content": {
+      "src": "if_else_2.py",
       "text": "def if_else_investigation(a, b):\n\tif a < b:\n\t\ta += 1\n\tif a < b:\n\t\ta += 1\n\telse:\n\t\tb += 1\n\tif a >= b:\n\t\tb = b - 5\n\treturn (a, b)",
       "variants": [{
         "id": "31",
@@ -210,6 +212,7 @@
     "id": "74",
     "title": "While Loop Investigation 1",
     "content": {
+      "src": "while_loop_1.py",
       "text": "def while_loop_investigation(i):\n\tfact = 1\n\twhile i  > 0:\n\t\tfact = fact * i\n\t\ti-= 1\n\treturn (fact)",
       "variants": [{
         "id": "75",

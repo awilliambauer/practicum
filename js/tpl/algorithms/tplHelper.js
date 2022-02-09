@@ -1,3 +1,8 @@
+const RELATIVE_SRC_DIR = "../../../include/source/";
+const HORIZONTAL_TAB = 9; // Unicode control code
+const NEW_LINE = 10; // Unicode control code
+// see: https://en.wikipedia.org/wiki/List_of_Unicode_characters#Control_codes
+
 function TplHelper() {
     "use strict";
 
@@ -137,9 +142,6 @@ function TplHelper() {
                 }
                 return parent.body[lineNum++];
             case "for":
-                if (parent.body.length === 0) throw new Error ("Empty loop body!");
-                if (current_statement) return get_next_statement(parent.body, current_statement);
-                return parent.body[0];
             case "while":
                 if (parent.body.length === 0) throw new Error ("Empty loop body!");
                 if (current_statement) return get_next_statement(parent.body, current_statement);
@@ -406,6 +408,33 @@ function TplHelper() {
     };
 }
 
+function load_file(filePath) {
+    var result = null;
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("GET", filePath, false);
+    xmlhttp.send();
+    if (xmlhttp.status==200) {
+        result = xmlhttp.responseText;
+    }
+    return result;
+}
+
+function format_python(code) {
+    // python files currently must indent with tabs
+    //TODO: parse python files that indent using spaces
+    var code_formatted = "";
+    for (let i = 0; i < code.length; i++) {
+        if (code.charCodeAt(i) == NEW_LINE) {
+            code_formatted += "\n";
+        } else if (code.charCodeAt(i) == HORIZONTAL_TAB) {
+            code_formatted += "\t";
+        } else {
+            code_formatted += code.charAt(i);
+        }
+    }
+    return code_formatted;
+}
+
 /**
  * Creates an initial state for a problem configuration.
  * @param problem: the problem configuration.
@@ -414,7 +443,17 @@ function TplHelper() {
 function make_initial_state(problem, variant) {
     "use strict";
 
-    var ast = python_parsing.parse_method(problem.content.text);
+    if (problem.content.hasOwnProperty('src')) {
+        console.log("Pulling problem " + problem.title + " from a src file.");
+        let filename = RELATIVE_SRC_DIR + problem.content.src;
+        let problem_raw = load_file(filename);
+        let problem_formatted = format_python(problem_raw);
+        var ast = python_parsing.parse_method(problem_formatted);
+    } else { // if problem.content lacks a src, fallback to using problem.content.text
+        console.log("Pulling problem " + problem.title + " directly from json.");
+        var ast = python_parsing.parse_method(problem.content.text);
+    }
+    
     var args = variant.arguments;
 
     return {
