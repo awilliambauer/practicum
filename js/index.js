@@ -1,7 +1,6 @@
-// Argument names for specific problem category and id
-const CATEGORY_ARG = "category";
-const PROBLEM_ID_ARG = "problem";
-const PRACTICUM_URL = "https://awb-carleton.github.io/practicum/";
+// Parameter names for specific problem category and id
+const CATEGORY_PARAMETER = "category";
+const PROBLEM_ID_PARAMETER = "problem";
 
 // from https://css-tricks.com/snippets/javascript/get-url-variables/
 // doesn't handle every valid query string, but should work for our purposes
@@ -536,9 +535,9 @@ function onProblemStart(problem) {
 }
 
 // Checks for arguments in the URL asking for a specific problem
-function checkForSpecificProblemArg() {
-    const category_value = getQueryVariable(CATEGORY_ARG);
-    const problem_id_value = getQueryVariable(PROBLEM_ID_ARG);
+function checkForSpecificProblemUrlParameters() {
+    const category_value = getQueryVariable(CATEGORY_PARAMETER);
+    const problem_id_value = getQueryVariable(PROBLEM_ID_PARAMETER);
     if (category_value && problem_id_value) {
         csed.setProblemToLoad(category_value, problem_id_value);
     }
@@ -607,11 +606,13 @@ $(document).ready(function() {
                     var problem = csed.getProblemToLoad(categoryConfig);                    
                     let category = problem.category;
                     let problemID = problem.id;
-                    let link = PRACTICUM_URL + "?category=" + category + "&problem=" + problemID;
-                    navigator.clipboard.writeText(link);        
-                    console.log("copied! " + link);
+                    let url = window.location.href.split('?')[0];
+                    let problem_link = url + "?category=" + category + "&problem=" + problemID;
+                    navigator.clipboard.writeText(problem_link);        
+                    console.log("copied! " + problem_link);
                 };
                 document.body.appendChild(link_button);
+                //TODO: hide this copy link to problem button on the home screen
             }
         })
         .fail(function () {
@@ -624,8 +625,8 @@ $(document).ready(function() {
         d3.select("#main-page").classed("hidden", false);
     });
     
-    // Check for arguments in url
-    checkForSpecificProblemArg();
+    // Check for parameters in url
+    checkForSpecificProblemUrlParameters();
 });
 
 (function($) {
