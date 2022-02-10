@@ -74,7 +74,7 @@ The js folder has the index.js file, which deals with loading all the problems, 
 
 The logging.js file deals with logging usage information about the system.
 
-There are two subfolders in the JS folder. The **change later** java folder has all the code for parsing through the Python code. The ast.js file contains code to create the Abstract Syntax Tree, the formatter.js file converts the AST into HTML to display on the problem page, the parser.js file is responsible for parsing through the AST and evaluating the Python code, and the simulator.js file executes statements and handles moving through the code.
+There are two subfolders in the JS folder. The python folder has all the code for parsing through the Python code. The ast.js file contains code to create the Abstract Syntax Tree, the formatter.js file converts the AST into HTML to display on the problem page, the parser.js file is responsible for parsing through the AST and evaluating the Python code, and the simulator.js file executes statements and handles moving through the code.
 
 The tpl folder is similar, but it contains the code required to interpret the TPLs. It also contains a folder called algorithms which contains the TPLs for each problem type, as well as tplHelper.js, which contains the functions used to create the TPL. tplHelper.js is what allows the TPLs to be parsed be the rest of the system.
 
