@@ -1,6 +1,7 @@
-// Arguments for specific problem category and id
-const category_arg = "category";
-const problem_id_arg = "problemID";
+// Argument names for specific problem category and id
+const CATEGORY_ARG = "category";
+const PROBLEM_ID_ARG = "problem";
+const PRACTICUM_URL = "https://awb-carleton.github.io/practicum/";
 
 // from https://css-tricks.com/snippets/javascript/get-url-variables/
 // doesn't handle every valid query string, but should work for our purposes
@@ -531,12 +532,13 @@ var csed = (function() {
 
 function onProblemStart(problem) {
     csed.loadProblem(problem);
+    csed.setProblemToLoad(problem.category, problem.id); // setting this allows the click to copy button to read it
 }
 
 // Checks for arguments in the URL asking for a specific problem
 function checkForSpecificProblemArg() {
-    const category_value = getQueryVariable(category_arg);
-    const problem_id_value = getQueryVariable(problem_id_arg);
+    const category_value = getQueryVariable(CATEGORY_ARG);
+    const problem_id_value = getQueryVariable(PROBLEM_ID_ARG);
     if (category_value && problem_id_value) {
         csed.setProblemToLoad(category_value, problem_id_value);
     }
@@ -597,6 +599,19 @@ $(document).ready(function() {
                 } else {
                     csed.showHome();
                 }
+                
+                // Adding a button to copy a link to the current problem
+                let link_button = document.createElement("button"); 
+                link_button.innerHTML = "Copy link to problem";
+                link_button.onclick = function () {
+                    var problem = csed.getProblemToLoad(categoryConfig);                    
+                    let category = problem.category;
+                    let problemID = problem.id;
+                    let link = PRACTICUM_URL + "?category=" + category + "&problem=" + problemID;
+                    navigator.clipboard.writeText(link);        
+                    console.log("copied! " + link);
+                };
+                document.body.appendChild(link_button);
             }
         })
         .fail(function () {
