@@ -1,3 +1,6 @@
+// Arguments for specific problem category and id
+const category_arg = "category";
+const problem_id_arg = "problemID";
 
 // from https://css-tricks.com/snippets/javascript/get-url-variables/
 // doesn't handle every valid query string, but should work for our purposes
@@ -136,18 +139,20 @@ var csed = (function() {
         d3.select("#problem-container .problem").remove();
     }
 
-    function findProblem(categoryConfig, requestedCategory, requestedProblemId)  {
-        categoryConfig.forEach(function (category) {
-            if (category.category === requestedCategory) {
-                var problems = category['problems'];
-                problem.forEach(function (problem) {
+    function findProblem(categoryConfig, requestedCategory, requestedProblemId)  {        
+        for (let i in categoryConfig) {
+            let category = categoryConfig[i];
+            if (category.category == requestedCategory) {
+                let problems = category['problems'];
+                for (let j in problems) {
+                    let problem = problems[j];
                     if (problem.id === requestedProblemId) {
                         return problem;
                     }
-                });
+                }
             }
-        });
-        return null;
+        }
+       return null;
     }
 
     function addProblemsContentToLandingPage(problemsConfig, onProblemStartCallback) {
@@ -528,6 +533,15 @@ function onProblemStart(problem) {
     csed.loadProblem(problem);
 }
 
+// Checks for arguments in the URL asking for a specific problem
+function checkForSpecificProblemArg() {
+    const category_value = getQueryVariable(category_arg);
+    const problem_id_value = getQueryVariable(problem_id_arg);
+    if (category_value && problem_id_value) {
+        csed.setProblemToLoad(category_value, problem_id_value);
+    }
+}
+
 $(document).ready(function() {
     "use strict";
 
@@ -576,7 +590,7 @@ $(document).ready(function() {
 
                 csed.addProblemsToNav(categoryConfig, onProblemStart);
                 csed.addProblemsContentToLandingPage(categoryConfig, onProblemStart);
-
+                
                 if (csed.hasProblemToLoad(categoryConfig)) {
                     var problem = csed.getProblemToLoad(categoryConfig);
                     csed.loadProblem(problem);
@@ -594,6 +608,9 @@ $(document).ready(function() {
         $('#main-page').html('<p>Uh oh! There appears to be a problem with the server!</p><p>Our apologies, please report this with <a href="https://catalyst.uw.edu/umail/form/aaronb22/4553">our feedback form</a> and we\'ll get it fixed ASAP.</p>');
         d3.select("#main-page").classed("hidden", false);
     });
+    
+    // Check for arguments in url
+    checkForSpecificProblemArg();
 });
 
 (function($) {
