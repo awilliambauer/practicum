@@ -344,10 +344,18 @@ var csed = (function() {
         }
 
     }
+    
+    // Pushes the identifier of the problem into the browser's url
+    function setUrlArgs(problem) {
+        const url = new URL(window.location);
+        url.searchParams.set(CATEGORY_PARAMETER, problem.category);
+        url.searchParams.set(PROBLEM_ID_PARAMETER, problem.id);
+        window.history.pushState({}, '', url);
+    }
 
     function loadProblem(problemConfig, variant) {
         task_logger = Logging.start_task(problemConfig);
-
+        
         // if no alt state, choose the first
         if (problemConfig.content.variants) {
             variant = variant || problemConfig.content.variants[0];
@@ -357,7 +365,8 @@ var csed = (function() {
                 detail: {id: variant.id},
             });
         }
-
+        
+        setUrlArgs(problemConfig);
         saveProblemData(problemConfig);
         updateProblemDisplay(problemConfig);
 
@@ -554,6 +563,12 @@ $(document).ready(function() {
             .removeClass("col-sm-12")
             .addClass("col-sm-6");
     });
+    
+    // Detect change in active history entry. Only triggered by browser actions or by calling history.back()
+    // https://developer.mozilla.org/en-US/docs/Web/API/WindowEventHandlers/onpopstate
+    $(window).on('popstate', function() {
+        location.reload(true); // Reload the page to load the problem that was navigated back to.
+    });      
 
     var username = csed.getUsername();
     var forceUser = getQueryVariable("username");
