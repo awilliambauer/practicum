@@ -350,7 +350,7 @@ var csed = (function() {
         const url = new URL(window.location);
         url.searchParams.set(CATEGORY_PARAMETER, problem.category);
         url.searchParams.set(PROBLEM_ID_PARAMETER, problem.id);
-        window.history.pushState({}, '', url);
+        window.history.replaceState({}, '', url);
     }
 
     function loadProblem(problemConfig, variant) {
@@ -540,7 +540,6 @@ var csed = (function() {
 
 function onProblemStart(problem) {
     csed.loadProblem(problem);
-    csed.setProblemToLoad(problem.category, problem.id); // setting this allows the click to copy button to read it
 }
 
 // Checks for arguments in the URL asking for a specific problem
@@ -564,11 +563,12 @@ $(document).ready(function() {
             .addClass("col-sm-6");
     });
     
+    //TODO:
     // Detect change in active history entry. Only triggered by browser actions or by calling history.back()
     // https://developer.mozilla.org/en-US/docs/Web/API/WindowEventHandlers/onpopstate
-    $(window).on('popstate', function() {
-        location.reload(true); // Reload the page to load the problem that was navigated back to.
-    });      
+    // $(window).on('popstate', function() {
+    //     location.reload(true); // Reload the page to load the problem that was navigated back to.
+    // });      
 
     var username = csed.getUsername();
     var forceUser = getQueryVariable("username");
@@ -613,21 +613,6 @@ $(document).ready(function() {
                 } else {
                     csed.showHome();
                 }
-                
-                // Adding a button to copy a link to the current problem
-                let link_button = document.createElement("button"); 
-                link_button.innerHTML = "Copy link to problem";
-                link_button.onclick = function () {
-                    var problem = csed.getProblemToLoad(categoryConfig);                    
-                    let category = problem.category;
-                    let problemID = problem.id;
-                    let url = window.location.href.split('?')[0];
-                    let problem_link = url + "?category=" + category + "&problem=" + problemID;
-                    navigator.clipboard.writeText(problem_link);        
-                    console.log("copied! " + problem_link);
-                };
-                document.body.appendChild(link_button);
-                //TODO: hide this copy link to problem button on the home screen
             }
         })
         .fail(function () {
