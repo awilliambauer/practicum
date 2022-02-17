@@ -1,3 +1,6 @@
+// Parameter names for specific problem category and id
+const CATEGORY_PARAMETER = "category";
+const PROBLEM_ID_PARAMETER = "problem";
 
 // from https://css-tricks.com/snippets/javascript/get-url-variables/
 // doesn't handle every valid query string, but should work for our purposes
@@ -136,18 +139,20 @@ var csed = (function() {
         d3.select("#problem-container .problem").remove();
     }
 
-    function findProblem(categoryConfig, requestedCategory, requestedProblemId)  {
-        categoryConfig.forEach(function (category) {
-            if (category.category === requestedCategory) {
-                var problems = category['problems'];
-                problem.forEach(function (problem) {
+    function findProblem(categoryConfig, requestedCategory, requestedProblemId)  {        
+        for (let i in categoryConfig) {
+            let category = categoryConfig[i];
+            if (category.category == requestedCategory) {
+                let problems = category['problems'];
+                for (let j in problems) {
+                    let problem = problems[j];
                     if (problem.id === requestedProblemId) {
                         return problem;
                     }
-                });
+                }
             }
-        });
-        return null;
+        }
+       return null;
     }
 
     function addProblemsContentToLandingPage(problemsConfig, onProblemStartCallback) {
@@ -339,10 +344,18 @@ var csed = (function() {
         }
 
     }
+    
+    // Pushes the identifier of the problem into the browser's url
+    function setUrlArgs(problem) {
+        const url = new URL(window.location);
+        url.searchParams.set(CATEGORY_PARAMETER, problem.category);
+        url.searchParams.set(PROBLEM_ID_PARAMETER, problem.id);
+        window.history.replaceState({}, '', url);
+    }
 
     function loadProblem(problemConfig, variant) {
         task_logger = Logging.start_task(problemConfig);
-
+        
         // if no alt state, choose the first
         if (problemConfig.content.variants) {
             variant = variant || problemConfig.content.variants[0];
@@ -352,7 +365,8 @@ var csed = (function() {
                 detail: {id: variant.id},
             });
         }
-
+        
+        setUrlArgs(problemConfig);
         saveProblemData(problemConfig);
         updateProblemDisplay(problemConfig);
 
@@ -528,6 +542,15 @@ function onProblemStart(problem) {
     csed.loadProblem(problem);
 }
 
+// Checks for arguments in the URL asking for a specific problem
+function checkForSpecificProblemUrlParameters() {
+    const category_value = getQueryVariable(CATEGORY_PARAMETER);
+    const problem_id_value = getQueryVariable(PROBLEM_ID_PARAMETER);
+    if (category_value && problem_id_value) {
+        csed.setProblemToLoad(category_value, problem_id_value);
+    }
+}
+
 $(document).ready(function() {
     "use strict";
 
@@ -539,6 +562,13 @@ $(document).ready(function() {
             .removeClass("col-sm-12")
             .addClass("col-sm-6");
     });
+    
+    //TODO:
+    // Detect change in active history entry. Only triggered by browser actions or by calling history.back()
+    // https://developer.mozilla.org/en-US/docs/Web/API/WindowEventHandlers/onpopstate
+    // $(window).on('popstate', function() {
+    //     location.reload(true); // Reload the page to load the problem that was navigated back to.
+    // });      
 
     var username = csed.getUsername();
     var forceUser = getQueryVariable("username");
@@ -576,7 +606,7 @@ $(document).ready(function() {
 
                 csed.addProblemsToNav(categoryConfig, onProblemStart);
                 csed.addProblemsContentToLandingPage(categoryConfig, onProblemStart);
-
+                
                 if (csed.hasProblemToLoad(categoryConfig)) {
                     var problem = csed.getProblemToLoad(categoryConfig);
                     csed.loadProblem(problem);
@@ -594,6 +624,9 @@ $(document).ready(function() {
         $('#main-page').html('<p>Uh oh! There appears to be a problem with the server!</p><p>Our apologies, please report this with <a href="https://catalyst.uw.edu/umail/form/aaronb22/4553">our feedback form</a> and we\'ll get it fixed ASAP.</p>');
         d3.select("#main-page").classed("hidden", false);
     });
+    
+    // Check for parameters in url
+    checkForSpecificProblemUrlParameters();
 });
 
 (function($) {
