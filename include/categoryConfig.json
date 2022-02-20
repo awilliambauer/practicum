@@ -8,7 +8,7 @@
     "title": "If/Else Investigation 1",
     "examProblemDatabaseId": "71",
     "content": {
-      "src": "if_else_1.py",
+      "src": "if_else/if_else_1.py",
       "text": "def if_else_investigation(a, b):\n\tc = 2\n\tif a + c < b:\n\t\tc = c + 8\n\telse:\n\t\tb = b + 10\n\tif a + c < b:\n\t\tc = c + 8\n\telse:\n\t\tb = b + 10\n\treturn (b, c)",
       "variants": [{
         "id": "26",
@@ -29,7 +29,7 @@
     "title": "If/Else Investigation 2",
     "examProblemDatabaseId": "73",
     "content": {
-      "src": "if_else_2.py",
+      "src": "if_else/if_else_2.py",
       "text": "def if_else_investigation(a, b):\n\tif a < b:\n\t\ta += 1\n\tif a < b:\n\t\ta += 1\n\telse:\n\t\tb += 1\n\tif a >= b:\n\t\tb = b - 5\n\treturn (a, b)",
       "variants": [{
         "id": "31",
@@ -50,6 +50,7 @@
     "title": "If/Else Investigation 3",
     "examProblemDatabaseId": "75",
     "content": {
+      "src": "if_else/if_else_3.py",
       "text": "def if_else_investigation(a, b):\n\tif a == b:\n\t\tb = b - 1\n\telif a < b:\n\t\ta = a + 1\n\telse: \n\t\tb = b + 5\n\tif a == b:\n\t\ta = a + 2\n\treturn (a, b)",
       "variants": [{
         "id": "36",
@@ -70,6 +71,7 @@
     "title": "If/Else Investigation 4",
     "examProblemDatabaseId": "77",
     "content": {
+      "src": "if_else/if_else_4.py",
       "text": "def if_else_investigation(a, b):\n\tif a < b:\n\t\ta = a * 2\n\tif a > b:\n\t\ta = a - 10\n\telse:\n\t\tb+= 1\n\treturn (a, b)",
       "variants": [{
         "id": "41",
@@ -90,7 +92,8 @@
     "title": "If/Else Investigation 5",
     "examProblemDatabaseId": "83",
     "content": {
-      "text": "def if_else_investigation(a, b, c):\n\tif a < b && a < c:\n\t\ta = a + c\n\t\tc+= 1\n\telif a >= b:\n\t\ta = a - b\n\t\tb-= 1\n\tif a >= b && a >= c:\n\t\ta+= 1\n\t\tc+= 1\n\treturn (a, b, c)",
+      "src": "if_else/if_else_5.py",
+      "text": "def if_else_investigation(a, b, c):\n\tif a < b and a < c:\n\t\ta = a + c\n\t\tc+= 1\n\telif a >= b:\n\t\ta = a - b\n\t\tb-= 1\n\tif a >= b and a >= c:\n\t\ta+= 1\n\t\tc+= 1\n\treturn (a, b, c)",
       "variants": [{
         "id": "46",
         "arguments": {"a": 2, "b": 10, "c": 3}
@@ -110,6 +113,7 @@
     "title": "If/Else Investigation 6",
     "examProblemDatabaseId": "88",
     "content": {
+      "src": "if_else/if_else_6.py",
       "text": "def if_else_investigation(x, y):\n\tz = 4\n\tif z <= x || x > 5:\n\t\tz = x + 1\n\telse:\n\t\tz = z + 9\n\tif z <= y:\n\t\ty+= 1\n\treturn (z, y)",
       "variants": [{
         "id": "51",
@@ -130,6 +134,7 @@
     "title": "If/Else Investigation 7",
     "examProblemDatabaseId": "90",
     "content": {
+      "src": "if_else/if_else_7.py",
       "text": "def if_else_investigation(a, b):\n\tif a * 2 < b:\n\t\ta = a * 3\n\tif b < a:\n\t\tb+= 1\n\telse:\n\t\ta-= 1\n\treturn (a, b)",
       "variants": [{
         "id": "56",
@@ -150,6 +155,7 @@
     "title": "If/Else Investigation 8",
     "examProblemDatabaseId": "92",
     "content": {
+      "src": "if_else/if_else_8.py",
       "text": "def if_else_investigation(x, y):\n\tif x == y || y < 5:\n\t\tx = x + 11\n\telif x > 2 * y:\n\t\tx = 0\n\tif x == 0 && y > x:\n\t\tx = x + 2\n\t\ty = y + 2\n\treturn (x, y)",
       "variants": [{
         "id": "61",
@@ -167,6 +173,7 @@
     "title": "If/Else Investigation 9",
     "examProblemDatabaseId": "94",
     "content": {
+      "src": "if_else/if_else_9.py",
       "text": "def if_else_investigation(a, b):\n\tif a %2 != 0:\n\t\ta = a * 2\n\tif a > 10:\n\t\tb+= 1\n\telif a > 10:\n\t\ta-= 1\n\t\tb-= 1\n\treturn (a, b)",
       "variants": [{
         "id": "65",
@@ -187,6 +194,7 @@
     "title": "If/Else Investigation 10",
     "examProblemDatabaseId": "96",
     "content": {
+      "src": "if_else/if_else_10.py",
       "text": "def if_else_investigation(x, y):\n\tz = 0\n\tif x >= y:\n\t\tx = x / 2\n\t\tz+= 1\n\tif x > z && y <= z:\n\t\tz+= 1\n\telif x > z:\n\t\ty = y - 5\n\treturn (x, y, z)",
       "variants": [{
         "id": "70",
@@ -212,7 +220,7 @@
     "id": "74",
     "title": "While Loop Investigation 1",
     "content": {
-      "src": "while_loop_1.py",
+      "src": "while_loop/while_loop_1.py",
       "text": "def while_loop_investigation(i):\n\tfact = 1\n\twhile i  > 0:\n\t\tfact = fact * i\n\t\ti-= 1\n\treturn (fact)",
       "variants": [{
         "id": "75",
