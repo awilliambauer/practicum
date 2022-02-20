@@ -426,10 +426,14 @@ function format_python(code) {
     // python files currently must indent with tabs
     //TODO: parse python files that indent using spaces
 
+    //HACK: The following fixes simply swap the syntax in the source code to match what the parser expects.
+
     // Parser expects some java syntax for logical operators.
-    //HACK: This fix simply swaps the syntax in the source code.
     code = code.replaceAll(" and ", " && ");
     code = code.replaceAll(" or ", " || ");
+
+    // Parser expects quotes to include an escape character
+    code = code.replaceAll("'", "\"");
 
     var code_formatted = "";
     for (let i = 0; i < code.length; i++) {
