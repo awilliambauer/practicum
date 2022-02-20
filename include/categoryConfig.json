@@ -489,6 +489,7 @@
     "id": "102",
     "title": "Nested For Loop Investigation 1",
     "content": {
+      "src": "nested_for_loop/nested_for_loop_1.py",
       "text": "def nested_for_loop_investigation(a, b):\n\tc = 0\n\tfor i in range(a):\n\t\tfor j in range(b):\n\t\t\tc = c + 1\n\treturn(c)\n",
       "variants": [{
         "id": "103",
@@ -499,6 +500,7 @@
     "id": "104",
     "title": "Nested For Loop Investigation 2",
     "content": {
+      "src": "nested_for_loop/nested_for_loop_2.py",
       "text": "def nested_for_loop_investigation(lst_inner):\n\tlst_outer = [2, 3, 4]\n\tfor i in range(len(lst_outer)):\n\t\tfor j in range(len(lst_inner)):\n\t\t\tlst_inner[j] = lst_inner[j] * lst_outer[i]\n\treturn(lst_inner)",
       "variants": [{
         "id": "105",
@@ -512,6 +514,7 @@
     "id": "107",
     "title": "Nested For Loop Investigation 3",
     "content": {
+      "src": "nested_for_loop/nested_for_loop_3.py",
       "text": "def nested_for_loop_investigation(word):\n\tvowels = \"aeiou\"\n\tcount = 0\n\tfor letter in word:\n\t\tfor vowel in vowels:\n\t\t\tif letter == vowel:\n\t\t\t\tcount = count + 1\n\t\t\t\tbreak\n\treturn(count)",
       "variants": [{
         "id": "108",
@@ -528,6 +531,7 @@
     "id": "111",
     "title": "Nested For Loop Investigation 4",
     "content": {
+      "src": "nested_for_loop/nested_for_loop_4.py",
       "text": "def nested_for_loop_investigation(lst):\n\tfor i in range(lst[0], lst[1]):\n\t\tfor j in range(len(lst)):\n\t\t\tlst[j] = lst[j] + i\n\t\t\tif lst[j] > 10:\n\t\t\t\treturn(lst)\n\treturn(lst)",
       "variants": [{
         "id": "112",
@@ -541,6 +545,7 @@
     "id": "114",
     "title": "Nested For Loop Investigation 5",
     "content": {
+      "src": "nested_for_loop/nested_for_loop_5.py",
       "text": "def nested_for_loop_investigation(data_lst, mean):\n\tfor i in range(2):\n\t\tfor j in range(len(data_lst)):\n\t\t\tif data_lst[j] < mean:\n\t\t\t\tdata_lst[j] = data_lst[j] + 2\n\treturn(data_lst)",
       "variants": [{
         "id": "115",
@@ -551,6 +556,7 @@
     "id": "116",
     "title": "Nested For Loop Investigation 6",
     "content": {
+      "src": "nested_for_loop/nested_for_loop_6.py",
       "text": "def nested_for_loop_investigation(no_squares):\n\tnums = [3, 4, 5]\n\tfor i in range(len(no_squares)):\n\t\tfor num in nums:\n\t\t\tif num * num == no_squares[i]:\n\t\t\t\tno_squares[i] = 0\n\t\t\t\tbreak\n\treturn(no_squares)",
       "variants": [{
         "id": "117",
@@ -564,6 +570,7 @@
     "id": "119",
     "title": "Nested For Loop Investigation 7",
     "content": {
+      "src": "nested_for_loop/nested_for_loop_7.py",
       "text": "def nested_for_loop_investigation(lst):\n\tfor num in lst:\n\t\tfor j in range(len(lst)):\n\t\t\tif num < 0:\n\t\t\t\tlst[j] = lst[j] + 3\n\treturn(lst)",
       "variants": [{
         "id": "120",
@@ -577,6 +584,7 @@
     "id": "122",
     "title": "Nested For Loop Investigation 8",
     "content": {
+      "src": "nested_for_loop/nested_for_loop_8.py",
       "text": "def nested_for_loop_investigation(lst):\n\tfactors = [2, 3, 4, 6]\n\tcount = 0\n\tfor item in lst:\n\t\tif item > 12:\n\t\t\treturn(count)\n\t\tfor factor in factors:\n\t\t\tif item * factor == 12:\n\t\t\t\tcount = count + 1\n\t\t\t\tbreak\n\treturn(count)",
       "variants": [{
         "id": "123",
@@ -590,6 +598,7 @@
     "id": "125",
     "title": "Nested For Loop Investigation 9",
     "content": {
+      "src": "nested_for_loop/nested_for_loop_9.py",
       "text": "def nested_for_loop_investigation(lst):\n\tcount = 0\n\tfor i in range(3):\n\t\tfor j in range(len(lst)):\n\t\t\tif lst[j] < 50:\n\t\t\t\tlst[j] = lst[j] + 10\n\t\t\telse:\n\t\t\t\tcount = count + 1\n\treturn(count)",
       "variants": [{
         "id": "126",
@@ -603,6 +612,7 @@
     "id": "128",
     "title": "Nested For Loop Investigation 10",
     "content": {
+      "src": "nested_for_loop/nested_for_loop_10.py",
       "text": "def nested_for_loop_investigation(a, b):\n\tc = 0\n\tfor i in range(3):\n\t\tfor j in range(2):\n\t\t\tif a < 3 * b:\n\t\t\t\tc = c + a * 2\n\t\t\t\ta = a + 20\n\t\t\telse:\n\t\t\t\t b = b + 10\n\treturn(a, b, c)",
       "variants": [{
         "id": "129",
