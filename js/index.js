@@ -5,8 +5,8 @@ function getQueryVariable(variable)
 {
     var query = window.location.search.substring(1);
     var vars = query.split("&");
-    for (var i=0; i < vars.length; i++) {
-        var pair = vars[i].split("=");
+    for (let v of vars) {
+        var pair = v.split("=");
         if(pair[0] == variable){
             return pair[1];
         }
@@ -77,11 +77,11 @@ var csed = (function() {
                 }
                 numProblemsByCategory = server_savedata.numProblemsByCategory;
                 problemIdsByCategory = server_savedata.problemIdsByCategory;
-                for (let i = 0; i < enabled_problem_types.length; i++) {
-                    if (!numProblemsByCategory[enabled_problem_types[i]]) numProblemsByCategory[enabled_problem_types[i]] = 0;
+                for (let problem_type of enabled_problem_types) {
+                    if (!numProblemsByCategory[problem_type]) numProblemsByCategory[problem_type] = 0;
                 }
-                for (let i = 0; i < enabled_problem_types.length; i++) {
-                    if (!problemIdsByCategory[enabled_problem_types[i]]) problemIdsByCategory[enabled_problem_types[i]] = [];
+                for (let problem_type of enabled_problem_types) {
+                    if (!problemIdsByCategory[problem_type]) problemIdsByCategory[problem_type] = [];
                 }
 
                 // for debugging
@@ -168,12 +168,11 @@ var csed = (function() {
             })
             all_problems = all_problems.flat();
             let problem_results = all_problems.map(problem => {
-                let result = {
+                return {
                     "problem": problem,
                     "guided": false,
                     "independent": false
                 }
-                return result;
             })
             localStorage.setItem("problem_results", JSON.stringify(problem_results));
         }
