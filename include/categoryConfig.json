@@ -231,6 +231,7 @@
     "id": "76",
     "title": "While Loop Investigation 2",
     "content": {
+      "src": "while_loop/while_loop_2.py",
       "text": "def while_loop_investigation(lst):\n\t i = 0\n\t sum = 0\n\twhile (i < len(lst)):\n\t\t sum = sum + lst[i]\n\t\t i = i + 1\n\t return (sum)",
       "variants": [{
         "id": "77",
@@ -244,6 +245,7 @@
     "id": "79",
     "title": "While Loop Investigation 3",
     "content": {
+      "src": "while_loop/while_loop_3.py",
       "text": "def while_loop_investigation(num):\n\tdiv_by_two = 0\n\twhile num >= 1:\n\t\tnum = num - 2\n\t\tdiv_by_two+= 1\n\treturn (div_by_two)",
       "variants": [{
         "id": "80",
@@ -257,6 +259,7 @@
     "id": "82",
     "title": "While Loop Investigation 4",
     "content": {
+      "src": "while_loop/while_loop_4.py",
       "text": "def while_loop_investigation(lst):\n\ti = 0\n\twhile i < len(lst):\n\t\tlst[i] = lst[i] * -1 \n\t\ti = i + 1 \n\treturn (lst)",
       "variants": [{
         "id": "83",
@@ -270,6 +273,7 @@
     "id": "85",
     "title": "While Loop Investigation 5",
     "content": {
+      "src": "while_loop/while_loop_5.py",
       "text": "def while_loop_investigation(lst):\n\tto_add = 13\n\ti = 0\n\twhile i < len(lst):\n\t\tlst[i] = lst[i] + to_add \n\t\ti = i + 1\n\treturn (lst)",
       "variants": [{
         "id": "86",
@@ -283,6 +287,7 @@
     "id": "88",
     "title": "While Loop Investigation 6",
     "content": {
+      "src": "while_loop/while_loop_6.py",
       "text": "def while_loop_investigation(a, b):\n\tpower = 0\n\twhile b >= 1:\n\t\tb = b / a\n\t\tpower+= 1\n\treturn (power)",
       "variants": [{
         "id": "89",
@@ -296,6 +301,7 @@
     "id": "91",
     "title": "While Loop Investigation 7",
     "content": {
+      "src": "while_loop/while_loop_7.py",
       "text": "def while_loop_investigation(num):\n\tpower = 1\n\ti = 0\n\twhile i < 5:\n\t\tpower = power * num \n\t\ti = i + 1 \n\treturn (num)\n",
       "variants": [{
         "id": "92",
@@ -306,6 +312,7 @@
     "id": "93",
     "title": "While Loop Investigation 8",
     "content": {
+      "src": "while_loop/while_loop_8.py",
       "text": "def while_loop_investigation(a, b):\n\twhile a < 1000:\n\t\ta = a * b\n\treturn (a)",
       "variants": [{
         "id": "94",
@@ -319,6 +326,7 @@
     "id": "96",
     "title": "While Loop Investigation 9",
     "content": {
+      "src": "while_loop/while_loop_9.py",
       "text": "def while_loop_investigation(lst):\n\ti = 0\n\tsum = 0\n\twhile i < len(lst) - 1: \n\t\ti = i + 1 \n\t\tif lst[i] % 2 == 1:\n\t\t\tsum = sum + lst[i]  \n\treturn (sum)",
       "variants": [{
         "id": "97",
@@ -333,6 +341,7 @@
     "title": "While Loop Investigation 10",
     "examProblemDatabaseId": "96",
     "content": {
+      "src": "while_loop/while_loop_10.py",
       "text": "def whileLoopInvestigation(a, b):\n\twhile a < b:\n\t\ta = a + 1\n\t\tif a % 2 == 0:\n\t\t\tcontinue\n\t\telse:\n\t\t\tb = b - a\n\treturn (a, b)",
       "variants": [{
         "id": "100",
