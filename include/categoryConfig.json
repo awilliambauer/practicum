@@ -88,7 +88,7 @@
     "title": "If/Else Investigation 5",
     "examProblemDatabaseId": "83",
     "content": {
-      "text": "def if_else_investigation(a, b, c):\n\tif a < b && a < c:\n\t\ta = a + c\n\t\tc+= 1\n\telif a >= b:\n\t\ta = a - b\n\t\tb-= 1\n\tif a >= b && a >= c:\n\t\ta+= 1\n\t\tc+= 1\n\treturn (a, b, c)",
+      "text": "def if_else_investigation(a, b, c):\n\tif a < b and a < c:\n\t\ta = a + c\n\t\tc+= 1\n\telif a >= b:\n\t\ta = a - b\n\t\tb-= 1\n\tif a >= b and a >= c:\n\t\ta+= 1\n\t\tc+= 1\n\treturn (a, b, c)",
       "variants": [{
         "id": "46",
         "arguments": {"a": 2, "b": 10, "c": 3}
@@ -108,7 +108,7 @@
     "title": "If/Else Investigation 6",
     "examProblemDatabaseId": "88",
     "content": {
-      "text": "def if_else_investigation(x, y):\n\tz = 4\n\tif z <= x || x > 5:\n\t\tz = x + 1\n\telse:\n\t\tz = z + 9\n\tif z <= y:\n\t\ty+= 1\n\treturn (z, y)",
+      "text": "def if_else_investigation(x, y):\n\tz = 4\n\tif z <= x and x > 5:\n\t\tz = x + 1\n\telse:\n\t\tz = z + 9\n\tif z <= y:\n\t\ty+= 1\n\treturn (z, y)",
       "variants": [{
         "id": "51",
         "arguments": {"x": 3, "y": 20}
@@ -148,7 +148,7 @@
     "title": "If/Else Investigation 8",
     "examProblemDatabaseId": "92",
     "content": {
-      "text": "def if_else_investigation(x, y):\n\tif x == y || y < 5:\n\t\tx = x + 11\n\telif x > 2 * y:\n\t\tx = 0\n\tif x == 0 && y > x:\n\t\tx = x + 2\n\t\ty = y + 2\n\treturn (x, y)",
+      "text": "def if_else_investigation(x, y):\n\tif x == y or y < 5:\n\t\tx = x + 11\n\telif x > 2 * y:\n\t\tx = 0\n\tif x == 0 and y > x:\n\t\tx = x + 2\n\t\ty = y + 2\n\treturn (x, y)",
       "variants": [{
         "id": "61",
         "arguments": {"x": 5, "y": 5}
@@ -185,7 +185,7 @@
     "title": "If/Else Investigation 10",
     "examProblemDatabaseId": "96",
     "content": {
-      "text": "def if_else_investigation(x, y):\n\tz = 0\n\tif x >= y:\n\t\tx = x / 2\n\t\tz+= 1\n\tif x > z && y <= z:\n\t\tz+= 1\n\telif x > z:\n\t\ty = y - 5\n\treturn (x, y, z)",
+      "text": "def if_else_investigation(x, y):\n\tz = 0\n\tif x >= y:\n\t\tx = x / 2\n\t\tz+= 1\n\tif x > z and y <= z:\n\t\tz+= 1\n\telif x > z:\n\t\ty = y - 5\n\treturn (x, y, z)",
       "variants": [{
         "id": "70",
         "arguments": {"x": 3, "y": 1}
@@ -410,7 +410,7 @@
     "id": "16",
     "title": "For Loop Investigation 7",
     "content": {
-      "text": "def for_loop_investigation(lst):\n\ta = 5\n\tfor n in lst:\n\t\ta = a - 3\n\t\tif n < 0:\n\t\t\ta = a + 3\n\t\tif -1 < n && n < 1:\n\t\t\treturn(a)\n\treturn (a)",
+      "text": "def for_loop_investigation(lst):\n\ta = 5\n\tfor n in lst:\n\t\ta = a - 3\n\t\tif n < 0:\n\t\t\ta = a + 3\n\t\tif -1 < n and n < 1:\n\t\t\treturn(a)\n\treturn (a)",
       "variants": [{
         "id": "17",
         "arguments": {"lst": [-3, 200, 56, -0.2, -19, 88]}
@@ -585,6 +585,3 @@
   }]
 }
 ]
-
-
-
