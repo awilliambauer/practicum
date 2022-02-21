@@ -16,7 +16,6 @@ var python_parsing = function() {
     /// msg is a string containing a human-readable description of the type of error.
     function throw_error(pos, msg) {
 
-
         var str = sprintf("ERROR @ {0}:{1}: {2}", pos.line + 1, pos.col + 1, msg);
 
         throw new Error(str);
@@ -44,7 +43,7 @@ var python_parsing = function() {
         /// Advance the stream, returning the next character.
         self.next = function() {
             var c = str.charAt(bufidx);
-            if (c === "\n") {
+            if (c === "\n" || c.charCodeAt(0) == NEW_LINE) {
                 line++;
                 col = 0;
             } else {
@@ -62,7 +61,6 @@ var python_parsing = function() {
         self.home = function() {
             bufidx -= col;
             col = 0;
-
         }
 
         return self;
@@ -103,7 +101,7 @@ var python_parsing = function() {
 
         var keywords = {
             "def":1, "return":1, "break":1, "continue":1,
-            "for":1, "in":1, "if":1, "else":1, "elif":1, "while":1
+            "for":1, "in":1, "if":1, "else":1, "elif":1, "while":1 //TODO: Add "class"
         };
 
         var symbols = {
@@ -112,8 +110,7 @@ var python_parsing = function() {
             "<":1, ">":1, "<=":1, ">=":1, "==":1, "!=":1,
             "+":1, "-":1, "*":1, "/":1, "!":1, "%":1,
             "+=":1, "-=":1, "*=":1, "/=":1, "%=":1,
-            "&":1, "|":1, "and":1, "or":1,
-            "\t":1
+            "&":1, "|":1, "and":1, "or":1, "\t":1
         };
 
         function iseof() {
@@ -122,7 +119,7 @@ var python_parsing = function() {
         self.iseof = iseof;
 
         function isspace(c) {
-            return c === ' ' || c === '\r' || c === '\n';
+            return c === ' ' || c === '\r' || c === '\n' || c.charCodeAt(0) == NEW_LINE;
         }
 
         function isalpha(c) {
@@ -143,7 +140,7 @@ var python_parsing = function() {
 
         function read_until_newline() {
             var text = "";
-            while (!cs.iseof() && cs.peek() !== "\n") {
+            while (!cs.iseof() && (cs.peek() !== "\n" || cs.peek().charCodeAt(0) !== NEW_LINE)) {
                 text += cs.next();
             }
             // read the ending newline
@@ -174,10 +171,12 @@ var python_parsing = function() {
             if (c in symbols) {
                 if ((c + cs.peek()) in symbols) {
                     token = Token.symbol(c + cs.next());
-                } else {
+                } 
+                else {
                     token = Token.symbol(c);
                 }
-            } else if (isalpha(c)) {
+            } 
+            else if (isalpha(c)) {
                 var ident = c;
                 while (!cs.iseof() && isident(cs.peek())) {
                     c = cs.next();
@@ -188,7 +187,8 @@ var python_parsing = function() {
                 if (ident in symbols) {
                   token = ident in symbols ? Token.symbol(ident) : Token.identifier(ident);
                 }
-            } else if (isdigit(c)) {
+            } 
+            else if (isdigit(c)) {
                 var num = c;
                 var is_double = false;
                 while (!cs.iseof() && (isdigit(cs.peek()) || cs.peek() === '.')) {
@@ -197,17 +197,27 @@ var python_parsing = function() {
                     num += c;
                 }
                 token = (is_double ? Token.double : Token.integer)(parseFloat(num));
-            } else if (c === '"') {
+            } 
+            else if (c === '"') {
                 var str = "";
                 while (cs.peek() !== '"') {
                     str += cs.next();
                 }
                 cs.next();
-
                 token = Token.string(str);
-
-            } else {
-
+            } 
+            else if (c === "'") {
+                var str = "";
+                while (cs.peek() !== "'") {
+                    str += cs.next();
+                }
+                cs.next();
+                token = Token.string(str);
+            }
+            else if (c.charCodeAt(0) == HORIZONTAL_TAB) {
+                  token = Token.symbol("\t");
+            } 
+            else {
                 throw_error(pos, sprintf("Unexpected character '{0}'", c));
             }
 
@@ -223,14 +233,12 @@ var python_parsing = function() {
                 current_token = get_next();
                 is_peeked = true;
             }
-
             return current_token;
         }
         self.peek = peek;
 
         function next() {
             var token = peek();
-
             is_peeked = false;
             last_position = cs.position();
             return token;
