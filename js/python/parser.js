@@ -15,10 +15,10 @@ var python_parsing = function() {
     /// pos can either be a token or a character stream position object
     /// msg is a string containing a human-readable description of the type of error.
     function throw_error(pos, msg) {
-
-
+        
+        
         var str = sprintf("ERROR @ {0}:{1}: {2}", pos.line + 1, pos.col + 1, msg);
-
+        
         throw new Error(str);
     }
 
@@ -62,7 +62,7 @@ var python_parsing = function() {
         self.home = function() {
             bufidx -= col;
             col = 0;
-
+            
         }
 
         return self;
@@ -112,7 +112,7 @@ var python_parsing = function() {
             "<":1, ">":1, "<=":1, ">=":1, "==":1, "!=":1,
             "+":1, "-":1, "*":1, "/":1, "!":1, "%":1,
             "+=":1, "-=":1, "*=":1, "/=":1, "%=":1,
-            "&":1, "|":1, "and":1, "or":1,
+            "&":1, "|":1, "&&":1, "||":1,
             "\t":1
         };
 
@@ -184,10 +184,6 @@ var python_parsing = function() {
                     ident += c;
                 }
                 token = ident in keywords ? Token.keyword(ident) : Token.identifier(ident);
-                // ONLY for "and" and "or" case.
-                if (ident in symbols) {
-                  token = ident in symbols ? Token.symbol(ident) : Token.identifier(ident);
-                }
             } else if (isdigit(c)) {
                 var num = c;
                 var is_double = false;
@@ -205,14 +201,14 @@ var python_parsing = function() {
                 cs.next();
 
                 token = Token.string(str);
-
+                
             } else {
-
+                
                 throw_error(pos, sprintf("Unexpected character '{0}'", c));
             }
 
             skip_whitespace();
-
+            
 
             token.position = pos;
             return token;
@@ -223,14 +219,14 @@ var python_parsing = function() {
                 current_token = get_next();
                 is_peeked = true;
             }
-
+            
             return current_token;
         }
         self.peek = peek;
 
         function next() {
             var token = peek();
-
+            
             is_peeked = false;
             last_position = cs.position();
             return token;
@@ -470,7 +466,7 @@ var python_parsing = function() {
         /// rbp means "right bind power". Top-level expressions should be parsed with match_expression(0).
         function match_expression(rbp) {
             var left = match_prefix();
-
+            
             while (!lex.iseof() && rbp < binop_bind_power(lex.peek())) {
                 left = match_infix(left);
             }
@@ -481,7 +477,7 @@ var python_parsing = function() {
         function match_prefix() {
             var start = lex.position();
             var t = lex.next();
-
+            
             switch (t.type) {
                 // literals
                 case TokenType.INT_LITERAL:
@@ -508,7 +504,7 @@ var python_parsing = function() {
                         let arr = match_delimited_list(function(){return match_expression(0);}, ',', true, "[]");
                         return {id:new_id(), location:location(start), tag:'literal', type:'array', value:arr};
                     } else {
-
+                        
                         throw_error(t.position, "( is the only symbol that can prefix an expression");
                         break;
                     }
@@ -556,7 +552,7 @@ var python_parsing = function() {
                 case "*": case "/": case "%": return 60;
                 case "+":  case "-": return 50;
                 case "==": case "!=": case "<=": case ">=": case "<": case ">": return 40;
-                case "and": case "or": return 30;
+                case "&&": case "||": return 30;
                 case "=": case "*=": case "/=": case "%=": case "+=":  case "-=": return 10;
                 case ";": case ")": case "]": case ",": case ":": case "\t": return 0;
                 default: throw new Error("unknown operator " + token.value);
@@ -694,17 +690,18 @@ var python_parsing = function() {
 
 if (typeof module !== 'undefined' && typeof process !== 'undefined') {
     if (process.argv.length <= 2) {
-
+        
     } else {
         var filename = process.argv[2];
         var fs = require('fs');
         fs.readFile(filename, 'utf8', function (err,data) {
             if (err) {
-
+                
             } else {
                 var ast = python_parsing.parse_program(data);
-
+                
             }
         });
     }
 }
+
