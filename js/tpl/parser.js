@@ -103,7 +103,7 @@ var simulator_parsing = function() {
             "<":1, ">":1, "<=":1, ">=":1, "==":1, "!=":1,
             "+":1, "-":1, "*":1, "/":1, "!":1, "%":1,
             "++":1, "--":1, ":":1,
-            "&":1, "|":1, "&&":1, "||":1,
+            "&":1, "|":1, "and":1, "or":1,
         };
 
         var text_start_chars = {
@@ -597,7 +597,7 @@ var simulator_parsing = function() {
                 case "*": case "/": case "%": return 60;
                 case "+":  case "-": return 50;
                 case "==": case "!=": case "<=": case ">=": case "<": case ">": return 40;
-                case "&&": case "||": return 30;
+                case "and": case "or": return 30;
                 case "=": return 10;
                 case ";": case ")": case "]": case ",": return 0;
                 default: throw_error(token.position, "unknown operator " + token.value);
@@ -711,4 +711,3 @@ if (typeof module !== 'undefined' && typeof process !== 'undefined') {
         });
     }
 }
-

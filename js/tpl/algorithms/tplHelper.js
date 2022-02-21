@@ -428,9 +428,9 @@ function format_python(code) {
 
     //HACK: The following fixes simply swap the syntax in the source code to match what the parser expects.
 
-    // Parser expects some java syntax for logical operators.
-    code = code.replaceAll(" and ", " && ");
-    code = code.replaceAll(" or ", " || ");
+    // // Parser expects some java syntax for logical operators. SHOULD be fixed
+    // code = code.replaceAll(" and ", " && ");
+    // code = code.replaceAll(" or ", " || ");
 
     // Parser expects quotes to include an escape character
     code = code.replaceAll("'", "\"");
@@ -468,7 +468,7 @@ function make_initial_state(problem, variant) {
         console.log("Pulling problem " + problem.title + " directly from json.");
         ast = python_parsing.parse_method(problem.content.text);
     }
-    
+
     var args = variant.arguments;
 
     return {
@@ -477,4 +477,3 @@ function make_initial_state(problem, variant) {
         vars: {}
     };
 }
-
