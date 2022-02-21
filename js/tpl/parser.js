@@ -103,7 +103,7 @@ var simulator_parsing = function() {
             "<":1, ">":1, "<=":1, ">=":1, "==":1, "!=":1,
             "+":1, "-":1, "*":1, "/":1, "!":1, "%":1,
             "++":1, "--":1, ":":1,
-            "&":1, "|":1, "and":1, "or":1,
+            "&":1, "|":1, "&&":1, "||":1,
         };
 
         var text_start_chars = {
@@ -116,7 +116,7 @@ var simulator_parsing = function() {
         self.iseof = iseof;
 
         function isspace(c) {
-            return c == ' ' || c == '\t' || c == '\r' || c == '\n' || c.charCodeAt(0) == NEW_LINE || c.charCodeAt(0) == HORIZONTAL_TAB;
+            return c == ' ' || c == '\t' || c == '\r' || c == '\n';
         }
 
         function isalpha(c) {
@@ -137,7 +137,7 @@ var simulator_parsing = function() {
 
         function read_until_newline() {
             var text = "";
-            while (!cs.iseof() && (cs.peek() !== "\n" || c.charCodeAt(0) !== NEW_LINE)) {
+            while (!cs.iseof() && cs.peek() !== "\n") {
                 text += cs.next();
             }
             // read the ending newline
@@ -167,7 +167,7 @@ var simulator_parsing = function() {
 
             // check for comments (BEFORE symbols, since / is a symbol)
             if (c === '/' && cs.peek() === '/') {
-                while (!iseof() && (cs.peek() !== '\n' || c.charCodeAt(0) !== NEW_LINE)) {
+                while (!iseof() && cs.peek() !== '\n') {
                     cs.next();
                 }
                 skip_whitespace();
@@ -597,7 +597,7 @@ var simulator_parsing = function() {
                 case "*": case "/": case "%": return 60;
                 case "+":  case "-": return 50;
                 case "==": case "!=": case "<=": case ">=": case "<": case ">": return 40;
-                case "and": case "or": return 30;
+                case "&&": case "||": return 30;
                 case "=": return 10;
                 case ";": case ")": case "]": case ",": return 0;
                 default: throw_error(token.position, "unknown operator " + token.value);
