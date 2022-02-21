@@ -155,6 +155,8 @@ function simulator(ast, globals) {
                         case "<=": sr_info.result = lv <= rv; break;
                         case "and": sr_info.result = lv && rv; break;
                         case "or": sr_info.result = lv || rv; break;
+                        case "&&": sr_info.result = lv && rv; break;
+                        case "||": sr_info.result = lv || rv; break;
                         case "==": sr_info.result = lv === rv; break;
                         case "!=": sr_info.result = lv !== rv; break;
                         default: throw new Error("unrecognized operator " + expr.operator);
