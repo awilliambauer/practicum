@@ -15,7 +15,6 @@ var controller = (function() {
     function initialize(problemConfig, simulatorInterface_, initialState, task_logger, fading) {
 
         $("#problem_space > pre").html(python_formatter.format(initialState.ast, {args:initialState.args}));
-
         $("#promptText").css("font-weight", 'bold');
         $("#problem_space > pre").addClass("hidden");
         $("#problem_space").css("padding-top", "15px");
@@ -587,7 +586,7 @@ var controller = (function() {
         });
     }
 
-    function interactiveArrayElement(arrayElement) {    
+    function interactiveArrayElement(arrayElement) {
         d3.selectAll(".variable_list_table_row").each(function () {
           var varName = d3.select(this).select(".bank_variable").node()
             .innerHTML;
@@ -615,7 +614,7 @@ var controller = (function() {
             });
           }
         });
-        
+
     }
 
     function highlightASTNode(node) {
@@ -717,7 +716,7 @@ var controller = (function() {
                 }
                 else if(correctAnswer[0] !== undefined) {
                     if (correctAnswer[0].type === "array") {
-                        
+
                         correctVariable[correctAnswer[0].name] = [];
                         userVariable[correctAnswer[0].name] = [];
                         arrayTable.selectAll(".arrayVarValue").each(function (d, i) {
@@ -779,7 +778,7 @@ var controller = (function() {
             else {
                 var input = d3.select(this).select(".bank_variable_value").select(".varValue");
                 if (input.node() !== null) {
-                    
+
                     var typeString;
                     if (Array.isArray(correctAnswer)) {
                         typeString = correctAnswer[0].type === "string";
@@ -806,7 +805,7 @@ var controller = (function() {
                             correctValue = correctAnswer.find(function (v) {
                                 return v.name === d3.select(this).select(".bank_variable_label").select(".bank_variable").html();
                             }, this).value;
-                            
+
                         }
                     } else if (typeString) {
                         correctValue = correctAnswer.value.replace(/^['"]+|['"]+$/g,"");
@@ -1041,12 +1040,12 @@ var controller = (function() {
         userSolution = userSolution.replace(/\(/g,'');
         userSolution = userSolution.replace(/\)/g,'');
         userSolution = userSolution.split(',').map(substr => substr.replace(/^['"]+|['"]+$/g,"")).join(',');
-        
+
         var solutionState = simulatorInterface.getFinalState();
-        
+
         var correctSolution = solutionState.variables.in_scope.the_return_value_of_the_function_is_determined_here.value;
         correctSolution = correctSolution.split(',').map(substr => substr.replace(/^['"]+|['"]+$/g,"")).join(',');
-        
+
         var correct = false;
         if (String(userSolution) === String(correctSolution)) {
             correct = true;
@@ -1103,7 +1102,7 @@ var controller = (function() {
                 let curr_class = d3
                   .select(`.${problem_id}.list-group-item`)
                   .attr("class");
-                
+
                 if (guided) {
                     problem.guided = guided;
                     curr_class += " problem-guided-complete";

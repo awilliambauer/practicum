@@ -18,7 +18,7 @@ var python_simulator = function() {
                 return evaluate_expression(context, expr.value);
                 break;
             case 'binop':
-                
+
                 arg1 = evaluate_expression(context, expr.args[0]);
                 arg2 = evaluate_expression(context, expr.args[1]);
                 arg1v = arg1.value;
@@ -74,19 +74,19 @@ var python_simulator = function() {
                   case "%=":
                     arg1.value %= arg2.value;
                     return arg1;
-                  case "&&":
+                  case "and":
                     return { type: "bool", value: arg1v && arg2v };
-                  case "||":
+                  case "or":
                     return { type: "bool", value: arg1v || arg2v };
                   default:
                     throw new Error("Unknown binary operator " + expr.operator);
                 }
 
             case 'literal':
-                
+
                 return {type: expr.type, value: expr.value};
             case 'identifier':
-                
+
                 r = context[expr.value];
                 if (!r) throw new Error("unknown identifier " + expr.value);
                 return r;
@@ -154,7 +154,7 @@ var python_simulator = function() {
         switch (stmt.tag) {
             case 'expression':
             case 'declaration':
-                
+
                 return this.evaluate_expression(context, stmt.expression);
             default: throw new Error("unknown statement type " + stmt.tag);
         }
@@ -183,4 +183,3 @@ var python_simulator = function() {
 
     return self;
 }();
-
