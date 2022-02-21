@@ -137,7 +137,7 @@
 
 .problem #next-container {
     text-align: center;
-    padding-top: 20px;
+    padding-top: 2px;
 }
 
 .problem #nextstep {
@@ -702,4 +702,3 @@ the dynamic styling works correctly.
 /* DON'T PUT STUFF BELOW THIS COMMENT!! PLACE ADDITIONAL CODE ABOVE
    DYNAMIC STYLING CLASSES!!
 */
-
