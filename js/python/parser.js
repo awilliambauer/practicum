@@ -32,6 +32,7 @@ var python_parsing = function() {
 
         /// Did we hit the end of the stream?
         self.iseof = function() {
+            console.log("len: " + str.length + ", buffer index: " + bufidx + ", char: " + str.charAt(bufidx));
             return str.length <= bufidx;
         };
 
@@ -233,7 +234,7 @@ var python_parsing = function() {
         }
 
         function peek() {
-            if (!is_peeked) {
+            if (!is_peeked && !iseof()) {
                 current_token = get_next();
                 is_peeked = true;
             }
