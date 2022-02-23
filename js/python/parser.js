@@ -330,9 +330,12 @@ var python_parsing = function() {
         }
 
         function match_block(indent_level) {
+            if (peek_symbol("\n")) {
+                match_symbol("\n");
+            }
+            
             var stmts = [];
             // first line in block must be fully indented
-            //TODO: remove this requirement
             for (let i = 0; i < indent_level; i++) {
                 match_symbol("\t");
             }
@@ -417,8 +420,7 @@ var python_parsing = function() {
             if (do_match_ending_semicolon) {
                 match_symbol(";");
             }
-            // hmmm
-            console.log(JSON.stringify(result, null, 2));
+            // console.log(JSON.stringify(result, null, 2));
             return result;
         }
 
@@ -456,6 +458,7 @@ var python_parsing = function() {
         }
 
         function match_ifelse(indent_level, is_elif=false) {
+            console.log("CALLED MATCH IF ELSE");
             var start = lex.position();
             if (!is_elif) match_keyword("if");
             else match_keyword("elif");
@@ -477,7 +480,7 @@ var python_parsing = function() {
                 lex.home(); // needs to un-match the tabs if there was not an elif/else
             }
 
-            return {
+            var result = {
                 id: new_id(),
                 location: location(start),
                 tag: 'if',
@@ -486,6 +489,8 @@ var python_parsing = function() {
                 else_is_elif: has_elif,
                 else_branch: elseb
             };
+            // console.log("if/else result: " + JSON.stringify(result, null, 2));
+            return result;
         }
 
         function match_declaration() {
@@ -592,8 +597,6 @@ var python_parsing = function() {
 
         // left/right bind power for binary operators or postfix operators
         function binop_bind_power(token) {
-            // console.log("token " + JSON.stringify(token, null, 2));
-            // console.log(token.value);
             switch (token.value) {
                 case ".": return 100;
                 case "(": case "[": return 90;
@@ -679,6 +682,9 @@ var python_parsing = function() {
 
         function match_token(expected_type, expected_value) {
             if (!peek_token(expected_type, expected_value)) {
+                // console.log(expected_type);
+                // console.log(expected_value);
+                // console.log(lex.peek());
                 throw_error(lex.position(), sprintf(
                     "Expected {0} but found {1}",
                     token_to_string({type:expected_type, value:expected_value}),
