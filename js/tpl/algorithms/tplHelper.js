@@ -434,10 +434,10 @@ function make_initial_state(problem, variant) {
         console.log("Pulling problem " + problem.title + " from a src file.");
         let filename = RELATIVE_SRC_DIR + problem.content.src;
         let problem_raw = load_file(filename);
-        ast = python_parsing.parse_method(problem_raw);
+        ast = python_parsing.parse_program(problem_raw);
     } else { // if problem.content lacks a src, fallback to using problem.content.text
         console.log("Pulling problem " + problem.title + " directly from json.");
-        ast = python_parsing.parse_method(problem.content.text);
+        ast = python_parsing.parse_program(problem.content.text);
     }
 
     var args = variant.arguments;

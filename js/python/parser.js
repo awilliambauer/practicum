@@ -110,7 +110,8 @@ var python_parsing = function() {
             "<":1, ">":1, "<=":1, ">=":1, "==":1, "!=":1,
             "+":1, "-":1, "*":1, "/":1, "!":1, "%":1,
             "+=":1, "-=":1, "*=":1, "/=":1, "%=":1,
-            "&":1, "|":1, "and":1, "or":1, "\t":1
+            "&":1, "|":1, "and":1, "or":1, "\t":1,
+            "\n":1,
         };
 
         function iseof() {
@@ -119,7 +120,7 @@ var python_parsing = function() {
         self.iseof = iseof;
 
         function isspace(c) {
-            return c === ' ' || c === '\r' || c === '\n' || c.charCodeAt(0) == NEW_LINE;
+            return c === ' ' || c === '\r';
         }
 
         function isalpha(c) {
@@ -217,6 +218,9 @@ var python_parsing = function() {
             else if (c.charCodeAt(0) == HORIZONTAL_TAB) {
                   token = Token.symbol("\t");
             } 
+            else if (c.charCodeAt(0) == NEW_LINE) {
+                token = Token.symbol("\n");
+            }
             else {
                 throw_error(pos, sprintf("Unexpected character '{0}'", c));
             }
@@ -272,12 +276,29 @@ var python_parsing = function() {
         }
 
         function match_program() {
+            console.log("called match_program()");
             var start = lex.position();
-            match_keyword("def");
-            var name = match_ident();
-            var params = match_delimited_list(match_parameter, ",");
-            match_symbol(":");
-            var body = match_block(1);
+            // Check if this python code is wrapped in a function or not
+            if (lex.peek().value == "def") {
+                // Legacy top-level function code
+                match_keyword("def");
+                var name = match_ident();
+                var params = match_delimited_list(match_parameter, ",");
+                match_symbol(":");
+                var body = match_block(1);
+            } else {   
+                console.log("hi dev. This is not a function.");
+                var name = "test_func";
+                var body = match_block(0);
+            }
+            
+            // categoryConfig already includes the arguments / parameters
+            //TODO: can i manually construct a parameter?
+            
+            console.log("function call");
+            console.log("name: " + name);
+            console.log("params: " + JSON.stringify(params, null, 2));
+            console.log("body: " + JSON.stringify(body, null, 2));
 
             return {
                 id: new_id(),
@@ -290,6 +311,7 @@ var python_parsing = function() {
         }
 
         function match_method() {
+            console.log("called match_method");
             var start = lex.position();
             match_keyword("def");
             var name = match_ident();
@@ -310,6 +332,7 @@ var python_parsing = function() {
         function match_block(indent_level) {
             var stmts = [];
             // first line in block must be fully indented
+            //TODO: remove this requirement
             for (let i = 0; i < indent_level; i++) {
                 match_symbol("\t");
             }
@@ -394,6 +417,8 @@ var python_parsing = function() {
             if (do_match_ending_semicolon) {
                 match_symbol(";");
             }
+            // hmmm
+            console.log(JSON.stringify(result, null, 2));
             return result;
         }
 
@@ -484,6 +509,10 @@ var python_parsing = function() {
             }
             return left;
         }
+        
+        function match_new_line() {
+            
+        }
 
         // match prefix operators or sub-expressions of operators
         function match_prefix() {
@@ -501,7 +530,12 @@ var python_parsing = function() {
                 case TokenType.IDENTIFIER:
                     return {id:new_id(), location:location(start), tag:'identifier', value:t.value};
                 case TokenType.SYMBOL:
-                    if (t.value === '(') {
+                    if (t.value === '\n') {
+                        // New line denotes the end of an expression.
+                        // So, we ignore this character and match the next char                       
+                        return match_statement();
+                        // return match_prefix();
+                    } else if (t.value === '(') {
                         var e = match_expression(0);
                         match_symbol(")"); // ) has bind power of 0, so match_expression halts and doesn't consume it
                         return {id:new_id(), location:location(start), tag:'paren_expr', value:e};
@@ -558,6 +592,8 @@ var python_parsing = function() {
 
         // left/right bind power for binary operators or postfix operators
         function binop_bind_power(token) {
+            // console.log("token " + JSON.stringify(token, null, 2));
+            // console.log(token.value);
             switch (token.value) {
                 case ".": return 100;
                 case "(": case "[": return 90;
@@ -566,7 +602,7 @@ var python_parsing = function() {
                 case "==": case "!=": case "<=": case ">=": case "<": case ">": return 40;
                 case "and": case "or": return 30;
                 case "=": case "*=": case "/=": case "%=": case "+=":  case "-=": return 10;
-                case ";": case ")": case "]": case ",": case ":": case "\t": return 0;
+                case ";": case ")": case "]": case ",": case ":": case "\t": case "\n": return 0;
                 default: throw new Error("unknown operator " + token.value);
             }
         }
@@ -644,11 +680,12 @@ var python_parsing = function() {
         function match_token(expected_type, expected_value) {
             if (!peek_token(expected_type, expected_value)) {
                 throw_error(lex.position(), sprintf(
-                            "Expected {0} but found {1}",
-                            token_to_string({type:expected_type, value:expected_value}),
-                            token_to_string(lex.next())));
+                    "Expected {0} but found {1}",
+                    token_to_string({type:expected_type, value:expected_value}),
+                    token_to_string(lex.peek())));
+            } else { // only advance if there is no error?
+                lex.next(); // advance lexer but ignore result
             }
-            lex.next(); // advance lexer but ignore result
         }
 
         function peek_token(expected_type, expected_value) {
@@ -657,7 +694,12 @@ var python_parsing = function() {
         }
 
         self.parse_program = function() {
-            return match_program();
+            // TODO: Understand if this code is a function definition
+            // if (true) {
+                // return match_method();
+            // } else {
+                return match_program();
+            // }
         };
 
         self.parse_method = function() {

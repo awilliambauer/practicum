@@ -398,7 +398,7 @@ var csed = (function() {
             // This problemUI initialize call probably needs to happen after the main_sim init call,
             // which is handled by promises/then() with fetch.
 
-            console.log(problemConfig);
+            // console.log(problemConfig);
         });
     }
 
