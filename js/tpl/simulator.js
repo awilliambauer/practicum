@@ -54,7 +54,7 @@ function simulator(ast, globals) {
     }
 
     function shortCircuit(val, op) {
-        return (val === true && op === "||") || (val === false && op === "&&");
+        return (val === true && op === "or") || (val === false && op === "and");
     }
 
     function getLookupsArray(e) {
@@ -153,6 +153,8 @@ function simulator(ast, globals) {
                         case ">=": sr_info.result = lv >= rv; break;
                         case "<": sr_info.result = lv < rv; break;
                         case "<=": sr_info.result = lv <= rv; break;
+                        case "and": sr_info.result = lv && rv; break;
+                        case "or": sr_info.result = lv || rv; break;
                         case "&&": sr_info.result = lv && rv; break;
                         case "||": sr_info.result = lv || rv; break;
                         case "==": sr_info.result = lv === rv; break;
@@ -188,7 +190,7 @@ function simulator(ast, globals) {
                 if (!fn) throw new Error("no such function " + expr.object.name);
                 var fn_this = objs[objs.length - 2];
                 var args = expr.args.map(function (arg) { return evaluate(arg, state)});
-                
+
                 var ret = fn.apply(fn_this, args);
                 sr_info.name = expr.object.name;
                 sr_info.result = ret;
@@ -308,7 +310,7 @@ function simulator(ast, globals) {
                 }
                 break;
             case "return":
-                
+
                 while (last(call_stack).marker !== "function") call_stack.pop();
                 last(call_stack).to_execute = [];
                 return null;
@@ -316,7 +318,7 @@ function simulator(ast, globals) {
                 throw new Error("node tag not recognized " + JSON.stringify(stmt));
         }
 
-        // 
+        //
         var cs = copy(last(call_stack));
         return {
             // the problem state
@@ -389,4 +391,3 @@ function simulator(ast, globals) {
 
     return self;
 }
-

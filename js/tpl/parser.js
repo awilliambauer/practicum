@@ -41,7 +41,7 @@ var simulator_parsing = function() {
         /// Advance the stream, returning the next character.
         self.next = function() {
             var c = str.charAt(bufidx);
-            if (c == "\n") {
+            if (c == "\n" || c.charCodeAt(0) == NEW_LINE) {
                 line++;
                 col = 0;
             } else {
@@ -711,4 +711,3 @@ if (typeof module !== 'undefined' && typeof process !== 'undefined') {
         });
     }
 }
-
