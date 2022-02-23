@@ -330,6 +330,7 @@ var python_parsing = function() {
         }
 
         function match_block(indent_level) {
+            // Skip newline at start of block
             if (peek_symbol("\n")) {
                 match_symbol("\n");
             }
@@ -342,7 +343,13 @@ var python_parsing = function() {
             stmts.push(match_statement(indent_level));
             let j = 0;
             while (true) {
+                // Skip newlines within block
+                if (peek_symbol("\n")) {
+                    match_symbol("\n");
+                }
+                
                 if (lex.iseof()) return stmts;
+                    
                 for (let i = 0; i < indent_level; i++) {
                     if (!peek_symbol("\t")) {
                         lex.home();
@@ -490,6 +497,8 @@ var python_parsing = function() {
                 else_branch: elseb
             };
             // console.log("if/else result: " + JSON.stringify(result, null, 2));
+            // console.log("finished if/else");
+            // console.log(lex.peek().value);
             return result;
         }
 
