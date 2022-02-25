@@ -184,11 +184,11 @@
     padding-left: 10px;
 }
 
-.java-line {
+.python-line {
     display: block;
 }
 
-.java-line::before {
+.python-line::before {
     counter-increment: line-number;
     display: inline-block;
     width: 2em;
@@ -196,23 +196,23 @@
     content: counter(line-number);
 }
 
-.problem .java-keyword {
+.problem .python-keyword {
     color: black;
 }
 
-.problem .java-ident {
+.problem .python-ident {
     color: blue;
 }
 
-.problem .java-literal {
+.problem .python-literal {
     color: green;
 }
 
-.problem .java-method {
+.problem .python-method {
     color: purple;
 }
 
-.problem .java-reference {
+.problem .python-reference {
     font-style: italic;
 }
 

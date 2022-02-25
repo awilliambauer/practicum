@@ -23,12 +23,12 @@ var python_formatter = function() {
         return '<span class="' + clazz + '">' + s + '</span>';
     }
 
-    function keyword(s) { return span('java-keyword', s); }
-    function symbol(s) { return span('java-symbol', s); }
-    function ident(s) { return span('java-ident', s); }
-    function literal(s) { return span('java-literal', s); }
-    function method(s) { return span('java-method', s); }
-    function reference(s) { return span('java-reference', s); }
+    function keyword(s) { return span('python-keyword', s); }
+    function symbol(s) { return span('python-symbol', s); }
+    function ident(s) { return span('python-ident', s); }
+    function literal(s) { return span('python-literal', s); }
+    function method(s) { return span('python-method', s); }
+    function reference(s) { return span('python-reference', s); }
 
     /**
      *
@@ -41,7 +41,7 @@ var python_formatter = function() {
         /*
          * Brief implementation notes:
          * All AST nodes are put into their own spans, with subelements are children.
-         * Any code that should be its own line is put in a span with the 'java-line' class,
+         * Any code that should be its own line is put in a span with the 'python-line' class,
          * and CSS takes care of adding a line number and making sure it ends with a newline.
          * So no manual newlines are required!
          *
@@ -50,12 +50,12 @@ var python_formatter = function() {
          * where they share the middle line. Elements, can, of course, take 0 lines, such as expressions.
          */
 
-        var prefix = options.id_prefix || 'java-ast-';
+        var prefix = options.id_prefix || 'python-ast-';
 
         function newline(parent) {
             var l = $('<span>');
             l.attr('id', prefix + 'line-' + options.line);
-            l.addClass('java-line');
+            l.addClass('python-line');
             options.line += 1;
             parent.append(l);
             return l;
@@ -249,12 +249,12 @@ var python_formatter = function() {
                 break;
 
             case 'identifier':
-                elem.addClass("java-ident");
+                elem.addClass("python-ident");
                 elem.text(node.value);
                 break;
 
             case 'literal':
-                elem.addClass("java-literal")
+                elem.addClass("python-literal")
                 if (node.type === 'array') {
                     elem.append('[')
                     if (node.value.length > 0) firstIter = true;
