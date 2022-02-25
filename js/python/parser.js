@@ -32,7 +32,6 @@ var python_parsing = function() {
 
         /// Did we hit the end of the stream?
         self.iseof = function() {
-            console.log("len: " + str.length + ", buffer index: " + bufidx + ", char: " + str.charAt(bufidx));
             return str.length <= bufidx;
         };
 
@@ -277,7 +276,6 @@ var python_parsing = function() {
         }
 
         function match_program() {
-            console.log("called match_program()");
             var start = lex.position();
             // Check if this python code is wrapped in a function or not
             if (lex.peek().value == "def") {
@@ -288,18 +286,13 @@ var python_parsing = function() {
                 match_symbol(":");
                 var body = match_block(1);
             } else {   
-                console.log("hi dev. This is not a function.");
                 var name = "test_func";
                 var body = match_block(0);
+                var params = "";
             }
             
             // categoryConfig already includes the arguments / parameters
             //TODO: can i manually construct a parameter?
-            
-            console.log("function call");
-            console.log("name: " + name);
-            console.log("params: " + JSON.stringify(params, null, 2));
-            console.log("body: " + JSON.stringify(body, null, 2));
 
             return {
                 id: new_id(),
@@ -312,7 +305,6 @@ var python_parsing = function() {
         }
 
         function match_method() {
-            console.log("called match_method");
             var start = lex.position();
             match_keyword("def");
             var name = match_ident();
@@ -428,7 +420,6 @@ var python_parsing = function() {
             if (do_match_ending_semicolon) {
                 match_symbol(";");
             }
-            // console.log(JSON.stringify(result, null, 2));
             return result;
         }
 
@@ -466,7 +457,6 @@ var python_parsing = function() {
         }
 
         function match_ifelse(indent_level, is_elif=false) {
-            console.log("CALLED MATCH IF ELSE");
             var start = lex.position();
             if (!is_elif) match_keyword("if");
             else match_keyword("elif");
@@ -497,9 +487,6 @@ var python_parsing = function() {
                 else_is_elif: has_elif,
                 else_branch: elseb
             };
-            // console.log("if/else result: " + JSON.stringify(result, null, 2));
-            // console.log("finished if/else");
-            // console.log(lex.peek().value);
             return result;
         }
 
@@ -692,9 +679,6 @@ var python_parsing = function() {
 
         function match_token(expected_type, expected_value) {
             if (!peek_token(expected_type, expected_value)) {
-                // console.log(expected_type);
-                // console.log(expected_value);
-                // console.log(lex.peek());
                 throw_error(lex.position(), sprintf(
                     "Expected {0} but found {1}",
                     token_to_string({type:expected_type, value:expected_value}),

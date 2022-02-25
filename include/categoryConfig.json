@@ -9,7 +9,7 @@
     "examProblemDatabaseId": "71",
     "content": {
       "src": "if_else/if_else_1.py",
-      "text": "def if_else_investigation(a, b):\n\tc = 2\n\tif a + c < b:\n\t\tc = c + 8\n\telse:\n\t\tb = b + 10\n\tif a + c < b:\n\t\tc = c + 8\n\telse:\n\t\tb = b + 10\n\treturn (b, c)",
+      "text": "we don't need this anymore",
       "variants": [{
         "id": "26",
         "arguments": {"a": 4, "b": 15}

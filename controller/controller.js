@@ -13,7 +13,7 @@ var controller = (function() {
     var button;
 
     function initialize(problemConfig, simulatorInterface_, initialState, task_logger, fading) {
-
+        console.log("initial state: " + JSON.stringify(initialState));
         $("#problem_space > pre").html(python_formatter.format(initialState.ast, {args:initialState.args}));
         $("#promptText").css("font-weight", 'bold');
         $("#problem_space > pre").addClass("hidden");
@@ -619,7 +619,7 @@ var controller = (function() {
 
     function highlightASTNode(node) {
         if (node !== null) {
-            var htmlID = "java-ast-" + node.id;
+            var htmlID = "python-ast-" + node.id;
             $("#" + htmlID).addClass("node_highlight");
         }
     }
@@ -648,18 +648,18 @@ var controller = (function() {
     // highlights the line of code passed in as a parameter
     function highlightLine(line) {
         if (line.hasOwnProperty("location")) {
-            d3.select("#java-ast-line-" + line.location.start.line).classed("line_highlight", true);
+            d3.select("#python-ast-line-" + line.location.start.line).classed("line_highlight", true);
         }
         else {
-            d3.select("#java-ast-line-" + line).classed("line_highlight", true);
+            d3.select("#python-ast-line-" + line).classed("line_highlight", true);
         }
     }
 
     // makes all the lines clickable so that the user can select the next line
     function interactiveLines() {
-        d3.select(".java-line").classed("line_highlight", false);
+        d3.select(".python-line").classed("line_highlight", false);
 
-        d3.selectAll(".java-line").each(function () {
+        d3.selectAll(".python-line").each(function () {
             d3.select(this)
                 .classed("clickable", true)
                 .attr("tabindex", 0)
@@ -870,7 +870,7 @@ var controller = (function() {
             }
 
             var lineId = highlightedLine.attr("id");
-            lineId = lineId.replace("java-ast-line-", "");
+            lineId = lineId.replace("python-ast-line-", "");
             userLine = parseInt(lineId);
             if (userLine === correctLine) {
                 correct = true;
