@@ -100,7 +100,7 @@ var python_parsing = function() {
         var current_token;
 
         var keywords = {
-            "def":1, "return":1, "break":1, "continue":1,
+            "def":1, "return":1, "break":1, "continue":1, "print":1,
             "for":1, "in":1, "if":1, "else":1, "elif":1, "while":1 //TODO: Add "class"
         };
 
@@ -280,15 +280,16 @@ var python_parsing = function() {
             // Check if this python code is wrapped in a function or not
             if (lex.peek().value == "def") {
                 // Legacy top-level function code
-                match_keyword("def");
-                var name = match_ident();
-                var params = match_delimited_list(match_parameter, ",");
-                match_symbol(":");
-                var body = match_block(1);
+                // match_keyword("def");
+                // var name = match_ident();
+                // var params = match_delimited_list(match_parameter, ",");
+                // match_symbol(":");
+                // var body = match_block(1);
+                return match_method(0); //match_method does the exact same thing but wasn't being used.
             } else {   
                 var name = "test_func";
-                var body = match_block(0);
                 var params = "";
+                var body = match_block(0);
             }
             
             // categoryConfig already includes the arguments / parameters
@@ -297,20 +298,20 @@ var python_parsing = function() {
             return {
                 id: new_id(),
                 location: location(start),
-                tag: 'method',
+                tag: 'block',
                 name: name,
                 params: params,
                 body: body,
             };
         }
 
-        function match_method() {
+        function match_method(indent_level) {
             var start = lex.position();
             match_keyword("def");
             var name = match_ident();
             var params = match_delimited_list(match_parameter, ",");
             match_symbol(":");
-            var body = match_block(1);
+            var body = match_block(indent_level + 1);
 
             return {
                 id: new_id(),
@@ -362,6 +363,7 @@ var python_parsing = function() {
                 case "if": return match_ifelse(indent_level);
                 case "while": return match_whileloop(indent_level);
                 case "return": return match_return_statement();
+                case "print": return match_print_statement();
                 case "break": return match_break();
                 case "continue": return match_continue();
                 default: return match_simple_statement(false);
@@ -380,6 +382,23 @@ var python_parsing = function() {
                     id: new_id(),
                     location: location(start),
                     tag: "return",
+                    args: {type: "array", value: values}
+                }
+            };
+        }
+
+        function match_print_statement() {
+            var start = lex.position();
+            match_keyword("print");
+            var values = match_delimited_list(function(){return match_expression(0);}, ",");
+            return {
+                id:new_id(),
+                location: location(start),
+                tag: "expression",
+                expression: {
+                    id: new_id(),
+                    location: location(start),
+                    tag: "print",
                     args: {type: "array", value: values}
                 }
             };
@@ -698,12 +717,12 @@ var python_parsing = function() {
             // if (true) {
                 // return match_method();
             // } else {
-                return match_program();
+                return match_program(); //We choose match_program over match method since it can be a method/class/or just code without a method
             // }
         };
 
         self.parse_method = function() {
-            return match_method();
+            return match_method(0);
         };
 
         self.parse_expression = function() {

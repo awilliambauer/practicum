@@ -141,6 +141,12 @@ function TplHelper() {
                     return get_next_statement(parent.body, current_statement);
                 }
                 return parent.body[lineNum++];
+            case "block":
+                if (current_statement) {
+                    lineNum++;
+                    return get_next_statement(parent.body, current_statement);
+                }
+                return parent.body[lineNum++];
             case "for":
             case "while":
                 if (parent.body.length === 0) throw new Error ("Empty loop body!");
@@ -364,6 +370,14 @@ function TplHelper() {
         return lineNum !== ast.body.length - 1;
     }; // TODO: factor out when lineNum is deprecated
 
+    this.this_is_a_function = function(ast) {
+        // console.log(JSON.stringify(ast, null, 2));
+        if (ast.tag === "method") {     
+            return true;
+        }
+        return false;
+    };
+
     this.this_is_a_return_statement = function(ast) {
         if (this.current_code_block_index === -1) this.current_code_block_index = ast.body.length - 1; // TODO HACK for when current_code_block_index is not being used
         if (ast.body[this.current_code_block_index].tag === "expression") {
@@ -376,8 +390,25 @@ function TplHelper() {
         return false;
     };
 
+    this.this_is_a_print_statement = function(ast) {
+        if (this.current_code_block_index === -1) this.current_code_block_index = ast.body.length - 1; // TODO HACK for when current_code_block_index is not being used
+        if (ast.body[this.current_code_block_index].tag === "expression") {
+            if (ast.body[this.current_code_block_index].expression.hasOwnProperty("tag")) {
+                if (ast.body[this.current_code_block_index].expression.tag === "print") {
+                    return true;
+                }
+            }
+        }
+        return false;
+    };
+
     this.get_return_statement = function(ast) {
         if (!this.this_is_a_return_statement(ast)) throw new Error("could not find return!");
+        return ast.body[this.current_code_block_index];
+    };
+
+    this.get_print_statement = function(ast) {
+        if (!this.this_is_a_print_statement(ast)) throw new Error("could not find print!");
         return ast.body[this.current_code_block_index];
     };
 
@@ -391,7 +422,16 @@ function TplHelper() {
         for (let i = 0; i < return_args.length; i++) {
             return_vals[i] = sim.evaluate_expression(variable_bank, return_args[i]);
         }
-        return this.create_print_string(return_vals, "")
+        return this.create_print_string(return_vals, "");
+    };
+
+    this.get_print_output = function(stmt, variable_bank) {
+        var print_args = stmt.expression.args.value;
+        var print_vals = [];
+        for (let i = 0; i < print_args.length; i++) {
+            print_vals[i] = sim.evaluate_expression(variable_bank, print_args[i]);
+        }
+        return this.create_print_string(print_vals, "");
     };
 
     this.create_print_string = function(vals, string) {

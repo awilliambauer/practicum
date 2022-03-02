@@ -66,7 +66,7 @@ var python_formatter = function() {
         var firstIter;
 
         elem.attr('id', prefix + node.id);
-        console.log("node: " + node.body);
+        // console.log("node: " + node.body);
         switch (node.tag) { 
             case 'method':
                 line = newline(elem);
@@ -114,6 +114,11 @@ var python_formatter = function() {
                 }
                 break;
 
+            case 'block':
+                node.body.forEach(function(s) {
+                    elem.append(to_dom(s, options, 1));
+                });
+                break;
             case 'parameter':
                 elem.append(ident(node.name));
                 break;
@@ -280,6 +285,22 @@ var python_formatter = function() {
 
             case 'return':
                 elem.append(keyword("return") + ' ');
+                if (node.args.value.length > 1) {
+                    let firstIter = true;
+                    elem.append("(");
+                    node.args.value.forEach(function(arg) {
+                        if (!firstIter) {
+                            elem.append(", ");
+                        }
+                        firstIter = false;
+                        elem.append(to_dom(arg, options, indent_level));
+                    });
+                    elem.append(")");
+                } else elem.append(to_dom(node.args.value[0], options, indent_level));
+                break;
+
+            case 'print':
+                elem.append(keyword("print") + ' ');
                 if (node.args.value.length > 1) {
                     let firstIter = true;
                     elem.append("(");

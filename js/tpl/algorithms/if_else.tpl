@@ -20,7 +20,7 @@ function TPLAlgorithm() {
     "Welcome to if/else practice.";
 
     [no_step]
-    {
+    if (helper.this_is_a_function(ast)) {
         [prompt]
         "First, look at the function call.";
 
@@ -37,7 +37,10 @@ function TPLAlgorithm() {
         [prompt]
         "Now let’s walk through the code line-by-line while keeping track of variables.";
     }
-
+    else {
+        [prompt]
+        "Now let’s walk through the code line-by-line while keeping track of variables.";
+    }
     [no_step]
     while(helper.check_for_if(ast)) {
 
@@ -157,7 +160,7 @@ function TPLAlgorithm() {
                 [no_step]
                 if (helper.is_there_another_line_to_execute(parent, this_is_the_next_line_that_will_execute, condition_outcome) == false) {
                     [prompt]
-                    "Now we can move back out of this code block to the main part of the function and skip any elif or else statements that come later.";
+                    "Now we can move back out of this code block and skip any elif or else statements that come later.";
                 }
             }
 
@@ -172,5 +175,15 @@ function TPLAlgorithm() {
         the_return_value_of_the_function_is_determined_here = helper.get_return_output(this_is_the_next_line_that_will_execute, variables);
         [prompt]
         "The print statement below prints out the value(s) that the function returned. Enter that solution in the solution box!";
+    }
+
+    [no_step] if (helper.this_is_a_print_statement(ast)) {
+        let this_is_the_next_line_that_will_execute: Line;
+        [interactive("next_line")] this_is_the_next_line_that_will_execute = helper.get_print_statement(ast);
+
+        let the_return_value_of_the_function_is_determined_here; //Have to leave it in this name so that controller.js recognizes it...
+        the_return_value_of_the_function_is_determined_here = helper.get_print_output(this_is_the_next_line_that_will_execute, variables);
+        [prompt]
+        "The print statement prints out the value(s). Enter the value(s) in the solution box!";
     }
 }

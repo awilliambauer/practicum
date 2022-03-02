@@ -13,7 +13,7 @@ var controller = (function() {
     var button;
 
     function initialize(problemConfig, simulatorInterface_, initialState, task_logger, fading) {
-        console.log("initial state: " + JSON.stringify(initialState));
+        // console.log("initial state: " + JSON.stringify(initialState));
         $("#problem_space > pre").html(python_formatter.format(initialState.ast, {args:initialState.args}));
         $("#promptText").css("font-weight", 'bold');
         $("#problem_space > pre").addClass("hidden");
