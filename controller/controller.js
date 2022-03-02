@@ -64,7 +64,7 @@ var controller = (function() {
             .append("li")
             .append("a")
             .attr("class", "monospace")
-            .text(function(s) { return state.ast.name + "(" + getArgString(s.arguments) + ")"; })
+            .text(function(s) { return makeInitialValueString(s.arguments); })
             .on("click", function(s) {
                 if (s !== state.variant) {
                     csed.loadProblem(problemConfig, s);
@@ -73,8 +73,21 @@ var controller = (function() {
         ;
 
         d3.select("#methodCall")
-            .text(function() { return state.ast.name + "(" + getArgString(state.args) + ")"} )
+            .text(function() { return makeInitialValueString(state.args) })
         ;
+    }
+
+    function makeInitialValueString(args) {
+        let iv_string = "";
+        for (const [key, value] of Object.entries(args)) {
+            let v = value;
+            if(Object.prototype.toString.call(value) === '[object Array]') {
+                v = "[" + value + "]";
+            }
+            let this_value = key + " = " + v + ", ";
+            iv_string = iv_string + this_value;
+        }
+        return iv_string.slice(0, -2); // remove final comma and space
     }
 
     function getArgString(args) {

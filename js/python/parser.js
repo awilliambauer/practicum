@@ -291,9 +291,6 @@ var python_parsing = function() {
                 var params = "";
                 var body = match_block(0);
             }
-            
-            // categoryConfig already includes the arguments / parameters
-            //TODO: can i manually construct a parameter?
 
             return {
                 id: new_id(),

@@ -16,7 +16,7 @@ var python_formatter = function() {
 
     // returns a string representing indentation to given level.
     function indent(level) {
-        return Array(4*level+1).join(" ");
+        return Array(4*level+1).join(" "); // 4 spaces for each indent level
     }
 
     function span(clazz, s) {
@@ -70,7 +70,7 @@ var python_formatter = function() {
         switch (node.tag) { 
             case 'method':
                 line = newline(elem);
-                // Basically I have it skip adding the line def foo(params) if params == "", needs to be changed.
+                //HACK: Basically I have it skip adding the line def foo(params) if params == "", needs to be changed.
                 if (node.params !== ""){
                     line.html(sprintf('{0}{1} {2}(', indent(indent_level), keyword('def'), method(node.name)));
                     firstIter = true;
