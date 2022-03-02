@@ -219,7 +219,7 @@
     "id": "74",
     "title": "While Loop Investigation 1",
     "content": {
-      "srcx": "while_loop/while_loop_1.py",
+      "src": "while_loop/while_loop_1.py",
       "text": "def while_loop_investigation(i):\n\tfact = 1\n\twhile i  > 0:\n\t\tfact = fact * i\n\t\ti-= 1\n\treturn (fact)",
       "variants": [{
         "id": "75",
@@ -230,7 +230,7 @@
     "id": "76",
     "title": "While Loop Investigation 2",
     "content": {
-      "srcx": "while_loop/while_loop_2.py",
+      "src": "while_loop/while_loop_2.py",
       "text": "def while_loop_investigation(lst):\n\t i = 0\n\t sum = 0\n\twhile (i < len(lst)):\n\t\t sum = sum + lst[i]\n\t\t i = i + 1\n\t return (sum)",
       "variants": [{
         "id": "77",
@@ -244,7 +244,7 @@
     "id": "79",
     "title": "While Loop Investigation 3",
     "content": {
-      "srcx": "while_loop/while_loop_3.py",
+      "src": "while_loop/while_loop_3.py",
       "text": "def while_loop_investigation(num):\n\tdiv_by_two = 0\n\twhile num >= 1:\n\t\tnum = num - 2\n\t\tdiv_by_two+= 1\n\treturn (div_by_two)",
       "variants": [{
         "id": "80",
@@ -258,7 +258,7 @@
     "id": "82",
     "title": "While Loop Investigation 4",
     "content": {
-      "srcx": "while_loop/while_loop_4.py",
+      "src": "while_loop/while_loop_4.py",
       "text": "def while_loop_investigation(lst):\n\ti = 0\n\twhile i < len(lst):\n\t\tlst[i] = lst[i] * -1 \n\t\ti = i + 1 \n\treturn (lst)",
       "variants": [{
         "id": "83",
@@ -272,7 +272,7 @@
     "id": "85",
     "title": "While Loop Investigation 5",
     "content": {
-      "srcx": "while_loop/while_loop_5.py",
+      "src": "while_loop/while_loop_5.py",
       "text": "def while_loop_investigation(lst):\n\tto_add = 13\n\ti = 0\n\twhile i < len(lst):\n\t\tlst[i] = lst[i] + to_add \n\t\ti = i + 1\n\treturn (lst)",
       "variants": [{
         "id": "86",
@@ -286,7 +286,7 @@
     "id": "88",
     "title": "While Loop Investigation 6",
     "content": {
-      "srcx": "while_loop/while_loop_6.py",
+      "src": "while_loop/while_loop_6.py",
       "text": "def while_loop_investigation(a, b):\n\tpower = 0\n\twhile b >= 1:\n\t\tb = b / a\n\t\tpower+= 1\n\treturn (power)",
       "variants": [{
         "id": "89",
@@ -300,7 +300,7 @@
     "id": "91",
     "title": "While Loop Investigation 7",
     "content": {
-      "srcx": "while_loop/while_loop_7.py",
+      "src": "while_loop/while_loop_7.py",
       "text": "def while_loop_investigation(num):\n\tpower = 1\n\ti = 0\n\twhile i < 5:\n\t\tpower = power * num \n\t\ti = i + 1 \n\treturn (num)\n",
       "variants": [{
         "id": "92",
@@ -311,7 +311,7 @@
     "id": "93",
     "title": "While Loop Investigation 8",
     "content": {
-      "srcx": "while_loop/while_loop_8.py",
+      "src": "while_loop/while_loop_8.py",
       "text": "def while_loop_investigation(a, b):\n\twhile a < 1000:\n\t\ta = a * b\n\treturn (a)",
       "variants": [{
         "id": "94",
@@ -325,7 +325,7 @@
     "id": "96",
     "title": "While Loop Investigation 9",
     "content": {
-      "srcx": "while_loop/while_loop_9.py",
+      "src": "while_loop/while_loop_9.py",
       "text": "def while_loop_investigation(lst):\n\ti = 0\n\tsum = 0\n\twhile i < len(lst) - 1: \n\t\ti = i + 1 \n\t\tif lst[i] % 2 == 1:\n\t\t\tsum = sum + lst[i]  \n\treturn (sum)",
       "variants": [{
         "id": "97",
@@ -340,7 +340,7 @@
     "title": "While Loop Investigation 10",
     "examProblemDatabaseId": "96",
     "content": {
-      "": "while_loop/while_loop_10.py",
+      "src": "while_loop/while_loop_10.py",
       "text": "def whileLoopInvestigation(a, b):\n\twhile a < b:\n\t\ta = a + 1\n\t\tif a % 2 == 0:\n\t\t\tcontinue\n\t\telse:\n\t\t\tb = b - a\n\treturn (a, b)",
       "variants": [{
         "id": "100",
@@ -360,7 +360,7 @@
     "id": "1",
     "title": "For Loop Investigation 1",
     "content": {
-      "srcx": "for_loop/for_loop_1.py",
+      "src": "for_loop/for_loop_1.py",
       "text": "def for_loop_investigation(start, end, step):\n\ta = 4\n\tb = 21\n\tfor i in range(start, end, step):\n\t\ta = a + 6\n\t\tif a > b:\n\t\t\tb = b + 8\n\treturn (a, b)",
       "variants": [{
         "id": "2",
@@ -371,7 +371,7 @@
     "id": "3",
     "title": "For Loop Investigation 2",
     "content": {
-      "srcx": "for_loop/for_loop_2.py",
+      "src": "for_loop/for_loop_2.py",
       "text": "def for_loop_investigation(lst):\n\ta = 0\n\tfor item in lst:\n\t\tif item % 5 == 0:\n\t\t\ta = a + 1\n\treturn (a)",
       "variants": [{
         "id": "4",
@@ -385,7 +385,7 @@
     "id": "6",
     "title": "For Loop Investigation 3",
     "content": {
-      "srcx": "for_loop/for_loop_3.py",
+      "src": "for_loop/for_loop_3.py",
       "text": "def for_loop_investigation(word):\n\tb = 1\n\tfor ch in word:\n\t\tif ch == \"a\":\n\t\t\tb = b * 3\n\treturn (b)",
       "variants": [{
         "id": "7",
@@ -399,7 +399,7 @@
     "id": "9",
     "title": "For Loop Investigation 4",
     "content": {
-      "srcx": "for_loop/for_loop_4.py",
+      "src": "for_loop/for_loop_4.py",
       "text": "def for_loop_investigation(start, end, step):\n\ta = 3\n\tb = 0\n\tfor i in range(start, end, step):\n\t\tif i > b:\n\t\t\tb = b + a\n\t\t\ta = a + 1\n\treturn (a,b)",
       "variants": [{
         "id": "10",
@@ -410,7 +410,7 @@
     "id": "11",
     "title": "For Loop Investigation 5",
     "content": {
-      "srcx": "for_loop/for_loop_5.py",
+      "src": "for_loop/for_loop_5.py",
       "text": "def for_loop_investigation(start, end):\n\ta = 5\n\tb = 2\n\tfor i in range(start, end):\n\t\tif a > i:\n\t\t\tcontinue\n\t\ta = a + 1\n\t\tif a > b:\n\t\t\tb = b + a\n\treturn (a,b)",
       "variants": [{
         "id": "12",
@@ -424,7 +424,7 @@
     "id": "14",
     "title": "For Loop Investigation 6",
     "content": {
-      "srcx": "for_loop/for_loop_6.py",
+      "src": "for_loop/for_loop_6.py",
       "text": "def for_loop_investigation(end):\n\ta = -2\n\tfor i in range(end):\n\t\tif a == i:\n\t\t\tbreak\n\t\ta = a + end\n\treturn (a)",
       "variants": [{
         "id": "15",
@@ -435,7 +435,7 @@
     "id": "16",
     "title": "For Loop Investigation 7",
     "content": {
-      "srcx": "for_loop/for_loop_7.py",
+      "src": "for_loop/for_loop_7.py",
       "text": "def for_loop_investigation(lst):\n\ta = 5\n\tfor n in lst:\n\t\ta = a - 3\n\t\tif n < 0:\n\t\t\ta = a + 3\n\t\tif -1 < n && n < 1:\n\t\t\treturn(a)\n\treturn (a)",
       "variants": [{
         "id": "17",
@@ -449,7 +449,7 @@
     "id": "19",
     "title": "For Loop Investigation 8",
     "content": {
-      "srcx": "for_loop/for_loop_8.py",
+      "src": "for_loop/for_loop_8.py",
       "text": "def for_loop_investigation(start, end):\n\tb = 0\n\tfor i in range(start, end):\n\t\tif i % 2 == 0:\n\t\t\tb = b + i\n\treturn (b)",
       "variants": [{
         "id": "20",
@@ -460,7 +460,7 @@
     "id": "21",
     "title": "For Loop Investigation 9",
     "content": {
-      "srcx": "for_loop/for_loop_9.py",
+      "src": "for_loop/for_loop_9.py",
       "text": "def for_loop_investigation(start, end, step):\n\ta = 10\n\tb = 0\n\tfor i in range(start, end, step):\n\t\tif a > i: \n\t\t\ta = a - 2\n\t\t\tb = b + 1\n\treturn (a,b)",
       "variants": [{
         "id": "22",
@@ -471,7 +471,7 @@
     "id": "23",
     "title": "For Loop Investigation 10",
     "content": {
-      "srcx": "for_loop/for_loop_10.py",
+      "src": "for_loop/for_loop_10.py",
       "text": "def for_loop_investigation(word):\n\tx = 0\n\tfor letter in word:\n\t\tif letter == \"s\":\n\t\t\tx = x + 7\n\t\tif letter == \"i\":\n\t\t\tx = x - 3\n\treturn (x)",
       "variants": [{
         "id": "24",
