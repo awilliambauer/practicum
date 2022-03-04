@@ -181,7 +181,7 @@ function TPLAlgorithm() {
         let this_is_the_next_line_that_will_execute: Line;
         [interactive("next_line")] this_is_the_next_line_that_will_execute = helper.get_print_statement(ast);
 
-         let the_print_function_prints_out_the_values_passed_to_it;
+        let the_print_function_prints_out_the_values_passed_to_it;
         the_print_function_prints_out_the_values_passed_to_it = helper.get_print_output(this_is_the_next_line_that_will_execute, variables);
 
         [prompt]
