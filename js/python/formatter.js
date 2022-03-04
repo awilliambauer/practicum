@@ -66,23 +66,19 @@ var python_formatter = function() {
         var firstIter;
 
         elem.attr('id', prefix + node.id);
-        // console.log("node: " + node.body);
         switch (node.tag) { 
             case 'method':
                 line = newline(elem);
-                //HACK: Basically I have it skip adding the line def foo(params) if params == "", needs to be changed.
-                if (node.params !== ""){
-                    line.html(sprintf('{0}{1} {2}(', indent(indent_level), keyword('def'), method(node.name)));
-                    firstIter = true;
-                    node.params.forEach(function(p) {
-                        if (!firstIter) {
-                            line.append(", ");
-                        }
-                        firstIter = false;
-                        line.append(to_dom(p, options, 0));
-                    });
-                    line.append('): ');
-                }
+                line.html(sprintf('{0}{1} {2}(', indent(indent_level), keyword('def'), method(node.name)));
+                firstIter = true;
+                node.params.forEach(function(p) {
+                    if (!firstIter) {
+                        line.append(", ");
+                    }
+                    firstIter = false;
+                    line.append(to_dom(p, options, 0));
+                });
+                line.append('): ');
                 node.body.forEach(function(s) {
                     elem.append(to_dom(s, options, 1));
                 });
@@ -116,7 +112,7 @@ var python_formatter = function() {
 
             case 'block':
                 node.body.forEach(function(s) {
-                    elem.append(to_dom(s, options, 1));
+                    elem.append(to_dom(s, options, 0));
                 });
                 break;
             case 'parameter':

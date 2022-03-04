@@ -710,12 +710,7 @@ var python_parsing = function() {
         }
 
         self.parse_program = function() {
-            // TODO: Understand if this code is a function definition
-            // if (true) {
-                // return match_method();
-            // } else {
-                return match_program(); //We choose match_program over match method since it can be a method/class/or just code without a method
-            // }
+            return match_program(); //We choose match_program over match method since it can be a method/class/or just code without a method
         };
 
         self.parse_method = function() {
