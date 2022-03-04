@@ -181,7 +181,7 @@ function TPLAlgorithm() {
         let this_is_the_next_line_that_will_execute: Line;
         [interactive("next_line")] this_is_the_next_line_that_will_execute = helper.get_print_statement(ast);
 
-        let the_return_value_of_the_function_is_determined_here; //Have to leave it in this name so that controller.js recognizes it...
+        let the_return_value_of_the_function_is_determined_here; //HACK: Have to leave it in this name so that controller.js recognizes it...
         the_return_value_of_the_function_is_determined_here = helper.get_print_output(this_is_the_next_line_that_will_execute, variables);
         [prompt]
         "The print statement prints out the value(s). Enter the value(s) in the solution box!";

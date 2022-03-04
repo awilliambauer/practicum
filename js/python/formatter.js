@@ -300,7 +300,7 @@ var python_formatter = function() {
                 break;
 
             case 'print':
-                elem.append(keyword("print") + ' ');
+                elem.append(keyword("print"));
                 if (node.args.value.length > 1) {
                     let firstIter = true;
                     elem.append("(");
@@ -312,7 +312,11 @@ var python_formatter = function() {
                         elem.append(to_dom(arg, options, indent_level));
                     });
                     elem.append(")");
-                } else elem.append(to_dom(node.args.value[0], options, indent_level));
+                } else {
+                    elem.append("(");
+                    elem.append(to_dom(node.args.value[0], options, indent_level));
+                    elem.append(")");
+                }
                 break;
 
             case 'break':
