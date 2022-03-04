@@ -389,10 +389,10 @@
       "text": "def for_loop_investigation(word):\n\tb = 1\n\tfor ch in word:\n\t\tif ch == \"a\":\n\t\t\tb = b * 3\n\treturn (b)",
       "variants": [{
         "id": "7",
-        "arguments": {"word": "banana"}
+        "arguments": {"word": "\"banana\""}
       },{
         "id": "8",
-        "arguments": {"word": "aardvark"}
+        "arguments": {"word": "\"aardvark\""}
       }]
     }
   }, {
