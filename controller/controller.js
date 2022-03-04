@@ -201,6 +201,12 @@ var controller = (function() {
                 button = "#submitButton";
             }
 
+            if (prompt === "Enter the value(s) that print in the solution box!") {
+                $("#next-container").addClass("hidden");
+                $("#nextstep").prop('disabled', true);
+                button = "#submitButton";
+            }
+
             if (state.hasOwnProperty("askForResponse") && state.askForResponse === "conditional") {
                 var yesNoButtonDiv = d3.select("#promptText")
                     .append("div")
@@ -1056,7 +1062,7 @@ var controller = (function() {
 
         var solutionState = simulatorInterface.getFinalState();
 
-        var correctSolution = solutionState.variables.in_scope.the_return_value_of_the_function_is_determined_here.value;
+        var correctSolution = solutionState.variables.in_scope.the_print_function_prints_out_the_values_passed_to_it.value;
         correctSolution = correctSolution.split(',').map(substr => substr.replace(/^['"]+|['"]+$/g,"")).join(',');
 
         var correct = false;

@@ -69,8 +69,8 @@ function TPLAlgorithm() {
             [interactive("next_line")] this_is_the_next_line_that_will_execute = helper.get_the_next_line_in_this_block_to_execute(parent, this_is_the_next_line_that_will_execute, condition_outcome);
 
             [no_step] if (helper.is_this_a_return_statement(this_is_the_next_line_that_will_execute)) {
-                let the_return_value_of_the_function_is_determined_here;
-                the_return_value_of_the_function_is_determined_here = helper.get_return_output(this_is_the_next_line_that_will_execute, variables);
+                let the_print_statement_prints_out_the_values;
+                the_print_statement_prints_out_the_values = helper.get_return_output(this_is_the_next_line_that_will_execute, variables);
                 [prompt]
                 "The print statement below prints out the value(s) that the function returned. Enter that solution in the solution box!";
                 return;
@@ -181,9 +181,10 @@ function TPLAlgorithm() {
         let this_is_the_next_line_that_will_execute: Line;
         [interactive("next_line")] this_is_the_next_line_that_will_execute = helper.get_print_statement(ast);
 
-        let the_return_value_of_the_function_is_determined_here; //HACK: Have to leave it in this name so that controller.js recognizes it...
-        the_return_value_of_the_function_is_determined_here = helper.get_print_output(this_is_the_next_line_that_will_execute, variables);
+         let the_print_function_prints_out_the_values_passed_to_it;
+        the_print_function_prints_out_the_values_passed_to_it = helper.get_print_output(this_is_the_next_line_that_will_execute, variables);
+
         [prompt]
-        "The print statement prints out the value(s). Enter the value(s) in the solution box!";
+        "Enter the value(s) that print in the solution box!";
     }
 }
