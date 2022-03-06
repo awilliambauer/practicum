@@ -9,6 +9,9 @@ var java_ast = function() {
         switch (node.tag) {
             case 'method':
                 return node.params.concat(node.body);
+                
+            case 'class':
+                return node.body;
 
             case 'declaration':
             case 'expression':

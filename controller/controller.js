@@ -78,6 +78,8 @@ var controller = (function() {
     }
 
     function makeInitialValueString(args) {
+        if (!args) return ""; // Do not inject additional python if there are no arguments
+        
         let iv_string = "";
         for (const [key, value] of Object.entries(args)) {
             let v = value;

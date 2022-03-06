@@ -286,7 +286,7 @@ var python_parsing = function() {
                 // var name = "dummy_function";
                 var params = "";
                 var body = match_block(0);
-                console.log(JSON.stringify(body, null, 2));
+                // console.log(JSON.stringify(body, null, 2));
             }
 
             return {

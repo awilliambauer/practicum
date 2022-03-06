@@ -67,6 +67,13 @@ var python_formatter = function() {
 
         elem.attr('id', prefix + node.id);
         switch (node.tag) { 
+            case 'class':
+                line = newline(elem);
+                line.html(sprintf('{0}{1} {2}:', indent(indent_level), keyword('class'), method(node.name)));
+                node.body.forEach(function(s) {
+                    elem.append(to_dom(s, options, 1));
+                });
+                break;
             case 'method':
                 line = newline(elem);
                 line.html(sprintf('{0}{1} {2}(', indent(indent_level), keyword('def'), method(node.name)));
@@ -80,7 +87,7 @@ var python_formatter = function() {
                 });
                 line.append('): ');
                 node.body.forEach(function(s) {
-                    elem.append(to_dom(s, options, 1));
+                    elem.append(to_dom(s, options, indent_level + 1));
                 });
                 if (special_flag) {
                     line = newline(newline(elem));
