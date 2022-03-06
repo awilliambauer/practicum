@@ -101,7 +101,7 @@ var python_parsing = function() {
 
         var keywords = {
             "def":1, "return":1, "break":1, "continue":1, "print":1,
-            "for":1, "in":1, "if":1, "else":1, "elif":1, "while":1 //TODO: Add "class"
+            "for":1, "in":1, "if":1, "else":1, "elif":1, "while":1, "class": 1
         };
 
         var symbols = {
@@ -277,19 +277,16 @@ var python_parsing = function() {
 
         function match_program() {
             var start = lex.position();
-            // Check if this python code is wrapped in a function or not
+            
+            // HACK: top-level function definition for legacy problems
+            // TODO: abstract function definitions so this is not necessary
             if (lex.peek().value == "def") {
-                // Legacy top-level function code
-                // match_keyword("def");
-                // var name = match_ident();
-                // var params = match_delimited_list(match_parameter, ",");
-                // match_symbol(":");
-                // var body = match_block(1);
-                return match_method(0); //match_method does the exact same thing but wasn't being used.
+                return match_method(0);
             } else {   
-                var name = "test_func";
+                // var name = "dummy_function";
                 var params = "";
                 var body = match_block(0);
+                console.log(JSON.stringify(body, null, 2));
             }
 
             return {
@@ -309,6 +306,7 @@ var python_parsing = function() {
             var params = match_delimited_list(match_parameter, ",");
             match_symbol(":");
             var body = match_block(indent_level + 1);
+            // console.log(JSON.stringify(body, null, 2));
 
             return {
                 id: new_id(),
@@ -316,6 +314,27 @@ var python_parsing = function() {
                 tag: 'method',
                 name: name,
                 params: params,
+                body: body,
+            };
+        }
+        
+        function match_class(indent_level) {
+            var start = lex.position();
+            match_keyword("class");
+            var name = match_ident();
+            console.log(name);
+            match_symbol(":");
+            
+            var body = match_block(indent_level + 1);
+            // console.log("class body");
+            // console.log(JSON.stringify(body, null, 2));
+
+            return {
+                id: new_id(),
+                location: location(start),
+                tag: 'class',
+                name: name,
+                // params: params,
                 body: body,
             };
         }
@@ -331,8 +350,16 @@ var python_parsing = function() {
             for (let i = 0; i < indent_level; i++) {
                 match_symbol("\t");
             }
-            stmts.push(match_statement(indent_level));
-            let j = 0;
+            
+            if (lex.peek().value == "def") {
+                console.log("function def!");
+                stmts.push(match_method(indent_level));
+            } else if (lex.peek().value == "class") {
+                console.log('class!');
+                stmts.push(match_class(indent_level));
+            } else {                
+                stmts.push(match_statement(indent_level));
+            }
             while (true) {
                 // Skip newlines within block
                 if (peek_symbol("\n")) {
@@ -349,7 +376,6 @@ var python_parsing = function() {
                     match_symbol("\t")
                 }
                 stmts.push(match_statement(indent_level));
-                j++;
             }
         }
 

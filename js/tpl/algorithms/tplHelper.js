@@ -475,19 +475,20 @@ function make_initial_state(problem, variant) {
         let filename = RELATIVE_SRC_DIR + problem.content.src;
         let problem_raw = load_file(filename);
 
-        // Inject python for initial values at start of raw code
-        let initialv_raw = "";
-        for (const [key, value] of Object.entries(variant.arguments)) {
-            let v = value;
-            if(Object.prototype.toString.call(value) === '[object Array]') {
-                v = "[" + value + "]";
+        if (variant.arguments) {
+            // Inject python for initial values at start of raw code
+            let initialv_raw = "";
+            for (const [key, value] of Object.entries(variant.arguments)) {
+                let v = value;
+                if(Object.prototype.toString.call(value) === '[object Array]') {
+                    v = "[" + value + "]";
+                }
+                let this_value = key + " = " + v + "\n";
+                initialv_raw = initialv_raw + this_value;
             }
-            let this_value = key + " = " + v + "\n";
-            initialv_raw = initialv_raw + this_value;
+            problem_raw = initialv_raw + problem_raw;
+            // console.log(problem_raw);
         }
-        problem_raw = initialv_raw + problem_raw;
-        // console.log(problem_raw);
-
         ast = python_parsing.parse_program(problem_raw);
     } else { // if problem.content lacks a src, fallback to using problem.content.text
         console.log("Pulling problem " + problem.title + " directly from json.");

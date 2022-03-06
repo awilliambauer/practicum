@@ -631,7 +631,10 @@
     "id": "1",
     "title": "Classes and Objects Investigation 1",
     "content": {
-      "src": "classes_and_objects/classes_and_objects_1.py"
+      "src": "classes_and_objects/classes_and_objects_1.py",
+      "variants": [{
+        "id": "105"
+      }]
     }
   },{
     "id": "104",
@@ -650,6 +653,3 @@
   }]
 }
 ]
-
-
-
