@@ -100,7 +100,7 @@ var python_parsing = function() {
         var current_token;
 
         var keywords = {
-            "def":1, "return":1, "break":1, "continue":1,
+            "def":1, "return":1, "break":1, "continue":1, "print":1,
             "for":1, "in":1, "if":1, "else":1, "elif":1, "while":1 //TODO: Add "class"
         };
 
@@ -110,7 +110,8 @@ var python_parsing = function() {
             "<":1, ">":1, "<=":1, ">=":1, "==":1, "!=":1,
             "+":1, "-":1, "*":1, "/":1, "!":1, "%":1,
             "+=":1, "-=":1, "*=":1, "/=":1, "%=":1,
-            "&":1, "|":1, "and":1, "or":1, "\t":1
+            "&":1, "|":1, "and":1, "or":1, "\t":1,
+            "\n":1,
         };
 
         function iseof() {
@@ -119,7 +120,7 @@ var python_parsing = function() {
         self.iseof = iseof;
 
         function isspace(c) {
-            return c === ' ' || c === '\r' || c === '\n' || c.charCodeAt(0) == NEW_LINE;
+            return c === ' ' || c === '\r';
         }
 
         function isalpha(c) {
@@ -217,6 +218,9 @@ var python_parsing = function() {
             else if (c.charCodeAt(0) == HORIZONTAL_TAB) {
                   token = Token.symbol("\t");
             } 
+            else if (c.charCodeAt(0) == NEW_LINE) {
+                token = Token.symbol("\n");
+            }
             else {
                 throw_error(pos, sprintf("Unexpected character '{0}'", c));
             }
@@ -229,7 +233,7 @@ var python_parsing = function() {
         }
 
         function peek() {
-            if (!is_peeked) {
+            if (!is_peeked && !iseof()) {
                 current_token = get_next();
                 is_peeked = true;
             }
@@ -273,29 +277,38 @@ var python_parsing = function() {
 
         function match_program() {
             var start = lex.position();
-            match_keyword("def");
-            var name = match_ident();
-            var params = match_delimited_list(match_parameter, ",");
-            match_symbol(":");
-            var body = match_block(1);
+            // Check if this python code is wrapped in a function or not
+            if (lex.peek().value == "def") {
+                // Legacy top-level function code
+                // match_keyword("def");
+                // var name = match_ident();
+                // var params = match_delimited_list(match_parameter, ",");
+                // match_symbol(":");
+                // var body = match_block(1);
+                return match_method(0); //match_method does the exact same thing but wasn't being used.
+            } else {   
+                var name = "test_func";
+                var params = "";
+                var body = match_block(0);
+            }
 
             return {
                 id: new_id(),
                 location: location(start),
-                tag: 'method',
+                tag: 'block',
                 name: name,
                 params: params,
                 body: body,
             };
         }
 
-        function match_method() {
+        function match_method(indent_level) {
             var start = lex.position();
             match_keyword("def");
             var name = match_ident();
             var params = match_delimited_list(match_parameter, ",");
             match_symbol(":");
-            var body = match_block(1);
+            var body = match_block(indent_level + 1);
 
             return {
                 id: new_id(),
@@ -308,6 +321,11 @@ var python_parsing = function() {
         }
 
         function match_block(indent_level) {
+            // Skip newline at start of block
+            if (peek_symbol("\n")) {
+                match_symbol("\n");
+            }
+            
             var stmts = [];
             // first line in block must be fully indented
             for (let i = 0; i < indent_level; i++) {
@@ -316,7 +334,13 @@ var python_parsing = function() {
             stmts.push(match_statement(indent_level));
             let j = 0;
             while (true) {
+                // Skip newlines within block
+                if (peek_symbol("\n")) {
+                    match_symbol("\n");
+                }
+                
                 if (lex.iseof()) return stmts;
+                    
                 for (let i = 0; i < indent_level; i++) {
                     if (!peek_symbol("\t")) {
                         lex.home();
@@ -336,6 +360,7 @@ var python_parsing = function() {
                 case "if": return match_ifelse(indent_level);
                 case "while": return match_whileloop(indent_level);
                 case "return": return match_return_statement();
+                case "print": return match_print_statement();
                 case "break": return match_break();
                 case "continue": return match_continue();
                 default: return match_simple_statement(false);
@@ -354,6 +379,23 @@ var python_parsing = function() {
                     id: new_id(),
                     location: location(start),
                     tag: "return",
+                    args: {type: "array", value: values}
+                }
+            };
+        }
+
+        function match_print_statement() {
+            var start = lex.position();
+            match_keyword("print");
+            var values = match_delimited_list(function(){return match_expression(0);}, ",");
+            return {
+                id:new_id(),
+                location: location(start),
+                tag: "expression",
+                expression: {
+                    id: new_id(),
+                    location: location(start),
+                    tag: "print",
                     args: {type: "array", value: values}
                 }
             };
@@ -452,7 +494,7 @@ var python_parsing = function() {
                 lex.home(); // needs to un-match the tabs if there was not an elif/else
             }
 
-            return {
+            var result = {
                 id: new_id(),
                 location: location(start),
                 tag: 'if',
@@ -461,6 +503,7 @@ var python_parsing = function() {
                 else_is_elif: has_elif,
                 else_branch: elseb
             };
+            return result;
         }
 
         function match_declaration() {
@@ -484,6 +527,10 @@ var python_parsing = function() {
             }
             return left;
         }
+        
+        function match_new_line() {
+            
+        }
 
         // match prefix operators or sub-expressions of operators
         function match_prefix() {
@@ -501,7 +548,12 @@ var python_parsing = function() {
                 case TokenType.IDENTIFIER:
                     return {id:new_id(), location:location(start), tag:'identifier', value:t.value};
                 case TokenType.SYMBOL:
-                    if (t.value === '(') {
+                    if (t.value === '\n') {
+                        // New line denotes the end of an expression.
+                        // So, we ignore this character and match the next char                       
+                        return match_statement();
+                        // return match_prefix();
+                    } else if (t.value === '(') {
                         var e = match_expression(0);
                         match_symbol(")"); // ) has bind power of 0, so match_expression halts and doesn't consume it
                         return {id:new_id(), location:location(start), tag:'paren_expr', value:e};
@@ -566,7 +618,7 @@ var python_parsing = function() {
                 case "==": case "!=": case "<=": case ">=": case "<": case ">": return 40;
                 case "and": case "or": return 30;
                 case "=": case "*=": case "/=": case "%=": case "+=":  case "-=": return 10;
-                case ";": case ")": case "]": case ",": case ":": case "\t": return 0;
+                case ";": case ")": case "]": case ",": case ":": case "\t": case "\n": return 0;
                 default: throw new Error("unknown operator " + token.value);
             }
         }
@@ -644,11 +696,12 @@ var python_parsing = function() {
         function match_token(expected_type, expected_value) {
             if (!peek_token(expected_type, expected_value)) {
                 throw_error(lex.position(), sprintf(
-                            "Expected {0} but found {1}",
-                            token_to_string({type:expected_type, value:expected_value}),
-                            token_to_string(lex.next())));
+                    "Expected {0} but found {1}",
+                    token_to_string({type:expected_type, value:expected_value}),
+                    token_to_string(lex.peek())));
+            } else { // only advance if there is no error?
+                lex.next(); // advance lexer but ignore result
             }
-            lex.next(); // advance lexer but ignore result
         }
 
         function peek_token(expected_type, expected_value) {
@@ -657,11 +710,11 @@ var python_parsing = function() {
         }
 
         self.parse_program = function() {
-            return match_program();
+            return match_program(); //We choose match_program over match method since it can be a method/class/or just code without a method
         };
 
         self.parse_method = function() {
-            return match_method();
+            return match_method(0);
         };
 
         self.parse_expression = function() {

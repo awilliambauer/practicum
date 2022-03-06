@@ -190,7 +190,6 @@ function simulator(ast, globals) {
                 if (!fn) throw new Error("no such function " + expr.object.name);
                 var fn_this = objs[objs.length - 2];
                 var args = expr.args.map(function (arg) { return evaluate(arg, state)});
-
                 var ret = fn.apply(fn_this, args);
                 sr_info.name = expr.object.name;
                 sr_info.result = ret;

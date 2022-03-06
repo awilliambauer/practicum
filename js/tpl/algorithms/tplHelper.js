@@ -141,6 +141,12 @@ function TplHelper() {
                     return get_next_statement(parent.body, current_statement);
                 }
                 return parent.body[lineNum++];
+            case "block":
+                if (current_statement) {
+                    lineNum++;
+                    return get_next_statement(parent.body, current_statement);
+                }
+                return parent.body[lineNum++];
             case "for":
             case "while":
                 if (parent.body.length === 0) throw new Error ("Empty loop body!");
@@ -364,6 +370,14 @@ function TplHelper() {
         return lineNum !== ast.body.length - 1;
     }; // TODO: factor out when lineNum is deprecated
 
+    this.this_is_a_function = function(ast) {
+        // console.log(JSON.stringify(ast, null, 2));
+        if (ast.tag === "method") {     
+            return true;
+        }
+        return false;
+    };
+
     this.this_is_a_return_statement = function(ast) {
         if (this.current_code_block_index === -1) this.current_code_block_index = ast.body.length - 1; // TODO HACK for when current_code_block_index is not being used
         if (ast.body[this.current_code_block_index].tag === "expression") {
@@ -376,8 +390,25 @@ function TplHelper() {
         return false;
     };
 
+    this.this_is_a_print_statement = function(ast) {
+        if (this.current_code_block_index === -1) this.current_code_block_index = ast.body.length - 1; // TODO HACK for when current_code_block_index is not being used
+        if (ast.body[this.current_code_block_index].tag === "expression") {
+            if (ast.body[this.current_code_block_index].expression.hasOwnProperty("tag")) {
+                if (ast.body[this.current_code_block_index].expression.tag === "print") {
+                    return true;
+                }
+            }
+        }
+        return false;
+    };
+
     this.get_return_statement = function(ast) {
         if (!this.this_is_a_return_statement(ast)) throw new Error("could not find return!");
+        return ast.body[this.current_code_block_index];
+    };
+
+    this.get_print_statement = function(ast) {
+        if (!this.this_is_a_print_statement(ast)) throw new Error("could not find print!");
         return ast.body[this.current_code_block_index];
     };
 
@@ -391,7 +422,16 @@ function TplHelper() {
         for (let i = 0; i < return_args.length; i++) {
             return_vals[i] = sim.evaluate_expression(variable_bank, return_args[i]);
         }
-        return this.create_print_string(return_vals, "")
+        return this.create_print_string(return_vals, "");
+    };
+
+    this.get_print_output = function(stmt, variable_bank) {
+        var print_args = stmt.expression.args.value;
+        var print_vals = [];
+        for (let i = 0; i < print_args.length; i++) {
+            print_vals[i] = sim.evaluate_expression(variable_bank, print_args[i]);
+        }
+        return this.create_print_string(print_vals, "");
     };
 
     this.create_print_string = function(vals, string) {
@@ -434,10 +474,24 @@ function make_initial_state(problem, variant) {
         console.log("Pulling problem " + problem.title + " from a src file.");
         let filename = RELATIVE_SRC_DIR + problem.content.src;
         let problem_raw = load_file(filename);
-        ast = python_parsing.parse_method(problem_raw);
+
+        // Inject python for initial values at start of raw code
+        let initialv_raw = "";
+        for (const [key, value] of Object.entries(variant.arguments)) {
+            let v = value;
+            if(Object.prototype.toString.call(value) === '[object Array]') {
+                v = "[" + value + "]";
+            }
+            let this_value = key + " = " + v + "\n";
+            initialv_raw = initialv_raw + this_value;
+        }
+        problem_raw = initialv_raw + problem_raw;
+        // console.log(problem_raw);
+
+        ast = python_parsing.parse_program(problem_raw);
     } else { // if problem.content lacks a src, fallback to using problem.content.text
         console.log("Pulling problem " + problem.title + " directly from json.");
-        ast = python_parsing.parse_method(problem.content.text);
+        ast = python_parsing.parse_program(problem.content.text);
     }
 
     var args = variant.arguments;

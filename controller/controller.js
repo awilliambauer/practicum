@@ -13,7 +13,7 @@ var controller = (function() {
     var button;
 
     function initialize(problemConfig, simulatorInterface_, initialState, task_logger, fading) {
-
+        // console.log("initial state: " + JSON.stringify(initialState));
         $("#problem_space > pre").html(python_formatter.format(initialState.ast, {args:initialState.args}));
         $("#promptText").css("font-weight", 'bold');
         $("#problem_space > pre").addClass("hidden");
@@ -64,7 +64,7 @@ var controller = (function() {
             .append("li")
             .append("a")
             .attr("class", "monospace")
-            .text(function(s) { return state.ast.name + "(" + getArgString(s.arguments) + ")"; })
+            .text(function(s) { return makeInitialValueString(s.arguments); })
             .on("click", function(s) {
                 if (s !== state.variant) {
                     csed.loadProblem(problemConfig, s);
@@ -73,8 +73,21 @@ var controller = (function() {
         ;
 
         d3.select("#methodCall")
-            .text(function() { return state.ast.name + "(" + getArgString(state.args) + ")"} )
+            .text(function() { return makeInitialValueString(state.args) })
         ;
+    }
+
+    function makeInitialValueString(args) {
+        let iv_string = "";
+        for (const [key, value] of Object.entries(args)) {
+            let v = value;
+            if(Object.prototype.toString.call(value) === '[object Array]') {
+                v = "[" + value + "]";
+            }
+            let this_value = key + " = " + v + ", ";
+            iv_string = iv_string + this_value;
+        }
+        return iv_string.slice(0, -2); // remove final comma and space
     }
 
     function getArgString(args) {
@@ -183,6 +196,12 @@ var controller = (function() {
             d3.select("#promptText").node().innerHTML = prompt;
 
             if (prompt === "The print statement below prints out the value(s) that the function returned. Enter that solution in the solution box!") {
+                $("#next-container").addClass("hidden");
+                $("#nextstep").prop('disabled', true);
+                button = "#submitButton";
+            }
+
+            if (prompt === "Enter the value(s) that print in the solution box!") {
                 $("#next-container").addClass("hidden");
                 $("#nextstep").prop('disabled', true);
                 button = "#submitButton";
@@ -619,7 +638,7 @@ var controller = (function() {
 
     function highlightASTNode(node) {
         if (node !== null) {
-            var htmlID = "java-ast-" + node.id;
+            var htmlID = "python-ast-" + node.id;
             $("#" + htmlID).addClass("node_highlight");
         }
     }
@@ -648,18 +667,18 @@ var controller = (function() {
     // highlights the line of code passed in as a parameter
     function highlightLine(line) {
         if (line.hasOwnProperty("location")) {
-            d3.select("#java-ast-line-" + line.location.start.line).classed("line_highlight", true);
+            d3.select("#python-ast-line-" + line.location.start.line).classed("line_highlight", true);
         }
         else {
-            d3.select("#java-ast-line-" + line).classed("line_highlight", true);
+            d3.select("#python-ast-line-" + line).classed("line_highlight", true);
         }
     }
 
     // makes all the lines clickable so that the user can select the next line
     function interactiveLines() {
-        d3.select(".java-line").classed("line_highlight", false);
+        d3.select(".python-line").classed("line_highlight", false);
 
-        d3.selectAll(".java-line").each(function () {
+        d3.selectAll(".python-line").each(function () {
             d3.select(this)
                 .classed("clickable", true)
                 .attr("tabindex", 0)
@@ -870,7 +889,7 @@ var controller = (function() {
             }
 
             var lineId = highlightedLine.attr("id");
-            lineId = lineId.replace("java-ast-line-", "");
+            lineId = lineId.replace("python-ast-line-", "");
             userLine = parseInt(lineId);
             if (userLine === correctLine) {
                 correct = true;
@@ -1043,7 +1062,7 @@ var controller = (function() {
 
         var solutionState = simulatorInterface.getFinalState();
 
-        var correctSolution = solutionState.variables.in_scope.the_return_value_of_the_function_is_determined_here.value;
+        var correctSolution = solutionState.variables.in_scope.the_print_function_prints_out_the_values_passed_to_it.value;
         correctSolution = correctSolution.split(',').map(substr => substr.replace(/^['"]+|['"]+$/g,"")).join(',');
 
         var correct = false;

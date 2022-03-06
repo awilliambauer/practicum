@@ -16,19 +16,19 @@ var python_formatter = function() {
 
     // returns a string representing indentation to given level.
     function indent(level) {
-        return Array(4*level+1).join(" ");
+        return Array(4*level+1).join(" "); // 4 spaces for each indent level
     }
 
     function span(clazz, s) {
         return '<span class="' + clazz + '">' + s + '</span>';
     }
 
-    function keyword(s) { return span('java-keyword', s); }
-    function symbol(s) { return span('java-symbol', s); }
-    function ident(s) { return span('java-ident', s); }
-    function literal(s) { return span('java-literal', s); }
-    function method(s) { return span('java-method', s); }
-    function reference(s) { return span('java-reference', s); }
+    function keyword(s) { return span('python-keyword', s); }
+    function symbol(s) { return span('python-symbol', s); }
+    function ident(s) { return span('python-ident', s); }
+    function literal(s) { return span('python-literal', s); }
+    function method(s) { return span('python-method', s); }
+    function reference(s) { return span('python-reference', s); }
 
     /**
      *
@@ -41,7 +41,7 @@ var python_formatter = function() {
         /*
          * Brief implementation notes:
          * All AST nodes are put into their own spans, with subelements are children.
-         * Any code that should be its own line is put in a span with the 'java-line' class,
+         * Any code that should be its own line is put in a span with the 'python-line' class,
          * and CSS takes care of adding a line number and making sure it ends with a newline.
          * So no manual newlines are required!
          *
@@ -50,12 +50,12 @@ var python_formatter = function() {
          * where they share the middle line. Elements, can, of course, take 0 lines, such as expressions.
          */
 
-        var prefix = options.id_prefix || 'java-ast-';
+        var prefix = options.id_prefix || 'python-ast-';
 
         function newline(parent) {
             var l = $('<span>');
             l.attr('id', prefix + 'line-' + options.line);
-            l.addClass('java-line');
+            l.addClass('python-line');
             options.line += 1;
             parent.append(l);
             return l;
@@ -66,8 +66,7 @@ var python_formatter = function() {
         var firstIter;
 
         elem.attr('id', prefix + node.id);
-
-        switch (node.tag) {
+        switch (node.tag) { 
             case 'method':
                 line = newline(elem);
                 line.html(sprintf('{0}{1} {2}(', indent(indent_level), keyword('def'), method(node.name)));
@@ -111,6 +110,11 @@ var python_formatter = function() {
                 }
                 break;
 
+            case 'block':
+                node.body.forEach(function(s) {
+                    elem.append(to_dom(s, options, 0));
+                });
+                break;
             case 'parameter':
                 elem.append(ident(node.name));
                 break;
@@ -249,12 +253,12 @@ var python_formatter = function() {
                 break;
 
             case 'identifier':
-                elem.addClass("java-ident");
+                elem.addClass("python-ident");
                 elem.text(node.value);
                 break;
 
             case 'literal':
-                elem.addClass("java-literal")
+                elem.addClass("python-literal")
                 if (node.type === 'array') {
                     elem.append('[')
                     if (node.value.length > 0) firstIter = true;
@@ -291,6 +295,26 @@ var python_formatter = function() {
                 } else elem.append(to_dom(node.args.value[0], options, indent_level));
                 break;
 
+            case 'print':
+                elem.append(keyword("print"));
+                if (node.args.value.length > 1) {
+                    let firstIter = true;
+                    elem.append("(");
+                    node.args.value.forEach(function(arg) {
+                        if (!firstIter) {
+                            elem.append(", ");
+                        }
+                        firstIter = false;
+                        elem.append(to_dom(arg, options, indent_level));
+                    });
+                    elem.append(")");
+                } else {
+                    elem.append("(");
+                    elem.append(to_dom(node.args.value[0], options, indent_level));
+                    elem.append(")");
+                }
+                break;
+
             case 'break':
                 line = newline(elem);
                 line.append(indent(indent_level) + "break");
@@ -311,7 +335,11 @@ var python_formatter = function() {
     self.format = function(ast, options) {
         options = options || {};
         options.line = 0;
-        var dom = to_dom(ast, options, 0, true);
+        if (ast.params == ""){
+            var dom = to_dom(ast, options, 0, false);
+        } else {
+            var dom = to_dom(ast, options, 0, true);
+        }
         return dom[0];
     }
 
