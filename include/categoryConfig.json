@@ -622,6 +622,32 @@
       }]
     }
   }]
+}, {
+  "name": "default-oop",
+  "category": "oop",
+  "title": "Classes and Objects Investigation",
+  "description": "Practice object-oriented programming concepts",
+  "problems": [{
+    "id": "1",
+    "title": "Classes and Objects Investigation 1",
+    "content": {
+      "src": "classes_and_objects/classes_and_objects_1.py"
+    }
+  },{
+    "id": "104",
+    "title": "Classes and Objects Investigation 2",
+    "content": {
+      "srcx": "nested_for_loop/nested_for_loop_2.py",
+      "text": "def nested_for_loop_investigation(lst_inner):\n\tlst_outer = [2, 3, 4]\n\tfor i in range(len(lst_outer)):\n\t\tfor j in range(len(lst_inner)):\n\t\t\tlst_inner[j] = lst_inner[j] * lst_outer[i]\n\treturn(lst_inner)",
+      "variants": [{
+        "id": "105",
+        "arguments": {"lst_inner": [1, 2, 3]}
+      },{
+        "id": "106",
+        "arguments": {"lst_inner": [5, 1, 2]}
+      }]
+    }
+  }]
 }
 ]
 

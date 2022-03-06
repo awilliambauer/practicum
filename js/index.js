@@ -40,12 +40,13 @@ var csed = (function() {
     var ENABLE_TELEMETRY_LOGGING = false;
 
     let problem_types = {
-      problem_types: ["whileLoop", "if_else", "forLoop", "nested"],
+      problem_types: ["whileLoop", "if_else", "forLoop", "nested", "oop"],
       enabled_categories: [
         "default-whileLoop",
         "default-if_else",
         "default-forLoop",
         "default-nested",
+        "default-oop",
       ],
     };
     
@@ -69,12 +70,14 @@ var csed = (function() {
                             if_else: 0,
                             array: 0,
                             nested: 0,
+                            oop: 0,
                         },
                         problemIdsByCategory: {
                             expressions: [],
                             if_else: [],
                             array: [],
-                            nested: []
+                            nested: [],
+                            oop: []
                         }
                     };
                 }
