@@ -266,6 +266,27 @@ function TplHelper() {
         return true;
     };
 
+    this.go_next_line_without_reading = function() {
+        lineNum++;
+    }
+
+    this.check_instantiation = function(ast) {
+        if(ast.body[lineNum].tag === 'declaration'){
+            if(ast.body[lineNum].expression.tag === 'binop'){
+                if(ast.body[lineNum].expression.args[1].tag === 'call'){
+                    return true;
+                }
+                return false;
+            }
+            return false;
+        }
+        return false;
+    }
+
+    this.get_object_reference = function(ast) {
+        return ast.body[lineNum].expression.args[1].object.value;
+    }
+
     this.initialize_loop_iterable = function(variable_bank, iterable, is_inner) {
         iterable = sim.evaluate_expression(variable_bank, iterable);
         if ((iterable.type !== 'array') && (iterable.type !== 'string')) throw new Error("for loop iterable isn't an array or string")
