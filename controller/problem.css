@@ -315,6 +315,16 @@
     text-align: right;
 }
 
+.problem .bank_object {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    border: 2px solid #000000;
+    border-radius: 5px;
+    background-color: #27a4d1;
+}
+
 .problem .array_label {
     padding-right: 10px;
     text-align: right;

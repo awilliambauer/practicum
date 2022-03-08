@@ -310,12 +310,45 @@ function TplHelper() {
         let variableValue = ast["body"][lineNum]["expression"]["args"][1].value;
         let variableType = ast["body"][lineNum]["expression"]["args"][1].type;
         lineNum = lineNum + 1;
+        console.log(variableName, variableValue, variableType);
         return this.add_this_to_the_variable_bank(variable_bank, {
             name: variableName,
             type: variableType,
             value: variableValue
         });
     };
+
+    this.add_class_instance = function(variable_bank, ast) {
+        let variableName = ast["body"][lineNum]["expression"]["args"][0].value;
+        let variableValues = ast["body"][lineNum]["expression"]["args"][1].args;
+        let classReference = this.get_class_from_name(ast["body"][lineNum]["expression"]["args"][1]["object"].value, ast)
+        if (classReference === false) throw new Error("could not find a definition for a class with this name!");
+        return this.add_the_object_to_the_variable_bank(variable_bank, {
+            name: variableName,
+            reference: classReference,
+            values: variableValues
+        });
+    }
+
+    this.add_the_object_to_the_variable_bank = function(bank, variable) {
+        //Variable.reference is the params of the init function of the correct class
+        //Variable.values is the array of params that instantiate the class object
+        bank[variable.name] = {type: 'object', reference: this.copy(variable.reference), values: this.copy(variable.values)};
+        return variable
+    }
+    
+    this.get_class_from_name = function(className, ast) {
+        let currAstElement;
+        for (let idx = 0; idx < ast["body"].length; idx++){
+            currAstElement = ast["body"][idx];
+            if (currAstElement.hasOwnProperty("tag") && currAstElement.tag === "class") {
+                if (currAstElement.name == className) {
+                    return currAstElement;
+                }
+            }
+        }
+        return false;
+    }
 
     this.is_loop_called_without_range = function(loop) {
         return loop.iterable.args === undefined;

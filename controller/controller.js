@@ -265,6 +265,7 @@ var controller = (function() {
                 var listRow;
                 var listCell1;
                 var listCell2;
+                var object;
                 if (!(variableBankObject[variable].hasOwnProperty("type") && variableBankObject[variable].type === "array")) {
                     listRow = d3.select("#variable_list_table").append("tr").attr("class", "variable_list_table_row");
                     listCell1 = listRow.append("td");
@@ -320,19 +321,40 @@ var controller = (function() {
                     .append("span")
                     .attr("class", "bank_variable_value")
                     .text(word);
-                } else {
-                  listCell1.attr("class", "bank_variable_label");
-                  listCell1
-                    .append("span")
-                    .attr("class", "bank_variable")
-                    .text(variable);
-                  listCell1.append("span").text(" :");
-
-                  listCell2.attr("style", "text-align: left;");
-                  listCell2
-                    .append("span")
-                    .attr("class", "bank_variable_value")
-                    .text(variableBankObject[variable].value);
+                } 
+                else if (variableBankObject[variable].hasOwnProperty("type") && variableBankObject[variable].type === 'object') {
+                    console.log("In the correct case of variable bank: ", variable);
+                    //Put in Rebecca's d3 visualization here.
+                    object = d3.select("#variable_list_table").append("div").attr("class", "bank_object");
+                    for(let idx = 0; idx < variableBankObject[variable].values.length; idx++){
+                        listRow = d3.select(".bank_object").append("tr").attr("class", "variable_list_table_row");
+                        listCell1 = listRow.append("td");
+                        listCell2 = listRow.append("td");
+                        listCell1.attr("class", "bank_variable_label");
+                        listCell1
+                            .append("span")
+                            .attr("class", "bank_variable")
+                            .text(variableBankObject[variable].reference.body[0].params[idx+1].name);
+                        listCell1.append("span").text(" :");
+                        listCell2.attr("style", "text-align: left;");
+                        listCell2
+                            .append("span")
+                            .attr("class", "bank_variable_value")
+                            .text(variableBankObject[variable].values[idx].value);
+                    }
+                }
+                else {
+                    listCell1.attr("class", "bank_variable_label");
+                    listCell1
+                        .append("span")
+                        .attr("class", "bank_variable")
+                        .text(variable);
+                    listCell1.append("span").text(" :");
+                    listCell2.attr("style", "text-align: left;");
+                    listCell2
+                        .append("span")
+                        .attr("class", "bank_variable_value")
+                        .text(variableBankObject[variable].value);
                 }
             }
             if (variableBankObject.hasOwnProperty("loop sequence")) {
