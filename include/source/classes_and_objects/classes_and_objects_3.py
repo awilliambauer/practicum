@@ -5,7 +5,7 @@ class Pets:
 		self.home = "Minnesota"
 		self.name = name
 	def getAge(self):
-		return self.age
+		return(self.age)
 	def birthday(self):
 		self.age = self.age + 1
 whiskers = Pets("cat",2,"Whiskers")

@@ -7,11 +7,11 @@ class Point:
 
 	def inImage(self,n,distance):
 		if n < 0:
-			return 0
+			return(0)
 		if n > distance:
-			return distance
+			return(distance)
 		else:
-			return n
+			return(n)
 
 p1 = Point(15,17)
 p2 = Point(16,54)
