@@ -735,6 +735,15 @@
         "id": "121"
       }]
     }
+  },{
+    "id": "13",
+    "title": "Classes and Objects Investigation 13",
+    "content": {
+      "src": "classes_and_objects/classes_and_objects_13.py",
+      "variants": [{
+        "id": "131"
+      }]
+    }
   }
 ]
 }
