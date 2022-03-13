@@ -338,8 +338,19 @@ var python_parsing = function() {
                 body: body,
             };
         }
+        
+        // Peeks and calls the appropriate match.
+        function match_class_method_or_statement(indent_level) {
+            if (lex.peek().value == "def") {
+                return match_method(indent_level);
+            } else if (lex.peek().value == "class") {
+                return match_class(indent_level);
+            } else {                
+                return match_statement(indent_level);
+            }
+        }
 
-        function match_block(indent_level) {
+        function match_block(indent_level) {            
             // Skip newline at start of block
             if (peek_symbol("\n")) {
                 match_symbol("\n");
@@ -351,23 +362,18 @@ var python_parsing = function() {
                 match_symbol("\t");
             }
             
-            if (lex.peek().value == "def") {
-                console.log("function def!");
-                stmts.push(match_method(indent_level));
-            } else if (lex.peek().value == "class") {
-                console.log('class!');
-                stmts.push(match_class(indent_level));
-            } else {                
-                stmts.push(match_statement(indent_level));
-            }
+            stmts.push(match_class_method_or_statement(indent_level));
+            
             while (true) {
                 // Skip newlines within block
                 if (peek_symbol("\n")) {
                     match_symbol("\n");
                 }
                 
+                // Stop parsing block at end of file.
                 if (lex.iseof()) return stmts;
-                    
+                
+                // Stop parsing block if indent level decreases 
                 for (let i = 0; i < indent_level; i++) {
                     if (!peek_symbol("\t")) {
                         lex.home();
@@ -375,7 +381,9 @@ var python_parsing = function() {
                     }
                     match_symbol("\t")
                 }
-                stmts.push(match_statement(indent_level));
+                
+                // Otherwise, push to statements.
+                stmts.push(match_class_method_or_statement(indent_level));
             }
         }
 
@@ -578,7 +586,6 @@ var python_parsing = function() {
                         // New line denotes the end of an expression.
                         // So, we ignore this character and match the next char                       
                         return match_statement();
-                        // return match_prefix();
                     } else if (t.value === '(') {
                         var e = match_expression(0);
                         match_symbol(")"); // ) has bind power of 0, so match_expression halts and doesn't consume it
