@@ -36,7 +36,7 @@ function TPLAlgorithm() {
     Let_us_look_at_the_class_we_will_instantiate = this_is_the_next_line_that_will_execute.expression.args[1].object;
 
     [no_step]
-    let it_defines_a_new_local_variable_which_we_will_add_to_the_variable_bank: Variable;
+    let it_defines_a_new_local_variable_which_we_will_add_to_the_variable_bank: Instance;
     [interactive("add_variable")]
     it_defines_a_new_local_variable_which_we_will_add_to_the_variable_bank = helper.add_class_instance(variables, ast);
 
