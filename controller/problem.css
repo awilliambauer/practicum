@@ -316,13 +316,17 @@
 }
 
 .problem .bank_object {
+    font: '14px Menlo,Monaco,Consolas,"Courier New",monospace';
     margin-left: auto;
     margin-right: auto;
     margin-top: 5px;
     margin-bottom: 15px;
-    border: 2px solid #000000;
+}
+
+.problem .bank_object .bank_object_box {
+    border: 2px solid red;
     border-radius: 5px;
-    background-color: #27a4d1;
+    background-color: white;
 }
 
 .problem .array_label {
@@ -712,4 +716,3 @@ the dynamic styling works correctly.
 /* DON'T PUT STUFF BELOW THIS COMMENT!! PLACE ADDITIONAL CODE ABOVE
    DYNAMIC STYLING CLASSES!!
 */
-

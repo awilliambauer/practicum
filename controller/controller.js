@@ -79,7 +79,7 @@ var controller = (function() {
 
     function makeInitialValueString(args) {
         if (!args) return ""; // Do not inject additional python if there are no arguments
-        
+
         let iv_string = "";
         for (const [key, value] of Object.entries(args)) {
             let v = value;
@@ -250,6 +250,19 @@ var controller = (function() {
         }
     }
 
+    function getInstanceText(value, params, paramValues) {
+      var val = "";
+      for (var i = 1; i < params.length; i++) {
+        if (params[i].name == value[0].name){
+          val = paramValues[i-1].value;
+        }
+      }
+      if (val == "") {
+        val = value[1].value;
+      }
+      return value[0].name + " = " + val;
+    }
+
     function addVariableBank() {
         d3.select("#variable_list_table").node().innerHTML = "";
         d3.select("#variable_array_table").node().innerHTML = "";
@@ -321,27 +334,79 @@ var controller = (function() {
                     .append("span")
                     .attr("class", "bank_variable_value")
                     .text(word);
-                } 
+                }
                 else if (variableBankObject[variable].hasOwnProperty("type") && variableBankObject[variable].type === 'object') {
                     console.log("In the correct case of variable bank: ", variable);
                     //Put in Rebecca's d3 visualization here.
-                    object = d3.select("#variable_list_table").append("div").attr("class", "bank_object");
-                    for(let idx = 0; idx < variableBankObject[variable].values.length; idx++){
-                        listRow = d3.select(".bank_object").append("tr").attr("class", "variable_list_table_row");
-                        listCell1 = listRow.append("td");
-                        listCell2 = listRow.append("td");
-                        listCell1.attr("class", "bank_variable_label");
-                        listCell1
-                            .append("span")
-                            .attr("class", "bank_variable")
-                            .text(variableBankObject[variable].reference.body[0].params[idx+1].name);
-                        listCell1.append("span").text(" :");
-                        listCell2.attr("style", "text-align: left;");
-                        listCell2
-                            .append("span")
-                            .attr("class", "bank_variable_value")
-                            .text(variableBankObject[variable].values[idx].value);
-                    }
+                    let div = d3.select("#variable_list_table").append('div').attr("class", "bank_object");
+                    let svg = div.append('svg')
+                        .attr('fill', 'white');
+
+                    let box = svg.append('rect')
+                      .attr("class", "bank_object_box")
+                      .attr('id', 'bank_object_box_' + variable)
+                      .attr("width", 220)
+                      .attr("height", 110)
+                      .attr("rx", 5)
+                      .attr('stroke', 'red')
+                      .attr('stroke-width', '2')
+                      .attr('fill', 'white')
+                      .attr('margin', 2)
+                      .attr('opacity', 1)
+                      .attr('y', 1)
+                      .attr('x', 100)
+                      .transition()
+                        .ease("linear")
+                        .duration(500)
+                        .attr('x', 20)
+                      .transition()
+                        .ease("linear")
+                        .duration(500)
+                        .attr('y', 30)
+                      .transition()
+                        .delay(1000)
+                        .ease("linear")
+                        .duration(500)
+                        .attr('y', 1);
+
+                    let variables = svg.selectAll('text')
+                      .data(variableBankObject[variable].reference.body[0].body)
+                      .enter()
+                      .append('text')
+                        .style('font', '14px Menlo,Monaco,Consolas,"Courier New",monospace')
+                        .attr('x', 30)
+                        .attr('y', (d, i) => 50 + i*25)
+                        .attr('fill', 'black')
+                        .attr('opacity', 0)
+                        .text((d, i) => getInstanceText(variableBankObject[variable].reference.body[0].body[i].expression.args, variableBankObject[variable].reference.body[0].params, variableBankObject[variable].values))
+                        .transition()
+                          .delay(1000)
+                          .duration(1000)
+                          .attr('opacity', 1)
+                        .transition()
+                          .ease("linear")
+                          .duration(500)
+                          .attr('y', (d, i) => 21 + i*25)
+
+                    //console.log(variableBankObject[variable].reference.body[0].body);
+                    //console.log(variableBankObject[variable]);
+                    //console.log(variableBankObject[variable].values);
+                    // for(let idx = 0; idx < variableBankObject[variable].values.length; idx++){
+                    //     listRow = d3.select(".bank_object").append("tr").attr("class", "variable_list_table_row");
+                    //     listCell1 = listRow.append("td");
+                    //     listCell2 = listRow.append("td");
+                    //     listCell1.attr("class", "bank_variable_label");
+                    //     listCell1
+                    //         .append("span")
+                    //         .attr("class", "bank_variable")
+                    //         .text(variableBankObject[variable].reference.body[0].params[idx+1].name);
+                    //     listCell1.append("span").text(" :");
+                    //     listCell2.attr("style", "text-align: left;");
+                    //     listCell2
+                    //         .append("span")
+                    //         .attr("class", "bank_variable_value")
+                    //         .text(variableBankObject[variable].values[idx].value);
+                    // }
                 }
                 else {
                     listCell1.attr("class", "bank_variable_label");
