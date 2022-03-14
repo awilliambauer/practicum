@@ -336,7 +336,6 @@ var controller = (function() {
                     .text(word);
                 }
                 else if (variableBankObject[variable].hasOwnProperty("type") && variableBankObject[variable].type === 'object') {
-                    console.log("In the correct case of variable bank: ", variable);
                     //Put in Rebecca's d3 visualization here.
                     let div = d3.select("#variable_list_table").append('div').attr("class", "bank_object");
                     let svg = div.append('svg')
@@ -549,6 +548,8 @@ var controller = (function() {
                         else {
                             highlightLine(varObject.value);
                         }
+                        break;
+                    case "Instance":
                         break;
                 }
             }
