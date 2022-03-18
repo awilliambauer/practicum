@@ -322,12 +322,9 @@ var python_parsing = function() {
             var start = lex.position();
             match_keyword("class");
             var name = match_ident();
-            console.log(name);
             match_symbol(":");
             
             var body = match_block(indent_level + 1);
-            // console.log("class body");
-            // console.log(JSON.stringify(body, null, 2));
 
             return {
                 id: new_id(),

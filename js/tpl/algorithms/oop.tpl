@@ -15,7 +15,7 @@ function TPLAlgorithm() {
 
     //TODO: Add someway to describe the focus of each class investigation
     [prompt]
-    "Welcome to class investigation 1.";
+    "Welcome to classes/objects practice.";
     [prompt]
     "Now let’s walk through the code line-by-line while keeping track of variables.";
     
@@ -39,5 +39,31 @@ function TPLAlgorithm() {
     let it_defines_a_new_local_variable_which_we_will_add_to_the_variable_bank: Instance;
     [interactive("add_variable")]
     it_defines_a_new_local_variable_which_we_will_add_to_the_variable_bank = helper.add_class_instance(variables, ast);
+
+    //TODO: support multiple classes in a problem
+
+    [no_step]
+    let theClass;
+    [no_step]
+    theClass = helper.get_class_from_name(helper.get_class_name(ast), ast);
+
+    [no_step]
+    let theConstructor;
+    [no_step]
+    theConstructor = helper.get_class_constructor(theClass);
+
+    //let this_is_the_constructor: Line;
+    //[interactive("next_line")] this_is_the_constructor = helper.jump_inside_constructor(theConstructor.body, this_is_the_next_line_that_will_execute);
+
+    [prompt]
+    "Now we enter the constructor.";
+
+    [no_step]
+    helper.jump_inside_constructor(theConstructor.body, this_is_the_next_line_that_will_execute);
+    [interactive("next_line")] this_is_the_next_line_that_will_execute = helper.get_next_line(theConstructor.body, this_is_the_next_line_that_will_execute);
+
+    // step through the constructor
+    // while inside constructor: fill in values to object line by line
+    // example: see type, look up type's value in corresponding function call, add that value to variable bank
 
 }

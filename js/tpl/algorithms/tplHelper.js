@@ -128,6 +128,11 @@ function TplHelper() {
         return body[lineNum];
     }
 
+    this.jump_inside_constructor = function(body) {
+        lineNum = 0;
+        return body[lineNum];
+    }
+
     this.get_iterable_sequence = function(variable_bank, iterable, is_inner) {
         this.initialize_loop_iterable(variable_bank, iterable, is_inner);
         return !is_inner ? this.iterable : this.iterable2;
@@ -136,11 +141,6 @@ function TplHelper() {
     this.get_the_next_line_in_this_block_to_execute = function(parent, current_statement, condition) {
         switch(parent.tag) {
             case "method":
-                if (current_statement) {
-                    lineNum++;
-                    return get_next_statement(parent.body, current_statement);
-                }
-                return parent.body[lineNum++];
             case "block":
                 if (current_statement) {
                     lineNum++;
@@ -321,7 +321,8 @@ function TplHelper() {
     this.add_class_instance = function(variable_bank, ast) {
         let variableName = ast["body"][lineNum]["expression"]["args"][0].value;
         let variableValues = ast["body"][lineNum]["expression"]["args"][1].args;
-        let classReference = this.get_class_from_name(ast["body"][lineNum]["expression"]["args"][1]["object"].value, ast)
+        let className = ast["body"][lineNum]["expression"]["args"][1]["object"].value;
+        let classReference = this.get_class_from_name(className, ast)
         if (classReference === false) throw new Error("could not find a definition for a class with this name!");
         return this.add_the_object_to_the_variable_bank(variable_bank, {
             name: variableName,
@@ -336,18 +337,33 @@ function TplHelper() {
         bank[variable.name] = {type: 'object', reference: this.copy(variable.reference), values: this.copy(variable.values)};
         return variable
     }
+
+    this.get_class_name = function(ast) {
+        return ast["body"][lineNum]["expression"]["args"][1]["object"].value;
+    }
     
     this.get_class_from_name = function(className, ast) {
-        let currAstElement;
-        for (let idx = 0; idx < ast["body"].length; idx++){
-            currAstElement = ast["body"][idx];
-            if (currAstElement.hasOwnProperty("tag") && currAstElement.tag === "class") {
-                if (currAstElement.name == className) {
+        let astBody = ast.body;
+        for (const [k, currAstElement] of Object.entries(astBody)) {
+            if (currAstElement.hasOwnProperty("tag")
+                && currAstElement.tag === "class"
+                && currAstElement.name == className) {
                     return currAstElement;
                 }
             }
-        }
         return false;
+    }
+
+    this.get_class_constructor = function(classBody) {
+        for (const [key_class, value_class] of Object.entries(classBody)) {
+            for (const i in value_class) {
+                if (value_class[i].tag === "method" && value_class[i].name === "__init__") {
+                    // console.log(JSON.stringify(value_class, null, 2));
+                    return value_class[i];
+                }
+            }
+        }
+        throw new Error("Could not find constructor in body of class.");
     }
 
     this.is_loop_called_without_range = function(loop) {
@@ -491,7 +507,7 @@ function TplHelper() {
     this.create_print_string = function(vals, string) {
         for (let i = 0; i < vals.length; i++) {
             if (!vals[i].hasOwnProperty("tag") || vals[i]["tag"] === "identifier" || vals[i]["tag"] === "literal") {
-                if (!(vals[i]["type"] === "array")) string += vals[i]["value"];
+                if (vals[i]["type"] !== "array") string += vals[i]["value"];
                 else string += this.create_print_string(vals[i]["value"], string);
             } else if (vals[i].tag === "binop") {
                 string += this.create_print_string(vals[i].args, string);
@@ -541,7 +557,6 @@ function make_initial_state(problem, variant) {
                 initialv_raw = initialv_raw + this_value;
             }
             problem_raw = initialv_raw + problem_raw;
-            // console.log(problem_raw);
         }
         ast = python_parsing.parse_program(problem_raw);
     } else { // if problem.content lacks a src, fallback to using problem.content.text
