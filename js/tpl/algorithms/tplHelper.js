@@ -337,35 +337,32 @@ function TplHelper() {
 
     this.assign_value_within_object = function(variable_bank, assignment, object) {
         if (assignment) {
-            let variableName = assignment.expression.args[0].name;
-    
+            let variableName = assignment.expression.args[0].name;    
             let variableValue = assignment.expression.args[1];
-            // console.log("var " + variableName + " value is " + variableValue.value);
 
-            // tag is either an identifier, or a literal
-            if (variableValue.tag === "identifier") {
-                // TODO: fill in the identifier's value from the constructor parameters
-            } else if (variableValue.tag === "literal") {
-                this.update_object_in_variable_bank(variable_bank, object.name, {
-                    name: variableName,
-                    value: variableValue.value 
-                });
-            }   
-
+            this.update_object_in_variable_bank(variable_bank, object, {
+                name: variableName,
+                value: variableValue.value 
+            });
         } else {
-            console.log("uh oh. executing on an invalid line position");
-            // throw Error("invalid line position");
+            //TODO: helper function to know when last line within class is reached?
+            return;
         }
-
-        // variable_bank[variable.name] = {type: 'object', reference: this.copy(variable.reference), values: this.copy(variable.values)};
         return variable_bank;
     }
 
-    this.update_object_in_variable_bank = function(bank, object_name, variable) {
-        bank[object_name].values.push(variable);
-        bank[object_name].reference.body[0].params.push({"tag": "parameter", "name": variable.name})
-        // HACK. This is a weird nested edit to 'params' because of how John structured the variable bank.
-        // I think changing this structure should be a priority.
+    this.update_object_in_variable_bank = function(bank, object, variable) {
+        for (let i in bank[object.name].values) {
+            let local_variable = bank[object.name].values[i];
+            if (local_variable.name === variable.name) {
+                // match
+                let newValue = object.values[i].value;
+                bank[object.name].values[i].value = newValue;
+                return bank;
+            }
+        }
+        // No match
+        bank[object.name].values.push(variable);
         return bank;
     }
 
@@ -373,17 +370,16 @@ function TplHelper() {
         //Variable.reference is the params of the init function of the correct class
         //Variable.values is the array of params that instantiate the class object
 
-        //TODO: uncomment this and/or find some other way to fill in values line by line
-        // let object_values = this.copy(variable.values);
-        // for (let i in object_values) {
-        //     object_values[i] = "";
-        // }
-        // bank[variable.name] = {type: 'object', reference: this.copy(variable.reference), values: object_values};
-
-        bank[variable.name] = {type: 'object', reference: this.copy(variable.reference), values: this.copy(variable.values)};
+        let parameters = variable.reference.body[0].params.slice(1); // Ignoring first parameter (self)
+        let vbankValues = this.copy(variable.values);
         
+        for (const i in parameters) {
+            vbankValues[i]["name"] = parameters[i]["name"];
+            vbankValues[i]["value"] = "";
+        }
+
+        bank[variable.name] = {type: 'object', reference: this.copy(variable.reference), values: vbankValues};
         return variable;
-        //TODO: i need a helper function that can look up the value from the arguments passed to the class
     }
 
     this.get_class_name = function(astBody) {

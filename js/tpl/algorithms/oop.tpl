@@ -87,7 +87,6 @@ function TPLAlgorithm() {
         [no_step]
         helper.assign_value_within_object(variables, theConstructor.body[constructorIndex], it_defines_a_new_object_which_we_will_add_to_the_variable_bank);
 
-
         [no_step]
         constructorIndex = constructorIndex + 1;
         // TODO: use a method that advances constructor and returns line outside of it when done

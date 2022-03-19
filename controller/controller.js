@@ -333,7 +333,7 @@ var controller = (function() {
                         listCell1
                             .append("span")
                             .attr("class", "bank_variable")
-                            .text(variableBankObject[variable].reference.body[0].params[idx+1].name);
+                            .text(variableBankObject[variable].values[idx].name);
                         listCell1.append("span").text(" :");
                         listCell2.attr("style", "text-align: left;");
                         listCell2
