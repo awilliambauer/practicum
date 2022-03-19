@@ -13,57 +13,96 @@ function TPLAlgorithm() {
     [no_step]
     variables = helper.create_new_variable_bank();
 
-    //TODO: Add someway to describe the focus of each class investigation
+    //TODO: Add some way to describe the focus of each class investigation
+    //TODO: support multiple classes in a problem
     [prompt]
     "Welcome to classes/objects practice.";
+
+    //TODO: step through and SIMULATE each line. store the methods within the class definition
+
+    [no_step]
+    let this_is_the_next_line_that_will_execute: Line;
+    [no_step]
+    this_is_the_next_line_that_will_execute = helper.get_next_line(ast.body, this_is_the_next_line_that_will_execute);
+    
     [prompt]
-    "Now let’s walk through the code line-by-line while keeping track of variables.";
+    "This is a class declaration. We'll revisit this later.";
     
     [no_step]
     while(helper.check_instantiation(ast) == false){
         [no_step]
         helper.go_next_line_without_reading();
+        // simulate line inside class?
     }
-
 
     let this_is_the_next_line_that_will_execute: Line;
     [interactive("next_line")] this_is_the_next_line_that_will_execute = helper.get_next_line(ast.body, this_is_the_next_line_that_will_execute);
 
     [prompt]
-    "This is the declaration of the class.";
+    "This is the instantiation of an object.";
 
-    let Let_us_look_at_the_class_we_will_instantiate: AstNode;
-    Let_us_look_at_the_class_we_will_instantiate = this_is_the_next_line_that_will_execute.expression.args[1].object;
+    //[no_step]
+    let Let_us_look_at_the_class_definition: AstNode;
+    //[no_step]
+    Let_us_look_at_the_class_definition = this_is_the_next_line_that_will_execute.expression.args[1].object;
 
     [no_step]
-    let it_defines_a_new_local_variable_which_we_will_add_to_the_variable_bank: Instance;
-    [interactive("add_variable")]
-    it_defines_a_new_local_variable_which_we_will_add_to_the_variable_bank = helper.add_class_instance(variables, ast);
-
-    //TODO: support multiple classes in a problem
+    let it_defines_a_new_object_which_we_will_add_to_the_variable_bank: Instance;
+    [interactive("add_variable")] it_defines_a_new_object_which_we_will_add_to_the_variable_bank = helper.add_class_instance(variables, ast);
 
     [no_step]
     let theClass;
     [no_step]
     theClass = helper.get_class_from_name(helper.get_class_name(ast), ast);
 
+    // record current position to revisit later
+    [no_step]
+    let lineOutsideClass;
+    [no_step]
+    lineOutsideClass = this_is_the_next_line_that_will_execute;
+
+    [prompt]
+    "Now we enter the constructor for this class.";
+
     [no_step]
     let theConstructor;
     [no_step]
     theConstructor = helper.get_class_constructor(theClass);
 
-    //let this_is_the_constructor: Line;
-    //[interactive("next_line")] this_is_the_constructor = helper.jump_inside_constructor(theConstructor.body, this_is_the_next_line_that_will_execute);
-
-    [prompt]
-    "Now we enter the constructor.";
+    [no_step]
+    let constructorIndex;
+    [no_step]
+    constructorIndex = 0;
 
     [no_step]
-    helper.jump_inside_constructor(theConstructor.body, this_is_the_next_line_that_will_execute);
-    [interactive("next_line")] this_is_the_next_line_that_will_execute = helper.get_next_line(theConstructor.body, this_is_the_next_line_that_will_execute);
+    this_is_the_next_line_that_will_execute = theConstructor.body[constructorIndex];
+    [no_step]
+    while (helper.is_still_inside_constructor(ast, this_is_the_next_line_that_will_execute)) {
+        //TODO: look ahead one line
+        this_is_the_next_line_that_will_execute = theConstructor.body[constructorIndex];
 
-    // step through the constructor
-    // while inside constructor: fill in values to object line by line
-    // example: see type, look up type's value in corresponding function call, add that value to variable bank
+        [prompt]
+        "It assigns a value.";
 
+        [no_step]
+        helper.assign_value_within_object(variables, theConstructor.body[constructorIndex], it_defines_a_new_object_which_we_will_add_to_the_variable_bank);
+
+
+        [no_step]
+        constructorIndex = constructorIndex + 1;
+        // TODO: use a method that advances constructor and returns line outside of it when done
+    }
+
+    [no_step]
+    this_is_the_next_line_that_will_execute = lineOutsideClass;
+
+    //this_is_the_next_line_that_will_execute = helper.get_next_line(ast.body, this_is_the_next_line_that_will_execute);
+    // doesn't work. call a helper to reset linenum where it should be
+    // need to clear highlight of class name
+
+    // return to outside scope
+    // check the print line
+
+    [prompt]
+    "end of tpl";
 }

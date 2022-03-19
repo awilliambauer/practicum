@@ -128,11 +128,6 @@ function TplHelper() {
         return body[lineNum];
     }
 
-    this.jump_inside_constructor = function(body) {
-        lineNum = 0;
-        return body[lineNum];
-    }
-
     this.get_iterable_sequence = function(variable_bank, iterable, is_inner) {
         this.initialize_loop_iterable(variable_bank, iterable, is_inner);
         return !is_inner ? this.iterable : this.iterable2;
@@ -166,6 +161,15 @@ function TplHelper() {
                 throw new Error("Unknown code block parent: " + parent.tag);
         }
     };
+
+    this.is_still_inside_constructor = function(parent, stmt) {
+        if (!stmt) return false;
+
+        if (stmt.location.start.col === 2) { //HACK do not hard code indent level
+            return true;
+        }
+        return false;
+    }
 
     this.is_there_another_line_to_execute = function(parent, stmt, condition) {
         return !!this.get_the_next_line_in_this_block_to_execute(parent, stmt, condition);
@@ -331,11 +335,56 @@ function TplHelper() {
         });
     }
 
+    this.assign_value_within_object = function(variable_bank, assignment, object) {
+        if (assignment) {
+            let variableName = assignment.expression.args[0].name;
+    
+            let variableValue = assignment.expression.args[1];
+            // console.log("var " + variableName + " value is " + variableValue.value);
+
+            // tag is either an identifier, or a literal
+            if (variableValue.tag === "identifier") {
+                // TODO: fill in the identifier's value from the constructor parameters
+            } else if (variableValue.tag === "literal") {
+                this.update_object_in_variable_bank(variable_bank, object.name, {
+                    name: variableName,
+                    value: variableValue.value 
+                });
+            }   
+
+        } else {
+            console.log("uh oh. executing on an invalid line position");
+            // throw Error("invalid line position");
+        }
+
+        // variable_bank[variable.name] = {type: 'object', reference: this.copy(variable.reference), values: this.copy(variable.values)};
+        return variable_bank;
+    }
+
+    this.update_object_in_variable_bank = function(bank, object_name, variable) {
+        bank[object_name].values.push(variable);
+        bank[object_name].reference.body[0].params.push({"tag": "parameter", "name": variable.name})
+        // HACK. This is a weird nested edit to 'params' because of how John structured the variable bank.
+        // I think changing this structure should be a priority.
+        return bank;
+    }
+
     this.add_the_object_to_the_variable_bank = function(bank, variable) {
         //Variable.reference is the params of the init function of the correct class
         //Variable.values is the array of params that instantiate the class object
+
+        //TODO: uncomment this and/or find some other way to fill in values line by line
+        // let object_values = this.copy(variable.values);
+        // for (let i in object_values) {
+        //     object_values[i] = "";
+        // }
+        // bank[variable.name] = {type: 'object', reference: this.copy(variable.reference), values: object_values};
+
+
         bank[variable.name] = {type: 'object', reference: this.copy(variable.reference), values: this.copy(variable.values)};
-        return variable
+        
+        return variable;
+        //TODO: i need a helper function that can look up the value from the arguments passed to the class
     }
 
     this.get_class_name = function(ast) {
@@ -358,7 +407,7 @@ function TplHelper() {
         for (const [key_class, value_class] of Object.entries(classBody)) {
             for (const i in value_class) {
                 if (value_class[i].tag === "method" && value_class[i].name === "__init__") {
-                    // console.log(JSON.stringify(value_class, null, 2));
+                    lineNum = value_class[i].location.start.line - 1; // remove one line because tpl will advance one line
                     return value_class[i];
                 }
             }
