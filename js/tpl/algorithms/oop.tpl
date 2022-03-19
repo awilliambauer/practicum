@@ -29,7 +29,7 @@ function TPLAlgorithm() {
     "This is a class declaration. We'll revisit this later.";
     
     [no_step]
-    while(helper.check_instantiation(ast) == false){
+    while(helper.check_instantiation(ast.body) == false){
         [no_step]
         helper.go_next_line_without_reading();
         // simulate line inside class?
@@ -48,12 +48,12 @@ function TPLAlgorithm() {
 
     [no_step]
     let it_defines_a_new_object_which_we_will_add_to_the_variable_bank: Instance;
-    [interactive("add_variable")] it_defines_a_new_object_which_we_will_add_to_the_variable_bank = helper.add_class_instance(variables, ast);
+    [interactive("add_variable")] it_defines_a_new_object_which_we_will_add_to_the_variable_bank = helper.add_class_instance(variables, ast.body);
 
     [no_step]
     let theClass;
     [no_step]
-    theClass = helper.get_class_from_name(helper.get_class_name(ast), ast);
+    theClass = helper.get_class_from_name(helper.get_class_name(ast.body), ast.body);
 
     // record current position to revisit later
     [no_step]
@@ -77,7 +77,7 @@ function TPLAlgorithm() {
     [no_step]
     this_is_the_next_line_that_will_execute = theConstructor.body[constructorIndex];
     [no_step]
-    while (helper.is_still_inside_constructor(ast, this_is_the_next_line_that_will_execute)) {
+    while (helper.is_still_inside_constructor(this_is_the_next_line_that_will_execute)) {
         //TODO: look ahead one line
         this_is_the_next_line_that_will_execute = theConstructor.body[constructorIndex];
 

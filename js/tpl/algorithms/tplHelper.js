@@ -162,7 +162,7 @@ function TplHelper() {
         }
     };
 
-    this.is_still_inside_constructor = function(parent, stmt) {
+    this.is_still_inside_constructor = function(stmt) {
         if (!stmt) return false;
 
         if (stmt.location.start.col === 2) { //HACK do not hard code indent level
@@ -274,10 +274,10 @@ function TplHelper() {
         lineNum++;
     }
 
-    this.check_instantiation = function(ast) {
-        if(ast.body[lineNum].tag === 'declaration'){
-            if(ast.body[lineNum].expression.tag === 'binop'){
-                if(ast.body[lineNum].expression.args[1].tag === 'call'){
+    this.check_instantiation = function(astBody) {
+        if(astBody[lineNum].tag === 'declaration'){
+            if(astBody[lineNum].expression.tag === 'binop'){
+                if(astBody[lineNum].expression.args[1].tag === 'call'){
                     return true;
                 }
                 return false;
@@ -322,11 +322,11 @@ function TplHelper() {
         });
     };
 
-    this.add_class_instance = function(variable_bank, ast) {
-        let variableName = ast["body"][lineNum]["expression"]["args"][0].value;
-        let variableValues = ast["body"][lineNum]["expression"]["args"][1].args;
-        let className = ast["body"][lineNum]["expression"]["args"][1]["object"].value;
-        let classReference = this.get_class_from_name(className, ast)
+    this.add_class_instance = function(variable_bank, astBody) {
+        let variableName = astBody[lineNum]["expression"]["args"][0].value;
+        let variableValues = astBody[lineNum]["expression"]["args"][1].args;
+        let className = astBody[lineNum]["expression"]["args"][1]["object"].value;
+        let classReference = this.get_class_from_name(className, astBody)
         if (classReference === false) throw new Error("could not find a definition for a class with this name!");
         return this.add_the_object_to_the_variable_bank(variable_bank, {
             name: variableName,
@@ -380,19 +380,17 @@ function TplHelper() {
         // }
         // bank[variable.name] = {type: 'object', reference: this.copy(variable.reference), values: object_values};
 
-
         bank[variable.name] = {type: 'object', reference: this.copy(variable.reference), values: this.copy(variable.values)};
         
         return variable;
         //TODO: i need a helper function that can look up the value from the arguments passed to the class
     }
 
-    this.get_class_name = function(ast) {
-        return ast["body"][lineNum]["expression"]["args"][1]["object"].value;
+    this.get_class_name = function(astBody) {
+        return astBody[lineNum]["expression"]["args"][1]["object"].value;
     }
     
-    this.get_class_from_name = function(className, ast) {
-        let astBody = ast.body;
+    this.get_class_from_name = function(className, astBody) {
         for (const [k, currAstElement] of Object.entries(astBody)) {
             if (currAstElement.hasOwnProperty("tag")
                 && currAstElement.tag === "class"
