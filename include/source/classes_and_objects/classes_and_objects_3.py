@@ -1,6 +1,6 @@
 class Pets:
-	def __init__(self, animal, age, name):
-		self.type = animal
+	def __init__(self, type, age, name):
+		self.type = type
 		self.age = age
 		self.home = "Minnesota"
 		self.name = name
@@ -9,6 +9,6 @@ class Pets:
 	def birthday(self):
 		self.age = self.age + 1
 whiskers = Pets("cat",2,"Whiskers")
-print(whiskers.getAge())
+anAge = whiskers.getAge()
 whiskers.birthday()
-print(whiskers.getAge())
+print(anAge, whiskers.getAge())

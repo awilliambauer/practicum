@@ -320,9 +320,24 @@
     margin-right: auto;
     margin-top: 5px;
     margin-bottom: 15px;
-    border: 2px solid #000000;
-    border-radius: 5px;
-    background-color: #27a4d1;
+}
+
+.bank_object_box {
+    stroke: red;
+    stroke-width: 2px;
+    rx: 5px;
+}
+
+.bank_object_vars {
+  font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
+  font-size: 14px;
+  fill: black;
+}
+
+.object-name {
+  font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
+  font-size: 14px;
+  fill: black;
 }
 
 .problem .array_label {

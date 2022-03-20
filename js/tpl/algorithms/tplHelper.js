@@ -175,6 +175,19 @@ function TplHelper() {
         return !!this.get_the_next_line_in_this_block_to_execute(parent, stmt, condition);
     };
 
+    this.is_there_an_instantiation = function(astBody){
+        if(astBody[lineNum+1].tag === 'declaration'){
+            if(astBody[lineNum+1].expression.tag === 'binop'){
+                if(astBody[lineNum+1].expression.args[1].tag === 'call'){
+                    return true;
+                }
+                return false;
+            }
+            return false;
+        }
+        return false;
+    }
+
     this.is_if = function(stmt) {
         return stmt.tag === "if";
     };
@@ -278,7 +291,10 @@ function TplHelper() {
         if(astBody[lineNum].tag === 'declaration'){
             if(astBody[lineNum].expression.tag === 'binop'){
                 if(astBody[lineNum].expression.args[1].tag === 'call'){
-                    return true;
+                    if(astBody[lineNum].expression.args[1].object.tag === 'identifier'){
+                        return true;
+                    }
+                    return false;
                 }
                 return false;
             }
@@ -313,8 +329,7 @@ function TplHelper() {
         let variableName = ast["body"][lineNum]["expression"]["args"][0].value;
         let variableValue = ast["body"][lineNum]["expression"]["args"][1].value;
         let variableType = ast["body"][lineNum]["expression"]["args"][1].type;
-        lineNum = lineNum + 1;
-        console.log(variableName, variableValue, variableType);
+        lineNum += 1;
         return this.add_this_to_the_variable_bank(variable_bank, {
             name: variableName,
             type: variableType,
@@ -327,6 +342,7 @@ function TplHelper() {
         let variableValues = astBody[lineNum]["expression"]["args"][1].args;
         let className = astBody[lineNum]["expression"]["args"][1]["object"].value;
         let classReference = this.get_class_from_name(className, astBody)
+        console.log(astBody[lineNum]);
         if (classReference === false) throw new Error("could not find a definition for a class with this name!");
         return this.add_the_object_to_the_variable_bank(variable_bank, {
             name: variableName,
@@ -398,15 +414,14 @@ function TplHelper() {
     }
 
     this.get_class_constructor = function(classBody) {
-        for (const [key_class, value_class] of Object.entries(classBody)) {
-            for (const i in value_class) {
-                if (value_class[i].tag === "method" && value_class[i].name === "__init__") {
-                    lineNum = value_class[i].location.start.line - 1; // remove one line because tpl will advance one line
-                    return value_class[i];
-                }
-            }
+        if (classBody.body[0].name === "__init__" && classBody.body[0].tag === "method"){
+            return classBody.body[0];
         }
-        throw new Error("Could not find constructor in body of class.");
+        throw new Error("Class constructor is not properly defined.");
+    }
+
+    this.get_class_constructor_body_range = function(classBody) {
+        return classBody.body[0].location.end.line - classBody.body[0].location.start.line - 1;
     }
 
     this.is_loop_called_without_range = function(loop) {
