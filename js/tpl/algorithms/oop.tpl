@@ -35,6 +35,7 @@ function TPLAlgorithm() {
 
     [no_step]
     do {
+        [no_step]
         if (helper.check_instantiation(ast.body)){
             [prompt]
             "This is the instantiation of an object.";
@@ -50,11 +51,6 @@ function TPLAlgorithm() {
             let theClass;
             [no_step]
             theClass = helper.get_class_from_name(Let_us_look_at_the_class_definition.value, ast.body);
-
-            [no_step]
-            let lineOutsideClass;
-            [no_step]
-            lineOutsideClass = this_is_the_next_line_that_will_execute;
 
             [prompt]
             "Now we enter the constructor for this class.";
@@ -79,18 +75,43 @@ function TPLAlgorithm() {
                 "It assigns a value.";
 
                 [no_step]
-                helper.assign_value_within_object(variables, theConstructor.body[constructorIndex], it_defines_a_new_object_which_we_will_add_to_the_variable_bank);
+                helper.update_object_in_variable_bank(variables, it_defines_a_new_object_which_we_will_add_to_the_variable_bank, constructorIndex);
 
                 [no_step]
                 constructorIndex = constructorIndex + 1;
             }
+            
+
             [no_step]
-            this_is_the_next_line_that_will_execute = lineOutsideClass;
+            helper.go_next_line_without_reading();    
+            [no_step]
+            this_is_the_next_line_that_will_execute = helper.get_next_line(ast.body, this_is_the_next_line_that_will_execute);
+        } 
+
+
+        else [no_step] if (helper.this_is_a_function_call(ast.body)) {
+            this_is_the_next_line_that_will_execute = helper.get_next_line(ast.body, this_is_the_next_line_that_will_execute);
+            [no_step]
+            helper.evaluate_class_function(helper.get_expression(helper.get_next_line(ast.body)), variables);
             [no_step]
             helper.go_next_line_without_reading();
+        } 
+
+
+        else [no_step] if (helper.does_this_line_update_bank(ast.body)) {
+            this_is_the_next_line_that_will_execute = helper.get_next_line(ast.body, this_is_the_next_line_that_will_execute);
+            [no_step]
+            helper.add_local_variable(variables, ast);
+        } 
+        
+        else {
+            this_is_the_next_line_that_will_execute = helper.get_next_line(ast.body, this_is_the_next_line_that_will_execute);
+            [no_step]
+            helper.go_next_line_without_reading();
+            [prompt]
+            "Another situation? We need to add another case.";
         }
-    } while(helper.check_instantiation(ast.body));
-    
+    } while(helper.are_we_on_print_statement(ast) == false);
 
 
     [no_step] if (helper.this_is_a_print_statement(ast)) {
