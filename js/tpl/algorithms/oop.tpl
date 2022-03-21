@@ -102,3 +102,12 @@ function TPLAlgorithm() {
         "The print statement below prints out the value(s) that the function returned. Enter that solution in the solution box!";
     }
 }
+
+//Wanted layout for TPL at this moment: 
+//Skip class definitions until we get to first line which does not define a class.
+//Do {iterate through code} while no print statements (There should only ever be one print statement.)
+//If class instantiation, do {add to variable bank} while things in the class to instantiate, 
+//then go back to line previously at (class instantiation line) and read next line (lineOutsideClass is used for this).
+//Else if use a function, simulate the act of the function and change variable bank accordingly
+//Else do whatever that line does.
+//Once print is encountered, exit do while, find the print output and then ask for solution.
