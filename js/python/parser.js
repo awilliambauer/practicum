@@ -111,7 +111,7 @@ var python_parsing = function() {
             "+":1, "-":1, "*":1, "/":1, "!":1, "%":1,
             "+=":1, "-=":1, "*=":1, "/=":1, "%=":1,
             "&":1, "|":1, "and":1, "or":1, "\t":1,
-            "\n":1,
+            "\n":1, "**":1,
         };
 
         function iseof() {
@@ -643,7 +643,7 @@ var python_parsing = function() {
             switch (token.value) {
                 case ".": return 100;
                 case "(": case "[": return 90;
-                case "*": case "/": case "%": return 60;
+                case "*": case "/": case "%": case "**":return 60;
                 case "+":  case "-": return 50;
                 case "==": case "!=": case "<=": case ">=": case "<": case ">": return 40;
                 case "and": case "or": return 30;

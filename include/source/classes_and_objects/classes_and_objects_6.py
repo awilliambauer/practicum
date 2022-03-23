@@ -6,12 +6,12 @@ class Point:
 		self.y = self.inImage(y,height)
 
 	def inImage(self,n,distance):
-		if n < 0:
-			return 0
-		if n > distance:
-			return distance
+		if (n < 0):
+			return (0)
+		if (n > distance):
+			return (distance)
 		else:
-			return n
+			return (n)
 
 	def getDistance(self,point):
 		return ((((self.x - point.x)**2) + ((self.y-point.y)**2))**0.5)

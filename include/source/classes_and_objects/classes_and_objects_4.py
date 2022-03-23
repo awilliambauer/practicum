@@ -2,9 +2,10 @@ class Pets:
 	def __init__(self, animal, age, name):
 		self.type = animal
 		self.name = name
+		self.age = age
 
 	def getAge(self):
-		return(self.age)
+		return (self.age)
 
 	def birthday(self):
 		self.age = self.age + 1
@@ -18,7 +19,7 @@ class Owner:
 		pet = self.pet
 		return(pet.name)
 
-whiskers = Pets("cat",2,"Whiskers")
+whiskers = Pets("cat", 2,"Whiskers")
 david = Owner("David", whiskers)
 davidsPet = david.getPetName()
 print(davidsPet)

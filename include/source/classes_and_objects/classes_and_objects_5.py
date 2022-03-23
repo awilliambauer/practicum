@@ -15,3 +15,4 @@ class Point:
 
 p1 = Point(15,17)
 p2 = Point(16,54)
+print(p1.x, p2.y)

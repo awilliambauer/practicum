@@ -353,6 +353,7 @@ function TplHelper() {
         let className = astBody[lineNum]["expression"]["args"][1]["object"].value;
         let classReference = this.get_class_from_name(className, astBody)
         if (classReference === false) throw new Error("could not find a definition for a class with this name!");
+        this.convert_self_to_instance_name(classReference, variableName);
         return this.add_the_object_to_the_variable_bank(variable_bank, {
             name: variableName,
             reference: classReference,
@@ -386,11 +387,11 @@ function TplHelper() {
             // No match
             bank[instance_name].values.push(variable);
         }
-        return bank;
+        return variable;
     }
 
     this.add_the_object_to_the_variable_bank = function(bank, variable) {
-        // Variable.reference is the params of the init function of the correct class
+        // Variable.reference[0] is the init function of the correct class
         // Variable.values is the array of params that instantiate the class object
 
         let class_definition = variable.reference;
@@ -399,27 +400,82 @@ function TplHelper() {
         for (let i in parameters){
             param_list.push(parameters[i].name);
         }
-        let variable_bank_values = this.copy(variable.values);
+        let class_constructor_body = variable.reference.body[0].body;
+        let variable_bank_values = this.create_bank(class_constructor_body.length);
         let future_bank_values = [];
         
-        for (let idx = 0; idx < parameters.length; idx++) {
-            variable_bank_values[idx]["name"] = parameters[idx]["name"];
-            variable_bank_values[idx]["value"] = "";
-            variable_bank_values[idx]["hidden_val"] = sim.evaluate_expression(bank, variable.values[idx]).value;
-        }
-        
-        let class_constructor_body = variable.reference.body[0].body;
-        for (let idx = 0; idx < class_constructor_body.length; idx++) {
-            let declaration_identifier = class_constructor_body[idx].expression.args[0].name;
-            if (!param_list.includes(declaration_identifier)){
-                let future_value = {"name": declaration_identifier, "value": sim.evaluate_expression(bank, class_constructor_body[idx].expression.args[1]).value};
-                future_bank_values.push(future_value);
-            }
-        }
 
+        for (let idx = 0; idx < class_constructor_body.length; idx++) {
+            if(class_constructor_body[idx].tag === "declaration"){
+                if (class_constructor_body[idx].expression.args[1].hasOwnProperty("tag") && class_constructor_body[idx].expression.args[1].tag === "literal"){
+                    let declaration_identifier = class_constructor_body[idx].expression.args[0].name; //Case if setting a literal
+                    let declaration_value = class_constructor_body[idx].expression.args[1];
+                    variable_bank_values[idx]["name"] = declaration_identifier;
+                    variable_bank_values[idx]["value"] = "";
+                    variable_bank_values[idx]["hidden_val"] =  declaration_value.value;
+                    variable_bank_values[idx]["type"] =  declaration_value.type;
+                } else { //Case if setting a reference
+                    let declaration_identifier = class_constructor_body[idx].expression.args[0].name;
+                    let declaration_value = class_constructor_body[idx].expression.args[1];
+                    let declaration_type = "reference";
+                    if (declaration_value.tag === "identifier"){
+                        for(let i = 0; i < param_list.length; i++){
+                            let declaration_param_match = class_constructor_body[idx].expression.args[1]
+                            if (declaration_param_match.value === param_list[i]){
+                                declaration_value = variable.values[i];
+                                declaration_type = declaration_value.type;
+                                if (declaration_value.tag === "identifier"){
+                                    declaration_type = "instance";
+                                    declaration_value.value = bank[declaration_value.value];
+                                }
+                            }
+                        }
+                    }
+                    variable_bank_values[idx]["name"] = declaration_identifier;
+                    variable_bank_values[idx]["value"] = "";
+                    variable_bank_values[idx]["hidden_val"] = declaration_value.value;
+                    variable_bank_values[idx]["type"] =  declaration_type;
+                }
+            }
+            
+        }
+        // for (let idx = 0; idx < parameters.length; idx++) {
+        //     variable_bank_values[idx]["name"] = parameters[idx]["name"];
+        //     variable_bank_values[idx]["value"] = "";
+        //     let actual_val = variable.values[idx];
+        //     if (actual_val.hasOwnProperty("tag") && actual_val.tag === "literal"){
+        //         variable_bank_values[idx]["hidden_val"] = sim.evaluate_expression(bank, actual_val).value;
+        //     } else {
+        //         variable_bank_values[idx]["hidden_val"] = actual_val;
+        //         variable_bank_values[idx]["type"] = "instance";
+        //     }
+        // }
 
         bank[variable.name] = {type: 'object', name: variable.name, reference: variable.reference, values: variable_bank_values, undefined: future_bank_values, undefined_left: future_bank_values.length};
         return bank[variable.name];
+    }
+    this.convert_self_to_instance_name = function(node, instance_name){
+        for (const [key, value] of Object.entries(node)) {
+            if (value === "self"){
+                node[key] = instance_name;
+            } else {
+                if (this.has_children(node[key])){
+                    this.convert_self_to_instance_name(node[key], instance_name);
+                }      
+            }
+        }
+    }
+
+    this.create_bank = function(class_constructor_body_length){
+        let bank = [];
+        for(let i = 0; i < class_constructor_body_length; i++){
+            bank.push({});
+        }
+        return bank
+    }
+
+    this.has_children = function(node){
+        return (typeof node) === "object";
     }
 
     this.get_class_name = function(astBody) {
@@ -604,14 +660,11 @@ function TplHelper() {
 
     this.evaluate_class_function = function(stmt, variable_bank){
         let return_vals = sim.evaluate_expression(variable_bank, stmt);
-        for (let idx = 0; idx < return_vals.length; idx++){
-            if (return_vals[idx].type === "return"){
-                return return_vals[idx];
-            } else {
-                let object = variable_bank[stmt.object.object.value];
-                this.update_object_in_variable_bank(variable_bank, object, return_vals[idx]);
-            }           
-        }   
+        if (return_vals !== undefined){
+            if (return_vals.type === "return"){
+                return return_vals;
+            } 
+        }      
     }
 
     this.get_function = function(line){

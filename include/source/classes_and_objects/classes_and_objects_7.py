@@ -23,5 +23,4 @@ class Circle:
 
 p1 = Point(15,15)
 circle1 = Circle(p1,10)
-print(circle1.center.x)
-print(p1.x)
+print(circle1.center.x, p1.x)

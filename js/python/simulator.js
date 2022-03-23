@@ -12,34 +12,43 @@ var python_simulator = function() {
         if (!context || !expr || !expr.tag) throw new Error("invalid arguments to evaluate!");
 
         var arg1, arg2, obj, idx, arg1v, arg2v, r, args;
-
         switch (expr.tag) {
             case 'method':
-                args = [];
-                for(let idx = 0; idx < expr.body.length; idx++){
-                    args.push(evaluate_expression(context, expr.body[idx]));
+                for(let i = 0; i < expr.body.length; i++){
+                    var line_result = evaluate_expression(context, expr.body[i])
+                    if (line_result.type === "return"){
+                        return line_result;
+                    } else {
+                        let instance_name = expr.params[0].name;
+                        for (let j = 0; j < context[instance_name].values.length; j++) {
+                            if (context[instance_name].values[j].name === line_result.name) {
+                                context[instance_name].values[j].value = line_result.value;
+                                break;
+                            }
+                        }
+                    }
                 }
-                return args;
+                break;
             case 'expression':
                 switch (expr.expression.tag){
                     case "return":
-                      obj = evaluate_expression(context, expr.expression.args.value[0]);
-                      obj.type = "return";
-                      return obj;
-                }
-            case 'element':
-              let correct_val = null;
-              for(idx = 0; idx < context.values.length; idx++){
-                  if (context.values[idx].name == expr.name){
-                      correct_val = context.values[idx];
-                  }
-              }
-              if (correct_val === null) Error("Unable to evaluate class reference.");
-              return {type: correct_val.type, value: correct_val.value};
+                        obj = evaluate_expression(context, expr.expression.args.value[0]);
+                        obj.type = "return";
+                        return obj;
+                }   
+                
             case 'declaration':
-                obj = evaluate_expression(context, expr.expression);
-                obj.name = expr.expression.args[0].name;
-                return obj;
+                var exists = false;
+                arg1 = expr.expression.args[0];
+                if (context[arg1.value] !== undefined || arg1.tag === "reference"){
+                    exists = true;
+                } 
+                if (exists === false){
+                    context[arg1.value] = ({"type": "temp", "name": arg1.value, "value": null})
+                }
+                //If identifier does not exist, add to context temporarily (variable_bank)
+                //If it does, act as normal.
+                return evaluate_expression(context, expr.expression);
             case 'paren_expr':
                 return evaluate_expression(context, expr.value);
             case 'binop':
@@ -70,6 +79,8 @@ var python_simulator = function() {
                     return { type: "int", value: arg1v - arg2v };
                   case "*":
                     return { type: "int", value: arg1v * arg2v };
+                  case "**":
+                    return { type: "int", value: arg1v ** arg2v };
                   case "/":
                     return {
                       type: "int",
@@ -109,10 +120,7 @@ var python_simulator = function() {
                 return {type: expr.type, value: expr.value};
             case 'identifier':
                 r = context[expr.value];
-                if (!r && expr.value !== "self") throw new Error("unknown identifier " + expr.value);
-                if(expr.value === "self"){
-                    return expr;
-                }
+                if (!r) throw new Error("unknown identifier " + expr.value);
                 return r;
             case 'index':
                 obj = evaluate_expression(context, expr.object);
@@ -125,25 +133,56 @@ var python_simulator = function() {
                 obj = evaluate_expression(context, expr.object);
                 if (obj.type === 'array' && expr.name === 'length') {
                     return {type: 'int', value: obj.value.length};
-                } else if (obj.type === "object"){
+                } 
+                
+                else if (obj.type === "object"){
                     let correctVal = null;
-                    for(idx = 0; idx < obj.values.length; idx++){
-                        if (obj.values[idx].name == expr.name){
-                            correctVal = obj.values[idx];
+                    for(let i = 0; i < obj.values.length; i++){
+                        if (obj.values[i].name == expr.name){
+                            correctVal = obj.values[i];
                         }
                     }
                     if (correctVal === null) Error("Unable to evaluate class reference.");
-                    return {type: correctVal.type, value: correctVal.value};
-                } else if (obj.tag === "identifier"){
-                    return evaluate_expression(context, {tag: "element", name: expr.name});
-                } else {
+                    return {type: correctVal.type, name: correctVal.name, value: correctVal.value};
+                } else if (obj.type === "instance") {
+                    obj = obj.value
+                    let correctVal = null;
+                    for(let i = 0; i < obj.values.length; i++){
+                        if (obj.values[i].name == expr.name){
+                            correctVal = obj.values[i];
+                        }
+                    }
+                    if (correctVal === null) Error("Unable to evaluate instance reference.");
+                    return {type: correctVal.type, name: correctVal.name, value: correctVal.value};
+                } else if (obj.type === "temp") {
+                    idx = obj.name;
+                    obj = obj.value;
+                    let correctVal = null;
+                    for(let i = 0; i < obj.values.length; i++){
+                        if (obj.values[i].name == expr.name){
+                            correctVal = obj.values[i];
+                        }
+                    }
+                    delete context[idx];
+                    if (correctVal === null) Error("Unable to evaluate instance reference.");
+                    return {type: correctVal.type, name: correctVal.name, value: correctVal.value};
+                }
+
+                
+                else {
                     throw new Error("Unable to evaluate reference.");
                 }
             case 'call':
-                obj = expr.object;
+                obj = expr.object;     
                 args = [];
                 for (let arg of expr.args) {
-                    args.push(evaluate_expression(context, arg));
+                    if(obj.tag === "reference"){
+                        var class_name = obj.object.value;
+                        args.push(evaluate_expression(context[class_name], arg));
+                    } else {
+                        args.push(evaluate_expression(context, arg));
+                    }
+                    
                 }
                 if (obj.value === 'range') {
                     var val = [];
@@ -170,9 +209,9 @@ var python_simulator = function() {
                 } else if (obj.tag === 'reference'){
                     var reference_name = obj.name;
                     var instance_name = obj.object.value;
-                    for(let idx = 1; idx < context[instance_name].reference.body.length; idx++){
-                        if (context[instance_name].reference.body[idx].name === reference_name){
-                            return evaluate_expression(context[instance_name], context[instance_name].reference.body[idx]);
+                    for(let i = 1; i < context[instance_name].reference.body.length; i++){
+                        if (context[instance_name].reference.body[i].name === reference_name){
+                            return evaluate_expression(context, context[instance_name].reference.body[i]);
                         }
                     }
                     throw new Error("unable to find function call.")
