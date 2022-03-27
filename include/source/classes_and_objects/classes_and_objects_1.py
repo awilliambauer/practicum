@@ -5,3 +5,4 @@ class Pet:
 		self.home = "Minnesota"
 		self.name = name
 whiskers = Pet("cat", 2, "Whiskers")
+print(whiskers.age)

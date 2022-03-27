@@ -323,10 +323,22 @@
     margin-bottom: 15px;
 }
 
-.problem .bank_object .bank_object_box {
-    border: 2px solid red;
-    border-radius: 5px;
-    background-color: white;
+.bank_object_box {
+    stroke: red;
+    stroke-width: 2px;
+    rx: 5px;
+}
+
+.bank_object_vars {
+  font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
+  font-size: 14px;
+  fill: black;
+}
+
+.object-name {
+  font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
+  font-size: 14px;
+  fill: black;
 }
 
 .problem .array_label {

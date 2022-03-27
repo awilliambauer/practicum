@@ -250,18 +250,32 @@ var controller = (function() {
         }
     }
 
-    function getInstanceText(value, params, paramValues) {
-      var val = "";
-      for (var i = 1; i < params.length; i++) {
-        if (params[i].name == value[0].name){
-          val = paramValues[i-1].value;
+    function getInstanceText(bank, variable, idx) {
+        return(bank[variable].values[idx].name + " = " + bank[variable].values[idx].value);
+    }
+
+
+    function findWidth(text) {
+      var canvas = document.createElement('canvas'),
+          context = canvas.getContext('2d');
+      context.font = '14px Arial bold';
+      return Math.ceil(context.measureText(text).width) + 30;
+    }
+
+
+    function getHighlightX(i, data, dataValues) {
+      var x = 110;
+      for (let j = 0; j < i; j++) {
+        if (findWidth(data[j].name) > findWidth(dataValues[j].value)) {
+          x += findWidth(data[j].name) + 20;
+        } else {
+          x += findWidth(dataValues[j].value) + 20;
         }
       }
-      if (val == "") {
-        val = value[1].value;
-      }
-      return value[0].name + " = " + val;
+      return x;
     }
+
+
 
     function addVariableBank() {
         d3.select("#variable_list_table").node().innerHTML = "";
@@ -339,6 +353,7 @@ var controller = (function() {
                     //Put in Rebecca's d3 visualization here.
                     let div = d3.select("#variable_list_table").append('div').attr("class", "bank_object");
                     let svg = div.append('svg')
+<<<<<<< HEAD
                         .attr('fill', 'white');
 
                     let box = svg.append('rect')
@@ -390,6 +405,137 @@ var controller = (function() {
                     //console.log(variableBankObject[variable].reference.body[0].body);
                     //console.log(variableBankObject[variable]);
                     //console.log(variableBankObject[variable].values);
+=======
+                        .attr('width', 500)
+                        .attr('height', 300)
+                        .attr('fill', 'white');
+
+                    let box = svg.append('g');
+
+                    box.append('rect')
+                      .attr("class", "bank_object_box")
+                      //.attr('id', 'bank_object_box_' + variable)
+                      .attr("width", 170)
+                      .attr("height", 110)
+                      .attr('y', 1)
+                      .attr('x', 200)
+                      .attr('fill', 'white')
+                      .transition()
+                        .ease("linear")
+                        .duration(500)
+                        .attr('x', 100)
+                      .transition()
+                        .ease("linear")
+                        .duration(500)
+                        .attr('y', 70)
+                      .transition()
+                        .delay(3000)
+                        .ease("linear")
+                        .duration(500)
+                        .attr('y', 1)
+                      .transition()
+                        .attr('fill', "#ffd6d6");
+
+                    let paramBoxes = svg.append('g');
+
+                    paramBoxes.selectAll('rect')
+                      .data(variableBankObject[variable].reference.body[0].params.slice(1, variableBankObject[variable].reference.body[0].params.length))
+                      .enter()
+                      .append('rect')
+                        .attr('x', (d, i) => getHighlightX(i, variableBankObject[variable].reference.body[0].params.slice(1, variableBankObject[variable].reference.body[0].params.length), variableBankObject[variable].values))
+                        .attr('y', 1)
+                        .attr('width', (d, i) => findWidth(d.name) > findWidth(variableBankObject[variable].values[i].value) ? findWidth(d.name): findWidth(variableBankObject[variable].values[i].value))
+                        .attr('height', 50)
+                        .attr('fill', 'white')
+                        .attr('stroke', '#8bd8d4')
+                        .attr('stroke-width', "3px")
+                        .attr('opacity', 0)
+                        .transition()
+                          .delay(1500)
+                          .duration(500)
+                          .attr('opacity', 1)
+                        .transition()
+                          .duration(500)
+                          .attr('opacity', 0);
+
+                    let paramBoxVars = svg.append('g');
+
+                    paramBoxVars.selectAll('text')
+                      .data(variableBankObject[variable].reference.body[0].params.slice(1, variableBankObject[variable].reference.body[0].params.length))
+                      .enter()
+                      .append('text')
+                        .style('font', '14px Menlo,Monaco,Consolas,"Courier New",monospace')
+                        .style('fill', '#ff8080')
+                        .style('font-weight', 'bold')
+                        .attr('x', (d,i) => getHighlightX(i, variableBankObject[variable].reference.body[0].params.slice(1, variableBankObject[variable].reference.body[0].params.length), variableBankObject[variable].values) + 5)
+                        .attr('y', 20)
+                        .attr('opacity', 0)
+                        .text(d => d.name)
+                        .transition()
+                          .delay(1000)
+                          .duration(500)
+                          .attr('opacity', 1)
+                        .transition()
+                          .delay(3000)
+                          .duration(0)
+                          .attr('opacity', 0);
+
+                    let paramBoxVals = svg.append('g');
+
+                    paramBoxVals.selectAll('text')
+                        .data(variableBankObject[variable].reference.body[0].params.slice(1, variableBankObject[variable].reference.body[0].params.length))
+                        .enter()
+                        .append('text')
+                          .style('font', '14px Menlo,Monaco,Consolas,"Courier New",monospace')
+                          .style('fill', '#ff8080')
+                          .attr('x', (d,i) => getHighlightX(i, variableBankObject[variable].reference.body[0].params.slice(1, variableBankObject[variable].reference.body[0].params.length), variableBankObject[variable].values) + 5)
+                          .attr('y', 40)
+                          .attr('opacity', 0)
+                          .text((d, i) => variableBankObject[variable].values[i].value)
+                          .transition()
+                            .delay(1000)
+                            .duration(500)
+                            .attr('opacity', 1)
+                          .transition()
+                            .delay(3000)
+                            .duration(0)
+                            .attr('opacity', 0);
+
+                    let variables = svg.append('g');
+
+                    variables.selectAll('text')
+                      .data(variableBankObject[variable].values)
+                      .enter()
+                      .append('text')
+                        .attr('class', 'bank_object_vars')
+                        .attr('x', 110)
+                        .attr('y', (d, i) => 90 + i*25)
+                        .attr('opacity', 0)
+                        .text((d, i) => getInstanceText(variableBankObject, variable, i))
+                        .transition()
+                          .delay(1000)
+                          .duration(500)
+                          .attr('opacity', 1)
+                        .transition()
+                          .delay(3000)
+                          .ease("linear")
+                          .duration(500)
+                          .attr('y', (d, i) => 21 + i*25);
+
+                    let objectName = svg.append('g');
+
+                    objectName.append('text')
+                      .attr('class', 'object-name')
+                      .attr('x', 0)
+                      .attr('y', 60)
+                      .attr('opacity', 0)
+                      .text(variable + " =")
+                      .transition()
+                        .delay(5000)
+                        .duration(500)
+                        .attr('opacity', 1);
+                    // object = d3.select("#variable_list_table").append("div").attr("class", "bank_object");
+>>>>>>> 233552d81e37c5246027529abfc09b488947e065
                     // for(let idx = 0; idx < variableBankObject[variable].values.length; idx++){
                     //     listRow = d3.select(".bank_object").append("tr").attr("class", "variable_list_table_row");
                     //     listCell1 = listRow.append("td");
@@ -398,7 +544,11 @@ var controller = (function() {
                     //     listCell1
                     //         .append("span")
                     //         .attr("class", "bank_variable")
+<<<<<<< HEAD
                     //         .text(variableBankObject[variable].reference.body[0].params[idx+1].name);
+=======
+                    //         .text(variableBankObject[variable].values[idx].name);
+>>>>>>> 233552d81e37c5246027529abfc09b488947e065
                     //     listCell1.append("span").text(" :");
                     //     listCell2.attr("style", "text-align: left;");
                     //     listCell2

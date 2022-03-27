@@ -101,7 +101,18 @@ var python_simulator = function() {
                 obj = evaluate_expression(context, expr.object);
                 if (obj.type === 'array' && expr.name === 'length') {
                     return {type: 'int', value: obj.value.length};
-                } else {
+                } 
+                else if (obj.type === "object"){
+                    let correctVal = null;
+                    for(idx = 0; idx < obj.values.length; idx++){
+                        if (obj.values[idx].name == expr.name){
+                            correctVal = obj.values[idx];
+                        }
+                    }
+                    if (correctVal === null) Error("Unable to evaluate class reference.");
+                    return {type: correctVal.type, value: correctVal.value};
+                }
+                else {
                     throw new Error("Unable to evaluate reference.");
                 }
             case 'call':
