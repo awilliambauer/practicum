@@ -31,5 +31,7 @@ professor.addStudent(student1)
 professor.addStudent(student2)
 
 roster = professor.roster
+name_roster = []
 for i in range(len(roster)):
-	print(roster[i].name)
+	name_roster.append(roster[i].name)
+print(name_roster)

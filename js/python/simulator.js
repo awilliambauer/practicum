@@ -12,6 +12,9 @@ var python_simulator = function() {
         if (!context || !expr || !expr.tag) throw new Error("invalid arguments to evaluate!");
 
         var arg1, arg2, obj, idx, arg1v, arg2v, r, args;
+        // console.log(expr);
+        // console.log(expr.tag);
+        // console.log(" ");
         switch (expr.tag) {
             case 'method':
                 for(let i = 0; i < expr.body.length; i++){
@@ -52,6 +55,7 @@ var python_simulator = function() {
             case 'paren_expr':
                 return evaluate_expression(context, expr.value);
             case 'binop':
+
                 arg1 = evaluate_expression(context, expr.args[0]);
                 arg2 = evaluate_expression(context, expr.args[1]);
                 arg1v = arg1.value;
@@ -120,6 +124,20 @@ var python_simulator = function() {
                 return {type: expr.type, value: expr.value};
             case 'identifier':
                 r = context[expr.value];
+                if (r === undefined){
+                    if (expr.value.type === "object"){
+                        r = context[expr.value.name];
+                    } else if (context.name === expr.value){
+                        r = context;
+                    } else if (context.hasOwnProperty("values")) {
+                        for (let i = 0; i < context.values.length; i++){
+                            if (context.values[i].name === expr.value){
+                                r = {"value": context.values[i].value, "type": context.values[i].type};
+                                break;
+                            }
+                        }
+                    } 
+                }
                 if (!r) throw new Error("unknown identifier " + expr.value);
                 return r;
             case 'index':

@@ -4,7 +4,6 @@ class Pets:
 		self.age = age
 		self.home = "Minnesota"
 		self.name = name
-
 whiskers = Pets("cat",2,"Whiskers")
 buster = Pets("dog",4,"Buster")
 print(whiskers.type, buster.type)
