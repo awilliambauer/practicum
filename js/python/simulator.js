@@ -12,6 +12,7 @@ var python_simulator = function() {
         if (!context || !expr || !expr.tag) throw new Error("invalid arguments to evaluate!");
 
         var arg1, arg2, obj, idx, arg1v, arg2v, r, args;
+        // console.log(context);
         // console.log(expr);
         // console.log(expr.tag);
         // console.log(" ");
@@ -172,7 +173,7 @@ var python_simulator = function() {
                     }
                     if (correctVal === null) Error("Unable to evaluate instance reference.");
                     return {type: correctVal.type, name: correctVal.name, value: correctVal.value};
-                } else if (obj.type === "temp") {
+                } else if (obj.type === "temp" || obj.temp === "temp") {
                     idx = obj.name;
                     obj = obj.value;
                     let correctVal = null;
@@ -181,14 +182,14 @@ var python_simulator = function() {
                             correctVal = obj.values[i];
                         }
                     }
-                    delete context[idx];
                     if (correctVal === null) Error("Unable to evaluate instance reference.");
                     return {type: correctVal.type, name: correctVal.name, value: correctVal.value};
                 }
 
                 
                 else {
-                    throw new Error("Unable to evaluate reference.");
+                    console.log(obj);
+                    throw new Error("Unable to evaluate reference:");
                 }
             case 'call':
                 obj = expr.object;     

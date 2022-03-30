@@ -23,8 +23,6 @@ function TPLAlgorithm() {
     let this_is_the_next_line_that_will_execute: Line;
     this_is_the_next_line_that_will_execute = helper.get_next_line(ast.body, this_is_the_next_line_that_will_execute);
     
-    
-    
     [no_step]
     while(helper.check_instantiation(ast.body) == false){
         [prompt]
@@ -60,7 +58,6 @@ function TPLAlgorithm() {
             [no_step]
             theConstructor = helper.get_class_constructor(theClass);
 
-            
             let constructorIndex;
             [no_step]
             constructorIndex = 0;
@@ -275,7 +272,6 @@ function TPLAlgorithm() {
             this_is_the_next_line_that_will_execute = helper.get_next_line(ast.body, this_is_the_next_line_that_will_execute);
         } 
 
-
         else [no_step] if (helper.line_has_a_function_call(this_is_the_next_line_that_will_execute)){
             [prompt]
             "This line has a function call.";
@@ -305,6 +301,15 @@ function TPLAlgorithm() {
             result = null;
 
             this_is_the_next_line_that_will_execute = functionDefinition;
+
+            [no_step]
+            if (helper.has_params_to_add(functionDefinition)){
+                let param_values;
+                [no_step]
+                param_values = helper.get_param_values(variables, functionCall, functionDefinition);
+                [no_step]
+                variables = helper.add_temp_param_variables(variables, param_values);
+            }
 
             [prompt]
             "This is the function definition.";
@@ -337,7 +342,7 @@ function TPLAlgorithm() {
                     }
                 } else [no_step] if (helper.are_we_on_return_statement(this_is_the_next_line_that_will_execute)){
                     [no_step]
-                    result = helper.get_line_result(variables[classReference], this_is_the_next_line_that_will_execute);
+                    result = helper.get_line_result(variables, this_is_the_next_line_that_will_execute);
                     break;
                 } else [no_step] if (helper.is_if(this_is_the_next_line_that_will_execute)) {
                     [prompt]
@@ -454,7 +459,6 @@ function TPLAlgorithm() {
             [no_step]
             helper.go_next_line_without_reading();
             this_is_the_next_line_that_will_execute = helper.get_next_line(ast.body, this_is_the_next_line_that_will_execute);
-
         }
     } while(helper.are_we_on_print_statement(ast) == false);
 

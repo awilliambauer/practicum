@@ -430,7 +430,7 @@ var controller = (function() {
                     let paramBoxVals = svg.append('g');
 
                     paramBoxVals.selectAll('text')
-                        .data(variableBankObject[variable].reference.body[0].params.slice(1, variableBankObject[variable].reference.body[0].params.length))
+                        .data(variableBankObject[variable].params)
                         .enter()
                         .append('text')
                           .style('font', '14px Menlo,Monaco,Consolas,"Courier New",monospace')
@@ -438,7 +438,7 @@ var controller = (function() {
                           .attr('x', (d,i) => getHighlightX(i, variableBankObject[variable].reference.body[0].params.slice(1, variableBankObject[variable].reference.body[0].params.length), variableBankObject[variable].values) + 5)
                           .attr('y', 40)
                           .attr('opacity', 0)
-                          .text((d, i) => variableBankObject[variable].values[i].value)
+                          .text((d, i) => variableBankObject[variable].params[i].value)
                           .transition()
                             .delay(1000)
                             .duration(500)

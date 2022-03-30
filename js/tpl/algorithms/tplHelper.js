@@ -351,30 +351,47 @@ function TplHelper() {
         let param_values = [];
         let call_params = this.copy(function_call.args);
         let def_params = function_definition.params.slice(1);
-        for(const [key, value] of Object.entries(instance.params)){
-            for (let idx = 0; idx < function_call.args.length; idx++){
-                if (key === call_params[idx].value){
-                    param_values.push({name: def_params[idx].name, value: value.value});
-                    call_params[idx].value = null;
+        if (instance.hasOwnProperty("params")){
+            for(let jdx = 0; jdx < instance.params.length; jdx++){
+                for (let idx = 0; idx < function_call.args.length; idx++){
+                    if (instance.params[jdx].name === call_params[idx].value){
+                        param_values.push({name: def_params[idx].name, value: instance.params[jdx].value});
+                        call_params[idx].value = null;
+                    }
                 }
             }
-        }
-        for(let jdx = 0; jdx < instance.values.length; jdx++){
-            let curr_value = instance.values[jdx];
-            for (let idx = 0; idx < function_call.args.length; idx++){
-                if (curr_value.name === call_params[idx].value){
-                    param_values.push({name: def_params[idx].name, value: curr_value.value});
+            for(let jdx = 0; jdx < instance.values.length; jdx++){
+                let curr_value = instance.values[jdx];
+                for (let idx = 0; idx < function_call.args.length; idx++){
+                    if (curr_value.name === call_params[idx].value){
+                        param_values.push({name: def_params[idx].name, value: curr_value.value});
+                    }
                 }
             }
+            return param_values;
+        } else {
+            for(const [key, value] of Object.entries(instance)){
+                for (let idx = 0; idx < function_call.args.length; idx++){
+                    if (key === call_params[idx].value){
+                        param_values.push({name: def_params[idx].name, value: value});
+                        call_params[idx].value = null;
+                    }
+                }
+            }
+            return param_values; 
         }
-        return param_values;
+        
     }
 
     this.add_temp_param_variables = function(variable_bank, param_values){
         for (let idx = 0; idx < param_values.length; idx++){
+            let tag = "literal";
+            if (param_values[idx].value.type === "object") {
+                tag = "reference";
+            }
             variable_bank[param_values[idx].name] = {
                 name: param_values[idx].name, 
-                tag: "literal",
+                tag: tag,
                 temp: "temp", 
                 value: param_values[idx].value
             };
@@ -483,9 +500,10 @@ function TplHelper() {
         }
         
 
-        bank[variable.name] = {type: 'object', name: variable.name, reference: variable.reference, values: variable_bank_values, params: {}};
+        bank[variable.name] = {type: 'object', name: variable.name, reference: variable.reference, values: variable_bank_values, params: []};
         for (let idx = 0; idx < parameters.length; idx++) {
-            bank[variable.name].params[param_list[idx]] = sim.evaluate_expression(bank, variable.values[idx]);
+            bank[variable.name].params.push(sim.evaluate_expression(bank, variable.values[idx]));
+            bank[variable.name].params[idx].name = param_list[idx];
         }
         return bank[variable.name];
     }
@@ -564,6 +582,7 @@ function TplHelper() {
 
     this.get_class_method_body_range = function(method) {
         return method.location.end.line - method.location.start.line - 1;
+
     }
 
     this.get_value_for_update = function(function_line, new_value) {
