@@ -71,6 +71,7 @@ var python_parsing = function() {
         KEYWORD: "KEYWORD",
         SYMBOL: "SYMBOL",
         IDENTIFIER: "IDENTIFIER",
+        BOOL_LITERAL: "BOOL_LITERAL",
         INT_LITERAL: "INT_LITERAL",
         DOUBLE_LITERAL: "DOUBLE_LITERAL",
         STR_LITERAL: "STR_LITERAL",
@@ -84,6 +85,7 @@ var python_parsing = function() {
         integer: function(v) { return {type:TokenType.INT_LITERAL, value:v}; },
         double: function(v) { return {type:TokenType.DOUBLE_LITERAL, value:v}; },
         string: function(v) { return {type:TokenType.STR_LITERAL, value:v}; },
+        boolean: function(v) { return {type:TokenType.BOOL_LITERAL, value: v}},
     };
 
     function token_to_string(t) {
@@ -101,7 +103,8 @@ var python_parsing = function() {
 
         var keywords = {
             "def":1, "return":1, "break":1, "continue":1, "print":1,
-            "for":1, "in":1, "if":1, "else":1, "elif":1, "while":1, "class": 1
+            "for":1, "in":1, "if":1, "else":1, "elif":1, "while":1, "class": 1, //TODO: add True, False
+            
         };
 
         var symbols = {
@@ -111,7 +114,7 @@ var python_parsing = function() {
             "+":1, "-":1, "*":1, "/":1, "!":1, "%":1,
             "+=":1, "-=":1, "*=":1, "/=":1, "%=":1,
             "&":1, "|":1, "and":1, "or":1, "\t":1,
-            "\n":1, "**":1,
+            "\n":1, "**":1, "True":1, "False": 1
         };
 
         function iseof() {
@@ -184,8 +187,11 @@ var python_parsing = function() {
                     ident += c;
                 }
                 token = ident in keywords ? Token.keyword(ident) : Token.identifier(ident);
-                // ONLY for "and" and "or" case.
-                if (ident in symbols) {
+                // ONLY for "and" and "or" case. And True, False case.
+                if (ident in symbols && (ident[0] === "T" || ident[0] === "F")) {
+                    token = ident in symbols ? Token.boolean(ident) : Token.identifier(ident);
+                }
+                else if (ident in symbols) {
                   token = ident in symbols ? Token.symbol(ident) : Token.identifier(ident);
                 }
             } 
@@ -558,10 +564,6 @@ var python_parsing = function() {
             }
             return left;
         }
-        
-        function match_new_line() {
-            
-        }
 
         // match prefix operators or sub-expressions of operators
         function match_prefix() {
@@ -570,6 +572,8 @@ var python_parsing = function() {
 
             switch (t.type) {
                 // literals
+                case TokenType.BOOL_LITERAL:
+                    return {id:new_id(), location:location(start), tag:'literal', type:'bool', value: ((t.value === "True") ? true : false)};
                 case TokenType.INT_LITERAL:
                     return {id:new_id(), location:location(start), tag:'literal', type:'int', value:t.value};
                 case TokenType.DOUBLE_LITERAL:

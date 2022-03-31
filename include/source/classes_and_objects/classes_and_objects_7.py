@@ -7,7 +7,7 @@ class Point:
 	def inImage(self,n,distance):
 		if (n < 0):
 			return (0)
-		if (n > distance):
+		elif (n > distance):
 			return (distance)
 		else:
 			return (n)

@@ -309,6 +309,17 @@ function TplHelper() {
         return ast.body[lineNum].expression.args[1].object.value;
     }
 
+    this.get_references = function(line){
+        if (line.tag === "declaration") {
+            let arg1 = line.expression.args[0];
+            if (arg1.hasOwnProperty("object")){
+                return arg1.object;
+            }
+            
+        }
+        return null;
+    }
+
     this.initialize_loop_iterable = function(variable_bank, iterable, is_inner) {
         iterable = sim.evaluate_expression(variable_bank, iterable);
         if ((iterable.type !== 'array') && (iterable.type !== 'string')) throw new Error("for loop iterable isn't an array or string")
@@ -341,6 +352,9 @@ function TplHelper() {
 
     this.add_temp_variable = function(variable_bank, line) {
         let temp_name = line.expression.args[0].name;
+        if (temp_name === undefined){
+            temp_name = line.expression.args[0].value;
+        }
         let temp_value = sim.evaluate_expression(variable_bank, line.expression.args[1]).value;
         let temp_type = "temp";
         variable_bank[temp_name] = {name: temp_name, value: temp_value, type: temp_type};
@@ -353,8 +367,12 @@ function TplHelper() {
         let def_params = function_definition.params.slice(1);
         if (instance.hasOwnProperty("params")){
             for(let jdx = 0; jdx < instance.params.length; jdx++){
-                for (let idx = 0; idx < function_call.args.length; idx++){
-                    if (instance.params[jdx].name === call_params[idx].value){
+                for (let idx = 0; idx < call_params.length; idx++){
+                    if (call_params[idx].tag === "literal"){
+                        param_values.push({name: def_params[idx].name, value: call_params[idx].value});
+                        call_params[idx].tag = null;
+                    }
+                    else if (instance.params[jdx].name === call_params[idx].value){
                         param_values.push({name: def_params[idx].name, value: instance.params[jdx].value});
                         call_params[idx].value = null;
                     }
@@ -362,8 +380,12 @@ function TplHelper() {
             }
             for(let jdx = 0; jdx < instance.values.length; jdx++){
                 let curr_value = instance.values[jdx];
-                for (let idx = 0; idx < function_call.args.length; idx++){
-                    if (curr_value.name === call_params[idx].value){
+                for (let idx = 0; idx < call_params.length; idx++){
+                    if (call_params[idx].tag === "literal"){
+                        param_values.push({name: def_params[idx].name, value: call_params[idx].value});
+                        call_params[idx].tag = null;
+                    }
+                    else if (curr_value.name === call_params[idx].value){
                         param_values.push({name: def_params[idx].name, value: curr_value.value});
                     }
                 }
@@ -371,8 +393,12 @@ function TplHelper() {
             return param_values;
         } else {
             for(const [key, value] of Object.entries(instance)){
-                for (let idx = 0; idx < function_call.args.length; idx++){
-                    if (key === call_params[idx].value){
+                for (let idx = 0; idx < call_params.length; idx++){
+                    if (call_params[idx].tag === "literal"){
+                        param_values.push({name: def_params[idx].name, value: call_params[idx].value});
+                        call_params[idx].tag = null;
+                    }
+                    else if (key === call_params[idx].value){
                         param_values.push({name: def_params[idx].name, value: value});
                         call_params[idx].value = null;
                     }
@@ -401,7 +427,7 @@ function TplHelper() {
 
     this.remove_temp_vars = function(variable_bank) {
         for (const [key, value] of Object.entries(variable_bank)){
-            if (value.temp === "temp"){
+            if (value.temp === "temp" || value.type === "temp"){
                 value.value = null;
                 delete variable_bank[key];
             }
@@ -431,12 +457,40 @@ function TplHelper() {
             }
         }
         else {
+            if (variable.hasOwnProperty("reference") && variable.reference !== null){
+                let references = [variable.reference.name];
+                let curr_obj = variable.reference;
+                while (curr_obj.hasOwnProperty("object")){
+                    references.push(curr_obj.object.value);
+                    curr_obj = curr_obj.object;
+                }
+                
+                let relevant_object = object;
+                for (let jdx = references.length; jdx > 0; jdx--){
+                    if (relevant_object.hasOwnProperty("values")){
+                        for (let idx = 0; idx < relevant_object.values.length; idx++) {
+                            if (relevant_object.values[idx].name === references[jdx-1]) {
+                                relevant_object = relevant_object.values[idx]; 
+                                break; 
+                            }
+                        }
+                    }
+                }
+                for (let i = 0; i < relevant_object.value.values.length; i++) {
+                    if (relevant_object.value.values[i].name === variable.name) {
+                        // Find a match
+                        relevant_object.value.values[i].value = variable.value;
+                        return object;
+                    } // Need to add here to check if the reference is depth of two or one etc.
+                }
+                
+            }
             for (let idx = 0; idx < object.values.length; idx++) {
                 if (object.values[idx].name === variable.name) {
                     // Find a match
                     object.values[idx].value = variable.value;
                     return object;
-                }
+                } // Need to add here to check if the reference is depth of two or one etc.
             }
             // No match
             object.values.push(variable);
@@ -509,7 +563,10 @@ function TplHelper() {
     }
 
     this.get_line_result = function(bank, line) {
-        return sim.evaluate_expression(bank, line);
+        let reference = this.get_references(line);
+        let result = sim.evaluate_expression(bank, line);
+        result.reference = reference;
+        return result;
     }
 
     this.convert_self_to_instance_name = function(node, instance_name){
@@ -560,6 +617,12 @@ function TplHelper() {
             if (reference.object.tag === "identifier"){
                 return false;
             }
+            else if (reference.object.tag === "reference"){
+                if (reference.object.object.tag === "identifier"){
+                    return false;
+                }
+            }
+        
         }
         for(const [key, value] in Object.entries(bank)){
             if (key === reference.name){
@@ -597,6 +660,15 @@ function TplHelper() {
         let prev_line;
         let curr_line = function_definition.body[0];
         let in_then_branch = false;
+        let if_length = 0;
+        for (let idx = 0; idx < index; idx++){
+            if(function_definition.body[idx] !== undefined){
+                if(this.is_if(function_definition.body[idx])){
+                    if_length += function_definition.body[idx].location.end.line - function_definition.body[idx].location.start.line - 1;
+                }
+            }
+            
+        }
         if(curr_line.tag === "if"){
             while ((curr_line.location.start.line - start_line) !== (index+1)){
                 if (in_then_branch === false){
@@ -621,7 +693,7 @@ function TplHelper() {
                 }
             }
         } else {
-            return function_definition.body[index];
+            return function_definition.body[index - if_length];
         }
         return curr_line;
     }
@@ -842,7 +914,6 @@ function TplHelper() {
                 print_vals[i] = sim.evaluate_expression(variable_bank, print_args[i]);
             }
         }
-    
         return this.create_print_string(print_vals, "");
     };
 

@@ -5,9 +5,9 @@ class Point:
 		self.x = self.inImage(x,width)
 		self.y = self.inImage(y,height)
 	def inImage(self,n,distance):
-		if n < 0:
+		if (n < 0):
 			return (0)
-		elif n > distance:
+		elif (n > distance):
 			return (distance)
 		else:
 			return (n)

@@ -317,6 +317,7 @@ function TPLAlgorithm() {
             [no_step]
             do {
                 this_is_the_next_line_that_will_execute = helper.get_function_body_line(functionDefinition, bodyIndex);
+
                 [no_step] if (helper.does_this_stmt_update_bank(this_is_the_next_line_that_will_execute)){
                     let arg1;
                     let arg2;
@@ -333,12 +334,12 @@ function TPLAlgorithm() {
                         temp = helper.add_temp_variable(variables, this_is_the_next_line_that_will_execute);
                     } else {
                         [prompt]
-                        "ol variable";
+                        "old variable";
                         let result;
                         [no_step]
                         result = helper.get_line_result(variables, this_is_the_next_line_that_will_execute);
-                        variables[classReference] = helper.update_object_in_variable_bank(variables, variables[classReference], result);
-                        
+                        [no_step]
+                        variables[classReference] = helper.update_object_in_variable_bank(variables, variables[classReference], result); 
                     }
                 } else [no_step] if (helper.are_we_on_return_statement(this_is_the_next_line_that_will_execute)){
                     [no_step]
@@ -354,12 +355,6 @@ function TPLAlgorithm() {
                     if (helper.does_this_conditional_evaluate_to_true(variables, this_is_the_conditional_of_the_if_statement)) {
                         [prompt]
                         "Since it’s true we move on to the lines inside of this code block.";
-
-                        [no_step]
-                        parent = this_is_the_next_line_that_will_execute;
-
-                        [no_step]
-                        condition_outcome = true;
                     } else {
                         [prompt]
                         "Since it’s false we will be ignoring all of the lines in this code block.";
@@ -381,10 +376,6 @@ function TPLAlgorithm() {
                             if (helper.does_this_conditional_evaluate_to_true(variables, this_is_the_conditional_of_an_elif_statement)) {
                                 [prompt]
                                 "Since it’s true we move on to the lines inside of this code block.";
-                                [no_step]
-                                parent = this_is_the_next_line_that_will_execute;
-                                [no_step]
-                                condition_outcome = true;
                             } else {
                                 [no_step]
                                 bodyIndex = bodyIndex + 2;
@@ -396,26 +387,20 @@ function TPLAlgorithm() {
                                 if (helper.has_else(this_is_the_next_line_that_will_execute)) {
                                     [prompt]
                                     "Since all previous if and elif statements were false we automatically move into the else case.";
-                                    [no_step]
-                                    parent = this_is_the_next_line_that_will_execute;
-                                    [no_step]
-                                    condition_outcome = false;
-                                } else {
-                                    break;
                                 }
+                                else {
+                                    bodyIndex = bodyIndex - 1;
+                                } 
                             }
                         } else {
                             [no_step]
                             if (helper.has_else(this_is_the_next_line_that_will_execute)) {
                                 [prompt]
                                 "Since all previous if and elif statements were false we automatically move into the else case.";
-                                [no_step]
-                                parent = this_is_the_next_line_that_will_execute;
-                                [no_step]
-                                condition_outcome = false;
                             } else {
-                                break;
-                            }
+                                [no_step]
+                                bodyIndex = bodyIndex - 1;
+                            } 
                         } 
                     } 
                 } 
@@ -444,11 +429,13 @@ function TPLAlgorithm() {
                     let toChange;
                     [no_step]
                     toChange = helper.get_value_for_update(functionLine, result.value);
+                    [no_step]
                     it_defines_a_new_object_which_we_will_add_to_the_variable_bank = helper.update_object_in_variable_bank(variables, it_defines_a_new_object_which_we_will_add_to_the_variable_bank, toChange);
                 }
             }
             [no_step]
             variables = helper.remove_temp_vars(variables);
+            [no_step]
             helper.go_next_line_without_reading();
             this_is_the_next_line_that_will_execute = helper.get_next_line(ast.body, this_is_the_next_line_that_will_execute);
         }
@@ -464,7 +451,6 @@ function TPLAlgorithm() {
 
     [no_step]
     if (helper.this_is_a_print_statement(ast)) {
-        [interactive("next_line")] this_is_the_next_line_that_will_execute = helper.get_print_statement(ast);
         let the_print_function_prints_out_the_values_passed_to_it;
         the_print_function_prints_out_the_values_passed_to_it = helper.get_print_output(this_is_the_next_line_that_will_execute, variables);
         [prompt]

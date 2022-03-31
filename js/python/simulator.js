@@ -188,7 +188,6 @@ var python_simulator = function() {
 
                 
                 else {
-                    console.log(obj);
                     throw new Error("Unable to evaluate reference:");
                 }
             case 'call':
