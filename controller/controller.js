@@ -12,7 +12,7 @@ var controller = (function() {
     var numTries;
     var button;
     var bankStatus = {};
-    var objectSteps = ["createBox", "addAndHighlight", "finalize", "done"];
+    var objectSteps = ["createBox", "addAndHighlight", "done"];
     var trackHighlights = -3;
 
     function initialize(problemConfig, simulatorInterface_, initialState, task_logger, fading) {
@@ -258,6 +258,12 @@ var controller = (function() {
       var value = "";
       if (bank[variable].values[idx].type === "string" && bank[variable].values[idx].value !== "") {
         value = "'" + bank[variable].values[idx].value + "'";
+      } else if (bank[variable].values[idx].type === "instance" && bank[variable].values[idx].value !== "") {
+        if (bank[variable].values[idx].value.reference.name === "Pets") {
+          value = bank[variable].values[idx].value.reference.name + ": " + bank[variable].values[idx].value.values[1]["value"];
+        } else if (bank[variable].values[idx].value.reference.name == "Point") {
+          value = bank[variable].values[idx].value.reference.name + ": (" + bank[variable].values[idx].value.values[2]["value"] + ", " + bank[variable].values[idx].value.values[3]["value"] + ")";
+        }
       } else {
         value = bank[variable].values[idx].value;
       }
@@ -279,6 +285,12 @@ var controller = (function() {
       var value = "";
       if (val.type === "string") {
         value = "'" + val.value + "'";
+      } else if (val.type == "object") {
+        if (val.reference.name == "Pets") {
+          value = val.reference.name + ": " + val.values[1]["value"];
+        } else if (val.reference.name == "Point") {
+          value = val.reference.name + ": (" + val.values[2]["value"] + ", " + val.values[3]["value"] + ")";
+        }
       } else {
         value = val.value;
       }
@@ -287,7 +299,8 @@ var controller = (function() {
 
 
     function findOpacity(v, values){
-      if (matchIndex(v, values) === trackHighlights/2) {
+      var idx = matchIndex(v, values);
+      if ((values[idx].value !== "") && (idx === values.length -1 || values[idx+1].value === "") && trackHighlights%2 == 0) {
         return 1;
       } else {
         return 0;
@@ -299,7 +312,7 @@ var controller = (function() {
       var canvas = document.createElement('canvas'),
           context = canvas.getContext('2d');
       context.font = '14px Arial bold';
-      return Math.ceil(context.measureText(text).width) + 30;
+      return Math.ceil(context.measureText(text).width) + 50;
     }
 
 
@@ -391,10 +404,11 @@ var controller = (function() {
                 }
                 else if (variableBankObject[variable].hasOwnProperty("type") && variableBankObject[variable].type === 'object') {
                     //Put in Rebecca's d3 visualization here.
+                    //console.log(variableBankObject[variable].values);
                     if (!(variable in bankStatus)) {
                       bankStatus[variable] = objectSteps[0];
                     }
-                    if (bankStatus[variable] == objectSteps[0]) {
+                    if (bankStatus[variable] === objectSteps[0]) {
                       let div = d3.select("#variable_list_table").append('div').attr("class", "bank_object");
                       let svg = div.append('svg')
                           .attr('width', 500)
@@ -405,8 +419,8 @@ var controller = (function() {
 
                       box.append('rect')
                         .attr("class", "bank_object_box")
-                        .attr("width", 170)
-                        .attr("height", 110)
+                        .attr("width", 220)
+                        .attr("height", variableBankObject[variable].values.length*25+10)
                         .attr('y', 1)
                         .attr('x', 200)
                         .attr('fill', 'white')
@@ -418,13 +432,26 @@ var controller = (function() {
                           .ease("linear")
                           .duration(500)
                           .attr('y', 70);
-                        bankStatus[variable] = objectSteps[1];
 
-                    } else if (bankStatus[variable] == objectSteps[1]) {
-                      if (variableBankObject[variable].values[variableBankObject[variable].values.length-1].value != "") {
-                        bankStatus[variable] = objectSteps[2];
-                      }
+                      let variables = svg.append('g');
 
+                      variables.selectAll('text')
+                        .data(variableBankObject[variable].values)
+                        .enter()
+                        .append('text')
+                          .attr('class', 'bank_object_vars bank_object_vars_' + variable)
+                          .attr('x', 110)
+                          .attr('y', (d, i) => 90 + i*25)
+                          .attr('opacity', 0)
+                          .text((d, i) => getInstanceText(variableBankObject, variable, i))
+                          .transition()
+                            .delay(1000)
+                            .duration(0)
+                            .attr('opacity', 1)
+
+                      bankStatus[variable] = objectSteps[1];
+
+                    } else if (bankStatus[variable] === objectSteps[1]) {
                       let div = d3.select("#variable_list_table").append('div').attr("class", "bank_object");
                       let svg = div.append('svg')
                           .attr('width', 500)
@@ -435,12 +462,22 @@ var controller = (function() {
 
                       box.append('rect')
                         .attr("class", "bank_object_box")
-                        //.attr('id', 'bank_object_box_' + variable)
-                        .attr("width", 170)
-                        .attr("height", 110)
+                        .attr("width", 220)
+                        .attr("height", variableBankObject[variable].values.length*25+10)
                         .attr('y', 70)
                         .attr('x', 100)
-                        .attr('fill', 'white')
+                        .attr('fill', 'white');
+
+                      if (variableBankObject[variable].values[variableBankObject[variable].values.length-1].value !== "") {
+                        d3.selectAll(".bank_object_box")
+                          .transition()
+                            .delay(1500)
+                            .ease("linear")
+                            .duration(500)
+                            .attr('y', 1)
+                          .transition()
+                            .attr('fill', "#ffd6d6");
+                      }
 
                       let paramBoxes = svg.append('g');
 
@@ -448,9 +485,9 @@ var controller = (function() {
                         .data(variableBankObject[variable].reference.body[0].params.slice(1, variableBankObject[variable].reference.body[0].params.length))
                         .enter()
                         .append('rect')
-                          .attr('x', (d, i) => getHighlightX(i, variableBankObject[variable].reference.body[0].params.slice(1, variableBankObject[variable].reference.body[0].params.length), variableBankObject[variable].values))
+                          .attr('x', (d, i) => getHighlightX(i, variableBankObject[variable].reference.body[0].params.slice(1, variableBankObject[variable].reference.body[0].params.length), variableBankObject[variable].params))
                           .attr('y', 1)
-                          .attr('width', (d, i) => findWidth(d.name) > findWidth(getValueRep(variableBankObject[variable].values[i])) ? findWidth(d.name): findWidth(getValueRep(variableBankObject[variable].values[i])))
+                          .attr('width', (d, i) => findWidth(d.name) > findWidth(getValueRep(variableBankObject[variable].params[i])) ? findWidth(d.name): findWidth(getValueRep(variableBankObject[variable].params[i])))
                           .attr('height', 50)
                           .attr('fill', 'white')
                           .attr('stroke', '#ff8080')
@@ -470,10 +507,11 @@ var controller = (function() {
                         .data(variableBankObject[variable].reference.body[0].params.slice(1, variableBankObject[variable].reference.body[0].params.length))
                         .enter()
                         .append('text')
+                          .attr('class', 'bank_param_box_vars')
                           .style('font', '14px Menlo,Monaco,Consolas,"Courier New",monospace')
                           .style('fill', '#58a7a3')
                           .style('font-weight', 'bold')
-                          .attr('x', (d,i) => getHighlightX(i, variableBankObject[variable].reference.body[0].params.slice(1, variableBankObject[variable].reference.body[0].params.length), variableBankObject[variable].values) + 5)
+                          .attr('x', (d,i) => getHighlightX(i, variableBankObject[variable].reference.body[0].params.slice(1, variableBankObject[variable].reference.body[0].params.length), variableBankObject[variable].params) + 5)
                           .attr('y', 20)
                           .attr('opacity', 0)
                           .text(d => d.name)
@@ -481,6 +519,15 @@ var controller = (function() {
                             .duration(0)
                             .attr('opacity', 1);
 
+                      if (variableBankObject[variable].values[variableBankObject[variable].values.length-1].value !== "") {
+                        d3.selectAll(".bank_param_box_vars")
+                          .transition()
+                            .delay(1000)
+                            .duration(500)
+                            .attr('opacity', 0);
+                      }
+
+
                       let paramBoxVals = svg.append('g');
 
                       paramBoxVals.selectAll('text')
@@ -489,7 +536,8 @@ var controller = (function() {
                           .append('text')
                             .style('font', '14px Menlo,Monaco,Consolas,"Courier New",monospace')
                             .style('fill', '#58a7a3')
-                            .attr('x', (d,i) => getHighlightX(i, variableBankObject[variable].reference.body[0].params.slice(1, variableBankObject[variable].reference.body[0].params.length), variableBankObject[variable].values) + 5)
+                            .attr('class', 'bank_param_box_vals')
+                            .attr('x', (d,i) => getHighlightX(i, variableBankObject[variable].reference.body[0].params.slice(1, variableBankObject[variable].reference.body[0].params.length), variableBankObject[variable].params) + 5)
                             .attr('y', 40)
                             .attr('opacity', 0)
                             .text((d, i) => getValueRep(variableBankObject[variable].params[i]))
@@ -497,81 +545,14 @@ var controller = (function() {
                               .duration(0)
                               .attr('opacity', 1);
 
-                      let variables = svg.append('g');
-
-                      variables.selectAll('text')
-                        .data(variableBankObject[variable].values)
-                        .enter()
-                        .append('text')
-                          .attr('class', 'bank_object_vars')
-                          .attr('x', 110)
-                          .attr('y', (d, i) => 90 + i*25)
-                          .attr('opacity', 0)
-                          .text((d, i) => getInstanceText(variableBankObject, variable, i))
+                      if (variableBankObject[variable].values[variableBankObject[variable].values.length-1].value !== "") {
+                        d3.selectAll(".bank_param_box_vals")
                           .transition()
-                            .duration(0)
-                            .attr('opacity', 1)
-
-                      trackHighlights += 1;
-                    } else if (bankStatus[variable] == objectSteps[2]) {
-
-                      let div = d3.select("#variable_list_table").append('div').attr("class", "bank_object");
-                      let svg = div.append('svg')
-                          .attr('width', 500)
-                          .attr('height', 300)
-                          .attr('fill', 'white');
-
-                      let box = svg.append('g');
-
-                      box.append('rect')
-                        .attr("class", "bank_object_box")
-                        //.attr('id', 'bank_object_box_' + variable)
-                        .attr("width", 170)
-                        .attr("height", 110)
-                        .attr('y', 70)
-                        .attr('x', 100)
-                        .attr('fill', 'white')
-                        .transition()
-                          .delay(500)
-                          .ease("linear")
-                          .duration(500)
-                          .attr('y', 1)
-                        .transition()
-                          .attr('fill', "#ffd6d6");
-
-
-                      let paramBoxVars = svg.append('g');
-
-                      paramBoxVars.selectAll('text')
-                        .data(variableBankObject[variable].reference.body[0].params.slice(1, variableBankObject[variable].reference.body[0].params.length))
-                        .enter()
-                        .append('text')
-                          .style('font', '14px Menlo,Monaco,Consolas,"Courier New",monospace')
-                          .style('fill', '#58a7a3')
-                          .style('font-weight', 'bold')
-                          .attr('x', (d,i) => getHighlightX(i, variableBankObject[variable].reference.body[0].params.slice(1, variableBankObject[variable].reference.body[0].params.length), variableBankObject[variable].values) + 5)
-                          .attr('y', 20)
-                          .attr('opacity', 1)
-                          .text(d => d.name)
-                          .transition()
+                            .delay(1000)
                             .duration(500)
                             .attr('opacity', 0);
+                      }
 
-                      let paramBoxVals = svg.append('g');
-
-                      paramBoxVals.selectAll('text')
-                          .data(variableBankObject[variable].params)
-                          .enter()
-                          .append('text')
-                            .style('font', '14px Menlo,Monaco,Consolas,"Courier New",monospace')
-                            .style('fill', '#58a7a3')
-                            .attr('x', (d,i) => getHighlightX(i, variableBankObject[variable].reference.body[0].params.slice(1, variableBankObject[variable].reference.body[0].params.length), variableBankObject[variable].values) + 5)
-                            .attr('y', 40)
-                            .attr('opacity', 1)
-                            .text((d, i) => getValueRep(variableBankObject[variable].params[i]))
-                            .transition()
-                              .duration(500)
-                              .attr('opacity', 0);
 
                       let variables = svg.append('g');
 
@@ -579,38 +560,45 @@ var controller = (function() {
                         .data(variableBankObject[variable].values)
                         .enter()
                         .append('text')
-                          .attr('class', 'bank_object_vars')
+                          .attr('class', 'bank_object_vars bank_object_vars_' + variable)
                           .attr('x', 110)
                           .attr('y', (d, i) => 90 + i*25)
                           .attr('opacity', 1)
                           .text((d, i) => getInstanceText(variableBankObject, variable, i))
+
+
+                      if (variableBankObject[variable].values[variableBankObject[variable].values.length-1].value !== "") {
+                        d3.selectAll('.bank_object_vars_' + variable)
                           .transition()
-                            .delay(500)
+                            .delay(1500)
                             .ease("linear")
                             .duration(500)
                             .attr('y', (d, i) => 21 + i*25);
 
+                        let objectName = svg.append('g');
 
-                      let objectName = svg.append('g');
+                        objectName.append('text')
+                          .attr('class', 'object-name')
+                          .attr('x', 0)
+                          .attr('y', 30)
+                          .attr('opacity', 0)
+                          .text(variable + " =")
+                          .transition()
+                            .delay(2000)
+                            .duration(500)
+                            .attr('opacity', 1);
 
-                      objectName.append('text')
-                        .attr('class', 'object-name')
-                        .attr('x', 0)
-                        .attr('y', 60)
-                        .attr('opacity', 0)
-                        .text(variable + " =")
-                        .transition()
-                          .delay(1000)
-                          .duration(500)
-                          .attr('opacity', 1);
+                        svg.transition()
+                          .delay(2000)
+                          .attr('height', 150);
 
-                      svg.transition()
-                        .delay(1000)
-                        .attr('height', 150);
-
-                      trackHighlights = -3;
-                      bankStatus[variable] = objectSteps[3];
-                    } else if (bankStatus[variable] == objectSteps[3]) {
+                        trackHighlights = -3;
+                        bankStatus[variable] = objectSteps[2]
+                      } else {
+                        trackHighlights += 1;
+                      }
+                  }
+                  else if (bankStatus[variable] === objectSteps[2]) {
                       let div = d3.select("#variable_list_table").append('div').attr("class", "bank_object");
                       let svg = div.append('svg')
                           .attr('width', 500)
@@ -621,9 +609,8 @@ var controller = (function() {
 
                       box.append('rect')
                         .attr("class", "bank_object_box")
-                        //.attr('id', 'bank_object_box_' + variable)
-                        .attr("width", 170)
-                        .attr("height", 110)
+                        .attr("width", 220)
+                        .attr("height", variableBankObject[variable].values.length*25+10)
                         .attr('y', 1)
                         .attr('x', 100)
                         .attr('fill', "#ffd6d6");
@@ -646,10 +633,11 @@ var controller = (function() {
                       objectName.append('text')
                         .attr('class', 'object-name')
                         .attr('x', 0)
-                        .attr('y', 60)
+                        .attr('y', 30)
                         .attr('opacity', 1)
                         .text(variable + " =")
                     }
+                  }
 
                     // object = d3.select("#variable_list_table").append("div").attr("class", "bank_object");
                     // for(let idx = 0; idx < variableBankObject[variable].values.length; idx++){
@@ -668,7 +656,7 @@ var controller = (function() {
                     //         .attr("class", "bank_variable_value")
                     //         .text(variableBankObject[variable].values[idx].value);
                     // }
-                }
+                //}
                 else {
                     listCell1.attr("class", "bank_variable_label");
                     listCell1
