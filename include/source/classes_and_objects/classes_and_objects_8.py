@@ -23,7 +23,7 @@ class Circle:
 			newX = 0
 		self.center.x = newX
 p1 = Point(15,15)
-circle1 = Circle(p1,10)
-circle1.moveCircleLeft(10)
+circle1 = Circle(p1,15)
+circle1.moveCircleLeft(20)
 print(circle1.center.x, p1.x)
 # print(newX) #intentionally trigger error to show scope?
