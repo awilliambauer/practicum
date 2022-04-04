@@ -466,8 +466,8 @@ function TplHelper() {
                 }
                 
                 let relevant_object = object;
-                for (let jdx = references.length; jdx > 0; jdx--){
-                    if (relevant_object.hasOwnProperty("values")){
+                if (relevant_object.hasOwnProperty("values")){
+                    for (let jdx = references.length; jdx > 0; jdx--){
                         for (let idx = 0; idx < relevant_object.values.length; idx++) {
                             if (relevant_object.values[idx].name === references[jdx-1]) {
                                 relevant_object = relevant_object.values[idx]; 
@@ -476,14 +476,15 @@ function TplHelper() {
                         }
                     }
                 }
-                for (let i = 0; i < relevant_object.value.values.length; i++) {
-                    if (relevant_object.value.values[i].name === variable.name) {
-                        // Find a match
-                        relevant_object.value.values[i].value = variable.value;
-                        return object;
-                    } // Need to add here to check if the reference is depth of two or one etc.
+                else {
+                    for (let i = 0; i < relevant_object.value.values.length; i++) {
+                        if (relevant_object.value.values[i].name === variable.name) {
+                            // Find a match
+                            relevant_object.value.values[i].value = variable.value;
+                            return object;
+                        } // Need to add here to check if the reference is depth of two or one etc.
+                    }
                 }
-                
             }
             for (let idx = 0; idx < object.values.length; idx++) {
                 if (object.values[idx].name === variable.name) {
