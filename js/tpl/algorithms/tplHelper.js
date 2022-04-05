@@ -321,7 +321,7 @@ function TplHelper() {
     }
 
     this.initialize_loop_iterable = function(variable_bank, iterable, is_inner) {
-        iterable = sim.evaluate_expression(variable_bank, iterable);
+        iterable = sim.evaluate_expression(variable_bank, iterable); // passes in variable_bank as context
         if ((iterable.type !== 'array') && (iterable.type !== 'string')) throw new Error("for loop iterable isn't an array or string")
         if (iterable.type === 'string' && !iterable.value[0].hasOwnProperty('type')) {
             iterable = JSON.parse(JSON.stringify((iterable))); // deep copy

@@ -351,6 +351,7 @@ var controller = (function() {
                 } 
                 else if (variableBankObject[variable].hasOwnProperty("type") && variableBankObject[variable].type === 'object') {
                     //Put in Rebecca's d3 visualization here.
+                    //TODO: display data from a clean VB source of truth instead of doing slice operations
                     let div = d3.select("#variable_list_table").append('div').attr("class", "bank_object");
                     let svg = div.append('svg')
                         .attr('width', 500)
