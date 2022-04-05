@@ -12,6 +12,20 @@ function TplHelper() {
 
     this.iterable = undefined;
     this.iterable2 = undefined;
+    
+    this.get_context = function(variable_bank, representation_of_function_call) {
+        // TODO: add a new get_context function to simulator that takes the variable bank and an AST for the function call
+        // goal is not to support arbitrary number of function calls. just one additional function call.
+
+        // console.log("vb: " + variable_bank);
+        // console.log(variable_bank);
+        
+        // one method calls a second method, parameters and local variables from initial variables fade
+        // OVERALL: make the variable bank hold all information needed for a visualization
+        
+        var source_of_truth = {"curr": {}, "prev": {}};
+        return source_of_truth;
+    }
 
     this.copy_args = function(o) {
         var args = [];
@@ -439,7 +453,7 @@ function TplHelper() {
         let variableName = astBody[lineNum]["expression"]["args"][0].value;
         let variableValues = astBody[lineNum]["expression"]["args"][1].args;
         let className = astBody[lineNum]["expression"]["args"][1]["object"].value;
-        let classReference = this.get_class_from_name(className, astBody)
+        let classReference = this.get_class_from_name(className, astBody);
         if (classReference === false) throw new Error("could not find a definition for a class with this name!");
         this.convert_self_to_instance_name(classReference, variableName);
         return this.add_the_object_to_the_variable_bank(variable_bank, {
@@ -501,6 +515,7 @@ function TplHelper() {
     this.add_the_object_to_the_variable_bank = function(bank, variable) {
         // Variable.reference[0] is the init function of the correct class
         // Variable.values is the array of params that instantiate the class object
+        
 
         let class_definition = variable.reference;
         let parameters = class_definition.body[0].params.slice(1); // Ignoring first parameter (self)
@@ -880,6 +895,32 @@ function TplHelper() {
             return line.expression.args[1];
         }
     }
+    
+    this.simple_bank = function(curr_messy_bank, old_simple_bank) {
+        console.log("The bank is ");
+        console.log(curr_messy_bank);
+        
+        let bank_simplified = JSON.parse(JSON.stringify(curr_messy_bank));
+        for (const obj in bank_simplified) {
+            let obj_values = bank_simplified[obj]["values"];
+            
+            let temp = {};
+            for (const i in obj_values) {
+                let name = obj_values[i]["name"];
+                let value = obj_values[i]["value"];
+                temp[name] = {value: value, local: true};
+                if (obj_values[i]["type"] == "reference") {
+                    temp[name].local = false;
+                }
+            }
+            bank_simplified[obj] = temp;
+        }
+        
+        let the_new_simple_bank = {"current_vb": bank_simplified, "previous_vb": old_simple_bank["current_vb"]};
+        console.log("Simplified VB:");
+        console.log(JSON.stringify(the_new_simple_bank, null, 2));
+        return the_new_simple_bank;
+    }
 
     this.get_function_from_call = function(bank, call){
         if (call.object.hasOwnProperty("tag")){
@@ -887,6 +928,7 @@ function TplHelper() {
                 let class_reference = bank[call.object.value].reference;
                 for (let idx = 0; idx < class_reference.body.length; idx++){
                     if (class_reference.body[idx].name === call.name){
+                        console.log("FUNCTION CALL");
                         return class_reference.body[idx];
                     }
                 }

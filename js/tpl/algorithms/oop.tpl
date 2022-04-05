@@ -13,6 +13,9 @@ function TPLAlgorithm() {
     [no_step]
     variables = helper.create_new_variable_bank();
     
+    let variables_simple;
+    variables_simple = helper.create_new_variable_bank();
+    
     let lineNum;
     [no_step]
     lineNum = 0;
@@ -89,6 +92,8 @@ function TPLAlgorithm() {
                     let functionDefinition;
                     [no_step]
                     functionDefinition = helper.get_function_from_call(variables, functionCall.object);
+                    
+                    variables_simple = helper.simple_bank(variables, variables_simple);
 
                     let classReference;
                     [no_step]
