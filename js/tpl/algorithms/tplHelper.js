@@ -480,8 +480,8 @@ function TplHelper() {
                 }
                 
                 let relevant_object = object;
-                for (let jdx = references.length; jdx > 0; jdx--){
-                    if (relevant_object.hasOwnProperty("values")){
+                if (relevant_object.hasOwnProperty("values")){
+                    for (let jdx = references.length; jdx > 0; jdx--){
                         for (let idx = 0; idx < relevant_object.values.length; idx++) {
                             if (relevant_object.values[idx].name === references[jdx-1]) {
                                 relevant_object = relevant_object.values[idx]; 
@@ -490,14 +490,15 @@ function TplHelper() {
                         }
                     }
                 }
-                for (let i = 0; i < relevant_object.value.values.length; i++) {
-                    if (relevant_object.value.values[i].name === variable.name) {
-                        // Find a match
-                        relevant_object.value.values[i].value = variable.value;
-                        return object;
-                    } // Need to add here to check if the reference is depth of two or one etc.
+                else {
+                    for (let i = 0; i < relevant_object.value.values.length; i++) {
+                        if (relevant_object.value.values[i].name === variable.name) {
+                            // Find a match
+                            relevant_object.value.values[i].value = variable.value;
+                            return object;
+                        } // Need to add here to check if the reference is depth of two or one etc.
+                    }
                 }
-                
             }
             for (let idx = 0; idx < object.values.length; idx++) {
                 if (object.values[idx].name === variable.name) {
@@ -670,45 +671,60 @@ function TplHelper() {
     }
 
     this.get_function_body_line = function(function_definition, index){
-        let start_line = function_definition.location.start.line;
-        let branch_index = 0;
-        let prev_line;
         let curr_line = function_definition.body[0];
-        let in_then_branch = false;
+        let prev_line = function_definition.body[0];
         let if_length = 0;
-        for (let idx = 0; idx < index; idx++){
-            if(function_definition.body[idx] !== undefined){
-                if(this.is_if(function_definition.body[idx])){
-                    if_length += function_definition.body[idx].location.end.line - function_definition.body[idx].location.start.line - 1;
-                }
-            }
-            
-        }
-        if(curr_line.tag === "if"){
-            while ((curr_line.location.start.line - start_line) !== (index+1)){
-                if (in_then_branch === false){
+        let then_index = 0;
+        let in_then_branch = false;
+        let go_to_else = false;
+        let in_if = false;
+        if (index > 0){
+            for (let i = 0; i < index+1; i++){
+                if (function_definition.body[i-if_length].tag === "if" && !in_if){
                     prev_line = curr_line;
-                    curr_line = curr_line.then_branch[0];
-                    branch_index += 1;
-                    in_then_branch = true
-                } else {
-                    if (branch_index + 1 < prev_line.then_branch.length){
-                        curr_line = prev_line.then_branch[branch_index];
-                        branch_index += 1;
-                    } else {
-                        in_then_branch = false;
-                        if (Array.isArray(prev_line.else_branch)){
-                            curr_line = prev_line.else_branch[0];
-                        } else {
-                            curr_line = prev_line.else_branch;
+                    curr_line = function_definition.body[i-if_length];
+                    if_length += 1;
+                    in_if = true;
+                } else if (go_to_else){
+                    if (prev_line.hasOwnProperty("else_branch")){
+                        curr_line = prev_line.else_branch;
+                        if(Array.isArray(curr_line)){ //Due to how the parser works, it adds else (of elif's) into an array. Also with else statements we never want to get the line with the else, so i+= 1
+                            curr_line = curr_line[0];
+                            i += 1;
                         }
+                        if_length += 1;
+                        go_to_else = false;
+                    } else {
+                        if_length -= 1;
+                        curr_line = function_definition.body[i-if_length];
                         prev_line = curr_line;
-                        branch_index = 0;
+                        go_to_else = false;
                     }
+                } else if (in_if && !in_then_branch){
+                    prev_line = curr_line;
+                    curr_line = curr_line.then_branch[then_index];
+                    then_index += 1;
+                    if_length += 1;
+                    in_then_branch = true;
+                    if (then_index >= prev_line.then_branch.length-1){
+                        go_to_else = true;
+                        then_index = 0;
+                        in_then_branch = false;
+                    }
+                } else if (in_if && in_then_branch){
+                    curr_line = prev_line.then_branch[then_index];
+                    then_index += 1;
+                    if_length += 1;
+                    if (then_index >= prev_line.then_branch.length-1){
+                        go_to_else = true;
+                        then_index = 0;
+                        in_then_branch = false;
+                    }
+                } else {
+                    prev_line = curr_line;
+                    curr_line = function_definition.body[i-if_length];
                 }
             }
-        } else {
-            return function_definition.body[index - if_length];
         }
         return curr_line;
     }
