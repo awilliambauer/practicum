@@ -14,9 +14,9 @@ class Point:
 	def getDistance(self,point):
 		return ((((self.x - point.x )**2) + ((self.y-point.y)**2) )**0.5)
 class Circle:
-	def __init__(self,c,r):
-		self.center = c
-		self.radius = r
+	def __init__(self,center,radius):
+		self.center = center
+		self.radius = radius
 p1 = Point(15,15)
 circle1 = Circle(p1,10)
 print(circle1.center.x, p1.x)
