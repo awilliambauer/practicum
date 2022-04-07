@@ -1,9 +1,14 @@
+// TODO: add a new get_context function to simulator that takes the variable bank and an AST for the function call
+// goal is not to support arbitrary number of function calls. just one additional function call.
+// one method calls a second method, parameters and local variables from initial variables fade
+// OVERALL: make the variable bank hold all information needed for a visualization
+
 
 /** Helper functions to simulate python code (without explanations) */
 var python_simulator = function() {
     "use strict";
     var self = {};
-
+    
     /**
      * Evaluates the given expression to completion.
      * @param context: an object mapping local variable names to {type:string, value:*} objects.
@@ -12,10 +17,6 @@ var python_simulator = function() {
         if (!context || !expr || !expr.tag) throw new Error("invalid arguments to evaluate!");
 
         var arg1, arg2, obj, idx, arg1v, arg2v, r, args;
-        // console.log(context);
-        // console.log(expr);
-        // console.log(expr.tag);
-        // console.log(" ");
         switch (expr.tag) {
             case 'method':
                 for(let i = 0; i < expr.body.length; i++){
@@ -284,9 +285,3 @@ var python_simulator = function() {
 
     return self;
 }();
-
-
-
-
-// Every method will either return something or change something, or both. So we want methods to return a list of changes.
-// Every change gets added to the variable bank unless it is a return statement, which if it is means that you are declaring an identifier.
