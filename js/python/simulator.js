@@ -9,13 +9,6 @@ var python_simulator = function() {
     "use strict";
     var self = {};
     
-    function get_context(variable_bank, representation_of_function_call) {
-        // my useful new function
-        // returns an object with current and previous variable bank
-        // local variables are flagged as such
-    }
-    
-
     /**
      * Evaluates the given expression to completion.
      * @param context: an object mapping local variable names to {type:string, value:*} objects.
@@ -24,10 +17,6 @@ var python_simulator = function() {
         if (!context || !expr || !expr.tag) throw new Error("invalid arguments to evaluate!");
 
         var arg1, arg2, obj, idx, arg1v, arg2v, r, args;
-        // console.log(context);
-        // console.log(expr);
-        // console.log(expr.tag);
-        // console.log(" ");
         switch (expr.tag) {
             case 'method':
                 for(let i = 0; i < expr.body.length; i++){
@@ -296,9 +285,3 @@ var python_simulator = function() {
 
     return self;
 }();
-
-
-
-
-// Every method will either return something or change something, or both. So we want methods to return a list of changes.
-// Every change gets added to the variable bank unless it is a return statement, which if it is means that you are declaring an identifier.
