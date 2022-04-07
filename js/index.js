@@ -40,12 +40,13 @@ var csed = (function() {
     var ENABLE_TELEMETRY_LOGGING = false;
 
     let problem_types = {
-      problem_types: ["whileLoop", "if_else", "forLoop", "nested"],
+      problem_types: ["whileLoop", "if_else", "forLoop", "nested", "oop"],
       enabled_categories: [
         "default-whileLoop",
         "default-if_else",
         "default-forLoop",
         "default-nested",
+        "default-oop",
       ],
     };
     
@@ -69,12 +70,14 @@ var csed = (function() {
                             if_else: 0,
                             array: 0,
                             nested: 0,
+                            oop: 0,
                         },
                         problemIdsByCategory: {
                             expressions: [],
                             if_else: [],
                             array: [],
-                            nested: []
+                            nested: [],
+                            oop: []
                         }
                     };
                 }
@@ -377,19 +380,24 @@ var csed = (function() {
         // Load in the template for the problem
         d3.html(problemUI.template_url, function(error, problemHtml){
             if (error) console.error(error);
-
+            
             // Uh, not sure why I can't append raw html into the dom with D3. Using jQuery for the moment...
             $("#problem-container").append(problemHtml);
-
+            
             d3.select("#main-page").classed("hidden", true);
             d3.select("#problem-container").classed("hidden", false);
 
+            // If the problem has no initial values, hide initial values header
+            if (!problemConfig.content.variants[0].arguments) {
+                d3.selectAll("#InitialValuesHeader").style("display", "none");
+            }
+            
             var category = problemConfig.category;
             d3.select("#PageHeader").html(problemConfig.title);
 
             var initial_state = problemUI.create_initial_state(problemConfig, variant);
             main_simulator.initialize(category, {state:initial_state});
-
+            
             // The modal will determine the fading level and then call problemUI.initialize() 
             // once the Done button is pressed. That's why it takes in all of 
             // problemUI.initialize()'s arguments.
@@ -397,7 +405,7 @@ var csed = (function() {
             
             // This problemUI initialize call probably needs to happen after the main_sim init call,
             // which is handled by promises/then() with fetch.
-        });
+        });          
     }
 
     // add the "problem-visited" class to the newly visited problem

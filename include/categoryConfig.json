@@ -622,8 +622,129 @@
       }]
     }
   }]
+}, {
+  "name": "default-oop",
+  "category": "oop",
+  "title": "Classes and Objects Investigation",
+  "description": "Practice object-oriented programming concepts",
+  "problems": [{
+    "id": "1",
+    "title": "Classes and Objects Investigation 1",
+    "content": {
+      "src": "classes_and_objects/classes_and_objects_1.py",
+      "variants": [{
+        "id": "1"
+      }]
+    }
+  },{
+    "id": "2",
+    "title": "Classes and Objects Investigation 2",
+    "content": {
+      "src": "classes_and_objects/classes_and_objects_2.py",
+      "variants": [{
+        "id": "21"
+      }]
+    }
+  },{
+    "id": "3",
+    "title": "Classes and Objects Investigation 3",
+    "content": {
+      "src": "classes_and_objects/classes_and_objects_3.py",
+      "variants": [{
+        "id": "31"
+      }]
+    }
+  },{
+    "id": "4",
+    "title": "Classes and Objects Investigation 4",
+    "content": {
+      "src": "classes_and_objects/classes_and_objects_4.py",
+      "variants": [{
+        "id": "41"
+      }]
+    }
+  },{
+    "id": "5",
+    "title": "Classes and Objects Investigation 5",
+    "content": {
+      "src": "classes_and_objects/classes_and_objects_5.py",
+      "variants": [{
+        "id": "51"
+      }]
+    }
+  },{
+    "id": "6",
+    "title": "Classes and Objects Investigation 6",
+    "content": {
+      "src": "classes_and_objects/classes_and_objects_6.py",
+      "variants": [{
+        "id": "61"
+      }]
+    }
+  },{
+    "id": "7",
+    "title": "Classes and Objects Investigation 7",
+    "content": {
+      "src": "classes_and_objects/classes_and_objects_7.py",
+      "variants": [{
+        "id": "71"
+      }]
+    }
+  },{
+    "id": "8",
+    "title": "Classes and Objects Investigation 8",
+    "content": {
+      "src": "classes_and_objects/classes_and_objects_8.py",
+      "variants": [{
+        "id": "81"
+      }]
+    }
+  },{
+    "id": "9",
+    "title": "Classes and Objects Investigation 9",
+    "content": {
+      "src": "classes_and_objects/classes_and_objects_9.py",
+      "variants": [{
+        "id": "91"
+      }]
+    }
+  },{
+    "id": "10",
+    "title": "Classes and Objects Investigation 10",
+    "content": {
+      "src": "classes_and_objects/classes_and_objects_10.py",
+      "variants": [{
+        "id": "101"
+      }]
+    }
+  },{
+    "id": "11",
+    "title": "Classes and Objects Investigation 11",
+    "content": {
+      "src": "classes_and_objects/classes_and_objects_11.py",
+      "variants": [{
+        "id": "111"
+      }]
+    }
+  },{
+    "id": "12",
+    "title": "Classes and Objects Investigation 12",
+    "content": {
+      "src": "classes_and_objects/classes_and_objects_12.py",
+      "variants": [{
+        "id": "121"
+      }]
+    }
+  },{
+    "id": "13",
+    "title": "Classes and Objects Investigation 13",
+    "content": {
+      "src": "classes_and_objects/classes_and_objects_13.py",
+      "variants": [{
+        "id": "131"
+      }]
+    }
+  }
+]
 }
 ]
-
-
-

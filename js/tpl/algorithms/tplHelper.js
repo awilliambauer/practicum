@@ -136,11 +136,6 @@ function TplHelper() {
     this.get_the_next_line_in_this_block_to_execute = function(parent, current_statement, condition) {
         switch(parent.tag) {
             case "method":
-                if (current_statement) {
-                    lineNum++;
-                    return get_next_statement(parent.body, current_statement);
-                }
-                return parent.body[lineNum++];
             case "block":
                 if (current_statement) {
                     lineNum++;
@@ -167,9 +162,31 @@ function TplHelper() {
         }
     };
 
+    this.is_still_inside_constructor = function(stmt) {
+        if (!stmt) return false;
+
+        if (stmt.location.start.col === 2) { //HACK do not hard code indent level
+            return true;
+        }
+        return false;
+    }
+
     this.is_there_another_line_to_execute = function(parent, stmt, condition) {
         return !!this.get_the_next_line_in_this_block_to_execute(parent, stmt, condition);
     };
+
+    this.is_there_an_instantiation = function(astBody){
+        if(astBody[lineNum+1].tag === 'declaration'){
+            if(astBody[lineNum+1].expression.tag === 'binop'){
+                if(astBody[lineNum+1].expression.args[1].tag === 'call'){
+                    return true;
+                }
+                return false;
+            }
+            return false;
+        }
+        return false;
+    }
 
     this.is_if = function(stmt) {
         return stmt.tag === "if";
@@ -266,6 +283,30 @@ function TplHelper() {
         return true;
     };
 
+    this.go_next_line_without_reading = function() {
+        lineNum++;
+    }
+
+    this.check_instantiation = function(astBody) {
+        if(astBody[lineNum].tag === 'declaration'){
+            if(astBody[lineNum].expression.tag === 'binop'){
+                if(astBody[lineNum].expression.args[1].tag === 'call'){
+                    if(astBody[lineNum].expression.args[1].object.tag === 'identifier'){
+                        return true;
+                    }
+                    return false;
+                }
+                return false;
+            }
+            return false;
+        }
+        return false;
+    }
+
+    this.get_object_reference = function(ast) {
+        return ast.body[lineNum].expression.args[1].object.value;
+    }
+
     this.initialize_loop_iterable = function(variable_bank, iterable, is_inner) {
         iterable = sim.evaluate_expression(variable_bank, iterable);
         if ((iterable.type !== 'array') && (iterable.type !== 'string')) throw new Error("for loop iterable isn't an array or string")
@@ -288,13 +329,100 @@ function TplHelper() {
         let variableName = ast["body"][lineNum]["expression"]["args"][0].value;
         let variableValue = ast["body"][lineNum]["expression"]["args"][1].value;
         let variableType = ast["body"][lineNum]["expression"]["args"][1].type;
-        lineNum = lineNum + 1;
+        lineNum += 1;
         return this.add_this_to_the_variable_bank(variable_bank, {
             name: variableName,
             type: variableType,
             value: variableValue
         });
     };
+
+    this.add_class_instance = function(variable_bank, astBody) {
+        let variableName = astBody[lineNum]["expression"]["args"][0].value;
+        let variableValues = astBody[lineNum]["expression"]["args"][1].args;
+        let className = astBody[lineNum]["expression"]["args"][1]["object"].value;
+        let classReference = this.get_class_from_name(className, astBody)
+        console.log(astBody[lineNum]);
+        if (classReference === false) throw new Error("could not find a definition for a class with this name!");
+        return this.add_the_object_to_the_variable_bank(variable_bank, {
+            name: variableName,
+            reference: classReference,
+            values: variableValues
+        });
+    }
+
+    this.assign_value_within_object = function(variable_bank, assignment, object) {
+        if (assignment) {
+            let variableName = assignment.expression.args[0].name;    
+            let variableValue = assignment.expression.args[1];
+
+            this.update_object_in_variable_bank(variable_bank, object, {
+                name: variableName,
+                value: variableValue.value 
+            });
+        } else {
+            //TODO: helper function to know when last line within class is reached?
+            return;
+        }
+        return variable_bank;
+    }
+
+    this.update_object_in_variable_bank = function(bank, object, variable) {
+        for (let i in bank[object.name].values) {
+            let local_variable = bank[object.name].values[i];
+            if (local_variable.name === variable.name) {
+                // match
+                let newValue = object.values[i].value;
+                bank[object.name].values[i].value = newValue;
+                return bank;
+            }
+        }
+        // No match
+        bank[object.name].values.push(variable);
+        return bank;
+    }
+
+    this.add_the_object_to_the_variable_bank = function(bank, variable) {
+        //Variable.reference is the params of the init function of the correct class
+        //Variable.values is the array of params that instantiate the class object
+
+        let parameters = variable.reference.body[0].params.slice(1); // Ignoring first parameter (self)
+        let vbankValues = this.copy(variable.values);
+        
+        for (const i in parameters) {
+            vbankValues[i]["name"] = parameters[i]["name"];
+            vbankValues[i]["value"] = "";
+        }
+
+        bank[variable.name] = {type: 'object', reference: this.copy(variable.reference), values: vbankValues};
+        return variable;
+    }
+
+    this.get_class_name = function(astBody) {
+        return astBody[lineNum]["expression"]["args"][1]["object"].value;
+    }
+    
+    this.get_class_from_name = function(className, astBody) {
+        for (const [k, currAstElement] of Object.entries(astBody)) {
+            if (currAstElement.hasOwnProperty("tag")
+                && currAstElement.tag === "class"
+                && currAstElement.name == className) {
+                    return currAstElement;
+                }
+            }
+        return false;
+    }
+
+    this.get_class_constructor = function(classBody) {
+        if (classBody.body[0].name === "__init__" && classBody.body[0].tag === "method"){
+            return classBody.body[0];
+        }
+        throw new Error("Class constructor is not properly defined.");
+    }
+
+    this.get_class_constructor_body_range = function(classBody) {
+        return classBody.body[0].location.end.line - classBody.body[0].location.start.line - 1;
+    }
 
     this.is_loop_called_without_range = function(loop) {
         return loop.iterable.args === undefined;
@@ -437,7 +565,7 @@ function TplHelper() {
     this.create_print_string = function(vals, string) {
         for (let i = 0; i < vals.length; i++) {
             if (!vals[i].hasOwnProperty("tag") || vals[i]["tag"] === "identifier" || vals[i]["tag"] === "literal") {
-                if (!(vals[i]["type"] === "array")) string += vals[i]["value"];
+                if (vals[i]["type"] !== "array") string += vals[i]["value"];
                 else string += this.create_print_string(vals[i]["value"], string);
             } else if (vals[i].tag === "binop") {
                 string += this.create_print_string(vals[i].args, string);
@@ -475,19 +603,19 @@ function make_initial_state(problem, variant) {
         let filename = RELATIVE_SRC_DIR + problem.content.src;
         let problem_raw = load_file(filename);
 
-        // Inject python for initial values at start of raw code
-        let initialv_raw = "";
-        for (const [key, value] of Object.entries(variant.arguments)) {
-            let v = value;
-            if(Object.prototype.toString.call(value) === '[object Array]') {
-                v = "[" + value + "]";
+        if (variant.arguments) {
+            // Inject python for initial values at start of raw code
+            let initialv_raw = "";
+            for (const [key, value] of Object.entries(variant.arguments)) {
+                let v = value;
+                if(Object.prototype.toString.call(value) === '[object Array]') {
+                    v = "[" + value + "]";
+                }
+                let this_value = key + " = " + v + "\n";
+                initialv_raw = initialv_raw + this_value;
             }
-            let this_value = key + " = " + v + "\n";
-            initialv_raw = initialv_raw + this_value;
+            problem_raw = initialv_raw + problem_raw;
         }
-        problem_raw = initialv_raw + problem_raw;
-        // console.log(problem_raw);
-
         ast = python_parsing.parse_program(problem_raw);
     } else { // if problem.content lacks a src, fallback to using problem.content.text
         console.log("Pulling problem " + problem.title + " directly from json.");

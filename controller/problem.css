@@ -315,6 +315,32 @@
     text-align: right;
 }
 
+.problem .bank_object {
+    font: '14px Menlo,Monaco,Consolas,"Courier New",monospace';
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+
+.bank_object_box {
+    stroke: red;
+    stroke-width: 2px;
+    rx: 5px;
+}
+
+.bank_object_vars {
+  font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
+  font-size: 14px;
+  fill: black;
+}
+
+.object-name {
+  font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
+  font-size: 14px;
+  fill: black;
+}
+
 .problem .array_label {
     padding-right: 10px;
     text-align: right;
@@ -702,4 +728,3 @@ the dynamic styling works correctly.
 /* DON'T PUT STUFF BELOW THIS COMMENT!! PLACE ADDITIONAL CODE ABOVE
    DYNAMIC STYLING CLASSES!!
 */
-
