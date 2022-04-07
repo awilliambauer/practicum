@@ -14,6 +14,11 @@ var controller = (function() {
     var bankStatus = {};
     var objectSteps = ["createBox", "addAndHighlight", "done"];
     var trackHighlights = -3;
+    
+    var simpleVariableBank;
+    function acceptSimpleVariableBank(simpleVB) {
+        simpleVariableBank = simpleVB;
+    }
 
     function initialize(problemConfig, simulatorInterface_, initialState, task_logger, fading) {
         // console.log("initial state: " + JSON.stringify(initialState));
@@ -1480,7 +1485,8 @@ var controller = (function() {
         create_initial_state: make_initial_state,
         template_url: "controller/problemTemplate.html",
         template_id: "problem-template",
-        initialize: initialize
+        initialize: initialize,
+        acceptSimpleVariableBank: acceptSimpleVariableBank
     };
 
 })();

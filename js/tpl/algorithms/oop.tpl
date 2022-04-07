@@ -68,6 +68,8 @@ function TPLAlgorithm() {
             [no_step]
             do {
                 this_is_the_next_line_that_will_execute = theConstructor.body[constructorIndex];
+                
+                variables_simple = helper.simple_bank(variables, variables_simple);
 
                 [prompt]
                 "It assigns a value.";
