@@ -316,6 +316,7 @@
 }
 
 .problem .bank_object {
+    font: '14px Menlo,Monaco,Consolas,"Courier New",monospace';
     margin-left: auto;
     margin-right: auto;
     margin-top: 5px;
@@ -727,4 +728,3 @@ the dynamic styling works correctly.
 /* DON'T PUT STUFF BELOW THIS COMMENT!! PLACE ADDITIONAL CODE ABOVE
    DYNAMIC STYLING CLASSES!!
 */
-

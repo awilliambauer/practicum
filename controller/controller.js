@@ -312,7 +312,6 @@ var controller = (function() {
       }
     }
 
-
     function findWidth(text) {
       var canvas = document.createElement('canvas'),
           context = canvas.getContext('2d');
@@ -643,7 +642,6 @@ var controller = (function() {
                         .text(variable + " =")
                     }
                   }
-
                     // object = d3.select("#variable_list_table").append("div").attr("class", "bank_object");
                     // for(let idx = 0; idx < variableBankObject[variable].values.length; idx++){
                     //     listRow = d3.select(".bank_object").append("tr").attr("class", "variable_list_table_row");
@@ -653,6 +651,7 @@ var controller = (function() {
                     //     listCell1
                     //         .append("span")
                     //         .attr("class", "bank_variable")
+                    //         .text(variableBankObject[variable].reference.body[0].params[idx+1].name);
                     //         .text(variableBankObject[variable].values[idx].name);
                     //     listCell1.append("span").text(" :");
                     //     listCell2.attr("style", "text-align: left;");
