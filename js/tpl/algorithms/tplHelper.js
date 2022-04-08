@@ -913,23 +913,21 @@ function TplHelper() {
     }
     
     this.simple_bank = function(curr_messy_bank, old_simple_bank) {
-        console.log("The bank is ");
-        console.log(curr_messy_bank);
-        
-        let bank_simplified = JSON.parse(JSON.stringify(curr_messy_bank));
-        for (const obj in bank_simplified) {
-            let obj_values = bank_simplified[obj]["values"];
+        let bank_simplified = {};
+        for (const obj in curr_messy_bank) {
+            let obj_values = curr_messy_bank[obj]["values"];
             
-            let temp = {};
-            if (bank_simplified[obj].hasOwnProperty("params")) {
-                let obj_params = bank_simplified[obj]["params"];
+            let constructor_parameters = {};
+            if (curr_messy_bank[obj].hasOwnProperty("params")) {
+                let obj_params = curr_messy_bank[obj]["params"];
                 for (const i in obj_params) {
                     let name = obj_params[i]["name"];
                     let value = obj_params[i]["value"];
-                    temp[name] = {value: value, local: true, param: true};
+                    constructor_parameters[name] = {value: value, local: true};
                 }
             }
         
+            let vars = {}
             for (const i in obj_values) {
                 let value = obj_values[i]["value"];
                 let name = obj_values[i]["name"];
@@ -938,16 +936,14 @@ function TplHelper() {
                     name = "self." + name;
                     local = false;
                 }
-                temp[name] = {value: value, local: local, param: false};
+                vars[name] = {value: value, local: local};
             }
-            bank_simplified[obj] = temp;
+            bank_simplified[obj] = {};
+            bank_simplified[obj]["variables"] = vars;
+            bank_simplified[obj]["parameters"] = constructor_parameters;
         }
         
         let the_new_simple_bank = {"current_vb": bank_simplified, "previous_vb": old_simple_bank["current_vb"]};
-        
-        //TODO: remove these logs
-        console.log("Simplified VB:");
-        console.log(JSON.stringify(the_new_simple_bank, null, 2));
         
         // Send the simple VB over to the controller
         controller.acceptSimpleVariableBank(the_new_simple_bank);

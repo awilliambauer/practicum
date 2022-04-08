@@ -18,6 +18,7 @@ var controller = (function() {
     var simpleVariableBank;
     function acceptSimpleVariableBank(simpleVB) {
         simpleVariableBank = simpleVB;
+        console.log(JSON.stringify(simpleVariableBank, null, 2));
     }
 
     function initialize(problemConfig, simulatorInterface_, initialState, task_logger, fading) {
