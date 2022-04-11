@@ -370,7 +370,7 @@ var controller = (function() {
     }
 
     function addVariableBank() {
-        d3.select("#variable_list_table").node().innerHTML = "";
+        d3.select("#variable_list_table").node().innerHTML = ""; 
         d3.select("#variable_array_table").node().innerHTML = "";
         var variableBankObject;
         for (var v in state.variables.in_scope) {
@@ -379,10 +379,8 @@ var controller = (function() {
             }
         }
         
-        console.log(JSON.stringify(variableBankObject, null, 2));
-        
         simpleVariableBank = generateSimpleVariableBank(variableBankObject, simpleVariableBank);
-        // console.log(JSON.stringify(simpleVariableBank, null, 2));
+        console.log(JSON.stringify(simpleVariableBank, null, 2));
 
         if (!isObjectEmpty(variableBankObject)) {
             for (var variable in variableBankObject) {
