@@ -74,8 +74,6 @@ function TPLAlgorithm() {
             do {
                 this_is_the_next_line_that_will_execute = theConstructor.body[constructorIndex];
                 
-                [no_step]
-                variables_simple = helper.simple_bank(variables, variables_simple);
 
                 [prompt]
                 "This line assigns a value.";
@@ -101,8 +99,6 @@ function TPLAlgorithm() {
                     [no_step]
                     functionDefinition = helper.get_function_from_call(variables, functionCall.object);
                     
-                    [no_step]
-                    variables_simple = helper.simple_bank(variables, variables_simple);
 
                     let classReference;
                     [no_step]

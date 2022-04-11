@@ -15,11 +15,7 @@ var controller = (function() {
     var objectSteps = ["createBox", "addAndHighlight", "done"];
     var trackHighlights = -3;
     
-    var simpleVariableBank;
-    function acceptSimpleVariableBank(simpleVB) {
-        simpleVariableBank = simpleVB;
-        console.log(JSON.stringify(simpleVariableBank, null, 2));
-    }
+    var simpleVariableBank = {};
 
     function initialize(problemConfig, simulatorInterface_, initialState, task_logger, fading) {
         // console.log("initial state: " + JSON.stringify(initialState));
@@ -333,7 +329,45 @@ var controller = (function() {
       return x;
     }
 
-
+    function generateSimpleVariableBank(curr_messy_bank, old_simple_bank) {
+        let bank_simplified = {};
+        for (const obj in curr_messy_bank) {
+            
+            bank_simplified[obj] = {};
+            if (curr_messy_bank[obj].hasOwnProperty("reference")) {
+                // This is a class. Add the class name as a value in the dict
+                bank_simplified[obj] = {"class_name": curr_messy_bank[obj]["reference"]["name"]};
+            }
+            
+            let constructor_parameters = {};
+            if (curr_messy_bank[obj].hasOwnProperty("params")) {
+                let obj_params = curr_messy_bank[obj]["params"];
+                for (const i in obj_params) {
+                    let name = obj_params[i]["name"];
+                    let value = obj_params[i]["value"];
+                    constructor_parameters[name] = {value: value, local: true};
+                }
+            }
+            
+            let vars = {}
+            let obj_values = curr_messy_bank[obj]["values"];
+            for (const i in obj_values) {
+                let value = obj_values[i]["value"];
+                let name = obj_values[i]["name"];
+                let local = true;
+                if (obj_values[i]["type"] == "reference") {
+                    name = "self." + name;
+                    local = false;
+                }
+                vars[name] = {value: value, local: local};
+            }
+            bank_simplified[obj]["variables"] = vars;
+            bank_simplified[obj]["parameters"] = constructor_parameters;
+        }
+        
+        let the_new_simple_bank = {"current_vb": bank_simplified, "previous_vb": old_simple_bank["current_vb"]};
+        return the_new_simple_bank;
+    }
 
     function addVariableBank() {
         d3.select("#variable_list_table").node().innerHTML = "";
@@ -344,6 +378,11 @@ var controller = (function() {
                 variableBankObject = state.variables.in_scope[v].value;
             }
         }
+        
+        console.log(JSON.stringify(variableBankObject, null, 2));
+        
+        simpleVariableBank = generateSimpleVariableBank(variableBankObject, simpleVariableBank);
+        // console.log(JSON.stringify(simpleVariableBank, null, 2));
 
         if (!isObjectEmpty(variableBankObject)) {
             for (var variable in variableBankObject) {
@@ -1486,7 +1525,6 @@ var controller = (function() {
         template_url: "controller/problemTemplate.html",
         template_id: "problem-template",
         initialize: initialize,
-        acceptSimpleVariableBank: acceptSimpleVariableBank
     };
 
 })();
