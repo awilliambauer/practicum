@@ -26,12 +26,14 @@ function TPLAlgorithm() {
     "Welcome to classes/objects practice.";
 
     let this_is_the_next_line_that_will_execute: Line;
+    [no_step]
     this_is_the_next_line_that_will_execute = helper.get_next_line(ast.body, this_is_the_next_line_that_will_execute);
-    
+
     [no_step]
     while(helper.check_instantiation(ast.body) == false){
         [prompt]
-        "This is a class declaration. We'll revisit this later.";
+        "This is a class declaration. The program does not start here. We will revisit this later.";
+        [no_step]
         helper.go_next_line_without_reading();
         this_is_the_next_line_that_will_execute = helper.get_next_line(ast.body, this_is_the_next_line_that_will_execute);
     }
@@ -44,20 +46,21 @@ function TPLAlgorithm() {
         [no_step]
         if (helper.check_instantiation(ast.body)){
             [prompt]
-            "This is the instantiation of an object.";
+            "This line of code instantiates an object.";
 
             let Let_us_look_at_the_class_definition: AstNode;
+            [no_step]
             Let_us_look_at_the_class_definition = this_is_the_next_line_that_will_execute.expression.args[1].object;
             
-            let it_defines_a_new_object_which_we_will_add_to_the_variable_bank: Instance;
-            [interactive("add_variable")] it_defines_a_new_object_which_we_will_add_to_the_variable_bank = helper.add_class_instance(variables, ast.body);
+            let we_will_add_this_to_the_variable_bank: Instance;
+            [interactive("add_variable")] we_will_add_this_to_the_variable_bank = helper.add_class_instance(variables, ast.body);
             
             let theClass;
             [no_step]
             theClass = helper.get_class_from_name(Let_us_look_at_the_class_definition.value, ast.body);
 
             [prompt]
-            "Now we enter the constructor for this class.";
+            "In the constructor, we will match the parameter inputs with the constructer parameter variables.";
 
             let theConstructor;
             [no_step]
@@ -75,7 +78,7 @@ function TPLAlgorithm() {
                 variables_simple = helper.simple_bank(variables, variables_simple);
 
                 [prompt]
-                "It assigns a value.";
+                "This line assigns a value.";
 
                 let newVariable: Variable;
                 [no_step]
@@ -121,6 +124,7 @@ function TPLAlgorithm() {
                     [no_step]
                     parent = ast;
 
+                    [no_step]
                     this_is_the_next_line_that_will_execute = functionDefinition;
 
                     [prompt]
@@ -130,7 +134,7 @@ function TPLAlgorithm() {
                     if (helper.has_params_to_add(functionDefinition)){
                         let param_values;
                         [no_step]
-                        param_values = helper.get_param_values(it_defines_a_new_object_which_we_will_add_to_the_variable_bank, functionCall, functionDefinition);
+                        param_values = helper.get_param_values(we_will_add_this_to_the_variable_bank, functionCall, functionDefinition);
                         [no_step]
                         variables = helper.add_temp_param_variables(variables, param_values);
                     }
@@ -147,13 +151,13 @@ function TPLAlgorithm() {
                             [no_step]
                             if (helper.does_this_declare_a_new_variable(variables, arg1)){
                                 [prompt]
-                                "new temp variable";
+                                "Here we set a value for the variable";
                                 let temp: Variable;
                                 [no_step]
                                 temp = helper.add_temp_variable(variables, this_is_the_next_line_that_will_execute);
                             } else {
                                 [prompt]
-                                "ol variable";
+                                "We will assign a new value for the variable";
                                 let result;
                                 [no_step]
                                 result = helper.get_line_result(variables, this_is_the_next_line_that_will_execute);
@@ -166,8 +170,9 @@ function TPLAlgorithm() {
                             break;
                         } else [no_step] if (helper.is_if(this_is_the_next_line_that_will_execute)) {
                             [prompt]
-                            "It’s an if statement which means we need to determine whether the conditional part of the if statement is true or false.";
+                            "This is an if statement which means we need to determine whether the conditional part of the if statement is true or false.";
                             let this_is_the_conditional_of_the_if_statement: AstNode;
+                            [no_step]
                             this_is_the_conditional_of_the_if_statement = this_is_the_next_line_that_will_execute.condition;
 
                             [interactive("conditional")]
@@ -195,6 +200,7 @@ function TPLAlgorithm() {
                                     [prompt]
                                     "Just like with if statements we need to decide whether the conditional part of the elif statement is true or false.";
                                     let this_is_the_conditional_of_an_elif_statement: AstNode;
+                                    [no_step]
                                     this_is_the_conditional_of_an_elif_statement = this_is_the_next_line_that_will_execute.condition;
 
                                     [interactive("conditional")]
@@ -255,23 +261,23 @@ function TPLAlgorithm() {
                         [no_step]
                         if (helper.does_this_declare_a_new_variable(variables, arg1)){
                             [prompt]
-                            "new variable";
+                            "We will add the new variable and its value to the variable bank";
                             [no_step]
                             variables[arg1.value] = result;
                         } else {
                             [prompt]
-                            "ol variable";
+                            "We will assign a new value for the variable";
                             let toChange;
                             [no_step]
                             toChange = helper.get_value_for_update(functionLine, result);
-                            it_defines_a_new_object_which_we_will_add_to_the_variable_bank = helper.update_object_in_variable_bank(variables, it_defines_a_new_object_which_we_will_add_to_the_variable_bank, toChange);
+                            we_will_add_this_to_the_variable_bank = helper.update_object_in_variable_bank(variables, we_will_add_this_to_the_variable_bank, toChange);
                         }
                     }
                     [no_step]
                     variables = helper.remove_temp_vars(variables);
                 } else {
                     [no_step]
-                    it_defines_a_new_object_which_we_will_add_to_the_variable_bank = helper.update_object_in_variable_bank(variables, it_defines_a_new_object_which_we_will_add_to_the_variable_bank, constructorIndex);
+                    we_will_add_this_to_the_variable_bank = helper.update_object_in_variable_bank(variables, we_will_add_this_to_the_variable_bank, constructorIndex);
                 }
                 [no_step]
                 constructorIndex = constructorIndex + 1;
@@ -311,6 +317,7 @@ function TPLAlgorithm() {
             [no_step]
             result = null;
 
+            [no_step]
             this_is_the_next_line_that_will_execute = functionDefinition;
 
             [no_step]
@@ -339,13 +346,13 @@ function TPLAlgorithm() {
                     [no_step]
                     if (helper.does_this_declare_a_new_variable(variables, arg1)){
                         [prompt]
-                        "new temp variable";
+                        "Here we set a value for the variable";
                         let temp: Variable;
                         [no_step]
                         temp = helper.add_temp_variable(variables, this_is_the_next_line_that_will_execute);
                     } else {
                         [prompt]
-                        "old variable";
+                        "We will assign a new value for the variable";
                         let result;
                         [no_step]
                         result = helper.get_line_result(variables, this_is_the_next_line_that_will_execute);
@@ -358,8 +365,9 @@ function TPLAlgorithm() {
                     break;
                 } else [no_step] if (helper.is_if(this_is_the_next_line_that_will_execute)) {
                     [prompt]
-                    "It’s an if statement which means we need to determine whether the conditional part of the if statement is true or false.";
+                    "This is an if statement which means we need to determine whether the conditional part of the if statement is true or false.";
                     let this_is_the_conditional_of_the_if_statement: AstNode;
+                    [no_step]
                     this_is_the_conditional_of_the_if_statement = this_is_the_next_line_that_will_execute.condition;
 
                     [interactive("conditional")]
@@ -381,6 +389,7 @@ function TPLAlgorithm() {
                             [prompt]
                             "Just like with if statements we need to decide whether the conditional part of the elif statement is true or false.";
                             let this_is_the_conditional_of_an_elif_statement: AstNode;
+                            [no_step]
                             this_is_the_conditional_of_an_elif_statement = this_is_the_next_line_that_will_execute.condition;
 
                             [interactive("conditional")]
@@ -431,17 +440,17 @@ function TPLAlgorithm() {
                 [no_step]
                 if (helper.does_this_declare_a_new_variable(variables, arg1)){
                     [prompt]
-                    "new variable";
+                    "We will add the new variable and its value to the variable bank";
                     [no_step]
                     variables[arg1.value] = result;
                 } else {
                     [prompt]
-                    "ol variable";
+                    "We will assign a new value for the variable";
                     let toChange;
                     [no_step]
                     toChange = helper.get_value_for_update(functionLine, result.value);
                     [no_step]
-                    it_defines_a_new_object_which_we_will_add_to_the_variable_bank = helper.update_object_in_variable_bank(variables, it_defines_a_new_object_which_we_will_add_to_the_variable_bank, toChange);
+                    we_will_add_this_to_the_variable_bank = helper.update_object_in_variable_bank(variables, we_will_add_this_to_the_variable_bank, toChange);
                 }
             }
             [no_step]
@@ -463,9 +472,10 @@ function TPLAlgorithm() {
     [no_step]
     if (helper.this_is_a_print_statement(ast)) {
         let the_print_function_prints_out_the_values_passed_to_it;
+        [no_step]
         the_print_function_prints_out_the_values_passed_to_it = helper.get_print_output(this_is_the_next_line_that_will_execute, variables);
         [prompt]
-        "The print statement below prints out the value(s) that the function returned. Enter that solution in the solution box!";
+        "The print statement below prints out the value(s) within the parenthesis. Enter that solution in the solution box!";
     }
 }
 
