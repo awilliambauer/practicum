@@ -14,6 +14,8 @@ var controller = (function() {
     var bankStatus = {};
     var objectSteps = ["createBox", "addAndHighlight", "done"];
     var trackHighlights = -3;
+    var colors = [["#e0deed", "#736aaf"], ["#b3d0e5", "#3b7cab"], ["#fb8072", "#f72008"]];
+    var colorDict = {};
     
     var simpleVariableBank;
     function acceptSimpleVariableBank(simpleVB) {
@@ -27,6 +29,7 @@ var controller = (function() {
         $("#problem_space > pre").addClass("hidden");
         $("#problem_space").css("padding-top", "15px");
         bankStatus = {};
+        colorDict = {};
         trackHighlights = -3;
 
         logger = task_logger;
@@ -333,6 +336,18 @@ var controller = (function() {
     }
 
 
+    function makeList(values) {
+        var varList = [];
+        var keys = Object.keys(values);
+        for (var i = 0; i < keys.length; i++) {
+            var v = values[keys[i]];
+            v["name"] = keys[i];
+            varList.push(v);
+        }
+        return varList;
+    }
+
+
 
     function addVariableBank() {
         d3.select("#variable_list_table").node().innerHTML = "";
@@ -408,9 +423,11 @@ var controller = (function() {
                 }
                 else if (variableBankObject[variable].hasOwnProperty("type") && variableBankObject[variable].type === 'object') {
                     //Put in Rebecca's d3 visualization here.
-                    //console.log(variableBankObject[variable].values);
+                    var listParams = makeList(simpleVariableBank["current_vb"][variable]);
+                    console.log(simpleVariableBank);
                     if (!(variable in bankStatus)) {
                       bankStatus[variable] = objectSteps[0];
+                      colorDict[variable] = colors[Object.keys(colorDict).length];
                     }
                     if (bankStatus[variable] === objectSteps[0]) {
                       let div = d3.select("#variable_list_table").append('div').attr("class", "bank_object");
@@ -424,10 +441,11 @@ var controller = (function() {
                       box.append('rect')
                         .attr("class", "bank_object_box")
                         .attr("width", 220)
-                        .attr("height", variableBankObject[variable].values.length*25+10)
+                        .attr("height", listParams.filter(d => d.param == false).length*25+10)
                         .attr('y', 1)
                         .attr('x', 200)
                         .attr('fill', 'white')
+                        .attr('stroke', colorDict[variable][1])
                         .transition()
                           .ease("linear")
                           .duration(500)
@@ -440,7 +458,7 @@ var controller = (function() {
                       let variables = svg.append('g');
 
                       variables.selectAll('text')
-                        .data(variableBankObject[variable].values)
+                        .data(listParams.filter(d => d.param == false))
                         .enter()
                         .append('text')
                           .attr('class', 'bank_object_vars bank_object_vars_' + variable)
@@ -467,10 +485,11 @@ var controller = (function() {
                       box.append('rect')
                         .attr("class", "bank_object_box")
                         .attr("width", 220)
-                        .attr("height", variableBankObject[variable].values.length*25+10)
+                        .attr("height", listParams.filter(d => d.param == false).length*25+10)
                         .attr('y', 70)
                         .attr('x', 100)
-                        .attr('fill', 'white');
+                        .attr('fill', 'white')
+                        .attr('stroke', colorDict[variable][1]);
 
                       if (variableBankObject[variable].values[variableBankObject[variable].values.length-1].value !== "") {
                         d3.selectAll(".bank_object_box")
@@ -480,7 +499,7 @@ var controller = (function() {
                             .duration(500)
                             .attr('y', 1)
                           .transition()
-                            .attr('fill', "#ffd6d6");
+                            .attr('fill', colorDict[variable][0]);
                       }
 
                       let paramBoxes = svg.append('g');
@@ -494,7 +513,7 @@ var controller = (function() {
                           .attr('width', (d, i) => findWidth(d.name) > findWidth(getValueRep(variableBankObject[variable].params[i])) ? findWidth(d.name): findWidth(getValueRep(variableBankObject[variable].params[i])))
                           .attr('height', 50)
                           .attr('fill', 'white')
-                          .attr('stroke', '#ff8080')
+                          .attr('stroke', colorDict[variable][1])
                           .attr('stroke-width', "3px")
                           .attr('opacity', 0)
                           .transition()
@@ -561,7 +580,7 @@ var controller = (function() {
                       let variables = svg.append('g');
 
                       variables.selectAll('text')
-                        .data(variableBankObject[variable].values)
+                        .data(listParams.filter(d => d.param == false))
                         .enter()
                         .append('text')
                           .attr('class', 'bank_object_vars bank_object_vars_' + variable)
@@ -617,13 +636,14 @@ var controller = (function() {
                         .attr("height", variableBankObject[variable].values.length*25+10)
                         .attr('y', 1)
                         .attr('x', 100)
-                        .attr('fill', "#ffd6d6");
+                        .attr('fill', colorDict[variable][0])
+                        .attr('stroke', colorDict[variable][1]);
 
 
                       let variables = svg.append('g');
 
                       variables.selectAll('text')
-                        .data(variableBankObject[variable].values)
+                        .data(listParams.filter(d => d.param == false))
                         .enter()
                         .append('text')
                           .attr('class', 'bank_object_vars')
