@@ -13,7 +13,8 @@ var controller = (function() {
     var button;
     var bankStatus = {};
     var objectSteps = ["createBox", "addAndHighlight", "done"];
-    var colors = [["#e0deed", "#736aaf", "#5a5095"], ["#d9e8f2", "#418abe", "#346e98"], ["#fdbcb5", "#f72008", "#c61906"]];
+    //var colors = [["#e0deed", "#736aaf", "#5a5095"], ["#d9e8f2", "#418abe", "#346e98"], ["#fdbcb5", "#f72008", "#c61906"]];
+    var colors = [["#c9e8c9", "#6fc36f", "#3c903c"], ["#e4deed", "#9479b9", "#614686"], ["#c5d6ed", "#3d77c2", "#315f9b"], ["#fecde7", "#fd1c94", "#b1025f"]];
     var colorDict = {};
     
     var simpleVariableBank = {};
@@ -421,6 +422,7 @@ var controller = (function() {
         
         simpleVariableBank = generateSimpleVariableBank(variableBankObject, simpleVariableBank);
         console.log(JSON.stringify(simpleVariableBank, null, 2));
+        //console.log(colorDict);
 
         if (!isObjectEmpty(variableBankObject)) {
             for (var variable in variableBankObject) {
@@ -507,6 +509,7 @@ var controller = (function() {
 
                       let box = svg.append('g');
 
+                      console.log()
                       box.append('rect')
                         .attr("class", "bank_object_box")
                         .attr("width", 220)
@@ -718,7 +721,7 @@ var controller = (function() {
                           .attr('y', (d, i) => 7 + i*25)
                           .attr('height', 18)
                           .attr('width', (d, i) => findWidth(getInstanceText(vVariables, i)) - 10)
-                          .attr('fill', d => varChange(d, makeList(simpleVariableBank["previous_vb"][variable]["variables"])) ? "#bcdcda" : colorDict[vClassName][0])
+                          .attr('fill', d => varChange(d, makeList(simpleVariableBank["previous_vb"][variable]["variables"])) ? "#9bcac7" : colorDict[vClassName][0])
 
                       variables.selectAll('text')
                         .data(vVariables.filter(d => d.local == true))
@@ -765,7 +768,7 @@ var controller = (function() {
                         .attr('y', 20)
                         .style('font', '14px Menlo,Monaco,Consolas,"Courier New",monospace')
                         .style('fill', '#ff8000')
-                        .text(simpleVariableBank["current_vb"][variable].value);
+                        .text(/\d/.test(simpleVariableBank["current_vb"][variable].value) ? simpleVariableBank["current_vb"][variable].value : "'" + simpleVariableBank["current_vb"][variable].value + "'");
                   }
                 else {
                     listCell1.attr("class", "bank_variable_label");
