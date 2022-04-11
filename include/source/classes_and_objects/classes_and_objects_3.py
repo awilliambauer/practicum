@@ -1,4 +1,4 @@
-class Pets:
+class Pet:
 	def __init__(self, type, age, name):
 		self.type = type
 		self.age = age
@@ -8,7 +8,7 @@ class Pets:
 		return(self.age)
 	def birthday(self):
 		self.age = self.age + 1
-whiskers = Pets("cat",2,"Whiskers")
+whiskers = Pet("cat",2,"Whiskers")
 anAge = whiskers.getAge()
 whiskers.birthday()
 print(anAge, whiskers.getAge())

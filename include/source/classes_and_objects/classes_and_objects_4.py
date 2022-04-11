@@ -1,4 +1,4 @@
-class Pets:
+class Pet:
 	def __init__(self, type, age, name):
 		self.type = type
 		self.name = name
@@ -14,7 +14,7 @@ class Owner:
 		self.pet = pet
 	def getPetName(self):
 		return(self.pet.name)
-whiskers = Pets("cat", 2,"Whiskers")
+whiskers = Pet("cat", 2,"Whiskers")
 david = Owner("David", whiskers)
 davidsPet = david.getPetName()
 print(davidsPet)
