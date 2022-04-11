@@ -12,20 +12,6 @@ function TplHelper() {
 
     this.iterable = undefined;
     this.iterable2 = undefined;
-    
-    this.get_context = function(variable_bank, representation_of_function_call) {
-        // TODO: add a new get_context function to simulator that takes the variable bank and an AST for the function call
-        // goal is not to support arbitrary number of function calls. just one additional function call.
-
-        // console.log("vb: " + variable_bank);
-        // console.log(variable_bank);
-        
-        // one method calls a second method, parameters and local variables from initial variables fade
-        // OVERALL: make the variable bank hold all information needed for a visualization
-        
-        var source_of_truth = {"curr": {}, "prev": {}};
-        return source_of_truth;
-    }
 
     this.copy_args = function(o) {
         var args = [];
@@ -911,48 +897,6 @@ function TplHelper() {
             return line.expression.args[1];
         }
     }
-    
-    this.simple_bank = function(curr_messy_bank, old_simple_bank) {
-        console.log("The bank is ");
-        console.log(curr_messy_bank);
-        
-        let bank_simplified = JSON.parse(JSON.stringify(curr_messy_bank));
-        for (const obj in bank_simplified) {
-            let obj_values = bank_simplified[obj]["values"];
-            
-            let temp = {};
-            if (bank_simplified[obj].hasOwnProperty("params")) {
-                let obj_params = bank_simplified[obj]["params"];
-                for (const i in obj_params) {
-                    let name = obj_params[i]["name"];
-                    let value = obj_params[i]["value"];
-                    temp[name] = {value: value, local: true, param: true};
-                }
-            }
-        
-            for (const i in obj_values) {
-                let value = obj_values[i]["value"];
-                let name = obj_values[i]["name"];
-                let local = true;
-                if (obj_values[i]["type"] == "reference") {
-                    name = "self." + name;
-                    local = false;
-                }
-                temp[name] = {value: value, local: local, param: false};
-            }
-            bank_simplified[obj] = temp;
-        }
-        
-        let the_new_simple_bank = {"current_vb": bank_simplified, "previous_vb": old_simple_bank["current_vb"]};
-        
-        //TODO: remove these logs
-        console.log("Simplified VB:");
-        console.log(JSON.stringify(the_new_simple_bank, null, 2));
-        
-        // Send the simple VB over to the controller
-        controller.acceptSimpleVariableBank(the_new_simple_bank);
-        return the_new_simple_bank;
-    }
 
     this.get_function_from_call = function(bank, call){
         if (call.object.hasOwnProperty("tag")){
@@ -960,7 +904,8 @@ function TplHelper() {
                 let class_reference = bank[call.object.value].reference;
                 for (let idx = 0; idx < class_reference.body.length; idx++){
                     if (class_reference.body[idx].name === call.name){
-                        console.log("FUNCTION CALL");
+                        // console.log("FUNCTION CALL " + class_reference.body[idx].name);
+                        
                         return class_reference.body[idx];
                     }
                 }
