@@ -13,8 +13,7 @@ var controller = (function() {
     var button;
     var bankStatus = {};
     var objectSteps = ["createBox", "addAndHighlight", "done"];
-    var trackHighlights = -3;
-    var colors = [["#e0deed", "#736aaf"], ["#b3d0e5", "#3b7cab"], ["#fb8072", "#f72008"]];
+    var colors = [["#e0deed", "#736aaf", "#5a5095"], ["#d9e8f2", "#418abe", "#346e98"], ["#fdbcb5", "#f72008", "#c61906"]];
     var colorDict = {};
     
     var simpleVariableBank = {};
@@ -26,8 +25,6 @@ var controller = (function() {
         $("#problem_space > pre").addClass("hidden");
         $("#problem_space").css("padding-top", "15px");
         bankStatus = {};
-        colorDict = {};
-        trackHighlights = -3;
 
         logger = task_logger;
         simulatorInterface = simulatorInterface_;
@@ -259,26 +256,21 @@ var controller = (function() {
         }
     }
 
-    function getInstanceText(bank, variable, idx) {
+    function getInstanceText(values, idx) {
       var value = "";
-      if (bank[variable].values[idx].type === "string" && bank[variable].values[idx].value !== "") {
-        value = "'" + bank[variable].values[idx].value + "'";
-      } else if (bank[variable].values[idx].type === "instance" && bank[variable].values[idx].value !== "") {
-        if (bank[variable].values[idx].value.reference.name === "Pets") {
-          value = bank[variable].values[idx].value.reference.name + ": " + bank[variable].values[idx].value.values[1]["value"];
-        } else if (bank[variable].values[idx].value.reference.name == "Point") {
-          value = bank[variable].values[idx].value.reference.name + ": (" + bank[variable].values[idx].value.values[2]["value"] + ", " + bank[variable].values[idx].value.values[3]["value"] + ")";
-        }
-      } else {
-        value = bank[variable].values[idx].value;
+      if (values[idx].type === "string" && values[idx].value !== "") {
+        value = "'" + values[idx].value + "'";
+      } 
+      else {
+        value = values[idx].value;
       }
-      return(bank[variable].values[idx].name + " = " + value);
+      return(values[idx].name.replace("self.", "") + " = " + value);
     }
 
     function matchIndex(v, values) {
       var found = -1;
       for (var i = 0; i < values.length; i++) {
-        if (v.name === values[i].name) {
+        if (v.name === values[i].name.replace("self.", "")) {
           found = i;
         }
       }
@@ -290,22 +282,17 @@ var controller = (function() {
       var value = "";
       if (val.type === "string") {
         value = "'" + val.value + "'";
-      } else if (val.type == "object") {
-        if (val.reference.name == "Pets") {
-          value = val.reference.name + ": " + val.values[1]["value"];
-        } else if (val.reference.name == "Point") {
-          value = val.reference.name + ": (" + val.values[2]["value"] + ", " + val.values[3]["value"] + ")";
-        }
-      } else {
+      }
+      else {
         value = val.value;
       }
       return value;
     }
 
 
-    function findOpacity(v, values){
+    function findOpacity(v, values, prevValues){
       var idx = matchIndex(v, values);
-      if ((values[idx].value !== "") && (idx === values.length -1 || values[idx+1].value === "") && trackHighlights%2 == 0) {
+      if ((values[idx].value !== "") && (idx === values.length -1 || values[idx+1].value === "") && prevValues[idx].value === "") {
         return 1;
       } else {
         return 0;
@@ -320,13 +307,13 @@ var controller = (function() {
     }
 
 
-    function getHighlightX(i, data, dataValues) {
+    function getHighlightX(data, i) {
       var x = 110;
       for (let j = 0; j < i; j++) {
-        if (findWidth(data[j].name) > findWidth(getValueRep(dataValues[j]))) {
+        if (findWidth(data[j].name) > findWidth(getValueRep(data[j]))) {
           x += findWidth(data[j].name) + 20;
         } else {
-          x += findWidth(getValueRep(dataValues[j])) + 20;
+          x += findWidth(getValueRep(data[j])) + 20;
         }
       }
       return x;
@@ -344,41 +331,79 @@ var controller = (function() {
     }
 
 
+    function varChange(val, oldVals) {
+        var idx = matchIndex(val, oldVals);
+        return (val.value !== oldVals[idx].value);
+    }
+
+
+    function getColor(v, colorDict) {
+        if (v.type === "instance" && v.value !== "") {
+            return colorDict[v.value.split(":")[0]][2];
+        }
+        return "black";
+    }
+
+
     function generateSimpleVariableBank(curr_messy_bank, old_simple_bank) {
         let bank_simplified = {};
         for (const obj in curr_messy_bank) {
-            
             bank_simplified[obj] = {};
-            if (curr_messy_bank[obj].hasOwnProperty("reference")) {
+            if (curr_messy_bank[obj].hasOwnProperty("reference") && curr_messy_bank[obj]["reference"]) {
                 // This is a class. Add the class name as a value in the dict
                 bank_simplified[obj] = {"class_name": curr_messy_bank[obj]["reference"]["name"]};
-            }
-            
-            let constructor_parameters = {};
-            if (curr_messy_bank[obj].hasOwnProperty("params")) {
-                let obj_params = curr_messy_bank[obj]["params"];
-                for (const i in obj_params) {
-                    let name = obj_params[i]["name"];
-                    let value = obj_params[i]["value"];
-                    constructor_parameters[name] = {value: value, local: true};
+                let constructor_parameters = {};
+                if (curr_messy_bank[obj].hasOwnProperty("params")) {
+                    let obj_params = curr_messy_bank[obj]["params"];
+                    for (const i in obj_params) {
+                        let name = obj_params[i]["name"];
+                        let value = obj_params[i]["value"];
+                        let type = obj_params[i]["type"];
+                        if (type === "object") {
+                            if (obj_params[i].reference.name == "Pets") {
+                                value = obj_params[i].reference.name + ": " + obj_params[i].values[1].value;
+                            } else if (obj_params[i].reference.name == "Point") {
+                                value = obj_params[i].reference.name + ": (" + obj_params[i].values[2].value + ", " + obj_params[i].values[3].value + ")";
+                            }
+                        }
+                        constructor_parameters[name] = {value: value, type: type, local: true};
+                    }
                 }
-            }
-            
-            let vars = {}
-            let obj_values = curr_messy_bank[obj]["values"];
-            for (const i in obj_values) {
-                let value = obj_values[i]["value"];
-                let name = obj_values[i]["name"];
-                let local = true;
-                if (obj_values[i]["type"] == "reference") {
-                    name = "self." + name;
-                    local = false;
+                
+                let vars = {}
+                let obj_values = curr_messy_bank[obj]["values"];
+                for (const i in obj_values) {
+                    let value = obj_values[i]["value"];
+                    let name = obj_values[i]["name"];
+                    let type = obj_values[i]["type"];
+                    if (type === "instance" && value !== "") {
+                        if (obj_values[i].value.reference.name == "Pets") {
+                            value = obj_values[i].value.reference.name + ": " + obj_values[i].value.values[1].value;
+                        } else if (obj_values[i].value.reference.name == "Point") {
+                            value = obj_values[i].value.reference.name + ": (" + obj_values[i].value.values[2].value + ", " + obj_values[i].value.values[3].value + ")";
+                        }
+                    }
+                    let local = true;
+                    if (obj_values[i]["type"] == "reference") {
+                        name = "self." + name;
+                        local = false;
+                    }
+                    vars[name] = {value: value, type: type, local: local};
                 }
-                vars[name] = {value: value, local: local};
+                bank_simplified[obj]["variables"] = vars;
+                bank_simplified[obj]["parameters"] = constructor_parameters;
+            } else {
+                bank_simplified[obj]["value"] = curr_messy_bank[obj].value;
+                if (curr_messy_bank[obj].hasOwnProperty("type")) {
+                    bank_simplified[obj]["type"] = curr_messy_bank[obj].type;
+                } else if (curr_messy_bank[obj].hasOwnProperty("temp")) {
+                    bank_simplified[obj]["type"] = "temp";
+                }
+                
             }
-            bank_simplified[obj]["variables"] = vars;
-            bank_simplified[obj]["parameters"] = constructor_parameters;
-        }
+            console.log(curr_messy_bank[obj]);
+            
+        } 
         
         let the_new_simple_bank = {"current_vb": bank_simplified, "previous_vb": old_simple_bank["current_vb"]};
         return the_new_simple_bank;
@@ -461,12 +486,18 @@ var controller = (function() {
                 }
                 else if (variableBankObject[variable].hasOwnProperty("type") && variableBankObject[variable].type === 'object') {
                     //Put in Rebecca's d3 visualization here.
-                    //var listParams = makeList(simpleVariableBank["current_vb"][variable]);
-                    //console.log(simpleVariableBank);
+                    var vParams = makeList(simpleVariableBank["current_vb"][variable]["parameters"]);
+                    var vVariables = makeList(simpleVariableBank["current_vb"][variable]["variables"]);
+                    var vClassName = simpleVariableBank["current_vb"][variable]["class_name"];
+                    
                     if (!(variable in bankStatus)) {
                       bankStatus[variable] = objectSteps[0];
-                      colorDict[variable] = colors[Object.keys(colorDict).length];
                     }
+
+                    if (!(vClassName in colorDict)) {
+                        colorDict[vClassName] = colors[Object.keys(colorDict).length];
+                    }
+
                     if (bankStatus[variable] === objectSteps[0]) {
                       let div = d3.select("#variable_list_table").append('div').attr("class", "bank_object");
                       let svg = div.append('svg')
@@ -479,11 +510,11 @@ var controller = (function() {
                       box.append('rect')
                         .attr("class", "bank_object_box")
                         .attr("width", 220)
-                        .attr("height", listParams.filter(d => d.param == false).length*25+10)
+                        .attr("height", vVariables.filter(d => d.local == true).length*25+10)
                         .attr('y', 1)
                         .attr('x', 200)
                         .attr('fill', 'white')
-                        .attr('stroke', colorDict[variable][1])
+                        .attr('stroke', colorDict[vClassName][1])
                         .transition()
                           .ease("linear")
                           .duration(500)
@@ -496,14 +527,15 @@ var controller = (function() {
                       let variables = svg.append('g');
 
                       variables.selectAll('text')
-                        .data(listParams.filter(d => d.param == false))
+                        .data(vVariables.filter(d => d.local == true))
                         .enter()
                         .append('text')
                           .attr('class', 'bank_object_vars bank_object_vars_' + variable)
                           .attr('x', 110)
                           .attr('y', (d, i) => 90 + i*25)
+                          .style('fill', d => getColor(d, colorDict))
                           .attr('opacity', 0)
-                          .text((d, i) => getInstanceText(variableBankObject, variable, i))
+                          .text((d, i) => getInstanceText(vVariables, i))
                           .transition()
                             .delay(1000)
                             .duration(0)
@@ -523,13 +555,14 @@ var controller = (function() {
                       box.append('rect')
                         .attr("class", "bank_object_box")
                         .attr("width", 220)
-                        .attr("height", listParams.filter(d => d.param == false).length*25+10)
+                        .attr("height", vVariables.filter(d => d.local == true).length*25+10)
                         .attr('y', 70)
                         .attr('x', 100)
                         .attr('fill', 'white')
-                        .attr('stroke', colorDict[variable][1]);
+                        .attr('stroke', colorDict[vClassName][1]);
 
-                      if (variableBankObject[variable].values[variableBankObject[variable].values.length-1].value !== "") {
+                    
+                      if (vVariables[vVariables.length-1].value !== "") {
                         d3.selectAll(".bank_object_box")
                           .transition()
                             .delay(1500)
@@ -537,26 +570,26 @@ var controller = (function() {
                             .duration(500)
                             .attr('y', 1)
                           .transition()
-                            .attr('fill', colorDict[variable][0]);
+                            .attr('fill', colorDict[vClassName][0]);
                       }
 
                       let paramBoxes = svg.append('g');
 
                       paramBoxes.selectAll('rect')
-                        .data(variableBankObject[variable].reference.body[0].params.slice(1, variableBankObject[variable].reference.body[0].params.length))
+                        .data(vParams)
                         .enter()
                         .append('rect')
-                          .attr('x', (d, i) => getHighlightX(i, variableBankObject[variable].reference.body[0].params.slice(1, variableBankObject[variable].reference.body[0].params.length), variableBankObject[variable].params))
+                          .attr('x', (d, i) => getHighlightX(vParams, i))
                           .attr('y', 1)
-                          .attr('width', (d, i) => findWidth(d.name) > findWidth(getValueRep(variableBankObject[variable].params[i])) ? findWidth(d.name): findWidth(getValueRep(variableBankObject[variable].params[i])))
+                          .attr('width', (d, i) => findWidth(d.name) > findWidth(getValueRep(d)) ? findWidth(d.name): findWidth(getValueRep(d)))
                           .attr('height', 50)
                           .attr('fill', 'white')
-                          .attr('stroke', colorDict[variable][1])
+                          .attr('stroke', colorDict[vClassName][1])
                           .attr('stroke-width', "3px")
                           .attr('opacity', 0)
                           .transition()
                             .duration(0)
-                            .attr('opacity', (d, i) => findOpacity(d, variableBankObject[variable].values))
+                            .attr('opacity', d => findOpacity(d, vVariables, makeList(simpleVariableBank["previous_vb"][variable]["variables"])))
                           .transition()
                             .delay(500)
                             .duration(500)
@@ -565,22 +598,22 @@ var controller = (function() {
                       let paramBoxVars = svg.append('g');
 
                       paramBoxVars.selectAll('text')
-                        .data(variableBankObject[variable].reference.body[0].params.slice(1, variableBankObject[variable].reference.body[0].params.length))
+                        .data(vParams)
                         .enter()
                         .append('text')
                           .attr('class', 'bank_param_box_vars')
                           .style('font', '14px Menlo,Monaco,Consolas,"Courier New",monospace')
                           .style('fill', '#58a7a3')
                           .style('font-weight', 'bold')
-                          .attr('x', (d,i) => getHighlightX(i, variableBankObject[variable].reference.body[0].params.slice(1, variableBankObject[variable].reference.body[0].params.length), variableBankObject[variable].params) + 5)
+                          .attr('x', (d,i) => getHighlightX(vParams, i) + 5)
                           .attr('y', 20)
                           .attr('opacity', 0)
                           .text(d => d.name)
                           .transition()
                             .duration(0)
                             .attr('opacity', 1);
-
-                      if (variableBankObject[variable].values[variableBankObject[variable].values.length-1].value !== "") {
+                        
+                      if (vVariables[vVariables.length-1].value !== "") {
                         d3.selectAll(".bank_param_box_vars")
                           .transition()
                             .delay(1000)
@@ -592,21 +625,21 @@ var controller = (function() {
                       let paramBoxVals = svg.append('g');
 
                       paramBoxVals.selectAll('text')
-                          .data(variableBankObject[variable].params)
+                          .data(vParams)
                           .enter()
                           .append('text')
                             .style('font', '14px Menlo,Monaco,Consolas,"Courier New",monospace')
                             .style('fill', '#58a7a3')
                             .attr('class', 'bank_param_box_vals')
-                            .attr('x', (d,i) => getHighlightX(i, variableBankObject[variable].reference.body[0].params.slice(1, variableBankObject[variable].reference.body[0].params.length), variableBankObject[variable].params) + 5)
+                            .attr('x', (d,i) => getHighlightX(vParams, i) + 5)
                             .attr('y', 40)
                             .attr('opacity', 0)
-                            .text((d, i) => getValueRep(variableBankObject[variable].params[i]))
+                            .text(d => getValueRep(d))
                             .transition()
                               .duration(0)
                               .attr('opacity', 1);
-
-                      if (variableBankObject[variable].values[variableBankObject[variable].values.length-1].value !== "") {
+                        
+                      if (vVariables[vVariables.length-1].value !== "") {
                         d3.selectAll(".bank_param_box_vals")
                           .transition()
                             .delay(1000)
@@ -618,17 +651,17 @@ var controller = (function() {
                       let variables = svg.append('g');
 
                       variables.selectAll('text')
-                        .data(listParams.filter(d => d.param == false))
+                        .data(vVariables.filter(d => d.local == true))
                         .enter()
                         .append('text')
                           .attr('class', 'bank_object_vars bank_object_vars_' + variable)
                           .attr('x', 110)
                           .attr('y', (d, i) => 90 + i*25)
+                          .style('fill', d => getColor(d, colorDict))
                           .attr('opacity', 1)
-                          .text((d, i) => getInstanceText(variableBankObject, variable, i))
+                          .text((d, i) => getInstanceText(vVariables, i))
 
-
-                      if (variableBankObject[variable].values[variableBankObject[variable].values.length-1].value !== "") {
+                      if (vVariables[vVariables.length-1].value !== "") {
                         d3.selectAll('.bank_object_vars_' + variable)
                           .transition()
                             .delay(1500)
@@ -651,19 +684,16 @@ var controller = (function() {
 
                         svg.transition()
                           .delay(2000)
-                          .attr('height', 150);
+                          .attr('height', vVariables.filter(d => d.local === true).length*25+30);
 
-                        trackHighlights = -3;
                         bankStatus[variable] = objectSteps[2]
-                      } else {
-                        trackHighlights += 1;
-                      }
+                      } 
                   }
                   else if (bankStatus[variable] === objectSteps[2]) {
                       let div = d3.select("#variable_list_table").append('div').attr("class", "bank_object");
                       let svg = div.append('svg')
                           .attr('width', 500)
-                          .attr('height', 150)
+                          .attr('height', vVariables.filter(d => d.local === true).length*25+30)
                           .attr('fill', 'white');
 
                       let box = svg.append('g');
@@ -671,24 +701,36 @@ var controller = (function() {
                       box.append('rect')
                         .attr("class", "bank_object_box")
                         .attr("width", 220)
-                        .attr("height", variableBankObject[variable].values.length*25+10)
+                        .attr("height", vVariables.filter(d => d.local === true).length*25+10)
                         .attr('y', 1)
                         .attr('x', 100)
-                        .attr('fill', colorDict[variable][0])
-                        .attr('stroke', colorDict[variable][1]);
+                        .attr('fill', colorDict[vClassName][0])
+                        .attr('stroke', colorDict[vClassName][1]);
 
 
                       let variables = svg.append('g');
 
+                      variables.selectAll('rect')
+                        .data(vVariables.filter(d => d.local == true))
+                        .enter()
+                        .append('rect')
+                          .attr('x', 105)
+                          .attr('y', (d, i) => 7 + i*25)
+                          .attr('height', 18)
+                          .attr('width', (d, i) => findWidth(getInstanceText(vVariables, i)) - 10)
+                          .attr('fill', d => varChange(d, makeList(simpleVariableBank["previous_vb"][variable]["variables"])) ? "#bcdcda" : colorDict[vClassName][0])
+
                       variables.selectAll('text')
-                        .data(listParams.filter(d => d.param == false))
+                        .data(vVariables.filter(d => d.local == true))
                         .enter()
                         .append('text')
                           .attr('class', 'bank_object_vars')
                           .attr('x', 110)
                           .attr('y', (d, i) => 21 + i*25)
+                          .style('fill', d => getColor(d, colorDict))
                           .attr('opacity', 1)
-                          .text((d, i) => getInstanceText(variableBankObject, variable, i))
+                          .text((d, i) => getInstanceText(vVariables, i))
+                        
 
                       let objectName = svg.append('g');
 
@@ -699,6 +741,31 @@ var controller = (function() {
                         .attr('opacity', 1)
                         .text(variable + " =")
                     }
+                  }
+                  else if (simpleVariableBank["current_vb"][variable].hasOwnProperty("type") && (variableBankObject[variable].type === 'return' || simpleVariableBank["current_vb"][variable]["type"] === "temp")) {
+                    let div = d3.select("#variable_list_table").append('div');
+
+                    let svg = div.append('svg')
+                        .attr('width', 500)
+                        .attr('height', 25)
+                        .attr('fill', 'white');
+                    
+                    let variableCont = svg.append('g');
+
+                    variableCont.append('text')
+                        .attr('x', 100)
+                        .attr('y', 20)
+                        .style('font', '14px Menlo,Monaco,Consolas,"Courier New",monospace')
+                        .style('fill', '#ff8000')
+                        .style('font-weight', 'bold')
+                        .text(variable + ":");
+                    
+                    variableCont.append('text')
+                        .attr('x', 100 + findWidth(variable))
+                        .attr('y', 20)
+                        .style('font', '14px Menlo,Monaco,Consolas,"Courier New",monospace')
+                        .style('fill', '#ff8000')
+                        .text(simpleVariableBank["current_vb"][variable].value);
                   }
                 else {
                     listCell1.attr("class", "bank_variable_label");
