@@ -502,8 +502,6 @@ function TplHelper() {
     this.add_the_object_to_the_variable_bank = function(bank, variable) {
         // Variable.reference[0] is the init function of the correct class
         // Variable.values is the array of params that instantiate the class object
-        
-
         let class_definition = variable.reference;
         let parameters = class_definition.body[0].params.slice(1); // Ignoring first parameter (self)
         let param_list = [];
@@ -525,7 +523,7 @@ function TplHelper() {
                     variable_bank_values[idx]["value"] = "";
                     variable_bank_values[idx]["hidden_val"] =  {"value": declaration_value.value, "type": declaration_value.type, "tag": "literal"};
                     variable_bank_values[idx]["type"] =  declaration_value.type;
-                } else { //Case if setting a reference
+                } else { //Case if setting parameter being passed in.
                     let declaration_identifier = class_constructor_body[idx].expression.args[0].name;
                     let declaration_value = class_constructor_body[idx].expression.args[1];
                     let declaration_type = "reference";
@@ -549,7 +547,10 @@ function TplHelper() {
                     } else {
                         variable_bank_values[idx]["hidden_val"] = {"value": declaration_value.value, "type": declaration_type, "tag": "literal"};
                     }
-                    variable_bank_values[idx]["type"] =  declaration_type;
+                    variable_bank_values[idx]["type"] = declaration_type;                    
+                }
+                if (class_constructor_body[idx].expression.args[0].hasOwnProperty("object") && class_constructor_body[idx].expression.args[0].object.tag === "identifier"){
+                    variable_bank_values[idx]["tag"] = "reference";
                 }
             }
             
@@ -608,7 +609,7 @@ function TplHelper() {
             if (currAstElement.hasOwnProperty("tag")
                 && currAstElement.tag === "class"
                 && currAstElement.name == className) {
-                    return currAstElement;
+                    return this.copy(currAstElement);
                 }
             }
         return false;
@@ -626,7 +627,7 @@ function TplHelper() {
             }
         
         }
-        for(const [key, value] in Object.entries(bank)){
+        for(const [key, value] of Object.entries(bank)){
             if (key === reference.name){
                 return false;
             }
@@ -892,21 +893,43 @@ function TplHelper() {
 
     this.get_function = function(line){
         if (line.expression.tag === "call"){
+            //This is the case if a function call is made just normally "functioncall(stuff)"
             return line.expression;
         } else {
+            // This is the case when a function call is made in a declaration of the form "x = functioncall(stuff)"
             return line.expression.args[1];
+        }
+    }
+
+    this.update_current_function_tag = function(line, variable_bank){
+        if (line.expression.tag === "call"){
+            //This is the case if a function call is made just normally "functioncall(stuff)"
+            variable_bank["CURRENTFUNCTION"] = {name: line.expression.object.name};
+            if (line.expression.object.hasOwnProperty("object") && line.expression.object.object.tag === "identifier"){
+                variable_bank["CURRENTFUNCTION"]["instance"] = line.expression.object.object.value;
+            }
+            return variable_bank;
+        } else {
+            // This is the case when a function call is made in a declaration of the form "x = functioncall(stuff)"
+            variable_bank["CURRENTFUNCTION"] = {name: line.expression.args[1].object.name};
+            if (line.expression.args[1].object.hasOwnProperty("object") && line.expression.args[1].object.object.tag === "identifier"){
+                variable_bank["CURRENTFUNCTION"]["instance"] = line.expression.args[1].object.object.value;
+            }
+            return variable_bank;
         }
     }
 
     this.get_function_from_call = function(bank, call){
         if (call.object.hasOwnProperty("tag")){
             if (call.object.tag === "identifier"){
-                let class_reference = bank[call.object.value].reference;
-                for (let idx = 0; idx < class_reference.body.length; idx++){
-                    if (class_reference.body[idx].name === call.name){
-                        // console.log("FUNCTION CALL " + class_reference.body[idx].name);
-                        
-                        return class_reference.body[idx];
+                for (const [key, val] of Object.entries(bank)){
+                    let class_reference = val.reference;
+                    //TODO: Let call.object.value actually be the instance name.
+                    for (let idx = 0; idx < class_reference.body.length; idx++){
+                        if (class_reference.body[idx].name === call.name){
+                            // console.log("FUNCTION CALL " + class_reference.body[idx].name);
+                            return class_reference.body[idx];
+                        }
                     }
                 }
             }

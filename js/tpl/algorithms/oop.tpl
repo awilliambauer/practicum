@@ -13,11 +13,6 @@ function TPLAlgorithm() {
     [no_step]
     variables = helper.create_new_variable_bank();
     
-    [no_step]
-    let variables_simple;
-    [no_step]
-    variables_simple = helper.create_new_variable_bank();
-    
     let lineNum;
     [no_step]
     lineNum = 0;
@@ -94,6 +89,9 @@ function TPLAlgorithm() {
                     let functionCall;
                     [no_step]
                     functionCall = helper.get_function(this_is_the_next_line_that_will_execute);
+
+                    [no_step]
+                    variables = helper.update_current_function_tag(this_is_the_next_line_that_will_execute, variables);
 
                     let functionDefinition;
                     [no_step]
@@ -296,6 +294,9 @@ function TPLAlgorithm() {
             let functionCall;
             [no_step]
             functionCall = helper.get_function(this_is_the_next_line_that_will_execute);
+
+            [no_step]
+            variables = helper.update_current_function_tag(this_is_the_next_line_that_will_execute, variables);
 
             let functionDefinition;
             [no_step]
