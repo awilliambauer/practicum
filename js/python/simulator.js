@@ -1,9 +1,3 @@
-// TODO: add a new get_context function to simulator that takes the variable bank and an AST for the function call
-// goal is not to support arbitrary number of function calls. just one additional function call.
-// one method calls a second method, parameters and local variables from initial variables fade
-// OVERALL: make the variable bank hold all information needed for a visualization
-
-
 /** Helper functions to simulate python code (without explanations) */
 var python_simulator = function() {
     "use strict";
