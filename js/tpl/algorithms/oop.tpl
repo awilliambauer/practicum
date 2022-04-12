@@ -13,11 +13,6 @@ function TPLAlgorithm() {
     [no_step]
     variables = helper.create_new_variable_bank();
     
-    [no_step]
-    let variables_simple;
-    [no_step]
-    variables_simple = helper.create_new_variable_bank();
-    
     let lineNum;
     [no_step]
     lineNum = 0;
