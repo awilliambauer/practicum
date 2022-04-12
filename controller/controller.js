@@ -13,7 +13,6 @@ var controller = (function() {
     var button;
     var bankStatus = {};
     var objectSteps = ["createBox", "addAndHighlight", "done"];
-    //var colors = [["#e0deed", "#736aaf", "#5a5095"], ["#d9e8f2", "#418abe", "#346e98"], ["#fdbcb5", "#f72008", "#c61906"]];
     var colors = [["#c9e8c9", "#6fc36f", "#3c903c"], ["#e4deed", "#9479b9", "#614686"], ["#c5d6ed", "#3d77c2", "#315f9b"], ["#fecde7", "#fd1c94", "#b1025f"]];
     var colorDict = {};
     
@@ -422,7 +421,6 @@ var controller = (function() {
         
         simpleVariableBank = generateSimpleVariableBank(variableBankObject, simpleVariableBank);
         console.log(JSON.stringify(simpleVariableBank, null, 2));
-        //console.log(colorDict);
 
         if (!isObjectEmpty(variableBankObject)) {
             for (var variable in variableBankObject) {
