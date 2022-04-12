@@ -901,24 +901,6 @@ function TplHelper() {
         }
     }
 
-    this.update_current_function_tag = function(line, variable_bank){
-        if (line.expression.tag === "call"){
-            //This is the case if a function call is made just normally "functioncall(stuff)"
-            variable_bank["CURRENTFUNCTION"] = {name: line.expression.object.name};
-            if (line.expression.object.hasOwnProperty("object") && line.expression.object.object.tag === "identifier"){
-                variable_bank["CURRENTFUNCTION"]["instance"] = line.expression.object.object.value;
-            }
-            return variable_bank;
-        } else {
-            // This is the case when a function call is made in a declaration of the form "x = functioncall(stuff)"
-            variable_bank["CURRENTFUNCTION"] = {name: line.expression.args[1].object.name};
-            if (line.expression.args[1].object.hasOwnProperty("object") && line.expression.args[1].object.object.tag === "identifier"){
-                variable_bank["CURRENTFUNCTION"]["instance"] = line.expression.args[1].object.object.value;
-            }
-            return variable_bank;
-        }
-    }
-
     this.get_function_from_call = function(bank, call){
         if (call.object.hasOwnProperty("tag")){
             if (call.object.tag === "identifier"){

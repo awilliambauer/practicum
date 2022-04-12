@@ -465,6 +465,14 @@ var controller = (function() {
   function visualizeObjectInVariableBank(variable, simpleVariableBank) {
       //TODO: FINISH OBJECT VISUALIZATION
       // ** ADD OBJECT-SPECIFIC VB VIZ TO THIS FUNCTION **
+    
+    // Note for Rebecca:
+    // You can access the current python function name like this:
+    // console.log(state.variables.in_scope.current_python_function.value);
+    // It is null before any functions are called.
+    // It does NOT return to null once we're finished with function calls. If that's necessary, we could probably add it.
+      
+      
     var vParams = makeList(
       simpleVariableBank["current_vb"][variable]["parameters"]
     );
