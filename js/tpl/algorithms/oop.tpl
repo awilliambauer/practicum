@@ -12,7 +12,7 @@ function TPLAlgorithm() {
     let variables: VariableBank;
     [no_step]
     variables = helper.create_new_variable_bank();
-    
+
     let lineNum;
     [no_step]
     lineNum = 0;
@@ -26,18 +26,22 @@ function TPLAlgorithm() {
 
     [no_step]
     while(helper.check_instantiation(ast.body) == false){
-        [prompt]
-        "This is a class declaration. The program does not start here. We will revisit this later.";
+        //[prompt]
+        //"This is a class declaration. The program does not start here. We will revisit this later.";
         [no_step]
         helper.go_next_line_without_reading();
+        [no_step]
         this_is_the_next_line_that_will_execute = helper.get_next_line(ast.body, this_is_the_next_line_that_will_execute);
     }
+
+    [prompt]
+    "We start here because every line before this is part of a class definition.";
 
     [no_step]
     do {
         [no_step]
         lineNum = helper.get_line_num();
-        
+
         [no_step]
         if (helper.check_instantiation(ast.body)){
             [prompt]
@@ -46,10 +50,10 @@ function TPLAlgorithm() {
             let Let_us_look_at_the_class_definition: AstNode;
             [no_step]
             Let_us_look_at_the_class_definition = this_is_the_next_line_that_will_execute.expression.args[1].object;
-            
+
             let we_will_add_this_to_the_variable_bank: Instance;
             [interactive("add_variable")] we_will_add_this_to_the_variable_bank = helper.add_class_instance(variables, ast.body);
-            
+
             let theClass;
             [no_step]
             theClass = helper.get_class_from_name(Let_us_look_at_the_class_definition.value, ast.body);
@@ -64,11 +68,11 @@ function TPLAlgorithm() {
             let constructorIndex;
             [no_step]
             constructorIndex = 0;
-            
+
             [no_step]
             do {
                 this_is_the_next_line_that_will_execute = theConstructor.body[constructorIndex];
-                
+
 
                 [prompt]
                 "This line assigns a value.";
@@ -76,7 +80,7 @@ function TPLAlgorithm() {
                 let newVariable: Variable;
                 [no_step]
                 newVariable = null;
-                
+
                 [no_step]
                 if (helper.line_has_a_function_call(this_is_the_next_line_that_will_execute)){
                     [prompt]
@@ -96,12 +100,12 @@ function TPLAlgorithm() {
                     let functionDefinition;
                     [no_step]
                     functionDefinition = helper.get_function_from_call(variables, functionCall.object);
-                    
+
 
                     let classReference;
                     [no_step]
                     classReference = functionDefinition.params[0].name;
-                    
+
                     let bodyIndex;
                     [no_step]
                     bodyIndex = 0;
@@ -156,7 +160,7 @@ function TPLAlgorithm() {
                                 [no_step]
                                 result = helper.get_line_result(variables, this_is_the_next_line_that_will_execute);
                                 variables[classReference] = helper.update_object_in_variable_bank(variables, variables[classReference], result);
-                                
+
                             }
                         } else [no_step] if (helper.are_we_on_return_statement(this_is_the_next_line_that_will_execute)){
                             [no_step]
@@ -236,9 +240,9 @@ function TPLAlgorithm() {
                                     } else {
                                         break;
                                     }
-                                } 
-                            } 
-                        } 
+                                }
+                            }
+                        }
                         [no_step]
                         bodyIndex = bodyIndex + 1;
                     } while (bodyIndex < helper.get_class_method_body_range(functionDefinition));
@@ -276,12 +280,12 @@ function TPLAlgorithm() {
                 [no_step]
                 constructorIndex = constructorIndex + 1;
             } while (constructorIndex < helper.get_class_constructor_body_range(theClass));
-            
+
             [no_step]
-            helper.go_next_line_without_reading();    
-            
+            helper.go_next_line_without_reading();
+
             this_is_the_next_line_that_will_execute = helper.get_next_line(ast.body, this_is_the_next_line_that_will_execute);
-        } 
+        }
 
         else [no_step] if (helper.line_has_a_function_call(this_is_the_next_line_that_will_execute)){
             [prompt]
@@ -305,7 +309,7 @@ function TPLAlgorithm() {
             let classReference;
             [no_step]
             classReference = functionDefinition.params[0].name;
-            
+
             let bodyIndex;
             [no_step]
             bodyIndex = 0;
@@ -354,7 +358,7 @@ function TPLAlgorithm() {
                         [no_step]
                         result = helper.get_line_result(variables, this_is_the_next_line_that_will_execute);
                         [no_step]
-                        variables[classReference] = helper.update_object_in_variable_bank(variables, variables[classReference], result); 
+                        variables[classReference] = helper.update_object_in_variable_bank(variables, variables[classReference], result);
                     }
                 } else [no_step] if (helper.are_we_on_return_statement(this_is_the_next_line_that_will_execute)){
                     [no_step]
@@ -407,7 +411,7 @@ function TPLAlgorithm() {
                                 }
                                 else {
                                     bodyIndex = bodyIndex - 1;
-                                } 
+                                }
                             }
                         } else {
                             [no_step]
@@ -417,10 +421,10 @@ function TPLAlgorithm() {
                             } else {
                                 [no_step]
                                 bodyIndex = bodyIndex - 1;
-                            } 
-                        } 
-                    } 
-                } 
+                            }
+                        }
+                    }
+                }
                 [no_step]
                 bodyIndex = bodyIndex + 1;
             } while (bodyIndex < helper.get_class_method_body_range(functionDefinition));
@@ -456,7 +460,7 @@ function TPLAlgorithm() {
             helper.go_next_line_without_reading();
             this_is_the_next_line_that_will_execute = helper.get_next_line(ast.body, this_is_the_next_line_that_will_execute);
         }
-        
+
         else {
             [prompt]
             "Another situation? We need to add another case.";
@@ -476,14 +480,14 @@ function TPLAlgorithm() {
     }
 }
 
-//Wanted layout for TPL at this moment: 
+//Wanted layout for TPL at this moment:
 //Skip class definitions until we get to first line which does not define a class.
 //Do {iterate through code} while no print statements (There should only ever be one print statement.)
-//  If class instantiation, do {add to variable bank} while things in the class to instantiate, 
+//  If class instantiation, do {add to variable bank} while things in the class to instantiate,
 //  then go back to line previously at (class instantiation line) and read next line (lineOutsideClass is used for this).
 //  Else if use a function, simulate the act of the function and change variable bank accordingly
 //  do {iterate through function} while function body has line
-//        
+//
 //  Else do whatever that line does.
 //  Once print is encountered, exit do while,
 //find the print output and then ask for solution.
