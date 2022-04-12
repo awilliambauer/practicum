@@ -272,6 +272,7 @@ function TPLAlgorithm() {
                             let toChange;
                             [no_step]
                             toChange = helper.get_value_for_update(functionLine, result);
+                            [no_step]
                             we_will_add_this_to_the_variable_bank = helper.update_object_in_variable_bank(variables, we_will_add_this_to_the_variable_bank, toChange);
                         }
                     }
