@@ -90,6 +90,9 @@ function TPLAlgorithm() {
                     [no_step]
                     functionCall = helper.get_function(this_is_the_next_line_that_will_execute);
 
+                    [no_step]
+                    variables = helper.update_current_function_tag(this_is_the_next_line_that_will_execute, variables);
+
                     let functionDefinition;
                     [no_step]
                     functionDefinition = helper.get_function_from_call(variables, functionCall.object);
@@ -291,6 +294,9 @@ function TPLAlgorithm() {
             let functionCall;
             [no_step]
             functionCall = helper.get_function(this_is_the_next_line_that_will_execute);
+
+            [no_step]
+            variables = helper.update_current_function_tag(this_is_the_next_line_that_will_execute, variables);
 
             let functionDefinition;
             [no_step]

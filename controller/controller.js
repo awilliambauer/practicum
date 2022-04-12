@@ -347,6 +347,7 @@ var controller = (function() {
 
 
     function generateSimpleVariableBank(curr_messy_bank, old_simple_bank) {
+        console.log(curr_messy_bank);
         let bank_simplified = {};
         for (const obj in curr_messy_bank) {
             bank_simplified[obj] = {};
@@ -361,7 +362,7 @@ var controller = (function() {
                         let value = obj_params[i]["value"];
                         let type = obj_params[i]["type"];
                         if (type === "object") {
-                            if (obj_params[i].reference.name == "Pets") {
+                            if (obj_params[i].reference.name == "Pets") { //Maybe check curr_messy_bank.class_reference.name
                                 value = obj_params[i].reference.name + ": " + obj_params[i].values[1].value;
                             } else if (obj_params[i].reference.name == "Point") {
                                 value = obj_params[i].reference.name + ": (" + obj_params[i].values[2].value + ", " + obj_params[i].values[3].value + ")";
@@ -385,7 +386,8 @@ var controller = (function() {
                         }
                     }
                     let local = true;
-                    if (obj_values[i]["type"] == "reference") {
+                    console.log(obj_values[i]);
+                    if (obj_values[i]["tag"] == "reference") {
                         name = "self." + name;
                         local = false;
                     }
@@ -402,7 +404,7 @@ var controller = (function() {
                 }
                 
             }
-            console.log(curr_messy_bank[obj]);
+            // console.log(curr_messy_bank[obj]);
             
         } 
         
@@ -421,7 +423,7 @@ var controller = (function() {
         }
         
         simpleVariableBank = generateSimpleVariableBank(variableBankObject, simpleVariableBank);
-        console.log(JSON.stringify(simpleVariableBank, null, 2));
+        // console.log(JSON.stringify(simpleVariableBank, null, 2));
         //console.log(colorDict);
 
         if (!isObjectEmpty(variableBankObject)) {
