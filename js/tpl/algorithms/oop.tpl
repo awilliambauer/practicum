@@ -31,11 +31,9 @@ function TPLAlgorithm() {
 
     [no_step]
     while(helper.check_instantiation(ast.body) == false){
-        //[prompt]
-        //"This is a class declaration. The program does not start here. We will revisit this later.";
         [no_step]
         helper.go_next_line_without_reading();
-        [no_step]
+        [interactive("next_line")]
         this_is_the_next_line_that_will_execute = helper.get_next_line(ast.body, this_is_the_next_line_that_will_execute);
     }
 
@@ -56,8 +54,10 @@ function TPLAlgorithm() {
             [no_step]
             Let_us_look_at_the_class_definition = this_is_the_next_line_that_will_execute.expression.args[1].object;
 
-            let we_will_add_this_to_the_variable_bank: Instance;
-            [interactive("add_variable")] we_will_add_this_to_the_variable_bank = helper.add_class_instance(variables, ast.body);
+            let we_will_add_this_object_to_the_variable_bank: Instance;
+
+            //[interactive("add_variable")] // add_variable won't work here. we need a new tag
+            we_will_add_this_object_to_the_variable_bank = helper.add_class_instance(variables, ast.body);
 
             let theClass;
             [no_step]
@@ -76,8 +76,8 @@ function TPLAlgorithm() {
 
             [no_step]
             do {
+                [interactive("next_line")]
                 this_is_the_next_line_that_will_execute = theConstructor.body[constructorIndex];
-
 
                 [prompt]
                 "This line assigns a value.";
@@ -105,7 +105,6 @@ function TPLAlgorithm() {
                     [no_step]
                     functionDefinition = helper.get_function_from_call(variables, functionCall.object);
 
-
                     let classReference;
                     [no_step]
                     classReference = functionDefinition.params[0].name;
@@ -126,7 +125,8 @@ function TPLAlgorithm() {
                     [no_step]
                     parent = ast;
 
-                    [no_step]
+                    //[no_step]
+                    [interactive("next_line")]
                     this_is_the_next_line_that_will_execute = functionDefinition;
 
                     [prompt]
@@ -136,12 +136,13 @@ function TPLAlgorithm() {
                     if (helper.has_params_to_add(functionDefinition)){
                         let param_values;
                         [no_step]
-                        param_values = helper.get_param_values(we_will_add_this_to_the_variable_bank, functionCall, functionDefinition);
+                        param_values = helper.get_param_values(we_will_add_this_object_to_the_variable_bank, functionCall, functionDefinition);
                         [no_step]
                         variables = helper.add_temp_param_variables(variables, param_values);
                     }
                     [no_step]
                     do {
+                        //[interactive("next_line")]
                         this_is_the_next_line_that_will_execute = helper.get_function_body_line(functionDefinition, bodyIndex);
                         [no_step] if (helper.does_this_stmt_update_bank(this_is_the_next_line_that_will_execute)){
                             let arg1;
@@ -273,14 +274,14 @@ function TPLAlgorithm() {
                             [no_step]
                             toChange = helper.get_value_for_update(functionLine, result);
                             [no_step]
-                            we_will_add_this_to_the_variable_bank = helper.update_object_in_variable_bank(variables, we_will_add_this_to_the_variable_bank, toChange);
+                            we_will_add_this_object_to_the_variable_bank = helper.update_object_in_variable_bank(variables, we_will_add_this_object_to_the_variable_bank, toChange);
                         }
                     }
                     [no_step]
                     variables = helper.remove_temp_vars(variables);
                 } else {
                     [no_step]
-                    we_will_add_this_to_the_variable_bank = helper.update_object_in_variable_bank(variables, we_will_add_this_to_the_variable_bank, constructorIndex);
+                    we_will_add_this_object_to_the_variable_bank = helper.update_object_in_variable_bank(variables, we_will_add_this_object_to_the_variable_bank, constructorIndex);
                 }
                 [no_step]
                 constructorIndex = constructorIndex + 1;
@@ -289,6 +290,7 @@ function TPLAlgorithm() {
             [no_step]
             helper.go_next_line_without_reading();
 
+            [interactive("next_line")]
             this_is_the_next_line_that_will_execute = helper.get_next_line(ast.body, this_is_the_next_line_that_will_execute);
         }
 
@@ -455,7 +457,7 @@ function TPLAlgorithm() {
                     [no_step]
                     toChange = helper.get_value_for_update(functionLine, result.value);
                     [no_step]
-                    we_will_add_this_to_the_variable_bank = helper.update_object_in_variable_bank(variables, we_will_add_this_to_the_variable_bank, toChange);
+                    we_will_add_this_object_to_the_variable_bank = helper.update_object_in_variable_bank(variables, we_will_add_this_object_to_the_variable_bank, toChange);
                 }
             }
             [no_step]
