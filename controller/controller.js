@@ -243,6 +243,12 @@ var controller = (function() {
         button = "#submitButton";
       }
 
+      if (prompt === "The print statement below prints out the value(s) within the parenthesis. Enter that solution in the solution box!") {
+        $("#next-container").addClass("hidden");
+        $("#nextstep").prop("disabled", true);
+        button = "#submitButton";
+      }
+
       if (
         state.hasOwnProperty("askForResponse") &&
         state.askForResponse === "conditional"
