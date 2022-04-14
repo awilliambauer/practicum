@@ -327,7 +327,7 @@ var controller = (function() {
     var canvas = document.createElement("canvas"),
       context = canvas.getContext("2d");
     context.font = "14px Arial bold";
-    return Math.ceil(context.measureText(text).width) + 50;
+    return Math.ceil(context.measureText(text).width) + 55;
   }
 
   function getHighlightX(data, i) {
@@ -554,7 +554,7 @@ var controller = (function() {
 
       box
         .append("rect")
-        .attr("class", "bank_object_box")
+        .attr("class", "bank_object_box bank_object_box_" + variable)
         .attr("width", 220)
         .attr("height", vLocalVariables.length * 30 + 10)
         .attr("y", 70)
@@ -564,7 +564,7 @@ var controller = (function() {
 
       if (vLocalVariables[vLocalVariables.length - 1].value !== "") {
         d3
-          .selectAll(".bank_object_box")
+          .selectAll(".bank_object_box_" + variable)
           .transition()
             .delay(1500)
             .ease("linear")
@@ -686,7 +686,7 @@ var controller = (function() {
 
       objectName
         .append("text")
-        .attr("class", "object-name")
+        .attr("class", "object-name object_name_" + variable)
         .style("font", '16px Menlo,Monaco,Consolas,"Courier New",monospace')
         .attr("x", 0)
         .attr("y", 101)
@@ -705,7 +705,7 @@ var controller = (function() {
 
 
         d3
-          .selectAll(".object-name")
+          .selectAll(".object_name_" + variable)
           .transition()
             .delay(1500)
             .ease("linear")

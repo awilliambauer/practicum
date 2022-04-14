@@ -278,6 +278,7 @@ function TPLAlgorithm() {
                     }
                     [no_step]
                     variables = helper.remove_temp_vars(variables);
+                    current_python_function = "init";
                 } else {
                     [no_step]
                     we_will_add_this_to_the_variable_bank = helper.update_object_in_variable_bank(variables, we_will_add_this_to_the_variable_bank, constructorIndex);
@@ -461,9 +462,9 @@ function TPLAlgorithm() {
             }
             [no_step]
             variables = helper.remove_temp_vars(variables);
-            current_python_function = null;
             [no_step]
             helper.go_next_line_without_reading();
+            current_python_function = null;
             this_is_the_next_line_that_will_execute = helper.get_next_line(ast.body, this_is_the_next_line_that_will_execute);
         }
 
@@ -476,6 +477,7 @@ function TPLAlgorithm() {
         }
     } while(helper.are_we_on_print_statement(ast) == false);
 
+    current_python_function = null;
     [no_step]
     if (helper.this_is_a_print_statement(ast)) {
         let the_print_function_prints_out_the_values_passed_to_it;
