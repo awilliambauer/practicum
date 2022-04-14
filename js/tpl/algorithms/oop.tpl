@@ -77,6 +77,7 @@ function TPLAlgorithm() {
             [no_step]
             do {
                 this_is_the_next_line_that_will_execute = theConstructor.body[constructorIndex];
+                [no_step]
                 current_python_function = "init";
 
                 [prompt]
@@ -278,6 +279,7 @@ function TPLAlgorithm() {
                     }
                     [no_step]
                     variables = helper.remove_temp_vars(variables);
+                    [no_step]
                     current_python_function = "init";
                 } else {
                     [no_step]
@@ -289,6 +291,7 @@ function TPLAlgorithm() {
 
             [no_step]
             helper.go_next_line_without_reading();
+            [no_step]
             current_python_function = null;
 
             this_is_the_next_line_that_will_execute = helper.get_next_line(ast.body, this_is_the_next_line_that_will_execute);
@@ -464,7 +467,9 @@ function TPLAlgorithm() {
             variables = helper.remove_temp_vars(variables);
             [no_step]
             helper.go_next_line_without_reading();
+            [no_step]
             current_python_function = null;
+            [no_step]
             this_is_the_next_line_that_will_execute = helper.get_next_line(ast.body, this_is_the_next_line_that_will_execute);
         }
 
@@ -477,6 +482,7 @@ function TPLAlgorithm() {
         }
     } while(helper.are_we_on_print_statement(ast) == false);
 
+    [no_step]
     current_python_function = null;
     [no_step]
     if (helper.this_is_a_print_statement(ast)) {
