@@ -63,10 +63,7 @@ function TPLAlgorithm() {
             let theClass;
             [no_step]
             theClass = helper.get_class_from_name(Let_us_look_at_the_class_definition.value, ast.body);
-
-            [prompt]
-            "In the constructor, we will match the parameter inputs with the constructer parameter variables.";
-
+            
             let theConstructor;
             [no_step]
             theConstructor = helper.get_class_constructor(theClass);
@@ -74,6 +71,10 @@ function TPLAlgorithm() {
             let constructorIndex;
             [no_step]
             constructorIndex = 0;
+            //TODO: highlight the constructor here
+
+            [prompt]
+            "In the constructor, we will match the parameter inputs with the constructer parameter variables.";
 
             [no_step]
             do {
@@ -84,6 +85,7 @@ function TPLAlgorithm() {
 
                 [prompt]
                 "This line assigns a value.";
+                //TODO: interactive box here for value
 
                 let newVariable: Variable;
                 [no_step]
@@ -127,13 +129,13 @@ function TPLAlgorithm() {
                     let parent;
                     [no_step]
                     parent = ast;
+                    
+                    // Jump into function
 
-                    //[no_step]
                     [interactive("next_line")]
-                    this_is_the_next_line_that_will_execute = functionDefinition;
-
-                    [prompt]
-                    "This is the function definition.";
+                    this_is_the_next_line_that_will_execute = helper.get_function_body_line(functionDefinition, bodyIndex);
+                    // use this to go to the def line instead
+                    //this_is_the_next_line_that_will_execute = functionDefinition;
 
                     [no_step]
                     if (helper.has_params_to_add(functionDefinition)){
@@ -145,7 +147,6 @@ function TPLAlgorithm() {
                     }
                     [no_step]
                     do {
-                        //[interactive("next_line")]
                         this_is_the_next_line_that_will_execute = helper.get_function_body_line(functionDefinition, bodyIndex);
                         [no_step] if (helper.does_this_stmt_update_bank(this_is_the_next_line_that_will_execute)){
                             let arg1;
@@ -168,7 +169,6 @@ function TPLAlgorithm() {
                                 [no_step]
                                 result = helper.get_line_result(variables, this_is_the_next_line_that_will_execute);
                                 variables[classReference] = helper.update_object_in_variable_bank(variables, variables[classReference], result);
-
                             }
                         } else [no_step] if (helper.are_we_on_return_statement(this_is_the_next_line_that_will_execute)){
                             [no_step]
