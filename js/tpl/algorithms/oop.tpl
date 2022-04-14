@@ -16,7 +16,7 @@ function TPLAlgorithm() {
     let lineNum;
     [no_step]
     lineNum = 0;
-    
+
     [no_step]
     let current_python_function; // keep track of the most recently called function. this is necessary for viz in controller.js
     [no_step]
@@ -77,7 +77,7 @@ function TPLAlgorithm() {
             [no_step]
             do {
                 this_is_the_next_line_that_will_execute = theConstructor.body[constructorIndex];
-
+                current_python_function = "init";
 
                 [prompt]
                 "This line assigns a value.";
@@ -288,6 +288,7 @@ function TPLAlgorithm() {
 
             [no_step]
             helper.go_next_line_without_reading();
+            current_python_function = null;
 
             this_is_the_next_line_that_will_execute = helper.get_next_line(ast.body, this_is_the_next_line_that_will_execute);
         }
@@ -460,6 +461,7 @@ function TPLAlgorithm() {
             }
             [no_step]
             variables = helper.remove_temp_vars(variables);
+            current_python_function = null;
             [no_step]
             helper.go_next_line_without_reading();
             this_is_the_next_line_that_will_execute = helper.get_next_line(ast.body, this_is_the_next_line_that_will_execute);

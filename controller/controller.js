@@ -13,7 +13,7 @@ var controller = (function() {
   var bankStatus = {};
   var objectSteps = ["createBox", "addAndHighlight", "done"];
   var colors = [
-    ["#fecde7", "#fd1c94"],
+    ["#fee6f3", "#fd1c94"],
     ["#c9e8c9", "#46b946"],
     ["#e4deed", "#7958a7"],
     ["#c5d6ed", "#3d77c2"]
@@ -451,17 +451,7 @@ var controller = (function() {
     return the_new_simple_bank;
   }
 
-  function visualizeObjectInVariableBank(variable, simpleVariableBank) {
-      //TODO: FINISH OBJECT VISUALIZATION
-      // ** ADD OBJECT-SPECIFIC VB VIZ TO THIS FUNCTION **
-    
-    // Note for Rebecca:
-    // You can access the current python function name like this:
-    console.log(state.variables.in_scope.current_python_function.value);
-    // It is null before any functions are called.
-    // It does NOT return to null once we're finished with function calls. If that's necessary, we could probably add it.
-      
-      
+  function visualizeObjectInVariableBank(variable, simpleVariableBank) {      
     var vParams = makeList(simpleVariableBank["current_vb"][variable]["parameters"]);
     var vVariables = makeList(simpleVariableBank["current_vb"][variable]["variables"]);
     var vLocalVariables = vVariables.filter(d => !d.local);
@@ -637,7 +627,7 @@ var controller = (function() {
             getHighlightX(vParams.concat(vVariables.filter(d => d.local)), i) + 5
         )
         .attr("y", 20)
-        .attr("opacity", varOrigin[variable] === state.variables.in_scope.current_python_function.value ? 1 : 0.5)
+        .attr("opacity", (state.variables.in_scope.current_python_function.value === null) || (state.variables.in_scope.current_python_function.value === "init") ? 1 : 0.5)
         .text(d => d.name)
 
       if (vLocalVariables[vLocalVariables.length - 1].value !== "") {
@@ -665,7 +655,7 @@ var controller = (function() {
               getHighlightX(vParams.concat(vVariables.filter(d => d.local)), i) + 5
           )
           .attr("y", 40)
-          .attr("opacity", varOrigin[variable] === state.variables.in_scope.current_python_function.value ? 1 : 0.5)
+          .attr("opacity", (state.variables.in_scope.current_python_function.value === null) || (state.variables.in_scope.current_python_function.value === "init") ? 1 : 0.5)
           .text(d => getValueRep(d))
 
       if (vLocalVariables[vLocalVariables.length - 1].value !== "") {
@@ -711,7 +701,7 @@ var controller = (function() {
             .delay(1500)
             .ease("linear")
             .duration(500)
-            .attr("y", (d, i) => 21 + i * 30);
+            .attr("y", (d, i) => 26 + i * 30);
 
 
         d3
