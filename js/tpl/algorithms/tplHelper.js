@@ -296,11 +296,8 @@ function TplHelper() {
                     if(astBody[lineNum].expression.args[1].object.tag === 'identifier'){
                         return true;
                     }
-                    return false;
                 }
-                return false;
             }
-            return false;
         }
         return false;
     }

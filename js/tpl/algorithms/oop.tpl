@@ -33,10 +33,11 @@ function TPLAlgorithm() {
     while(helper.check_instantiation(ast.body) == false){
         [no_step]
         helper.go_next_line_without_reading();
-        [interactive("next_line")]
-        this_is_the_next_line_that_will_execute = helper.get_next_line(ast.body, this_is_the_next_line_that_will_execute);
     }
-
+    
+    [interactive("next_line")]
+    this_is_the_next_line_that_will_execute = helper.get_next_line(ast.body, this_is_the_next_line_that_will_execute);
+    
     [prompt]
     "We start here because every line before this is part of a class definition.";
 
