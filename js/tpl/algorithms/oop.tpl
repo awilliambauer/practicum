@@ -16,7 +16,7 @@ function TPLAlgorithm() {
     let lineNum;
     [no_step]
     lineNum = 0;
-    
+
     [no_step]
     let current_python_function; // keep track of the most recently called function. this is necessary for viz in controller.js
     [no_step]
@@ -79,6 +79,8 @@ function TPLAlgorithm() {
             do {
                 [interactive("next_line")]
                 this_is_the_next_line_that_will_execute = theConstructor.body[constructorIndex];
+                [no_step]
+                current_python_function = "init";
 
                 [prompt]
                 "This line assigns a value.";
@@ -280,6 +282,8 @@ function TPLAlgorithm() {
                     }
                     [no_step]
                     variables = helper.remove_temp_vars(variables);
+                    [no_step]
+                    current_python_function = "init";
                 } else {
                     [no_step]
                     we_will_add_this_object_to_the_variable_bank = helper.update_object_in_variable_bank(variables, we_will_add_this_object_to_the_variable_bank, constructorIndex);
@@ -290,6 +294,8 @@ function TPLAlgorithm() {
 
             [no_step]
             helper.go_next_line_without_reading();
+            [no_step]
+            current_python_function = null;
 
             [interactive("next_line")]
             this_is_the_next_line_that_will_execute = helper.get_next_line(ast.body, this_is_the_next_line_that_will_execute);
@@ -465,6 +471,9 @@ function TPLAlgorithm() {
             variables = helper.remove_temp_vars(variables);
             [no_step]
             helper.go_next_line_without_reading();
+            [no_step]
+            current_python_function = null;
+            [no_step]
             this_is_the_next_line_that_will_execute = helper.get_next_line(ast.body, this_is_the_next_line_that_will_execute);
         }
 
@@ -477,6 +486,8 @@ function TPLAlgorithm() {
         }
     } while(helper.are_we_on_print_statement(ast) == false);
 
+    [no_step]
+    current_python_function = null;
     [no_step]
     if (helper.this_is_a_print_statement(ast)) {
         let the_print_function_prints_out_the_values_passed_to_it;
