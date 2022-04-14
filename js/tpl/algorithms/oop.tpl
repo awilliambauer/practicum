@@ -57,7 +57,6 @@ function TPLAlgorithm() {
 
             let we_will_add_this_object_to_the_variable_bank: Instance;
 
-            //[interactive("add_variable")] // add_variable won't work here. we need a new tag
             we_will_add_this_object_to_the_variable_bank = helper.add_class_instance(variables, ast.body);
 
             let theClass;
@@ -71,7 +70,6 @@ function TPLAlgorithm() {
             let constructorIndex;
             [no_step]
             constructorIndex = 0;
-            //TODO: highlight the constructor here
 
             [prompt]
             "In the constructor, we will match the parameter inputs with the constructer parameter variables.";
@@ -85,7 +83,6 @@ function TPLAlgorithm() {
 
                 [prompt]
                 "This line assigns a value.";
-                //TODO: interactive box here for value
 
                 let newVariable: Variable;
                 [no_step]
@@ -285,7 +282,10 @@ function TPLAlgorithm() {
                     [no_step]
                     current_python_function = "init";
                 } else {
-                    [no_step]
+                    // not a function call
+                    
+                    // Check user input on this variable's value
+                    [interactive("add_variable_object")]
                     we_will_add_this_object_to_the_variable_bank = helper.update_object_in_variable_bank(variables, we_will_add_this_object_to_the_variable_bank, constructorIndex);
                 }
                 [no_step]

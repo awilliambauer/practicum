@@ -159,6 +159,9 @@ var controller = (function() {
 
     if (waitingForResponse) {
       switch (responseType) {
+        case "add_variable_object":
+          checkVariableBankObjectVariableAnswer();
+          break;
         case "add_variable":
           checkVariableBankAnswer();
           break;
@@ -251,6 +254,34 @@ var controller = (function() {
 
       if (
         state.hasOwnProperty("askForResponse") &&
+        state.askForResponse === "add_variable_object"
+      ) {
+        // let object_local_variables = state.variables.in_scope.we_will_add_this_object_to_the_variable_bank.value.values;
+        let line_that_will_execute = state.variables.in_scope.this_is_the_next_line_that_will_execute.value;
+        
+        //TODO: hide the answer
+        console.log("todo: HIDE THE ANSWER!");
+
+        // use left side to create string to display
+        let leftSide = line_that_will_execute.expression.args[0];
+        let var_display_name = leftSide.object.value + "." + leftSide.name;
+
+        d3.select("#promptText")
+          .insert("div")
+          .attr("id", "responseArea");
+
+        d3.select("#responseArea")
+          .append("label")
+          .text(var_display_name +" =");
+
+        d3.select("#responseArea")
+          .insert("input")
+          .attr("type", "text")
+          .attr("id", "objectVariableUserResponse");
+      }
+
+      if (
+        state.hasOwnProperty("askForResponse") &&
         state.askForResponse === "conditional"
       ) {
         var yesNoButtonDiv = d3
@@ -285,7 +316,7 @@ var controller = (function() {
     }
   }
 
-  function getInstanceText(values, idx) {
+    function getInstanceText(values, idx) {
     var value = "";
     if (values[idx].type === "string" && values[idx].value !== "") {
       value = "'" + values[idx].value + "'";
@@ -820,7 +851,6 @@ var controller = (function() {
       variableBankObject,
       simpleVariableBank
     );
-    //console.log(JSON.stringify(simpleVariableBank, null, 2));
 
     if (!isObjectEmpty(variableBankObject)) {
       for (var variable in variableBankObject) {
@@ -1022,22 +1052,28 @@ var controller = (function() {
             ) {
               interactiveVariableBank(varObject.value, false);
             } else {
-              if (Array.isArray(varObject.value)) {
-                varObject.value.forEach(function(v) {
-                  highlightVariableBank(v);
-                });
-              } else if (
-                varObject.value.type === "array" ||
-                varObject.value.type === "string"
-              ) {
-                if (
-                  variable !== "lets_visualize_our_sequence" &&
-                  variable !== "lets_visualize_our_inner_sequence"
+              try {
+                if (Array.isArray(varObject.value)) {
+                  varObject.value.forEach(function(v) {
+                    highlightVariableBank(v);
+                  });
+                } else if (
+                  varObject.value.type === "array" ||
+                  varObject.value.type === "string"
                 ) {
+                  if (
+                    variable !== "lets_visualize_our_sequence" &&
+                    variable !== "lets_visualize_our_inner_sequence"
+                  ) {
+                    highlightVariableBank(varObject.value);
+                  }
+                } else {
                   highlightVariableBank(varObject.value);
                 }
-              } else {
-                highlightVariableBank(varObject.value);
+              } catch (error) {
+                //HACK: varObject.value is null for OOP problem variables. Reason is unknown to me at this time. Ignoring this case for now.
+                //TODO: acknowledge this case
+                break;
               }
             }
             break;
@@ -1383,6 +1419,28 @@ var controller = (function() {
   }
 
   // #################### FUNCTIONS TO CHECK USER ANSWERS ####################
+
+  function lookupCorrectValForVarOfName(lookupName, correctAnswerObject) {
+    for (let obj_var of correctAnswerObject) {
+      if (obj_var.name == lookupName) {
+        return obj_var.value;
+      }
+    }
+    console.error("Failed to lookup val of " + lookupName);
+  }
+
+  function checkVariableBankObjectVariableAnswer() {
+    let userValue = document.getElementById('objectVariableUserResponse').value;
+
+    let object_local_variables = state.variables.in_scope.we_will_add_this_object_to_the_variable_bank.value.values;
+    // console.log(object_local_variables);
+    let line_that_will_execute = state.variables.in_scope.this_is_the_next_line_that_will_execute.value;
+    let lookup = line_that_will_execute.expression.args[0].name;
+    let correctVal = lookupCorrectValForVarOfName(lookup, object_local_variables);
+
+    console.log("val of " + lookup + " is " + correctVal);
+    respondToAnswer((correctVal == userValue), "variable_bank", correctVal);
+  }
 
   function checkVariableBankAnswer() {
     var correctAnswerObject = simulatorInterface.getCorrectAnswer();
