@@ -162,7 +162,7 @@ function TPLAlgorithm() {
                                 temp = helper.add_temp_variable(variables, this_is_the_next_line_that_will_execute);
                             } else {
                                 [prompt]
-                                "We will assign a new value for the variable";
+                                "We will assign a new value for the variable 1";
                                 let result;
                                 [no_step]
                                 result = helper.get_line_result(variables, this_is_the_next_line_that_will_execute);
@@ -270,7 +270,7 @@ function TPLAlgorithm() {
                             variables[arg1.value] = result;
                         } else {
                             [prompt]
-                            "We will assign a new value for the variable";
+                            "The value returned by the function is assigned to the variable.";
                             let toChange;
                             [no_step]
                             toChange = helper.get_value_for_update(functionLine, result);
@@ -369,7 +369,7 @@ function TPLAlgorithm() {
                         temp = helper.add_temp_variable(variables, this_is_the_next_line_that_will_execute);
                     } else {
                         [prompt]
-                        "We will assign a new value for the variable";
+                        "We will assign a new value for the variable.";
                         let result;
                         [no_step]
                         result = helper.get_line_result(variables, this_is_the_next_line_that_will_execute);
@@ -461,15 +461,17 @@ function TPLAlgorithm() {
                 [no_step]
                 if (helper.does_this_declare_a_new_variable(variables, arg1)){
                     [prompt]
-                    "We will add the new variable and its value to the variable bank";
+                    "We will add the new variable and its value to the variable bank.";
 
-                    //[interactive("add_variable_object")]
-                    //TODO: test user on this value
-                    [no_step]
+                    //HACK: changing result to the form expected by helper.add_this_to_the_variable_bank(). Shouldn't break anything, but you never know!
+                    result.name = arg1.value;
+                    result["value"] = result.value;
+
+                    [interactive("add_variable_from_function")]
                     variables[arg1.value] = result;
                 } else {
                     [prompt]
-                    "We will assign a new value for the variable";
+                    "We will assign the value returned by the function to the variable.";
                     let toChange;
                     [no_step]
                     toChange = helper.get_value_for_update(functionLine, result.value);
