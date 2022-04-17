@@ -521,7 +521,8 @@ var controller = (function() {
 
     let the_new_simple_bank = {
       current_vb: bank_simplified,
-      previous_vb: old_simple_bank["current_vb"]
+      previous_vb: old_simple_bank["current_vb"],
+      prev_previous_vb: old_simple_bank["previous_vb"]
     };
     return the_new_simple_bank;
   }
@@ -530,6 +531,7 @@ var controller = (function() {
     // console.log(state.variables.in_scope.current_python_function.value);
     // console.log(varOrigin);
     console.log(fadeLevel);
+    console.log(simpleVariableBank);
     var vParams = makeList(simpleVariableBank["current_vb"][variable]["parameters"]);
     var vVariables = makeList(simpleVariableBank["current_vb"][variable]["variables"]);
     var vNotLocalVariables = vVariables.filter(d => !d.local);
