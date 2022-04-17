@@ -7,6 +7,7 @@ var controller = (function() {
   var state;
   var fadeLevel;
   var waitingForResponse;
+  var lastWaitingForResponse;
   var responseType;
   var numTries;
   var button;
@@ -43,6 +44,7 @@ var controller = (function() {
     config = problemConfig;
     state = initialState;
     waitingForResponse = false;
+    lastWaitingForResponse = false;
     responseType = "";
     numTries = 0;
     fadeLevel = fading;
@@ -198,9 +200,11 @@ var controller = (function() {
 
   function stepWithState() {
     if (fadeLevel > 0 && state.hasOwnProperty("askForResponse")) {
+      lastWaitingForResponse = waitingForResponse;
       waitingForResponse = true;
       responseType = state.askForResponse;
     } else {
+      lastWaitingForResponse = waitingForResponse;
       waitingForResponse = false;
       responseType = null;
     }
@@ -338,11 +342,11 @@ var controller = (function() {
     }
   }
 
-    function getInstanceText(values, idx) {
+  function getInstanceText(values, oldValues, idx) {
     var value = "";
-    if (values[idx].type === "string" && values[idx].value !== "") {
+    if (values[idx].type === "string" && values[idx].value !== "" && (oldValues[idx].value || !waitingForResponse)) {
       value = "'" + values[idx].value + "'";
-    } else {
+    } else if (oldValues[idx].value || !waitingForResponse){
       value = values[idx].value;
     }
     return values[idx].name.replace("self.", "") + " = " + value;
@@ -353,6 +357,14 @@ var controller = (function() {
     for (var i = 0; i < values.length; i++) {
       if (v.name.replace("self.", "") === values[i].name.replace("self.", "")) {
         found = i;
+      }
+    }
+
+    if (found < 0) {
+      for (var i = 0; i < values.length; i++) {
+        if (v.value === values[i].value) {
+          found = i;
+        }
       }
     }
     return found;
@@ -368,13 +380,17 @@ var controller = (function() {
     return value;
   }
 
-  function findOpacity(v, values, prevValues) {
+  function findOpacity(v, values, oldValues) {
+    // console.log("current");
+    // console.log(values);
+    // console.log("prev");
+    // console.log(oldValues)
     var idx = matchIndex(v, values);
     if (idx >= 0) {
       if (
         values[idx].value !== "" &&
-        (idx === values.length - 1 || values[idx + 1].value === "") &&
-        prevValues[idx].value === ""
+        oldValues[idx].value === "" //&&
+        //lastWaitingForResponse
       ) {
         return 1;
       }
@@ -510,11 +526,22 @@ var controller = (function() {
     return the_new_simple_bank;
   }
 
-  function visualizeObjectInVariableBank(variable, simpleVariableBank) {      
+  function visualizeObjectInVariableBank(variable, simpleVariableBank) {    
+    // console.log(state.variables.in_scope.current_python_function.value);
+    // console.log(varOrigin);
+    console.log(fadeLevel);
     var vParams = makeList(simpleVariableBank["current_vb"][variable]["parameters"]);
     var vVariables = makeList(simpleVariableBank["current_vb"][variable]["variables"]);
-    var vLocalVariables = vVariables.filter(d => !d.local);
+    var vNotLocalVariables = vVariables.filter(d => !d.local);
     var vClassName = simpleVariableBank["current_vb"][variable]["class_name"];
+    var vOldVariables;
+
+    if (simpleVariableBank["previous_vb"].hasOwnProperty(variable)) {
+      vOldVariables = makeList(simpleVariableBank["previous_vb"][variable]["variables"]);
+    } else {
+      vOldVariables = vVariables
+    }
+
 
     if (!(variable in bankStatus)) {
       bankStatus[variable] = objectSteps[0];
@@ -546,7 +573,7 @@ var controller = (function() {
         .append("rect")
         .attr("class", "bank_object_box")
         .attr("width", 220)
-        .attr("height", vLocalVariables.length * 30 + 10)
+        .attr("height", vNotLocalVariables.length * 30 + 10)
         .attr("y", 1)
         .attr("x", 200)
         .attr("fill", "white")
@@ -564,7 +591,7 @@ var controller = (function() {
 
       variables
         .selectAll("text")
-        .data(vLocalVariables)
+        .data(vNotLocalVariables)
         .enter()
         .append("text")
           .attr("class", "bank_object_vars bank_object_vars_" + variable)
@@ -573,7 +600,7 @@ var controller = (function() {
           .attr("y", (d, i) => 95 + i * 30)
           .style("fill", d => getColor(d, colorDict))
           .attr("opacity", 0)
-          .text((d, i) => getInstanceText(vLocalVariables, i))
+          .text((d, i) => getInstanceText(vNotLocalVariables, vOldVariables.filter(d => !d.local), i))
           .transition()
             .delay(1000)
             .duration(0)
@@ -615,13 +642,13 @@ var controller = (function() {
         .append("rect")
         .attr("class", "bank_object_box bank_object_box_" + variable)
         .attr("width", 220)
-        .attr("height", vLocalVariables.length * 30 + 10)
+        .attr("height", vNotLocalVariables.length * 30 + 10)
         .attr("y", 70)
         .attr("x", 110)
         .attr("fill", "white")
         .attr("stroke", colorDict[vClassName][1]);
 
-      if (vLocalVariables[vLocalVariables.length - 1].value !== "") {
+      if (vNotLocalVariables[vNotLocalVariables.length - 1].value !== "") {
         d3
           .selectAll(".bank_object_box_" + variable)
           .transition()
@@ -661,7 +688,7 @@ var controller = (function() {
               findOpacity(
                 d,
                 vVariables,
-                makeList(simpleVariableBank["previous_vb"][variable]["variables"])
+                vOldVariables
               )
             )
           .transition()
@@ -689,7 +716,7 @@ var controller = (function() {
         .attr("opacity", (state.variables.in_scope.current_python_function.value === null) || (state.variables.in_scope.current_python_function.value === "init") ? 1 : 0.5)
         .text(d => d.name)
 
-      if (vLocalVariables[vLocalVariables.length - 1].value !== "") {
+      if (vNotLocalVariables[vNotLocalVariables.length - 1].value !== "") {
         d3
           .selectAll(".bank_param_box_vars")
           .transition()
@@ -717,7 +744,7 @@ var controller = (function() {
           .attr("opacity", (state.variables.in_scope.current_python_function.value === null) || (state.variables.in_scope.current_python_function.value === "init") ? 1 : 0.5)
           .text(d => getValueRep(d))
 
-      if (vLocalVariables[vLocalVariables.length - 1].value !== "") {
+      if (vNotLocalVariables[vNotLocalVariables.length - 1].value !== "") {
         d3
           .selectAll(".bank_param_box_vals")
           .transition()
@@ -730,7 +757,7 @@ var controller = (function() {
 
       variables
         .selectAll("text")
-        .data(vLocalVariables)
+        .data(vNotLocalVariables)
         .enter()
         .append("text")
           .attr("class", "bank_object_vars bank_object_vars_" + variable)
@@ -739,7 +766,7 @@ var controller = (function() {
           .attr("y", (d, i) => 95 + i * 30)
           .style("fill", d => getColor(d, colorDict))
           .attr("opacity", 1)
-          .text((d, i) => getInstanceText(vLocalVariables, i));
+          .text((d, i) => getInstanceText(vNotLocalVariables, vOldVariables.filter(d => !d.local), i));
       
       let objectName = svg.append("g");
 
@@ -753,7 +780,7 @@ var controller = (function() {
         .text("self =")
   
 
-      if (vLocalVariables[vLocalVariables.length - 1].value !== "") {
+      if (vNotLocalVariables[vNotLocalVariables.length - 1].value !== "") {
         d3
           .selectAll(".bank_object_vars_" + variable)
           .transition()
@@ -777,7 +804,7 @@ var controller = (function() {
         svg
           .transition()
           .delay(2000)
-          .attr("height", vLocalVariables.length * 30 + 30);
+          .attr("height", vNotLocalVariables.length * 30 + 30);
 
         bankStatus[variable] = objectSteps[2];
       }
@@ -790,7 +817,7 @@ var controller = (function() {
       let svg = div
         .append("svg")
         .attr("width", 500)
-        .attr("height", vLocalVariables.length * 30 + 30)
+        .attr("height", vNotLocalVariables.length * 30 + 30)
         .attr("fill", "white");
 
       let box = svg.append("g");
@@ -799,7 +826,7 @@ var controller = (function() {
         .append("rect")
         .attr("class", "bank_object_box")
         .attr("width", 220)
-        .attr("height", vLocalVariables.length * 30 + 10)
+        .attr("height", vNotLocalVariables.length * 30 + 10)
         .attr("y", 1)
         .attr("x", 110)
         .attr("fill", colorDict[vClassName][0])
@@ -809,7 +836,7 @@ var controller = (function() {
       
       variables
         .selectAll("rect")
-        .data(vLocalVariables)
+        .data(vNotLocalVariables)
         .enter()
         .append("rect")
           .style("font", '16px Menlo,Monaco,Consolas,"Courier New",monospace')
@@ -818,13 +845,13 @@ var controller = (function() {
           .attr("height", 18)
           .attr(
             "width",
-            (d, i) => findWidth(getInstanceText(vLocalVariables, i)) - 10)
+            (d, i) => findWidth(getInstanceText(vNotLocalVariables, vOldVariables.filter(d => !d.local), i)) - 10)
           .attr(
             "fill",
             d =>
               varChange(
                 d,
-                makeList(simpleVariableBank["previous_vb"][variable]["variables"])
+                vOldVariables
               )
                 ? "#9bcac7"
                 : colorDict[vClassName][0]
@@ -832,7 +859,7 @@ var controller = (function() {
 
       variables
         .selectAll("text")
-        .data(vLocalVariables)
+        .data(vNotLocalVariables)
         .enter()
         .append("text")
           .attr("class", "bank_object_vars")
@@ -841,7 +868,7 @@ var controller = (function() {
           .attr("y", (d, i) => 26 + i * 30)
           .style("fill", d => getColor(d, colorDict))
           .attr("opacity", 1)
-          .text((d, i) => getInstanceText(vLocalVariables, i));
+          .text((d, i) => getInstanceText(vNotLocalVariables, vOldVariables.filter(d => !d.local), i));
 
       let objectName = svg.append("g");
 
@@ -1833,6 +1860,7 @@ var controller = (function() {
     }
 
     if (correct || numTries === 3) {
+      lastWaitingForResponse = waitingForResponse;
       waitingForResponse = false;
       responseType = "";
       numTries = 0;

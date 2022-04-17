@@ -34,10 +34,10 @@ function TPLAlgorithm() {
         [no_step]
         helper.go_next_line_without_reading();
     }
-    
+
     [interactive("next_line")]
     this_is_the_next_line_that_will_execute = helper.get_next_line(ast.body, this_is_the_next_line_that_will_execute);
-    
+
     [prompt]
     "We start here because every line before this is part of a class definition.";
 
@@ -62,7 +62,7 @@ function TPLAlgorithm() {
             let theClass;
             [no_step]
             theClass = helper.get_class_from_name(Let_us_look_at_the_class_definition.value, ast.body);
-            
+
             let theConstructor;
             [no_step]
             theConstructor = helper.get_class_constructor(theClass);
@@ -126,7 +126,7 @@ function TPLAlgorithm() {
                     let parent;
                     [no_step]
                     parent = ast;
-                    
+
                     // Jump into function
 
                     [interactive("next_line")]
@@ -275,7 +275,7 @@ function TPLAlgorithm() {
                             [no_step]
                             toChange = helper.get_value_for_update(functionLine, result);
 
-                            [interactive("add_variable_object")]                            
+                            [interactive("add_variable_object")]
                             we_will_add_this_object_to_the_variable_bank = helper.update_object_in_variable_bank(variables, we_will_add_this_object_to_the_variable_bank, toChange);
                         }
                     }
@@ -285,7 +285,7 @@ function TPLAlgorithm() {
                     current_python_function = "init";
                 } else {
                     // not a function call
-                    
+
                     // Check user input on this variable's value
                     [interactive("add_variable_object")]
                     we_will_add_this_object_to_the_variable_bank = helper.update_object_in_variable_bank(variables, we_will_add_this_object_to_the_variable_bank, constructorIndex);
@@ -483,10 +483,10 @@ function TPLAlgorithm() {
             [no_step]
             variables = helper.remove_temp_vars(variables);
             [no_step]
-            helper.go_next_line_without_reading();
-            [no_step]
             current_python_function = null;
-            
+            [no_step]
+            helper.go_next_line_without_reading();
+
             [interactive("next_line")]
             this_is_the_next_line_that_will_execute = helper.get_next_line(ast.body, this_is_the_next_line_that_will_execute);
         }
