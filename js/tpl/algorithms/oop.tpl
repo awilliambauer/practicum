@@ -463,8 +463,9 @@ function TPLAlgorithm() {
                     [prompt]
                     "We will add the new variable and its value to the variable bank.";
 
-                    //HACK: changing result to the form expected by helper.add_this_to_the_variable_bank(). Shouldn't break anything, but you never know!
+                    [no_step]
                     result.name = arg1.value;
+                    [no_step]
                     result["value"] = result.value;
 
                     [interactive("add_variable_from_function")]
