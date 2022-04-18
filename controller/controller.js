@@ -7,7 +7,6 @@ var controller = (function() {
   var state;
   var fadeLevel;
   var waitingForResponse;
-  var lastWaitingForResponse;
   var responseType;
   var numTries;
   var button;
@@ -21,6 +20,9 @@ var controller = (function() {
   ];
   var colorDict = {"Pet": colors[0], "Owner": colors[1], "Point": colors[2]};
   var varOrigin = {};
+  var nowCorrect = null;
+  var nowCorrectAnswer = "";
+  var nowCorrectAnswerType = "";
 
   var simpleVariableBank = {};
 
@@ -44,7 +46,7 @@ var controller = (function() {
     config = problemConfig;
     state = initialState;
     waitingForResponse = false;
-    lastWaitingForResponse = false;
+    varOrigin = {};
     responseType = "";
     numTries = 0;
     fadeLevel = fading;
@@ -200,11 +202,9 @@ var controller = (function() {
 
   function stepWithState() {
     if (fadeLevel > 0 && state.hasOwnProperty("askForResponse")) {
-      lastWaitingForResponse = waitingForResponse;
       waitingForResponse = true;
       responseType = state.askForResponse;
     } else {
-      lastWaitingForResponse = waitingForResponse;
       waitingForResponse = false;
       responseType = null;
     }
@@ -265,12 +265,16 @@ var controller = (function() {
       ) {
         let line_that_will_execute = state.variables.in_scope.this_is_the_next_line_that_will_execute.value;
         
-        //TODO: hide the answer
-        console.log("todo: HIDE THE ANSWER!");
 
         // use left side to create string to display
         let leftSide = line_that_will_execute.expression.args[0];
-        let var_display_name = leftSide.object.value + "." + leftSide.name;
+        let var_display_name;
+        if (leftSide.hasOwnProperty("object")) {
+          var_display_name = leftSide.object.value + "." + leftSide.name;
+        } else {
+          var_display_name = leftSide.value;
+        }
+        
 
         d3.select("#promptText")
           .insert("div")
@@ -286,7 +290,6 @@ var controller = (function() {
           .attr("id", "objectVariableUserResponse");
       } else if (state.askForResponse === "add_variable_from_function") {
         let line_that_will_execute = state.variables.in_scope.this_is_the_next_line_that_will_execute.value;
-        console.log("todo: HIDE THE ANSWER!");
 
         // use left side to create string to display
         let leftSide = line_that_will_execute.expression.args[0];
@@ -344,9 +347,14 @@ var controller = (function() {
 
   function getInstanceText(values, oldValues, idx) {
     var value = "";
-    if (values[idx].type === "string" && values[idx].value !== "" && (oldValues[idx].value || !waitingForResponse)) {
+    if (values[idx].type === "string" && values[idx].value !== "" && 
+        ((oldValues[idx].value && fadeLevel == 1 &&
+          (nowCorrect && nowCorrectAnswer === values[idx].value || nowCorrectAnswer !== values[idx].value)) || 
+          fadeLevel == 0)) {
       value = "'" + values[idx].value + "'";
-    } else if (oldValues[idx].value || !waitingForResponse){
+    } else if ((oldValues[idx].value && fadeLevel == 1 &&
+          (nowCorrect && nowCorrectAnswer === values[idx].value || nowCorrectAnswer !== values[idx].value))
+          || fadeLevel == 0) {
       value = values[idx].value;
     }
     return values[idx].name.replace("self.", "") + " = " + value;
@@ -359,7 +367,6 @@ var controller = (function() {
         found = i;
       }
     }
-
     if (found < 0) {
       for (var i = 0; i < values.length; i++) {
         if (v.value === values[i].value) {
@@ -380,19 +387,16 @@ var controller = (function() {
     return value;
   }
 
-  function findOpacity(v, values, oldValues) {
-    // console.log("current");
-    // console.log(values);
-    // console.log("prev");
-    // console.log(oldValues)
+  function findOpacity(v, values, oldValues, oldOldValues) {
     var idx = matchIndex(v, values);
     if (idx >= 0) {
-      if (
-        values[idx].value !== "" &&
-        oldValues[idx].value === "" //&&
-        //lastWaitingForResponse
-      ) {
-        return 1;
+      if (values[idx].value !== "" &&
+         ((oldValues[idx].value === "" && fadeLevel === 0) ||
+         (oldValues[idx].value && //oldOldValues[idx].value === "" && 
+         fadeLevel === 1 && 
+         (nowCorrect && nowCorrectAnswer === values[idx].value && nowCorrectAnswerType === "variable_bank")
+         ))) {
+            return 1;
       }
     }
     return 0;
@@ -415,6 +419,17 @@ var controller = (function() {
       }
     }
     return x;
+  }
+
+  function displayParamVal(d, i, vOldParams, vOldVariables) {
+    if (fadeLevel == 0) {
+      return getValueRep(d);
+    }
+    else if (vOldParams.concat(vOldVariables)[i].value !== "" && fadeLevel ==  1 && (nowCorrect && nowCorrectAnswer === d.value || nowCorrectAnswer !== d.value)) {
+      return getValueRep(d);
+    } else {
+      return "";
+    }
   }
 
   function makeList(values) {
@@ -528,20 +543,30 @@ var controller = (function() {
   }
 
   function visualizeObjectInVariableBank(variable, simpleVariableBank) {    
-    // console.log(state.variables.in_scope.current_python_function.value);
-    // console.log(varOrigin);
-    console.log(fadeLevel);
-    console.log(simpleVariableBank);
     var vParams = makeList(simpleVariableBank["current_vb"][variable]["parameters"]);
     var vVariables = makeList(simpleVariableBank["current_vb"][variable]["variables"]);
     var vNotLocalVariables = vVariables.filter(d => !d.local);
     var vClassName = simpleVariableBank["current_vb"][variable]["class_name"];
     var vOldVariables;
+    var vOldParams;
+    var vOldOldVariables;
 
     if (simpleVariableBank["previous_vb"].hasOwnProperty(variable)) {
       vOldVariables = makeList(simpleVariableBank["previous_vb"][variable]["variables"]);
     } else {
-      vOldVariables = vVariables
+      vOldVariables = vVariables;
+    }
+
+    if (simpleVariableBank["previous_vb"].hasOwnProperty(variable)) {
+      vOldParams = makeList(simpleVariableBank["previous_vb"][variable]["parameters"]);
+    } else {
+      vOldParams = vParams;
+    }
+
+    if (simpleVariableBank["prev_previous_vb"].hasOwnProperty(variable)) {
+      vOldOldVariables = makeList(simpleVariableBank["prev_previous_vb"][variable]["variables"]);
+    } else {
+      vOldOldVariables = vVariables;
     }
 
 
@@ -650,7 +675,7 @@ var controller = (function() {
         .attr("fill", "white")
         .attr("stroke", colorDict[vClassName][1]);
 
-      if (vNotLocalVariables[vNotLocalVariables.length - 1].value !== "") {
+      if ((vNotLocalVariables[vNotLocalVariables.length - 1].value !== "" && fadeLevel == 0) || (vOldVariables.filter(d => !d.local)[vOldVariables.filter(d => !d.local).length - 1].value !== "" && fadeLevel == 1 && nowCorrect)) {
         d3
           .selectAll(".bank_object_box_" + variable)
           .transition()
@@ -690,7 +715,8 @@ var controller = (function() {
               findOpacity(
                 d,
                 vVariables,
-                vOldVariables
+                vOldVariables,
+                vOldOldVariables
               )
             )
           .transition()
@@ -718,7 +744,7 @@ var controller = (function() {
         .attr("opacity", (state.variables.in_scope.current_python_function.value === null) || (state.variables.in_scope.current_python_function.value === "init") ? 1 : 0.5)
         .text(d => d.name)
 
-      if (vNotLocalVariables[vNotLocalVariables.length - 1].value !== "") {
+      if ((vNotLocalVariables[vNotLocalVariables.length - 1].value !== "" && fadeLevel == 0) || (vOldVariables.filter(d => !d.local)[vOldVariables.filter(d => !d.local).length - 1].value !== "" && fadeLevel == 1 && nowCorrect)) {
         d3
           .selectAll(".bank_param_box_vars")
           .transition()
@@ -744,9 +770,9 @@ var controller = (function() {
           )
           .attr("y", 40)
           .attr("opacity", (state.variables.in_scope.current_python_function.value === null) || (state.variables.in_scope.current_python_function.value === "init") ? 1 : 0.5)
-          .text(d => getValueRep(d))
+          .text((d, i) => displayParamVal(d, i, vOldParams, vOldVariables))
 
-      if (vNotLocalVariables[vNotLocalVariables.length - 1].value !== "") {
+      if ((vNotLocalVariables[vNotLocalVariables.length - 1].value !== "" && fadeLevel == 0) || (vOldVariables.filter(d => !d.local)[vOldVariables.filter(d => !d.local).length - 1].value !== "" && fadeLevel == 1 && nowCorrect)) {
         d3
           .selectAll(".bank_param_box_vals")
           .transition()
@@ -782,7 +808,7 @@ var controller = (function() {
         .text("self =")
   
 
-      if (vNotLocalVariables[vNotLocalVariables.length - 1].value !== "") {
+      if ((vNotLocalVariables[vNotLocalVariables.length - 1].value !== "" && fadeLevel == 0) || (vOldVariables.filter(d => !d.local)[vOldVariables.filter(d => !d.local).length - 1].value !== "" && fadeLevel == 1 && nowCorrect)) {
         d3
           .selectAll(".bank_object_vars_" + variable)
           .transition()
@@ -1002,6 +1028,7 @@ var controller = (function() {
             varOrigin[variable] = state.variables.in_scope.current_python_function.value;
           }
           
+          
           let div = d3.select("#variable_list_table").append("div");
 
           let svg = div
@@ -1022,11 +1049,25 @@ var controller = (function() {
             .style("font-weight", "bold")
             .text(variable + ":");
 
+          var varOpacity;
+
+          if ((simpleVariableBank["previous_vb"].hasOwnProperty(variable) && fadeLevel == 1 && (nowCorrect && nowCorrectAnswer === simpleVariableBank["current_vb"][variable]["value"] || nowCorrectAnswer !== simpleVariableBank["current_vb"][variable]["value"])) || 
+              (simpleVariableBank["current_vb"].hasOwnProperty(variable) && fadeLevel == 0) || 
+              simpleVariableBank["current_vb"][variable]["type"] === "temp") {
+            if (varOrigin[variable] === state.variables.in_scope.current_python_function.value) {
+              varOpacity = 1;
+            } else {
+              varOpacity = 0.5;
+            }
+          } else {
+            varOpacity = 0;
+          }
+
           variableCont
             .append("text")
             .attr("x", 100 + findWidth(variable))
             .attr("y", 20)
-            .attr("opacity", varOrigin[variable] === state.variables.in_scope.current_python_function.value ? 1 : 0.5)
+            .attr("opacity", varOpacity)
             .style("font", '16px Menlo,Monaco,Consolas,"Courier New",monospace')
             .style("fill", "#e67300")
             .text(
@@ -1474,7 +1515,18 @@ var controller = (function() {
   function lookupCorrectValForVarOfName(lookupName, correctAnswerObject) {
     for (let obj_var of correctAnswerObject) {
       if (obj_var.name == lookupName) {
-        return obj_var.value;
+        if (obj_var.value.hasOwnProperty("type") && obj_var.value.type === "object") {
+          if (obj_var.value.reference.name == "Pet") {
+            return obj_var.value.reference.name + ": " +
+              obj_var.value.values[1].value;
+          } else if (obj_var.value.reference.name == "Point") {
+            return obj_var.value.reference.name + ": (" +
+              obj_var.value.values[2].value + ", " +
+              obj_var.value.values[3].value + ")";
+          }
+        } else {
+          return obj_var.value;
+        }
       }
     }
     console.error("Failed to lookup val of " + lookupName);
@@ -1484,7 +1536,12 @@ var controller = (function() {
     let userValue = document.getElementById('objectVariableUserResponse').value;
     let object_local_variables = state.variables.in_scope.we_will_add_this_object_to_the_variable_bank.value.values;
     let line_that_will_execute = state.variables.in_scope.this_is_the_next_line_that_will_execute.value;
-    let lookup = line_that_will_execute.expression.args[0].name;
+    let lookup;
+    if (line_that_will_execute.expression.args[0].hasOwnProperty("name")){
+      lookup = line_that_will_execute.expression.args[0].name;
+    } else {
+      lookup = line_that_will_execute.expression.args[0].value;
+    }
     let correctVal = lookupCorrectValForVarOfName(lookup, object_local_variables);
     respondToAnswer((correctVal == userValue), "variable_bank", correctVal);
   }
@@ -1494,6 +1551,8 @@ var controller = (function() {
     let line_that_will_execute = state.variables.in_scope.this_is_the_next_line_that_will_execute.value;
     let lookup = line_that_will_execute.expression.args[0].value;
     let vb = state.variables.in_scope.variables.value;
+    console.log(lookup);
+    console.log(vb);
     let correctVal = vb[lookup]["value"];
     console.log("val of " + lookup + " is " + correctVal);
     respondToAnswer((correctVal == userValue), "variable_bank", correctVal);
@@ -1850,6 +1909,10 @@ var controller = (function() {
   }
 
   function respondToAnswer(correct, type, correctAnswer) {
+    nowCorrect = correct;
+    nowCorrectAnswer = correctAnswer;
+    nowCorrectAnswerType = type;
+
     numTries = numTries + 1;
     if (!correct && numTries === 3) {
       Logging.log_task_event(logger, {
@@ -1862,7 +1925,6 @@ var controller = (function() {
     }
 
     if (correct || numTries === 3) {
-      lastWaitingForResponse = waitingForResponse;
       waitingForResponse = false;
       responseType = "";
       numTries = 0;

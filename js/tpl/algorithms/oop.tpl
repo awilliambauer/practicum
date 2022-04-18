@@ -253,6 +253,8 @@ function TPLAlgorithm() {
                         bodyIndex = bodyIndex + 1;
                     } while (bodyIndex < helper.get_class_method_body_range(functionDefinition));
                     [no_step]
+                    current_python_function = "init";
+                    [no_step]
                     if (helper.does_this_stmt_update_bank(functionLine)){
                         [no_step]
                         this_is_the_next_line_that_will_execute = functionLine;
@@ -281,8 +283,6 @@ function TPLAlgorithm() {
                     }
                     [no_step]
                     variables = helper.remove_temp_vars(variables);
-                    [no_step]
-                    current_python_function = "init";
                 } else {
                     // not a function call
 
@@ -444,6 +444,9 @@ function TPLAlgorithm() {
                 [no_step]
                 bodyIndex = bodyIndex + 1;
             } while (bodyIndex < helper.get_class_method_body_range(functionDefinition));
+
+            [no_step]
+            current_python_function = null;
             [no_step]
             if (helper.does_this_stmt_update_bank(functionLine)){
 
@@ -483,8 +486,6 @@ function TPLAlgorithm() {
             }
             [no_step]
             variables = helper.remove_temp_vars(variables);
-            [no_step]
-            current_python_function = null;
             [no_step]
             helper.go_next_line_without_reading();
 
