@@ -463,16 +463,20 @@ function TPLAlgorithm() {
                 arg2 = this_is_the_next_line_that_will_execute.expression.args[1];
                 [no_step]
                 if (helper.does_this_declare_a_new_variable(variables, arg1)){
-                    [prompt]
-                    "We will add the new variable and its value to the variable bank.";
-
                     [no_step]
                     result.name = arg1.value;
                     [no_step]
                     result["value"] = result.value;
 
-                    [interactive("add_variable_from_function")]
+                    [no_step]
                     variables[arg1.value] = result;
+
+                    let we_will_add_the_new_variable_and_its_value_to_the_variable_bank;
+                    
+                    [no_step]
+                    we_will_add_the_new_variable_and_its_value_to_the_variable_bank = variables;
+                    [interactive("add_variable_from_function")]
+                    we_will_add_the_new_variable_and_its_value_to_the_variable_bank[arg1.value] = result;
                 } else {
                     [prompt]
                     "We will assign the value returned by the function to the variable.";
