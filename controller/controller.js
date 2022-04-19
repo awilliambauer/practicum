@@ -547,7 +547,6 @@ var controller = (function() {
   }
 
   function visualizeObjectInVariableBank(variable, simpleVariableBank) {  
-    console.log(numTries);  
     var vParams = makeList(simpleVariableBank["current_vb"][variable]["parameters"]);
     var vVariables = makeList(simpleVariableBank["current_vb"][variable]["variables"]);
     var vNotLocalVariables = vVariables.filter(d => !d.local);
@@ -1559,8 +1558,6 @@ var controller = (function() {
     let line_that_will_execute = state.variables.in_scope.this_is_the_next_line_that_will_execute.value;
     let lookup = line_that_will_execute.expression.args[0].value;
     let vb = state.variables.in_scope.variables.value;
-    console.log(lookup);
-    console.log(vb);
     let correctVal = vb[lookup]["value"];
     console.log("val of " + lookup + " is " + correctVal);
     respondToAnswer((correctVal == userValue), "variable_bank", correctVal);
