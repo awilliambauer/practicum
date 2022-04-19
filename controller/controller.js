@@ -194,6 +194,9 @@ var controller = (function() {
         case "evaluate_expression":
           checkScratchASTNode("evaluate_expression");
           break;
+        case "add_instance":
+          checkInstance();
+          break;
       }
     } else {
       state = simulatorInterface.getNextState(fadeLevel);
@@ -313,11 +316,9 @@ var controller = (function() {
       }
 
       if (
-        state.hasOwnProperty("askForResponse") &&
-        state.askForResponse === "conditional"
-      ) {
-        var yesNoButtonDiv = d3
-          .select("#promptText")
+        state.hasOwnProperty("askForResponse") && state.askForResponse === "conditional") {
+        var yesNoButtonDiv = 
+        d3.select("#promptText")
           .append("div")
           .attr("class", "yes_no_buttons");
 
@@ -343,7 +344,69 @@ var controller = (function() {
           .attr("value", "no")
           .attr("id", "no_radio");
 
-        yesNoButtonDiv.append("label").attr("for", "no_radio").text("No");
+        yesNoButtonDiv.append("label")
+          .attr("for", "no_radio")
+          .text("No");
+      } else if (state.hasOwnProperty("askForResponse") && state.askForResponse === "add_instance"){
+        var classOptionsDiv = 
+        d3.select("#promptText")
+          .append("div")
+          .attr("class", "class_multiple_choice_buttons");
+        
+        classOptionsDiv
+          .append("input")
+          .attr("type", "radio")
+          .attr("class", "radio")
+          .attr("name", "class_multiple_choice_radio")
+          .attr("id", "whiskers_radio")
+          .attr("value", "whiskers");
+
+        classOptionsDiv
+          .append("label")
+          .text("whiskers")
+          .attr("for", "yes_radio")
+          .style("padding-right", "30px");
+
+        classOptionsDiv
+          .append("input")
+          .attr("type", "radio")
+          .attr("class", "radio")
+          .attr("name", "class_multiple_choice_radio")
+          .attr("id", "buster_radio")
+          .attr("value", "buster");
+
+        classOptionsDiv
+          .append("label")
+          .text("buster")
+          .attr("for", "buster_radio")
+          .style("padding-right", "30px");
+
+        classOptionsDiv
+          .append("input")
+          .attr("type", "radio")
+          .attr("class", "radio")
+          .attr("name", "class_multiple_choice_radio")
+          .attr("id", "point_radio")
+          .attr("value", "point");
+
+        classOptionsDiv
+          .append("label")
+          .text("point")
+          .attr("for", "point_radio")
+          .style("padding-right", "30px");
+
+        classOptionsDiv
+          .append("input")
+          .attr("type", "radio")
+          .attr("class", "radio")
+          .attr("name", "class_multiple_choice_radio")
+          .attr("id", "david_radio")
+          .attr("value", "david");
+
+        classOptionsDiv
+          .append("label")
+          .text("david")
+          .attr("for", "david_radio")
       }
     }
   }
@@ -538,7 +601,6 @@ var controller = (function() {
   }
 
   function visualizeObjectInVariableBank(variable, simpleVariableBank) {  
-    console.log(numTries);  
     var vParams = makeList(simpleVariableBank["current_vb"][variable]["parameters"]);
     var vVariables = makeList(simpleVariableBank["current_vb"][variable]["variables"]);
     var vNotLocalVariables = vVariables.filter(d => !d.local);
@@ -1905,6 +1967,25 @@ var controller = (function() {
     });
 
     respondToAnswer(correct, type, correctValue);
+  }
+
+  function checkInstance() {
+    var correctAnswerObject = simulatorInterface.getCorrectAnswer();
+    var userAnswer = d3.select('input[name="class_multiple_choice_radio"]:checked').node().value; 
+    var correctAnswer;
+    for(let idx = 0; idx < correctAnswerObject.rhs.values.length; idx++){ //Hacky AF, but doesn't actually give us the line we were on...
+      if (correctAnswerObject.rhs.values[idx].type === "instance"){
+        correctAnswer = correctAnswerObject.rhs.values[idx].hidden_val.value.name;
+      }
+    }
+
+    var correct = false;
+    if (correctAnswer === userAnswer) {
+      correct = true;
+    }
+
+    respondToAnswer(correct, "add_instance", correctAnswer);
+
   }
 
   function respondToAnswer(correct, type, correctAnswer) {

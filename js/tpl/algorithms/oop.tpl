@@ -166,6 +166,7 @@ function TPLAlgorithm() {
                                 let result;
                                 [no_step]
                                 result = helper.get_line_result(variables, this_is_the_next_line_that_will_execute);
+                                [no_step]
                                 variables[classReference] = helper.update_object_in_variable_bank(variables, variables[classReference], result);
                             }
                         } else [no_step] if (helper.are_we_on_return_statement(this_is_the_next_line_that_will_execute)){
@@ -286,9 +287,19 @@ function TPLAlgorithm() {
                 } else {
                     // not a function call
 
-                    // Check user input on this variable's value
-                    [interactive("add_variable_object")]
-                    we_will_add_this_object_to_the_variable_bank = helper.update_object_in_variable_bank(variables, we_will_add_this_object_to_the_variable_bank, constructorIndex);
+
+                    //Check to see if the value we are setting is an instance
+                    [no_step]
+                    if (helper.are_we_setting_an_instance(we_will_add_this_object_to_the_variable_bank, constructorIndex)){
+                        [interactive("add_instance")]
+                        we_will_add_this_object_to_the_variable_bank = helper.update_object_in_variable_bank(variables, we_will_add_this_object_to_the_variable_bank, constructorIndex);
+                    } else {
+                        // Check user input on this variable's value
+                        [interactive("add_variable_object")]
+                        we_will_add_this_object_to_the_variable_bank = helper.update_object_in_variable_bank(variables, we_will_add_this_object_to_the_variable_bank, constructorIndex);
+                    }
+                    
+                    
                 }
                 [no_step]
                 constructorIndex = constructorIndex + 1;
