@@ -9,6 +9,7 @@ var controller = (function() {
   var waitingForResponse;
   var responseType;
   var numTries;
+  var threeTries = false;
   var button;
   var bankStatus = {};
   var objectSteps = ["createBox", "addAndHighlight", "done"];
@@ -349,11 +350,11 @@ var controller = (function() {
     var value = "";
     if (values[idx].type === "string" && values[idx].value !== "" && 
         ((oldValues[idx].value && fadeLevel == 1 &&
-          (nowCorrect && nowCorrectAnswer === values[idx].value || nowCorrectAnswer !== values[idx].value)) || 
+          ((nowCorrect || threeTries) && nowCorrectAnswer === values[idx].value || nowCorrectAnswer !== values[idx].value)) || 
           fadeLevel == 0)) {
       value = "'" + values[idx].value + "'";
     } else if ((oldValues[idx].value && fadeLevel == 1 &&
-          (nowCorrect && nowCorrectAnswer === values[idx].value || nowCorrectAnswer !== values[idx].value))
+          ((nowCorrect || threeTries) && nowCorrectAnswer === values[idx].value || nowCorrectAnswer !== values[idx].value))
           || fadeLevel == 0) {
       value = values[idx].value;
     }
@@ -387,14 +388,14 @@ var controller = (function() {
     return value;
   }
 
-  function findOpacity(v, values, oldValues, oldOldValues) {
+  function findOpacity(v, values, oldValues) {
     var idx = matchIndex(v, values);
     if (idx >= 0) {
       if (values[idx].value !== "" &&
          ((oldValues[idx].value === "" && fadeLevel === 0) ||
-         (oldValues[idx].value && //oldOldValues[idx].value === "" && 
+         (oldValues[idx].value &&  
          fadeLevel === 1 && 
-         (nowCorrect && nowCorrectAnswer === values[idx].value && nowCorrectAnswerType === "variable_bank")
+         ((nowCorrect || threeTries) && nowCorrectAnswer === values[idx].value && nowCorrectAnswerType === "variable_bank")
          ))) {
             return 1;
       }
@@ -409,7 +410,8 @@ var controller = (function() {
     return Math.ceil(context.measureText(text).width) + 55;
   }
 
-  function getHighlightX(data, i) {
+  function getHighlightX(data, d) {
+    var i = matchIndex(d, data);
     var x = 120;
     for (let j = 0; j < i; j++) {
       if (findWidth(data[j].name) > findWidth(getValueRep(data[j]))) {
@@ -421,11 +423,11 @@ var controller = (function() {
     return x;
   }
 
-  function displayParamVal(d, i, vOldParams, vOldVariables) {
+  function displayParamVal(d, i, vOldLocalVariables) {
     if (fadeLevel == 0) {
       return getValueRep(d);
     }
-    else if (vOldParams.concat(vOldVariables)[i].value !== "" && fadeLevel ==  1 && (nowCorrect && nowCorrectAnswer === d.value || nowCorrectAnswer !== d.value)) {
+    else if (vOldLocalVariables[i].value !== "" && fadeLevel ==  1 && ((nowCorrect || threeTries) && nowCorrectAnswer === d.value || nowCorrectAnswer !== d.value)) {
       return getValueRep(d);
     } else {
       return "";
@@ -542,33 +544,19 @@ var controller = (function() {
     return the_new_simple_bank;
   }
 
-  function visualizeObjectInVariableBank(variable, simpleVariableBank) {    
+  function visualizeObjectInVariableBank(variable, simpleVariableBank) {  
+    console.log(numTries);  
     var vParams = makeList(simpleVariableBank["current_vb"][variable]["parameters"]);
     var vVariables = makeList(simpleVariableBank["current_vb"][variable]["variables"]);
     var vNotLocalVariables = vVariables.filter(d => !d.local);
     var vClassName = simpleVariableBank["current_vb"][variable]["class_name"];
     var vOldVariables;
-    var vOldParams;
-    var vOldOldVariables;
 
     if (simpleVariableBank["previous_vb"].hasOwnProperty(variable)) {
       vOldVariables = makeList(simpleVariableBank["previous_vb"][variable]["variables"]);
     } else {
       vOldVariables = vVariables;
     }
-
-    if (simpleVariableBank["previous_vb"].hasOwnProperty(variable)) {
-      vOldParams = makeList(simpleVariableBank["previous_vb"][variable]["parameters"]);
-    } else {
-      vOldParams = vParams;
-    }
-
-    if (simpleVariableBank["prev_previous_vb"].hasOwnProperty(variable)) {
-      vOldOldVariables = makeList(simpleVariableBank["prev_previous_vb"][variable]["variables"]);
-    } else {
-      vOldOldVariables = vVariables;
-    }
-
 
     if (!(variable in bankStatus)) {
       bankStatus[variable] = objectSteps[0];
@@ -675,7 +663,7 @@ var controller = (function() {
         .attr("fill", "white")
         .attr("stroke", colorDict[vClassName][1]);
 
-      if ((vNotLocalVariables[vNotLocalVariables.length - 1].value !== "" && fadeLevel == 0) || (vOldVariables.filter(d => !d.local)[vOldVariables.filter(d => !d.local).length - 1].value !== "" && fadeLevel == 1 && nowCorrect)) {
+      if ((vNotLocalVariables[vNotLocalVariables.length - 1].value !== "" && fadeLevel == 0) || (vOldVariables.filter(d => !d.local)[vOldVariables.filter(d => !d.local).length - 1].value !== "" && fadeLevel == 1 && (nowCorrect || threeTries))) {
         d3
           .selectAll(".bank_object_box_" + variable)
           .transition()
@@ -696,7 +684,7 @@ var controller = (function() {
         .enter()
         .append("rect")
           .attr("x", (d, i) =>
-            getHighlightX(vParams.concat(vVariables.filter(d => d.local)), i))
+            getHighlightX(vParams.concat(vVariables.filter(d => d.local)), d))
           .attr("y", 1)
           .attr(
             "width",
@@ -715,8 +703,7 @@ var controller = (function() {
               findOpacity(
                 d,
                 vVariables,
-                vOldVariables,
-                vOldOldVariables
+                vOldVariables
               )
             )
           .transition()
@@ -738,13 +725,13 @@ var controller = (function() {
         .attr(
           "x",
           (d, i) =>
-            getHighlightX(vParams.concat(vVariables.filter(d => d.local)), i) + 5
+            getHighlightX(vParams.concat(vVariables.filter(d => d.local)), d) + 5
         )
         .attr("y", 20)
         .attr("opacity", (state.variables.in_scope.current_python_function.value === null) || (state.variables.in_scope.current_python_function.value === "init") ? 1 : 0.5)
         .text(d => d.name)
 
-      if ((vNotLocalVariables[vNotLocalVariables.length - 1].value !== "" && fadeLevel == 0) || (vOldVariables.filter(d => !d.local)[vOldVariables.filter(d => !d.local).length - 1].value !== "" && fadeLevel == 1 && nowCorrect)) {
+      if ((vNotLocalVariables[vNotLocalVariables.length - 1].value !== "" && fadeLevel == 0) || (vOldVariables.filter(d => !d.local)[vOldVariables.filter(d => !d.local).length - 1].value !== "" && fadeLevel == 1 && (nowCorrect || threeTries))) {
         d3
           .selectAll(".bank_param_box_vars")
           .transition()
@@ -761,18 +748,37 @@ var controller = (function() {
         .enter()
         .append("text")
           .style("font", '16px Menlo,Monaco,Consolas,"Courier New",monospace')
-          .style("fill", d => (d.param ? "#4f9693" : "#e67300"))
+          .style("fill", "#4f9693")
           .attr("class", "bank_param_box_vals")
           .attr(
             "x",
             (d, i) =>
-              getHighlightX(vParams.concat(vVariables.filter(d => d.local)), i) + 5
+              getHighlightX(vParams.concat(vVariables.filter(d => d.local)), d) + 5
           )
           .attr("y", 40)
           .attr("opacity", (state.variables.in_scope.current_python_function.value === null) || (state.variables.in_scope.current_python_function.value === "init") ? 1 : 0.5)
-          .text((d, i) => displayParamVal(d, i, vOldParams, vOldVariables))
+          .text(d => getValueRep(d))
+      
+      let paramBoxValsLocal = svg.append("g");
 
-      if ((vNotLocalVariables[vNotLocalVariables.length - 1].value !== "" && fadeLevel == 0) || (vOldVariables.filter(d => !d.local)[vOldVariables.filter(d => !d.local).length - 1].value !== "" && fadeLevel == 1 && nowCorrect)) {
+      paramBoxValsLocal
+        .selectAll("text")
+        .data(vVariables.filter(d => d.local))
+        .enter()
+        .append("text")
+          .style("font", '16px Menlo,Monaco,Consolas,"Courier New",monospace')
+          .style("fill", "#e67300")
+          .attr("class", "bank_param_box_vals")
+          .attr(
+            "x",
+            (d, i) =>
+              getHighlightX(vParams.concat(vVariables.filter(d => d.local)), d) + 5
+          )
+          .attr("y", 40)
+          .attr("opacity", (state.variables.in_scope.current_python_function.value === null) || (state.variables.in_scope.current_python_function.value === "init") ? 1 : 0.5)
+          .text((d, i) => displayParamVal(d, i, vOldVariables.filter(d => d.local)))
+
+      if ((vNotLocalVariables[vNotLocalVariables.length - 1].value !== "" && fadeLevel == 0) || (vOldVariables.filter(d => !d.local)[vOldVariables.filter(d => !d.local).length - 1].value !== "" && fadeLevel == 1 && (nowCorrect || threeTries))) {
         d3
           .selectAll(".bank_param_box_vals")
           .transition()
@@ -808,7 +814,7 @@ var controller = (function() {
         .text("self =")
   
 
-      if ((vNotLocalVariables[vNotLocalVariables.length - 1].value !== "" && fadeLevel == 0) || (vOldVariables.filter(d => !d.local)[vOldVariables.filter(d => !d.local).length - 1].value !== "" && fadeLevel == 1 && nowCorrect)) {
+      if ((vNotLocalVariables[vNotLocalVariables.length - 1].value !== "" && fadeLevel == 0) || (vOldVariables.filter(d => !d.local)[vOldVariables.filter(d => !d.local).length - 1].value !== "" && fadeLevel == 1 && (nowCorrect || threeTries))) {
         d3
           .selectAll(".bank_object_vars_" + variable)
           .transition()
@@ -1047,11 +1053,11 @@ var controller = (function() {
             .style("font", '16px Menlo,Monaco,Consolas,"Courier New",monospace')
             .style("fill", "#e67300")
             .style("font-weight", "bold")
-            .text(variable + ":");
+            .text(variable + " = ");
 
           var varOpacity;
 
-          if ((simpleVariableBank["previous_vb"].hasOwnProperty(variable) && fadeLevel == 1 && (nowCorrect && nowCorrectAnswer === simpleVariableBank["current_vb"][variable]["value"] || nowCorrectAnswer !== simpleVariableBank["current_vb"][variable]["value"])) || 
+          if ((simpleVariableBank["previous_vb"].hasOwnProperty(variable) && fadeLevel == 1 && ((nowCorrect || threeTries) && nowCorrectAnswer === simpleVariableBank["current_vb"][variable]["value"] || nowCorrectAnswer !== simpleVariableBank["current_vb"][variable]["value"])) || 
               (simpleVariableBank["current_vb"].hasOwnProperty(variable) && fadeLevel == 0) || 
               simpleVariableBank["current_vb"][variable]["type"] === "temp") {
             if (varOrigin[variable] === state.variables.in_scope.current_python_function.value) {
@@ -1914,6 +1920,13 @@ var controller = (function() {
     nowCorrectAnswerType = type;
 
     numTries = numTries + 1;
+
+    if (numTries === 3) {
+      threeTries = true;
+    } else {
+      threeTries = false;
+    }
+
     if (!correct && numTries === 3) {
       Logging.log_task_event(logger, {
         type: Logging.ID.BottomOutHint,
