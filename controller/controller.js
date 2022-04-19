@@ -288,7 +288,8 @@ var controller = (function() {
         d3.select("#responseArea")
           .insert("input")
           .attr("type", "text")
-          .attr("id", "objectVariableUserResponse");
+          .attr("id", "objectVariableUserResponse")
+          .node().focus();
       } else if (state.askForResponse === "add_variable_from_function") {
         let line_that_will_execute = state.variables.in_scope.this_is_the_next_line_that_will_execute.value;
 
@@ -307,7 +308,8 @@ var controller = (function() {
         d3.select("#responseArea")
           .insert("input")
           .attr("type", "text")
-          .attr("id", "objectVariableUserResponse");
+          .attr("id", "objectVariableUserResponse")
+          .node().focus();
       }
 
       if (
