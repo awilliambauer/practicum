@@ -24,6 +24,7 @@ var controller = (function() {
   var nowCorrect = null;
   var nowCorrectAnswer = "";
   var nowCorrectAnswerType = "";
+  var nowCorrectVar = "";
 
   var simpleVariableBank = {};
 
@@ -415,11 +416,11 @@ var controller = (function() {
     var value = "";
     if (values[idx].type === "string" && values[idx].value !== "" && 
         ((oldValues[idx].value !== "" && fadeLevel == 1 &&
-          ((nowCorrect || threeTries) && nowCorrectAnswer === values[idx].value || nowCorrectAnswer !== values[idx].value)) || 
+          ((nowCorrect || threeTries) && values[idx].name.replace("self.", "") === nowCorrectVar || values[idx].name.replace("self.", "") !== nowCorrectVar)) || 
           fadeLevel == 0)) {
       value = "'" + values[idx].value + "'";
     } else if ((oldValues[idx].value !== "" && fadeLevel == 1 &&
-          ((nowCorrect || threeTries) && nowCorrectAnswer === values[idx].value || nowCorrectAnswer !== values[idx].value))
+          ((nowCorrect || threeTries) && values[idx].name.replace("self.", "") === nowCorrectVar || values[idx].name.replace("self.", "") !== nowCorrectVar))
           || fadeLevel == 0) {
       value = values[idx].value;
     }
@@ -460,7 +461,7 @@ var controller = (function() {
          ((oldValues[idx].value === "" && fadeLevel === 0) ||
          (oldValues[idx].value &&  
          fadeLevel === 1 && 
-         ((nowCorrect || threeTries) && nowCorrectAnswer === values[idx].value && nowCorrectAnswerType === "variable_bank")
+         ((nowCorrect || threeTries) && nowCorrectVar === v.name && nowCorrectAnswerType === "variable_bank")
          ))) {
             return 1;
       }
@@ -492,7 +493,7 @@ var controller = (function() {
     if (fadeLevel == 0) {
       return getValueRep(d);
     }
-    else if (vOldLocalVariables[i].value !== "" && fadeLevel ==  1 && ((nowCorrect || threeTries) && nowCorrectAnswer === d.value || nowCorrectAnswer !== d.value)) {
+    else if (vOldLocalVariables[i].value !== "" && fadeLevel ==  1 && ((nowCorrect || threeTries) && nowCorrectVar === d.name || nowCorrectVar !== d.name)) {
       return getValueRep(d);
     } else {
       return "";
@@ -515,7 +516,7 @@ var controller = (function() {
     return val.value !== oldVals[idx].value;
   }
 
-  function getColor(v, colorDict) {
+  function getColor(v) {
     if (v.type === "instance" && v.value !== "") {
       return colorDict[v.value.split(":")[0]][1];
     }
@@ -624,10 +625,6 @@ var controller = (function() {
       bankStatus[variable] = objectSteps[0];
     }
 
-    if (!(vClassName in colorDict)) {
-      colorDict[vClassName] = colors[Object.keys(colorDict).length];
-    }
-
     if (!(variable in varOrigin)) {
       varOrigin[variable] = state.variables.in_scope.current_python_function.value;
     }
@@ -675,7 +672,7 @@ var controller = (function() {
           .style("font", '16px Menlo,Monaco,Consolas,"Courier New",monospace')
           .attr("x", 120)
           .attr("y", (d, i) => 95 + i * 30)
-          .style("fill", d => getColor(d, colorDict))
+          .style("fill", d => getColor(d))
           .attr("opacity", 0)
           .text((d, i) => getInstanceText(vNotLocalVariables, vOldVariables.filter(d => !d.local), i))
           .transition()
@@ -860,7 +857,7 @@ var controller = (function() {
           .style("font", '16px Menlo,Monaco,Consolas,"Courier New",monospace')
           .attr("x", 120)
           .attr("y", (d, i) => 95 + i * 30)
-          .style("fill", d => getColor(d, colorDict))
+          .style("fill", d => getColor(d))
           .attr("opacity", 1)
           .text((d, i) => getInstanceText(vNotLocalVariables, vOldVariables.filter(d => !d.local), i));
       
@@ -962,7 +959,7 @@ var controller = (function() {
           .style("font", '16px Menlo,Monaco,Consolas,"Courier New",monospace')
           .attr("x", 120)
           .attr("y", (d, i) => 26 + i * 30)
-          .style("fill", d => getColor(d, colorDict))
+          .style("fill", d => getColor(d))
           .attr("opacity", 1)
           .text((d, i) => getInstanceText(vNotLocalVariables, vOldVariables.filter(d => !d.local), i));
 
@@ -980,7 +977,6 @@ var controller = (function() {
   }
 
   function addVariableBank() {
-    console.log(state.variables.in_scope.current_python_function.value);
     d3.select("#variable_list_table").node().innerHTML = "";
     d3.select("#variable_array_table").node().innerHTML = "";
     var variableBankObject;
@@ -1120,7 +1116,7 @@ var controller = (function() {
 
           var varOpacity;
 
-          if ((simpleVariableBank["previous_vb"].hasOwnProperty(variable) && fadeLevel == 1 && ((nowCorrect || threeTries) && nowCorrectAnswer === simpleVariableBank["current_vb"][variable]["value"] || nowCorrectAnswer !== simpleVariableBank["current_vb"][variable]["value"])) || 
+          if ((simpleVariableBank["previous_vb"].hasOwnProperty(variable) && fadeLevel == 1 && ((nowCorrect || threeTries) && nowCorrectVar === variable || nowCorrectVar !== variable)) || 
               (simpleVariableBank["current_vb"].hasOwnProperty(variable) && fadeLevel == 0) || 
               simpleVariableBank["current_vb"][variable]["type"] === "temp") {
             if (varOrigin[variable] === state.variables.in_scope.current_python_function.value) {
@@ -1140,6 +1136,7 @@ var controller = (function() {
             .style("font", '16px Menlo,Monaco,Consolas,"Courier New",monospace')
             .style("fill", "#e67300")
             .text(simpleVariableBank["current_vb"][variable].value);
+
         } else {
           listCell1.attr("class", "bank_variable_label");
           listCell1
@@ -1607,6 +1604,7 @@ var controller = (function() {
     } else {
       lookup = line_that_will_execute.expression.args[0].value;
     }
+    nowCorrectVar = lookup;
     let correctVal = lookupCorrectValForVarOfName(lookup, object_local_variables);
     respondToAnswer((correctVal == userValue && userValue != ""), "variable_bank", correctVal);
   }
@@ -1617,6 +1615,7 @@ var controller = (function() {
     let lookup = line_that_will_execute.expression.args[0].value;
     let vb = state.variables.in_scope.variables.value;
     let correctVal = vb[lookup]["value"];
+    nowCorrectVar = lookup;
     console.log("val of " + lookup + " is " + correctVal);
     respondToAnswer((correctVal == userValue && userValue != ""), "variable_bank", correctVal);
   }

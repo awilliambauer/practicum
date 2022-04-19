@@ -609,9 +609,9 @@ $(document).ready(function() {
         csed.determineEnabledCategories();
 
         // pull in problems
-        $.getJSON("include/categoryConfig.json", function (categoryConfig) {
+        $.getJSON("include/categoryConfig_experiment.json", function (categoryConfig) {
             if (!categoryConfig) {
-                console.error("Unable to load problem configuration: need .../public/categoryConfig.json");
+                console.error("Unable to load problem configuration: need .../public/categoryConfig_experiment.json");
             } else {
                 // add next problem pointers
                 categoryConfig.forEach(function (category) {
