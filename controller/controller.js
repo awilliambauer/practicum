@@ -22,7 +22,6 @@ var controller = (function() {
   var colorDict = {"Pet": colors[0], "Owner": colors[1], "Point": colors[2], "Circle": colors[3]};
   var varOrigin = {};
   var nowCorrect = null;
-  var nowCorrectAnswer = "";
   var nowCorrectAnswerType = "";
   var nowCorrectVar = "";
 
@@ -1616,7 +1615,6 @@ var controller = (function() {
     let vb = state.variables.in_scope.variables.value;
     let correctVal = vb[lookup]["value"];
     nowCorrectVar = lookup;
-    console.log("val of " + lookup + " is " + correctVal);
     respondToAnswer((correctVal == userValue && userValue != ""), "variable_bank", correctVal);
   }
 
@@ -1991,7 +1989,6 @@ var controller = (function() {
 
   function respondToAnswer(correct, type, correctAnswer) {
     nowCorrect = correct;
-    nowCorrectAnswer = correctAnswer;
     nowCorrectAnswerType = type;
 
     numTries = numTries + 1;
