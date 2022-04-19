@@ -17,8 +17,8 @@ class Circle:
 	def __init__(self,center,radius):
 		self.center = center
 		self.radius = radius     
-	def moveCircleLeft(self, distance):
-		newX = self.center.x - distance
+	def moveCircleLeft(self, dist):
+		newX = self.center.x - dist
 		if (newX < 0):
 			newX = 0
 		self.center.x = newX

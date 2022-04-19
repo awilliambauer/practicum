@@ -15,11 +15,11 @@ var controller = (function() {
   var objectSteps = ["createBox", "addAndHighlight", "done"];
   var colors = [
     ["#fee6f3", "#fd1c94"],
-    ["#c9e8c9", "#46b946"],
-    ["#e4deed", "#7958a7"],
-    ["#c5d6ed", "#3d77c2"]
+    ["#ebf1f9", "#3d77c2"],
+    ["#f1ebfa", "#7439c6"],
+    ["#edf7ed", "#46b946"]
   ];
-  var colorDict = {"Pet": colors[0], "Owner": colors[1], "Point": colors[2]};
+  var colorDict = {"Pet": colors[0], "Owner": colors[1], "Point": colors[2], "Circle": colors[3]};
   var varOrigin = {};
   var nowCorrect = null;
   var nowCorrectAnswer = "";
@@ -351,11 +351,11 @@ var controller = (function() {
   function getInstanceText(values, oldValues, idx) {
     var value = "";
     if (values[idx].type === "string" && values[idx].value !== "" && 
-        ((oldValues[idx].value && fadeLevel == 1 &&
+        ((oldValues[idx].value !== "" && fadeLevel == 1 &&
           ((nowCorrect || threeTries) && nowCorrectAnswer === values[idx].value || nowCorrectAnswer !== values[idx].value)) || 
           fadeLevel == 0)) {
       value = "'" + values[idx].value + "'";
-    } else if ((oldValues[idx].value && fadeLevel == 1 &&
+    } else if ((oldValues[idx].value !== "" && fadeLevel == 1 &&
           ((nowCorrect || threeTries) && nowCorrectAnswer === values[idx].value || nowCorrectAnswer !== values[idx].value))
           || fadeLevel == 0) {
       value = values[idx].value;
@@ -520,7 +520,14 @@ var controller = (function() {
         bank_simplified[obj]["variables"] = vars;
         bank_simplified[obj]["parameters"] = constructor_parameters;
       } else {
-        bank_simplified[obj]["value"] = curr_messy_bank[obj].value;
+        if (curr_messy_bank[obj].hasOwnProperty("tag") && curr_messy_bank[obj].tag === "reference") {
+          bank_simplified[obj]["value"] = curr_messy_bank[obj].value.reference.name + ": " + curr_messy_bank[obj].value.name;
+        } else if (/\d/.test(curr_messy_bank[obj].value)) {
+          bank_simplified[obj]["value"] = curr_messy_bank[obj].value;
+        } else {
+          bank_simplified[obj]["value"] = "'" + curr_messy_bank[obj].value + "'";
+        }
+        
         if (curr_messy_bank[obj].hasOwnProperty("type")) {
           bank_simplified[obj]["type"] = curr_messy_bank[obj].type;
         } else if (curr_messy_bank[obj].hasOwnProperty("temp")) {
@@ -736,7 +743,7 @@ var controller = (function() {
 
       paramBoxVals
         .selectAll("text")
-        .data(vParams.concat(vVariables.filter(d => d.local)))
+        .data(vParams)
         .enter()
         .append("text")
           .style("font", '16px Menlo,Monaco,Consolas,"Courier New",monospace')
@@ -910,6 +917,7 @@ var controller = (function() {
   }
 
   function addVariableBank() {
+    console.log(state.variables.in_scope.current_python_function.value);
     d3.select("#variable_list_table").node().innerHTML = "";
     d3.select("#variable_array_table").node().innerHTML = "";
     var variableBankObject;
@@ -1063,16 +1071,12 @@ var controller = (function() {
 
           variableCont
             .append("text")
-            .attr("x", 100 + findWidth(variable))
+            .attr("x", 100 + findWidth(variable + " = "))
             .attr("y", 20)
             .attr("opacity", varOpacity)
             .style("font", '16px Menlo,Monaco,Consolas,"Courier New",monospace')
             .style("fill", "#e67300")
-            .text(
-              /\d/.test(simpleVariableBank["current_vb"][variable].value)
-                ? simpleVariableBank["current_vb"][variable].value
-                : "'" + simpleVariableBank["current_vb"][variable].value + "'"
-            );
+            .text(simpleVariableBank["current_vb"][variable].value);
         } else {
           listCell1.attr("class", "bank_variable_label");
           listCell1
