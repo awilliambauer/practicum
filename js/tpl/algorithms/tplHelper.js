@@ -446,6 +446,17 @@ function TplHelper() {
         });
     }
 
+    this.are_we_setting_an_instance = function(object, lineIndex){
+        let relevant_line = object.reference.body[0].body[lineIndex]; //Gets the line from the actual class definition stored in the object.
+        let arg2_val = relevant_line.expression.args[1].value; //value of the right hand side of the equal sign in the line, either the actual value or an indentifier name
+        for(let idx = 0; idx < object.params.length; idx++) { //Iterate through the params passed into the object
+            if (arg2_val === object.params[idx].name && object.params[idx].type === "object"){
+                return true;
+            }
+        }
+        return false;
+    }
+
     this.update_object_in_variable_bank = function(bank, object, variable) {
         if (Number.isInteger(variable)){
             let curr_var = object.values[variable];
