@@ -609,7 +609,7 @@ $(document).ready(function() {
         csed.determineEnabledCategories();
 
         // pull in problems
-        $.getJSON("include/categoryConfig_experiment.json", function (categoryConfig) {
+        $.getJSON("include/categoryConfig.json", function (categoryConfig) {
             if (!categoryConfig) {
                 console.error("Unable to load problem configuration: need .../public/categoryConfig.json");
             } else {
