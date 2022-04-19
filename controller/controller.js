@@ -1608,7 +1608,7 @@ var controller = (function() {
       lookup = line_that_will_execute.expression.args[0].value;
     }
     let correctVal = lookupCorrectValForVarOfName(lookup, object_local_variables);
-    respondToAnswer((correctVal == userValue), "variable_bank", correctVal);
+    respondToAnswer((correctVal == userValue && userValue != ""), "variable_bank", correctVal);
   }
 
   function checkVariableBankObjectVariableAnswerFromFunction() {
@@ -1618,7 +1618,7 @@ var controller = (function() {
     let vb = state.variables.in_scope.variables.value;
     let correctVal = vb[lookup]["value"];
     console.log("val of " + lookup + " is " + correctVal);
-    respondToAnswer((correctVal == userValue), "variable_bank", correctVal);
+    respondToAnswer((correctVal == userValue && userValue != ""), "variable_bank", correctVal);
   }
 
   function checkVariableBankAnswer() {
