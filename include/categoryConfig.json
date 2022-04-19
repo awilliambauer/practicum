@@ -672,6 +672,33 @@
         "id": "51"
       }]
     }
+  },{
+    "id": "6",
+    "title": "Classes and Objects Investigation 6",
+    "content": {
+      "src": "classes_and_objects/classes_and_objects_6.py",
+      "variants": [{
+        "id": "61"
+      }]
+    }
+  },{
+    "id": "7",
+    "title": "Classes and Objects Investigation 7",
+    "content": {
+      "src": "classes_and_objects/classes_and_objects_7.py",
+      "variants": [{
+        "id": "71"
+      }]
+    }
+  },{
+    "id": "8",
+    "title": "Classes and Objects Investigation 8",
+    "content": {
+      "src": "classes_and_objects/classes_and_objects_8.py",
+      "variants": [{
+        "id": "81"
+      }]
+    }
   }
 ]
 }

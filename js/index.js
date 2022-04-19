@@ -285,6 +285,16 @@ var csed = (function() {
     }
 
     function modalFadingLevel(problemConfig, callback_obj, initial_state, problemUI) {
+        // If categoryConfig specifies a required fading level (guided / independent)
+        // set it and initialize the problem immediately.
+        if (problemConfig.hasOwnProperty("force_fading")) {
+            let selection = problemConfig["force_fading"];
+            setFadingLevel(selection);
+            d3.select("#difficultyLevel").append("span").html(`Difficulty level: ${selection}`);
+            problemUI.initialize(problemConfig, callback_obj, initial_state, task_logger, fading_level);
+            return;
+        }
+        // Otherwise...
         // Get Modal
         var modal = document.getElementById("fading-level-modal");
         modal.style.display = "block";

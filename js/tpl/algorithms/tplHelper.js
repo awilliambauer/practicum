@@ -507,7 +507,7 @@ function TplHelper() {
         }
         let class_constructor_body = variable.reference.body[0].body;
         let variable_bank_values = this.create_bank(class_constructor_body.length);        
-
+        
         for (let idx = 0; idx < class_constructor_body.length; idx++) {
             if(class_constructor_body[idx].tag === "declaration"){
                 if (class_constructor_body[idx].expression.args[1].hasOwnProperty("tag") && class_constructor_body[idx].expression.args[1].tag === "literal"){
@@ -522,7 +522,7 @@ function TplHelper() {
                     variable_bank_values[idx]["type"] =  declaration_value.type;
                 } else { //Case if setting parameter being passed in.
                     let declaration_identifier = class_constructor_body[idx].expression.args[0].name;
-                    let declaration_value = class_constructor_body[idx].expression.args[1];
+                    let declaration_value = this.copy(class_constructor_body[idx].expression.args[1]);
                     let declaration_type = "reference";
                     if (declaration_value.tag === "identifier"){
                         for(let i = 0; i < param_list.length; i++){
@@ -540,11 +540,11 @@ function TplHelper() {
                     variable_bank_values[idx]["name"] = declaration_identifier;
                     variable_bank_values[idx]["value"] = "";
                     if (declaration_value.hasOwnProperty("tag") && declaration_value.tag === "call") {
-                        variable_bank_values[idx]["hidden_val"] = declaration_value;
+                        variable_bank_values[idx]["hidden_val"] = this.copy(declaration_value);
                     } else {
-                        variable_bank_values[idx]["hidden_val"] = {"value": declaration_value.value, "type": declaration_type, "tag": "literal"};
+                        variable_bank_values[idx]["hidden_val"] = {"value": this.copy(declaration_value.value), "type": this.copy(declaration_type), "tag": "literal"};
                     }
-                    variable_bank_values[idx]["type"] = declaration_type;                    
+                    variable_bank_values[idx]["type"] = this.copy(declaration_type); // Essential to copy the values so that object details are not overwritten later.
                 }
                 if (class_constructor_body[idx].expression.args[0].hasOwnProperty("object") && class_constructor_body[idx].expression.args[0].object.tag === "identifier"){
                     variable_bank_values[idx]["tag"] = "reference";

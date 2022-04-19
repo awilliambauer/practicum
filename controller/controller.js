@@ -508,16 +508,7 @@ var controller = (function() {
           let name = obj_values[i]["name"];
           let type = obj_values[i]["type"];
           if (type === "instance" && value !== "") {
-            if (obj_values[i].value.reference.name == "Pet") {
-              value =
-                obj_values[i].value.reference.name + ": " +
-                obj_values[i].value.values[1].value;
-            } else if (obj_values[i].value.reference.name == "Point") {
-              value =
-                obj_values[i].value.reference.name + ": (" +
-                obj_values[i].value.values[2].value + ", " +
-                obj_values[i].value.values[3].value + ")";
-            }
+            value = obj_values[i].value.reference.name + ": " + obj_values[i].value.name;
           }
           let local = true;
           if (obj_values[i]["tag"] == "reference") {
