@@ -563,12 +563,14 @@ function TplHelper() {
             }
             
         }
-        
 
         bank[variable.name] = {type: 'object', name: variable.name, reference: variable.reference, values: variable_bank_values, params: []};
         for (let idx = 0; idx < parameters.length; idx++) {
             bank[variable.name].params.push(sim.evaluate_expression(bank, variable.values[idx]));
-            bank[variable.name].params[idx].name = param_list[idx];
+            // We want to be able to access the original name in the viz so we store it separately
+            bank[variable.name].params[idx].name_in_higher_scope = bank[variable.name].params[idx].name;
+            bank[variable.name].params[idx].name = param_list[idx]; // this line replaces the original name of the value with the name in the new scope so it simulates correctly
+            bank[variable.name].params[idx].og_value = variable.value;
         }
         return bank[variable.name];
     }

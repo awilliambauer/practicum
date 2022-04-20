@@ -586,22 +586,8 @@ var controller = (function() {
             let value = obj_params[i]["value"];
             let type = obj_params[i]["type"];
             if (type === "object") {
-              //TODO: don't hard code these
-              if (obj_params[i].reference.name == "Pet") {
-                //Maybe check curr_messy_bank.class_reference.name
-                value =
-                  obj_params[i].reference.name +
-                  ": " +
-                  obj_params[i].values[1].value;
-              } else if (obj_params[i].reference.name == "Point") {
-                value =
-                  obj_params[i].reference.name +
-                  ": (" +
-                  obj_params[i].values[2].value +
-                  ", " +
-                  obj_params[i].values[3].value +
-                  ")";
-              }
+              // If this is an object, the display value we want is the name from its original scope
+              value = obj_params[i].name_in_higher_scope;
             }
             constructor_parameters[name] = {
               value: value,
@@ -620,9 +606,9 @@ var controller = (function() {
           let type = obj_values[i]["type"];
           if (type === "instance" && value !== "") {
             value =
-              obj_values[i].value.reference.name +
-              ": " +
-              obj_values[i].value.name;
+            obj_values[i].value.reference.name +
+            ": " +
+            obj_values[i].value.name;
           }
           let local = true;
           if (obj_values[i]["tag"] == "reference") {
@@ -630,6 +616,11 @@ var controller = (function() {
             local = false;
           }
           vars[name] = { value: value, type: type, local: local, param: false };
+          
+          // Some variables had a name in the higher scope that we might care about. Leave it here.
+          if (obj_values[i].hasOwnProperty("name_in_higher_scope")) {
+            vars[name]["name_in_higher_scope"] = obj_values[i]["name_in_higher_scope"];
+          }
         }
         bank_simplified[obj]["variables"] = vars;
         bank_simplified[obj]["parameters"] = constructor_parameters;
@@ -657,12 +648,11 @@ var controller = (function() {
       }
     }
 
-    let the_new_simple_bank = {
+    return {
       current_vb: bank_simplified,
       previous_vb: old_simple_bank["current_vb"],
       prev_previous_vb: old_simple_bank["previous_vb"]
     };
-    return the_new_simple_bank;
   }
 
   function visualizeObjectInVariableBank(variable, simpleVariableBank) {
