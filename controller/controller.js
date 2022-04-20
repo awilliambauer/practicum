@@ -430,19 +430,19 @@ var controller = (function() {
     }
   }
 
-  function getInstanceText(values, oldValues, idx) {
+  function getInstanceText(values, oldValues, idx, lastObject) {
     var value = "";
     if (values[idx].type === "string" && values[idx].value !== "" && 
         ((oldValues[idx].value !== "" && fadeLevel == 1 &&
-          ((nowCorrect || threeTries) && values[idx].name.replace("self.", "") === nowCorrectVar || (values[idx].name.replace("self.", "") !== nowCorrectVar || values[idx].value !== nowCorrectAnswer))) || 
+          ((nowCorrect || threeTries) && values[idx].name.replace("self.", "") === nowCorrectVar || (values[idx].name.replace("self.", "") !== nowCorrectVar || values[idx].value !== nowCorrectAnswer) || !lastObject)) || 
           fadeLevel == 0)) {
       value = "'" + values[idx].value + "'";
     } else if (values[idx].type === "instance" && ((oldValues[idx].value !== "" && fadeLevel == 1 &&
-          ((nowCorrect || threeTries) && values[idx].name.replace("self.", "") === nowCorrectVar || (values[idx].name.replace("self.", "") !== nowCorrectVar || !values[idx].value.includes(nowCorrectAnswer))))
+          ((nowCorrect || threeTries) && values[idx].name.replace("self.", "") === nowCorrectVar || (values[idx].name.replace("self.", "") !== nowCorrectVar || !values[idx].value.includes(nowCorrectAnswer) || !lastObject)))
           || fadeLevel == 0)) {
       value = values[idx].value;
     } else if (values[idx].type !== "instance" && ((oldValues[idx].value !== "" && fadeLevel == 1 &&
-          ((nowCorrect || threeTries) && values[idx].name.replace("self.", "") === nowCorrectVar || (values[idx].name.replace("self.", "") !== nowCorrectVar || values[idx].value !== nowCorrectAnswer)))
+          ((nowCorrect || threeTries) && values[idx].name.replace("self.", "") === nowCorrectVar || (values[idx].name.replace("self.", "") !== nowCorrectVar || values[idx].value !== nowCorrectAnswer || !lastObject)))
           || fadeLevel == 0)) {
       value = values[idx].value;
     }
@@ -524,6 +524,7 @@ var controller = (function() {
     }
   }
 
+
   function makeList(values) {
     var varList = [];
     var keys = Object.keys(values);
@@ -535,10 +536,12 @@ var controller = (function() {
     return varList;
   }
 
+
   function varChange(val, oldVals) {
     var idx = matchIndex(val, oldVals);
     return val.value !== oldVals[idx].value;
   }
+
 
   function getColor(v) {
     if (v.type === "instance" && v.value !== "") {
@@ -546,6 +549,22 @@ var controller = (function() {
     }
     return "black";
   }
+
+
+  function isLastObject(simpleVariableBank, variable) {
+    var isLast = true;
+    var foundVar = false;
+    for (var i = 0; i < Object.keys(simpleVariableBank["current_vb"]).length; i++) {
+      if (Object.keys(simpleVariableBank["current_vb"])[i] === variable) {
+        foundVar = true;
+      }
+      else if (foundVar && simpleVariableBank["current_vb"][Object.keys(simpleVariableBank["current_vb"])[i]].hasOwnProperty("class_name")) {
+        isLast = false;
+      }
+    }
+    return isLast;
+  }
+
 
   function generateSimpleVariableBank(curr_messy_bank, old_simple_bank) {
     let bank_simplified = {};
@@ -567,22 +586,8 @@ var controller = (function() {
             let value = obj_params[i]["value"];
             let type = obj_params[i]["type"];
             if (type === "object") {
-              //TODO: don't hard code these
-              if (obj_params[i].reference.name == "Pet") {
-                //Maybe check curr_messy_bank.class_reference.name
-                value =
-                  obj_params[i].reference.name +
-                  ": " +
-                  obj_params[i].values[1].value;
-              } else if (obj_params[i].reference.name == "Point") {
-                value =
-                  obj_params[i].reference.name +
-                  ": (" +
-                  obj_params[i].values[2].value +
-                  ", " +
-                  obj_params[i].values[3].value +
-                  ")";
-              }
+              // If this is an object, the display value we want is the name from its original scope
+              value = obj_params[i].name_in_higher_scope;
             }
             constructor_parameters[name] = {
               value: value,
@@ -601,9 +606,9 @@ var controller = (function() {
           let type = obj_values[i]["type"];
           if (type === "instance" && value !== "") {
             value =
-              obj_values[i].value.reference.name +
-              ": " +
-              obj_values[i].value.name;
+            obj_values[i].value.reference.name +
+            ": " +
+            obj_values[i].value.name;
           }
           let local = true;
           if (obj_values[i]["tag"] == "reference") {
@@ -611,6 +616,11 @@ var controller = (function() {
             local = false;
           }
           vars[name] = { value: value, type: type, local: local, param: false };
+          
+          // Some variables had a name in the higher scope that we might care about. Leave it here.
+          if (obj_values[i].hasOwnProperty("name_in_higher_scope")) {
+            vars[name]["name_in_higher_scope"] = obj_values[i]["name_in_higher_scope"];
+          }
         }
         bank_simplified[obj]["variables"] = vars;
         bank_simplified[obj]["parameters"] = constructor_parameters;
@@ -638,12 +648,11 @@ var controller = (function() {
       }
     }
 
-    let the_new_simple_bank = {
+    return {
       current_vb: bank_simplified,
       previous_vb: old_simple_bank["current_vb"],
       prev_previous_vb: old_simple_bank["previous_vb"]
     };
-    return the_new_simple_bank;
   }
 
   function visualizeObjectInVariableBank(variable, simpleVariableBank) {
@@ -719,7 +728,8 @@ var controller = (function() {
           getInstanceText(
             vNotLocalVariables,
             vOldVariables.filter(d => !d.local),
-            i
+            i,
+            isLastObject(simpleVariableBank, variable)
           )
         )
         .transition()
@@ -951,7 +961,8 @@ var controller = (function() {
           getInstanceText(
             vNotLocalVariables,
             vOldVariables.filter(d => !d.local),
-            i
+            i,
+            isLastObject(simpleVariableBank, variable)
           )
         );
 
@@ -1043,7 +1054,8 @@ var controller = (function() {
               getInstanceText(
                 vNotLocalVariables,
                 vOldVariables.filter(d => !d.local),
-                i
+                i,
+                isLastObject(simpleVariableBank, variable)
               )
             ) - 10
         )
@@ -1068,7 +1080,8 @@ var controller = (function() {
           getInstanceText(
             vNotLocalVariables,
             vOldVariables.filter(d => !d.local),
-            i
+            i,
+            isLastObject(simpleVariableBank, variable)
           )
         );
 
@@ -1767,6 +1780,7 @@ var controller = (function() {
         .value.values;
     let line_that_will_execute =
       state.variables.in_scope.this_is_the_next_line_that_will_execute.value;
+      console.log(line_that_will_execute.expression.args[0]);
     let lookup;
     if (line_that_will_execute.expression.args[0].hasOwnProperty("name")) {
       lookup = line_that_will_execute.expression.args[0].name;
