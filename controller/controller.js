@@ -430,19 +430,19 @@ var controller = (function() {
     }
   }
 
-  function getInstanceText(values, oldValues, idx) {
+  function getInstanceText(values, oldValues, idx, lastObject) {
     var value = "";
     if (values[idx].type === "string" && values[idx].value !== "" && 
         ((oldValues[idx].value !== "" && fadeLevel == 1 &&
-          ((nowCorrect || threeTries) && values[idx].name.replace("self.", "") === nowCorrectVar || (values[idx].name.replace("self.", "") !== nowCorrectVar || values[idx].value !== nowCorrectAnswer))) || 
+          ((nowCorrect || threeTries) && values[idx].name.replace("self.", "") === nowCorrectVar || (values[idx].name.replace("self.", "") !== nowCorrectVar || values[idx].value !== nowCorrectAnswer) || !lastObject)) || 
           fadeLevel == 0)) {
       value = "'" + values[idx].value + "'";
     } else if (values[idx].type === "instance" && ((oldValues[idx].value !== "" && fadeLevel == 1 &&
-          ((nowCorrect || threeTries) && values[idx].name.replace("self.", "") === nowCorrectVar || (values[idx].name.replace("self.", "") !== nowCorrectVar || !values[idx].value.includes(nowCorrectAnswer))))
+          ((nowCorrect || threeTries) && values[idx].name.replace("self.", "") === nowCorrectVar || (values[idx].name.replace("self.", "") !== nowCorrectVar || !values[idx].value.includes(nowCorrectAnswer) || !lastObject)))
           || fadeLevel == 0)) {
       value = values[idx].value;
     } else if (values[idx].type !== "instance" && ((oldValues[idx].value !== "" && fadeLevel == 1 &&
-          ((nowCorrect || threeTries) && values[idx].name.replace("self.", "") === nowCorrectVar || (values[idx].name.replace("self.", "") !== nowCorrectVar || values[idx].value !== nowCorrectAnswer)))
+          ((nowCorrect || threeTries) && values[idx].name.replace("self.", "") === nowCorrectVar || (values[idx].name.replace("self.", "") !== nowCorrectVar || values[idx].value !== nowCorrectAnswer || !lastObject)))
           || fadeLevel == 0)) {
       value = values[idx].value;
     }
@@ -524,6 +524,7 @@ var controller = (function() {
     }
   }
 
+
   function makeList(values) {
     var varList = [];
     var keys = Object.keys(values);
@@ -535,10 +536,12 @@ var controller = (function() {
     return varList;
   }
 
+
   function varChange(val, oldVals) {
     var idx = matchIndex(val, oldVals);
     return val.value !== oldVals[idx].value;
   }
+
 
   function getColor(v) {
     if (v.type === "instance" && v.value !== "") {
@@ -546,6 +549,22 @@ var controller = (function() {
     }
     return "black";
   }
+
+
+  function isLastObject(simpleVariableBank, variable) {
+    var isLast = true;
+    var foundVar = false;
+    for (var i = 0; i < Object.keys(simpleVariableBank["current_vb"]).length; i++) {
+      if (Object.keys(simpleVariableBank["current_vb"])[i] === variable) {
+        foundVar = true;
+      }
+      else if (foundVar && simpleVariableBank["current_vb"][Object.keys(simpleVariableBank["current_vb"])[i]].hasOwnProperty("class_name")) {
+        isLast = false;
+      }
+    }
+    return isLast;
+  }
+
 
   function generateSimpleVariableBank(curr_messy_bank, old_simple_bank) {
     let bank_simplified = {};
@@ -719,7 +738,8 @@ var controller = (function() {
           getInstanceText(
             vNotLocalVariables,
             vOldVariables.filter(d => !d.local),
-            i
+            i,
+            isLastObject(simpleVariableBank, variable)
           )
         )
         .transition()
@@ -951,7 +971,8 @@ var controller = (function() {
           getInstanceText(
             vNotLocalVariables,
             vOldVariables.filter(d => !d.local),
-            i
+            i,
+            isLastObject(simpleVariableBank, variable)
           )
         );
 
@@ -1043,7 +1064,8 @@ var controller = (function() {
               getInstanceText(
                 vNotLocalVariables,
                 vOldVariables.filter(d => !d.local),
-                i
+                i,
+                isLastObject(simpleVariableBank, variable)
               )
             ) - 10
         )
@@ -1068,7 +1090,8 @@ var controller = (function() {
           getInstanceText(
             vNotLocalVariables,
             vOldVariables.filter(d => !d.local),
-            i
+            i,
+            isLastObject(simpleVariableBank, variable)
           )
         );
 
@@ -1767,6 +1790,7 @@ var controller = (function() {
         .value.values;
     let line_that_will_execute =
       state.variables.in_scope.this_is_the_next_line_that_will_execute.value;
+      console.log(line_that_will_execute.expression.args[0]);
     let lookup;
     if (line_that_will_execute.expression.args[0].hasOwnProperty("name")) {
       lookup = line_that_will_execute.expression.args[0].name;
