@@ -141,9 +141,11 @@ function TPLAlgorithm() {
                     }
                     [no_step]
                     do {
-                        [interactive("next_line")]
+                        [no_step]
                         this_is_the_next_line_that_will_execute = helper.get_function_body_line(functionDefinition, bodyIndex);
                         [no_step] if (helper.does_this_stmt_update_bank(this_is_the_next_line_that_will_execute)){
+                            [interactive("next_line")]
+                            this_is_the_next_line_that_will_execute = helper.get_function_body_line(functionDefinition, bodyIndex);
                             let arg1;
                             let arg2;
                             [no_step]
@@ -167,6 +169,8 @@ function TPLAlgorithm() {
                                 variables[classReference] = helper.update_object_in_variable_bank(variables, variables[classReference], result);
                             }
                         } else [no_step] if (helper.are_we_on_return_statement(this_is_the_next_line_that_will_execute)){
+                            [interactive("next_line")]
+                            this_is_the_next_line_that_will_execute = helper.get_function_body_line(functionDefinition, bodyIndex);
                             [no_step]
                             result = helper.get_line_result(variables, this_is_the_next_line_that_will_execute);
                             break;
@@ -361,10 +365,12 @@ function TPLAlgorithm() {
 
             [no_step]
             do {
-                [interactive("next_line")]
+                [no_step]
                 this_is_the_next_line_that_will_execute = helper.get_function_body_line(functionDefinition, bodyIndex);
 
                 [no_step] if (helper.does_this_stmt_update_bank(this_is_the_next_line_that_will_execute)){
+                    [interactive("next_line")]
+                    this_is_the_next_line_that_will_execute = helper.get_function_body_line(functionDefinition, bodyIndex);
                     let arg1;
                     let arg2;
                     [no_step]
@@ -388,6 +394,8 @@ function TPLAlgorithm() {
                         variables[classReference] = helper.update_object_in_variable_bank(variables, variables[classReference], result);
                     }
                 } else [no_step] if (helper.are_we_on_return_statement(this_is_the_next_line_that_will_execute)){
+                    [interactive("next_line")]
+                    this_is_the_next_line_that_will_execute = helper.get_function_body_line(functionDefinition, bodyIndex);
                     [no_step]
                     result = helper.get_line_result(variables, this_is_the_next_line_that_will_execute);
                     break;
