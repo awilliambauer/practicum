@@ -19,7 +19,12 @@ var controller = (function() {
     ["#f1ebfa", "#7439c6"],
     ["#edf7ed", "#46b946"]
   ];
-  var colorDict = {"Pet": colors[0], "Owner": colors[1], "Point": colors[2], "Circle": colors[3]};
+  var colorDict = {
+    Pet: colors[0],
+    Owner: colors[1],
+    Point: colors[2],
+    Circle: colors[3]
+  };
   var varOrigin = {};
   var varEquivalence = {};
   var nowCorrect = null;
@@ -34,7 +39,8 @@ var controller = (function() {
     simulatorInterface_,
     initialState,
     task_logger,
-    fading) {
+    fading
+  ) {
     $("#problem_space > pre").html(
       python_formatter.format(initialState.ast, { args: initialState.args })
     );
@@ -260,7 +266,10 @@ var controller = (function() {
         button = "#submitButton";
       }
 
-      if (prompt === "The print statement below prints out the value(s) within the parenthesis. Enter that solution in the solution box!") {
+      if (
+        prompt ===
+        "The print statement below prints out the value(s) within the parenthesis. Enter that solution in the solution box!"
+      ) {
         $("#next-container").addClass("hidden");
         $("#nextstep").prop("disabled", true);
         button = "#submitButton";
@@ -268,10 +277,11 @@ var controller = (function() {
 
       if (
         state.hasOwnProperty("askForResponse") &&
-        state.askForResponse === "add_variable_object"   
+        state.askForResponse === "add_variable_object"
       ) {
-        let line_that_will_execute = state.variables.in_scope.this_is_the_next_line_that_will_execute.value;
-        
+        let line_that_will_execute =
+          state.variables.in_scope.this_is_the_next_line_that_will_execute
+            .value;
 
         // use left side to create string to display
         let leftSide = line_that_will_execute.expression.args[0];
@@ -281,47 +291,52 @@ var controller = (function() {
         } else {
           var_display_name = leftSide.value;
         }
-        
 
-        d3.select("#promptText")
-          .insert("div")
-          .attr("id", "responseArea");
+        d3.select("#promptText").insert("div").attr("id", "responseArea");
 
-        d3.select("#responseArea")
+        d3
+          .select("#responseArea")
           .append("label")
-          .text(var_display_name +" =");
+          .text(var_display_name + " =");
 
-        d3.select("#responseArea")
+        d3
+          .select("#responseArea")
           .insert("input")
           .attr("type", "text")
           .attr("id", "objectVariableUserResponse")
-          .node().focus();
+          .node()
+          .focus();
       } else if (state.askForResponse === "add_variable_from_function") {
-        let line_that_will_execute = state.variables.in_scope.this_is_the_next_line_that_will_execute.value;
+        let line_that_will_execute =
+          state.variables.in_scope.this_is_the_next_line_that_will_execute
+            .value;
 
         // use left side to create string to display
         let leftSide = line_that_will_execute.expression.args[0];
         let var_display_name = leftSide.value;
 
-        d3.select("#promptText")
-          .insert("div")
-          .attr("id", "responseArea");
+        d3.select("#promptText").insert("div").attr("id", "responseArea");
 
-        d3.select("#responseArea")
+        d3
+          .select("#responseArea")
           .append("label")
-          .text(var_display_name +" =");
+          .text(var_display_name + " =");
 
-        d3.select("#responseArea")
+        d3
+          .select("#responseArea")
           .insert("input")
           .attr("type", "text")
           .attr("id", "objectVariableUserResponse")
-          .node().focus();
+          .node()
+          .focus();
       }
 
       if (
-        state.hasOwnProperty("askForResponse") && state.askForResponse === "conditional") {
-        var yesNoButtonDiv = 
-        d3.select("#promptText")
+        state.hasOwnProperty("askForResponse") &&
+        state.askForResponse === "conditional"
+      ) {
+        var yesNoButtonDiv = d3
+          .select("#promptText")
           .append("div")
           .attr("class", "yes_no_buttons");
 
@@ -347,15 +362,16 @@ var controller = (function() {
           .attr("value", "no")
           .attr("id", "no_radio");
 
-        yesNoButtonDiv.append("label")
-          .attr("for", "no_radio")
-          .text("No");
-      } else if (state.hasOwnProperty("askForResponse") && state.askForResponse === "add_instance"){
-        var classOptionsDiv = 
-        d3.select("#promptText")
+        yesNoButtonDiv.append("label").attr("for", "no_radio").text("No");
+      } else if (
+        state.hasOwnProperty("askForResponse") &&
+        state.askForResponse === "add_instance"
+      ) {
+        var classOptionsDiv = d3
+          .select("#promptText")
           .append("div")
           .attr("class", "class_multiple_choice_buttons");
-        
+
         classOptionsDiv
           .append("input")
           .attr("type", "radio")
@@ -409,7 +425,7 @@ var controller = (function() {
         classOptionsDiv
           .append("label")
           .text("david")
-          .attr("for", "david_radio")
+          .attr("for", "david_radio");
       }
     }
   }
@@ -551,17 +567,21 @@ var controller = (function() {
             let value = obj_params[i]["value"];
             let type = obj_params[i]["type"];
             if (type === "object") {
-                //TODO: don't hard code these
+              //TODO: don't hard code these
               if (obj_params[i].reference.name == "Pet") {
                 //Maybe check curr_messy_bank.class_reference.name
                 value =
-                  obj_params[i].reference.name + ": " +
+                  obj_params[i].reference.name +
+                  ": " +
                   obj_params[i].values[1].value;
               } else if (obj_params[i].reference.name == "Point") {
                 value =
-                  obj_params[i].reference.name + ": (" +
-                  obj_params[i].values[2].value + ", " +
-                  obj_params[i].values[3].value + ")";
+                  obj_params[i].reference.name +
+                  ": (" +
+                  obj_params[i].values[2].value +
+                  ", " +
+                  obj_params[i].values[3].value +
+                  ")";
               }
             }
             constructor_parameters[name] = {
@@ -580,7 +600,10 @@ var controller = (function() {
           let name = obj_values[i]["name"];
           let type = obj_values[i]["type"];
           if (type === "instance" && value !== "") {
-            value = obj_values[i].value.reference.name + ": " + obj_values[i].value.name;
+            value =
+              obj_values[i].value.reference.name +
+              ": " +
+              obj_values[i].value.name;
           }
           let local = true;
           if (obj_values[i]["tag"] == "reference") {
@@ -592,14 +615,21 @@ var controller = (function() {
         bank_simplified[obj]["variables"] = vars;
         bank_simplified[obj]["parameters"] = constructor_parameters;
       } else {
-        if (curr_messy_bank[obj].hasOwnProperty("tag") && curr_messy_bank[obj].tag === "reference") {
-          bank_simplified[obj]["value"] = curr_messy_bank[obj].value.reference.name + ": " + curr_messy_bank[obj].value.name;
+        if (
+          curr_messy_bank[obj].hasOwnProperty("tag") &&
+          curr_messy_bank[obj].tag === "reference"
+        ) {
+          bank_simplified[obj]["value"] =
+            curr_messy_bank[obj].value.reference.name +
+            ": " +
+            curr_messy_bank[obj].value.name;
         } else if (/\d/.test(curr_messy_bank[obj].value)) {
           bank_simplified[obj]["value"] = curr_messy_bank[obj].value;
         } else {
-          bank_simplified[obj]["value"] = "'" + curr_messy_bank[obj].value + "'";
+          bank_simplified[obj]["value"] =
+            "'" + curr_messy_bank[obj].value + "'";
         }
-        
+
         if (curr_messy_bank[obj].hasOwnProperty("type")) {
           bank_simplified[obj]["type"] = curr_messy_bank[obj].type;
         } else if (curr_messy_bank[obj].hasOwnProperty("temp")) {
@@ -624,7 +654,9 @@ var controller = (function() {
     var vOldVariables;
 
     if (simpleVariableBank["previous_vb"].hasOwnProperty(variable)) {
-      vOldVariables = makeList(simpleVariableBank["previous_vb"][variable]["variables"]);
+      vOldVariables = makeList(
+        simpleVariableBank["previous_vb"][variable]["variables"]
+      );
     } else {
       vOldVariables = vVariables;
     }
@@ -634,7 +666,8 @@ var controller = (function() {
     }
 
     if (!(variable in varOrigin)) {
-      varOrigin[variable] = state.variables.in_scope.current_python_function.value;
+      varOrigin[variable] =
+        state.variables.in_scope.current_python_function.value;
     }
 
     if (bankStatus[variable] === objectSteps[0]) {
@@ -642,7 +675,7 @@ var controller = (function() {
         .select("#variable_list_table")
         .append("div")
         .attr("class", "bank_object");
-      
+
       let svg = div
         .append("svg")
         .attr("width", 500)
@@ -661,13 +694,13 @@ var controller = (function() {
         .attr("fill", "white")
         .attr("stroke", colorDict[vClassName][1])
         .transition()
-          .ease("linear")
-          .duration(500)
-          .attr("x", 110)
+        .ease("linear")
+        .duration(500)
+        .attr("x", 110)
         .transition()
-          .ease("linear")
-          .duration(500)
-          .attr("y", 70);
+        .ease("linear")
+        .duration(500)
+        .attr("y", 70);
 
       let variables = svg.append("g");
 
@@ -676,18 +709,24 @@ var controller = (function() {
         .data(vNotLocalVariables)
         .enter()
         .append("text")
-          .attr("class", "bank_object_vars bank_object_vars_" + variable)
-          .style("font", '16px Menlo,Monaco,Consolas,"Courier New",monospace')
-          .attr("x", 120)
-          .attr("y", (d, i) => 95 + i * 30)
-          .style("fill", d => getColor(d))
-          .attr("opacity", 0)
-          .text((d, i) => getInstanceText(vNotLocalVariables, vOldVariables.filter(d => !d.local), i))
-          .transition()
-            .delay(1000)
-            .duration(0)
-            .attr("opacity", 1);
-      
+        .attr("class", "bank_object_vars bank_object_vars_" + variable)
+        .style("font", '16px Menlo,Monaco,Consolas,"Courier New",monospace')
+        .attr("x", 120)
+        .attr("y", (d, i) => 95 + i * 30)
+        .style("fill", d => getColor(d))
+        .attr("opacity", 0)
+        .text((d, i) =>
+          getInstanceText(
+            vNotLocalVariables,
+            vOldVariables.filter(d => !d.local),
+            i
+          )
+        )
+        .transition()
+        .delay(1000)
+        .duration(0)
+        .attr("opacity", 1);
+
       let objectName = svg.append("g");
 
       objectName
@@ -699,19 +738,17 @@ var controller = (function() {
         .attr("opacity", 0)
         .text("self =")
         .transition()
-          .delay(1000)
-          .duration(0)
-          .attr("opacity", 1);    
-      
+        .delay(1000)
+        .duration(0)
+        .attr("opacity", 1);
+
       bankStatus[variable] = objectSteps[1];
-
     } else if (bankStatus[variable] === objectSteps[1]) {
-
       let div = d3
         .select("#variable_list_table")
         .append("div")
         .attr("class", "bank_object");
-      
+
       let svg = div
         .append("svg")
         .attr("width", 500)
@@ -730,17 +767,25 @@ var controller = (function() {
         .attr("fill", "white")
         .attr("stroke", colorDict[vClassName][1]);
 
-      if ((vNotLocalVariables[vNotLocalVariables.length - 1].value !== "" && fadeLevel == 0) || (vOldVariables.filter(d => !d.local)[vOldVariables.filter(d => !d.local).length - 1].value !== "" && fadeLevel == 1 && (nowCorrect || threeTries))) {
+      if (
+        (vNotLocalVariables[vNotLocalVariables.length - 1].value !== "" &&
+          fadeLevel == 0) ||
+        (vOldVariables.filter(d => !d.local)[
+          vOldVariables.filter(d => !d.local).length - 1
+        ].value !== "" &&
+          fadeLevel == 1 &&
+          (nowCorrect || threeTries))
+      ) {
         d3
           .selectAll(".bank_object_box_" + variable)
           .transition()
-            .delay(1500)
-            .ease("linear")
-            .duration(500)
-            .attr("y", 1)
+          .delay(1500)
+          .ease("linear")
+          .duration(500)
+          .attr("y", 1)
           .transition()
-            .duration(500)
-            .attr("fill", colorDict[vClassName][0]);
+          .duration(500)
+          .attr("fill", colorDict[vClassName][0]);
       }
 
       let paramBoxes = svg.append("g");
@@ -750,33 +795,29 @@ var controller = (function() {
         .data(vParams.concat(vVariables.filter(d => d.local)))
         .enter()
         .append("rect")
-          .attr("x", (d, i) =>
-            getHighlightX(vParams.concat(vVariables.filter(d => d.local)), d))
-          .attr("y", 1)
-          .attr(
-            "width",
-            (d, i) =>
-              findWidth(d.name) > findWidth(getValueRep(d))
-                ? findWidth(d.name)
-                : findWidth(getValueRep(d)))
-          .attr("height", 50)
-          .attr("fill", "white")
-          .attr("stroke", colorDict[vClassName][1])
-          .attr("stroke-width", "3px")
-          .attr("opacity", 0)
-          .transition()
-            .duration(0)
-            .attr("opacity", d =>
-              findOpacity(
-                d,
-                vVariables,
-                vOldVariables
-              )
-            )
-          .transition()
-            .delay(500)
-            .duration(500)
-            .attr("opacity", 0);
+        .attr("x", (d, i) =>
+          getHighlightX(vParams.concat(vVariables.filter(d => d.local)), d)
+        )
+        .attr("y", 1)
+        .attr(
+          "width",
+          (d, i) =>
+            findWidth(d.name) > findWidth(getValueRep(d))
+              ? findWidth(d.name)
+              : findWidth(getValueRep(d))
+        )
+        .attr("height", 50)
+        .attr("fill", "white")
+        .attr("stroke", colorDict[vClassName][1])
+        .attr("stroke-width", "3px")
+        .attr("opacity", 0)
+        .transition()
+        .duration(0)
+        .attr("opacity", d => findOpacity(d, vVariables, vOldVariables))
+        .transition()
+        .delay(500)
+        .duration(500)
+        .attr("opacity", 0);
 
       let paramBoxVars = svg.append("g");
 
@@ -792,19 +833,34 @@ var controller = (function() {
         .attr(
           "x",
           (d, i) =>
-            getHighlightX(vParams.concat(vVariables.filter(d => d.local)), d) + 5
+            getHighlightX(vParams.concat(vVariables.filter(d => d.local)), d) +
+            5
         )
         .attr("y", 20)
-        .attr("opacity", (state.variables.in_scope.current_python_function.value === null) || (state.variables.in_scope.current_python_function.value === "init") ? 1 : 0.5)
-        .text(d => d.name)
+        .attr(
+          "opacity",
+          state.variables.in_scope.current_python_function.value === null ||
+          state.variables.in_scope.current_python_function.value === "init"
+            ? 1
+            : 0.5
+        )
+        .text(d => d.name);
 
-      if ((vNotLocalVariables[vNotLocalVariables.length - 1].value !== "" && fadeLevel == 0) || (vOldVariables.filter(d => !d.local)[vOldVariables.filter(d => !d.local).length - 1].value !== "" && fadeLevel == 1 && (nowCorrect || threeTries))) {
+      if (
+        (vNotLocalVariables[vNotLocalVariables.length - 1].value !== "" &&
+          fadeLevel == 0) ||
+        (vOldVariables.filter(d => !d.local)[
+          vOldVariables.filter(d => !d.local).length - 1
+        ].value !== "" &&
+          fadeLevel == 1 &&
+          (nowCorrect || threeTries))
+      ) {
         d3
           .selectAll(".bank_param_box_vars")
           .transition()
-            .delay(1000)
-            .duration(500)
-            .attr("opacity", 0);
+          .delay(1000)
+          .duration(500)
+          .attr("opacity", 0);
       }
 
       let paramBoxVals = svg.append("g");
@@ -814,18 +870,25 @@ var controller = (function() {
         .data(vParams)
         .enter()
         .append("text")
-          .style("font", '16px Menlo,Monaco,Consolas,"Courier New",monospace')
-          .style("fill", "#4f9693")
-          .attr("class", "bank_param_box_vals")
-          .attr(
-            "x",
-            (d, i) =>
-              getHighlightX(vParams.concat(vVariables.filter(d => d.local)), d) + 5
-          )
-          .attr("y", 40)
-          .attr("opacity", (state.variables.in_scope.current_python_function.value === null) || (state.variables.in_scope.current_python_function.value === "init") ? 1 : 0.5)
-          .text(d => getValueRep(d))
-      
+        .style("font", '16px Menlo,Monaco,Consolas,"Courier New",monospace')
+        .style("fill", "#4f9693")
+        .attr("class", "bank_param_box_vals")
+        .attr(
+          "x",
+          (d, i) =>
+            getHighlightX(vParams.concat(vVariables.filter(d => d.local)), d) +
+            5
+        )
+        .attr("y", 40)
+        .attr(
+          "opacity",
+          state.variables.in_scope.current_python_function.value === null ||
+          state.variables.in_scope.current_python_function.value === "init"
+            ? 1
+            : 0.5
+        )
+        .text(d => getValueRep(d));
+
       let paramBoxValsLocal = svg.append("g");
 
       paramBoxValsLocal
@@ -833,25 +896,42 @@ var controller = (function() {
         .data(vVariables.filter(d => d.local))
         .enter()
         .append("text")
-          .style("font", '16px Menlo,Monaco,Consolas,"Courier New",monospace')
-          .style("fill", "#e67300")
-          .attr("class", "bank_param_box_vals")
-          .attr(
-            "x",
-            (d, i) =>
-              getHighlightX(vParams.concat(vVariables.filter(d => d.local)), d) + 5
-          )
-          .attr("y", 40)
-          .attr("opacity", (state.variables.in_scope.current_python_function.value === null) || (state.variables.in_scope.current_python_function.value === "init") ? 1 : 0.5)
-          .text((d, i) => displayParamVal(d, i, vOldVariables.filter(d => d.local)))
+        .style("font", '16px Menlo,Monaco,Consolas,"Courier New",monospace')
+        .style("fill", "#e67300")
+        .attr("class", "bank_param_box_vals")
+        .attr(
+          "x",
+          (d, i) =>
+            getHighlightX(vParams.concat(vVariables.filter(d => d.local)), d) +
+            5
+        )
+        .attr("y", 40)
+        .attr(
+          "opacity",
+          state.variables.in_scope.current_python_function.value === null ||
+          state.variables.in_scope.current_python_function.value === "init"
+            ? 1
+            : 0.5
+        )
+        .text((d, i) =>
+          displayParamVal(d, i, vOldVariables.filter(d => d.local))
+        );
 
-      if ((vNotLocalVariables[vNotLocalVariables.length - 1].value !== "" && fadeLevel == 0) || (vOldVariables.filter(d => !d.local)[vOldVariables.filter(d => !d.local).length - 1].value !== "" && fadeLevel == 1 && (nowCorrect || threeTries))) {
+      if (
+        (vNotLocalVariables[vNotLocalVariables.length - 1].value !== "" &&
+          fadeLevel == 0) ||
+        (vOldVariables.filter(d => !d.local)[
+          vOldVariables.filter(d => !d.local).length - 1
+        ].value !== "" &&
+          fadeLevel == 1 &&
+          (nowCorrect || threeTries))
+      ) {
         d3
           .selectAll(".bank_param_box_vals")
           .transition()
-            .delay(1000)
-            .duration(500)
-            .attr("opacity", 0);
+          .delay(1000)
+          .duration(500)
+          .attr("opacity", 0);
       }
 
       let variables = svg.append("g");
@@ -861,14 +941,20 @@ var controller = (function() {
         .data(vNotLocalVariables)
         .enter()
         .append("text")
-          .attr("class", "bank_object_vars bank_object_vars_" + variable)
-          .style("font", '16px Menlo,Monaco,Consolas,"Courier New",monospace')
-          .attr("x", 120)
-          .attr("y", (d, i) => 95 + i * 30)
-          .style("fill", d => getColor(d))
-          .attr("opacity", 1)
-          .text((d, i) => getInstanceText(vNotLocalVariables, vOldVariables.filter(d => !d.local), i));
-      
+        .attr("class", "bank_object_vars bank_object_vars_" + variable)
+        .style("font", '16px Menlo,Monaco,Consolas,"Courier New",monospace')
+        .attr("x", 120)
+        .attr("y", (d, i) => 95 + i * 30)
+        .style("fill", d => getColor(d))
+        .attr("opacity", 1)
+        .text((d, i) =>
+          getInstanceText(
+            vNotLocalVariables,
+            vOldVariables.filter(d => !d.local),
+            i
+          )
+        );
+
       let objectName = svg.append("g");
 
       objectName
@@ -878,29 +964,35 @@ var controller = (function() {
         .attr("x", 0)
         .attr("y", 101)
         .attr("opacity", 1)
-        .text("self =")
-  
+        .text("self =");
 
-      if ((vNotLocalVariables[vNotLocalVariables.length - 1].value !== "" && fadeLevel == 0) || (vOldVariables.filter(d => !d.local)[vOldVariables.filter(d => !d.local).length - 1].value !== "" && fadeLevel == 1 && (nowCorrect || threeTries))) {
+      if (
+        (vNotLocalVariables[vNotLocalVariables.length - 1].value !== "" &&
+          fadeLevel == 0) ||
+        (vOldVariables.filter(d => !d.local)[
+          vOldVariables.filter(d => !d.local).length - 1
+        ].value !== "" &&
+          fadeLevel == 1 &&
+          (nowCorrect || threeTries))
+      ) {
         d3
           .selectAll(".bank_object_vars_" + variable)
           .transition()
-            .delay(1500)
-            .ease("linear")
-            .duration(500)
-            .attr("y", (d, i) => 26 + i * 30);
-
+          .delay(1500)
+          .ease("linear")
+          .duration(500)
+          .attr("y", (d, i) => 26 + i * 30);
 
         d3
           .selectAll(".object_name_" + variable)
           .transition()
-            .delay(1500)
-            .ease("linear")
-            .duration(500)
-            .attr("y", 31)
+          .delay(1500)
+          .ease("linear")
+          .duration(500)
+          .attr("y", 31)
           .transition()
-            .duration(500)
-            .text(variable + " =");
+          .duration(500)
+          .text(variable + " =");
 
         svg
           .transition()
@@ -934,42 +1026,51 @@ var controller = (function() {
         .attr("stroke", colorDict[vClassName][1]);
 
       let variables = svg.append("g");
-      
+
       variables
         .selectAll("rect")
         .data(vNotLocalVariables)
         .enter()
         .append("rect")
-          .style("font", '16px Menlo,Monaco,Consolas,"Courier New",monospace')
-          .attr("x", 115)
-          .attr("y", (d, i) => 12 + i * 30)
-          .attr("height", 18)
-          .attr(
-            "width",
-            (d, i) => findWidth(getInstanceText(vNotLocalVariables, vOldVariables.filter(d => !d.local), i)) - 10)
-          .attr(
-            "fill",
-            d =>
-              varChange(
-                d,
-                vOldVariables
+        .style("font", '16px Menlo,Monaco,Consolas,"Courier New",monospace')
+        .attr("x", 115)
+        .attr("y", (d, i) => 12 + i * 30)
+        .attr("height", 18)
+        .attr(
+          "width",
+          (d, i) =>
+            findWidth(
+              getInstanceText(
+                vNotLocalVariables,
+                vOldVariables.filter(d => !d.local),
+                i
               )
-                ? "#9bcac7"
-                : colorDict[vClassName][0]
-          );
+            ) - 10
+        )
+        .attr(
+          "fill",
+          d =>
+            varChange(d, vOldVariables) ? "#9bcac7" : colorDict[vClassName][0]
+        );
 
       variables
         .selectAll("text")
         .data(vNotLocalVariables)
         .enter()
         .append("text")
-          .attr("class", "bank_object_vars")
-          .style("font", '16px Menlo,Monaco,Consolas,"Courier New",monospace')
-          .attr("x", 120)
-          .attr("y", (d, i) => 26 + i * 30)
-          .style("fill", d => getColor(d))
-          .attr("opacity", 1)
-          .text((d, i) => getInstanceText(vNotLocalVariables, vOldVariables.filter(d => !d.local), i));
+        .attr("class", "bank_object_vars")
+        .style("font", '16px Menlo,Monaco,Consolas,"Courier New",monospace')
+        .attr("x", 120)
+        .attr("y", (d, i) => 26 + i * 30)
+        .style("fill", d => getColor(d))
+        .attr("opacity", 1)
+        .text((d, i) =>
+          getInstanceText(
+            vNotLocalVariables,
+            vOldVariables.filter(d => !d.local),
+            i
+          )
+        );
 
       let objectName = svg.append("g");
 
@@ -1131,12 +1232,11 @@ var controller = (function() {
           (variableBankObject[variable].type === "return" ||
             simpleVariableBank["current_vb"][variable]["type"] === "temp")
         ) {
-
           if (!(variable in varOrigin)) {
-            varOrigin[variable] = state.variables.in_scope.current_python_function.value;
+            varOrigin[variable] =
+              state.variables.in_scope.current_python_function.value;
           }
-          
-          
+
           let div = d3.select("#variable_list_table").append("div");
 
           let svg = div
@@ -1151,7 +1251,13 @@ var controller = (function() {
             .append("text")
             .attr("x", 100)
             .attr("y", 20)
-            .attr("opacity", varOrigin[variable] === state.variables.in_scope.current_python_function.value ? 1 : 0.5)
+            .attr(
+              "opacity",
+              varOrigin[variable] ===
+              state.variables.in_scope.current_python_function.value
+                ? 1
+                : 0.5
+            )
             .style("font", '16px Menlo,Monaco,Consolas,"Courier New",monospace')
             .style("fill", "#e67300")
             .style("font-weight", "bold")
@@ -1186,7 +1292,6 @@ var controller = (function() {
             .style("font", '16px Menlo,Monaco,Consolas,"Courier New",monospace')
             .style("fill", "#e67300")
             .text(simpleVariableBank["current_vb"][variable].value);
-
         } else {
           listCell1.attr("class", "bank_variable_label");
           listCell1
@@ -1627,14 +1732,25 @@ var controller = (function() {
   function lookupCorrectValForVarOfName(lookupName, correctAnswerObject) {
     for (let obj_var of correctAnswerObject) {
       if (obj_var.name == lookupName) {
-        if (obj_var.value.hasOwnProperty("type") && obj_var.value.type === "object") {
+        if (
+          obj_var.value.hasOwnProperty("type") &&
+          obj_var.value.type === "object"
+        ) {
           if (obj_var.value.reference.name == "Pet") {
-            return obj_var.value.reference.name + ": " +
-              obj_var.value.values[1].value;
+            return (
+              obj_var.value.reference.name +
+              ": " +
+              obj_var.value.values[1].value
+            );
           } else if (obj_var.value.reference.name == "Point") {
-            return obj_var.value.reference.name + ": (" +
-              obj_var.value.values[2].value + ", " +
-              obj_var.value.values[3].value + ")";
+            return (
+              obj_var.value.reference.name +
+              ": (" +
+              obj_var.value.values[2].value +
+              ", " +
+              obj_var.value.values[3].value +
+              ")"
+            );
           }
         } else {
           return obj_var.value;
@@ -1645,29 +1761,43 @@ var controller = (function() {
   }
 
   function checkVariableBankObjectVariableAnswer() {
-    let userValue = document.getElementById('objectVariableUserResponse').value;
-    let object_local_variables = state.variables.in_scope.we_will_add_this_object_to_the_variable_bank.value.values;
-    let line_that_will_execute = state.variables.in_scope.this_is_the_next_line_that_will_execute.value;
+    let userValue = document.getElementById("objectVariableUserResponse").value;
+    let object_local_variables =
+      state.variables.in_scope.we_will_add_this_object_to_the_variable_bank
+        .value.values;
+    let line_that_will_execute =
+      state.variables.in_scope.this_is_the_next_line_that_will_execute.value;
     let lookup;
-    if (line_that_will_execute.expression.args[0].hasOwnProperty("name")){
+    if (line_that_will_execute.expression.args[0].hasOwnProperty("name")) {
       lookup = line_that_will_execute.expression.args[0].name;
     } else {
       lookup = line_that_will_execute.expression.args[0].value;
     }
     nowCorrectVar = lookup;
-    let correctVal = lookupCorrectValForVarOfName(lookup, object_local_variables);
-    respondToAnswer((correctVal == userValue && userValue != ""), "variable_bank", correctVal);
+    let correctVal = lookupCorrectValForVarOfName(
+      lookup,
+      object_local_variables
+    );
+    respondToAnswer(
+      correctVal == userValue && userValue != "",
+      "variable_bank",
+      correctVal
+    );
   }
 
   function checkVariableBankObjectVariableAnswerFromFunction() {
-    let userValue = document.getElementById('objectVariableUserResponse').value;
-    let line_that_will_execute = state.variables.in_scope.this_is_the_next_line_that_will_execute.value;
+    let userValue = document.getElementById("objectVariableUserResponse").value;
+    let line_that_will_execute =
+      state.variables.in_scope.this_is_the_next_line_that_will_execute.value;
     let lookup = line_that_will_execute.expression.args[0].value;
     let vb = state.variables.in_scope.variables.value;
     let correctVal = vb[lookup]["value"];
     nowCorrectVar = lookup;
-    console.log("val of " + lookup + " is " + correctVal);
-    respondToAnswer((correctVal == userValue && userValue != ""), "variable_bank", correctVal);
+    respondToAnswer(
+      correctVal == userValue && userValue != "",
+      "variable_bank",
+      correctVal
+    );
   }
 
   function checkVariableBankAnswer() {
@@ -2022,7 +2152,6 @@ var controller = (function() {
 
   function checkInstance() {
     var correctAnswerObject = simulatorInterface.getCorrectAnswer();
-
     if (d3.select('input[name="class_multiple_choice_radio"]:checked').node() === null) {
       if (d3.select("#responseMessage").node() !== null) {
         d3.select("#responseMessage").remove();
@@ -2065,9 +2194,7 @@ var controller = (function() {
       });
 
       respondToAnswer(correct, "add_instance", correctAnswer);
-
     }
-
   }
 
   function respondToAnswer(correct, type, correctAnswer) {
