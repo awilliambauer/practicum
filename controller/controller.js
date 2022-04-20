@@ -13,6 +13,7 @@ var controller = (function() {
   var button;
   var bankStatus = {};
   var objectSteps = ["createBox", "addAndHighlight", "done"];
+  var random_values = [];
   var colors = [
     ["#fee6f3", "#fd1c94"],
     ["#ebf1f9", "#3d77c2"],
@@ -246,6 +247,20 @@ var controller = (function() {
     addHighlighting();
   }
 
+  function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+  }
+
+  Object.size = function(obj) {
+    var size = 0,
+      key;
+    for (key in obj) {
+      if (obj.hasOwnProperty(key)) size++;
+    }
+    return size;
+  };
+  
+
   function addPrompt() {
     if (state.hasOwnProperty("prompt")) {
       var prompt = state.prompt;
@@ -363,10 +378,38 @@ var controller = (function() {
           .attr("id", "no_radio");
 
         yesNoButtonDiv.append("label").attr("for", "no_radio").text("No");
-      } else if (
-        state.hasOwnProperty("askForResponse") &&
-        state.askForResponse === "add_instance"
-      ) {
+      } else if (state.hasOwnProperty("askForResponse") && state.askForResponse === "add_instance") {
+        var correctInstanceName = state.variables.in_scope.passedInObject.value ;
+        if (random_values !== []){
+          var steps = 0;
+          while (random_values.length < 3){
+            let currObject;
+            let randInt1 = getRandomInt(Object.size(simpleVariableBank.current_vb));
+            let step = 0
+            for(const [key, value] of Object.entries(simpleVariableBank.current_vb)){
+              if (step === randInt1){
+                currObject = simpleVariableBank.current_vb[key];
+              }
+              step++;
+            }
+            step = 0
+            let randInt2 = getRandomInt(Object.size(currObject.variables));
+            for(const [key, value] of Object.entries(currObject.variables)){
+              if (step === randInt2){
+                if (!random_values.includes(currObject.variables[key].value) && currObject.variables[key].value !== ""){
+                  random_values.push(currObject.variables[key].value);
+                }
+              }
+              step++
+            }
+            steps++;
+            if(steps > 100){
+              random_values.push("aaron");
+            }
+          }
+        }
+        
+        
         var classOptionsDiv = d3
           .select("#promptText")
           .append("div")
@@ -377,13 +420,13 @@ var controller = (function() {
           .attr("type", "radio")
           .attr("class", "radio")
           .attr("name", "class_multiple_choice_radio")
-          .attr("id", "whiskers_radio")
-          .attr("value", "whiskers");
+          .attr("id", "correct_radio")
+          .attr("value", correctInstanceName);
 
         classOptionsDiv
           .append("label")
-          .text("whiskers")
-          .attr("for", "yes_radio")
+          .text(correctInstanceName)
+          .attr("for", "correct_radio")
           .style("padding-right", "30px");
 
         classOptionsDiv
@@ -391,13 +434,13 @@ var controller = (function() {
           .attr("type", "radio")
           .attr("class", "radio")
           .attr("name", "class_multiple_choice_radio")
-          .attr("id", "buster_radio")
-          .attr("value", "buster");
+          .attr("id", "random1_radio")
+          .attr("value", random_values[0]);
 
         classOptionsDiv
           .append("label")
-          .text("buster")
-          .attr("for", "buster_radio")
+          .text(random_values[0])
+          .attr("for", "random1_radio")
           .style("padding-right", "30px");
 
         classOptionsDiv
@@ -405,13 +448,13 @@ var controller = (function() {
           .attr("type", "radio")
           .attr("class", "radio")
           .attr("name", "class_multiple_choice_radio")
-          .attr("id", "point_radio")
-          .attr("value", "point");
+          .attr("id", "random2_radio")
+          .attr("value", random_values[1]);
 
         classOptionsDiv
           .append("label")
-          .text("point")
-          .attr("for", "point_radio")
+          .text(random_values[1])
+          .attr("for", "random2_radio")
           .style("padding-right", "30px");
 
         classOptionsDiv
@@ -419,13 +462,13 @@ var controller = (function() {
           .attr("type", "radio")
           .attr("class", "radio")
           .attr("name", "class_multiple_choice_radio")
-          .attr("id", "david_radio")
-          .attr("value", "david");
+          .attr("id", "random3_radio")
+          .attr("value", random_values[2]);
 
         classOptionsDiv
           .append("label")
-          .text("david")
-          .attr("for", "david_radio");
+          .text(random_values[2])
+          .attr("for", "random3_radio");
       }
     }
   }
