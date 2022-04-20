@@ -14,6 +14,6 @@ class Point:
 	def getDistance(self,point):
 		return ((((self.x - point.x)**2) + ((self.y-point.y)**2))**0.5)
 p1 = Point(10,0)
-p2 = Point(30,0)
+p2 = Point(30,10)
 distanceBtw = p1.getDistance(p2)
 print(distanceBtw)

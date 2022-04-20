@@ -21,7 +21,9 @@ var controller = (function() {
   ];
   var colorDict = {"Pet": colors[0], "Owner": colors[1], "Point": colors[2], "Circle": colors[3]};
   var varOrigin = {};
+  var varEquivalence = {};
   var nowCorrect = null;
+  var nowCorrectAnswer = "";
   var nowCorrectAnswerType = "";
   var nowCorrectVar = "";
 
@@ -48,6 +50,7 @@ var controller = (function() {
     state = initialState;
     waitingForResponse = false;
     varOrigin = {};
+    varEquivalence = {};
     responseType = "";
     numTries = 0;
     fadeLevel = fading;
@@ -415,12 +418,16 @@ var controller = (function() {
     var value = "";
     if (values[idx].type === "string" && values[idx].value !== "" && 
         ((oldValues[idx].value !== "" && fadeLevel == 1 &&
-          ((nowCorrect || threeTries) && values[idx].name.replace("self.", "") === nowCorrectVar || values[idx].name.replace("self.", "") !== nowCorrectVar)) || 
+          ((nowCorrect || threeTries) && values[idx].name.replace("self.", "") === nowCorrectVar || (values[idx].name.replace("self.", "") !== nowCorrectVar || values[idx].value !== nowCorrectAnswer))) || 
           fadeLevel == 0)) {
       value = "'" + values[idx].value + "'";
-    } else if ((oldValues[idx].value !== "" && fadeLevel == 1 &&
-          ((nowCorrect || threeTries) && values[idx].name.replace("self.", "") === nowCorrectVar || values[idx].name.replace("self.", "") !== nowCorrectVar))
-          || fadeLevel == 0) {
+    } else if (values[idx].type === "instance" && ((oldValues[idx].value !== "" && fadeLevel == 1 &&
+          ((nowCorrect || threeTries) && values[idx].name.replace("self.", "") === nowCorrectVar || (values[idx].name.replace("self.", "") !== nowCorrectVar || !values[idx].value.includes(nowCorrectAnswer))))
+          || fadeLevel == 0)) {
+      value = values[idx].value;
+    } else if (values[idx].type !== "instance" && ((oldValues[idx].value !== "" && fadeLevel == 1 &&
+          ((nowCorrect || threeTries) && values[idx].name.replace("self.", "") === nowCorrectVar || (values[idx].name.replace("self.", "") !== nowCorrectVar || values[idx].value !== nowCorrectAnswer)))
+          || fadeLevel == 0)) {
       value = values[idx].value;
     }
     return values[idx].name.replace("self.", "") + " = " + value;
@@ -433,9 +440,10 @@ var controller = (function() {
         found = i;
       }
     }
-    if (found < 0) {
+    if (found < 0 && varEquivalence.hasOwnProperty(v.name.replace("self.", ""))) {
+      var match = varEquivalence[v.name.replace("self.", "")];
       for (var i = 0; i < values.length; i++) {
-        if (v.value === values[i].value) {
+        if (match === values[i].name.replace("self.", "")) {
           found = i;
         }
       }
@@ -455,12 +463,13 @@ var controller = (function() {
 
   function findOpacity(v, values, oldValues) {
     var idx = matchIndex(v, values);
+
     if (idx >= 0) {
       if (values[idx].value !== "" &&
          ((oldValues[idx].value === "" && fadeLevel === 0) ||
          (oldValues[idx].value &&  
          fadeLevel === 1 && 
-         ((nowCorrect || threeTries) && nowCorrectVar === v.name && nowCorrectAnswerType === "variable_bank")
+         ((nowCorrect || threeTries) && nowCorrectAnswerType === "variable_bank" && nowCorrectAnswer === v.value && nowCorrectVar === values[idx].name.replace("self.", ""))
          ))) {
             return 1;
       }
@@ -492,7 +501,7 @@ var controller = (function() {
     if (fadeLevel == 0) {
       return getValueRep(d);
     }
-    else if (vOldLocalVariables[i].value !== "" && fadeLevel ==  1 && ((nowCorrect || threeTries) && nowCorrectVar === d.name || nowCorrectVar !== d.name)) {
+    else if (vOldLocalVariables[i].value !== "" && fadeLevel ==  1 && ((nowCorrect || threeTries) && nowCorrectVar === d.name && nowCorrectAnswer === d.value || (nowCorrectVar !== d.name || nowCorrectAnswer !== d.value))) {
       return getValueRep(d);
     } else {
       return "";
@@ -607,7 +616,7 @@ var controller = (function() {
     return the_new_simple_bank;
   }
 
-  function visualizeObjectInVariableBank(variable, simpleVariableBank) {  
+  function visualizeObjectInVariableBank(variable, simpleVariableBank) {
     var vParams = makeList(simpleVariableBank["current_vb"][variable]["parameters"]);
     var vVariables = makeList(simpleVariableBank["current_vb"][variable]["variables"]);
     var vNotLocalVariables = vVariables.filter(d => !d.local);
@@ -975,6 +984,38 @@ var controller = (function() {
     }
   }
 
+  function matchVariables(variableBankObject) {
+    varEquivalence = {};
+    for (const variable in variableBankObject) {
+
+      if (variableBankObject[variable].hasOwnProperty("type") &&
+          variableBankObject[variable].type === "object") {
+
+        var varParams = variableBankObject[variable].params;
+        var varVals = variableBankObject[variable].values;
+        
+        for (var i = 0; i < varParams.length; i++) {
+          var val = varParams[i];
+          var add = true;
+          var match = "";
+
+          for (var j = 0; j < varVals.length; j++) {
+            if (val.name.replace("self.", "") === varVals[j].name.replace("self.", "")) {
+              add = false;
+            } else if ((varVals[j].hasOwnProperty("hidden_val") && val.value === varVals[j].hidden_val.value) || (val.value === varVals[j].value)) {
+              match = varVals[j].name.replace("self.", "");
+            }
+          }
+
+          if (add) {
+            varEquivalence[val.name.replace("self.", "")] = match;
+          }
+        }
+
+      }
+    } 
+  }
+
   function addVariableBank() {
     d3.select("#variable_list_table").node().innerHTML = "";
     d3.select("#variable_array_table").node().innerHTML = "";
@@ -987,6 +1028,9 @@ var controller = (function() {
         variableBankObject = state.variables.in_scope[v].value;
       }
     }
+
+    matchVariables(variableBankObject);
+
 
     simpleVariableBank = generateSimpleVariableBank(
       variableBankObject,
@@ -1112,12 +1156,19 @@ var controller = (function() {
             .style("fill", "#e67300")
             .style("font-weight", "bold")
             .text(variable + " = ");
+                    
+
+          var cleanedValue = simpleVariableBank["current_vb"][variable].value;
+          if (!(/\d/.test(cleanedValue))) {
+            cleanedValue = cleanedValue.replaceAll("'", "");
+          }
 
           var varOpacity;
-
-          if ((simpleVariableBank["previous_vb"].hasOwnProperty(variable) && fadeLevel == 1 && ((nowCorrect || threeTries) && nowCorrectVar === variable || nowCorrectVar !== variable)) || 
-              (simpleVariableBank["current_vb"].hasOwnProperty(variable) && fadeLevel == 0) || 
-              simpleVariableBank["current_vb"][variable]["type"] === "temp") {
+          if ((simpleVariableBank["previous_vb"].hasOwnProperty(variable) || simpleVariableBank["current_vb"][variable]["type"] === "temp") && 
+              ((fadeLevel == 1 && 
+                (((nowCorrect || threeTries) && nowCorrectVar === variable && nowCorrectAnswer === cleanedValue) || 
+              (nowCorrectVar !== variable || nowCorrectAnswer !== cleanedValue))) || 
+              fadeLevel == 0)) {
             if (varOrigin[variable] === state.variables.in_scope.current_python_function.value) {
               varOpacity = 1;
             } else {
@@ -1615,6 +1666,7 @@ var controller = (function() {
     let vb = state.variables.in_scope.variables.value;
     let correctVal = vb[lookup]["value"];
     nowCorrectVar = lookup;
+    console.log("val of " + lookup + " is " + correctVal);
     respondToAnswer((correctVal == userValue && userValue != ""), "variable_bank", correctVal);
   }
 
@@ -1970,25 +2022,57 @@ var controller = (function() {
 
   function checkInstance() {
     var correctAnswerObject = simulatorInterface.getCorrectAnswer();
-    var userAnswer = d3.select('input[name="class_multiple_choice_radio"]:checked').node().value; 
-    var correctAnswer;
-    for(let idx = 0; idx < correctAnswerObject.rhs.values.length; idx++){ //Hacky AF, but doesn't actually give us the line we were on...
-      if (correctAnswerObject.rhs.values[idx].type === "instance"){
-        correctAnswer = correctAnswerObject.rhs.values[idx].hidden_val.value.name;
+
+    if (d3.select('input[name="class_multiple_choice_radio"]:checked').node() === null) {
+      if (d3.select("#responseMessage").node() !== null) {
+        d3.select("#responseMessage").remove();
       }
-    }
+      if (d3.select("#errorMessage").node() === null) {
+        var errorMessage =
+          "<span id='errorMessage' style='color: #ff0000;'>Try entering an answer first!<br></span>";
+        d3.select("#promptText").node().innerHTML =
+          errorMessage + d3.select("#promptText").node().innerHTML;
+      }
+    } else {
+      if (d3.select("#errorMessage").node() !== null) {
+        d3.select("#errorMessage").remove();
+      }
 
-    var correct = false;
-    if (correctAnswer === userAnswer) {
-      correct = true;
-    }
+      var userAnswer = d3.select('input[name="class_multiple_choice_radio"]:checked').node().value; 
+      var correctAnswer;
+      for(let idx = 0; idx < correctAnswerObject.rhs.values.length; idx++){ //Hacky AF, but doesn't actually give us the line we were on...
+        if (correctAnswerObject.rhs.values[idx].type === "instance"){
+          nowCorrectVar = correctAnswerObject.rhs.values[idx].name;
+          correctAnswer = correctAnswerObject.rhs.values[idx].hidden_val.value.name;
+        }
+      }
+      
+      
 
-    respondToAnswer(correct, "add_instance", correctAnswer);
+      var correct = false;
+      if (correctAnswer === userAnswer) {
+        correct = true;
+      }
+
+      Logging.log_task_event(logger, {
+        type: Logging.ID.QuestionAnswer,
+        detail: {
+          type: "add_instance",
+          correctAnswer: correctAnswer,
+          userAnswer: userAnswer,
+          correct: correct
+        }
+      });
+
+      respondToAnswer(correct, "add_instance", correctAnswer);
+
+    }
 
   }
 
   function respondToAnswer(correct, type, correctAnswer) {
     nowCorrect = correct;
+    nowCorrectAnswer = correctAnswer;
     nowCorrectAnswerType = type;
 
     numTries = numTries + 1;
