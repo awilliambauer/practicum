@@ -1819,7 +1819,7 @@ var controller = (function() {
   function checkVariableBankObjectVariableAnswer() {
     let userValue = document.getElementById("objectVariableUserResponse").value;
     let object_local_variables =
-      state.variables.in_scope.we_will_add_this_object_to_the_variable_bank
+      state.variables.in_scope.we_will_add_this_value_to_the_variable_bank
         .value.values;
     let line_that_will_execute =
       state.variables.in_scope.this_is_the_next_line_that_will_execute.value;
