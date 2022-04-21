@@ -61,7 +61,7 @@ var controller = (function() {
     responseType = "";
     numTries = 0;
     fadeLevel = fading;
-
+    
     Logging.log_task_event(logger, {
       type: Logging.ID.FadeLevel,
       detail: { fadeLevel: fadeLevel }
@@ -1815,6 +1815,16 @@ var controller = (function() {
     }
     console.error("Failed to lookup val of " + lookupName);
   }
+  
+  function stripQuotes(str) {
+    if (
+      (str.charAt(0) === '\'' && str.charAt(str.length - 1) === '\'') || // single quotes
+      (str.charAt(0) === '"' && str.charAt(str.length - 1) === '"') // double quotes
+    ) {
+      return str.substr(1, str.length - 2);
+    }
+    return str;
+  }
 
   function checkVariableBankObjectVariableAnswer() {
     let userValue = document.getElementById("objectVariableUserResponse").value;
@@ -1834,6 +1844,10 @@ var controller = (function() {
       lookup,
       object_local_variables
     );
+    if (typeof correctVal === 'string' || correctVal instanceof String) {
+      // If the answer we seek is a string, allow the user input to be wrapped in quotes or double quotes
+      userValue = stripQuotes(userValue);
+    }
     respondToAnswer(
       correctVal == userValue && userValue != "",
       "variable_bank",
@@ -1849,6 +1863,10 @@ var controller = (function() {
     let vb = state.variables.in_scope.variables.value;
     let correctVal = vb[lookup]["value"];
     nowCorrectVar = lookup;
+    if (typeof correctVal === 'string' || correctVal instanceof String) {
+      // If the answer we seek is a string, allow the user input to be wrapped in quotes or double quotes
+      userValue = stripQuotes(userValue);
+    }
     respondToAnswer(
       correctVal == userValue && userValue != "",
       "variable_bank",
