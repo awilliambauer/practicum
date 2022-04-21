@@ -49,15 +49,18 @@ function TPLAlgorithm() {
         [no_step]
         if (helper.check_instantiation(ast.body)){
             [prompt]
-            "This line of code instantiates an object.";
+            "This line instantiates an object. An object is an instance of a class. You can think of classes as a template for creating objects.";
 
+            [prompt]
+            "Let's add this object to the variable bank and begin to fill in its variables.";
+            
             let Let_us_look_at_the_class_definition: AstNode;
             [no_step]
             Let_us_look_at_the_class_definition = this_is_the_next_line_that_will_execute.expression.args[1].object;
 
-            let we_will_add_this_object_to_the_variable_bank: Instance;
-
-            we_will_add_this_object_to_the_variable_bank = helper.add_class_instance(variables, ast.body);
+            let we_will_add_this_value_to_the_variable_bank: Instance;
+            [no_step]
+            we_will_add_this_value_to_the_variable_bank = helper.add_class_instance(variables, ast.body);
 
             let theClass;
             [no_step]
@@ -72,8 +75,8 @@ function TPLAlgorithm() {
             constructorIndex = 0;
 
             [prompt]
-            "In the constructor, we will match the parameter inputs with the constructer parameter variables.";
-
+            "In the class constructor, these input values will be referenced by the names of the constructor parameters. We will enter the constructor now.";
+            
             [no_step]
             do {
                 [interactive("next_line")]
@@ -126,27 +129,29 @@ function TPLAlgorithm() {
                     let parent;
                     [no_step]
                     parent = ast;
+                    
+                    [prompt]
+                    "The current parameters and local variables in the constructor will no longer be available inside this new function unless they are passed as parameters.";
 
                     // Jump into function
-
                     [interactive("next_line")]
                     this_is_the_next_line_that_will_execute = helper.get_function_body_line(functionDefinition, bodyIndex);
-                    // use this to go to the def line instead
-                    //this_is_the_next_line_that_will_execute = functionDefinition;
 
                     [no_step]
                     if (helper.has_params_to_add(functionDefinition)){
                         let param_values;
                         [no_step]
-                        param_values = helper.get_param_values(we_will_add_this_object_to_the_variable_bank, functionCall, functionDefinition);
+                        param_values = helper.get_param_values(we_will_add_this_value_to_the_variable_bank, functionCall, functionDefinition);
                         [no_step]
                         variables = helper.add_temp_param_variables(variables, param_values);
                     }
                     [no_step]
                     do {
-                        [interactive("next_line")]
+                        [no_step]
                         this_is_the_next_line_that_will_execute = helper.get_function_body_line(functionDefinition, bodyIndex);
                         [no_step] if (helper.does_this_stmt_update_bank(this_is_the_next_line_that_will_execute)){
+                            [interactive("next_line")]
+                            this_is_the_next_line_that_will_execute = helper.get_function_body_line(functionDefinition, bodyIndex);
                             let arg1;
                             let arg2;
                             [no_step]
@@ -170,6 +175,8 @@ function TPLAlgorithm() {
                                 variables[classReference] = helper.update_object_in_variable_bank(variables, variables[classReference], result);
                             }
                         } else [no_step] if (helper.are_we_on_return_statement(this_is_the_next_line_that_will_execute)){
+                            [interactive("next_line")]
+                            this_is_the_next_line_that_will_execute = helper.get_function_body_line(functionDefinition, bodyIndex);
                             [no_step]
                             result = helper.get_line_result(variables, this_is_the_next_line_that_will_execute);
                             break;
@@ -253,7 +260,8 @@ function TPLAlgorithm() {
                         [no_step]
                         bodyIndex = bodyIndex + 1;
                     } while (bodyIndex < helper.get_class_method_body_range(functionDefinition));
-
+                    [no_step]
+                    current_python_function = "init";
                     [no_step]
                     if (helper.does_this_stmt_update_bank(functionLine)){
                         [no_step]
@@ -265,8 +273,6 @@ function TPLAlgorithm() {
                         [no_step]
                         arg2 = this_is_the_next_line_that_will_execute.expression.args[1];
                         [no_step]
-                        current_python_function = "init";
-                        [no_step]
                         if (helper.does_this_declare_a_new_variable(variables, arg1)){
                             [prompt]
                             "We will add the new variable and its value to the variable bank";
@@ -274,13 +280,13 @@ function TPLAlgorithm() {
                             variables[arg1.value] = result;
                         } else {
                             [prompt]
-                            "The value returned by the function is assigned to the variable.";
+                            "The value returned by the function is assigned to this original variable.";
                             let toChange;
                             [no_step]
                             toChange = helper.get_value_for_update(functionLine, result);
 
                             [interactive("add_variable_object")]
-                            we_will_add_this_object_to_the_variable_bank = helper.update_object_in_variable_bank(variables, we_will_add_this_object_to_the_variable_bank, toChange);
+                            we_will_add_this_value_to_the_variable_bank = helper.update_object_in_variable_bank(variables, we_will_add_this_value_to_the_variable_bank, toChange);
                         }
                     }
                     [no_step]
@@ -291,13 +297,16 @@ function TPLAlgorithm() {
 
                     //Check to see if the value we are setting is an instance
                     [no_step]
-                    if (helper.are_we_setting_an_instance(we_will_add_this_object_to_the_variable_bank, constructorIndex)){
+                    if (helper.are_we_setting_an_instance(we_will_add_this_value_to_the_variable_bank, constructorIndex)){
+                        let passedInObject;
+                        [no_step]
+                        passedInObject = helper.pass_in_instance_name(we_will_add_this_value_to_the_variable_bank, constructorIndex);
                         [interactive("add_instance")]
-                        we_will_add_this_object_to_the_variable_bank = helper.update_object_in_variable_bank(variables, we_will_add_this_object_to_the_variable_bank, constructorIndex);
+                        we_will_add_this_value_to_the_variable_bank = helper.update_object_in_variable_bank(variables, we_will_add_this_value_to_the_variable_bank, constructorIndex);
                     } else {
                         // Check user input on this variable's value
                         [interactive("add_variable_object")]
-                        we_will_add_this_object_to_the_variable_bank = helper.update_object_in_variable_bank(variables, we_will_add_this_object_to_the_variable_bank, constructorIndex);
+                        we_will_add_this_value_to_the_variable_bank = helper.update_object_in_variable_bank(variables, we_will_add_this_value_to_the_variable_bank, constructorIndex);
                     }
                     
                     
@@ -305,7 +314,10 @@ function TPLAlgorithm() {
                 [no_step]
                 constructorIndex = constructorIndex + 1;
             } while (constructorIndex < helper.get_class_constructor_body_range(theClass));
-
+            
+            [prompt]
+            "We've reached the end of the constructor and this object is done being created.";
+            
             [no_step]
             helper.go_next_line_without_reading();
             [no_step]
@@ -362,10 +374,12 @@ function TPLAlgorithm() {
 
             [no_step]
             do {
-                [interactive("next_line")]
+                [no_step]
                 this_is_the_next_line_that_will_execute = helper.get_function_body_line(functionDefinition, bodyIndex);
 
                 [no_step] if (helper.does_this_stmt_update_bank(this_is_the_next_line_that_will_execute)){
+                    [interactive("next_line")]
+                    this_is_the_next_line_that_will_execute = helper.get_function_body_line(functionDefinition, bodyIndex);
                     let arg1;
                     let arg2;
                     [no_step]
@@ -389,6 +403,8 @@ function TPLAlgorithm() {
                         variables[classReference] = helper.update_object_in_variable_bank(variables, variables[classReference], result);
                     }
                 } else [no_step] if (helper.are_we_on_return_statement(this_is_the_next_line_that_will_execute)){
+                    [interactive("next_line")]
+                    this_is_the_next_line_that_will_execute = helper.get_function_body_line(functionDefinition, bodyIndex);
                     [no_step]
                     result = helper.get_line_result(variables, this_is_the_next_line_that_will_execute);
                     break;
@@ -457,14 +473,14 @@ function TPLAlgorithm() {
                 bodyIndex = bodyIndex + 1;
             } while (bodyIndex < helper.get_class_method_body_range(functionDefinition));
 
-
+            [no_step]
+            current_python_function = null;
             [no_step]
             if (helper.does_this_stmt_update_bank(functionLine)){
 
                 [prompt]
                 "This function was called from a variable assignment. We need to return to that line to resume execution.";
-                [no_step]
-                current_python_function = null;
+
                 [interactive("next_line")]
                 this_is_the_next_line_that_will_execute = functionLine;
                 let arg1;
@@ -473,7 +489,6 @@ function TPLAlgorithm() {
                 arg1 = this_is_the_next_line_that_will_execute.expression.args[0];
                 [no_step]
                 arg2 = this_is_the_next_line_that_will_execute.expression.args[1];
-
                 [no_step]
                 if (helper.does_this_declare_a_new_variable(variables, arg1)){
                     [no_step]
@@ -485,7 +500,7 @@ function TPLAlgorithm() {
                     variables[arg1.value] = result;
 
                     let we_will_add_the_new_variable_and_its_value_to_the_variable_bank;
-
+                    
                     [no_step]
                     we_will_add_the_new_variable_and_its_value_to_the_variable_bank = variables;
                     [interactive("add_variable_from_function")]
@@ -498,12 +513,9 @@ function TPLAlgorithm() {
                     toChange = helper.get_value_for_update(functionLine, result.value);
 
                     [interactive("add_variable_object")]
-                    we_will_add_this_object_to_the_variable_bank = helper.update_object_in_variable_bank(variables, we_will_add_this_object_to_the_variable_bank, toChange);
+                    we_will_add_this_value_to_the_variable_bank = helper.update_object_in_variable_bank(variables, we_will_add_this_value_to_the_variable_bank, toChange);
                 }
             }
-            [no_step]
-            current_python_function = null;
-
             [no_step]
             variables = helper.remove_temp_vars(variables);
             [no_step]

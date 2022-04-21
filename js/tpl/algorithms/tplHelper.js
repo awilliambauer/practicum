@@ -1,4 +1,4 @@
-const RELATIVE_SRC_DIR = "../../../include/source/"; //It might be necessary to change this depending on your folder system.
+const RELATIVE_SRC_DIR = "include/source/"; //It might be necessary to change this depending on your folder system.
 const HORIZONTAL_TAB = 9; // Unicode control code
 const NEW_LINE = 10; // Unicode control code
 // see: https://en.wikipedia.org/wiki/List_of_Unicode_characters#Control_codes
@@ -455,6 +455,17 @@ function TplHelper() {
             }
         }
         return false;
+    }
+
+    this.pass_in_instance_name = function(object, lineIndex){
+        let relevant_line = object.reference.body[0].body[lineIndex]; //Gets the line from the actual class definition stored in the object.
+        let arg2_val = relevant_line.expression.args[1].value; //value of the right hand side of the equal sign in the line, either the actual value or an indentifier name
+        for(let idx = 0; idx < object.params.length; idx++) { //Iterate through the params passed into the object
+            if (arg2_val === object.params[idx].name && object.params[idx].type === "object"){
+                console.log(object.values[idx].hidden_val.value.name);
+                return object.values[idx].hidden_val.value.name;
+            }
+        }
     }
 
     this.update_object_in_variable_bank = function(bank, object, variable) {
