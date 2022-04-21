@@ -628,9 +628,10 @@ var controller = (function() {
             let name = obj_params[i]["name"];
             let value = obj_params[i]["value"];
             let type = obj_params[i]["type"];
+            console.log(obj_params[i]);
             if (type === "object") {
               // If this is an object, the display value we want is the name from its original scope
-              value = obj_params[i].name_in_higher_scope;
+              value = obj_params[i].reference.name + ": " + obj_params[i].name_in_higher_scope;
             }
             constructor_parameters[name] = {
               value: value,
@@ -1823,7 +1824,6 @@ var controller = (function() {
         .value.values;
     let line_that_will_execute =
       state.variables.in_scope.this_is_the_next_line_that_will_execute.value;
-      console.log(line_that_will_execute.expression.args[0]);
     let lookup;
     if (line_that_will_execute.expression.args[0].hasOwnProperty("name")) {
       lookup = line_that_will_execute.expression.args[0].name;
