@@ -628,7 +628,6 @@ var controller = (function() {
             let name = obj_params[i]["name"];
             let value = obj_params[i]["value"];
             let type = obj_params[i]["type"];
-            console.log(obj_params[i]);
             if (type === "object") {
               // If this is an object, the display value we want is the name from its original scope
               value = obj_params[i].reference.name + ": " + obj_params[i].name_in_higher_scope;
