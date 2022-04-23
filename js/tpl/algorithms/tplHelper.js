@@ -974,7 +974,7 @@ function TplHelper() {
             } else if (vals[i].tag === "binop") {
                 string += this.create_print_string(vals[i].args, string);
             }
-            if (i + 1 < vals.length) string += ",";
+            if (i + 1 < vals.length) string += " ";
         }
         return string;
     };
