@@ -2306,7 +2306,6 @@ var controller = (function() {
 
   function checkSolution() {
     var userSolution = d3.select("#inputBox").node().value;
-    userSolution = userSolution.replace(/ /g, "");
     userSolution = userSolution.replace(/\{/g, "");
     userSolution = userSolution.replace(/}/g, "");
     userSolution = userSolution.replace(/\[/g, "");
