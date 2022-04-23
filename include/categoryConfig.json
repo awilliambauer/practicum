@@ -475,7 +475,7 @@
       "text": "def for_loop_investigation(word):\n\tx = 0\n\tfor letter in word:\n\t\tif letter == \"s\":\n\t\t\tx = x + 7\n\t\tif letter == \"i\":\n\t\t\tx = x - 3\n\treturn (x)",
       "variants": [{
         "id": "24",
-        "arguments": {"word": "Mississippi"}
+        "arguments": {"word": "\"Mississippi\""}
       }]
     }
   }]
@@ -517,13 +517,13 @@
       "text": "def nested_for_loop_investigation(word):\n\tvowels = \"aeiou\"\n\tcount = 0\n\tfor letter in word:\n\t\tfor vowel in vowels:\n\t\t\tif letter == vowel:\n\t\t\t\tcount = count + 1\n\t\t\t\tbreak\n\treturn(count)",
       "variants": [{
         "id": "108",
-        "arguments": {"word": "house"}
+        "arguments": {"word": "\"house\""}
       },{
         "id": "109",
-        "arguments": {"word": "arid"}
+        "arguments": {"word": "\"arid\""}
       },{
         "id": "110",
-        "arguments": {"word": "drove"}
+        "arguments": {"word": "\"drove\""}
       }]
     }
   },{
