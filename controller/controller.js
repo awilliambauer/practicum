@@ -1569,8 +1569,8 @@ var controller = (function() {
                   highlightVariableBank(varObject.value);
                 }
               } catch (error) {
-                //HACK: varObject.value is null for OOP problem variables. Reason is unknown to me at this time. Ignoring this case for now.
-                //TODO: acknowledge this case
+                // varObject.value is null for OOP problem variables. Reason is unknown to me at this time, but it is not used by the viz.
+                //HACK Ignoring this case for now.
                 break;
               }
             }
