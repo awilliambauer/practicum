@@ -537,8 +537,6 @@ var controller = (function() {
      * Determine whether to highlight variable
      */
     var idx = matchIndex(v, values);
-    console.log(varEquivalence);
-    console.log(nowCorrectVar);
 
     if (idx >= 0) {
          // Value has been initialized
@@ -716,7 +714,7 @@ var controller = (function() {
 
       // If this is an object, display the name from its original scope
       if (type === "instance" && value !== "") {
-        value = obj_values[i].value.reference.name + ": " + sobj_values[i].value.name;
+        value = obj_values[i].value.reference.name + ": " + obj_values[i].value.name;
       }
 
       // Distinguish instance from local variables
