@@ -284,15 +284,15 @@ var python_parsing = function() {
         function match_program() {
             var start = lex.position();
             
-            // HACK: top-level function definition for legacy problems
-            // TODO: abstract function definitions so this is not necessary
+            // top-level function definition for legacy (pre 2022 Carleton COMPS) problems.
             if (lex.peek().value == "def") {
+                // As of May 2022, all existing practicum problems are no longer wrapped inside a function
+                // So, it is safe to remove this if statement, but in the event that you want to merge in pre-2022-format questions,
+                // we leave it here.
                 return match_method(0);
             } else {   
-                // var name = "dummy_function";
                 var params = "";
                 var body = match_block(0);
-                // console.log(JSON.stringify(body, null, 2));
             }
 
             return {
