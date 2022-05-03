@@ -936,7 +936,7 @@ function TplHelper() {
     
     this.is_this_the_last_line = function(ast) {
         return lineNum !== ast.body.length - 1;
-    }; // TODO: factor out when lineNum is deprecated
+    };
 
     /**
      * A function designed to check if the entire python code is wrapped in a function.
@@ -970,7 +970,7 @@ function TplHelper() {
     };
 
     this.this_is_a_return_statement = function(ast) {
-        if (this.current_code_block_index === -1) this.current_code_block_index = ast.body.length - 1; // TODO HACK for when current_code_block_index is not being used
+        if (this.current_code_block_index === -1) this.current_code_block_index = ast.body.length - 1; //HACK for when current_code_block_index is not being used
         if (ast.body[this.current_code_block_index].tag === "expression") {
             if (ast.body[this.current_code_block_index].expression.hasOwnProperty("tag")) {
                 if (ast.body[this.current_code_block_index].expression.tag === "return") {
@@ -982,7 +982,7 @@ function TplHelper() {
     };
 
     this.this_is_a_print_statement = function(ast) {
-        if (this.current_code_block_index === -1) this.current_code_block_index = ast.body.length - 1; // TODO HACK for when current_code_block_index is not being used
+        if (this.current_code_block_index === -1) this.current_code_block_index = ast.body.length - 1; //HACK for when current_code_block_index is not being used
         if (ast.body[this.current_code_block_index].tag === "expression") {
             if (ast.body[this.current_code_block_index].expression.hasOwnProperty("tag")) {
                 if (ast.body[this.current_code_block_index].expression.tag === "print") {
@@ -1071,7 +1071,6 @@ function TplHelper() {
             if (call.object.tag === "identifier"){
                 for (const [key, val] of Object.entries(bank)){
                     let class_reference = val.reference;
-                    //TODO: Let call.object.value actually be the instance name.
                     for (let idx = 0; idx < class_reference.body.length; idx++){
                         if (class_reference.body[idx].name === call.name){
                             return class_reference.body[idx];

@@ -8,12 +8,19 @@ var controller = (function() {
   var fadeLevel;
   var waitingForResponse;
   var responseType;
+  var button;
+  var random_values = [];
+
+  // Track user attempts to answer question
   var numTries;
   var threeTries = false;
-  var button;
+
+  // Track what stage of variable creation to display
   var bankStatus = {};
   var objectSteps = ["createBox", "addAndHighlight", "done"];
-  var random_values = [];
+
+  // Colors to display objects
+      // Hard-coded by class for visual legibility
   var colors = [
     ["#fee6f3", "#fd1c94"],
     ["#ebf1f9", "#3d77c2"],
@@ -26,11 +33,16 @@ var controller = (function() {
     Point: colors[2],
     Circle: colors[3]
   };
+
+  // Track where variables were defined
   var varOrigin = {};
+
+  // Find equivalent parameters and local variables
   var varEquivalence = {};
+
+  // Determine what to display based on answer correctness
   var nowCorrect = null;
   var nowCorrectAnswer = "";
-  var nowCorrectAnswerType = "";
   var nowCorrectVar = "";
 
   var simpleVariableBank = {};
@@ -53,6 +65,7 @@ var controller = (function() {
     logger = task_logger;
     simulatorInterface = simulatorInterface_;
 
+    // Reset state necessary variables
     config = problemConfig;
     state = initialState;
     waitingForResponse = false;
@@ -135,32 +148,6 @@ var controller = (function() {
     return iv_string.slice(0, -2); // remove final comma and space
   }
 
-  function getArgString(args) {
-    var callVals = [];
-    for (var variable in args) {
-      var arrayString;
-      if (Array.isArray(args[variable])) {
-        arrayString = "[";
-        var firstIter = false;
-        if (args[variable].length > 0) firstIter = true;
-        for (let item of args[variable]) {
-          if (!firstIter) {
-            arrayString = arrayString + ",";
-            arrayString = arrayString + " ";
-          }
-          firstIter = false;
-          arrayString = arrayString + item;
-        }
-        arrayString = arrayString + "]";
-      } else if (typeof args[variable] === "string") {
-        arrayString = "'" + args[variable] + "'";
-      } else {
-        arrayString = args[variable];
-      }
-      callVals.push(arrayString);
-    }
-    return callVals;
-  }
 
   function step() {
     $("#promptText").css("font-weight", "normal");
@@ -473,32 +460,49 @@ var controller = (function() {
     }
   }
 
+
   function getInstanceText(values, oldValues, idx, lastObject) {
+    /**
+     * Return a formatted version of the value
+     *    Return nothing if value should not yet be displayed
+     */
+
     var value = "";
-    if (values[idx].type === "string" && values[idx].value !== "" && 
-        ((oldValues[idx].value !== "" && fadeLevel == 1 &&
-          ((nowCorrect || threeTries) && values[idx].name.replace("self.", "") === nowCorrectVar || (values[idx].name.replace("self.", "") !== nowCorrectVar || values[idx].value !== nowCorrectAnswer) || !lastObject)) || 
-          fadeLevel == 0)) {
-      value = "'" + values[idx].value + "'";
-    } else if (values[idx].type === "instance" && ((oldValues[idx].value !== "" && fadeLevel == 1 &&
-          ((nowCorrect || threeTries) && values[idx].name.replace("self.", "") === nowCorrectVar || (values[idx].name.replace("self.", "") !== nowCorrectVar || !values[idx].value.includes(nowCorrectAnswer) || !lastObject)))
-          || fadeLevel == 0)) {
-      value = values[idx].value;
-    } else if (values[idx].type !== "instance" && ((oldValues[idx].value !== "" && fadeLevel == 1 &&
-          ((nowCorrect || threeTries) && values[idx].name.replace("self.", "") === nowCorrectVar || (values[idx].name.replace("self.", "") !== nowCorrectVar || values[idx].value !== nowCorrectAnswer || !lastObject)))
-          || fadeLevel == 0)) {
-      value = values[idx].value;
-    }
+    
+        // In independent mode
+    if ((fadeLevel == 1 && 
+        // Value has been added to object according to visualization
+        oldValues[idx].value !== "" &&
+        // The user is guessing the value for this variable and has given a correct answer or maxed out their tries
+        ((nowCorrect || threeTries) && values[idx].name.replace("self.", "") === nowCorrectVar || 
+        // The user is not guessing the answer for this variable
+        (values[idx].name.replace("self.", "") !== nowCorrectVar || !((values[idx].type === "instance" && values[idx].value.includes(nowCorrectAnswer)) || (values[idx].type !== "instance" && values[idx].value === nowCorrectAnswer)) || !lastObject)))
+        // In guided mode
+        || fadeLevel == 0) {
+          if (values[idx].type === "string" && values[idx].value !== "") {
+            value = "'" + values[idx].value + "'";
+          } else {
+            value = values[idx].value;
+          }
+        }
     return values[idx].name.replace("self.", "") + " = " + value;
   }
 
+
   function matchIndex(v, values) {
+    /**
+     * Find the index of v in values
+     */
     var found = -1;
+
+    // Match v by variable name
     for (var i = 0; i < values.length; i++) {
       if (v.name.replace("self.", "") === values[i].name.replace("self.", "")) {
         found = i;
       }
     }
+
+    // If v matches a variable with another name, match v by value
     if (found < 0 && varEquivalence.hasOwnProperty(v.name.replace("self.", ""))) {
       var match = varEquivalence[v.name.replace("self.", "")];
       for (var i = 0; i < values.length; i++) {
@@ -507,86 +511,135 @@ var controller = (function() {
         }
       }
     }
+
     return found;
   }
 
+
   function getValueRep(val) {
+    /**
+     * Return a formatted version of val 
+     */
     var value = "";
+
     if (val.type === "string") {
       value = "'" + val.value + "'";
     } else {
       value = val.value;
     }
+
     return value;
   }
 
+
   function findOpacity(v, values, oldValues) {
+    /**
+     * Determine whether to highlight variable
+     */
     var idx = matchIndex(v, values);
 
     if (idx >= 0) {
+         // Value has been initialized
       if (values[idx].value !== "" &&
+         // Guided mode and value just added to bank
          ((oldValues[idx].value === "" && fadeLevel === 0) ||
-         (oldValues[idx].value &&  
-         fadeLevel === 1 && 
-         ((nowCorrect || threeTries) && nowCorrectAnswerType === "variable_bank" && nowCorrectAnswer === v.value && nowCorrectVar === values[idx].name.replace("self.", ""))
+         // Independent mode and value not new
+         (fadeLevel === 1 && 
+         // User is guessing this value – answer is correct or user is out of tries 
+         ((nowCorrect || threeTries) && ((varEquivalence.hasOwnProperty(nowCorrectVar) && varEquivalence[nowCorrectVar] === values[idx].name.replace("self.", "")) || nowCorrectVar === values[idx].name.replace("self.", "")))
          ))) {
             return 1;
       }
     }
+
     return 0;
   }
 
   function findWidth(text) {
+    /**
+     * Find width needed to display text
+     */
     var canvas = document.createElement("canvas"),
-      context = canvas.getContext("2d");
-    context.font = "14px Arial bold";
-    return Math.ceil(context.measureText(text).width) + 55;
+        context = canvas.getContext("2d");
+    context.font = '16px Menlo,Monaco,Consolas,"Courier New",monospace';
+
+    return Math.ceil(context.measureText(text).width) + 20;
   }
 
+
   function getHighlightX(data, d) {
+    /**
+     * Find x value for local var and params
+     */
     var i = matchIndex(d, data);
+
+    // Add the width of each item before the current plus spacing
     var x = 120;
     for (let j = 0; j < i; j++) {
+      // Find width of wider item: variable name or value
       if (findWidth(data[j].name) > findWidth(getValueRep(data[j]))) {
         x += findWidth(data[j].name) + 20;
       } else {
         x += findWidth(getValueRep(data[j])) + 20;
       }
     }
+
     return x;
   }
 
-  function displayParamVal(d, i, vOldLocalVariables) {
+
+  function displayLocalVarVal(d, i, vOldLocalVariables) {
+    /**
+     * Determine whether to display a parameter value
+     */
+
+    // Display if in guided mode
     if (fadeLevel == 0) {
       return getValueRep(d);
     }
+    // Display if in independent mode and variable has been correctly guessed or three tries exhausted
+    // TODO: Remove first case
     else if (vOldLocalVariables[i].value !== "" && fadeLevel ==  1 && ((nowCorrect || threeTries) && nowCorrectVar === d.name && nowCorrectAnswer === d.value || (nowCorrectVar !== d.name || nowCorrectAnswer !== d.value))) {
       return getValueRep(d);
-    } else {
+    } 
+    // Else don't display
+    else {
       return "";
     }
   }
 
 
   function makeList(values) {
+    /**
+     * Convert dictionary into list
+     * Former key becomes value of 'name' key in value object
+     */
     var varList = [];
     var keys = Object.keys(values);
+
     for (var i = 0; i < keys.length; i++) {
       var v = values[keys[i]];
       v["name"] = keys[i];
       varList.push(v);
     }
+
     return varList;
   }
 
 
   function varChange(val, oldVals) {
+    /**
+     * Determine if value has been changed
+     */
     var idx = matchIndex(val, oldVals);
     return val.value !== oldVals[idx].value;
   }
 
 
   function getColor(v) {
+    /**
+     * If variable is an object, return the color of the object's class
+     */
     if (v.type === "instance" && v.value !== "") {
       return colorDict[v.value.split(":")[0]][1];
     }
@@ -595,94 +648,135 @@ var controller = (function() {
 
 
   function isLastObject(simpleVariableBank, variable) {
+    /**
+     * Determine if variable is last object in variable bank
+     */
     var isLast = true;
     var foundVar = false;
+
     for (var i = 0; i < Object.keys(simpleVariableBank["current_vb"]).length; i++) {
+      // Find variable in object bank
       if (Object.keys(simpleVariableBank["current_vb"])[i] === variable) {
         foundVar = true;
       }
+      // Find if another object is after the current object
       else if (foundVar && simpleVariableBank["current_vb"][Object.keys(simpleVariableBank["current_vb"])[i]].hasOwnProperty("class_name")) {
         isLast = false;
       }
     }
+
     return isLast;
   }
 
 
+  function generateSimpleParameters(messyObj){
+    /**
+     * Construct a simplified version of messyObj's parameters
+     */
+    let constructor_parameters = {};
+
+    if (messyObj.hasOwnProperty("params")) {
+      let obj_params = messyObj["params"];
+
+      for (const i in obj_params) {
+        let name = obj_params[i]["name"];
+        let value = obj_params[i]["value"];
+        let type = obj_params[i]["type"];
+        
+        // If this is an object, display the name from its original scope
+        if (type === "object") {
+          value = obj_params[i].reference.name + ": " + obj_params[i].name_in_higher_scope;
+        }
+
+        constructor_parameters[name] = {
+          value: value,
+          type: type,
+          local: true,
+          param: true
+        };
+      }
+    }
+    return constructor_parameters;
+  }
+
+
+  function generateSimpleVariables(messyObj) {
+    /**
+     * Construct a simplied version of messyObj's non-parameter values
+     */
+    let vars = {};
+
+    let obj_values = messyObj["values"];
+    for (const i in obj_values) {
+      let value = obj_values[i]["value"];
+      let name = obj_values[i]["name"];
+      let type = obj_values[i]["type"];
+
+      // If this is an object, display the name from its original scope
+      if (type === "instance" && value !== "") {
+        value = obj_values[i].value.reference.name + ": " + obj_values[i].value.name;
+      }
+
+      // Distinguish instance from local variables
+      let local = true;
+      if (obj_values[i]["tag"] == "reference") {
+        name = "self." + name;
+        local = false;
+      }
+
+      vars[name] = { value: value, type: type, local: local, param: false};
+          
+      // Variable's name in the higher scope, if it exists
+      if (obj_values[i].hasOwnProperty("name_in_higher_scope")) {
+        vars[name]["name_in_higher_scope"] = obj_values[i]["name_in_higher_scope"];
+      }
+    }
+
+    return vars;
+  }
+
+
   function generateSimpleVariableBank(curr_messy_bank, old_simple_bank) {
+    /**
+     * Convert messy variable bank into a simplified format
+     */
     let bank_simplified = {};
+
     for (const obj in curr_messy_bank) {
       bank_simplified[obj] = {};
-      if (
-        curr_messy_bank[obj].hasOwnProperty("reference") &&
-        curr_messy_bank[obj]["reference"]
-      ) {
-        // This is a class. Add the class name as a value in the dict
+
+      // obj is an object
+      if (curr_messy_bank[obj].hasOwnProperty("reference") &&
+          curr_messy_bank[obj]["reference"]) {
+        
+        // Add object's class
         bank_simplified[obj] = {
           class_name: curr_messy_bank[obj]["reference"]["name"]
         };
-        let constructor_parameters = {};
-        if (curr_messy_bank[obj].hasOwnProperty("params")) {
-          let obj_params = curr_messy_bank[obj]["params"];
-          for (const i in obj_params) {
-            let name = obj_params[i]["name"];
-            let value = obj_params[i]["value"];
-            let type = obj_params[i]["type"];
-            if (type === "object") {
-              // If this is an object, the display value we want is the name from its original scope
-              value = obj_params[i].reference.name + ": " + obj_params[i].name_in_higher_scope;
-            }
-            constructor_parameters[name] = {
-              value: value,
-              type: type,
-              local: true,
-              param: true
-            };
-          }
-        }
 
-        let vars = {};
-        let obj_values = curr_messy_bank[obj]["values"];
-        for (const i in obj_values) {
-          let value = obj_values[i]["value"];
-          let name = obj_values[i]["name"];
-          let type = obj_values[i]["type"];
-          if (type === "instance" && value !== "") {
-            value =
-            obj_values[i].value.reference.name +
-            ": " +
-            obj_values[i].value.name;
-          }
-          let local = true;
-          if (obj_values[i]["tag"] == "reference") {
-            name = "self." + name;
-            local = false;
-          }
-          vars[name] = { value: value, type: type, local: local, param: false };
-          
-          // Some variables had a name in the higher scope that we might care about. Leave it here.
-          if (obj_values[i].hasOwnProperty("name_in_higher_scope")) {
-            vars[name]["name_in_higher_scope"] = obj_values[i]["name_in_higher_scope"];
-          }
-        }
+        let constructor_parameters = generateSimpleParameters(curr_messy_bank[obj]);
+        let vars = generateSimpleVariables(curr_messy_bank[obj]);
+
         bank_simplified[obj]["variables"] = vars;
         bank_simplified[obj]["parameters"] = constructor_parameters;
-      } else {
-        if (
-          curr_messy_bank[obj].hasOwnProperty("tag") &&
-          curr_messy_bank[obj].tag === "reference"
-        ) {
-          bank_simplified[obj]["value"] =
-            curr_messy_bank[obj].value.reference.name +
-            ": " +
-            curr_messy_bank[obj].value.name;
-        } else if (/\d/.test(curr_messy_bank[obj].value)) {
+      } 
+      else {
+        // If obj is an object passed as a parameter
+        if (curr_messy_bank[obj].hasOwnProperty("tag") &&
+            curr_messy_bank[obj].tag === "reference") {
+          bank_simplified[obj]["value"] = curr_messy_bank[obj].value.reference.name + ": " +curr_messy_bank[obj].value.name;
+        } 
+        // If obj value is a digit
+        else if (/\d/.test(curr_messy_bank[obj].value)) {
           bank_simplified[obj]["value"] = curr_messy_bank[obj].value;
-        } else {
+        } 
+        // If obj is a string
+        else {
           bank_simplified[obj]["value"] =
             "'" + curr_messy_bank[obj].value + "'";
         }
 
+        // Store obj type
         if (curr_messy_bank[obj].hasOwnProperty("type")) {
           bank_simplified[obj]["type"] = curr_messy_bank[obj].type;
         } else if (curr_messy_bank[obj].hasOwnProperty("temp")) {
@@ -693,18 +787,39 @@ var controller = (function() {
 
     return {
       current_vb: bank_simplified,
-      previous_vb: old_simple_bank["current_vb"],
-      prev_previous_vb: old_simple_bank["previous_vb"]
+      previous_vb: old_simple_bank["current_vb"]//,
+      //prev_previous_vb: old_simple_bank["previous_vb"]
     };
   }
 
+
+  function finishedAddingVariables(vNotLocalVariables, vOldVariables) {
+    /**
+     * Determine if the code is done adding instance variable values to the object
+     */
+
+    // In guided mode and the last instance variable value has been filled
+    return (vNotLocalVariables[vNotLocalVariables.length - 1].value !== "" && fadeLevel == 0) ||
+      // In independent mode and user done guessing answers
+      (fadeLevel == 1 && (nowCorrect || threeTries) && 
+      // Last instance variable filled in
+      vOldVariables.filter(d => !d.local)[vOldVariables.filter(d => !d.local).length - 1].value !== "")
+  }
+
+
   function visualizeObjectInVariableBank(variable, simpleVariableBank) {
+    /**
+     * Visualize the object variable
+     */
+
+    // Partition variable bank into filtered subsections used later
     var vParams = makeList(simpleVariableBank["current_vb"][variable]["parameters"]);
     var vVariables = makeList(simpleVariableBank["current_vb"][variable]["variables"]);
     var vNotLocalVariables = vVariables.filter(d => !d.local);
     var vClassName = simpleVariableBank["current_vb"][variable]["class_name"];
     var vOldVariables;
 
+    // If variable not in previous_vb yet, set vOldVariables to current variables
     if (simpleVariableBank["previous_vb"].hasOwnProperty(variable)) {
       vOldVariables = makeList(
         simpleVariableBank["previous_vb"][variable]["variables"]
@@ -713,47 +828,53 @@ var controller = (function() {
       vOldVariables = vVariables;
     }
 
+    // Add variable to dict tracking creation stage if necessary
     if (!(variable in bankStatus)) {
       bankStatus[variable] = objectSteps[0];
     }
 
+    // Track where variable was created
     if (!(variable in varOrigin)) {
       varOrigin[variable] =
         state.variables.in_scope.current_python_function.value;
     }
 
+    // Add object to bank for first time
     if (bankStatus[variable] === objectSteps[0]) {
       let div = d3
         .select("#variable_list_table")
         .append("div")
-        .attr("class", "bank_object");
+          .attr("class", "bank_object");
 
       let svg = div
         .append("svg")
-        .attr("width", 500)
-        .attr("height", 205)
-        .attr("fill", "white");
+          .attr("width", 500)
+          .attr("height", 205)
+          .attr("fill", "white");
 
+      // Add object background box
       let box = svg.append("g");
 
       box
         .append("rect")
-        .attr("class", "bank_object_box")
-        .attr("width", 220)
-        .attr("height", vNotLocalVariables.length * 30 + 10)
-        .attr("y", 1)
-        .attr("x", 200)
-        .attr("fill", "white")
-        .attr("stroke", colorDict[vClassName][1])
-        .transition()
-        .ease("linear")
-        .duration(500)
-        .attr("x", 110)
-        .transition()
-        .ease("linear")
-        .duration(500)
-        .attr("y", 70);
-
+          .attr("class", "bank_object_box")
+          .attr("width", 220)
+          .attr("height", vNotLocalVariables.length * 30 + 10)
+          .attr("y", 1)
+          .attr("x", 200)
+          .attr("fill", "white")
+          .attr("stroke", colorDict[vClassName][1])
+          // Transition box into screen
+          .transition()
+            .ease("linear")
+            .duration(500)
+            .attr("x", 110)
+          .transition()
+            .ease("linear")
+            .duration(500)
+            .attr("y", 70);
+        
+      // Add instance variables to box
       let variables = svg.append("g");
 
       variables
@@ -761,86 +882,86 @@ var controller = (function() {
         .data(vNotLocalVariables)
         .enter()
         .append("text")
-        .attr("class", "bank_object_vars bank_object_vars_" + variable)
-        .style("font", '16px Menlo,Monaco,Consolas,"Courier New",monospace')
-        .attr("x", 120)
-        .attr("y", (d, i) => 95 + i * 30)
-        .style("fill", d => getColor(d))
-        .attr("opacity", 0)
-        .text((d, i) =>
-          getInstanceText(
-            vNotLocalVariables,
-            vOldVariables.filter(d => !d.local),
-            i,
-            isLastObject(simpleVariableBank, variable)
+          .attr("class", "bank_object_vars bank_object_vars_" + variable)
+          .style("font", '16px Menlo,Monaco,Consolas,"Courier New",monospace')
+          .attr("x", 120)
+          .attr("y", (d, i) => 95 + i * 30)
+          .style("fill", d => getColor(d))
+          .attr("opacity", 0)
+          .text((d, i) =>
+            getInstanceText(
+              vNotLocalVariables,
+              vOldVariables.filter(d => !d.local),
+              i,
+              isLastObject(simpleVariableBank, variable)
+            )
           )
-        )
-        .transition()
-        .delay(1000)
-        .duration(0)
-        .attr("opacity", 1);
+          // Variables appear once box is settled
+          .transition()
+            .delay(1000)
+            .duration(0)
+            .attr("opacity", 1);
 
+      
+      // Set current object name to 'self'
       let objectName = svg.append("g");
 
       objectName
         .append("text")
-        .attr("class", "object-name")
-        .style("font", '16px Menlo,Monaco,Consolas,"Courier New",monospace')
-        .attr("x", 0)
-        .attr("y", 101)
-        .attr("opacity", 0)
-        .text("self =")
-        .transition()
-        .delay(1000)
-        .duration(0)
-        .attr("opacity", 1);
+          .attr("class", "object-name")
+          .style("font", '16px Menlo,Monaco,Consolas,"Courier New",monospace')
+          .attr("x", 0)
+          .attr("y", 101)
+          .attr("opacity", 0)
+          .text("self =")
+          // Name appears once box is settled
+          .transition()
+            .delay(1000)
+            .duration(0)
+            .attr("opacity", 1);
 
       bankStatus[variable] = objectSteps[1];
+    // Add instance variable values to object
     } else if (bankStatus[variable] === objectSteps[1]) {
       let div = d3
         .select("#variable_list_table")
         .append("div")
-        .attr("class", "bank_object");
+          .attr("class", "bank_object");
 
       let svg = div
         .append("svg")
-        .attr("width", 500)
-        .attr("height", 205)
-        .attr("fill", "white");
+          .attr("width", 500)
+          .attr("height", 205)
+          .attr("fill", "white");
 
+      // Create background box
       let box = svg.append("g");
 
       box
         .append("rect")
-        .attr("class", "bank_object_box bank_object_box_" + variable)
-        .attr("width", 220)
-        .attr("height", vNotLocalVariables.length * 30 + 10)
-        .attr("y", 70)
-        .attr("x", 110)
-        .attr("fill", "white")
-        .attr("stroke", colorDict[vClassName][1]);
+          .attr("class", "bank_object_box bank_object_box_" + variable)
+          .attr("width", 220)
+          .attr("height", vNotLocalVariables.length * 30 + 10)
+          .attr("y", 70)
+          .attr("x", 110)
+          .attr("fill", "white")
+          .attr("stroke", colorDict[vClassName][1]);
 
-      if (
-        (vNotLocalVariables[vNotLocalVariables.length - 1].value !== "" &&
-          fadeLevel == 0) ||
-        (vOldVariables.filter(d => !d.local)[
-          vOldVariables.filter(d => !d.local).length - 1
-        ].value !== "" &&
-          fadeLevel == 1 &&
-          (nowCorrect || threeTries))
-      ) {
+      if (finishedAddingVariables(vNotLocalVariables, vOldVariables)) {
+        // When done adding instance variable values, shift box up and fill
         d3
           .selectAll(".bank_object_box_" + variable)
           .transition()
-          .delay(1500)
-          .ease("linear")
-          .duration(500)
-          .attr("y", 1)
+            .delay(1500)
+            .ease("linear")
+            .duration(500)
+            .attr("y", 1)
           .transition()
-          .duration(500)
-          .attr("fill", colorDict[vClassName][0]);
+            .duration(500)
+            .attr("fill", colorDict[vClassName][0]);
       }
 
+      // Create highlight boxes for parameters and local vars
       let paramBoxes = svg.append("g");
 
       paramBoxes
@@ -848,30 +969,29 @@ var controller = (function() {
         .data(vParams.concat(vVariables.filter(d => d.local)))
         .enter()
         .append("rect")
-        .attr("x", (d, i) =>
-          getHighlightX(vParams.concat(vVariables.filter(d => d.local)), d)
-        )
-        .attr("y", 1)
-        .attr(
-          "width",
-          (d, i) =>
-            findWidth(d.name) > findWidth(getValueRep(d))
-              ? findWidth(d.name)
-              : findWidth(getValueRep(d))
-        )
-        .attr("height", 50)
-        .attr("fill", "white")
-        .attr("stroke", colorDict[vClassName][1])
-        .attr("stroke-width", "3px")
-        .attr("opacity", 0)
-        .transition()
-        .duration(0)
-        .attr("opacity", d => findOpacity(d, vVariables, vOldVariables))
-        .transition()
-        .delay(500)
-        .duration(500)
-        .attr("opacity", 0);
+          .attr("x", d => getHighlightX(vParams.concat(vVariables.filter(d => d.local)), d))
+          .attr("y", 1)
+          .attr("width", d =>
+              // Set width based on whether variable or value is wider
+              findWidth(d.name) > findWidth(getValueRep(d))
+                ? findWidth(d.name)
+                : findWidth(getValueRep(d))
+          )
+          .attr("height", 50)
+          .attr("fill", "white")
+          .attr("stroke", colorDict[vClassName][1])
+          .attr("stroke-width", "3px")
+          .attr("opacity", 0)
+          // Flash box once variable value is added and/or correctly guessed
+          .transition()
+            .duration(0)
+            .attr("opacity", d => findOpacity(d, vVariables, vOldVariables))
+          .transition()
+            .delay(500)
+            .duration(500)
+            .attr("opacity", 0);
 
+      // Create the variable names for params and local variables
       let paramBoxVars = svg.append("g");
 
       paramBoxVars
@@ -879,43 +999,23 @@ var controller = (function() {
         .data(vParams.concat(vVariables.filter(d => d.local)))
         .enter()
         .append("text")
-        .attr("class", "bank_param_box_vars")
-        .style("font", '16px Menlo,Monaco,Consolas,"Courier New",monospace')
-        .style("fill", d => (d.param ? "#4f9693" : "#e67300"))
-        .style("font-weight", "bold")
-        .attr(
-          "x",
-          (d, i) =>
-            getHighlightX(vParams.concat(vVariables.filter(d => d.local)), d) +
-            5
-        )
-        .attr("y", 20)
-        .attr(
-          "opacity",
-          state.variables.in_scope.current_python_function.value === null ||
-          state.variables.in_scope.current_python_function.value === "init"
-            ? 1
-            : 0.5
-        )
-        .text(d => d.name);
+          .attr("class", "bank_param_box_vars")
+          .style("font", '16px Menlo,Monaco,Consolas,"Courier New",monospace')
+          .style("fill", d => (d.param ? "#4f9693" : "#e67300"))
+          .style("font-weight", "bold")
+          .attr("x", d =>
+              getHighlightX(vParams.concat(vVariables.filter(d => d.local)), d) + 5
+          )
+          .attr("y", 20)
+          // Fade variables if not in scope
+          .attr("opacity",
+            (state.variables.in_scope.current_python_function.value === null ||
+            state.variables.in_scope.current_python_function.value === "init")
+              ? 1 : 0.5
+          )
+          .text(d => d.name);
 
-      if (
-        (vNotLocalVariables[vNotLocalVariables.length - 1].value !== "" &&
-          fadeLevel == 0) ||
-        (vOldVariables.filter(d => !d.local)[
-          vOldVariables.filter(d => !d.local).length - 1
-        ].value !== "" &&
-          fadeLevel == 1 &&
-          (nowCorrect || threeTries))
-      ) {
-        d3
-          .selectAll(".bank_param_box_vars")
-          .transition()
-          .delay(1000)
-          .duration(500)
-          .attr("opacity", 0);
-      }
-
+      // Create the variable values for params
       let paramBoxVals = svg.append("g");
 
       paramBoxVals
@@ -923,25 +1023,23 @@ var controller = (function() {
         .data(vParams)
         .enter()
         .append("text")
-        .style("font", '16px Menlo,Monaco,Consolas,"Courier New",monospace')
-        .style("fill", "#4f9693")
-        .attr("class", "bank_param_box_vals")
-        .attr(
-          "x",
-          (d, i) =>
-            getHighlightX(vParams.concat(vVariables.filter(d => d.local)), d) +
-            5
-        )
-        .attr("y", 40)
-        .attr(
-          "opacity",
-          state.variables.in_scope.current_python_function.value === null ||
-          state.variables.in_scope.current_python_function.value === "init"
-            ? 1
-            : 0.5
-        )
-        .text(d => getValueRep(d));
-
+          .style("font", '16px Menlo,Monaco,Consolas,"Courier New",monospace')
+          .style("fill", "#4f9693")
+          .attr("class", "bank_param_box_vals")
+          .attr(
+            "x", d =>
+              getHighlightX(vParams.concat(vVariables.filter(d => d.local)), d) + 5
+          )
+          .attr("y", 40)
+          // Fade variables if not in scope
+          .attr("opacity",
+            (state.variables.in_scope.current_python_function.value === null ||
+            state.variables.in_scope.current_python_function.value === "init")
+              ? 1 : 0.5
+          )
+          .text(d => getValueRep(d));
+      
+      // Create the variable values for local vars
       let paramBoxValsLocal = svg.append("g");
 
       paramBoxValsLocal
@@ -949,44 +1047,41 @@ var controller = (function() {
         .data(vVariables.filter(d => d.local))
         .enter()
         .append("text")
-        .style("font", '16px Menlo,Monaco,Consolas,"Courier New",monospace')
-        .style("fill", "#e67300")
-        .attr("class", "bank_param_box_vals")
-        .attr(
-          "x",
-          (d, i) =>
-            getHighlightX(vParams.concat(vVariables.filter(d => d.local)), d) +
-            5
-        )
-        .attr("y", 40)
-        .attr(
-          "opacity",
-          state.variables.in_scope.current_python_function.value === null ||
-          state.variables.in_scope.current_python_function.value === "init"
-            ? 1
-            : 0.5
-        )
-        .text((d, i) =>
-          displayParamVal(d, i, vOldVariables.filter(d => d.local))
-        );
+          .style("font", '16px Menlo,Monaco,Consolas,"Courier New",monospace')
+          .style("fill", "#e67300")
+          .attr("class", "bank_param_box_vals")
+          .attr(
+            "x", d =>
+              getHighlightX(vParams.concat(vVariables.filter(d => d.local)), d) + 5
+          )
+          .attr("y", 40)
+          // Fade variables if not in scope
+          .attr("opacity",
+            (state.variables.in_scope.current_python_function.value === null ||
+            state.variables.in_scope.current_python_function.value === "init")
+              ? 1 : 0.5
+          )
+          // Display variable text if value added and / or user done guessing value
+          .text((d, i) => displayLocalVarVal(d, i, vOldVariables.filter(d => d.local)));
 
-      if (
-        (vNotLocalVariables[vNotLocalVariables.length - 1].value !== "" &&
-          fadeLevel == 0) ||
-        (vOldVariables.filter(d => !d.local)[
-          vOldVariables.filter(d => !d.local).length - 1
-        ].value !== "" &&
-          fadeLevel == 1 &&
-          (nowCorrect || threeTries))
-      ) {
+      if (finishedAddingVariables(vNotLocalVariables, vOldVariables)) {
+        // Params and local variables disappear once all values added
+        d3
+          .selectAll(".bank_param_box_vars")
+          .transition()
+            .delay(1000)
+            .duration(500)
+            .attr("opacity", 0);
+
         d3
           .selectAll(".bank_param_box_vals")
           .transition()
-          .delay(1000)
-          .duration(500)
-          .attr("opacity", 0);
+            .delay(1000)
+            .duration(500)
+            .attr("opacity", 0);
       }
 
+      // Add instance variables to box
       let variables = svg.append("g");
 
       variables
@@ -994,21 +1089,22 @@ var controller = (function() {
         .data(vNotLocalVariables)
         .enter()
         .append("text")
-        .attr("class", "bank_object_vars bank_object_vars_" + variable)
-        .style("font", '16px Menlo,Monaco,Consolas,"Courier New",monospace')
-        .attr("x", 120)
-        .attr("y", (d, i) => 95 + i * 30)
-        .style("fill", d => getColor(d))
-        .attr("opacity", 1)
-        .text((d, i) =>
-          getInstanceText(
-            vNotLocalVariables,
-            vOldVariables.filter(d => !d.local),
-            i,
-            isLastObject(simpleVariableBank, variable)
-          )
-        );
+          .attr("class", "bank_object_vars bank_object_vars_" + variable)
+          .style("font", '16px Menlo,Monaco,Consolas,"Courier New",monospace')
+          .attr("x", 120)
+          .attr("y", (d, i) => 95 + i * 30)
+          .style("fill", d => getColor(d))
+          .attr("opacity", 1)
+          .text((d, i) =>
+            getInstanceText(
+              vNotLocalVariables,
+              vOldVariables.filter(d => !d.local),
+              i,
+              isLastObject(simpleVariableBank, variable)
+            )
+          );
 
+      // Add object name, set as 'self' for now
       let objectName = svg.append("g");
 
       objectName
@@ -1020,94 +1116,92 @@ var controller = (function() {
         .attr("opacity", 1)
         .text("self =");
 
-      if (
-        (vNotLocalVariables[vNotLocalVariables.length - 1].value !== "" &&
-          fadeLevel == 0) ||
-        (vOldVariables.filter(d => !d.local)[
-          vOldVariables.filter(d => !d.local).length - 1
-        ].value !== "" &&
-          fadeLevel == 1 &&
-          (nowCorrect || threeTries))
-      ) {
+      if (finishedAddingVariables(vNotLocalVariables, vOldVariables)) {
+        // Shift instance variables and object name updwards with box
         d3
           .selectAll(".bank_object_vars_" + variable)
           .transition()
-          .delay(1500)
-          .ease("linear")
-          .duration(500)
-          .attr("y", (d, i) => 26 + i * 30);
+            .delay(1500)
+            .ease("linear")
+            .duration(500)
+            .attr("y", (d, i) => 26 + i * 30);
 
         d3
           .selectAll(".object_name_" + variable)
           .transition()
-          .delay(1500)
-          .ease("linear")
-          .duration(500)
-          .attr("y", 31)
+            .delay(1500)
+            .ease("linear")
+            .duration(500)
+            .attr("y", 31)
+          // Change self to the true object name
           .transition()
-          .duration(500)
-          .text(variable + " =");
+            .duration(500)
+            .text(variable + " =");
 
+        // Shrink svg size
         svg
           .transition()
-          .delay(2000)
-          .attr("height", vNotLocalVariables.length * 30 + 30);
-
+            .delay(2000)
+            .attr("height", vNotLocalVariables.length * 30 + 30);
+        
+        // Done adding instance variable values to objec
         bankStatus[variable] = objectSteps[2];
       }
-    } else if (bankStatus[variable] === objectSteps[2]) {
+    } 
+    // Add completely created object
+    else if (bankStatus[variable] === objectSteps[2]) {
       let div = d3
         .select("#variable_list_table")
         .append("div")
-        .attr("class", "bank_object");
+          .attr("class", "bank_object");
 
       let svg = div
         .append("svg")
-        .attr("width", 500)
-        .attr("height", vNotLocalVariables.length * 30 + 30)
-        .attr("fill", "white");
+          .attr("width", 500)
+          .attr("height", vNotLocalVariables.length * 30 + 30)
+          .attr("fill", "white");
 
+      // Create background box
       let box = svg.append("g");
 
       box
         .append("rect")
-        .attr("class", "bank_object_box")
-        .attr("width", 220)
-        .attr("height", vNotLocalVariables.length * 30 + 10)
-        .attr("y", 1)
-        .attr("x", 110)
-        .attr("fill", colorDict[vClassName][0])
-        .attr("stroke", colorDict[vClassName][1]);
+          .attr("class", "bank_object_box")
+          .attr("width", 220)
+          .attr("height", vNotLocalVariables.length * 30 + 10)
+          .attr("y", 1)
+          .attr("x", 110)
+          .attr("fill", colorDict[vClassName][0])
+          .attr("stroke", colorDict[vClassName][1]);
 
+      // Add instance variables to box
       let variables = svg.append("g");
 
+      // Create boxes behind each variable – change color if value changed
       variables
         .selectAll("rect")
         .data(vNotLocalVariables)
         .enter()
         .append("rect")
-        .style("font", '16px Menlo,Monaco,Consolas,"Courier New",monospace')
-        .attr("x", 115)
-        .attr("y", (d, i) => 12 + i * 30)
-        .attr("height", 18)
-        .attr(
-          "width",
-          (d, i) =>
-            findWidth(
-              getInstanceText(
-                vNotLocalVariables,
-                vOldVariables.filter(d => !d.local),
-                i,
-                isLastObject(simpleVariableBank, variable)
-              )
-            ) - 10
-        )
-        .attr(
-          "fill",
-          d =>
-            varChange(d, vOldVariables) ? "#9bcac7" : colorDict[vClassName][0]
-        );
-
+          .style("font", '16px Menlo,Monaco,Consolas,"Courier New",monospace')
+          .attr("x", 115)
+          .attr("y", (d, i) => 12 + i * 30)
+          .attr("height", 18)
+          .attr("width",
+            (d, i) =>
+              findWidth(
+                getInstanceText(
+                  vNotLocalVariables,
+                  vOldVariables.filter(d => !d.local),
+                  i,
+                  isLastObject(simpleVariableBank, variable)
+                )
+              ) - 10
+          )
+          .attr("fill", d => varChange(d, vOldVariables) ? "#9bcac7" : colorDict[vClassName][0]
+          );
+      
+      // Create instance variables
       variables
         .selectAll("text")
         .data(vNotLocalVariables)
@@ -1127,7 +1221,8 @@ var controller = (function() {
             isLastObject(simpleVariableBank, variable)
           )
         );
-
+      
+      // Add object name
       let objectName = svg.append("g");
 
       objectName
@@ -1141,13 +1236,18 @@ var controller = (function() {
     }
   }
 
-  function matchVariables(variableBankObject) {
-    varEquivalence = {};
-    for (const variable in variableBankObject) {
 
+  function matchVariables(variableBankObject) {
+    /**
+     * Create a dictionary matching the names of parameters and instance variables with same value but different names
+     */
+    varEquivalence = {};
+
+    for (const variable in variableBankObject) {
+      // If variable is an object
       if (variableBankObject[variable].hasOwnProperty("type") &&
           variableBankObject[variable].type === "object") {
-
+        
         var varParams = variableBankObject[variable].params;
         var varVals = variableBankObject[variable].values;
         
@@ -1157,25 +1257,32 @@ var controller = (function() {
           var match = "";
 
           for (var j = 0; j < varVals.length; j++) {
+            // Don't add if a name match exists
             if (val.name.replace("self.", "") === varVals[j].name.replace("self.", "")) {
               add = false;
-            } else if ((varVals[j].hasOwnProperty("hidden_val") && val.value === varVals[j].hidden_val.value) || (val.value === varVals[j].value)) {
+            } 
+            // If the parameter value matches a variable value
+            else if ((varVals[j].hasOwnProperty("hidden_val") && val.value === varVals[j].hidden_val.value) || (val.value === varVals[j].value)) {
               match = varVals[j].name.replace("self.", "");
             }
           }
 
+          // Add a match to dictionary in either direction
           if (add) {
             varEquivalence[val.name.replace("self.", "")] = match;
+            varEquivalence[match] = val.name.replace("self.", "");
           }
         }
-
       }
     } 
   }
+  
 
   function addVariableBank() {
     d3.select("#variable_list_table").node().innerHTML = "";
     d3.select("#variable_array_table").node().innerHTML = "";
+
+    // Create variable bank
     var variableBankObject;
     for (var v in state.variables.in_scope) {
       if (
@@ -1188,7 +1295,6 @@ var controller = (function() {
 
     matchVariables(variableBankObject);
 
-
     simpleVariableBank = generateSimpleVariableBank(
       variableBankObject,
       simpleVariableBank
@@ -1199,11 +1305,11 @@ var controller = (function() {
         var listRow;
         var listCell1;
         var listCell2;
+
+        // Add array to variable bank
         if (
-          !(
-            variableBankObject[variable].hasOwnProperty("type") &&
-            variableBankObject[variable].type === "array"
-          )
+          !(variableBankObject[variable].hasOwnProperty("type") &&
+            variableBankObject[variable].type === "array")
         ) {
           listRow = d3
             .select("#variable_list_table")
@@ -1213,6 +1319,7 @@ var controller = (function() {
           listCell2 = listRow.append("td");
         }
 
+        // Add array to variable bank
         if (
           variableBankObject[variable].hasOwnProperty("type") &&
           variableBankObject[variable].type === "array"
@@ -1221,18 +1328,23 @@ var controller = (function() {
             .select("#variable_array_table")
             .append("tr")
             .attr("class", "variable_list_table_row");
+
           listCell1 = listRow.append("td");
           listCell2 = listRow.append("td");
+
           listCell1.attr("class", "array_label");
           listCell1
             .append("span")
             .attr("class", "bank_variable")
             .text(variable);
           listCell1.append("span").text(" :");
+
           var arrayTable = listCell2
             .append("table")
             .attr("class", "bank_variable_array");
+
           var indexRow = arrayTable.append("tr");
+
           for (var i in variableBankObject[variable].value) {
             indexRow
               .append("td")
@@ -1254,7 +1366,9 @@ var controller = (function() {
                   : val.toString()
               );
           }
-        } else if (
+        } 
+        // Add string or character to variable bank
+        else if (
           variableBankObject[variable].hasOwnProperty("type") &&
           (variableBankObject[variable].type === "string" ||
             variableBankObject[variable].type === "char")
@@ -1277,20 +1391,23 @@ var controller = (function() {
             .append("span")
             .attr("class", "bank_variable_value")
             .text(word);
-        } else if (
+        } 
+        // Add an object to variable bank
+        else if (
           variableBankObject[variable].hasOwnProperty("type") &&
           variableBankObject[variable].type === "object"
         ) {
-          // The variable to visualize is an object
           visualizeObjectInVariableBank(variable, simpleVariableBank);
-        } else if (
+        } 
+        // Add local variables to variable bank
+        else if (
           simpleVariableBank["current_vb"][variable].hasOwnProperty("type") &&
-          (variableBankObject[variable].type === "return" ||
-            simpleVariableBank["current_vb"][variable]["type"] === "temp")
+          //(variableBankObject[variable].type === "return" || simpleVariableBank["current_vb"][variable]["type"] === "temp")
+          (simpleVariableBank["current_vb"][variable]["type"] === "return" || simpleVariableBank["current_vb"][variable]["type"] === "temp")
         ) {
+          // Track where variable was created
           if (!(variable in varOrigin)) {
-            varOrigin[variable] =
-              state.variables.in_scope.current_python_function.value;
+            varOrigin[variable] = state.variables.in_scope.current_python_function.value;
           }
 
           let div = d3.select("#variable_list_table").append("div");
@@ -1303,34 +1420,41 @@ var controller = (function() {
 
           let variableCont = svg.append("g");
 
+          // Add variable name to variable bank
           variableCont
             .append("text")
             .attr("x", 100)
             .attr("y", 20)
-            .attr(
-              "opacity",
-              varOrigin[variable] ===
-              state.variables.in_scope.current_python_function.value
-                ? 1
-                : 0.5
+            // Fade if not in scope
+            .attr("opacity",
+              (varOrigin[variable] === state.variables.in_scope.current_python_function.value)
+                ? 1 : 0.5
             )
             .style("font", '16px Menlo,Monaco,Consolas,"Courier New",monospace')
             .style("fill", "#e67300")
             .style("font-weight", "bold")
             .text(variable + " = ");
                     
-
+          // Remove quotations from strings
           var cleanedValue = simpleVariableBank["current_vb"][variable].value;
           if (!(/\d/.test(cleanedValue))) {
             cleanedValue = cleanedValue.replaceAll("'", "");
           }
 
+          // Determine opacity of variable value
           var varOpacity;
+
+              // If variable value exists in scope
           if ((simpleVariableBank["previous_vb"].hasOwnProperty(variable) || simpleVariableBank["current_vb"][variable]["type"] === "temp") && 
+              // In independent mode
               ((fadeLevel == 1 && 
+                // User done guessing value
                 (((nowCorrect || threeTries) && nowCorrectVar === variable && nowCorrectAnswer === cleanedValue) || 
-              (nowCorrectVar !== variable || nowCorrectAnswer !== cleanedValue))) || 
+                // Not the value the user is trying to answer
+                (nowCorrectVar !== variable || nowCorrectAnswer !== cleanedValue))) || 
+              // In guided mode
               fadeLevel == 0)) {
+            // If variable in scope
             if (varOrigin[variable] === state.variables.in_scope.current_python_function.value) {
               varOpacity = 1;
             } else {
@@ -1340,6 +1464,7 @@ var controller = (function() {
             varOpacity = 0;
           }
 
+          // Add variable value to variable bank
           variableCont
             .append("text")
             .attr("x", 100 + findWidth(variable + " = "))
@@ -1348,13 +1473,17 @@ var controller = (function() {
             .style("font", '16px Menlo,Monaco,Consolas,"Courier New",monospace')
             .style("fill", "#e67300")
             .text(simpleVariableBank["current_vb"][variable].value);
-        } else {
+
+        } 
+        // If no other type
+        else {
           listCell1.attr("class", "bank_variable_label");
           listCell1
             .append("span")
             .attr("class", "bank_variable")
             .text(variable);
           listCell1.append("span").text(" :");
+
           listCell2.attr("style", "text-align: left;");
           listCell2
             .append("span")
@@ -1362,6 +1491,7 @@ var controller = (function() {
             .text(variableBankObject[variable].value);
         }
       }
+
       if (variableBankObject.hasOwnProperty("loop sequence")) {
         d3.selectAll(".array_label").attr("class", "array_label has_sequence");
       }
@@ -1369,6 +1499,9 @@ var controller = (function() {
   }
 
   function isObjectEmpty(obj) {
+    /**
+     * Returns if object is empty
+     */
     for (var prop in obj) {
       if (obj.hasOwnProperty(prop)) return false;
     }
@@ -1436,8 +1569,8 @@ var controller = (function() {
                   highlightVariableBank(varObject.value);
                 }
               } catch (error) {
-                //HACK: varObject.value is null for OOP problem variables. Reason is unknown to me at this time. Ignoring this case for now.
-                //TODO: acknowledge this case
+                // varObject.value is null for OOP problem variables. Reason is unknown to me at this time, but it is not used by the viz.
+                //HACK Ignoring this case for now.
                 break;
               }
             }
@@ -1877,6 +2010,7 @@ var controller = (function() {
   function checkVariableBankAnswer() {
     var correctAnswerObject = simulatorInterface.getCorrectAnswer();
     var correctAnswer = correctAnswerObject.rhs;
+    nowCorrectVar = "";
 
     var userVariable = {};
     var correctVariable = {};
@@ -2049,6 +2183,7 @@ var controller = (function() {
     var correctAnswerObject = simulatorInterface.getCorrectAnswer();
     var correctIndex = parseInt(correctAnswerObject.rhs);
     var userIndex = parseInt(d3.select(".indexVarValue").property("value"));
+    nowCorrectVar = "";
 
     var correct = false;
     if (userIndex === correctIndex) {
@@ -2073,6 +2208,7 @@ var controller = (function() {
     var correctLine = parseInt(correctAnswerObject.rhs.location.start.line);
     var userLine;
     var correct = false;
+    nowCorrectVar = "";
 
     var highlightedLine = d3.select(".line_highlight");
     if (highlightedLine.node() !== null) {
@@ -2113,6 +2249,7 @@ var controller = (function() {
 
   function checkConditionalAnswer() {
     var correctAnswerObject = simulatorInterface.getCorrectAnswer();
+    nowCorrectVar = "";
 
     if (d3.select('input[name="yes_no_radio"]:checked').node() === null) {
       if (d3.select("#responseMessage").node() !== null) {
@@ -2164,6 +2301,7 @@ var controller = (function() {
 
     var userArrayElement;
     var correct = false;
+    nowCorrectVar = "";
 
     var highlightedElement = d3.select(".array_element_highlight");
     if (highlightedElement.node() !== null) {
@@ -2205,6 +2343,7 @@ var controller = (function() {
     var correctAnswerObject = simulatorInterface.getCorrectAnswer();
     var correctValue = parseInt(correctAnswerObject.rhs.value);
     var userValue = correctValue;
+    nowCorrectVar = "";
 
     var correct = false;
     if (userValue === correctValue) {
@@ -2226,6 +2365,7 @@ var controller = (function() {
 
   function checkInstance() {
     var correctAnswerObject = simulatorInterface.getCorrectAnswer();
+    
     if (d3.select('input[name="class_multiple_choice_radio"]:checked').node() === null) {
       if (d3.select("#responseMessage").node() !== null) {
         d3.select("#responseMessage").remove();
@@ -2250,8 +2390,6 @@ var controller = (function() {
         }
       }
       
-      
-
       var correct = false;
       if (correctAnswer === userAnswer) {
         correct = true;
@@ -2274,7 +2412,6 @@ var controller = (function() {
   function respondToAnswer(correct, type, correctAnswer) {
     nowCorrect = correct;
     nowCorrectAnswer = correctAnswer;
-    nowCorrectAnswerType = type;
 
     numTries = numTries + 1;
 
