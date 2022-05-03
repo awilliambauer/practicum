@@ -85,7 +85,7 @@ var python_parsing = function() {
         integer: function(v) { return {type:TokenType.INT_LITERAL, value:v}; },
         double: function(v) { return {type:TokenType.DOUBLE_LITERAL, value:v}; },
         string: function(v) { return {type:TokenType.STR_LITERAL, value:v}; },
-        boolean: function(v) { return {type:TokenType.BOOL_LITERAL, value: v}},
+        boolean: function(v) { return {type:TokenType.BOOL_LITERAL, value: v}}, //CURRENTLY INCOMPLETE
     };
 
     function token_to_string(t) {
