@@ -482,7 +482,6 @@ function TplHelper() {
         let arg2_val = relevant_line.expression.args[1].value; //value of the right hand side of the equal sign in the line, either the actual value or an indentifier name
         for(let idx = 0; idx < object.params.length; idx++) { //Iterate through the params passed into the object
             if (arg2_val === object.params[idx].name && object.params[idx].type === "object"){
-                console.log(object.values[idx].hidden_val.value.name);
                 return object.values[idx].hidden_val.value.name;
             }
         }
