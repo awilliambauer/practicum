@@ -164,31 +164,9 @@ function TplHelper() {
         }
     };
 
-    this.is_still_inside_constructor = function(stmt) {
-        if (!stmt) return false;
-
-        if (stmt.location.start.col === 2) { //HACK do not hard code indent level
-            return true;
-        }
-        return false;
-    }
-
     this.is_there_another_line_to_execute = function(parent, stmt, condition) {
         return !!this.get_the_next_line_in_this_block_to_execute(parent, stmt, condition);
     };
-
-    this.is_there_an_instantiation = function(astBody){
-        if(astBody[lineNum+1].tag === 'declaration'){
-            if(astBody[lineNum+1].expression.tag === 'binop'){
-                if(astBody[lineNum+1].expression.args[1].tag === 'call'){
-                    return true;
-                }
-                return false;
-            }
-            return false;
-        }
-        return false;
-    }
 
     this.is_if = function(stmt) {
         return stmt.tag === "if";
@@ -285,10 +263,19 @@ function TplHelper() {
         return true;
     };
 
+    /**
+     * A function designed to increment lineNum without doing anything else.
+     */
     this.go_next_line_without_reading = function() {
         lineNum++;
     }
 
+    /**
+     * A function which intakes the syntax tree and checks if the current index of the abstract syntax tree
+     * is a class instantiation
+     * @param {*} astBody astBody is the body of the abstract syntax tree passed in by the parser.
+     * @returns A boolean representing whether the current line instantiates a class.
+     */
     this.check_instantiation = function(astBody) {
         if(astBody[lineNum].tag === 'declaration'){
             if(astBody[lineNum].expression.tag === 'binop'){
@@ -302,10 +289,11 @@ function TplHelper() {
         return false;
     }
 
-    this.get_object_reference = function(ast) {
-        return ast.body[lineNum].expression.args[1].object.value;
-    }
-
+    /**
+     * A function to identify the variable that is associated with a line
+     * @param {*} line The current line of the python file
+     * @returns The variable that a line is changing if it exists, null if not
+     */
     this.get_references = function(line){
         if (line.tag === "declaration") {
             let arg1 = line.expression.args[0];
@@ -347,6 +335,12 @@ function TplHelper() {
         });
     };
 
+    /**
+     * A function called during class methods to add variables that only exist locally in the class method.
+     * @param {*} variable_bank The current state of the variable bank.
+     * @param {*} line The line of python code that is currently being read.
+     * @returns The new temp variable that is added to the variable bank.
+     */
     this.add_temp_variable = function(variable_bank, line) {
         let temp_name = line.expression.args[0].name;
         if (temp_name === undefined){
@@ -358,6 +352,14 @@ function TplHelper() {
         return {name: temp_name, value: temp_value, type: temp_type};
     }
 
+    /**
+     * 
+     * @param {*} instance The object we get the params from.
+     * @param {*} function_call the line of the python code which calls the function with the param values.
+     * @param {*} function_definition The python code for the function which exists in the original python code.
+     * @returns an array of {name, value} object pairs with the values from the function call
+     * and the name from the function definition
+     */
     this.get_param_values = function(instance, function_call, function_definition){
         let param_values = [];
         let call_params = this.copy(function_call.args);
@@ -406,6 +408,12 @@ function TplHelper() {
         
     }
 
+    /**
+     * Takes in a list of param values and adds them to the variable bank.
+     * @param {*} variable_bank The current state of the variable bank.
+     * @param {*} param_values an array of {name, value} object pairs/
+     * @returns an updated variable bank
+     */
     this.add_temp_param_variables = function(variable_bank, param_values){
         for (let idx = 0; idx < param_values.length; idx++){
             let tag = "literal";
@@ -422,6 +430,12 @@ function TplHelper() {
         return variable_bank;
     }
 
+    /**
+     * Looks through the variable bank and finds any temp variables and removes them. 
+     * To be called once a function finishes being read in TPL.
+     * @param {*} variable_bank The current state of the variable bank.
+     * @returns an updated variable bank
+     */
     this.remove_temp_vars = function(variable_bank) {
         for (const [key, value] of Object.entries(variable_bank)){
             if (value.temp === "temp" || value.type === "temp"){
@@ -432,13 +446,19 @@ function TplHelper() {
         return variable_bank;
     }
 
+    /**
+     * A function to add a class instance to a variable bank.
+     * @param {*} variable_bank The current state of the variable bank.
+     * @param {*} astBody astBody is the body of the abstract syntax tree passed in by the parser.
+     * @returns An updated variable bank with the new class instance added.
+     */
     this.add_class_instance = function(variable_bank, astBody) {
         let variableName = astBody[lineNum]["expression"]["args"][0].value;
         let variableValues = astBody[lineNum]["expression"]["args"][1].args;
         let className = astBody[lineNum]["expression"]["args"][1]["object"].value;
         let classReference = this.get_class_from_name(className, astBody);
         if (classReference === false) throw new Error("could not find a definition for a class with this name!");
-        this.convert_self_to_instance_name(classReference, variableName);
+        this.convert_self_to_instance_name(classReference, variableName); //this lines makes every instance have its own "reference" so it is unique
         return this.add_the_object_to_the_variable_bank(variable_bank, {
             name: variableName,
             reference: classReference,
