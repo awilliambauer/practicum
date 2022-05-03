@@ -164,16 +164,6 @@ function TplHelper() {
         }
     };
 
-    // this.is_still_inside_constructor = function(stmt) { I think we don't need this function anymore
-    //     if (!stmt) {
-    //         return false;
-    //     }
-    //     if (stmt.location.start.col === 2) { //HACK do not hard code indent level
-    //         return true;
-    //     }
-    //     return false;
-    // }
-
     this.is_there_another_line_to_execute = function(parent, stmt, condition) {
         return !!this.get_the_next_line_in_this_block_to_execute(parent, stmt, condition);
     };
