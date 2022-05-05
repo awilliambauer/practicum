@@ -1145,7 +1145,7 @@ function make_initial_state(problem, variant) {
     var ast;
 
     if (problem.content.hasOwnProperty('src')) {
-        console.log("Pulling problem " + problem.title + " from a src file.");
+        // console.log("Pulling problem " + problem.title + " from a src file.");
         let filename = RELATIVE_SRC_DIR + problem.content.src;
         let problem_raw = load_file(filename);
 
@@ -1164,7 +1164,7 @@ function make_initial_state(problem, variant) {
         }
         ast = python_parsing.parse_program(problem_raw);
     } else { // if problem.content lacks a src, fallback to using problem.content.text
-        console.log("Pulling problem " + problem.title + " directly from json.");
+        // console.log("Pulling problem " + problem.title + " directly from json.");
         ast = python_parsing.parse_program(problem.content.text);
     }
 
