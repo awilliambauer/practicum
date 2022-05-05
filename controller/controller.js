@@ -300,14 +300,14 @@ var controller = (function() {
           .select("#responseArea")
           .append("label")
           .text(var_display_name + " =")
-          .style("width", "40%");
+          .style("width", "50%");
 
         d3
           .select("#responseArea")
           .insert("input")
           .attr("type", "text")
           .attr("id", "objectVariableUserResponse")
-          .style("width", "60%")
+          .style("width", "50%")
           .node()
           .focus();
       } else if (state.askForResponse === "add_variable_from_function") {
@@ -325,14 +325,14 @@ var controller = (function() {
           .select("#responseArea")
           .append("label")
           .text(var_display_name + " =")
-          .style("width", "40%");
+          .style("width", "50%");
 
         d3
           .select("#responseArea")
           .insert("input")
           .attr("type", "text")
           .attr("id", "objectVariableUserResponse")
-          .style("width", "60%")
+          .style("width", "50%")
           .node()
           .focus();
       }
