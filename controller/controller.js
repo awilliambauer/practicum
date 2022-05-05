@@ -294,18 +294,20 @@ var controller = (function() {
           var_display_name = leftSide.value;
         }
 
-        d3.select("#promptText").insert("div").attr("id", "responseArea");
+        d3.select("#promptText").insert("div").attr("id", "responseArea").style("display", "flex");
 
         d3
           .select("#responseArea")
           .append("label")
-          .text(var_display_name + " =");
+          .text(var_display_name + " =")
+          .style("width", "40%");
 
         d3
           .select("#responseArea")
           .insert("input")
           .attr("type", "text")
           .attr("id", "objectVariableUserResponse")
+          .style("width", "60%")
           .node()
           .focus();
       } else if (state.askForResponse === "add_variable_from_function") {
@@ -317,18 +319,20 @@ var controller = (function() {
         let leftSide = line_that_will_execute.expression.args[0];
         let var_display_name = leftSide.value;
 
-        d3.select("#promptText").insert("div").attr("id", "responseArea");
+        d3.select("#promptText").insert("div").attr("id", "responseArea").style("display", "flex");
 
         d3
           .select("#responseArea")
           .append("label")
-          .text(var_display_name + " =");
+          .text(var_display_name + " =")
+          .style("width", "40%");
 
         d3
           .select("#responseArea")
           .insert("input")
           .attr("type", "text")
           .attr("id", "objectVariableUserResponse")
+          .style("width", "60%")
           .node()
           .focus();
       }
