@@ -164,31 +164,9 @@ function TplHelper() {
         }
     };
 
-    this.is_still_inside_constructor = function(stmt) {
-        if (!stmt) return false;
-
-        if (stmt.location.start.col === 2) { //HACK do not hard code indent level
-            return true;
-        }
-        return false;
-    }
-
     this.is_there_another_line_to_execute = function(parent, stmt, condition) {
         return !!this.get_the_next_line_in_this_block_to_execute(parent, stmt, condition);
     };
-
-    this.is_there_an_instantiation = function(astBody){
-        if(astBody[lineNum+1].tag === 'declaration'){
-            if(astBody[lineNum+1].expression.tag === 'binop'){
-                if(astBody[lineNum+1].expression.args[1].tag === 'call'){
-                    return true;
-                }
-                return false;
-            }
-            return false;
-        }
-        return false;
-    }
 
     this.is_if = function(stmt) {
         return stmt.tag === "if";
@@ -285,10 +263,19 @@ function TplHelper() {
         return true;
     };
 
+    /**
+     * A function designed to increment lineNum without doing anything else.
+     */
     this.go_next_line_without_reading = function() {
         lineNum++;
     }
 
+    /**
+     * A function which intakes the syntax tree and checks if the current index of the abstract syntax tree
+     * is a class instantiation
+     * @param {*} astBody astBody is the body of the abstract syntax tree passed in by the parser.
+     * @returns A boolean representing whether the current line instantiates a class.
+     */
     this.check_instantiation = function(astBody) {
         if(astBody[lineNum].tag === 'declaration'){
             if(astBody[lineNum].expression.tag === 'binop'){
@@ -302,10 +289,11 @@ function TplHelper() {
         return false;
     }
 
-    this.get_object_reference = function(ast) {
-        return ast.body[lineNum].expression.args[1].object.value;
-    }
-
+    /**
+     * A function to identify the variable that is associated with a line
+     * @param {*} line The current line of the python file
+     * @returns The variable that a line is changing if it exists, null if not
+     */
     this.get_references = function(line){
         if (line.tag === "declaration") {
             let arg1 = line.expression.args[0];
@@ -347,9 +335,15 @@ function TplHelper() {
         });
     };
 
+    /**
+     * A function called during class methods to add variables that only exist locally in the class method.
+     * @param {*} variable_bank The current state of the variable bank.
+     * @param {*} line The line of python code that is currently being read.
+     * @returns The new temp variable that is added to the variable bank.
+     */
     this.add_temp_variable = function(variable_bank, line) {
         let temp_name = line.expression.args[0].name;
-        if (temp_name === undefined){
+        if (temp_name === undefined){ //There are certain cases where the name of the object is not stored under the key "name"
             temp_name = line.expression.args[0].value;
         }
         let temp_value = sim.evaluate_expression(variable_bank, line.expression.args[1]).value;
@@ -358,6 +352,14 @@ function TplHelper() {
         return {name: temp_name, value: temp_value, type: temp_type};
     }
 
+    /**
+     * 
+     * @param {*} instance The object we get the params from.
+     * @param {*} function_call the line of the python code which calls the function with the param values.
+     * @param {*} function_definition The python code for the function which exists in the original python code.
+     * @returns an array of {name, value} object pairs with the values from the function call
+     * and the name from the function definition
+     */
     this.get_param_values = function(instance, function_call, function_definition){
         let param_values = [];
         let call_params = this.copy(function_call.args);
@@ -406,6 +408,12 @@ function TplHelper() {
         
     }
 
+    /**
+     * Takes in a list of param values and adds them to the variable bank.
+     * @param {*} variable_bank The current state of the variable bank.
+     * @param {*} param_values an array of {name, value} object pairs/
+     * @returns an updated variable bank
+     */
     this.add_temp_param_variables = function(variable_bank, param_values){
         for (let idx = 0; idx < param_values.length; idx++){
             let tag = "literal";
@@ -422,6 +430,12 @@ function TplHelper() {
         return variable_bank;
     }
 
+    /**
+     * Looks through the variable bank and finds any temp variables and removes them. 
+     * To be called once a function finishes being read in TPL.
+     * @param {*} variable_bank The current state of the variable bank.
+     * @returns an updated variable bank
+     */
     this.remove_temp_vars = function(variable_bank) {
         for (const [key, value] of Object.entries(variable_bank)){
             if (value.temp === "temp" || value.type === "temp"){
@@ -432,13 +446,19 @@ function TplHelper() {
         return variable_bank;
     }
 
+    /**
+     * A function to add a class instance to a variable bank.
+     * @param {*} variable_bank The current state of the variable bank.
+     * @param {*} astBody astBody is the body of the abstract syntax tree passed in by the parser.
+     * @returns An updated variable bank with the new class instance added.
+     */
     this.add_class_instance = function(variable_bank, astBody) {
         let variableName = astBody[lineNum]["expression"]["args"][0].value;
         let variableValues = astBody[lineNum]["expression"]["args"][1].args;
         let className = astBody[lineNum]["expression"]["args"][1]["object"].value;
         let classReference = this.get_class_from_name(className, astBody);
         if (classReference === false) throw new Error("could not find a definition for a class with this name!");
-        this.convert_self_to_instance_name(classReference, variableName);
+        this.convert_self_to_instance_name(classReference, variableName); //this lines makes every instance have its own "reference" so it is unique
         return this.add_the_object_to_the_variable_bank(variable_bank, {
             name: variableName,
             reference: classReference,
@@ -446,6 +466,12 @@ function TplHelper() {
         });
     }
 
+    /**
+     * A function that checks if one of the values in an object's contructor is an instance of another class.
+     * @param {*} object The object whose constructor is being inspected
+     * @param {*} lineIndex The line of the object's constructor we are checking
+     * @returns A boolean representing whether or not the value being set at an index in a class constructor is an instance of another class
+     */
     this.are_we_setting_an_instance = function(object, lineIndex){
         let relevant_line = object.reference.body[0].body[lineIndex]; //Gets the line from the actual class definition stored in the object.
         let arg2_val = relevant_line.expression.args[1].value; //value of the right hand side of the equal sign in the line, either the actual value or an indentifier name
@@ -457,35 +483,50 @@ function TplHelper() {
         return false;
     }
 
+    /**
+     * A function that adds the accesses and returns the name of the instance being set.
+     * (Note that although the value is not used in the TPL for the OOP example,
+     * controller can still access it since it would be in state.variables.in_scope)
+     * @param {*} object The object whose constructor is being inspected
+     * @param {*} lineIndex The line of the object's constructor that sets an instance
+     * @returns The name of the instance being set.
+     */
     this.pass_in_instance_name = function(object, lineIndex){
         let relevant_line = object.reference.body[0].body[lineIndex]; //Gets the line from the actual class definition stored in the object.
         let arg2_val = relevant_line.expression.args[1].value; //value of the right hand side of the equal sign in the line, either the actual value or an indentifier name
         for(let idx = 0; idx < object.params.length; idx++) { //Iterate through the params passed into the object
             if (arg2_val === object.params[idx].name && object.params[idx].type === "object"){
-                console.log(object.values[idx].hidden_val.value.name);
                 return object.values[idx].hidden_val.value.name;
             }
         }
     }
 
+    /**
+     * A function which either initializes values in an object or updates values in an object.
+     * @param {*} bank The current state of the variable bank
+     * @param {*} object The current state of the object 
+     * @param {*} variable Either an integer representing the line index of the class constructor or a variable in the object
+     * @returns A new updated object which has been updated accordingly.
+     */
     this.update_object_in_variable_bank = function(bank, object, variable) {
-        if (Number.isInteger(variable)){
+        if (Number.isInteger(variable)){ //Variable is an integer if we are in the class constructor
             let curr_var = object.values[variable];
             if (curr_var !== undefined){
                 curr_var.value = sim.evaluate_expression(bank, curr_var.hidden_val).value;
             }
         }
-        else {
+        else { //Else it will be a variable
             if (variable.hasOwnProperty("reference") && variable.reference !== null){
-                let references = [variable.reference.name];
+                let references = [variable.reference.name]; //This process keeps track of references to objects within object
+                                                            //An example of this in the code is circle1.center.x,
+                                                            //the first referenced object is circle1 followed by center.
                 let curr_obj = variable.reference;
                 while (curr_obj.hasOwnProperty("object")){
                     references.push(curr_obj.object.value);
                     curr_obj = curr_obj.object;
                 }
-                
                 let relevant_object = object;
-                if (relevant_object.hasOwnProperty("values")){
+                if (references.length > 1){
                     for (let jdx = references.length; jdx > 0; jdx--){
                         for (let idx = 0; idx < relevant_object.values.length; idx++) {
                             if (relevant_object.values[idx].name === references[jdx-1]) {
@@ -494,14 +535,21 @@ function TplHelper() {
                             }
                         }
                     }
-                }
-                else {
-                    for (let i = 0; i < relevant_object.value.values.length; i++) {
+                    for (let i = 0; i < relevant_object.value.values.length; i++) { 
                         if (relevant_object.value.values[i].name === variable.name) {
                             // Find a match
                             relevant_object.value.values[i].value = variable.value;
+                            let other_object;
+                            for (const [key, value] of Object.entries(bank)){
+                                if(key === relevant_object.value.name){
+                                    other_object = value;
+                                }
+                            }
+                            let new_variable = this.copy(variable);
+                            new_variable.reference = null; //TODO: Currently not supported for reference.length > 2, in this case reference should be made into curr_object or something of the like
+                            other_object = this.update_object_in_variable_bank(bank, other_object, new_variable);
                             return object;
-                        } // Need to add here to check if the reference is depth of two or one etc.
+                        } 
                     }
                 }
             }
@@ -510,7 +558,7 @@ function TplHelper() {
                     // Find a match
                     object.values[idx].value = variable.value;
                     return object;
-                } // Need to add here to check if the reference is depth of two or one etc.
+                }
             }
             // No match
             object.values.push(variable);
@@ -518,6 +566,12 @@ function TplHelper() {
         return object;
     }
 
+    /**
+     * A function to add the 
+     * @param {*} bank The current state of the variable bank.
+     * @param {*} variable The information being passed in about the object being created.
+     * @returns an updated state of the variable bank.
+     */
     this.add_the_object_to_the_variable_bank = function(bank, variable) {
         // Variable.reference[0] is the init function of the correct class
         // Variable.values is the array of params that instantiate the class object
@@ -586,6 +640,12 @@ function TplHelper() {
         return bank[variable.name];
     }
 
+    /**
+     * 
+     * @param {*} bank The current state of the variable bank.
+     * @param {*} line A line of python code.
+     * @returns The result of one line of python code being run.
+     */
     this.get_line_result = function(bank, line) {
         let reference = this.get_references(line);
         let result = sim.evaluate_expression(bank, line);
@@ -593,6 +653,11 @@ function TplHelper() {
         return result;
     }
 
+    /**
+     * A function to convert every instance of self in a javascript Object into a different string.
+     * @param {*} node A node in the AST.
+     * @param {*} instance_name The string to replace every instance of self.
+     */
     this.convert_self_to_instance_name = function(node, instance_name){
         for (const [key, value] of Object.entries(node)) {
             if (value === "self"){
@@ -605,6 +670,11 @@ function TplHelper() {
         }
     }
 
+    /**
+     * A helper function designed to create an array with some number of empty Objects.
+     * @param {*} class_constructor_body_length The length of the array being created.
+     * @returns an array with some number of empty Objects.
+     */
     this.create_bank = function(class_constructor_body_length){
         let bank = [];
         for(let i = 0; i < class_constructor_body_length; i++){
@@ -613,18 +683,31 @@ function TplHelper() {
         return bank
     }
 
+    /**
+     * A function to check if something is a javascript Object.
+     * @param {*} node anything really.
+     * @returns A boolean representing if "node" is a javascript Object or not.
+     */
     this.has_children = function(node){
         return (typeof node) === "object";
     }
 
+    /**
+     * A function to check if temp param variables need to be added to the bank.
+     * @param {*} function_definition The tokenized python code of the function definition.
+     * @returns A boolean representing whether the definition has more than one parrameter
+     * (all functions in our examples have "self" by default since they are class functions).
+     */
     this.has_params_to_add = function(function_definition){
         return function_definition.params.length > 1;
     }
-
-    this.get_class_name = function(astBody) {
-        return astBody[lineNum]["expression"]["args"][1]["object"].value;
-    }
     
+    /**
+     * A function to get the tokenized python code of a class given a name and the AST.
+     * @param {*} className The name of the class being searched for.
+     * @param {*} astBody The AST of the python code.
+     * @returns The tokenized python code which refers to a certain class.
+     */
     this.get_class_from_name = function(className, astBody) {
         for (const [k, currAstElement] of Object.entries(astBody)) {
             if (currAstElement.hasOwnProperty("tag")
@@ -636,6 +719,12 @@ function TplHelper() {
         return false;
     }
 
+    /**
+     * 
+     * @param {*} bank The current state of the variable bank.
+     * @param {*} reference Some part of the tokenized python code.
+     * @returns A boolean representing whether or not reference will add a new variable to the variable bank.
+     */
     this.does_this_declare_a_new_variable = function(bank, reference){
         if (reference.hasOwnProperty("object")) {
             if (reference.object.tag === "identifier"){
@@ -656,6 +745,11 @@ function TplHelper() {
         return true;
     }
 
+    /**
+     * A function to isolate the __init__ function of a class.
+     * @param {*} classBody The tokenized python code representing a class definition.
+     * @returns The class contructor of a given class.
+     */
     this.get_class_constructor = function(classBody) {
         if (classBody.body[0].name === "__init__" && classBody.body[0].tag === "method"){
             return classBody.body[0];
@@ -663,21 +757,45 @@ function TplHelper() {
         throw new Error("Class constructor is not properly defined.");
     }
 
+    /**
+     * A function to get the length of the __init__ function of a class.
+     * @param {*} classBody The tokenized python code representing a class definition.
+     * @returns the length of a given class's class constructor.
+     */
     this.get_class_constructor_body_range = function(classBody) {
         return classBody.body[0].location.end.line - classBody.body[0].location.start.line - 1;
     }
 
+    /**
+     * A function to find out how many lines (python code wise) are in a method. 
+     * @param {*} method The tokenized python code representing a class method.
+     * @returns The number of lines of given method.
+     */
     this.get_class_method_body_range = function(method) {
         return method.location.end.line - method.location.start.line - 1;
 
     }
 
+    /**
+     * A function to isolate the variable being changed in a line in a function,
+     * and to change that variable's value to a new_value.
+     * @param {*} function_line The tokenized python code of a function line.
+     * @param {*} new_value The new value used to change.
+     * @returns an updated variable to add to the variable bank.
+     */
     this.get_value_for_update = function(function_line, new_value) {
-        let variable = function_line.expression.args[0];
+        let variable = this.copy(function_line.expression.args[0]);
         variable.value = new_value.value;
         return variable;
     }
 
+    /**
+     * A pain in the ass which gets the correct line of a function at an index based on
+     * the original python code and NOT the tokenized python code. 
+     * @param {*} function_definition The tokenized python code of a function.
+     * @param {*} index The line index (of the original code) of the wanted line
+     * @returns THE RIGHT LINE YEAHHHHH BOI.
+     */
     this.get_function_body_line = function(function_definition, index){
         let curr_line = function_definition.body[0];
         let prev_line = function_definition.body[0];
@@ -735,12 +853,6 @@ function TplHelper() {
             }
         }
         return curr_line;
-    }
-
-    this.get_expression = function(node) {
-        if (!node.hasOwnProperty("expression")) throw new Error("This node does not have an expression");
-        return node.expression;
-
     }
 
     this.is_loop_called_without_range = function(loop) {
@@ -813,14 +925,24 @@ function TplHelper() {
                stmt.expression.args[0].tag === "index";
     };
 
+    /**
+     * A function to see if the variable bank needs to be updated.
+     * @param {*} stmt A piece of tokenized python code.
+     * @returns A boolean representing whether or not the statement updates the variable bank.
+     */
     this.does_this_stmt_update_bank = function(stmt) {
         return stmt.tag === "declaration" && stmt.hasOwnProperty("expression") && stmt.expression.tag === "binop";
     };
     
     this.is_this_the_last_line = function(ast) {
         return lineNum !== ast.body.length - 1;
-    }; // TODO: factor out when lineNum is deprecated
+    };
 
+    /**
+     * A function designed to check if the entire python code is wrapped in a function.
+     * @param {*} ast The tokenized python code.
+     * @returns A boolean representing whether or not the entire AST is in one function.
+     */
     this.this_is_a_function = function(ast) {
         if (ast.tag === "method") {     
             return true;
@@ -828,6 +950,11 @@ function TplHelper() {
         return false;
     };
 
+    /**
+     * A function to determine if a line of code has a function call.
+     * @param {*} line A line of python code in tokenized form.
+     * @returns A boolean representing whether or not a specific line has a function call or not.
+     */
     this.line_has_a_function_call = function(line) {
         if (line.tag === "declaration") {     
             if(line.expression.tag === "call"){
@@ -843,7 +970,7 @@ function TplHelper() {
     };
 
     this.this_is_a_return_statement = function(ast) {
-        if (this.current_code_block_index === -1) this.current_code_block_index = ast.body.length - 1; // TODO HACK for when current_code_block_index is not being used
+        if (this.current_code_block_index === -1) this.current_code_block_index = ast.body.length - 1; //HACK for when current_code_block_index is not being used
         if (ast.body[this.current_code_block_index].tag === "expression") {
             if (ast.body[this.current_code_block_index].expression.hasOwnProperty("tag")) {
                 if (ast.body[this.current_code_block_index].expression.tag === "return") {
@@ -855,7 +982,7 @@ function TplHelper() {
     };
 
     this.this_is_a_print_statement = function(ast) {
-        if (this.current_code_block_index === -1) this.current_code_block_index = ast.body.length - 1; // TODO HACK for when current_code_block_index is not being used
+        if (this.current_code_block_index === -1) this.current_code_block_index = ast.body.length - 1; //HACK for when current_code_block_index is not being used
         if (ast.body[this.current_code_block_index].tag === "expression") {
             if (ast.body[this.current_code_block_index].expression.hasOwnProperty("tag")) {
                 if (ast.body[this.current_code_block_index].expression.tag === "print") {
@@ -903,6 +1030,12 @@ function TplHelper() {
         return (stmt.tag === "expression" && stmt.expression.hasOwnProperty("tag") && stmt.expression.tag === "return");
     };
 
+    /**
+     * A function which simulates a statement in context of the variable bank.
+     * @param {*} stmt A piece of tokenized python code.
+     * @param {*} variable_bank The current state of the variable bank.
+     * @returns The result of the stmt being evaluated in the context of the variable bank.
+     */
     this.evaluate_class_function = function(stmt, variable_bank){
         let return_vals = sim.evaluate_expression(variable_bank, stmt);
         if (return_vals !== undefined){
@@ -912,6 +1045,11 @@ function TplHelper() {
         }      
     }
 
+    /**
+     * A function which gets the function from a line of code.
+     * @param {*} line A line of python code in tokenized format.
+     * @returns The expression containing the name of the function and the data being passed into it (the function call).
+     */
     this.get_function = function(line){
         if (line.expression.tag === "call"){
             //This is the case if a function call is made just normally "functioncall(stuff)"
@@ -922,15 +1060,19 @@ function TplHelper() {
         }
     }
 
+    /**
+     * A function to get the definition of the function from the call.
+     * @param {*} bank The current state of the variable bank.
+     * @param {*} call The function call.
+     * @returns Returns the tokenized python code which represent the function calls definition.
+     */
     this.get_function_from_call = function(bank, call){
         if (call.object.hasOwnProperty("tag")){
             if (call.object.tag === "identifier"){
                 for (const [key, val] of Object.entries(bank)){
                     let class_reference = val.reference;
-                    //TODO: Let call.object.value actually be the instance name.
                     for (let idx = 0; idx < class_reference.body.length; idx++){
                         if (class_reference.body[idx].name === call.name){
-                            // console.log("FUNCTION CALL " + class_reference.body[idx].name);
                             return class_reference.body[idx];
                         }
                     }
@@ -1003,7 +1145,7 @@ function make_initial_state(problem, variant) {
     var ast;
 
     if (problem.content.hasOwnProperty('src')) {
-        console.log("Pulling problem " + problem.title + " from a src file.");
+        // console.log("Pulling problem " + problem.title + " from a src file.");
         let filename = RELATIVE_SRC_DIR + problem.content.src;
         let problem_raw = load_file(filename);
 
@@ -1022,7 +1164,7 @@ function make_initial_state(problem, variant) {
         }
         ast = python_parsing.parse_program(problem_raw);
     } else { // if problem.content lacks a src, fallback to using problem.content.text
-        console.log("Pulling problem " + problem.title + " directly from json.");
+        // console.log("Pulling problem " + problem.title + " directly from json.");
         ast = python_parsing.parse_program(problem.content.text);
     }
 
