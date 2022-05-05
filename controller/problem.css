@@ -184,11 +184,11 @@
     padding-left: 10px;
 }
 
-.java-line {
+.python-line {
     display: block;
 }
 
-.java-line::before {
+.python-line::before {
     counter-increment: line-number;
     display: inline-block;
     width: 2em;
@@ -196,23 +196,23 @@
     content: counter(line-number);
 }
 
-.problem .java-keyword {
+.problem .python-keyword {
     color: black;
 }
 
-.problem .java-ident {
+.problem .python-ident {
     color: blue;
 }
 
-.problem .java-literal {
+.problem .python-literal {
     color: green;
 }
 
-.problem .java-method {
+.problem .python-method {
     color: purple;
 }
 
-.problem .java-reference {
+.problem .python-reference {
     font-style: italic;
 }
 
@@ -315,6 +315,31 @@
     text-align: right;
 }
 
+.problem .bank_object {
+    font: '14px Menlo,Monaco,Consolas,"Courier New",monospace';
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+
+.bank_object_box {
+    stroke-width: 2px;
+    rx: 5px;
+}
+
+.bank_object_vars {
+  font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
+  font-size: 14px;
+  fill: black;
+}
+
+.object-name {
+  font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
+  font-size: 14px;
+  fill: black;
+}
+
 .problem .array_label {
     padding-right: 10px;
     text-align: right;
@@ -398,6 +423,10 @@
 }
 
 .problem .yes_no_buttons {
+    text-align: center;
+}
+
+.problem .class_multiple_choice_buttons {
     text-align: center;
 }
 
@@ -702,4 +731,3 @@ the dynamic styling works correctly.
 /* DON'T PUT STUFF BELOW THIS COMMENT!! PLACE ADDITIONAL CODE ABOVE
    DYNAMIC STYLING CLASSES!!
 */
-

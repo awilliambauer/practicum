@@ -7,3 +7,4 @@ node_modules/
 *.icloud
 logfile
 .vscode
+.DS_Store

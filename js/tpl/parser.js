@@ -41,7 +41,7 @@ var simulator_parsing = function() {
         /// Advance the stream, returning the next character.
         self.next = function() {
             var c = str.charAt(bufidx);
-            if (c == "\n") {
+            if (c == "\n" || c.charCodeAt(0) == NEW_LINE) {
                 line++;
                 col = 0;
             } else {
@@ -106,9 +106,9 @@ var simulator_parsing = function() {
             "&":1, "|":1, "&&":1, "||":1,
         };
 
-        var text_start_chars = {
-            ":":1, "*":1, "$":1
-        };
+        // var text_start_chars = {
+        //     ":":1, "*":1, "$":1
+        // };
 
         function iseof() {
             return cs.iseof();
@@ -676,7 +676,7 @@ var simulator_parsing = function() {
         return self;
     };
 
-    function browser_parse(data, callback) {
+    function browser_parse(data) {
         var p = Parser(Lexer(CharStream(data)));
         return p.parse();
     }
@@ -711,4 +711,3 @@ if (typeof module !== 'undefined' && typeof process !== 'undefined') {
         });
     }
 }
-

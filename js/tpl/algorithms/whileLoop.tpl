@@ -20,7 +20,7 @@ function TPLAlgorithm() {
     "Welcome to while loop practice.";
 
     [no_step]
-    {
+    if (helper.this_is_a_function(ast)) {
         [prompt]
         "First, look at the function call.";
 
@@ -34,8 +34,9 @@ function TPLAlgorithm() {
             add_the_parameters_to_the_variable_bank = helper.add_other_parameters_to_the_variable_bank(variables, state.vars);
         }
 
+    } else {
         [prompt]
-        "Now let’s walk through the code line-by-line while keeping track of variables.";
+        "Let’s walk through the code line-by-line while keeping track of variables.";        
     }
 
     [no_step]
@@ -209,5 +210,16 @@ function TPLAlgorithm() {
         the_return_value_of_the_function_is_determined_here = helper.get_return_output(this_is_the_next_line_that_will_execute, variables);
         [prompt]
         "The print statement below prints out the value(s) that the function returned. Enter that solution in the solution box!";
+    }
+
+    [no_step] if (helper.this_is_a_print_statement(ast)) {
+        let this_is_the_next_line_that_will_execute: Line;
+        [interactive("next_line")] this_is_the_next_line_that_will_execute = helper.get_print_statement(ast);
+
+        let the_print_function_prints_out_the_values_passed_to_it;
+        the_print_function_prints_out_the_values_passed_to_it = helper.get_print_output(this_is_the_next_line_that_will_execute, variables);
+
+        [prompt]
+        "Enter the value(s) that print in the solution box!";
     }
 }

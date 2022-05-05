@@ -1,3 +1,6 @@
+// Parameter names for specific problem category and id
+const CATEGORY_PARAMETER = "category";
+const PROBLEM_ID_PARAMETER = "problem";
 
 // from https://css-tricks.com/snippets/javascript/get-url-variables/
 // doesn't handle every valid query string, but should work for our purposes
@@ -5,8 +8,8 @@ function getQueryVariable(variable)
 {
     var query = window.location.search.substring(1);
     var vars = query.split("&");
-    for (var i=0; i < vars.length; i++) {
-        var pair = vars[i].split("=");
+    for (let v of vars) {
+        var pair = v.split("=");
         if(pair[0] == variable){
             return pair[1];
         }
@@ -37,12 +40,13 @@ var csed = (function() {
     var ENABLE_TELEMETRY_LOGGING = false;
 
     let problem_types = {
-      problem_types: ["whileLoop", "if_else", "forLoop", "nested"],
+      problem_types: ["whileLoop", "if_else", "forLoop", "nested", "oop"],
       enabled_categories: [
         "default-whileLoop",
         "default-if_else",
         "default-forLoop",
         "default-nested",
+        "default-oop",
       ],
     };
     
@@ -66,22 +70,24 @@ var csed = (function() {
                             if_else: 0,
                             array: 0,
                             nested: 0,
+                            oop: 0,
                         },
                         problemIdsByCategory: {
                             expressions: [],
                             if_else: [],
                             array: [],
-                            nested: []
+                            nested: [],
+                            oop: []
                         }
                     };
                 }
                 numProblemsByCategory = server_savedata.numProblemsByCategory;
                 problemIdsByCategory = server_savedata.problemIdsByCategory;
-                for (let i = 0; i < enabled_problem_types.length; i++) {
-                    if (!numProblemsByCategory[enabled_problem_types[i]]) numProblemsByCategory[enabled_problem_types[i]] = 0;
+                for (let problem_type of enabled_problem_types) {
+                    if (!numProblemsByCategory[problem_type]) numProblemsByCategory[problem_type] = 0;
                 }
-                for (let i = 0; i < enabled_problem_types.length; i++) {
-                    if (!problemIdsByCategory[enabled_problem_types[i]]) problemIdsByCategory[enabled_problem_types[i]] = [];
+                for (let problem_type of enabled_problem_types) {
+                    if (!problemIdsByCategory[problem_type]) problemIdsByCategory[problem_type] = [];
                 }
 
                 // for debugging
@@ -136,18 +142,20 @@ var csed = (function() {
         d3.select("#problem-container .problem").remove();
     }
 
-    function findProblem(categoryConfig, requestedCategory, requestedProblemId)  {
-        categoryConfig.forEach(function (category) {
-            if (category.category === requestedCategory) {
-                var problems = category['problems'];
-                problem.forEach(function (problem) {
+    function findProblem(categoryConfig, requestedCategory, requestedProblemId)  {        
+        for (let i in categoryConfig) {
+            let category = categoryConfig[i];
+            if (category.category == requestedCategory) {
+                let problems = category['problems'];
+                for (let j in problems) {
+                    let problem = problems[j];
                     if (problem.id === requestedProblemId) {
                         return problem;
                     }
-                });
+                }
             }
-        });
-        return null;
+        }
+       return null;
     }
 
     function addProblemsContentToLandingPage(problemsConfig, onProblemStartCallback) {
@@ -168,12 +176,11 @@ var csed = (function() {
             })
             all_problems = all_problems.flat();
             let problem_results = all_problems.map(problem => {
-                let result = {
+                return {
                     "problem": problem,
                     "guided": false,
                     "independent": false
                 }
-                return result;
             })
             localStorage.setItem("problem_results", JSON.stringify(problem_results));
         }
@@ -278,6 +285,16 @@ var csed = (function() {
     }
 
     function modalFadingLevel(problemConfig, callback_obj, initial_state, problemUI) {
+        // If categoryConfig specifies a required fading level (guided / independent)
+        // set it and initialize the problem immediately.
+        if (problemConfig.hasOwnProperty("force_fading")) {
+            let selection = problemConfig["force_fading"];
+            setFadingLevel(selection);
+            d3.select("#difficultyLevel").append("span").html(`Difficulty level: ${selection}`);
+            problemUI.initialize(problemConfig, callback_obj, initial_state, task_logger, fading_level);
+            return;
+        }
+        // Otherwise...
         // Get Modal
         var modal = document.getElementById("fading-level-modal");
         modal.style.display = "block";
@@ -339,10 +356,18 @@ var csed = (function() {
         }
 
     }
+    
+    // Pushes the identifier of the problem into the browser's url
+    function setUrlArgs(problem) {
+        const url = new URL(window.location);
+        url.searchParams.set(CATEGORY_PARAMETER, problem.category);
+        url.searchParams.set(PROBLEM_ID_PARAMETER, problem.id);
+        window.history.replaceState({}, '', url);
+    }
 
     function loadProblem(problemConfig, variant) {
         task_logger = Logging.start_task(problemConfig);
-
+        
         // if no alt state, choose the first
         if (problemConfig.content.variants) {
             variant = variant || problemConfig.content.variants[0];
@@ -352,7 +377,8 @@ var csed = (function() {
                 detail: {id: variant.id},
             });
         }
-
+        
+        setUrlArgs(problemConfig);
         saveProblemData(problemConfig);
         updateProblemDisplay(problemConfig);
 
@@ -364,19 +390,24 @@ var csed = (function() {
         // Load in the template for the problem
         d3.html(problemUI.template_url, function(error, problemHtml){
             if (error) console.error(error);
-
+            
             // Uh, not sure why I can't append raw html into the dom with D3. Using jQuery for the moment...
             $("#problem-container").append(problemHtml);
-
+            
             d3.select("#main-page").classed("hidden", true);
             d3.select("#problem-container").classed("hidden", false);
 
+            // If the problem has no initial values, hide initial values header
+            if (!problemConfig.content.variants[0].arguments) {
+                d3.selectAll("#InitialValuesHeader").style("display", "none");
+            }
+            
             var category = problemConfig.category;
             d3.select("#PageHeader").html(problemConfig.title);
 
             var initial_state = problemUI.create_initial_state(problemConfig, variant);
             main_simulator.initialize(category, {state:initial_state});
-
+            
             // The modal will determine the fading level and then call problemUI.initialize() 
             // once the Done button is pressed. That's why it takes in all of 
             // problemUI.initialize()'s arguments.
@@ -384,7 +415,7 @@ var csed = (function() {
             
             // This problemUI initialize call probably needs to happen after the main_sim init call,
             // which is handled by promises/then() with fetch.
-        });
+        });          
     }
 
     // add the "problem-visited" class to the newly visited problem
@@ -528,6 +559,15 @@ function onProblemStart(problem) {
     csed.loadProblem(problem);
 }
 
+// Checks for arguments in the URL asking for a specific problem
+function checkForSpecificProblemUrlParameters() {
+    const category_value = getQueryVariable(CATEGORY_PARAMETER);
+    const problem_id_value = getQueryVariable(PROBLEM_ID_PARAMETER);
+    if (category_value && problem_id_value) {
+        csed.setProblemToLoad(category_value, problem_id_value);
+    }
+}
+
 $(document).ready(function() {
     "use strict";
 
@@ -539,6 +579,13 @@ $(document).ready(function() {
             .removeClass("col-sm-12")
             .addClass("col-sm-6");
     });
+    
+    //TODO:
+    // Detect change in active history entry. Only triggered by browser actions or by calling history.back()
+    // https://developer.mozilla.org/en-US/docs/Web/API/WindowEventHandlers/onpopstate
+    // $(window).on('popstate', function() {
+    //     location.reload(true); // Reload the page to load the problem that was navigated back to.
+    // });      
 
     var username = csed.getUsername();
     var forceUser = getQueryVariable("username");
@@ -576,7 +623,7 @@ $(document).ready(function() {
 
                 csed.addProblemsToNav(categoryConfig, onProblemStart);
                 csed.addProblemsContentToLandingPage(categoryConfig, onProblemStart);
-
+                
                 if (csed.hasProblemToLoad(categoryConfig)) {
                     var problem = csed.getProblemToLoad(categoryConfig);
                     csed.loadProblem(problem);
@@ -594,6 +641,9 @@ $(document).ready(function() {
         $('#main-page').html('<p>Uh oh! There appears to be a problem with the server!</p><p>Our apologies, please report this with <a href="https://catalyst.uw.edu/umail/form/aaronb22/4553">our feedback form</a> and we\'ll get it fixed ASAP.</p>');
         d3.select("#main-page").classed("hidden", false);
     });
+    
+    // Check for parameters in url
+    checkForSpecificProblemUrlParameters();
 });
 
 (function($) {

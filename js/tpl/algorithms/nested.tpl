@@ -22,24 +22,8 @@ function TPLAlgorithm() {
     [prompt]
     "These problems assume you are comfortable with for loops already. If not, we recommend trying the for loop investigation problems first.";
 
-    [no_step]
-    {
-        [prompt]
-        "First, look at the function call.";
-
-        let these_are_the_function_parameters: Parameter;
-        these_are_the_function_parameters = helper.get_function_parameters(state.args);
-
-        [no_step]
-        if (state.vars.length > 0) {
-            let add_the_parameters_to_the_variable_bank: Variable;
-            [interactive("add_variable")]
-            add_the_parameters_to_the_variable_bank = helper.add_other_parameters_to_the_variable_bank(variables, state.vars);
-        }
-
-        [prompt]
-        "Now let’s walk through the code line-by-line while keeping track of variables.";
-    }
+    [prompt]
+    "Let’s walk through the code line-by-line while keeping track of variables.";
 
     [no_step]
     while(helper.check_for_loop(ast)) {
@@ -156,8 +140,8 @@ function TPLAlgorithm() {
             [interactive("next_line")] this_is_the_next_line_that_will_execute = helper.get_the_next_line_in_this_block_to_execute(parent, this_is_the_next_line_that_will_execute, condition_outcome);
 
             [no_step] if (helper.is_this_a_return_statement(this_is_the_next_line_that_will_execute)) {
-                let the_return_value_of_the_function_is_determined_here;
-                the_return_value_of_the_function_is_determined_here = helper.get_return_output(this_is_the_next_line_that_will_execute, variables);
+                let the_print_function_prints_out_the_values_passed_to_it;
+                the_print_function_prints_out_the_values_passed_to_it = helper.get_return_output(this_is_the_next_line_that_will_execute, variables);
                 [prompt]
                 "The function ends as soon as we hit a return statement regardless of any more for loop iterations or anything else happening in the problem.";
                 [prompt]
@@ -271,8 +255,8 @@ function TPLAlgorithm() {
                         [interactive("next_line")] this_is_the_next_line_that_will_execute = helper.get_the_next_line_in_this_block_to_execute(inner_parent, this_is_the_next_line_that_will_execute, inner_condition_outcome);
 
                         [no_step] if (helper.is_this_a_return_statement(this_is_the_next_line_that_will_execute)) {
-                            let the_return_value_of_the_function_is_determined_here;
-                            the_return_value_of_the_function_is_determined_here = helper.get_return_output(this_is_the_next_line_that_will_execute, variables);
+                            let the_print_function_prints_out_the_values_passed_to_it;
+                            the_print_function_prints_out_the_values_passed_to_it = helper.get_return_output(this_is_the_next_line_that_will_execute, variables);
                             [prompt]
                             "The function ends as soon as we hit a return statement regardless of any more for loop iterations or anything else happening in the problem.";
                             [prompt]
@@ -494,14 +478,15 @@ function TPLAlgorithm() {
         iterations = true;
     } while (helper.is_there_another_item_in_the_loop_sequence(variables, false));
 
-    [no_step] if (helper.this_is_a_return_statement(ast)) {
+    [no_step] if (helper.this_is_a_print_statement(ast)) {
         let this_is_the_next_line_that_will_execute: Line;
-        [interactive("next_line")] this_is_the_next_line_that_will_execute = helper.get_return_statement(ast);
+        [interactive("next_line")] this_is_the_next_line_that_will_execute = helper.get_print_statement(ast);
 
-        let the_return_value_of_the_function_is_determined_here;
-        the_return_value_of_the_function_is_determined_here = helper.get_return_output(this_is_the_next_line_that_will_execute, variables);
+        let the_print_function_prints_out_the_values_passed_to_it;
+        the_print_function_prints_out_the_values_passed_to_it = helper.get_print_output(this_is_the_next_line_that_will_execute, variables);
+
         [prompt]
-        "The print statement below prints out the value(s) that the function returned. Enter that solution in the solution box!";
+        "Enter the value(s) that print in the solution box!";
     }
 
 }
